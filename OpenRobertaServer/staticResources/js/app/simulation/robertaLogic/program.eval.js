@@ -96,6 +96,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 evalMotorStopAction(stmt);
                 break;
 
+            case MOTOR_SET_POWER:
+                evalMotorSetPowerAction(stmt);
+                break;
+
             case RESET_LIGHT:
                 this.led.color = GREEN;
                 this.led.mode = OFF;
@@ -165,6 +169,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
         }
         setDurationToCover(obj, stmt);
+    }
+
+    function evalMotorSetPowerAction(obj, stmt) {
+        if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed));
+        } else {
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
+        }
     }
 
     function evalMotorStopAction(obj, stmt) {

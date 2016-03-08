@@ -383,6 +383,9 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
+        motorSetPowerAction.getPower().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -397,21 +400,25 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        // TODO implementation of visitClearDisplayAction
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        // TODO implementation of visitVolumeAction
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        // TODO implementation of visitPlayFileAction
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        // TODO implementation of visitShowPictureAction
         return null;
     }
 

@@ -1,5 +1,7 @@
-const ARG1 = "arg1";    
-const ARG2 = "arg2";   
+const
+ARG1 = "arg1";
+const
+ARG2 = "arg2";
 const
 EXPR = "expr";
 const
@@ -26,9 +28,12 @@ const
 VAR_DECLARATION = "VarDeclaration";
 const
 SINGLE_FUNCTION = "SingleFunction";
-const MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
-const RANDOM_INT = "randInt";
-const RANDOM_DOUBLE = "randDouble";
+const
+MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
+const
+RANDOM_INT = "randInt";
+const
+RANDOM_DOUBLE = "randDouble";
 const
 ASSIGN_STMT = "AssignStmt";
 const
@@ -37,9 +42,12 @@ const
 IF_STMT = "IfStatement";
 const
 WAIT_STMT = "WaitStmt";
-const MATH_CONST = "MathConst";
-const SHOW_TEXT_ACTION = "ShowTextAction";
-const MATH_PROP_FUNCT = "MathPropFunct";
+const
+MATH_CONST = "MathConst";
+const
+SHOW_TEXT_ACTION = "ShowTextAction";
+const
+MATH_PROP_FUNCT = "MathPropFunct";
 
 const
 WAIT_TIME_STMT = "WaitTimeSTMT";
@@ -87,7 +95,8 @@ const
 NUM_CONST = "NumConst";
 const
 BOOL_CONST = "BoolConst";
-const STRING_CONST = "StringConst";
+const
+STRING_CONST = "StringConst";
 const
 NUMERIC = "Numeric";
 const
@@ -118,9 +127,12 @@ const
 AND = "AND";
 const
 NEG = "NEG";
-const MOD = "MOD";
-const MIN = "min";
-const MAX = "max";
+const
+MOD = "MOD";
+const
+MIN = "min";
+const
+MAX = "max";
 const
 FOREWARD = "FOREWARD";
 const
@@ -161,19 +173,32 @@ TIMES = "TIMES";
 const
 COLOR_CONST = "COLOR_CONST";
 
-const PILOT = "pilot";
-const MOTOR_LEFT = "C";
-const MOTOR_RIGHT = "B";
-const MOTOR_SIDE = "motorSide";
-const MOTOR_ON_ACTION = "motorOnAction";
-const MOTOR_GET_POWER = "motorGetPowerAction";
-const MOTOR_STOP = "motorStop";
-const MOTOR_MOVE_MODE = "motorMoveMode";
-const MOTOR_DURATION = "motorDuration";
-const MOTOR_DURATION_VALUE = "motorDurationValue";
-const ROTATIONS = "ROTATIONS";
-const DEGREE = "DEGREE";
-
+const
+PILOT = "pilot";
+const
+MOTOR_LEFT = "C";
+const
+MOTOR_RIGHT = "B";
+const
+MOTOR_SIDE = "motorSide";
+const
+MOTOR_ON_ACTION = "motorOnAction";
+const
+MOTOR_GET_POWER = "motorGetPowerAction";
+const
+MOTOR_SET_POWER = "motorSetPowerAction";
+const
+MOTOR_STOP = "motorStop";
+const
+MOTOR_MOVE_MODE = "motorMoveMode";
+const
+MOTOR_DURATION = "motorDuration";
+const
+MOTOR_DURATION_VALUE = "motorDurationValue";
+const
+ROTATIONS = "ROTATIONS";
+const
+DEGREE = "DEGREE";
 
 const
 COLOR_ENUM = {
