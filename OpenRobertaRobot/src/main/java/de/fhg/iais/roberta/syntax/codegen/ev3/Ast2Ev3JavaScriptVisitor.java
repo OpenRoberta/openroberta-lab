@@ -360,6 +360,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
         return null;
     }
 

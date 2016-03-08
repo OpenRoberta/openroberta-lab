@@ -344,6 +344,14 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test24() throws Exception {
+        String a = "var stmt0 = createShowTextAction(createGetMotorPower(MOTOR_RIGHT));\n" + "var pp = [stmt0];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator24.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

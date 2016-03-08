@@ -52,12 +52,12 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
 
             case IF_STMT:
                 evalIf(this, stmt);
-                step(simulationSensorData);
+                this.step(simulationSensorData);
                 break;
 
             case REPEAT_STMT:
                 evalRepeat(this, stmt);
-                step(simulationSensorData);
+                this.step(simulationSensorData);
                 break;
 
             case DRIVE_ACTION:
@@ -175,6 +175,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         }
     }
 
+    function evalMotorGetPowerAction(obj, motorSide) {
+        if (motorSide == MOTOR_LEFT) {
+            return obj.actors.getLeftMotor().getPower();
+        } else {
+            return obj.actors.getRightMotor().getPower();
+        }
+    }
+
     function setAngleToTurn(obj, stmt) {
         if (stmt.angle != undefined) {
             obj.actors.calculateAngleToCover(obj.program, evalExpr(obj, stmt.angle));
@@ -282,6 +290,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
 
         case GET_SAMPLE:
             return evalSensor(obj, expr[SENSOR_TYPE], expr[SENSOR_MODE]);
+
+        case MOTOR_GET_POWER:
+            return evalMotorGetPowerAction(obj, expr.motorSide);
+            break;
+
         default:
             throw "Invalid Expression Type!";
         }
@@ -423,18 +436,18 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
     }
 
     function evalMathPropFunct(obj, val, min, max) {
-        var val_ = evalExpr(obj, val);    
-        var min_ = evalExpr(obj, min);    
-        var max_ = evalExpr(obj, max);          
+        var val_ = evalExpr(obj, val);
+        var min_ = evalExpr(obj, min);
+        var max_ = evalExpr(obj, max);
         return Math.min(Math.max(val_, min_), max_);
     }
 
     function evalMathConstrainFunct(obj, val, min, max) {
         var val1 = evalExpr(obj, arg1);
         if (arg2) {
-            var val2 = evalExpr(obj, arg2);    
+            var val2 = evalExpr(obj, arg2);
         }
-        
+
         switch (functName) {
         case 'EVEN':
             return val1 % 2 == 0;
@@ -464,7 +477,6 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
     function evalRandDouble() {
         return Math.random();
     }
-
 
     isPrime = function(n) {
         if (isNaN(n) || !isFinite(n) || n % 1 || n < 2) {
@@ -526,15 +538,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
     }
 
     function math_random_int(a, b) {
-      if (a > b) {
-        // Swap a and b to ensure a is smaller.
-        var c = a;
-        a = b;
-        b = c;
-      }
-      return Math.floor(Math.random() * (b - a + 1) + a);
+        if (a > b) {
+            // Swap a and b to ensure a is smaller.
+            var c = a;
+            a = b;
+            b = c;
+        }
+        return Math.floor(Math.random() * (b - a + 1) + a);
     }
-
 
     return ProgramEval;
 });

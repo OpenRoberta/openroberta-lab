@@ -136,6 +136,14 @@ function createMotorOnAction(speed, motorSide, motorDuration) {
     return result;
 }
 
+function createGetMotorPower(motorSide) {
+    var result = {};
+    result[EXPR] = MOTOR_GET_POWER;
+    result[MOTOR_SIDE] = motorSide;
+
+    return result;
+}
+
 function createDuration(motorMoveMode, duration) {
     var result = {};
     result[MOTOR_MOVE_MODE] = motorMoveMode;

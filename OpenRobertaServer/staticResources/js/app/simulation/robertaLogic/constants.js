@@ -166,6 +166,7 @@ const MOTOR_LEFT = "C";
 const MOTOR_RIGHT = "B";
 const MOTOR_SIDE = "motorSide";
 const MOTOR_ON_ACTION = "motorOnAction";
+const MOTOR_GET_POWER = "motorGetPowerAction";
 const MOTOR_STOP = "motorStop";
 const MOTOR_MOVE_MODE = "motorMoveMode";
 const MOTOR_DURATION = "motorDuration";
