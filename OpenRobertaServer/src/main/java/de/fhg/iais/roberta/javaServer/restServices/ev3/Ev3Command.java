@@ -86,7 +86,7 @@ public class Ev3Command {
         JSONObject response;
         switch ( cmd ) {
             case CMD_REGISTER:
-                LOG.info("pushcmd - brick sends token " + token + " for registration");
+                LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
                 Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);

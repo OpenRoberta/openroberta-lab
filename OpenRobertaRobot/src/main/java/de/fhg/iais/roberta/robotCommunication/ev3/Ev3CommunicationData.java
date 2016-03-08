@@ -67,7 +67,7 @@ public class Ev3CommunicationData {
      * @return true, if user approved the token; false otherwise
      */
     public synchronized boolean brickTokenAgreementRequest() {
-        LOG.info("BRICK " + this.robotName + " [" + this.robotIdentificator + "] starts waiting for the client to approve a token");
+        LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " starts waiting for the client to approve the token");
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
         this.timerStartedByLastRequest = Clock.start();
         while ( this.timerStartedByLastRequest.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE
@@ -79,15 +79,29 @@ public class Ev3CommunicationData {
                 // try again
             }
         }
-        boolean success = this.state != State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
-        if ( success ) {
-            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
-            LOG.info("Robot request for token approval terminated SUCCESSFULLY. Time elapsed: " + this.timerStartedByLastRequest.elapsedMsec());
+        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_BRICK ) {
+            LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " approval terminated SUCCESSFULLY.");
+            return true;
+        } else if ( this.state == State.GARBAGE ) {
+            LOG.info(
+                "Robot ["
+                    + this.robotIdentificator
+                    + "] token "
+                    + this.token
+                    + " user canceled the first registration request and sends another one after "
+                    + this.timerStartedByLastRequest.elapsedMsecFormatted());
+            return false;
         } else {
             this.state = State.GARBAGE;
-            LOG.info("Robot request for token approval FAILED. Time elapsed: " + this.timerStartedByLastRequest.elapsedMsec());
+            LOG.info(
+                "Robot ["
+                    + this.robotIdentificator
+                    + "] token "
+                    + this.token
+                    + " approval FAILED. Time elapsed: "
+                    + this.timerStartedByLastRequest.elapsedMsecFormatted());
+            return false;
         }
-        return success;
     }
 
     /**

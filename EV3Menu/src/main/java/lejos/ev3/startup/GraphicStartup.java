@@ -1729,10 +1729,15 @@ public class GraphicStartup implements Menu {
                     return convertToReadableMAC(current.getHardwareAddress());
                 }
             }
-            return "usb";
         } catch ( SocketException e ) {
             return "unknown";
         }
+        try {
+            return oraHandler.getBluetoothMacAddress();
+        } catch ( IOException e ) {
+            // ok
+        }
+        return "usb";
     }
 
     /**

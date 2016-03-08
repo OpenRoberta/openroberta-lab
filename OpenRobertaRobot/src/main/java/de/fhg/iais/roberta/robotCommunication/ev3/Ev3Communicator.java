@@ -38,7 +38,7 @@ public class Ev3Communicator {
     /**
      * check the new registration ticket.
      * only used by brickWantsTokenToBeApproved(), extracted for testing
-     * 
+     *
      * @throws assertions for various types of issues
      * @return true if the ticket has been accepted
      */
@@ -49,8 +49,10 @@ public class Ev3Communicator {
         Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
         for ( String storedToken : this.allStates.keySet() ) {
             Ev3CommunicationData storedState = this.allStates.get(storedToken);
-            if ( robotIdentificator.equals(storedState.getRobotIdentificator()) && !robotIdentificator.equals("usb") ) {
-                LOG.error("Token approval request for robotId " + robotIdentificator + ", but an old request is pending. Old request aborted.");
+            if ( robotIdentificator.equals(storedState.getRobotIdentificator())
+                && !robotIdentificator.equals("usb")
+                && !robotIdentificator.equals("unknown") ) {
+                LOG.error("Token approval request for robot [" + robotIdentificator + "], but an old request is pending. Old request aborted.");
                 storedState.abortPush(); // notifyAll() executed
                 this.allStates.remove(storedToken);
             }
@@ -103,7 +105,7 @@ public class Ev3Communicator {
         } else {
             state.abortPush(); // notifyAll() executed
             this.allStates.remove(token);
-            LOG.info("token " + token + " disconnected");
+            LOG.info("Robot [" + state.getRobotIdentificator() + "] token " + token + " disconnected.");
         }
     }
 

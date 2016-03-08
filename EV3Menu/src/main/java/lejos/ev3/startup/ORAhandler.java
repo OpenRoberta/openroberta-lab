@@ -3,6 +3,7 @@ package lejos.ev3.startup;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * No Singleton Pattern but do not use more than one
@@ -75,6 +76,17 @@ public class ORAhandler {
                 // ok
             }
         }
+    }
+
+    /**
+     * Read the Bluetooth macaddress from /var/volatile/BTser from the leJOS setup.
+     * This is an unique identifier for the USB connection if no wifi dongle is plugged in.
+     *
+     * @return
+     * @throws IOException
+     */
+    public String getBluetoothMacAddress() throws IOException {
+        return new String(Files.readAllBytes(new File("/var/volatile/BTser").toPath())).trim();
     }
 
     private void resetState() {
