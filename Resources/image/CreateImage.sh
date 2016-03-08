@@ -27,6 +27,7 @@ menu=${libdir}/EV3Menu.jar
 json=${libdir}/json.jar
 runtime=${libdir}/OpenRobertaRuntime.jar
 shared=${libdir}/OpenRobertaShared.jar
+websocket=${libdir}/Java-WebSocket.jar
 
 echo ""
 echo "---Creating Open Roberta Firmware---"
@@ -37,7 +38,7 @@ echo "OpenRobertaParent version is ${version}!"
 # ---
 
 # Check if required files exist
-if [ -f ${menu} ] && [ -f ${json} ] &&[ -f ${runtime} ] && [ -f ${shared} ]
+if [ -f ${menu} ] && [ -f ${json} ] &&[ -f ${runtime} ] && [ -f ${shared} ] && [ -f ${websocket} ]
 then
     echo "Compiled EV3 libraries found!"
     echo "Using files in ${libdir}"
@@ -49,13 +50,17 @@ else
     exit 1
 fi
 
+# TODO Download lejos automatically with wget
 if [ -f ${lejosimage} ]
 then
     echo "Lejosimage found!"
     echo "Using ${lejosimage}"
 else
     echo "Lejosimage in ${lejosimage} is missing!"
-    echo "Has someone changed the file structure of the repository?"
+	echo "Download leJOS from here:"
+	echo "https://sourceforge.net/projects/ev3.lejos.p/files/0.9.0-beta/"
+	echo "Extract it and copy lejosimage.zip into the lejosimage directory within this directory."
+	echo "Then run this script again."
     echo "---Abort---"
     echo ""
     exit 1
@@ -88,6 +93,7 @@ cp ${menu} ${work}/lejosimage/lejosfs/home/root/lejos/bin/utils
 cp ${json} ${work}/lejosimage/lejosfs/home/roberta/lib
 cp ${runtime} ${work}/lejosimage/lejosfs/home/roberta/lib
 cp ${shared} ${work}/lejosimage/lejosfs/home/roberta/lib
+cp ${websocket} ${work}/lejosimage/lejosfs/home/roberta/lib
 # ---
 
 # Pack everything together again
