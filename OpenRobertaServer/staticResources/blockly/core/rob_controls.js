@@ -81,6 +81,22 @@ Blockly.RobControls.prototype.PATH_RUNINSIM_ =
   '-2.002c-1.104 0-2 .896-2 2v10c0 1.104.896 2 2 2 .543 0 1.033-.218 1.393 '+
   '-.568 2.644-2.573 6.607-6.432 6.607-6.432s-3.963-3.859-6.604-6.433c-.363 '+
   '-.349-.853-.567-1.396-.567z';
+Blockly.RobControls.prototype.PATH_SIMSTOP_ = 
+  'M20 10h-8c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2 '+
+  '-2z';
+Blockly.RobControls.prototype.PATH_SIMFORWARD_ = 
+  'M14.396 22.433c2.641-2.574 6.604-6.433 6.604-6.433s-3.963-3.859-6.604-6.433 '+
+  'c-.363-.349-.853-.567-1.396-.567-1.104 0-2 .896-2 2v10c0 1.104.896 2 2 2 '+
+  '.543 0 1.033-.218 1.396-.567z';
+Blockly.RobControls.prototype.PATH_SIMPAUSE_ = 
+  'M12 10c-1.104 0-2 .896-2 2v8c0 1.104.896 2 2 2s2-.896 2-2v-8c0-1.104-.896-2 '+
+  '-2-2zM19 10c-1.104 0-2 .896-2 2v8c0 1.104.896 2 2 2s2-.896 2-2v-8c0-1.104 '+
+  '-.896-2-2-2z';
+Blockly.RobControls.prototype.PATH_SIMSTEP_ = 
+  'M21 20h-10c-1.104 0-2 .895-2 2 0 1.104.896 2 2 2h10c1.104 0 2-.896 2-2 0 '+
+  '-1.105-.896-2-2-2zM22.433 14.604c-2.574-2.641-6.433-6.604-6.433-6.604s '+
+  '-3.859 3.963-6.433 6.604c-.349.363-.567.853-.567 1.396 0 1.104.896 2 2 2h '+
+  '10c1.104 0 2-.896 2-2 0-.543-.218-1.033-.567-1.396z';
 Blockly.RobControls.prototype.PATH_SAVEPROGRAM_ =  
   'M21 13 l-.351.015c-.825-2.377-3.062-4.015-5.649-4.015-3.309 0-6 2.691-6 '+
   '6l.001.126c-1.724.445-3.001 2.013-3.001 3.874 0 2.206 1.794 4 4 4 h5v-4.586 '+
@@ -160,16 +176,34 @@ Blockly.RobControls.prototype.top_ = 0;
  */
 Blockly.RobControls.prototype.createDom = function() {
   var workspace = this.workspace_;
+  this.simVisible_ = false;
+  var control = this;  
   this.svgGroup_ = Blockly.createSvgElement('g', {'class': 'blocklyButtons'}, null);
   this.runOnBrick = this.createButton_(this.PATH_RUNONBRICK_, 0);
   this.runOnBrick.setAttribute("id", "runInSim");
   this.runInSim = this.createButton_(this.PATH_RUNINSIM_, 1);
+  this.simStop = this.createButton_(this.PATH_SIMSTOP_, 1);
+  this.simStep = this.createButton_(this.PATH_SIMSTEP_, 1, 1);
+  this.simForward = this.createButton_(this.PATH_SIMFORWARD_, 1, 2);
+  this.simPause = this.createButton_(this.PATH_SIMPAUSE_, 1, 2);
   this.runInSim.setAttribute("id", "runInSim");
+  this.simStop.setAttribute("id", "simStop");
+  this.simStop.setAttribute('class', 'robButtonHidden');
+  this.simForward.setAttribute("id", "simForward");
+  this.simForward.setAttribute('class', 'robButtonHidden');
+  this.simStep.setAttribute("id", "simStep");
+  this.simStep.setAttribute('class', 'robButtonHidden');
+  this.simPause.setAttribute("id", "simPause");
+  this.simPause.setAttribute('class', 'robButtonHidden');
   this.saveProgram = this.createButton_(this.PATH_SAVEPROGRAM_, 2);
   this.saveProgram.setAttribute("id", "saveProgram");
-  this.showCode = this.createButton_(this.PATH_SHOWCODE_, 3);
-  this.showCode.setAttribute("id", "showCode");
-  this.showCode.setAttribute("style", "display=none");
+//  this.showCode = this.createButton_(this.PATH_SHOWCODE_, 3);
+//  this.showCode.setAttribute("id", "showCode");
+//  this.showCode.setAttribute("style", "display=none");
+//  Blockly.bindEvent_(this.runInSim, 'mousedown', null, function(e) {
+//      control.startSim(true);
+//      e.stopPropagation();  // Don't start a workspace scroll.
+//  });
    
   if (this.zoom_) {
     this.zoomVisible_ = false;
@@ -181,8 +215,7 @@ Blockly.RobControls.prototype.createDom = function() {
     zoomoutSvg.setAttribute('class', 'robButtonHidden');
     zoomresetSvg.setAttribute('class', 'robButtonHidden');
 
-    // Attach event listeners.
-    var control = this;   
+    // Attach event listeners. 
     Blockly.bindEvent_(zoomresetSvg, 'mousedown', workspace, function(e) {
       workspace.zoomReset(e);
       control.showZoom(false);
@@ -269,6 +302,9 @@ Blockly.RobControls.prototype.position = function() {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
         this.WIDTH_ - this.MARGIN_SIDE_; //- Blockly.Scrollbar.scrollbarThickness;
   }
+  if (this.simVisible_ && this.smallScreen_){
+    this.left_+=160;
+  }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
       this.HEIGHT_ - this.MARGIN_BOTTOM_; //- Blockly.Scrollbar.scrollbarThickness;
   this.svgGroup_.setAttribute('transform',
@@ -298,4 +334,50 @@ Blockly.RobControls.prototype.showZoom = function(visible) {
     this.zoomresetSvg.setAttribute('class', 'robButtonHidden');
   }
   this.zoomVisible_ = visible;
+};
+
+Blockly.RobControls.prototype.toogleSim = function(opt_smallScreen) {
+  this.smallScreen_ = opt_smallScreen || false; 
+  if (!this.simVisible_ ) {     
+    this.runInSim.setAttribute('class', 'robButtonHidden ');
+    this.simStop.setAttribute('class', 'robButton simStop');
+    this.simForward.setAttribute('class', 'robButton simForward');
+    this.simStep.setAttribute('class', 'robButton simStep');
+    this.simPause.setAttribute('class', 'robButtonHidden');
+    this.simVisible_ = true;
+  } else {
+    this.runInSim.setAttribute('class', 'robButton runInSim');
+    this.simStop.setAttribute('class', 'robButtonHidden');
+    this.simForward.setAttribute('class', 'robButtonHidden');
+    this.simStep.setAttribute('class', 'robButtonHidden');
+    this.simPause.setAttribute('class', 'robButtonHidden');
+    this.simVisible_ = false;
+  }
+};
+
+Blockly.RobControls.prototype.setSimForward = function(visible) {
+  if (this.simForwardVisible_ === visible)
+    return;
+  if (visible) {
+    this.simForward.setAttribute('class', 'robButton simForward');
+    this.simPause.setAttribute('class', 'robButtonHidden');
+  } else {
+    this.simForward.setAttribute('class', 'robButtonHidden');
+    this.simPause.setAttribute('class', 'robButton simPause');
+  }
+  this.simForwardVisible_ = visible;
+};
+
+Blockly.RobControls.prototype.setSimStart = function(visible) {
+  if (this.simStartVisible_ === visible)
+    return;
+  if (visible) {
+    this.runInSim.setAttribute('class', 'robButton runInSim');
+    this.simStop.setAttribute('class', 'robButtonHidden');
+    this.simStartVisible_ = true;
+  } else {
+    this.runInSim.setAttribute('class', 'robButtonHidden');
+    this.simStop.setAttribute('class', 'robButton simStop');
+    this.simStartVisible_ = false;
+  }
 };

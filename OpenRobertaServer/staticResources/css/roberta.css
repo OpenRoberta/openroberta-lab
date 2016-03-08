@@ -213,8 +213,6 @@ body.blocklyMinimalBody  *  {
 }
 
 #blocklyDiv, #bricklyDiv {
-    /*  zoom: 0.5;
-    -moz-transform: scale(0.5); */
     height: 100%;
     width: 100%;
     min-height: 100%;
@@ -224,22 +222,14 @@ body.blocklyMinimalBody  *  {
     background-size: 100%;
 }
 
-#blocklyDiv {
-    transition-property: width;
-    transition-duration: 0.5s;
-    transition-timing-function: linear, ease-in;
-    -webkit-transition-property: width;
-    -webkit-transition-timing-function: linear, ease-in;
-    -webkit-transition-duration: 0.5s;
-}
-
 #blocklyDiv.simBackground {
     background: url(../css/svg/simBlockBackground.svg) repeat;
     background-size: 100%;
 }
 
 #simDiv {
-    position: relative;
+	height: 0;
+	position: relative;
     visibility: hidden;
 }
 
@@ -255,7 +245,6 @@ body.blocklyMinimalBody  *  {
 }
 
 #blocklyDiv.simActive, #blocklyDiv.codeActive {
-    width: 30%;
     float: left;
 }
 
@@ -338,13 +327,12 @@ body.blocklyMinimalBody  *  {
     background-image: none;
 }
 
-#simButtons {
-    width: 350px;
-    left: initial;
-}
-
-#simButtons>.btn {
-    margin-bottom: 10px;
+#simButtons, #codeButtons{
+	width: 160px;
+    left: 12;
+    bottom: 12;
+    position: absolute;
+    z-index: 99;
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
@@ -583,6 +571,29 @@ body.blocklyMinimalBody  *  {
     box-shadow: none;
 }
 
+.blbtn {
+	width: 48px;
+	height: 48px;
+    margin-right: 2px;
+    margin-left: 0;
+    background-color: #fff;
+    color: #333;
+    font-size: 24px;
+    border: none;
+    border-radius: 2px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    cursor: pointer;
+    box-shadow: none;
+}
+.sim .blbtn.typcn:before {
+	font-size: 36px;
+}
+
+.blbtn:hover {
+    background-color: #b7d032;
+}
+
 .modal-footer .btn+.btn {
     margin-left: 0;
 }
@@ -643,6 +654,9 @@ ul.icon li.arrow-right-thick:before {
 /***** BEGIN typicons *****/
 .typcn:before {
     margin-right: 6px;
+}
+.blbtn.typcn:before {
+    margin-right: 0;
 }
 
 .head-navi-icons.typcn:before {
@@ -855,27 +869,7 @@ table.dataTable thead .sorting_desc {
         padding: 16px 16px;
         margin-bottom: 0;
     }
-    .button2, .button3, .button4 {
-        display: none
-    }
-    #simButtons, #codeButtons {
-        width: 60px;
-    }
-    #simButtons>.btn, #codeButtons>.btn {
-        margin-bottom: 8px;
-    }
-    #simBack, #codeBack {
-        margin-bottom: -10px !important;
-    }
-    #blocklyDiv {
-        transition-property: width;
-        transition-duration: 0.5s;
-        transition-timing-function: linear, ease-in;
-        -webkit-transition-property: width;
-        -webkit-transition-timing-function: linear, ease-in;
-        -webkit-transition-duration: 0.5s;
-    }
-    #blocklyDiv.simActive, #blocklyDiv.codeActive {
+    #blocklyDiv.codeActive {
         display: none;
     }
     #start-choise {

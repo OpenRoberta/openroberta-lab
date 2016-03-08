@@ -8,8 +8,8 @@
  */
 
 define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulation.robot.math', 'simulation.robot.roberta', 'simulation.robot.rescue',
-        'simulation.scene', 'simulation.program.eval', 'simulation.math' ], function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot, RescueRobot,
-        Scene, ProgramEval, SIMATH) {
+        'simulation.scene', 'simulation.program.eval', 'simulation.math', 'roberta.program' ], function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot, RescueRobot,
+        Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM) {
 
     var programEval = new ProgramEval();
 
@@ -95,9 +95,12 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             if (value) {
                 $('.simForward').removeClass('typcn-media-pause');
                 $('.simForward').addClass('typcn-media-play');
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
             } else {
                 $('.simForward').removeClass('typcn-media-play');
                 $('.simForward').addClass('typcn-media-pause');
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(false);
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(false);
             }
             pause = value;
         }
@@ -234,12 +237,9 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             programEval.step(exports.input);
             setOutput();
         } else if (programEval.program.isTerminated()) {
-            reloadProgram();
-            eval(userProgram);
-            programEval.initProgram(pp);
-            $('.simForward').removeClass('typcn-media-pause');
-            $('.simForward').addClass('typcn-media-play');
             setPause(true);
+            reloadProgram();
+            ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         }
         robot.updatePose(exports.output);
         exports.input = scene.updateSensorValues(!pause);
@@ -251,6 +251,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         programEval.initProgram(pp);
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
+        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
     }
 
     function setOutput() {

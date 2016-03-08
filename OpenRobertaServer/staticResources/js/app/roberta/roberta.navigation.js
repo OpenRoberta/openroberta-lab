@@ -154,6 +154,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 ROBERTA_PROGRAM.showSaveAsModal();
             } else if (domId === 'menuShowCode') { //  Submenu 'Program'
                 ROBERTA_PROGRAM.showCode();
+                $("#navbarCollapse").collapse('hide');
             } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
                 ROBERTA_TOOLBOX.loadToolbox('beginner');
             } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
@@ -321,24 +322,30 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
 
         $('.simBack').onWrap('click', function(event) {
             SIM.cancel();
-            $('#blocklyDiv').removeClass('simActive');
-            $('#simDiv').removeClass('simActive');
-            $(".sim").addClass('hide');
-            Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
+            $(".sim").addClass('hide'); 
             $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('#menuSim').parent().addClass('disabled');
-            COMM.json("/toolbox", {
-                "cmd" : "loadT",
-                "name" : userState.toolbox,
-                "owner" : " "
-            }, function(result) {
-                ROBERTA_PROGRAM.injectBlockly(result, userState.programBlocksSaved);
-            });
             $("#simButtonsCollapse").collapse('hide');
             $("#head-navi-tooltip-program").removeClass('disabled');
             $('#head-navigation-program-edit').removeClass('disabled');
             $('#head-navigation-program-edit>ul').removeClass('hidden');
+            $('.blocklyToolboxDiv').css('visibility', 'visible');
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
+            ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.toogleSim();              
+            $('#blocklyDiv').animate({
+              width: '100%'
+            }, {
+              duration: 750,
+              step: function(){  
+                $(window).resize();
+                Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());                   
+                }, 
+              done: function() {               
+                $('#simDiv').removeClass('simActive');
+                $('#menuSim').parent().addClass('disabled');
+                $(window).resize();
+                Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace()); 
+              }
+            });                   
         }, 'simBack clicked');
 
         $('.simStop').onWrap('click', function(event) {
@@ -364,6 +371,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             SIM.setInfo();
             $("#simButtonsCollapse").collapse('hide');
         }, 'simInfo clicked');
+        
+        $('.simRobot').onWrap('click', function(event) {
+            //TODO implement the robot with a display and buttons
+            alert('here comes your robot!');
+            $("#simButtonsCollapse").collapse('hide');
+        }, 'simRobot clicked');
 
         $('.simScene').onWrap('click', function(event) {
             SIM.setBackground(0);
@@ -394,6 +407,18 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         $('.codeBack').onWrap('click', function(event) {
             $('#blocklyDiv').removeClass('codeActive');
             $('#codeDiv').removeClass('codeActive');
+            $('#blocklyDiv').animate({
+              width: '100%'
+            }, {
+              duration: 750,
+              step: function(){  
+                $(window).resize();
+                Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());                   
+                }, 
+              done: function() {               
+                $(window).resize();
+              }
+            });        
             if (userState.robot === "nxt") {
                 $('#menuEv3').parent().removeClass('disabled');
             } else {

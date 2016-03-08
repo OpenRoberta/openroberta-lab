@@ -158,6 +158,8 @@ limitations under the License.
 							lkey="Blockly.Msg.MENU_EDIT"
 						></span></a>
 						<ul class="dropdown-menu">
+						    <li><a href="#" id="menuSimRobot" class="simRobot menuSim typcn typcn-ev3">EV3</a></li>
+						    <li class="divider"></li>
 							<li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
 							<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
 							<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
@@ -174,6 +176,8 @@ limitations under the License.
 			</div>
 			<div class="collapse navbar-collapse " id="simButtonsCollapse">
 				<ul class="nav navbar-nav visible-xs">
+				    <li><a href="#" id="menuSimRobot" class="simRobot menuSim typcn typcn-ev3">EV3</a></li>
+				    <legend class="visible-xs"></legend>		
 					<li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
 					<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
 					<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
@@ -665,24 +669,23 @@ limitations under the License.
 					<div id="uniDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
 					<div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
 					<div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-					<div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-				</div>
-				<div id="simButtons" class="navbar navbar-fixed-bottom sim hide">
-					<button id="simForward" type="button" class="simForward btn typcn typcn-media-play head-navi-icons pull-left" data-toggle="collapse"></button>
-					<button id="simStep" type="button" class="simStep btn typcn typcn-step head-navi-icons pull-left" data-toggle="collapse"></button>
-					<button id="simStop" type="button" class="simStop btn typcn typcn-media-stop head-navi-icons pull-left" data-toggle="collapse"></button>
-					<button id="simScene" type="button" class="simScene btn typcn typcn-image head-navi-icons pull-left" data-toggle="collapse"></button>
-					<button id="simInfo" type="button" class="simInfo btn typcn typcn-info-large head-navi-icons pull-left" data-toggle="collapse"></button>
-					<button id="simBack" type="button" class="simBack btn typcn typcn-times head-navi-icons pull-left" data-toggle="collapse"></button>
+					<div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>				
+			    	<div id="simButtons">
+			    	    <button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3"></button>    
+			    	    <button id="simScene" type="button" class="simScene blbtn typcn typcn-image"></button>
+				        <button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-right-thick"></button>    					
+		    		</div>
 				</div>
 				<div id="codeDiv">
-					<div id="codePackage" class="codeActive"></div>
-					<button type="button" class="btn typcn typcn-plus" data-toggle="collapse" data-target="#codeImport">simple collapsible</button>
-					<div id="codeImport" class="collapse in codeActive"></div>
-				</div>
-				<div id="codeButtons" class="navbar navbar-fixed-bottom code hide">
-					<button id="codeDownload" type="button" class="codeDownload btn typcn typcn-download head-navi-icons pull-left" data-toggle="collapse"></button>
-					<button id="codeBack" type="button" class="codeBack btn typcn typcn-times head-navi-icons pull-left" data-toggle="collapse"></button>
+				    <div id="codeContent">
+				    	<div id="codePackage" class="codeActive"></div>
+				     	<button type="button" class="btn typcn typcn-plus" data-toggle="collapse" data-target="#codeImport">simple collapsible</button>
+				    	<div id="codeImport" class="collapse in codeActive"></div>	
+					</div>			
+			    	<div id="codeButtons" class="code">
+			    		<button id="codeDownload" type="button" class="codeDownload blbtn typcn typcn-download" data-toggle="collapse"></button>
+			    		<button id="codeBack" type="button" class="codeBack blbtn typcn typcn-arrow-right-thick" data-toggle="collapse"></button>
+				    </div>
 				</div>
 			</div>
 
