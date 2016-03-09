@@ -85,6 +85,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 break;
 
             case TURN_LIGHT:
+              console.log(stmt);
                 evalLedOnAction(this, simulationSensorData, stmt);
                 break;
 
@@ -101,7 +102,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 break;
 
             case RESET_LIGHT:
-                this.led.color = GREEN;
+                this.led.color = '';
                 this.led.mode = OFF;
                 break;
 
@@ -119,11 +120,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
 
     var setSensorActorValues = function(obj, simulationSensorData) {
         obj.sensors.touchSensor = simulationSensorData.touch;
-        obj.sensors.colorSensor = simulationSensorData.color;
-        obj.sensors.lightSensor = simulationSensorData.light;
-        obj.sensors.ultrasonicSensor = simulationSensorData.ultrasonic;
-        obj.actors.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
-        obj.actors.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
+        obj.sensors.colorSensor = simulationSensorData.color.colorValue;
+        obj.sensors.lightSensor = simulationSensorData.color.lightValue;
+        obj.sensors.ultrasonicSensor = simulationSensorData.ultrasonic.distance;
+        obj.actors.getLeftMotor().setCurrentRotations(simulationSensorData.encoder.left);
+        obj.actors.getRightMotor().setCurrentRotations(simulationSensorData.encoder.right);
         obj.program.getTimer().setCurrentTime(simulationSensorData.time);
     };
 
@@ -144,40 +145,41 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
     function evalLedOnAction(obj, simulationSensorData, stmt) {
         obj.led.color = stmt.color;
         obj.led.mode = stmt.mode;
-        obj.led.blinkAcc = 0.0;
-        switch (obj.led.mode) {
-        case "FLASH":
-            obj.led.blink = 2;
-            break;
-        case "DOUBLE_FLASH":
-            obj.led.blink = 4;
-            break;
-        }
+//        obj.led.blinkAcc = 0.0;
+//        switch (obj.led.mode) {
+//        case "FLASH":
+//            obj.led.blink = 2;
+//            break;
+//        case "DOUBLE_FLASH":
+//            obj.led.blink = 4;
+//            break;
+//        }
     }
 
     function evalShowTextAction(obj, stmt) {
+      console.log(stmt);
         val = evalExpr(obj, stmt.value)
         console.log(val);
     }
 
     function evalTurnAction(obj, simulationSensorData, stmt) {
-        obj.actors.resetTachoMotors(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+        obj.actors.resetTachoMotors(simulationSensorData.encoder.left, simulationSensorData.encoder.right);
         obj.actors.setAngleSpeed(evalExpr(obj, stmt.speed), stmt[TURN_DIRECTION]);
         setAngleToTurn(obj, stmt);
     }
 
     function evalDriveAction(obj, simulationSensorData, stmt) {
-        obj.actors.resetTachoMotors(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+        obj.actors.resetTachoMotors(simulationSensorData.encoder.left, simulationSensorData.encoder.right);
         obj.actors.setSpeed(evalExpr(obj, stmt.speed), stmt[DRIVE_DIRECTION]);
         setDistanceToDrive(obj, stmt);
     }
 
     function evalMotorOnAction(obj, simulationSensorData, stmt) {
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
-            obj.actors.resetLeftTachoMotor(simulationSensorData.tacho[0]);
+            obj.actors.resetLeftTachoMotor(simulationSensorData.encoder.left);
             obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed));
         } else {
-            obj.actors.resetRightTachoMotor(simulationSensorData.tacho[1]);
+            obj.actors.resetRightTachoMotor(simulationSensorData.encoder.right);
             obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
         }
         setDurationToCover(obj, stmt);

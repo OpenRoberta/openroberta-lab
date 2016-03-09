@@ -177,8 +177,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     exports.output = {
         left : 0,
         right : 0,
-        led : ' ',
-        ledMode : ' '
+        led : { color : '', mode : ''},
     };
 
 // render stuff
@@ -236,17 +235,22 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             }
             programEval.step(exports.input);
             setOutput();
-        } else if (programEval.program.isTerminated()) {
+        } else if (programEval.program.isTerminated()) {            
             setPause(true);
             reloadProgram();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         }
-        robot.updatePose(exports.output);
-        exports.input = scene.updateSensorValues(!pause);
+        robot.update(exports.output);
+        var values = scene.updateSensorValues(!pause);
+        values.correctDrive = currentBackground == 5;
+        exports.input = values;
+        //console.log(values);
         scene.drawRobot();
     }
 
     function reloadProgram() {
+        //robot.time = 0;
+        resetOutput();
         eval(userProgram);
         programEval.initProgram(pp);
         $('.simForward').removeClass('typcn-media-pause');
@@ -267,33 +271,25 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         } else if (right < -100) {
             right = -100
         }
+        exports.output.debug = true; // TODO get this information from programEval (startblock)
         exports.output.left = left * MAXPOWER || 0;
         exports.output.right = right * MAXPOWER || 0;
-
-        robot.led.mode = exports.output.ledMode = programEval.led.mode || "OFF";
-        switch (programEval.led.mode) {
-        case "OFF":
-            robot.led.color = exports.output.led = "#dddddd"; // = led off
-            break;
-        case "ON":
-            robot.led.color = exports.output.led = programEval.led.color;
-            break;
-        case "FLASH":
-        case "DOUBLE_FLASH":
-            if (programEval.led.blink > 0) {
-                if (programEval.led.blink & 0x1) {
-                    robot.led.color = exports.output.led = "#dddddd"; // = led off
-                } else {
-                    robot.led.color = exports.output.led = programEval.led.color;
-                }
-                programEval.led.blinkAcc += dt;
-                if (programEval.led.blinkAcc > 0.5) {
-                    programEval.led.blinkAcc -= 0.5;
-                    programEval.led.blink -= 1;
-                }
-            }
-            break;
-        }
+        exports.output.led = [];
+        exports.output.led.color = programEval.led.color;
+        exports.output.led.mode = programEval.led.mode;
+        //exports.output.display.text = 
+        //exports.output.display.x =
+        //exports.output.display.y =
+        //exports.output.tone = 
+    }
+    
+    function resetOutput() {
+        exports.output.left = 0;
+        exports.output.right = 0;
+        exports.output.led = [];
+        exports.output.led.color = '';
+        exports.output.led.mode = OFF;
+        //exports.output.display.text 
     }
 
     function setObstacle() {

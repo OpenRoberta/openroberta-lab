@@ -36,6 +36,7 @@ define([ 'simulation.simulation' ], function(SIM) {
             this.led.mode = OFF;
             this.led.blink = 0;
             this.time = 0;
+            this.timer = 0;
         };
     }
     Robot.prototype.geom = {
@@ -70,8 +71,6 @@ define([ 'simulation.simulation' ], function(SIM) {
         x : 0,
         y : 10,
         color : '#dddddd',
-        //color : 'DeepSkyBlue',
-        // color : 'orange',
         mode : ''
     };
     Robot.prototype.encoder = {
@@ -116,6 +115,18 @@ define([ 'simulation.simulation' ], function(SIM) {
         value : 0,
         color : '#FFCC33'
     };
+    Robot.prototype.gyroSensor = {
+        value : 0,
+        color : '#000'
+    };
+    Robot.prototype.buttons = {
+        back : false,
+        top : false,
+        left : false,
+        enter : false,
+        right : false,
+        bottom : false
+    };
     Robot.prototype.frontLeft = {
         x : 22.5,
         y : -25,
@@ -158,17 +169,21 @@ define([ 'simulation.simulation' ], function(SIM) {
         r : 30
     };
     Robot.prototype.time = 0;
+    Robot.prototype.timer = 0;
+    Robot.prototype.debug = false;
     /**
-     * Update the pose of the robot. The new pose is calculated with the forward
+     * Update all actions of the robot. The new pose is calculated with the forward
      * kinematics equations for a differential drive robot.
      * 
      * @param {output}
      *            output from the executing program: power for left and right
-     *            motors/wheels.
+     *            motors/wheels, display, led ...
      * 
      */
-    Robot.prototype.updatePose = function(output) {
-
+    Robot.prototype.update = function(output) {
+        // update debug
+        this.debug = output.debug;
+        // update pose
         this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
         this.encoder.left += output.left * SIM.getDt();
         this.encoder.right += output.right * SIM.getDt();
@@ -207,6 +222,7 @@ define([ 'simulation.simulation' ], function(SIM) {
                     this.pose.y -= mY;
                 }
             }
+            this.pose.thetaDiff = 0;
         } else {
             var R = TRACKWIDTH / 2 * ((output.left + output.right) / (output.left - output.right));
             var rot = (output.left - output.right) / TRACKWIDTH;
@@ -214,8 +230,8 @@ define([ 'simulation.simulation' ], function(SIM) {
             var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
             this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;
             this.pose.y = (Math.sin(rot * SIM.getDt()) * (this.pose.x - iccX) + Math.cos(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccY;
-            var thetaTemp = this.pose.theta;
-            this.pose.theta = this.pose.theta + (rot * SIM.getDt());
+            this.pose.thetaDiff = rot * SIM.getDt();
+            this.pose.theta = this.pose.theta + this.pose.thetaDiff;
         }
         var sin = Math.sin(this.pose.theta);
         var cos = Math.cos(this.pose.theta);
@@ -234,6 +250,39 @@ define([ 'simulation.simulation' ], function(SIM) {
         this.touchSensor.y1 = this.frontRight.ry;
         this.touchSensor.x2 = this.frontLeft.rx;
         this.touchSensor.y2 = this.frontLeft.ry;
+        
+        //update led(s)
+        switch (output.led.mode) {
+        case "OFF":
+            this.timer = 0;
+            this.led.blink = 0;
+            this.led.color = "#dddddd"; // = led off
+            break;
+        case "ON":
+            this.timer = 0;
+            this.led.color = output.led.color;
+            this.led.blink = 0;
+            break;
+        case "FLASH":
+            this.led.blink = 2;
+            break;
+        case "DOUBLE_FLASH":
+            this.led.blink = 4;
+            break;
+        }
+        if (this.led.blink > 0) {
+            if (this.timer > 0.5 && this.led.blink == 2) {
+              this.led.color = output.led.color;
+            } else if (this.led.blink == 4 && (this.timer > 0.5 && this.timer < 0.67 || this.timer > 0.83)){
+              this.led.color = output.led.color;
+            } else {
+              this.led.color = "#dddddd";
+            }
+            this.timer += SIM.getDt();
+            if (this.timer > 1.0) {
+              this.timer = 0;
+            }
+        }
     };
     /**
      * Translate a position to the global coordinate system

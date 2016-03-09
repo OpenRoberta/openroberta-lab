@@ -234,6 +234,7 @@ body.blocklyMinimalBody  *  {
 }
 
 #codeDiv {
+	height: 0;
     position: relative;
     visibility: hidden;
 }

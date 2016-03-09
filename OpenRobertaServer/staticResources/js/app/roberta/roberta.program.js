@@ -313,10 +313,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
                 ROBERTA_ROBOT.setState(result);
                 if ($(window).width() < 768) {
-                    smallScreen = true;
-                    width = '0';
+                     width = '0';
                 } else {
-                    smallScreen = false;
                     width = '30%';
                 }
                 $('#blocklyDiv').animate({
@@ -336,14 +334,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 $('.nav > li > ul > .robotType').addClass('disabled');
                 $('#head-navigation-program-edit').addClass('disabled');
                 $('#head-navigation-program-edit>ul').addClass('hidden');
-                UTIL.cacheBlocks(blocklyWorkspace);
-                COMM.json("/toolbox", {
-                    "cmd" : "loadT",
-                    "name" : userState.toolbox,
-                    "owner" : " "
-                }, function(result) {
-                    injectBlockly(result, userState.programBlocks, true);
-                });
                 $(".code").removeClass('hide');
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
             });
@@ -396,61 +386,68 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
 
         PROGRAM.runInSim(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            // TODO check result!
-            SIM.init(result.javaScriptProgram);
-            if ($(".sim").hasClass('hide')) {
-                $(".sim").removeClass('hide');           
-                $('#blocklyDiv').addClass('simActive');  
-                $('#simDiv').addClass('simActive');
-                $('#simButtonsCollapse').collapse({
-                  'toggle' : false
-                });
-                $('.nav > li > ul > .robotType').addClass('disabled');
-                $('#head-navigation-program-edit').addClass('disabled');
-                $('#head-navigation-program-edit>ul').addClass('hidden');
-                var width;
-                var smallScreen;
-                if ($(window).width() < 768) {
-                    smallScreen = true;
-                    width = '52px';
-                } else {
-                    smallScreen = false;
-                    width = '30%';
-                }
-                $('#blocklyDiv').animate({
-                  width: width
-                }, {
-                  duration: 750,
-                  step: function(){  
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);                   
-                  }, 
-                  done: function() {
-                    if (smallScreen)
-                        $('.blocklyToolboxDiv').css('visibility', 'hidden');
-                        blocklyWorkspace.robControls.toogleSim(smallScreen);
+            //TODO return empty sim program with rc = false;
+            if (result.rc == "ok" && result.javaScriptProgram != "var pp = [") {
+                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+                blocklyWorkspace.robControls.setSimStart(false);                   
+                SIM.init(result.javaScriptProgram);
+                if ($(".sim").hasClass('hide')) {
+                    $(".sim").removeClass('hide');           
+                    $('#blocklyDiv').addClass('simActive');  
+                    $('#simDiv').addClass('simActive');
+                    $('#simButtonsCollapse').collapse({
+                      'toggle' : false
+                    });
+                    $('.nav > li > ul > .robotType').addClass('disabled');
+                    $('#head-navigation-program-edit').addClass('disabled');
+                    $('#head-navigation-program-edit>ul').addClass('hidden');
+                    var width;
+                    var smallScreen;
+                    if ($(window).width() < 768) {
+                        smallScreen = true;
+                        width = '52px';
+                    } else {
+                        smallScreen = false;
+                        width = '30%';
+                    }
+                    $('#blocklyDiv').animate({
+                      width: width
+                    }, {
+                      duration: 750,
+                      step: function(){  
+                        $(window).resize();
+                        Blockly.svgResize(blocklyWorkspace);                   
+                      }, 
+                      done: function() {
+                        if (smallScreen) {
+                            $('.blocklyToolboxDiv').css('display', 'none');
+                        }
+                        blocklyWorkspace.robControls.toogleSim();
                         Blockly.svgResize(blocklyWorkspace); 
                         setTimeout(function() {
                           SIM.setPause(false);
                         }, 1000);
-                    }
+                      }
+                    });
+                } else {             
+                    setTimeout(function() {
+                        SIM.setPause(false);
+                    }, 1000);
+                }
+                $('#simDiv').addClass('simActive');
+                $('#simButtonsCollapse').collapse({
+                    'toggle' : false
                 });
-            } else {             
-                setTimeout(function() {
-                    SIM.setPause(false);
-                }, 1000);
-            }
-            $('#simDiv').addClass('simActive');
-            $('#simButtonsCollapse').collapse({
-                'toggle' : false
-            });
-            $('.nav > li > ul > .robotType').addClass('disabled');
-            $('#head-navigation-program-edit').addClass('disabled');
-            $('#head-navigation-program-edit>ul').addClass('hidden');
-            UTIL.cacheBlocks(blocklyWorkspace);
-            refreshBlocklyProgram(result);
-            $(".sim").removeClass('hide');
-        });
+                $('.nav > li > ul > .robotType').addClass('disabled');
+                $('#head-navigation-program-edit').addClass('disabled');
+                $('#head-navigation-program-edit>ul').addClass('hidden');
+                UTIL.cacheBlocks(blocklyWorkspace);
+                refreshBlocklyProgram(result);
+                $(".sim").removeClass('hide');
+                } else {
+                  //TODO
+                }
+            });      
     }
     exports.runInSim = runInSim;
 
@@ -492,7 +489,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 });
                 Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
                     LOG.info('runInSim from blockly button');
-                    blocklyWorkspace.robControls.setSimStart(false);
                     runInSim();
                     return false;
                 });

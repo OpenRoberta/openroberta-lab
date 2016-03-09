@@ -74,14 +74,14 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information   
-        if (SIM.getInfo()) {
+        if (SIM.getInfo() || this.robot.debug) {
             var endLabel = this.playground.w - 40;
             var endValue = this.playground.w - 5;
             var line = 20;
             this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
             this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
             this.rCtx.textAlign = "end";
-            this.rCtx.font = "10px Verdana";
+            this.rCtx.font = "10px Arial";
             var x, y;
             if (SIM.getBackground() === 5) {
                 x = (this.robot.pose.x + this.robot.pose.transX) / 3;
@@ -97,7 +97,7 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
             this.rCtx.fillText(Math.round(1 / SIM.getDt()), endValue, line);
             line += 15;
             this.rCtx.fillText("Time", endLabel, line);
-            this.rCtx.fillText(Math.round(this.robot.time * 10) / 10, endValue, line);
+            this.rCtx.fillText(Number(Math.round(this.robot.time+'e'+2)+'e-'+2), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot X", endLabel, line);
             this.rCtx.fillText(Math.round(x), endValue, line);
@@ -326,7 +326,7 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                 values.touch = false;
             }
         }
-        if (this.robot.colorSensor || this.robot.lightSensor) {
+        if (this.robot.colorSensor) {
             var r = 0;
             var g = 0
             var b = 0;
@@ -351,8 +351,9 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
             var green = g / num;
             var blue = b / num;
             if (this.robot.colorSensor) {
+                values.color = [];
                 this.robot.colorSensor.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
-                values.color = this.robot.colorSensor.colorValue;
+                values.color.colorValue = this.robot.colorSensor.colorValue;
                 if (this.robot.colorSensor.colorValue === COLOR_ENUM.NONE) {
                     this.robot.colorSensor.color = 'grey';
                 } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.BLACK) {
@@ -370,14 +371,14 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                 } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.GREEN) {
                     this.robot.colorSensor.color = 'lime';
                 }
-            }
-            if (this.robot.lightSensor) {
-                this.robot.lightSensor.lightValue = (red + green + blue) / 3 / 2.55;
-                values.light = this.robot.lightSensor.lightValue;
+                this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
+                values.color.lightValue = this.robot.lightSensor.lightValue;
             }
         }
 
         if (this.robot.ultraSensor) {
+            values.ultrasonic = [];
+            values.infrared = [];
             var u3 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
@@ -433,17 +434,44 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                     }
                 }
             }
-            values.ultrasonic = this.robot.ultraSensor.distance / 3;
+            var distance = this.robot.ultraSensor.distance / 3.0;
+            // adopt sim sensor to real sensor
+            if (distance < 255) {
+              values.ultrasonic.distance = distance;
+            } else {
+              values.ultrasonic.distance = 255.0;
+            }    
+            values.ultrasonic.presence = false;
+            // treet the ultrasonic sensor as infrared sensor
+            if (distance < 70) {
+              values.infrared.distance = 100.0 / 70.0 * distance;
+            } else {
+              values.infrared.distance = 100.0;
+            }  
+            values.infrared.presence = false;
         }
         if (running) {
             this.robot.time += SIM.getDt();
         }
         values.time = this.robot.time;
         if (this.robot.encoder) {
-            var tacho = [];
-            tacho[0] = this.robot.encoder.left * ENC;
-            tacho[1] = this.robot.encoder.right * ENC;
-            values.tacho = tacho;
+            values.encoder = [];
+            values.encoder.left = this.robot.encoder.left * ENC;
+            values.encoder.right = this.robot.encoder.right * ENC;
+        }
+        if (this.robot.gyroSensor) {
+            values.gyro = [];
+            values.gyro.angle = SIMATH.toDegree(this.robot.pose.theta);
+            values.gyro.rate = SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff);
+        }
+        // TODO implement buttons
+        if (this.robot.buttons) {
+            values.buttons = [];
+            var i = 0
+            for (var key in this.robot.buttons) {  
+                values.buttons[i] = this.robot.buttons[key];
+                i++;
+            }
         }
         return values;
     };

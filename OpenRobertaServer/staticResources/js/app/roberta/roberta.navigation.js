@@ -154,7 +154,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 ROBERTA_PROGRAM.showSaveAsModal();
             } else if (domId === 'menuShowCode') { //  Submenu 'Program'
                 ROBERTA_PROGRAM.showCode();
-                $("#navbarCollapse").collapse('hide');
+               // $("#navbarCollapse").collapse('hide');
             } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
                 ROBERTA_TOOLBOX.loadToolbox('beginner');
             } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
@@ -328,7 +328,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             $("#head-navi-tooltip-program").removeClass('disabled');
             $('#head-navigation-program-edit').removeClass('disabled');
             $('#head-navigation-program-edit>ul').removeClass('hidden');
-            $('.blocklyToolboxDiv').css('visibility', 'visible');
+            $('.blocklyToolboxDiv').css('display', 'inherit');
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.toogleSim();              
             $('#blocklyDiv').animate({

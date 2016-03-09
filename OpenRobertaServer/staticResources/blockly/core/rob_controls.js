@@ -302,7 +302,7 @@ Blockly.RobControls.prototype.position = function() {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
         this.WIDTH_ - this.MARGIN_SIDE_; //- Blockly.Scrollbar.scrollbarThickness;
   }
-  if (this.simVisible_ && this.smallScreen_){
+  if (this.simVisible_){//} && this.smallScreen_){
     this.left_+=160;
   }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
