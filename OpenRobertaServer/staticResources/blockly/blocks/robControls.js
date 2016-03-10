@@ -59,7 +59,6 @@ Blockly.Blocks['robControls_start'] = {
         this.setPreviousStatement(false);
         this.setNextStatement(true);
         this.setDeletable(false);
-       // this.setHelp(new Blockly.Help(Blockly.Msg.START_HELP));
         this.setMutatorPlus(new Blockly.MutatorPlus(['robControls_start']));
         this.setTooltip(Blockly.Msg.START_TOOLTIP);
     },

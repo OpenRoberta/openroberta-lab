@@ -93,10 +93,10 @@ Blockly.RobControls.prototype.PATH_SIMPAUSE_ =
   '-2-2zM19 10c-1.104 0-2 .896-2 2v8c0 1.104.896 2 2 2s2-.896 2-2v-8c0-1.104 '+
   '-.896-2-2-2z';
 Blockly.RobControls.prototype.PATH_SIMSTEP_ = 
-  'M21 20h-10c-1.104 0-2 .895-2 2 0 1.104.896 2 2 2h10c1.104 0 2-.896 2-2 0 '+
-  '-1.105-.896-2-2-2zM22.433 14.604c-2.574-2.641-6.433-6.604-6.433-6.604s '+
-  '-3.859 3.963-6.433 6.604c-.349.363-.567.853-.567 1.396 0 1.104.896 2 2 2h '+
-  '10c1.104 0 2-.896 2-2 0-.543-.218-1.033-.567-1.396z';
+  'M23 21.5v-10c0-1.104-0.895-2-2-2s-2 0.896-2 2v10c0 1.104 0.896 2 2 2 1.105 '+
+  '0 2-0.896 2-2zM12.396 22.934c2.641-2.575 6.604-6.434 6.604-6.434s-3.963 '+
+  '-3.859-6.604-6.433c-0.363-0.349-0.853-0.567-1.396-0.567-1.104 0-2 0.896-2 '+
+  '2v10c0 1.104 0.896 2 2 2 0.543 0 1.033-0.218 1.396-0.566z';
 Blockly.RobControls.prototype.PATH_SAVEPROGRAM_ =  
   'M21 13 l-.351.015c-.825-2.377-3.062-4.015-5.649-4.015-3.309 0-6 2.691-6 '+
   '6l.001.126c-1.724.445-3.001 2.013-3.001 3.874 0 2.206 1.794 4 4 4 h5v-4.586 '+
@@ -302,8 +302,8 @@ Blockly.RobControls.prototype.position = function() {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
         this.WIDTH_ - this.MARGIN_SIDE_; //- Blockly.Scrollbar.scrollbarThickness;
   }
-  if (this.simVisible_){//} && this.smallScreen_){
-    this.left_+=160;
+  if (this.simVisible_){
+    this.left_ += 159;
   }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
       this.HEIGHT_ - this.MARGIN_BOTTOM_; //- Blockly.Scrollbar.scrollbarThickness;
@@ -336,8 +336,7 @@ Blockly.RobControls.prototype.showZoom = function(visible) {
   this.zoomVisible_ = visible;
 };
 
-Blockly.RobControls.prototype.toogleSim = function(opt_smallScreen) {
-  this.smallScreen_ = opt_smallScreen || false; 
+Blockly.RobControls.prototype.toogleSim = function() {
   if (!this.simVisible_ ) {     
     this.runInSim.setAttribute('class', 'robButtonHidden ');
     this.simStop.setAttribute('class', 'robButton simStop');

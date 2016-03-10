@@ -350,7 +350,7 @@ Blockly.Blocks['math_on_list'] = {
       thisBlock.updateType_(newOp);
     });
     this.appendValueInput('LIST')
-        .setCheck('Array')
+        .setCheck('Array_Number')
         .appendField(dropdown, 'OP');
     this.setTooltip(function() {
       var mode = thisBlock.getFieldValue('OP');

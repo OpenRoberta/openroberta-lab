@@ -285,6 +285,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
     this.contextMenudeclarationType_ = 'variables_get';
     this.declarationType_ = 'Number';
+    this.nextStatement_ = false;
     this.setNextStatement(false);
     //this.setHelp(new Blockly.Help(Blockly.Msg.VARIABLE_GLOBAL_HELP));
   },

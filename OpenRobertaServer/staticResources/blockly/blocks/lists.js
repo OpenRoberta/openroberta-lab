@@ -782,7 +782,7 @@ Blockly.Blocks['robLists_create_with'] = {
              appendField(':').
              appendField(listType, 'LIST_TYPE').
              appendField(Blockly.RTL ? '\u2192' : '\u2190').
-             setCheck('Number');
+             setCheck(this.listType_);
         this.setInputsInline(false);
       } else {
         this.appendValueInput('ADD' + x).setCheck(this.listType_);

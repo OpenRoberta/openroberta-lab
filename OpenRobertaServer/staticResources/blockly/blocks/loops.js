@@ -446,6 +446,9 @@ Blockly.Blocks['robControls_for'] = {
       xmlField.setAttribute('name', 'VAR');
       var xmlBlock = goog.dom.createDom('block', null, xmlField);
       xmlBlock.setAttribute('type', 'variables_get');
+      xmlBlock.setAttribute('intask',false);
+      var mutation = goog.dom.createDom('mutation');
+      xmlBlock.appendChild(mutation);
       option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);
       options.push(option);
     }
@@ -481,13 +484,28 @@ Blockly.Blocks['robControls_forEach'] = {
       "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
     });
     // workaround to reuse the text from Blockly.Msg.CONTROLS_FOR_TITLE
-    this.nameOld = 'i';
-    this.getField("VAR").setText('i');
-    this.getField("VAR").setChangeHandler(this.validateName);
+    this.nameOld = Blockly.Msg.VARIABLES_TITLE;
+    this.getField("VAR").setText(Blockly.Msg.VARIABLES_DEFAULT_NAME);
+    this.getField("VAR").setChangeHandler(this.validateName); 
+    var declType = new Blockly.FieldDropdown([ 
+                   [Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], 
+                   [Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
+                   [Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], 
+                   [Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ], 
+                   [Blockly.Msg.VARIABLES_TYPE_CONNECTION, 'Connection' ]], 
+                   function(option) {
+                     if (option && this.sourceBlock_.getFieldValue('TYPE') !== option) {
+                       this.sourceBlock_.updateType(option);
+                     }
+                   });
+    this.getInput('LIST').appendField(declType, 'TYPE');
+    var temp = this.getInput('LIST').fieldRow.pop();
+    this.getInput('LIST').fieldRow.splice(1, 0, temp);
     this.appendStatementInput('DO')
         .appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_DO);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
+    this.listType_ = 'Number';
     this.setTooltip(function() {
       return Blockly.Msg.CONTROLS_FOREACH_TOOLTIP.replace('%1',
           thisBlock.getFieldValue('VAR'));
@@ -498,7 +516,11 @@ Blockly.Blocks['robControls_forEach'] = {
    * inconsistent as a result of the XML loading.
    * @this Blockly.Block
    */
-  validate: Blockly.Blocks['robControls_for'].validate,
+  validate: function () {
+    var name = Blockly.Variables.findLegalName(
+        this.getFieldValue('VAR'), this);
+    this.setFieldValue(name, 'VAR');
+  },
   /**
    * Obtain a valid name for the variable.
    * Merge runs of whitespace.  Strip leading and trailing whitespace.
@@ -509,6 +531,27 @@ Blockly.Blocks['robControls_forEach'] = {
    * @this Blockly.Block
    */
   validateName: Blockly.Blocks['robControls_for'].validateName,
+    /**
+   * Create XML to represent list inputs.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom : function() {
+    var container = document.createElement('mutation');
+    container.setAttribute('list_type', this.listType_);
+    return container;
+  },
+  /**
+   * Parse XML to restore the list inputs.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation : function(xmlElement) {
+    this.listType_ = xmlElement.getAttribute('list_type');
+    if (this.listType_) {
+      this.getInput('LIST').connection.setCheck('Array_' + this.listType_);
+    }
+  },
   /**
    * Return all variables referenced by this block.
    * @return {!Array.<string>} List of variable names.
@@ -525,6 +568,9 @@ Blockly.Blocks['robControls_forEach'] = {
   getVarDecl : function() {
     return [ this.getFieldValue('VAR') ];
   },
+  getType: function() {
+    return this.listType_;
+  },
   onchange : function() {
     if (!this.workspace || Blockly.Block.dragMode_ == 2) {
       // Block has been deleted or is in move
@@ -535,6 +581,11 @@ Blockly.Blocks['robControls_forEach'] = {
       var arrayType = blockList.outputConnection.check_[0];
       Blockly.Variables.updateType(this.getFieldValue('VAR'), arrayType.replace('Array_',''));
     }
+  },
+  updateType : function(option) {
+        this.listType_ = option;
+        this.getInput('LIST').connection.setCheck('Array_' + this.listType_);
+        Blockly.Variables.updateType(this.getFieldValue('VAR'), option);
   },
   customContextMenu : Blockly.Blocks['robControls_for'].customContextMenu
 };

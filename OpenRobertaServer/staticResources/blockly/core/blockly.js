@@ -131,24 +131,24 @@ Blockly.CAT_COMMUNICATION_RGB = "#FF69B4";
  */
 Blockly.CAT_ICON = [];
 Blockly.CAT_ICON['brick'] = 'roberta';
-Blockly.CAT_ICON['TOOLBOX_ACTION'] = 'arrow-forward-outline';
-Blockly.CAT_ICON['TOOLBOX_MOVE'] = 'starburst-outline';
-Blockly.CAT_ICON['TOOLBOX_DRIVE'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_ACTION'] = 'action';
+Blockly.CAT_ICON['TOOLBOX_MOVE'] = 'move';
+Blockly.CAT_ICON['TOOLBOX_DRIVE'] = 'steering_wheel';
 Blockly.CAT_ICON['TOOLBOX_DISPLAY'] = 'message-typing';
 Blockly.CAT_ICON['TOOLBOX_SOUND'] = 'volume-up';
-Blockly.CAT_ICON['TOOLBOX_LIGHT'] = 'thumbs-down';
-Blockly.CAT_ICON['TOOLBOX_SENSOR'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_LIGHT'] = 'led';
+Blockly.CAT_ICON['TOOLBOX_SENSOR'] = 'sensor';
 Blockly.CAT_ICON['TOOLBOX_CONTROL'] = 'flow-children';
 Blockly.CAT_ICON['TOOLBOX_DECISION'] = 'flow-merge';
-Blockly.CAT_ICON['TOOLBOX_WAIT'] = 'stopwatch';
-Blockly.CAT_ICON['TOOLBOX_LOOP'] = 'arrow-sync-outline';
-Blockly.CAT_ICON['TOOLBOX_LOGIC'] = 'thumbs-down';
-Blockly.CAT_ICON['TOOLBOX_MATH'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_WAIT'] = 'wait';
+Blockly.CAT_ICON['TOOLBOX_LOOP'] = 'loop';
+Blockly.CAT_ICON['TOOLBOX_LOGIC'] = 'logic';
+Blockly.CAT_ICON['TOOLBOX_MATH'] = 'math';
 Blockly.CAT_ICON['TOOLBOX_TEXT'] = 'sort-alphabetically-outline';
-Blockly.CAT_ICON['TOOLBOX_LIST'] = 'th-list-outline';
+Blockly.CAT_ICON['TOOLBOX_LIST'] = 'th-small-outline';
 Blockly.CAT_ICON['TOOLBOX_COLOUR'] = 'brush';
-Blockly.CAT_ICON['TOOLBOX_VARIABLE'] = 'code-outline';
-Blockly.CAT_ICON['TOOLBOX_PROCEDURE'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_VARIABLE'] = 'variable';
+Blockly.CAT_ICON['TOOLBOX_PROCEDURE'] = 'plus-outline';
 Blockly.CAT_ICON['TOOLBOX_COMMUNICATION'] = 'messages';
 
 /**
