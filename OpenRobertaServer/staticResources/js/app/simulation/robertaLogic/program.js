@@ -13,12 +13,21 @@ define([ 'robertaLogic.timer' ], function(Timer) {
         var privateProperties = {
             program : [],
             nextStatement : true,
+            nextFrameTimeDuration : 0,
             wait : false,
             timer : new Timer(),
             runningTimer : false
         };
         privateMem.set(this, privateProperties);
     };
+
+    Program.prototype.setNextFrameTimeDuration = function(value) {
+        privateMem.get(this).nextFrameTimeDuration = value;
+    }
+
+    Program.prototype.getNextFrameTimeDuration = function() {
+        return privateMem.get(this).nextFrameTimeDuration;
+    }
 
     /**
      * Set array of objects (statements of the program) as program.
@@ -184,7 +193,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
      * @returns {String} - String representation of the object.
      */
     Program.prototype.toString = function() {
-        return JSON.stringify([ privateMem.get(this).program, privateMem.get(this).timer ]);
+        return JSON.stringify([ privateMem.get(this).program, privateMem.get(this).timer, privateMem.get(this).nextFrameTimeDuration ]);
     };
 
     return Program;

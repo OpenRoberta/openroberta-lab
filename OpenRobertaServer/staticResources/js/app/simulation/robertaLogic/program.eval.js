@@ -114,8 +114,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 throw "Invalid Statement " + stmt.stmt + "!";
             }
         }
-        this.actors.calculateCoveredDistance(this.program);
+        newSpeeds = this.actors.calculateCoveredDistance(this.program);
         this.program.handleWaitTimer();
+        return this.handleSpeeds(this, newSpeeds)
     };
 
     var setSensorActorValues = function(obj, simulationSensorData) {
@@ -126,6 +127,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         obj.actors.getLeftMotor().setCurrentRotations(simulationSensorData.encoder.left);
         obj.actors.getRightMotor().setCurrentRotations(simulationSensorData.encoder.right);
         obj.program.getTimer().setCurrentTime(simulationSensorData.time);
+        obj.program.setNextFrameTimeDuration(simulationSensorData.frameTime);
+    };
+
+    ProgramEval.prototype.handleSpeeds = function(obj, speeds) {
+        var values = {};
+        values['powerLeft'] = obj.actors.getLeftMotor().getPower();
+        values['powerRight'] = obj.actors.getRightMotor().getPower();
+        if (speeds[0] != undefined) {
+            values['powerLeft'] = speeds[0]
+        }
+        if (speeds[1] != undefined) {
+            values['powerRight'] = speeds[1]
+        }
+        return values;
     };
 
     function evalResetEncoderSensor(obj, stmt) {

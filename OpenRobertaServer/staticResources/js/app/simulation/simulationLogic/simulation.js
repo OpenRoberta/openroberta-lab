@@ -8,8 +8,8 @@
  */
 
 define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulation.robot.math', 'simulation.robot.roberta', 'simulation.robot.rescue',
-        'simulation.scene', 'simulation.program.eval', 'simulation.math', 'roberta.program' ], function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot, RescueRobot,
-        Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM) {
+        'simulation.scene', 'simulation.program.eval', 'simulation.math', 'roberta.program' ], function(exports, SimpleRobot, DrawRobot, MathRobot,
+        RobertaRobot, RescueRobot, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM) {
 
     var programEval = new ProgramEval();
 
@@ -233,8 +233,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             if (stepCounter === 0) {
                 setPause(true);
             }
-            programEval.step(exports.input);
-            setOutput();
+            motorValues = programEval.step(exports.input);
+            setOutput(motorValues);
         } else if (programEval.program.isTerminated()) {            
             setPause(true);
             reloadProgram();
@@ -258,14 +258,14 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
     }
 
-    function setOutput() {
-        var left = programEval.actors.getLeftMotor().getPower();
+    function setOutput(values) {
+        var left = values.powerLeft;
         if (left > 100) {
             left = 100;
         } else if (left < -100) {
             left = -100
         }
-        var right = programEval.actors.getRightMotor().getPower();
+        var right = values.powerRight;
         if (right > 100) {
             right = 100;
         } else if (right < -100) {
