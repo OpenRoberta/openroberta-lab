@@ -49,7 +49,7 @@ public class AstToEv3PythonVisitorTest {
         + "        run()\n"
         + "    except Exception as e:\n"
         + "        hal.drawText('Fehler im EV3', 0, 0)\n"
-        + "        hal.drawText(e.__class__.__name, 0, 1)\n"
+        + "        hal.drawText(e.__class__.__name__, 0, 1)\n"
         + "        if e.message:\n"
         + "            hal.drawText(e.message, 0, 2)\n"
         + "        hal.drawText('Press any key', 0, 4)\n"
