@@ -69,10 +69,6 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
         }
     };
 
-    function round(value, decimals) {
-        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
-    }
-
     Scene.prototype.drawRobot = function() {
         this.rCtx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
         this.rCtx.restore();
@@ -88,8 +84,8 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
             this.rCtx.font = "10px Arial";
             var x, y;
             if (SIM.getBackground() === 5) {
-                x = round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
-                y = round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
+                x = SIMATH.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
+                y = SIMATH.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
                 this.rCtx.fillStyle = "#ffffff";
 
             } else {
@@ -98,34 +94,34 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                 this.rCtx.fillStyle = "#333333";
             }
             this.rCtx.fillText("FPS", endLabel, line);
-            this.rCtx.fillText(Math.round(1 / SIM.getDt()), endValue, line);
+            this.rCtx.fillText(SIMATH.round(1 / SIM.getDt(),0), endValue, line);
             line += 15;
             this.rCtx.fillText("Time", endLabel, line);
-            this.rCtx.fillText(Number(Math.round(this.robot.time+'e'+2)+'e-'+2), endValue, line);
+            this.rCtx.fillText(SIMATH.round(this.robot.time, 2), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot X", endLabel, line);
-            this.rCtx.fillText(x, endValue, line);
+            this.rCtx.fillText(SIMATH.round(x,0), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot Y", endLabel, line);
-            this.rCtx.fillText(y, endValue, line);
+            this.rCtx.fillText(SIMATH.round(y,0), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot θ", endLabel, line);
-            this.rCtx.fillText(Math.round(Math.round(SIMATH.toDegree(this.robot.pose.theta))), endValue, line);
+            this.rCtx.fillText(SIMATH.round(SIMATH.toDegree(this.robot.pose.theta),0), endValue, line);
             line += 25;
             this.rCtx.fillText("Motor left", endLabel, line);
-            this.rCtx.fillText(round(this.robot.encoder.left * ENC, 0), endValue, line);
+            this.rCtx.fillText(SIMATH.round(this.robot.encoder.left * ENC, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Motor right", endLabel, line);
-            this.rCtx.fillText(round(this.robot.encoder.right * ENC, 0), endValue, line);
+            this.rCtx.fillText(SIMATH.round(this.robot.encoder.right * ENC, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Touch Sensor", endLabel, line);
-            this.rCtx.fillText(Math.round(this.robot.touchSensor.value), endValue, line);
+            this.rCtx.fillText(SIMATH.round(this.robot.touchSensor.value, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Light Sensor", endLabel, line);
-            this.rCtx.fillText(Math.round(Math.round(this.robot.lightSensor.lightValue)), endValue, line);
+            this.rCtx.fillText(SIMATH.round(this.robot.lightSensor.lightValue, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Ultra Sensor", endLabel, line);
-            this.rCtx.fillText(Math.round(this.robot.ultraSensor.distance / 3), endValue, line);
+            this.rCtx.fillText(SIMATH.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Color Sensor", endLabel, line);
             this.rCtx.beginPath();
@@ -473,8 +469,12 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
             values.buttons = [];
             var i = 0
             for (var key in this.robot.buttons) {  
-                values.buttons[i] = this.robot.buttons[key];
-                i++;
+                values.buttons[key] = this.robot.buttons[key] == true;
+                //once the state of the button is delivered, reset the button
+                this.robot.buttons[key] = false;
+                // for testing only
+                if (values.buttons[key])
+                  console.log(key + ' pressed');        
             }
         }
         return values;

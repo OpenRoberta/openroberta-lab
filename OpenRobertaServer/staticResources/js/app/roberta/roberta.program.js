@@ -326,7 +326,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     Blockly.svgResize(blocklyWorkspace);                   
                   }, 
                   done: function() {
-                    Blockly.svgResize(blocklyWorkspace); 
+                    Blockly.svgResize(blocklyWorkspace);                    
                   }
                 });
                 $('#codeContent').addClass('codeActive');

@@ -178,6 +178,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         left : 0,
         right : 0,
         led : { color : '', mode : ''},
+        display : { text : '', x : 0, y : 0, picture : '', clear : false}
     };
 
 // render stuff
@@ -233,8 +234,9 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             if (stepCounter === 0) {
                 setPause(true);
             }
-            motorValues = programEval.step(exports.input);
-            setOutput(motorValues);
+            var actionValues = programEval.step(exports.input);
+            //TODO use actionValues directly for robot.update()
+            setOutput(actionValues);
         } else if (programEval.program.isTerminated()) {            
             setPause(true);
             reloadProgram();
@@ -244,7 +246,6 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         var values = scene.updateSensorValues(!pause);
         values.correctDrive = currentBackground == 5;
         exports.input = values;
-        //console.log(values);
         scene.drawRobot();
     }
 
@@ -271,15 +272,18 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         } else if (right < -100) {
             right = -100
         }
-        exports.output.debug = true; // TODO get this information from programEval (startblock)
+        exports.output.debug = true; // TODO get this information from actionValues.debug
         exports.output.left = left * MAXPOWER || 0;
         exports.output.right = right * MAXPOWER || 0;
         exports.output.led = [];
         exports.output.led.color = programEval.led.color;
         exports.output.led.mode = programEval.led.mode;
-        //exports.output.display.text = 
-        //exports.output.display.x =
-        //exports.output.display.y =
+        exports.output.display = [];
+        exports.output.display.text = '';// TODO get this information from actionValues.display.text
+        exports.output.display.x = 0;// TODO get this information from actionValues.display.x
+        exports.output.display.y = 0;// TODO get this information from actionValues.display.y
+        exports.output.display.picture = 'flowers';// TODO get this information from actionValues.display.picture
+        exports.output.display.clear = false;// TODO get this information from actionValues.display.clear      
         //exports.output.tone = 
     }
     
@@ -289,7 +293,10 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         exports.output.led = [];
         exports.output.led.color = '';
         exports.output.led.mode = OFF;
-        //exports.output.display.text 
+        exports.output.display = [];
+        exports.output.display.text = '';
+        exports.output.display.x = 0;
+        exports.output.display.y = 0;
     }
 
     function setObstacle() {

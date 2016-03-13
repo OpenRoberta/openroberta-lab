@@ -34,6 +34,19 @@ define(function(require, exports) {
         return radians * (180 / Math.PI);
     };
     /**
+     * Correct rounding.
+     * 
+     * @memberOf exports
+     * @param {Number}
+     *            number to round
+     * @param {Number}
+     *            decimals
+     * @returns {Number} degree
+     */
+    exports.round  = function (value, decimals) {
+        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    };
+    /**
      * Get intersection point from two lines.
      * 
      * @memberOf exports

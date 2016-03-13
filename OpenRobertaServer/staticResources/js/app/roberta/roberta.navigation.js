@@ -322,7 +322,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
 
         $('.simBack').onWrap('click', function(event) {
             SIM.cancel();
-            $(".sim").addClass('hide'); 
+            $(".sim").addClass('hide');
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $("#simButtonsCollapse").collapse('hide');
             $("#head-navi-tooltip-program").removeClass('disabled');
@@ -339,7 +339,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 $(window).resize();
                 Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());                   
                 }, 
-              done: function() {               
+              done: function() {         
+                $("#simRobotModal").modal("hide");        
                 $('#simDiv').removeClass('simActive');
                 $('#menuSim').parent().addClass('disabled');
                 $(window).resize();
@@ -372,12 +373,13 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             $("#simButtonsCollapse").collapse('hide');
         }, 'simInfo clicked');
         
-        $('.simRobot').onWrap('click', function(event) {
-            //TODO implement the robot with a display and buttons
-            alert('here comes your robot!');
+        $('#simRobot').onWrap('click', function(event) {
+            $("#simRobotModal").modal("toggle");
             $("#simButtonsCollapse").collapse('hide');
         }, 'simRobot clicked');
-
+        $('#simRobotModal').removeClass("modal-backdrop");
+        // not working :-(
+       //$('#simRobotModal').draggable(); 
         $('.simScene').onWrap('click', function(event) {
             SIM.setBackground(0);
             var scene = $("#simButtonsCollapse").collapse('hide');

@@ -483,6 +483,28 @@ body.blocklyMinimalBody  *  {
     text-transform: uppercase
 }
 
+.modal.simRobotModal {
+    left: 50px;
+    top: 100px;
+    right: inherit;
+    bottom: inherit;
+} 
+.simRobotModal .modal-header {
+	position: fixed;
+    right: 16;
+}
+.simRobotModal .modal-dialog {
+    width: inherit;
+    margin: 0;
+}
+.simRobotModal text{
+    -webkit-touch-callout: none; 
+    -webkit-user-select: none;   
+    -khtml-user-select: none;  
+    -moz-user-select: none;   
+    -ms-user-select: none;  
+    user-select: none;    
+}
 .modal-backdrop.in {
     opacity: .3;
 }
@@ -875,6 +897,10 @@ table.dataTable thead .sorting_desc {
     }
     #start-choise {
      width:80%;}
+    .modal.simRobotModal {
+      left: 6px; 
+      top: 60px;
+    }
 }
 
 @media (max-height: 360px)  {
