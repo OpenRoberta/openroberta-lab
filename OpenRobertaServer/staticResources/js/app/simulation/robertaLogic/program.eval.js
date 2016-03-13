@@ -3,8 +3,8 @@
  * reads every statement of the program and gives command to the simulation what
  * the robot should do.
  */
-define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.led' ], function(Actors, Sensors, Memory,
-        Program, Led) {
+define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.led', 'robertaLogic.display'], function(Actors, Sensors, Memory,
+        Program, Led, Display) {
 
     var ProgramEval = function() {
         this.actors = new Actors();
@@ -12,6 +12,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         this.memory = new Memory;
         this.program = new Program();
         this.led = new Led();
+        this.display = new Display();
     };
 
     /**
@@ -85,7 +86,6 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 break;
 
             case TURN_LIGHT:
-              console.log(stmt);
                 evalLedOnAction(this, simulationSensorData, stmt);
                 break;
 
@@ -160,21 +160,12 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
     function evalLedOnAction(obj, simulationSensorData, stmt) {
         obj.led.color = stmt.color;
         obj.led.mode = stmt.mode;
-//        obj.led.blinkAcc = 0.0;
-//        switch (obj.led.mode) {
-//        case "FLASH":
-//            obj.led.blink = 2;
-//            break;
-//        case "DOUBLE_FLASH":
-//            obj.led.blink = 4;
-//            break;
-//        }
     }
 
     function evalShowTextAction(obj, stmt) {
-      console.log(stmt);
-        val = evalExpr(obj, stmt.value)
-        console.log(val);
+        obj.display.text = evalExpr(obj, stmt.text);
+        obj.display.x = evalExpr(obj, stmt.x);
+        obj.display.y = evalExpr(obj, stmt.y);
     }
 
     function evalTurnAction(obj, simulationSensorData, stmt) {

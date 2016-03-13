@@ -51,6 +51,7 @@ require.config({
         'robertaLogic.actors' : '../app/simulation/robertaLogic/actors',
         'robertaLogic.sensors' : '../app/simulation/robertaLogic/sensors',
         'robertaLogic.led' : '../app/simulation/robertaLogic/led',
+        'robertaLogic.display' : '../app/simulation/robertaLogic/display',
         'robertaLogic.motor' : '../app/simulation/robertaLogic/motor',
         'robertaLogic.memory' : '../app/simulation/robertaLogic/memory',
         'robertaLogic.program' : '../app/simulation/robertaLogic/program'

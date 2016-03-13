@@ -452,6 +452,10 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createShowTextAction(");
         showTextAction.getMsg().visit(this);
+        this.sb.append(", ");
+        showTextAction.getX().visit(this);
+        this.sb.append(", ");
+        showTextAction.getY().visit(this);
         this.sb.append(end);
         return null;
     }

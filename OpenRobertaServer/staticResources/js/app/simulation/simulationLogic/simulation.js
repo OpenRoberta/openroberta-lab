@@ -279,11 +279,14 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         exports.output.led.color = programEval.led.color;
         exports.output.led.mode = programEval.led.mode;
         exports.output.display = [];
-        exports.output.display.text = '';// TODO get this information from actionValues.display.text
-        exports.output.display.x = 0;// TODO get this information from actionValues.display.x
-        exports.output.display.y = 0;// TODO get this information from actionValues.display.y
-        exports.output.display.picture = 'flowers';// TODO get this information from actionValues.display.picture
-        exports.output.display.clear = false;// TODO get this information from actionValues.display.clear      
+        exports.output.display.text = programEval.display.text ;
+        exports.output.display.x = programEval.display.x;
+        exports.output.display.y = programEval.display.y;
+        exports.output.display.picture = programEval.display.picture;
+        exports.output.display.clear = programEval.display.clear; 
+        // TODO do this in programEval
+        programEval.display=[];
+        //console.log(exports.output);
         //exports.output.tone = 
     }
     
@@ -294,9 +297,9 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         exports.output.led.color = '';
         exports.output.led.mode = OFF;
         exports.output.display = [];
-        exports.output.display.text = '';
-        exports.output.display.x = 0;
-        exports.output.display.y = 0;
+        exports.output.display.clear = true;
+        // TODO do this in programEval
+        programEval.display={};
     }
 
     function setObstacle() {

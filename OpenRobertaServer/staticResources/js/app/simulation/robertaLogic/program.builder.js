@@ -108,11 +108,12 @@ function createRepeatStmt(mode, expr, stmtList) {
     return result;
 }
 
-function createShowTextAction(text) {
+function createShowTextAction(text, x, y) {
     var result = {};
     result[STMT] = SHOW_TEXT_ACTION;
-    result[VALUE] = text;
-
+    result[TEXT] = text;
+    result[X] = x;
+    result[Y] = y;
     return result;
 }
 

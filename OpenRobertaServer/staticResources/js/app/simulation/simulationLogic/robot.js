@@ -347,7 +347,7 @@ define([ 'simulation.simulation' ], function(SIM) {
         }
         // update display
         if (output.display.text) {    
-          $("#display").html(
+          $("#display").html($("#display").html()+
                          '<text x=' + 
                            output.display.x + 
                            ' y=' + output.display.y + 

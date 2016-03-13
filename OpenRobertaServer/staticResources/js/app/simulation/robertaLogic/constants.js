@@ -47,6 +47,12 @@ MATH_CONST = "MathConst";
 const
 SHOW_TEXT_ACTION = "ShowTextAction";
 const
+TEXT = "text";
+const
+X = "x";
+const
+Y = "y";
+const
 MATH_PROP_FUNCT = "MathPropFunct";
 
 const
