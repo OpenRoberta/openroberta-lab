@@ -165,19 +165,23 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     exports.obstacleList = [ ground, obstacle ];
 
 // input and output for executing user program
-    exports.input = {
+    var input = {
         touch : false,
         color : '',
         light : 0,
         ultrasonic : 0,
         tacho : [ 0, 0 ],
-        time : 0
+        time : 0,
+        frameTime : 0
     };
 
-    exports.output = {
+    var output = {
         left : 0,
         right : 0,
-        led : { color : '', mode : ''},
+        led : {
+            color : '',
+            mode : ''
+        },
         display : { text : '', x : 0, y : 0, picture : '', clear : false}
     };
 
@@ -223,29 +227,28 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         var now = new Date().getTime();
         dt = now - (time || now);
         dt /= 1000;
-
+        input.frameTime = dt;
         time = now;
 
         stepCounter += 1;
-        exports.output.left = 0;
-        exports.output.right = 0;
+        output.left = 0;
+        output.right = 0;
         if (!programEval.program.isTerminated() && !pause) {
             //executeProgram();  //for tests without OpenRobertaLab
             if (stepCounter === 0) {
                 setPause(true);
             }
-            var actionValues = programEval.step(exports.input);
-            //TODO use actionValues directly for robot.update()
-            setOutput(actionValues);
+            var simulationValues = programEval.step(input);
+            setOutput(simulationValues);
         } else if (programEval.program.isTerminated()) {            
             setPause(true);
             reloadProgram();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         }
-        robot.update(exports.output);
-        var values = scene.updateSensorValues(!pause);
+        robot.update(output);
+        var values = scene.updateSensorValues(!pause, output);
         values.correctDrive = currentBackground == 5;
-        exports.input = values;
+        input = values;
         scene.drawRobot();
     }
 
@@ -272,18 +275,18 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         } else if (right < -100) {
             right = -100
         }
-        exports.output.debug = true; // TODO get this information from actionValues.debug
-        exports.output.left = left * MAXPOWER || 0;
-        exports.output.right = right * MAXPOWER || 0;
-        exports.output.led = [];
-        exports.output.led.color = programEval.led.color;
-        exports.output.led.mode = programEval.led.mode;
-        exports.output.display = [];
-        exports.output.display.text = programEval.display.text ;
-        exports.output.display.x = programEval.display.x;
-        exports.output.display.y = programEval.display.y;
-        exports.output.display.picture = programEval.display.picture;
-        exports.output.display.clear = programEval.display.clear; 
+        output.debug = true; // TODO get this information from actionValues.debug
+        output.left = left * MAXPOWER || 0;
+        output.right = right * MAXPOWER || 0;
+        output.led = [];
+        output.led.color = programEval.led.color;
+        output.led.mode = programEval.led.mode;
+        output.display = [];
+        output.display.text = programEval.display.text ;
+        output.display.x = programEval.display.x;
+        output.display.y = programEval.display.y;
+        output.display.picture = programEval.display.picture;
+        output.display.clear = programEval.display.clear; 
         // TODO do this in programEval
         programEval.display=[];
         //console.log(exports.output);
@@ -291,13 +294,13 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     }
     
     function resetOutput() {
-        exports.output.left = 0;
-        exports.output.right = 0;
-        exports.output.led = [];
-        exports.output.led.color = '';
-        exports.output.led.mode = OFF;
-        exports.output.display = [];
-        exports.output.display.clear = true;
+        output.left = 0;
+        output.right = 0;
+        output.led = [];
+        output.led.color = '';
+        output.led.mode = OFF;
+        output.display = [];
+        output.display.clear = true;
         // TODO do this in programEval
         programEval.display={};
     }

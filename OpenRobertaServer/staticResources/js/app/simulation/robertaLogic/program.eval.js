@@ -116,7 +116,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         }
         newSpeeds = this.actors.calculateCoveredDistance(this.program);
         this.program.handleWaitTimer();
-        return this.handleSpeeds(this, newSpeeds)
+        return handleSpeeds(this, newSpeeds)
     };
 
     var setSensorActorValues = function(obj, simulationSensorData) {
@@ -130,7 +130,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         obj.program.setNextFrameTimeDuration(simulationSensorData.frameTime);
     };
 
-    ProgramEval.prototype.handleSpeeds = function(obj, speeds) {
+    function handleSpeeds(obj, speeds) {
         var values = {};
         values['powerLeft'] = obj.actors.getLeftMotor().getPower();
         values['powerRight'] = obj.actors.getRightMotor().getPower();
@@ -141,7 +141,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             values['powerRight'] = speeds[1]
         }
         return values;
-    };
+    }
 
     function evalResetEncoderSensor(obj, stmt) {
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
@@ -166,6 +166,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         obj.display.text = evalExpr(obj, stmt.text);
         obj.display.x = evalExpr(obj, stmt.x);
         obj.display.y = evalExpr(obj, stmt.y);
+        console.log(stmt);
+        val = evalExpr(obj, stmt.value)
+        console.log(val);
     }
 
     function evalTurnAction(obj, simulationSensorData, stmt) {

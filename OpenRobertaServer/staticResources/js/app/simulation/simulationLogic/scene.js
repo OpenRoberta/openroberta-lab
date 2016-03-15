@@ -244,7 +244,7 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
         }
     };
 
-    Scene.prototype.updateSensorValues = function(running) {
+    Scene.prototype.updateSensorValues = function(running, output) {
         var values = {};
         if (this.robot.touchSensor) {
             this.robot.touchSensor.value = 0;
@@ -281,7 +281,7 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                             y : obstacleLines[k].y2
                         });
                         if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
-                                * Math.max(Math.abs(SIM.output.right), Math.abs(SIM.output.left))) {
+                                * Math.max(Math.abs(output.right), Math.abs(output.left))) {
                             this.robot.frontLeft.bumped = true;
                             this.robot.frontRight.bumped = true;
                             this.robot.touchSensor.value = 1;
@@ -310,7 +310,7 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                                     y : obstacleLines[k].y2
                                 });
                                 if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt()
-                                        * Math.max(Math.abs(SIM.output.right), Math.abs(SIM.output.left))) {
+                                        * Math.max(Math.abs(output.right), Math.abs(output.left))) {
                                     this.robot.backLeft.bumped = true;
                                     this.robot.backRight.bumped = true;
                                 }
