@@ -378,7 +378,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String end = createClosingBracket();
-        this.sb.append("createResetLight(");
+        this.sb.append("createStatusLight(" + lightStatusAction.getStatus());
         this.sb.append(end);
         return null;
     }
@@ -425,7 +425,9 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        // TODO implementation of visitClearDisplayAction
+        String end = createClosingBracket();
+        this.sb.append("createClearDisplayAction(");
+        this.sb.append(end);
         return null;
     }
 
@@ -443,7 +445,12 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        // TODO implementation of visitShowPictureAction
+        String end = createClosingBracket();
+        this.sb.append("createShowPictureAction('" + showPictureAction.getPicture() + "', ");
+        showPictureAction.getX().visit(this);
+        this.sb.append(", ");
+        showPictureAction.getY().visit(this);
+        this.sb.append(end);
         return null;
     }
 
@@ -513,11 +520,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        // TODO implement Infraredsensor
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        //TODO implement timer sensor
         return null;
     }
 
@@ -541,6 +550,11 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        if ( mainTask.getDebug().equals("TRUE") ) {
+            String end = createClosingBracket();
+            this.sb.append("createDebugAction(");
+            this.sb.append(end);
+        }
         mainTask.getVariables().visit(this);
         return null;
     }

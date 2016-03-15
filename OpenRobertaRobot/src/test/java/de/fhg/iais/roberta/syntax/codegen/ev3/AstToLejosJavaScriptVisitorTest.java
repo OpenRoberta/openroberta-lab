@@ -73,7 +73,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt2 = createTurnLight(GREEN, ON);\n"
                 + "var stmt3 = createStopDrive();\n"
-                + "var stmt4 = createResetLight();\n"
+                + "var stmt4 = createStatusLight(RESET);\n"
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5];";
 
@@ -152,7 +152,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt7 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 26));\n"
                 + "var stmt8 = createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 33));\n"
                 + "var stmt9 = createTurnLight(GREEN, ON);\n"
-                + "var stmt10 = createResetLight();\n"
+                + "var stmt10 = createStatusLight(OFF);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator9.xml");
@@ -389,6 +389,19 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator27.xml");
+
+    }
+
+    @Test
+    public void test28() throws Exception {
+        String a =
+            "var stmt0 = createDebugAction();\n"
+                + "var stmt1 = createShowPictureAction('OLDGLASSES', createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 11));\n"
+                + "var stmt2 = createShowPictureAction('EYESOPEN', createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 11));\n"
+                + "var stmt3 = createClearDisplayAction();\n"
+                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator28.xml");
 
     }
 

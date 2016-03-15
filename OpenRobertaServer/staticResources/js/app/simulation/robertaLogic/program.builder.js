@@ -108,6 +108,15 @@ function createRepeatStmt(mode, expr, stmtList) {
     return result;
 }
 
+function createShowPictureAction(picture, x, y) {
+    var result = {};
+    result[STMT] = SHOW_PICTURE_ACTION;
+    result[PICTURE] = picture;
+    result[X] = x;
+    result[Y] = y;
+    return result;
+}
+
 function createShowTextAction(text, x, y) {
     var result = {};
     result[STMT] = SHOW_TEXT_ACTION;
@@ -117,6 +126,18 @@ function createShowTextAction(text, x, y) {
     return result;
 }
 
+function createClearDisplayAction() {
+    var result = {};
+    result[STMT] = CLEAR_DISPLAY_ACTION;
+    return result;
+}
+
+function createDebugAction() {
+    var result = {};
+    result[STMT] = CREATE_DEBUG_ACTION;
+
+    return result;
+}
 function createDriveAction(speed, direction, distance) {
     var result = {};
     result[STMT] = DRIVE_ACTION;
@@ -179,9 +200,10 @@ function createTurnLight(color, mode) {
     return result;
 }
 
-function createResetLight() {
+function createStatusLight(mode) {
     var result = {};
-    result[STMT] = RESET_LIGHT;
+    result[STMT] = STATUS_LIGHT_ACTION;
+    result[MODE] = mode;
     return result;
 }
 

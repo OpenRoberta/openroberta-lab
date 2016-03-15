@@ -283,7 +283,9 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         } else if (right < -100) {
             right = -100
         }
-        output.debug = true; // TODO get this information from actionValues.debug
+        if (values.debug) {
+            output.debug = true;
+        }
         output.left = left * MAXPOWER || 0;
         output.right = right * MAXPOWER || 0;
         if (values.led) {

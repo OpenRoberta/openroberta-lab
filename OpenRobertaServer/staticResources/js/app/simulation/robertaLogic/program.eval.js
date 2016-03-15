@@ -46,6 +46,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
      *            {Object} - sensor data from the simulation
      */
     ProgramEval.prototype.step = function(simulationData) {
+        internal(this).outputCommands = {};
         setSensorActorValues(internal(this), simulationData);
         if (internal(this).program.isNextStatement()) {
             var stmt = internal(this).program.getRemove();
@@ -82,8 +83,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 evalMotorOnAction(internal(this), stmt);
                 break;
 
+            case SHOW_PICTURE_ACTION:
+                evalShowPictureAction(internal(this), stmt);
+                break;
+
             case SHOW_TEXT_ACTION:
                 evalShowTextAction(internal(this), stmt);
+                break;
+
+            case CLEAR_DISPLAY_ACTION:
+                evalClearDisplayAction(internal(this), stmt);
+                break;
+
+            case CREATE_DEBUG_ACTION:
+                internal(this).outputCommands.debug = true;
                 break;
 
             case WAIT_STMT:
@@ -110,8 +123,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 evalMotorSetPowerAction(internal(this), stmt);
                 break;
 
-            case RESET_LIGHT:
-                evalLedResetAction(internal(this));
+            case STATUS_LIGHT_ACTION:
+                evalLedStatusAction(internal(this), stmt);
                 break;
 
             case ENCODER_SENSOR_RESET:
@@ -169,9 +182,19 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         obj.outputCommands.led.mode = stmt.mode;
     };
 
-    var evalLedResetAction = function(obj) {
-        obj.outputCommands.led.color = '';
+    var evalLedStatusAction = function(obj, stmt) {
+        obj.outputCommands.led = {}
+        if (stmt.mode == RESET) {
+            obj.outputCommands.led.color = '';
+        }
         obj.outputCommands.led.mode = OFF;
+    };
+
+    var evalShowPictureAction = function(obj, stmt) {
+        obj.outputCommands.display = {};
+        obj.outputCommands.display.picture = stmt.picture;
+        obj.outputCommands.display.x = evalExpr(obj, stmt.x);
+        obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
 
     var evalShowTextAction = function(obj, stmt) {
@@ -181,7 +204,13 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
 
-    var evalTurnAction = function(obj, simulationData, stmt) {
+    var evalClearDisplayAction = function(obj, stmt) {
+        obj.outputCommands.display = {};
+        obj.outputCommands.display.clear = true;
+
+    };
+
+    var evalTurnAction = function(obj, stmt) {
         obj.actors.initTachoMotors(obj.simulationData.encoder.left, obj.simulationData.encoder.right);
         obj.actors.setAngleSpeed(evalExpr(obj, stmt.speed), stmt[TURN_DIRECTION]);
         setAngleToTurn(obj, stmt);

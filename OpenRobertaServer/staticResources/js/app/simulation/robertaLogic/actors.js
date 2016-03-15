@@ -181,8 +181,8 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
      */
     Actors.prototype.calculateAngleToCover = function(program, angle) {
         extraRotation = TURN_RATIO * (angle / 720.);
-        internal(this).leftMotor().setGoalRotations(extraRotation);
-        internal(this).rightMotor().setGoalRotations(extraRotation);
+        internal(this).leftMotor.setGoalRotations(extraRotation);
+        internal(this).rightMotor.setGoalRotations(extraRotation);
         internal(this).distanceToCover = true;
         internal(this).driveMode = PILOT;
         program.setNextStatement(false);

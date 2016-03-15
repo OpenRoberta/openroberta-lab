@@ -47,7 +47,15 @@ MATH_CONST = "MathConst";
 const
 SHOW_TEXT_ACTION = "ShowTextAction";
 const
+SHOW_PICTURE_ACTION = "ShowPictureAction";
+const
+CLEAR_DISPLAY_ACTION = "ClearDisplay";
+const
+CREATE_DEBUG_ACTION = "CreateDebugAction";
+const
 TEXT = "text";
+const
+PICTURE = "picture";
 const
 X = "x";
 const
@@ -173,7 +181,7 @@ const
 DOUBLE_FLASH = "DOUBLE_FLASH";
 
 const
-RESET_LIGHT = "resetLight";
+STATUS_LIGHT_ACTION = "statusLightAction";
 
 const
 TIMES = "TIMES";
