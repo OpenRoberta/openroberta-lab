@@ -3,8 +3,15 @@
  * 
  * @module robertaLogic/actors
  */
-define([ 'robertaLogic.motor' ], function(Motor) {
-    // var privateMem = new WeakMap();
+define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
+    var privateMem = new WeakMap();
+
+    var internal = function(object) {
+        if (!privateMem.has(object)) {
+            privateMem.set(object, {});
+        }
+        return privateMem.get(object);
+    }
 
     /**
      * @constructor Create an instance of the class Actors.
@@ -12,10 +19,10 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      * @alias module:robertaLogic/actors
      */
     var Actors = function() {
-        this.distanceToCover = false;
-        this.driveMode = undefined;
-        this.leftMotor = new Motor();
-        this.rightMotor = new Motor();
+        internal(this).distanceToCover = false;
+        internal(this).driveMode = undefined;
+        internal(this).leftMotor = new Motor();
+        internal(this).rightMotor = new Motor();
     };
 
     /**
@@ -24,7 +31,7 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      * @returns {Actors} - left motor of the robot
      */
     Actors.prototype.getLeftMotor = function() {
-        return this.leftMotor;
+        return internal(this).leftMotor;
     };
 
     /**
@@ -33,7 +40,7 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      * @returns {Actors} - right motor of the robot
      */
     Actors.prototype.getRightMotor = function() {
-        return this.rightMotor;
+        return internal(this).rightMotor;
     };
 
     /**
@@ -48,8 +55,8 @@ define([ 'robertaLogic.motor' ], function(Motor) {
         if (direction != FOREWARD) {
             speed = -speed;
         }
-        this.leftMotor.setPower(speed);
-        this.rightMotor.setPower(speed);
+        internal(this).leftMotor.setPower(speed);
+        internal(this).rightMotor.setPower(speed);
     };
 
     /**
@@ -63,38 +70,38 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      */
     Actors.prototype.setAngleSpeed = function(speed, direction) {
         if (direction == LEFT) {
-            this.leftMotor.setPower(-speed);
-            this.rightMotor.setPower(speed);
+            internal(this).leftMotor.setPower(-speed);
+            internal(this).rightMotor.setPower(speed);
         } else {
-            this.leftMotor.setPower(speed);
-            this.rightMotor.setPower(-speed);
+            internal(this).leftMotor.setPower(speed);
+            internal(this).rightMotor.setPower(-speed);
         }
     };
 
     /**
-     * Reset the tacho sensor on the left motor
+     * Initialize the tacho sensor on the left motor
      * 
      * @param value
      *            {Number} - number of rotations that we want the robot to make.
      */
-    Actors.prototype.resetLeftTachoMotor = function(value) {
-        this.leftMotor.setStartRotations(value);
-        this.leftMotor.resetCurrentRotations();
+    Actors.prototype.initLeftTachoMotor = function(value) {
+        internal(this).leftMotor.setStartRotations(value);
+        internal(this).leftMotor.resetCurrentRotations();
     };
 
     /**
-     * Reset the tacho sensor on the right motor
+     * Initialize the tacho sensor on the right motor
      * 
      * @param value
      *            {Number} - number of rotations that we want the robot to make.
      */
-    Actors.prototype.resetRightTachoMotor = function(value) {
-        this.rightMotor.setStartRotations(value);
-        this.rightMotor.resetCurrentRotations();
+    Actors.prototype.initRightTachoMotor = function(value) {
+        internal(this).rightMotor.setStartRotations(value);
+        internal(this).rightMotor.resetCurrentRotations();
     };
 
     /**
-     * Reset the tacho sensor on the robot motors
+     * Initialize the tacho sensor on the robot motors
      * 
      * @param leftMotorValue
      *            {Number} - number of rotations that we want the robot to make
@@ -103,9 +110,9 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      *            {Number} - number of rotations that we want the robot to make
      *            on the right motor
      */
-    Actors.prototype.resetTachoMotors = function(leftMotorValue, rightMotorValue) {
-        this.resetLeftTachoMotor(leftMotorValue);
-        this.resetRightTachoMotor(rightMotorValue);
+    Actors.prototype.initTachoMotors = function(leftMotorValue, rightMotorValue) {
+        this.initLeftTachoMotor(leftMotorValue);
+        this.initRightTachoMotor(rightMotorValue);
     };
 
     /**
@@ -114,52 +121,54 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      * program.
      * 
      * @param program
+     *            {Program}
      */
-    Actors.prototype.calculateCoveredDistance = function(program) {
+    Actors.prototype.checkCoveredDistanceAndCorrectSpeed = function(program, isCorrectSpeed) {
         var roundUP = 3;
-        var frameCorrLeftMotorPower = undefined;
-        var frameCorrRightMotorPower = undefined;
+        var corectedSpeeds = {}
 
-        var isLeftMotorFinished = round(this.getLeftMotor().getCurrentRotations(), roundUP) >= round(this.getLeftMotor().getRotations(), roundUP);
-        var isRightMotorFinished = round(this.getRightMotor().getCurrentRotations(), roundUP) >= round(this.getRightMotor().getRotations(), roundUP);
+        var isLeftMotorFinished = UTIL.round(internal(this).leftMotor.getCurrentRotations(), roundUP) >= UTIL.round(
+                internal(this).leftMotor.getGoalRotations(), roundUP);
+        var isRightMotorFinished = UTIL.round(internal(this).rightMotor.getCurrentRotations(), roundUP) >= UTIL.round(internal(this).rightMotor
+                .getGoalRotations(), roundUP);
 
-        if (this.distanceToCover) {
-            switch (this.driveMode) {
+        if (internal(this).distanceToCover) {
+            switch (internal(this).driveMode) {
             case PILOT:
                 if (isLeftMotorFinished && isRightMotorFinished) {
-                    this.getLeftMotor().setPower(0);
-                    this.getRightMotor().setPower(0);
-                    this.distanceToCover = false;
+                    internal(this).leftMotor.setPower(0);
+                    internal(this).rightMotor.setPower(0);
+                    internal(this).distanceToCover = false;
                     program.setNextStatement(true);
-                } else {
-                    frameCorrLeftMotorPower = this.leftMotorLFSpeedCorrection(program.getNextFrameTimeDuration());
-                    frameCorrRightMotorPower = this.rightMotorLFSpeedCorrection(program.getNextFrameTimeDuration());
+                } else if (isCorrectSpeed) {
+                    corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
+                    corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
                 }
                 break;
 
             case MOTOR_LEFT:
                 if (isLeftMotorFinished) {
-                    this.getLeftMotor().setPower(0);
-                    this.distanceToCover = false;
+                    internal(this).leftMotor.setPower(0);
+                    internal(this).distanceToCover = false;
                     program.setNextStatement(true);
-                } else {
-                    frameCorrLeftMotorPower = this.leftMotorLFSpeedCorrection(program.getNextFrameTimeDuration());
+                } else if (isCorrectSpeed) {
+                    corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
                 }
                 break;
 
             case MOTOR_RIGHT:
                 if (isRightMotorFinished) {
-                    this.getRightMotor().setPower(0);
-                    this.distanceToCover = false;
+                    internal(this).rightMotor.setPower(0);
+                    internal(this).distanceToCover = false;
                     program.setNextStatement(true);
-                } else {
-                    frameCorrRightMotorPower = this.rightMotorLFSpeedCorrection(program.getNextFrameTimeDuration());
+                } else if (isCorrectSpeed) {
+                    corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
                 }
                 break;
             }
 
         }
-        return [ frameCorrLeftMotorPower, frameCorrRightMotorPower ];
+        return corectedSpeeds;
     };
 
     /**
@@ -172,10 +181,10 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      */
     Actors.prototype.calculateAngleToCover = function(program, angle) {
         extraRotation = TURN_RATIO * (angle / 720.);
-        this.getLeftMotor().setRotations(extraRotation);
-        this.getRightMotor().setRotations(extraRotation);
-        this.distanceToCover = true;
-        this.driveMode = PILOT;
+        internal(this).leftMotor().setGoalRotations(extraRotation);
+        internal(this).rightMotor().setGoalRotations(extraRotation);
+        internal(this).distanceToCover = true;
+        internal(this).driveMode = PILOT;
         program.setNextStatement(false);
     };
 
@@ -189,20 +198,12 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      */
     Actors.prototype.setDistanceToCover = function(program, distance) {
         var rotations = distanceToRotations(distance);
-        this.leftMotor.setRotations(rotations);
-        this.rightMotor.setRotations(rotations);
-        this.distanceToCover = true;
-        this.driveMode = PILOT;
+        internal(this).leftMotor.setGoalRotations(rotations);
+        internal(this).rightMotor.setGoalRotations(rotations);
+        internal(this).distanceToCover = true;
+        internal(this).driveMode = PILOT;
         program.setNextStatement(false);
     };
-
-    function distanceToRotations(distance) {
-        return distance / (WHEEL_DIAMETER * Math.PI);
-    }
-
-    function rotationsToDistance(rotations) {
-        return (WHEEL_DIAMETER * Math.PI) * rotations;
-    }
 
     /**
      * Set the speed of the motor.
@@ -211,7 +212,7 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      *            {Number} - power of the motor in percent [0-100]
      */
     Actors.prototype.setLeftMotorSpeed = function(speed) {
-        this.leftMotor.setPower(speed);
+        internal(this).leftMotor.setPower(speed);
     };
 
     /**
@@ -221,7 +222,7 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      *            {Number} - power of the motor in percent [0-100]
      */
     Actors.prototype.setRightMotorSpeed = function(speed) {
-        this.rightMotor.setPower(speed);
+        internal(this).rightMotor.setPower(speed);
     };
 
     /**
@@ -239,13 +240,13 @@ define([ 'robertaLogic.motor' ], function(Motor) {
             rotations = duration / 360.
         }
         if (motorSide == MOTOR_LEFT) {
-            this.leftMotor.setRotations(rotations);
-            this.driveMode = MOTOR_LEFT;
+            internal(this).leftMotor.setGoalRotations(rotations);
+            internal(this).driveMode = MOTOR_LEFT;
         } else {
-            this.rightMotor.setRotations(rotations);
-            this.driveMode = MOTOR_RIGHT;
+            internal(this).rightMotor.setGoalRotations(rotations);
+            internal(this).driveMode = MOTOR_RIGHT;
         }
-        this.distanceToCover = true;
+        internal(this).distanceToCover = true;
         program.setNextStatement(false);
     };
 
@@ -253,50 +254,41 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      * Reset the motor speeds to 0.
      */
     Actors.prototype.resetMotorsSpeed = function() {
-        this.leftMotor.setPower(0);
-        this.rightMotor.setPower(0);
+        internal(this).leftMotor.setPower(0);
+        internal(this).rightMotor.setPower(0);
     };
 
-    Actors.prototype.toString = function() {
-        return JSON.stringify([ this.distanceToCover, this.leftMotor, this.rightMotor ]);
-    };
-
-    Actors.prototype.leftMotorLFSpeedCorrection = function(nextFrameTimeDuration) {
+    /**
+     * Correction of the speed of a motor.
+     * 
+     * @param nextFrameTimeDuration
+     *            {Number} - duration of the next frame in seconds
+     * @returns {Number} - corrected motor speed
+     */
+    Actors.prototype.speedCorrection = function(nextFrameTimeDuration, motor) {
         var roundUP = 3;
-        var correctedSpeed = undefined;
-        var nextFrameDistanceL = Math.abs(this.getLeftMotor().getPower()) * MAXPOWER * nextFrameTimeDuration / 3.0;
+        var correctedSpeed;
+        var nextFrameDistanceL = Math.abs(motor.getPower()) * MAXPOWER * nextFrameTimeDuration / 3.0;
         var nextFrameRotationsL = distanceToRotations(nextFrameDistanceL);
 
-        if (round(this.getLeftMotor().getCurrentRotations(), roundUP) + nextFrameRotationsL > round(this.getLeftMotor().getRotations(), roundUP)) {
-            var dRotations = this.getLeftMotor().getRotations() - this.getLeftMotor().getCurrentRotations();
+        if (UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotationsL > UTIL.round(motor.getGoalRotations(), roundUP)) {
+            var dRotations = motor.getGoalRotations() - motor.getCurrentRotations();
             var dDistance = rotationsToDistance(dRotations);
-            correctedSpeed = (3 * dDistance) / (MAXPOWER * nextFrameTimeDuration) * sgn(this.getLeftMotor().getPower());
+            correctedSpeed = (3 * dDistance) / (MAXPOWER * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
         }
         return correctedSpeed;
     };
 
-    Actors.prototype.rightMotorLFSpeedCorrection = function(nextFrameTimeDuration) {
-        var roundUP = 3;
-        var correctedSpeed = undefined;
-        var nextFrameDistanceR = Math.abs(this.getRightMotor().getPower()) * MAXPOWER * nextFrameTimeDuration / 3.0;
-        var nextFrameRotationsR = distanceToRotations(nextFrameDistanceR);
-
-        if (round(this.getRightMotor().getCurrentRotations(), roundUP) + nextFrameRotationsR > round(this.getRightMotor().getRotations(), roundUP)) {
-            var dRotations = this.getRightMotor().getRotations() - this.getRightMotor().getCurrentRotations();
-            var dDistance = rotationsToDistance(dRotations);
-            correctedSpeed = (3 * dDistance) / (MAXPOWER * nextFrameTimeDuration) * sgn(this.getRightMotor().getPower());
-        }
-
-        return correctedSpeed
+    Actors.prototype.toString = function() {
+        return JSON.stringify([ internal(this).distanceToCover, internal(this).leftMotor, internal(this).rightMotor ]);
     };
 
-    function round(value, decimals) {
-        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
-    }
+    var distanceToRotations = function(distance) {
+        return distance / (WHEEL_DIAMETER * Math.PI);
+    };
 
-    function sgn(x) {
-        return (x > 0) - (x < 0);
-    }
-
+    var rotationsToDistance = function(rotations) {
+        return (WHEEL_DIAMETER * Math.PI) * rotations;
+    };
     return Actors;
 });

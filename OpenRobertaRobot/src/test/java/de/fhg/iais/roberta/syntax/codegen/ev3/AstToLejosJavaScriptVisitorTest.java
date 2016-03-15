@@ -288,7 +288,9 @@ public class AstToLejosJavaScriptVisitorTest {
 
     @Test
     public void test19() throws Exception {
-        String a = "var stmt0 = createShowTextAction(createConstant(STRING_CONST, 'Hallo'));\n" + "var pp = [stmt0];";
+        String a =
+            "var stmt0 = createShowTextAction(createConstant(STRING_CONST, 'Hallo'), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var pp = [stmt0];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator19.xml");
 
@@ -297,13 +299,13 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test20() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createMathPropFunct('EVEN', createConstant(NUM_CONST, 3)));\n"
-                + "var stmt1 = createShowTextAction(createMathPropFunct('ODD', createConstant(NUM_CONST, 3)));\n"
-                + "var stmt2 = createShowTextAction(createMathPropFunct('PRIME', createConstant(NUM_CONST, 3)));\n"
-                + "var stmt3 = createShowTextAction(createMathPropFunct('WHOLE', createConstant(NUM_CONST, 3)));\n"
-                + "var stmt4 = createShowTextAction(createMathPropFunct('POSITIVE', createConstant(NUM_CONST, 3)));\n"
-                + "var stmt5 = createShowTextAction(createMathPropFunct('NEGATIVE', createConstant(NUM_CONST, 3)));\n"
-                + "var stmt6 = createShowTextAction(createMathPropFunct('DIVISIBLE_BY', createConstant(NUM_CONST, 3), createConstant(NUM_CONST, 3)));\n"
+            "var stmt0 = createShowTextAction(createMathPropFunct('EVEN', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createMathPropFunct('ODD', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt2 = createShowTextAction(createMathPropFunct('PRIME', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt3 = createShowTextAction(createMathPropFunct('WHOLE', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt4 = createShowTextAction(createMathPropFunct('POSITIVE', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt5 = createShowTextAction(createMathPropFunct('NEGATIVE', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt6 = createShowTextAction(createMathPropFunct('DIVISIBLE_BY', createConstant(NUM_CONST, 3), createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator20.xml");
@@ -313,9 +315,9 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test21() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
-                + "var stmt1 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, -200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
-                + "var stmt2 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 20), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
+            "var stmt0 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, -200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt2 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 20), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var pp = [stmt0,stmt1,stmt2];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator21.xml");
@@ -325,8 +327,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test22() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createRandInt(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
-                + "var stmt1 = createShowTextAction(createRandDouble());\n"
+            "var stmt0 = createShowTextAction(createRandInt(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createRandDouble(), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator22.xml");
@@ -346,7 +348,9 @@ public class AstToLejosJavaScriptVisitorTest {
 
     @Test
     public void test24() throws Exception {
-        String a = "var stmt0 = createShowTextAction(createGetMotorPower(MOTOR_RIGHT));\n" + "var pp = [stmt0];";
+        String a =
+            "var stmt0 = createShowTextAction(createGetMotorPower(MOTOR_RIGHT), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var pp = [stmt0];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator24.xml");
 
@@ -355,9 +359,9 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test25() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, ROTATION));\n"
-                + "var stmt1 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DEGREE));\n"
-                + "var stmt2 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DISTANCE));\n"
+            "var stmt0 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, ROTATION), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DEGREE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt2 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DISTANCE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt3 = createResetEncoderSensor(MOTOR_LEFT);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3];";
 
@@ -368,8 +372,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test26() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createGetSample(ANGLE));\n"
-                + "var stmt1 = createShowTextAction(createGetSample(RATE));\n"
+            "var stmt0 = createShowTextAction(createGetSample(ANGLE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createGetSample(RATE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt2 = createResetGyroSensor();\n"
                 + "var pp = [stmt0,stmt1,stmt2];";
 
@@ -380,8 +384,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test27() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createCreateListWith([createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]));\n"
-                + "var stmt1 = createShowTextAction(createCreateListWith([createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]));\n"
+            "var stmt0 = createShowTextAction(createCreateListWith([createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createCreateListWith([createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator27.xml");

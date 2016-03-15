@@ -166,11 +166,13 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
 
 // input and output for executing user program
     var input = {
-        touch : false,
-        color : '',
-        light : 0,
-        ultrasonic : 0,
-        tacho : [ 0, 0 ],
+        sensors : {
+            touch : false,
+            color : '',
+            light : 0,
+            ultrasonic : 0,
+            tacho : [ 0, 0 ]
+        },
         time : 0,
         frameTime : 0
     };
@@ -182,7 +184,13 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             color : '',
             mode : ''
         },
-        display : { text : '', x : 0, y : 0, picture : '', clear : false}
+        display : {
+            text : '',
+            x : 0,
+            y : 0,
+            picture : '',
+            clear : false
+        }
     };
 
 // render stuff
@@ -233,14 +241,14 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         stepCounter += 1;
         output.left = 0;
         output.right = 0;
-        if (!programEval.program.isTerminated() && !pause) {
+        if (!programEval.getProgram().isTerminated() && !pause) {
             //executeProgram();  //for tests without OpenRobertaLab
             if (stepCounter === 0) {
                 setPause(true);
             }
             var simulationValues = programEval.step(input);
             setOutput(simulationValues);
-        } else if (programEval.program.isTerminated()) {            
+        } else if (programEval.getProgram().isTerminated()) {
             setPause(true);
             reloadProgram();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
@@ -263,13 +271,13 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     }
 
     function setOutput(values) {
-        var left = values.powerLeft;
+        var left = values.motors.powerLeft;
         if (left > 100) {
             left = 100;
         } else if (left < -100) {
             left = -100
         }
-        var right = values.powerRight;
+        var right = values.motors.powerRight;
         if (right > 100) {
             right = 100;
         } else if (right < -100) {
@@ -278,21 +286,25 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         output.debug = true; // TODO get this information from actionValues.debug
         output.left = left * MAXPOWER || 0;
         output.right = right * MAXPOWER || 0;
-        output.led = [];
-        output.led.color = programEval.led.color;
-        output.led.mode = programEval.led.mode;
-        output.display = [];
-        output.display.text = programEval.display.text ;
-        output.display.x = programEval.display.x;
-        output.display.y = programEval.display.y;
-        output.display.picture = programEval.display.picture;
-        output.display.clear = programEval.display.clear; 
+        if (values.led) {
+            output.led = [];
+            output.led.color = values.led.color;
+            output.led.mode = values.led.mode;
+        }
+        if (values.display) {
+            output.display = [];
+            output.display.text = values.display.text;
+            output.display.x = values.display.x;
+            output.display.y = values.display.y;
+            output.display.picture = values.display.picture;
+            output.display.clear = values.display.clear;
+        }
         // TODO do this in programEval
-        programEval.display=[];
+//        values.display = [];
         //console.log(exports.output);
         //exports.output.tone = 
     }
-    
+
     function resetOutput() {
         output.left = 0;
         output.right = 0;
@@ -302,7 +314,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         output.display = [];
         output.display.clear = true;
         // TODO do this in programEval
-        programEval.display={};
+//        programEval.display = {};
     }
 
     function setObstacle() {

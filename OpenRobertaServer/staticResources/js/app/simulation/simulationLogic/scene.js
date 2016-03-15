@@ -2,7 +2,7 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
+define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIMATH, UTIL) {
 
     /**
      * Creates a new Scene.
@@ -84,8 +84,8 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
             this.rCtx.font = "10px Arial";
             var x, y;
             if (SIM.getBackground() === 5) {
-                x = SIMATH.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
-                y = SIMATH.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
+                x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
+                y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
                 this.rCtx.fillStyle = "#ffffff";
 
             } else {
@@ -94,34 +94,34 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
                 this.rCtx.fillStyle = "#333333";
             }
             this.rCtx.fillText("FPS", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(1 / SIM.getDt(),0), endValue, line);
+            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Time", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(this.robot.time, 2), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot X", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(x,0), endValue, line);
+            this.rCtx.fillText(UTIL.round(x, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot Y", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(y,0), endValue, line);
+            this.rCtx.fillText(UTIL.round(y, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot θ", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(SIMATH.toDegree(this.robot.pose.theta),0), endValue, line);
+            this.rCtx.fillText(UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0), endValue, line);
             line += 25;
             this.rCtx.fillText("Motor left", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(this.robot.encoder.left * ENC, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * ENC, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Motor right", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(this.robot.encoder.right * ENC, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * ENC, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Touch Sensor", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(this.robot.touchSensor.value, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Light Sensor", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(this.robot.lightSensor.lightValue, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.lightSensor.lightValue, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Ultra Sensor", endLabel, line);
-            this.rCtx.fillText(SIMATH.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Color Sensor", endLabel, line);
             this.rCtx.beginPath();
@@ -437,17 +437,17 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
             var distance = this.robot.ultraSensor.distance / 3.0;
             // adopt sim sensor to real sensor
             if (distance < 255) {
-              values.ultrasonic.distance = distance;
+                values.ultrasonic.distance = distance;
             } else {
-              values.ultrasonic.distance = 255.0;
-            }    
+                values.ultrasonic.distance = 255.0;
+            }
             values.ultrasonic.presence = false;
             // treet the ultrasonic sensor as infrared sensor
             if (distance < 70) {
-              values.infrared.distance = 100.0 / 70.0 * distance;
+                values.infrared.distance = 100.0 / 70.0 * distance;
             } else {
-              values.infrared.distance = 100.0;
-            }  
+                values.infrared.distance = 100.0;
+            }
             values.infrared.presence = false;
         }
         if (running) {
@@ -468,13 +468,14 @@ define([ 'simulation.simulation', 'simulation.math' ], function(SIM, SIMATH) {
         if (this.robot.buttons) {
             values.buttons = [];
             var i = 0
-            for (var key in this.robot.buttons) {  
+            for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
                 //once the state of the button is delivered, reset the button
                 this.robot.buttons[key] = false;
                 // for testing only
-                if (values.buttons[key])
-                  console.log(key + ' pressed');        
+                if (values.buttons[key]) {
+                    console.log(key + ' pressed');
+                }
             }
         }
         return values;

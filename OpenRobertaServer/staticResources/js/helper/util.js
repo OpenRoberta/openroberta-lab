@@ -248,4 +248,33 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
 
     exports.response = response;
 
+    /**
+     * Rounds a number to required decimal
+     * 
+     * @param value
+     *            {Number} - to be rounded
+     * @param decimals
+     *            {Number} - number of decimals after rounding
+     * @return {Number} rounded number
+     * 
+     */
+    function round(value, decimals) {
+        return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+    }
+
+    exports.round = round;
+
+    /**
+     * Get the sign of the number.
+     * 
+     * @param x
+     *            {Number} -
+     * @return {Number} - 1 if it is positive number o/w return -1
+     */
+    function sgn(x) {
+        return (x > 0) - (x < 0);
+    }
+
+    exports.sgn = sgn;
+
 });

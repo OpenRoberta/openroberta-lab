@@ -6,20 +6,24 @@
 define(function() {
     var privateMem = new WeakMap();
 
+    var internal = function(object) {
+        if (!privateMem.has(object)) {
+            privateMem.set(object, {});
+        }
+        return privateMem.get(object);
+    }
+
     /**
      * @constructor Create an instance of the class Motor.
      * 
      * @alias module:robertaLogic/motor
      */
     var Motor = function() {
-        var privateProperties = {
-            power : 0,
-            stopped : false,
-            startRotations : 0,
-            currentRotations : 0,
-            rotations : 0
-        };
-        privateMem.set(this, privateProperties);
+        internal(this).power = 0;
+        internal(this).stopped = false;
+        internal(this).startRotations = 0;
+        internal(this).currentRotations = 0;
+        internal(this).goalRotations = 0;
     };
 
     /**
@@ -28,7 +32,7 @@ define(function() {
      * @returns {Number} - percentage of the total power of the motor [0-100]
      */
     Motor.prototype.getPower = function() {
-        return privateMem.get(this).power;
+        return internal(this).power;
     };
 
     /**
@@ -38,7 +42,7 @@ define(function() {
      *            {Number} - power of the motor in percent [0-100]
      */
     Motor.prototype.setPower = function(value) {
-        privateMem.get(this).power = value;
+        internal(this).power = value;
     };
 
     /**
@@ -47,7 +51,7 @@ define(function() {
      * @returns {Boolean} - true if the motor is working
      */
     Motor.prototype.isStopped = function() {
-        return privateMem.get(this).stopped;
+        return internal(this).stopped;
     };
 
     /**
@@ -57,7 +61,7 @@ define(function() {
      *            {Boolean} - true to stop the motor
      */
     Motor.prototype.setStopped = function(value) {
-        privateMem.get(this).stopped = value;
+        internal(this).stopped = value;
     };
 
     /**
@@ -66,7 +70,7 @@ define(function() {
      * @returns {Number} - number of rotations of the motor.
      */
     Motor.prototype.getCurrentRotations = function() {
-        return privateMem.get(this).currentRotations;
+        return internal(this).currentRotations;
     };
 
     /**
@@ -76,7 +80,7 @@ define(function() {
      *            {Number} - number of rotations of the motor
      */
     Motor.prototype.setCurrentRotations = function(value) {
-        privateMem.get(this).currentRotations = Math.abs(value / 360. - privateMem.get(this).startRotations);
+        internal(this).currentRotations = Math.abs(value / 360. - privateMem.get(this).startRotations);
     };
 
     /**
@@ -85,16 +89,16 @@ define(function() {
      * 
      * @returns {Number} - number of rotations
      */
-    Motor.prototype.getRotations = function() {
-        return privateMem.get(this).rotations;
+    Motor.prototype.getGoalRotations = function() {
+        return internal(this).goalRotations;
     };
 
     /**
      * Set the number of rotation that the motor should make. This is use for
      * differential drive.
      */
-    Motor.prototype.setRotations = function(value) {
-        privateMem.get(this).rotations = value;
+    Motor.prototype.setGoalRotations = function(value) {
+        internal(this).goalRotations = value;
     };
 
     /**
@@ -105,7 +109,7 @@ define(function() {
      *            {Number} - rotation number
      */
     Motor.prototype.setStartRotations = function(value) {
-        privateMem.get(this).startRotations = value / 360.;
+        internal(this).startRotations = value / 360.;
     };
 
     /**
@@ -113,7 +117,7 @@ define(function() {
      * 
      */
     Motor.prototype.resetCurrentRotations = function() {
-        return privateMem.get(this).currentRotations = 0;
+        return internal(this).currentRotations = 0;
     };
 
     /**
@@ -123,7 +127,7 @@ define(function() {
      * @returns {Number} - rotation number
      */
     Motor.prototype.getStartRotations = function() {
-        return privateMem.get(this).startRotations;
+        return internal(this).startRotations;
     };
     return Motor;
 });

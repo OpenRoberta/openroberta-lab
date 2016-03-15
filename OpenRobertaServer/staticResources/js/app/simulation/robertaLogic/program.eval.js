@@ -3,16 +3,26 @@
  * reads every statement of the program and gives command to the simulation what
  * the robot should do.
  */
-define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.led', 'robertaLogic.display'], function(Actors, Sensors, Memory,
-        Program, Led, Display) {
+define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ], function(Actors, Memory, Program) {
+    var privateMem = new WeakMap();
+
+    var internal = function(object) {
+        if (!privateMem.has(object)) {
+            privateMem.set(object, {});
+        }
+        return privateMem.get(object);
+    }
 
     var ProgramEval = function() {
-        this.actors = new Actors();
-        this.sensors = new Sensors();
-        this.memory = new Memory;
-        this.program = new Program();
-        this.led = new Led();
-        this.display = new Display();
+        internal(this).program = new Program();
+        internal(this).memory = new Memory();
+        internal(this).actors = new Actors();
+        internal(this).simulationData = {};
+        internal(this).outputCommands = {};
+    };
+
+    ProgramEval.prototype.getProgram = function() {
+        return internal(this).program;
     };
 
     /**
@@ -22,222 +32,222 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
      *            {Object} - list of statements representing the program
      */
     ProgramEval.prototype.initProgram = function(program) {
-        this.memory.clear();
-        this.program.setNextStatement(true);
-        this.program.setWait(false);
-        this.program.set(program);
-        this.led.mode = OFF;
-        this.actors.resetMotorsSpeed();
+        internal(this).memory.clear();
+        internal(this).program.setNextStatement(true);
+        internal(this).program.setWait(false);
+        internal(this).program.set(program);
+        internal(this).actors.resetMotorsSpeed();
     };
 
     /**
      * Function that executes one step of the program.
      * 
-     * @param simulationSensorData
+     * @param simulationData
      *            {Object} - sensor data from the simulation
      */
-    ProgramEval.prototype.step = function(simulationSensorData) {
-        setSensorActorValues(this, simulationSensorData);
-        if (this.program.isNextStatement()) {
-            var stmt = this.program.getRemove();
+    ProgramEval.prototype.step = function(simulationData) {
+        setSensorActorValues(internal(this), simulationData);
+        if (internal(this).program.isNextStatement()) {
+            var stmt = internal(this).program.getRemove();
             switch (stmt.stmt) {
             case ASSIGN_STMT:
-                var value = evalExpr(obj, stmt.expr);
-                this.memory.assign(stmt.name, value);
+                var value = evalExpr(internal(this), stmt.expr);
+                internal(this).memory.assign(stmt.name, value);
                 break;
 
             case VAR_DECLARATION:
-                var value = evalExpr(obj, stmt.value);
-                this.memory.decl(stmt.name, value);
+                var value = evalExpr(internal(this), stmt.value);
+                internal(this).memory.decl(stmt.name, value);
                 break;
 
             case IF_STMT:
-                evalIf(this, stmt);
-                this.step(simulationSensorData);
+                evalIf(internal(this), stmt);
+                this.step(simulationData);
                 break;
 
             case REPEAT_STMT:
-                evalRepeat(this, stmt);
-                this.step(simulationSensorData);
+                evalRepeat(internal(this), stmt);
+                this.step(simulationData);
                 break;
 
             case DRIVE_ACTION:
-                evalDriveAction(this, simulationSensorData, stmt);
+                evalDriveAction(internal(this), stmt);
                 break;
 
             case TURN_ACTION:
-                evalTurnAction(this, simulationSensorData, stmt);
+                evalTurnAction(internal(this), stmt);
                 break;
 
             case MOTOR_ON_ACTION:
-                evalMotorOnAction(this, simulationSensorData, stmt);
+                evalMotorOnAction(internal(this), stmt);
                 break;
 
             case SHOW_TEXT_ACTION:
-                evalShowTextAction(this, stmt);
+                evalShowTextAction(internal(this), stmt);
                 break;
 
             case WAIT_STMT:
-                evalWaitStmt(this, stmt);
+                evalWaitStmt(internal(this), stmt);
                 break;
 
             case WAIT_TIME_STMT:
-                evalWaitTime(this, simulationSensorData, stmt);
+                evalWaitTime(internal(this), simulationData, stmt);
                 break;
 
             case TURN_LIGHT:
-                evalLedOnAction(this, simulationSensorData, stmt);
+                evalLedOnAction(internal(this), simulationData, stmt);
                 break;
 
             case STOP_DRIVE:
-                this.actors.setSpeed(0);
+                internal(this).actors.setSpeed(0);
                 break;
 
             case MOTOR_STOP:
-                evalMotorStopAction(stmt);
+                evalMotorStopAction(internal(this), stmt);
                 break;
 
             case MOTOR_SET_POWER:
-                evalMotorSetPowerAction(stmt);
+                evalMotorSetPowerAction(internal(this), stmt);
                 break;
 
             case RESET_LIGHT:
-                this.led.color = '';
-                this.led.mode = OFF;
+                evalLedResetAction(internal(this));
                 break;
 
             case ENCODER_SENSOR_RESET:
-                evalResetEncoderSensor(this, stmt);
+                evalResetEncoderSensor(internal(this), stmt);
                 break;
 
             default:
                 throw "Invalid Statement " + stmt.stmt + "!";
             }
         }
-        newSpeeds = this.actors.calculateCoveredDistance(this.program);
-        this.program.handleWaitTimer();
-        return handleSpeeds(this, newSpeeds)
+        newSpeeds = internal(this).actors.checkCoveredDistanceAndCorrectSpeed(internal(this).program, internal(this).simulationData.correctDrive);
+        internal(this).program.handleWaitTimer();
+        outputSpeeds(internal(this), newSpeeds)
+        return internal(this).outputCommands;
+
     };
 
-    var setSensorActorValues = function(obj, simulationSensorData) {
-        obj.sensors.touchSensor = simulationSensorData.touch;
-        obj.sensors.colorSensor = simulationSensorData.color.colorValue;
-        obj.sensors.lightSensor = simulationSensorData.color.lightValue;
-        obj.sensors.ultrasonicSensor = simulationSensorData.ultrasonic.distance;
-        obj.actors.getLeftMotor().setCurrentRotations(simulationSensorData.encoder.left);
-        obj.actors.getRightMotor().setCurrentRotations(simulationSensorData.encoder.right);
-        obj.program.getTimer().setCurrentTime(simulationSensorData.time);
-        obj.program.setNextFrameTimeDuration(simulationSensorData.frameTime);
+    var setSensorActorValues = function(obj, simulationData) {
+        obj.simulationData = simulationData;
+        obj.actors.getLeftMotor().setCurrentRotations(simulationData.encoder.left);
+        obj.actors.getRightMotor().setCurrentRotations(simulationData.encoder.right);
+        obj.program.getTimer().setCurrentTime(simulationData.time);
+        obj.program.setNextFrameTimeDuration(simulationData.frameTime);
     };
 
-    function handleSpeeds(obj, speeds) {
-        var values = {};
-        values['powerLeft'] = obj.actors.getLeftMotor().getPower();
-        values['powerRight'] = obj.actors.getRightMotor().getPower();
-        if (speeds[0] != undefined) {
-            values['powerLeft'] = speeds[0]
+    var outputSpeeds = function(obj, speeds) {
+        obj.outputCommands.motors = {};
+        obj.outputCommands.motors.powerLeft = obj.actors.getLeftMotor().getPower();
+        obj.outputCommands.motors.powerRight = obj.actors.getRightMotor().getPower();
+        if (speeds.left) {
+            obj.outputCommands.motors.powerLeft = speeds.left;
         }
-        if (speeds[1] != undefined) {
-            values['powerRight'] = speeds[1]
+        if (speeds.right) {
+            obj.outputCommands.motors.powerRight = speeds.right;
         }
-        return values;
-    }
+    };
 
-    function evalResetEncoderSensor(obj, stmt) {
+    var evalResetEncoderSensor = function(obj, stmt) {
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
-            obj.actors.resetLeftTachoMotor(0);
+            obj.actors.initLeftTachoMotor(0);
         } else {
-            obj.actors.resetRightTachoMotor(0);
+            obj.actors.initRightTachoMotor(0);
         }
-    }
+    };
 
-    function evalWaitTime(obj, simulationSensorData, stmt) {
+    var evalWaitTime = function(obj, simulationData, stmt) {
         obj.program.setIsRunningTimer(true);
-        obj.program.resetTimer(simulationSensorData.time);
+        obj.program.resetTimer(simulationData.time);
         obj.program.setTimer(evalExpr(obj, stmt.time));
-    }
+    };
 
-    function evalLedOnAction(obj, simulationSensorData, stmt) {
-        obj.led.color = stmt.color;
-        obj.led.mode = stmt.mode;
-    }
+    var evalLedOnAction = function(obj, simulationData, stmt) {
+        obj.outputCommands.led = {}
+        obj.outputCommands.led.color = stmt.color;
+        obj.outputCommands.led.mode = stmt.mode;
+    };
 
-    function evalShowTextAction(obj, stmt) {
-        obj.display.text = evalExpr(obj, stmt.text);
-        obj.display.x = evalExpr(obj, stmt.x);
-        obj.display.y = evalExpr(obj, stmt.y);
-        console.log(stmt);
-        val = evalExpr(obj, stmt.value)
-        console.log(val);
-    }
+    var evalLedResetAction = function(obj) {
+        obj.outputCommands.led.color = '';
+        obj.outputCommands.led.mode = OFF;
+    };
 
-    function evalTurnAction(obj, simulationSensorData, stmt) {
-        obj.actors.resetTachoMotors(simulationSensorData.encoder.left, simulationSensorData.encoder.right);
+    var evalShowTextAction = function(obj, stmt) {
+        obj.outputCommands.display = {};
+        obj.outputCommands.display.text = evalExpr(obj, stmt.text);
+        obj.outputCommands.display.x = evalExpr(obj, stmt.x);
+        obj.outputCommands.display.y = evalExpr(obj, stmt.y);
+    };
+
+    var evalTurnAction = function(obj, simulationData, stmt) {
+        obj.actors.initTachoMotors(obj.simulationData.encoder.left, obj.simulationData.encoder.right);
         obj.actors.setAngleSpeed(evalExpr(obj, stmt.speed), stmt[TURN_DIRECTION]);
         setAngleToTurn(obj, stmt);
-    }
+    };
 
-    function evalDriveAction(obj, simulationSensorData, stmt) {
-        obj.actors.resetTachoMotors(simulationSensorData.encoder.left, simulationSensorData.encoder.right);
+    var evalDriveAction = function(obj, stmt) {
+        obj.actors.initTachoMotors(obj.simulationData.encoder.left, obj.simulationData.encoder.right);
         obj.actors.setSpeed(evalExpr(obj, stmt.speed), stmt[DRIVE_DIRECTION]);
         setDistanceToDrive(obj, stmt);
-    }
+    };
 
-    function evalMotorOnAction(obj, simulationSensorData, stmt) {
+    var evalMotorOnAction = function(obj, stmt) {
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
-            obj.actors.resetLeftTachoMotor(simulationSensorData.encoder.left);
+            obj.actors.initLeftTachoMotor(obj.simulationData.encoder.left);
             obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed));
         } else {
-            obj.actors.resetRightTachoMotor(simulationSensorData.encoder.right);
+            obj.actors.initRightTachoMotor(obj.simulationData.encoder.right);
             obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
         }
         setDurationToCover(obj, stmt);
-    }
+    };
 
-    function evalMotorSetPowerAction(obj, stmt) {
+    var evalMotorSetPowerAction = function(obj, stmt) {
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
             obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed));
         } else {
             obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
         }
-    }
+    };
 
-    function evalMotorStopAction(obj, stmt) {
+    var evalMotorStopAction = function(obj, stmt) {
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
             obj.actors.setLeftMotorSpeed(0);
         } else {
             obj.actors.setRightMotorSpeed(0);
         }
-    }
+    };
 
-    function evalMotorGetPowerAction(obj, motorSide) {
+    var evalMotorGetPowerAction = function(obj, motorSide) {
         if (motorSide == MOTOR_LEFT) {
             return obj.actors.getLeftMotor().getPower();
         } else {
             return obj.actors.getRightMotor().getPower();
         }
-    }
+    };
 
-    function setAngleToTurn(obj, stmt) {
-        if (stmt.angle != undefined) {
+    var setAngleToTurn = function(obj, stmt) {
+        if (stmt.angle) {
             obj.actors.calculateAngleToCover(obj.program, evalExpr(obj, stmt.angle));
         }
-    }
+    };
 
-    function setDistanceToDrive(obj, stmt) {
-        if (stmt.distance != undefined) {
+    var setDistanceToDrive = function(obj, stmt) {
+        if (stmt.distance) {
             obj.actors.setDistanceToCover(obj.program, evalExpr(obj, stmt.distance));
         }
-    }
+    };
 
-    function setDurationToCover(obj, stmt) {
-        if (stmt[MOTOR_DURATION] != undefined) {
+    var setDurationToCover = function(obj, stmt) {
+        if (stmt[MOTOR_DURATION]) {
             obj.actors.setMotorDuration(obj.program, (stmt[MOTOR_DURATION]).motorMoveMode, evalExpr(obj, (stmt[MOTOR_DURATION]).motorDurationValue),
                     stmt[MOTOR_SIDE]);
         }
-    }
+    };
 
-    function evalRepeat(obj, stmt) {
+    var evalRepeat = function(obj, stmt) {
         switch (stmt.mode) {
         case TIMES:
             for (var i = 0; i < evalExpr(obj, stmt.expr); i++) {
@@ -251,9 +261,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 obj.program.prepend(stmt.stmtList);
             }
         }
-    }
+    };
 
-    function evalIf(obj, stmt) {
+    var evalIf = function(obj, stmt) {
         var programPrefix;
         var value;
         for (var i = 0; i < stmt.exprList.length; i++) {
@@ -267,16 +277,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 break;
             }
         }
-
         if ((programPrefix == undefined || programPrefix == []) && !obj.program.isWait()) {
             programPrefix = stmt.elseStmts;
         }
-
         obj.program.prepend(programPrefix);
         return value;
-    }
+    };
 
-    function evalWaitStmt(obj, stmt) {
+    var evalWaitStmt = function(obj, stmt) {
         obj.program.setWait(true);
         obj.program.prepend([ stmt ]);
         for (var i = 0; i < stmt.statements.length; i++) {
@@ -285,80 +293,65 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 break;
             }
         }
+    };
 
-    }
-
-    function evalExpr(obj, expr) {
+    var evalExpr = function(obj, expr) {
         switch (expr.expr) {
         case NUM_CONST:
         case BOOL_CONST:
         case COLOR_CONST:
         case STRING_CONST:
             return expr.value;
-
         case VAR:
-            return this.memory.get(expr.name);
-
+            return obj.memory.get(expr.name);
         case BINARY:
             return evalBinary(obj, expr.op, expr.left, expr.right);
-
         case UNARY:
             return evalUnary(obj, expr.op, expr.value);
-
         case SINGLE_FUNCTION:
             return evalSingleFunction(obj, expr.op, expr.value);
-
         case RANDOM_INT:
             return evalRandInt(obj, expr.min, expr.max);
-
         case RANDOM_DOUBLE:
             return evalRandDouble();
-
         case MATH_CONSTRAIN_FUNCTION:
             return evalMathPropFunct(obj, expr.value, expr.min, expr.max);
-
         case MATH_PROP_FUNCT:
             return evalMathPropFunct(obj, expr.op, expr.arg1, expr.arg2);
-
         case MATH_CONST:
             return evalMathConst(obj, expr.value);
-
         case GET_SAMPLE:
             return evalSensor(obj, expr[SENSOR_TYPE], expr[SENSOR_MODE]);
-
         case ENCODER_SENSOR_SAMPLE:
             return evalEncoderSensor(obj, expr.motorSide, expr.sensorMode);
-
         case MOTOR_GET_POWER:
             return evalMotorGetPowerAction(obj, expr.motorSide);
             break;
-
         default:
             throw "Invalid Expression Type!";
         }
-    }
+    };
 
-    function evalSensor(obj, sensorType, sensorMode) {
+    var evalSensor = function(obj, sensorType, sensorMode) {
         switch (sensorType) {
         case TOUCH:
-            return obj.sensors.touchSensor;
+            return obj.simulationData.touch;
         case ULTRASONIC:
-            return obj.sensors.ultrasonicSensor;
+            return obj.simulationData.ultrasonic[sensorMode];
         case RED:
-            return obj.sensors.lightSensor;
+            return obj.simulationData.color.lightValue;
         case COLOUR:
-            return obj.sensors.colorSensor;
+            return obj.simulationData.color.colorValue;
         case ANGLE:
-            return obj.sensors.gyroSensor;
+            return obj.simulationData.gyro.angle;
         case RATE:
-            return obj.sensors.gyroSensor;
-
+            return obj.simulationData.gyro.rate;
         default:
             throw "Invalid Sensor!";
         }
-    }
+    };
 
-    function evalEncoderSensor(obj, motorSide, sensorMode) {
+    var evalEncoderSensor = function(obj, motorSide, sensorMode) {
         var motor = obj.actors.getRightMotor();
         if (motorSide == MOTOR_LEFT) {
             motor = obj.actors.getLeftMotor()
@@ -370,13 +363,12 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             return motor.getCurrentRotations() * 360.;
         case DISTANCE:
             return motor.getCurrentRotations() * (WHEEL_DIAMETER * 3.14);
-
         default:
             throw "Invalid Encoder Mode!";
         }
-    }
+    };
 
-    function evalBinary(obj, op, left, right) {
+    var evalBinary = function(obj, op, left, right) {
         var valLeft = evalExpr(obj, left);
         var valRight = evalExpr(obj, right);
         var val;
@@ -427,9 +419,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             throw "Invalid Binary Operator";
         }
         return val;
-    }
+    };
 
-    function evalUnary(obj, op, value) {
+    var evalUnary = function(obj, op, value) {
         var val = evalExpr(obj, value);
         switch (op) {
         case NEG:
@@ -437,9 +429,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         default:
             throw "Invalid Unary Operator";
         }
-    }
+    };
 
-    function evalSingleFunction(obj, functName, value) {
+    var evalSingleFunction = function(obj, functName, value) {
         var val = evalExpr(obj, value);
         switch (functName) {
         case 'ROOT':
@@ -475,9 +467,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         default:
             throw "Invalid Function Name";
         }
-    }
+    };
 
-    function evalMathConst(obj, mathConst) {
+    var evalMathConst = function(obj, mathConst) {
         switch (mathConst) {
         case 'PI':
             return Math.PI;
@@ -494,21 +486,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         default:
             throw "Invalid Math Constant Name";
         }
-    }
+    };
 
-    function evalMathPropFunct(obj, val, min, max) {
+    var evalMathPropFunct = function(obj, val, min, max) {
         var val_ = evalExpr(obj, val);
         var min_ = evalExpr(obj, min);
         var max_ = evalExpr(obj, max);
         return Math.min(Math.max(val_, min_), max_);
-    }
+    };
 
-    function evalMathConstrainFunct(obj, val, min, max) {
+    var evalMathConstrainFunct = function(obj, val, min, max) {
         var val1 = evalExpr(obj, arg1);
         if (arg2) {
             var val2 = evalExpr(obj, arg2);
         }
-
         switch (functName) {
         case 'EVEN':
             return val1 % 2 == 0;
@@ -527,7 +518,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         default:
             throw "Invalid Math Property Function Name";
         }
-    }
+    };
 
     function evalRandInt(obj, min, max) {
         min_ = evalExpr(obj, min);
@@ -535,11 +526,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         return math_random_int(min_, max_);
     }
 
-    function evalRandDouble() {
+    var evalRandDouble = function() {
         return Math.random();
-    }
+    };
 
-    isPrime = function(n) {
+    var isPrime = function(n) {
         if (isNaN(n) || !isFinite(n) || n % 1 || n < 2) {
             return false;
         }
@@ -547,9 +538,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             return true;
         }
         return false;
-    }
+    };
 
-    leastFactor = function(n) {
+    var leastFactor = function(n) {
         if (isNaN(n) || !isFinite(n)) {
             return NaN;
         }
@@ -596,9 +587,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             }
         }
         return n;
-    }
+    };
 
-    function math_random_int(a, b) {
+    var math_random_int = function(a, b) {
         if (a > b) {
             // Swap a and b to ensure a is smaller.
             var c = a;
@@ -606,7 +597,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             b = c;
         }
         return Math.floor(Math.random() * (b - a + 1) + a);
-    }
+    };
 
     return ProgramEval;
 });
