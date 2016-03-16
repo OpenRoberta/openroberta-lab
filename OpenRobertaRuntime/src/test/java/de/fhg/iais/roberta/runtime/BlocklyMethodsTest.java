@@ -214,7 +214,7 @@ public class BlocklyMethodsTest {
         Assert.assertTrue(
             BlocklyMethods.listsIndex(BlocklyMethods.createListWithString("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_START, 1) == "b");
         Assert.assertTrue(
-            BlocklyMethods.listsIndex(BlocklyMethods.createListWithString("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_END, 3) == "b");
+            BlocklyMethods.listsIndex(BlocklyMethods.createListWithString("a", "b", "c", "d"), ListElementOperations.GET, IndexLocation.FROM_END, 0) == "d");
 
         ArrayList<String> list = BlocklyMethods.createListWithString("a", "b", "c", "c");
         BlocklyMethods.listsIndex(list, ListElementOperations.REMOVE, IndexLocation.LAST);
@@ -241,8 +241,9 @@ public class BlocklyMethodsTest {
     @Test
     public void listsGetSubList() {
         ArrayList<Float> list = BlocklyMethods.createListWithNumber(55, 66, 11, 22.0, 33);
-        Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FROM_START, 1, IndexLocation.FROM_END, 1).toString().equals("[66.0, 11.0, 22.0]"));
-        Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FIRST, IndexLocation.FROM_END, 1).toString().equals("[55.0, 66.0, 11.0, 22.0]"));
+        System.out.println(BlocklyMethods.listsGetSubList(list, IndexLocation.FROM_START, 1, IndexLocation.FROM_END, 1).toString());
+        Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FROM_START, 1, IndexLocation.FROM_END, 0).toString().equals("[66.0, 11.0, 22.0]"));
+        Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FIRST, IndexLocation.FROM_END, 0).toString().equals("[55.0, 66.0, 11.0, 22.0]"));
         Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FROM_START, 1, IndexLocation.LAST).toString().equals("[66.0, 11.0, 22.0, 33.0]"));
         Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FIRST, IndexLocation.LAST).toString().equals("[55.0, 66.0, 11.0, 22.0, 33.0]"));
     }
