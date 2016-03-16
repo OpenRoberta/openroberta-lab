@@ -350,7 +350,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         case MATH_CONST:
             return evalMathConst(obj, expr.value);
         case GET_SAMPLE:
-            return evalSensor(obj, expr[SENSOR_TYPE], expr[SENSOR_MODE]);
+            return evalSensor(obj, expr.sensorType, expr.sensorMode);
         case ENCODER_SENSOR_SAMPLE:
             return evalEncoderSensor(obj, expr.motorSide, expr.sensorMode);
         case MOTOR_GET_POWER:
@@ -362,22 +362,29 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
     };
 
     var evalSensor = function(obj, sensorType, sensorMode) {
-        switch (sensorType) {
-        case TOUCH:
-            return obj.simulationData.touch;
-        case ULTRASONIC:
-            return obj.simulationData.ultrasonic[sensorMode];
-        case RED:
-            return obj.simulationData.color.lightValue;
-        case COLOUR:
-            return obj.simulationData.color.colorValue;
-        case ANGLE:
-            return obj.simulationData.gyro.angle;
-        case RATE:
-            return obj.simulationData.gyro.rate;
-        default:
-            throw "Invalid Sensor!";
-        }
+        return obj.simulationData[sensorType][sensorMode];
+//        switch (sensorType) {
+//        case TOUCH:
+//            return obj.simulationData.touch;
+//        case ULTRASONIC:
+//            return obj.simulationData.ultrasonic[sensorMode];
+//        case COLOR:
+//            if (sensorMode == COLOUR) {
+//                return obj.simulationData.color.colorValue;
+//            } else if (sensorMode == RED) {
+//                return obj.simulationData.color.lightValue;
+//            } else {
+//                throw "Invalid Color Sensor Mode";
+//            }
+//        case INFRARED:
+//            return obj.simulationData.infrared[sensorMode];
+//        case ANGLE:
+//            return obj.simulationData.gyro.angle;
+//        case RATE:
+//            return obj.simulationData.gyro.rate;
+//        default:
+//            throw "Invalid Sensor!";
+//        }
     };
 
     var evalEncoderSensor = function(obj, motorSide, sensorMode) {

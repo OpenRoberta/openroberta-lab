@@ -483,13 +483,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        // TODO implement visitBrickSensor
+        this.sb.append("createGetSample(BUTTONS, " + brickSensor.getKey() + ")");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(" + colorSensor.getMode() + ")");
+        this.sb.append("createGetSample(COLOR, " + colorSensor.getMode() + ")");
         return null;
     }
 
@@ -513,14 +513,14 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
             this.sb.append("createResetGyroSensor(");
             this.sb.append(end);
         } else {
-            this.sb.append("createGetSample(" + gyroSensor.getMode() + ")");
+            this.sb.append("createGetSample(GYRO, " + gyroSensor.getMode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        // TODO implement Infraredsensor
+        this.sb.append("createGetSample(INFRARED, " + infraredSensor.getMode() + ")");
         return null;
     }
 
@@ -538,7 +538,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("createGetSample(ULTRASONIC)");
+        this.sb.append("createGetSample(ULTRASONIC, " + ultrasonicSensor.getMode() + ")");
         return null;
     }
 

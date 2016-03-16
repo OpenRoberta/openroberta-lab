@@ -378,8 +378,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $("#simButtonsCollapse").collapse('hide');
                 }, 'simRobot clicked');
                 $('#simRobotModal').removeClass("modal-backdrop");
-                // not working :-(
-//                $('#simRobotModal').draggable();
+                $('#simRobotModal').draggable();
                 $('.simScene').onWrap('click', function(event) {
                     SIM.setBackground(0);
                     var scene = $("#simButtonsCollapse").collapse('hide');

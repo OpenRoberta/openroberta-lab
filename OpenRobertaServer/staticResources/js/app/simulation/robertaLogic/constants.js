@@ -13,6 +13,16 @@ LEFT = "left";
 const
 RIGHT = "right";
 const
+ENTER = "enter";
+const
+DOWN = "down";
+const
+UP = "up";
+const
+ANY = "any";
+const
+ESCAPE = "escape";
+const
 BINARY = "Binary";
 const
 UNARY = "Unary";
@@ -88,6 +98,10 @@ SPEED = "speed";
 const
 DISTANCE = "distance";
 const
+PRESENCE = "presence";
+const
+SEEK = "presence";
+const
 RESET = "reset";
 const
 GET_SAMPLE = "GetSample";
@@ -104,9 +118,17 @@ EXPR_LIST = "exprList";
 const
 STATEMENTS = "statements";
 const
-TOUCH = "TOUCH";
+TOUCH = "touch";
 const
-ULTRASONIC = "ULTRASONIC";
+INFRARED = "infrared";
+const
+ULTRASONIC = "ultrasonic";
+const
+GYRO = "gyro";
+const
+BUTTONS = "buttons";
+const
+RATE = "rate";
 const
 NUM_CONST = "NumConst";
 const
@@ -162,13 +184,15 @@ ANGLE = "angle";
 const
 COLOR = "color";
 const
-COLOUR = "COLOUR";
+COLOUR = "colorValue";
 const
 MODE = "mode";
 const
 GREEN = "GREEN";
 const
-RED = "RED";
+RED = "red";
+const
+RGB = "rgb";
 const
 ORANGE = "ORANGE";
 const
@@ -224,14 +248,14 @@ DEGREE = "DEGREE";
 
 const
 COLOR_ENUM = {
-    NONE : 0,
-    BLACK : 1,
-    BLUE : 2,
-    GREEN : 3,
-    YELLOW : 4,
-    RED : 5,
-    WHITE : 6,
-    BROWN : 7
+    NONE : "NONE",
+    BLACK : "BLACK",
+    BLUE : "BLUE",
+    GREEN : "GREEN",
+    YELLOW : "YELLOW",
+    RED : "RED",
+    WHITE : "WHITE",
+    BROWN : "BROWN"
 };
 
 const

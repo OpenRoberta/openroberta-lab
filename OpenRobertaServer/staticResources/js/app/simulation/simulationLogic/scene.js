@@ -372,7 +372,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                     this.robot.colorSensor.color = 'lime';
                 }
                 this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
-                values.color.lightValue = this.robot.lightSensor.lightValue;
+                values.color.red = UTIL.round(this.robot.colorSensor.lightValue, 2);
+                values.color.rgb = [ UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0) ];
             }
         }
 
@@ -437,14 +438,14 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
             var distance = this.robot.ultraSensor.distance / 3.0;
             // adopt sim sensor to real sensor
             if (distance < 255) {
-                values.ultrasonic.distance = distance;
+                values.ultrasonic.distance = UTIL.round(distance, 2);
             } else {
                 values.ultrasonic.distance = 255.0;
             }
             values.ultrasonic.presence = false;
             // treet the ultrasonic sensor as infrared sensor
             if (distance < 70) {
-                values.infrared.distance = 100.0 / 70.0 * distance;
+                values.infrared.distance = UTIL.round(100.0 / 70.0 * distance, 2);
             } else {
                 values.infrared.distance = 100.0;
             }
@@ -461,15 +462,17 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
         if (this.robot.gyroSensor) {
             values.gyro = [];
-            values.gyro.angle = SIMATH.toDegree(this.robot.pose.theta);
-            values.gyro.rate = SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff);
+            values.gyro.angle = UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 2);
+            values.gyro.rate = UTIL.round(SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff), 2);
         }
         // TODO implement buttons
         if (this.robot.buttons) {
             values.buttons = [];
+            values.buttons.any = false;
             var i = 0
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
+                values.buttons.any = values.buttons.any || this.robot.buttons[key];
                 //once the state of the button is delivered, reset the button
                 this.robot.buttons[key] = false;
                 // for testing only

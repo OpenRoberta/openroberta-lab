@@ -26,7 +26,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt4 = createAssignStmt(\"x\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 10)));\n"
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt6 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
-                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [])]);\n"
+                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator.xml");
@@ -43,7 +43,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt4 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt5 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt6 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT, createConstant(NUM_CONST, 30));\n"
-                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [])]);\n"
+                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator1.xml");
@@ -121,7 +121,7 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt2 = createIfStmt([createBinaryExpr(EQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))], [[createIfStmt([createBinaryExpr(NEQ, createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 1)), createBinaryExpr(EQ, createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 1))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD), createTurnAction(createConstant(NUM_CONST, 50), RIGHT)]])]], [createStopDrive()]);\n"
-                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [])]);\n"
+                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator7.xml");
@@ -132,7 +132,7 @@ public class AstToLejosJavaScriptVisitorTest {
 
         String a =
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
-                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]), createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])])]])]);\n"
+                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]), createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [[createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])])]])]);\n"
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator8.xml");
@@ -179,10 +179,10 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test11() throws Exception {
         String a =
-            "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(RED), createConstant(NUM_CONST, 30))], [])]);\n"
-                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.RED))], [])]);\n"
-                + "var stmt2 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.GREEN))], [])]);\n"
-                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(RED), createConstant(NUM_CONST, 45))], [])]);\n"
+            "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(COLOR, RED), createConstant(NUM_CONST, 30))], [])]);\n"
+                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOR, COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.RED))], [])]);\n"
+                + "var stmt2 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOR, COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.GREEN))], [])]);\n"
+                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(COLOR, RED), createConstant(NUM_CONST, 45))], [])]);\n"
                 + "var pp = [stmt0,stmt1,stmt2,stmt3];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator11.xml");
@@ -372,8 +372,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test26() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createGetSample(ANGLE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var stmt1 = createShowTextAction(createGetSample(RATE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+            "var stmt0 = createShowTextAction(createGetSample(GYRO, ANGLE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createGetSample(GYRO, RATE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt2 = createResetGyroSensor();\n"
                 + "var pp = [stmt0,stmt1,stmt2];";
 
