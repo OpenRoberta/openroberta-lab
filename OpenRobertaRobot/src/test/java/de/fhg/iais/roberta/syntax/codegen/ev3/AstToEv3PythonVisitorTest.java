@@ -650,12 +650,12 @@ public class AstToEv3PythonVisitorTest {
             + "        pass\n"
             + "if TRUE:\n"
             + "    while not (15 == 20):\n"
-            + "        variablenName += 1;\n"
+            + "        variablenName += 1\n"
             + "if TRUE:\n"
             + "    while not True:\n"
             + "        if TRUE:\n"
             + "            while not (15 == 20):\n"
-            + "                variablenName += 1;\n\n"
+            + "                variablenName += 1\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");

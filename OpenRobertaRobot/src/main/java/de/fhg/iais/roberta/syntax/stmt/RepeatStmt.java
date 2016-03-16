@@ -143,6 +143,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 return helper.extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
 
             case BlocklyConstants.CONTROLS_FOR:
+            case BlocklyConstants.ROB_CONTROLS_FOR:
                 values = helper.extractValues(block, (short) 3);
                 exprList = ExprList.make();
 

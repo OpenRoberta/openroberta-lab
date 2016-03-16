@@ -3,13 +3,12 @@ package de.fhg.iais.roberta.syntax.expr;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Expr} in expressions.
+ * Wraps subclasses of the class {@link Stmt} so they can be used as {@link Expr} in expressions.
  */
 public class StmtExpr<V> extends Expr<V> {
     private final Stmt<V> stmt;

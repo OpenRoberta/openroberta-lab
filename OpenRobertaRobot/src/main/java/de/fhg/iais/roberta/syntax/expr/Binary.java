@@ -231,6 +231,7 @@ public final class Binary<V> extends Expr<V> {
                     "",
                     helper.extractBlockProperties(block),
                     helper.extractComment(block));
+            case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = helper.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));

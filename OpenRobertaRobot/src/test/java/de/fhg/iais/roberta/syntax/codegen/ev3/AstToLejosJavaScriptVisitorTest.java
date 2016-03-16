@@ -405,6 +405,17 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test29() throws Exception {
+        String a =
+            "var stmt0 = createVarDeclaration(NUMERIC, \"variablenName\", createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createMathChange(createVarReference(NUMERIC, \"variablenName\"), createConstant(NUM_CONST, 1));\n"
+                + "var pp = [stmt0,stmt1];";
+
+        assertCodeIsOk(a, "/ast/math/math_change.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

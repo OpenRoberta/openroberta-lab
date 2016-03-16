@@ -117,6 +117,7 @@ public final class BlocklyConstants {
     public static final String ROB_CONTROLS_LOOP_FOREVER = "robControls_loopForever";
     public static final String CONTROLS_WHILE_UNTIL = "controls_whileUntil";
     public static final String CONTROLS_FOR = "controls_for";
+    public static final String ROB_CONTROLS_FOR = "robControls_for";
     public static final String CONTROLS_FOR_EACH = "controls_forEach";
     public static final String CONTROLS_REPEAT = "controls_repeat";
     public static final String CONTROLS_REPEAT_EXT = "controls_repeat_ext";
@@ -129,6 +130,7 @@ public final class BlocklyConstants {
     public static final String LOGIC_COPERATION = "logic_operation";
 
     public static final String MATH_ARITHMETIC = "math_arithmetic";
+    public static final String ROB_MATH_CHANGE = "robMath_change";
     public static final String MATH_CHANGE = "math_change";
     public static final String MATH_MODULO = "math_modulo";
     public static final String MATH_NUMBER = "math_number";

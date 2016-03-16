@@ -61,6 +61,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 internal(this).memory.decl(stmt.name, value);
                 break;
 
+            case MATH_CHANGE:
+                evalMathChange(internal(this), stmt);
+                break;
+
             case IF_STMT:
                 evalIf(internal(this), stmt);
                 this.step(simulationData);
@@ -68,7 +72,6 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
 
             case REPEAT_STMT:
                 evalRepeat(internal(this), stmt);
-                this.step(simulationData);
                 break;
 
             case DRIVE_ACTION:
@@ -276,12 +279,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
     };
 
+    var evalMathChange = function(obj, stmt) {
+        var left = evalExpr(obj, stmt.left);
+        var right = evalExpr(obj, stmt.right);
+
+    };
+
     var evalRepeat = function(obj, stmt) {
         switch (stmt.mode) {
         case TIMES:
             for (var i = 0; i < evalExpr(obj, stmt.expr); i++) {
                 obj.program.prepend(stmt.stmtList);
             }
+            break;
+        case FOR:
             break;
         default:
             var value = evalExpr(obj, stmt.expr);
@@ -363,28 +374,6 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
 
     var evalSensor = function(obj, sensorType, sensorMode) {
         return obj.simulationData[sensorType][sensorMode];
-//        switch (sensorType) {
-//        case TOUCH:
-//            return obj.simulationData.touch;
-//        case ULTRASONIC:
-//            return obj.simulationData.ultrasonic[sensorMode];
-//        case COLOR:
-//            if (sensorMode == COLOUR) {
-//                return obj.simulationData.color.colorValue;
-//            } else if (sensorMode == RED) {
-//                return obj.simulationData.color.lightValue;
-//            } else {
-//                throw "Invalid Color Sensor Mode";
-//            }
-//        case INFRARED:
-//            return obj.simulationData.infrared[sensorMode];
-//        case ANGLE:
-//            return obj.simulationData.gyro.angle;
-//        case RATE:
-//            return obj.simulationData.gyro.rate;
-//        default:
-//            throw "Invalid Sensor!";
-//        }
     };
 
     var evalEncoderSensor = function(obj, motorSide, sensorMode) {
@@ -462,6 +451,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         switch (op) {
         case NEG:
             return -val;
+        case NOT:
+            return !val;
         default:
             throw "Invalid Unary Operator";
         }

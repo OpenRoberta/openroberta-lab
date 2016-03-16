@@ -7,11 +7,10 @@ function createConstant(dataType, value) {
     return result;
 }
 
-function createMathConstant(value) {
-    var result = {};
-    result[EXPR] = MATH_CONST;
-    result[VALUE] = value;
-    return result;
+function createMathChange(left, right) {
+    var binary = createBinaryExpr(ADD, left, right);
+    var assignment = createAssignStmt(left.name, binary)
+    return assignment;
 }
 
 function createBinaryExpr(op, left, right) {
@@ -89,6 +88,13 @@ function createVarDeclaration(type, name, value) {
 }
 
 function createAssignStmt(name, value) {
+    var result = {};
+    result[STMT] = ASSIGN_STMT;
+    result[NAME] = name;
+    result[EXPR] = value;
+    return result;
+}
+function createCreateMathChange(name, value) {
     var result = {};
     result[STMT] = ASSIGN_STMT;
     result[NAME] = name;

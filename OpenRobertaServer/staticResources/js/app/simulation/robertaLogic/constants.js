@@ -178,7 +178,15 @@ BACKWARD = "BACKWARD";
 const
 WHILE = "WHILE";
 const
+UNTIL = "UNTIL";
+const
 FOREVER = "FOREVER";
+const
+FOR = "FOREVER";
+const
+MATH_CHANGE = "mathChange";
+const
+NOT = "NOT";
 const
 ANGLE = "angle";
 const

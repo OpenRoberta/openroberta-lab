@@ -391,9 +391,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
-        if ( binary.getOp() == Op.MATH_CHANGE ) {
-            this.sb.append(";");
-        }
         return null;
     }
 

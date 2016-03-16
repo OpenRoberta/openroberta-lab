@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -194,11 +195,18 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        this.sb.append("createBinaryExpr(" + binary.getOp() + ", ");
+        String method = "createBinaryExpr(" + binary.getOp() + ", ";
+        String end = ")";
+        // FIXME: The math change should be removed from the binary expression since it is a statement
+        if ( binary.getOp() == Op.MATH_CHANGE ) {
+            end = createClosingBracket();
+            method = "createMathChange(";
+        }
+        this.sb.append(method);
         binary.getLeft().visit(this);
         this.sb.append(", ");
         binary.getRight().visit(this);
-        this.sb.append(")");
+        this.sb.append(end);
         return null;
     }
 
@@ -280,10 +288,15 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        this.sb.append("var stmt" + this.stmtCount + " = ");
-        increaseStmt();
+        String end = "";
+        if ( !isInStmt() ) {
+            this.sb.append("var stmt" + this.stmtCount + " = ");
+            increaseStmt();
+            end = ";";
+        }
         exprStmt.getExpr().visit(this);
-        this.sb.append(";");
+        this.sb.append(end);
+
         return null;
     }
 
@@ -858,9 +871,15 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 break;
             case FOREVER:
             case WHILE:
+            case UNTIL:
                 this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append(", [");
+                break;
+            case FOR:
+                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", [");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append("], [");
                 break;
 
             default:

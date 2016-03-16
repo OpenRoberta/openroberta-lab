@@ -795,7 +795,7 @@ public class BlocklyMethods {
             case FROM_START:
                 return (int) index;
             case FROM_END:
-                return (int) (list.size() - index);
+                return (int) ((list.size() - 1) - index);
             case FIRST:
                 return 0;
             case LAST:

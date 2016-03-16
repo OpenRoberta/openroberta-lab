@@ -357,9 +357,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
-        if ( binary.getOp() == Binary.Op.MATH_CHANGE ) {
-            this.sb.append(";"); // FIXME
-        }
         return null;
     }
 

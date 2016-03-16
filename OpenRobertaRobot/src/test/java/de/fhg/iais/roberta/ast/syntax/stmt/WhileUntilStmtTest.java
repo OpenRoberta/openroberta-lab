@@ -16,11 +16,11 @@ public class WhileUntilStmtTest {
                 + "booleanTRUE=true;if ( TRUE ) {\nwhile ( !true ) {\n"
                 + "}}\n"
                 + "booleanTRUE=true;if ( TRUE ) {\nwhile ( !(15 == 20) ) {\n"
-                + "    variablenName += 1;;\n"
+                + "    variablenName += 1;\n"
                 + "}}\n"
                 + "booleanTRUE=true;if ( TRUE ) {\nwhile ( !true ) {\n"
                 + "    booleanTRUE=true;if ( TRUE ) {\nwhile ( !(15 == 20) ) {\n"
-                + "        variablenName += 1;;\n"
+                + "        variablenName += 1;\n"
                 + "    }}\n"
                 + "}}";
 
