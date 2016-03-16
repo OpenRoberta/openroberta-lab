@@ -955,7 +955,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
         switch ( lenghtOfIsEmptyFunct.getFunctName() ) {
             case LISTS_LENGTH:
-                this.sb.append("BlocklyMethods.lenght( ");
+                this.sb.append("BlocklyMethods.length( ");
                 lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
