@@ -5,36 +5,42 @@ os=$(uname -a)
 if [[ ${os} == *"MINGW"* ]]
 then
   echo "You are using Mingw on Windows (probably Git).";
-  echo "Please run this script only on Linux to keep file permissions of the firmware!";
+  echo "Please run this script only on Linux!!!";
   exit 1
 fi
 #---
 
 # temporary directory in repository to extract zip file
 tmp='temp'
-# temporary directory on Linux file system
+# temporary directory on Linux file system (ext)
 work='/tmp/openroberta'
-# Original leJOS image file which you can download
-lejosimage='lejosimage/lejosimage.zip'
-
-# "Main location for defining a version number"
-parentpom='../../OpenRobertaParent/pom.xml'
 
 # Directory contains files for updating the brick after successful maven install
 libdir='../../OpenRobertaServer/target/updateResources'
+
+#Open Roberta default version, can be modified by the first input parameter
+# for example "sh CreateImage.sh 1.4.0"
+version='1.3.2'
 
 menu=${libdir}/EV3Menu.jar
 json=${libdir}/json.jar
 runtime=${libdir}/OpenRobertaRuntime.jar
 shared=${libdir}/OpenRobertaShared.jar
 websocket=${libdir}/Java-WebSocket.jar
+lejosfile=lejos.tar.gz
+lejosimage=lejosimage.zip
 
 echo ""
 echo "---Creating Open Roberta Firmware---"
 
-# Retrieve Open Roberta version (from pom.xml)
-version=$(grep -Po -m 1 '<version>\K.+\..+\..+?(?=[^0-9])' ${parentpom})
-echo "OpenRobertaParent version is ${version}!"
+# Set the version from the input parameter
+if [ ! -z $1 ]
+then
+	version=$1
+	echo "Open Roberta version is ${version}!"
+else
+	echo "Open Roberta default version is ${version}!"
+fi
 # ---
 
 # Check if required files exist
@@ -49,28 +55,38 @@ else
     echo ""
     exit 1
 fi
+# ---
 
-# TODO Download lejos automatically with wget
-if [ -f ${lejosimage} ]
+# Download lejos automatically with wget from sourceforge
+echo "Downloading lejos files from sourceforge!"
+echo ""
+wget -O ${lejosfile} https://sourceforge.net/projects/ev3.lejos.p/files/0.9.0-beta/leJOS_EV3_0.9.0-beta.tar.gz/download
+
+if [ -f ${lejosfile} ]
 then
-    echo "Lejosimage found!"
-    echo "Using ${lejosimage}"
+	echo "Download successful!"
+	echo "Extracting file now..."
+	tar --wildcards -zxf ${lejosfile} leJOS*/${lejosimage}
+	mv leJOS*/${lejosimage} ${lejosimage}
+	rm -r leJOS*
+	rm ${lejosfile}
+	if [ -f ${lejosimage} ]
+	then
+		echo "Got ${lejosimage}!"
+	else
+		echo "${lejosimage} does not exist. Extracting the file from ${lejosfile} failed!"
+		exit 1
+	fi
 else
-    echo "Lejosimage in ${lejosimage} is missing!"
-	echo "Download leJOS from here:"
-	echo "https://sourceforge.net/projects/ev3.lejos.p/files/0.9.0-beta/"
-	echo "Extract it and copy lejosimage.zip into the lejosimage directory within this directory."
-	echo "Then run this script again."
-    echo "---Abort---"
-    echo ""
-    exit 1
+	echo "${lejosfile} not found! Downloading the file failed."
+	exit 1
 fi
 # ---
 
 # Create temporary directories in Linux file system to keep file permissions of leJOS
 echo "Create temporary directories..."
-mkdir -p -v ${tmp}
-mkdir -p -v ${work}
+mkdir -p ${tmp}
+mkdir -p ${work}
 # ---
 
 # Extract image
@@ -111,8 +127,9 @@ echo "...Done."
 # Cleanup
 echo "Delete temporary directories..."
 cd - > /dev/null 2>&1
+rm ${lejosimage}
 rm -r ${tmp}
-rm -r /tmp/openroberta
+rm -r ${work}
 # ---
 
 echo "If there are no error messages, the image was created successfully."
