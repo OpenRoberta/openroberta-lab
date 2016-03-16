@@ -997,7 +997,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex(");
+        this.sb.append("BlocklyMethods.listsGetIndex(");
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
         this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
@@ -1008,15 +1008,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             listGetIndex.getParam().get(1).visit(this);
         }
         this.sb.append(")");
-        //if ( listGetIndex.getElementOperation().isStatment() ) {
-        //    this.sb.append(";");
-        //}
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex(");
+        this.sb.append("BlocklyMethods.listsSetIndex(");
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
         this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
