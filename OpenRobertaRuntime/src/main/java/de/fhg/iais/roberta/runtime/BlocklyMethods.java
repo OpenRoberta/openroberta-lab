@@ -697,12 +697,16 @@ public class BlocklyMethods {
      * @return median of the elements
      */
     public static float medianOnList(ArrayList<Float> list) {
+        int n = list.size();
+        if ( n == 0 ) {
+            return 0;
+        }
         Collections.sort(list);
         float median;
-        if ( list.size() % 2 == 0 ) {
-            median = (list.get(list.size() / 2) + list.get(list.size() / 2 - 1)) / 2;
+        if ( n % 2 == 0 ) {
+            median = (list.get(n / 2) + list.get(n / 2 - 1)) / 2;
         } else {
-            median = list.get(list.size() / 2);
+            median = list.get(n / 2);
         }
         return median;
     }
