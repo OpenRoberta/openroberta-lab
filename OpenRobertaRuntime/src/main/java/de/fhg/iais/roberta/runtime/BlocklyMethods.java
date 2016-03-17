@@ -687,11 +687,7 @@ public class BlocklyMethods {
      * @return average of the elements
      */
     public static float averageOnList(ArrayList<Float> list) {
-        float sum = 0;
-        for ( float element : list ) {
-            sum += element;
-        }
-        return sum / list.size();
+        return sumOnList(list) / list.size();
     }
 
     /**
