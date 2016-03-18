@@ -416,6 +416,14 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void createListWithItem() throws Exception {
+        String a = "createCreateListWithItem(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 5))" + "var pp = [";
+
+        assertCodeIsOk(a, "/syntax/lists/lists_create_with_item.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

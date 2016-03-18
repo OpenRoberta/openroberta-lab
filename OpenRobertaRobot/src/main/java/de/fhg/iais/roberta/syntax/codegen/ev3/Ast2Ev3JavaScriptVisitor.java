@@ -654,6 +654,11 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        this.sb.append("createCreateListWithItem(");
+        listRepeat.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        listRepeat.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
