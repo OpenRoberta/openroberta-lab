@@ -457,6 +457,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                 this.robot.timer[key] += SIM.getDt();
             }
         }
+        values.time = this.robot.time;
         if (this.robot.timer) {
             values.timer = {};
             for (key in this.robot.timer) {

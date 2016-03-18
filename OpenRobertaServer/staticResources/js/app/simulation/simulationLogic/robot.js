@@ -347,20 +347,21 @@ define(
                         this.led.blink = 4;
                         break;
                     }
-                    if (this.led.blink > 0) {
-                        if (this.led.timer > 0.5 && this.led.blink == 2) {
-                            this.led.color = actions.led.color;
-                        } else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
-                            this.led.color = actions.led.color;
-                        } else {
-                            this.led.color = 'LIGHTGRAY';
-                        }
-                        this.led.timer += SIM.getDt();
-                        if (this.led.timer > 1.0) {
-                            this.led.timer = 0;
-                        }
+                }
+                if (this.led.blink > 0) {
+                    if (this.led.timer > 0.5 && this.led.blink == 2) {
+                        this.led.color = actions.led.color;
+                    } else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
+                        this.led.color = actions.led.color;
+                    } else {
+                        this.led.color = 'LIGHTGRAY';
+                    }
+                    this.led.timer += SIM.getDt();
+                    if (this.led.timer > 1.0) {
+                        this.led.timer = 0;
                     }
                 }
+                $("#led").attr("fill", "url('#" + this.led.color + "')");
                 // update display
                 if (actions.display) {
                     if (actions.display.text) {
@@ -374,7 +375,6 @@ define(
                     if (actions.display.clear) {
                         $("#display").html('');
                     }
-                    $("#led").attr("fill", "url('#" + this.led.color + "')");
                 }
                 // update timer
                 if (actions.timer) {

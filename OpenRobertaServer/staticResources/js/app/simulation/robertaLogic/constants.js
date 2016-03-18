@@ -182,7 +182,7 @@ UNTIL = "UNTIL";
 const
 FOREVER = "FOREVER";
 const
-FOR = "FOREVER";
+FOR = "FOR";
 const
 MATH_CHANGE = "mathChange";
 const
