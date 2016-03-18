@@ -104,6 +104,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             }
             pause = value;
         }
+        robot.left = 0;
+        robot.right = 0;
     }
     exports.setPause = setPause;
 
@@ -128,6 +130,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     function stopProgram() {
         setPause(true);
         robot.reset();
+        robot.resetPose();
         scene.updateBackgrounds();
         reloadProgram();
     }
@@ -164,35 +167,6 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     };
     exports.obstacleList = [ ground, obstacle ];
 
-// input and output for executing user program
-    var input = {
-        sensors : {
-            touch : false,
-            color : '',
-            light : 0,
-            ultrasonic : 0,
-            tacho : [ 0, 0 ]
-        },
-        time : 0,
-        frameTime : 0
-    };
-
-    var output = {
-        left : 0,
-        right : 0,
-        led : {
-            color : '',
-            mode : ''
-        },
-        display : {
-            text : '',
-            x : 0,
-            y : 0,
-            picture : '',
-            clear : false
-        }
-    };
-
 // render stuff
     var globalID;
 
@@ -210,6 +184,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         pause = true;
         info = false;
         robot.reset();
+        robot.resetPose();
         img = [];
         if (isIE()) {
             imgSrc = imgSrcIE;
@@ -226,97 +201,46 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     }
     exports.cancel = cancel;
 
+    var sensorValues = {};
+
     function render() {
         if (canceled) {
             cancelAnimationFrame(globalID);
             return;
         }
+        var actionValues = {};
         globalID = requestAnimationFrame(render);
         var now = new Date().getTime();
         dt = now - (time || now);
         dt /= 1000;
-        input.frameTime = dt;
         time = now;
 
         stepCounter += 1;
-        output.left = 0;
-        output.right = 0;
+
         if (!programEval.getProgram().isTerminated() && !pause) {
             //executeProgram();  //for tests without OpenRobertaLab
             if (stepCounter === 0) {
                 setPause(true);
             }
-            var simulationValues = programEval.step(input);
-            setOutput(simulationValues);
+            actionValues = programEval.step(sensorValues);
         } else if (programEval.getProgram().isTerminated()) {
             setPause(true);
             reloadProgram();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         }
-        robot.update(output);
-        var values = scene.updateSensorValues(!pause, output);
-        values.correctDrive = currentBackground == 5;
-        input = values;
+        robot.update(actionValues);
+        sensorValues = scene.updateSensorValues(!pause);
+
         scene.drawRobot();
     }
 
     function reloadProgram() {
-        //robot.time = 0;
-        resetOutput();
+        robot.reset();
         eval(userProgram);
         programEval.initProgram(pp);
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
-    }
-
-    function setOutput(values) {
-        var left = values.motors.powerLeft;
-        if (left > 100) {
-            left = 100;
-        } else if (left < -100) {
-            left = -100
-        }
-        var right = values.motors.powerRight;
-        if (right > 100) {
-            right = 100;
-        } else if (right < -100) {
-            right = -100
-        }
-        if (values.debug) {
-            output.debug = true;
-        }
-        output.left = left * MAXPOWER || 0;
-        output.right = right * MAXPOWER || 0;
-        if (values.led) {
-            output.led = [];
-            output.led.color = values.led.color;
-            output.led.mode = values.led.mode;
-        }
-        if (values.display) {
-            output.display = [];
-            output.display.text = values.display.text;
-            output.display.x = values.display.x;
-            output.display.y = values.display.y;
-            output.display.picture = values.display.picture;
-            output.display.clear = values.display.clear;
-        }
-        // TODO do this in programEval
-//        values.display = [];
-        //console.log(exports.output);
-        //exports.output.tone = 
-    }
-
-    function resetOutput() {
-        output.left = 0;
-        output.right = 0;
-        output.led = [];
-        output.led.color = '';
-        output.led.mode = OFF;
-        output.display = [];
-        output.display.clear = true;
-        // TODO do this in programEval
-//        programEval.display = {};
     }
 
     function setObstacle() {

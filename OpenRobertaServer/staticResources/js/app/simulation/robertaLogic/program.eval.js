@@ -140,7 +140,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
         newSpeeds = internal(this).actors.checkCoveredDistanceAndCorrectSpeed(internal(this).program, internal(this).simulationData.correctDrive);
         internal(this).program.handleWaitTimer();
-        outputSpeeds(internal(this), newSpeeds)
+        outputSpeeds(internal(this), newSpeeds);
+        // internal(this).outputCommands.terminated = internal(this).program.isTerminated();
         return internal(this).outputCommands;
 
     };

@@ -23,8 +23,7 @@ define(
                     transX : pose.transX,
                     transY : pose.transY
                 };
-
-                this.reset = function() {
+                this.resetPose = function() {
                     this.pose.x = initialPose.x;
                     this.pose.y = initialPose.y;
                     this.pose.theta = initialPose.theta;
@@ -33,13 +32,17 @@ define(
                     this.pose.thetaOld = initialPose.theta;
                     this.pose.transX = initialPose.transX;
                     this.pose.transY = initialPose.transY;
+                };
+                this.reset = function() {
                     this.encoder.left = 0;
                     this.encoder.right = 0;
                     this.led.color = "LIGHTGRAY";
                     this.led.mode = OFF;
                     this.led.blink = 0;
                     this.time = 0;
-                    this.timer = 0;
+                    for (key in this.timer) {
+                        this.timer[key] = 0;
+                    }
                     var robot = this;
                     $("#simRobotContent").html(this.svg);
                     for ( var property in robot.buttons) {
@@ -84,7 +87,8 @@ define(
                 x : 0,
                 y : 10,
                 color : 'LIGHTGREY',
-                mode : ''
+                mode : '',
+                timer : 0
             };
             Robot.prototype.encoder = {
                 left : 0,
@@ -97,15 +101,8 @@ define(
                 ry : 0,
                 r : 5,
                 colorValue : 0,
+                lightValue : 0,
                 color : 'grey'
-            };
-            Robot.prototype.lightSensor = {
-                x : 0,
-                y : -15,
-                rx : 0,
-                ry : 0,
-                r : 5,
-                lightValue : 0
             };
             Robot.prototype.ultraSensor = {
                 x : 0,
@@ -223,43 +220,68 @@ define(
                     + '<stop offset="0%" style="stop-color:rgb(255,255,255);stop-opacity:0" />'
                     + '<stop offset="100%" style="stop-color:rgb(211,211,211);stop-opacity:1" />' + '</radialGradient>' + '</defs>' + '</svg>';
             Robot.prototype.time = 0;
-            Robot.prototype.timer = 0;
+            Robot.prototype.timer = {
+                timer1 : false,
+                timer2 : false,
+                timer3 : false,
+                timer4 : false,
+                timer5 : false
+            };
             Robot.prototype.debug = false;
             /**
              * Update all actions of the robot. The new pose is calculated with
              * the forward kinematics equations for a differential drive robot.
              * 
-             * @param {output}
-             *            output from the executing program: power for left and
+             * @param {actions}
+             *            actions from the executing program: power for left and
              *            right motors/wheels, display, led ...
              * 
              */
-            Robot.prototype.update = function(output) {
+            Robot.prototype.update = function(actions) {
                 // update debug
-                this.debug = output.debug;
+                this.debug = actions.debug || this.debug;
                 // update pose
+                if (actions.motors) {
+                    var left = actions.motors.powerLeft || 0;
+                    if (left > 100) {
+                        left = 100;
+                    } else if (left < -100) {
+                        left = -100
+                    }
+                    var right = actions.motors.powerRight || 0;
+                    if (right > 100) {
+                        right = 100;
+                    } else if (right < -100) {
+                        right = -100
+                    }
+                    this.left = left * MAXPOWER;
+                    this.right = right * MAXPOWER;
+                } else {
+                    this.left = 0;
+                    this.right = 0;
+                }
                 this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
-                this.encoder.left += output.left * SIM.getDt();
-                this.encoder.right += output.right * SIM.getDt();
+                this.encoder.left += this.left * SIM.getDt();
+                this.encoder.right += this.right * SIM.getDt();
                 this.bumpedAready = false;
-                if (this.frontLeft.bumped && output.left > 0) {
-                    output.left *= -1;
+                if (this.frontLeft.bumped && this.left > 0) {
+                    this.left *= -1;
                     this.bumpedAready = true;
                 }
-                if (this.backLeft.bumped && output.left < 0) {
-                    output.left *= -1;
+                if (this.backLeft.bumped && this.left < 0) {
+                    this.left *= -1;
                     this.bumpedAready = true;
                 }
-                if (this.frontRight.bumped && output.right > 0) {
-                    output.right *= -1;
+                if (this.frontRight.bumped && this.right > 0) {
+                    this.right *= -1;
                     this.bumpedAready = true;
                 }
-                if (this.backRight.bumped && output.right < 0) {
-                    output.right *= -1;
+                if (this.backRight.bumped && this.right < 0) {
+                    this.right *= -1;
                     this.bumpedAready = true;
                 }
-                if (output.right == output.left) {
-                    var moveXY = output.right * SIM.getDt();
+                if (this.right == this.left) {
+                    var moveXY = this.right * SIM.getDt();
                     var mX = Math.cos(this.pose.theta) * moveXY;
                     var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
                     this.pose.x += mX;
@@ -278,8 +300,8 @@ define(
                     }
                     this.pose.thetaDiff = 0;
                 } else {
-                    var R = TRACKWIDTH / 2 * ((output.left + output.right) / (output.left - output.right));
-                    var rot = (output.left - output.right) / TRACKWIDTH;
+                    var R = TRACKWIDTH / 2 * ((this.left + this.right) / (this.left - this.right));
+                    var rot = (this.left - this.right) / TRACKWIDTH;
                     var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
                     var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
                     this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;
@@ -306,48 +328,62 @@ define(
                 this.touchSensor.y2 = this.frontLeft.ry;
 
                 //update led(s)
-                switch (output.led.mode) {
-                case "OFF":
-                    this.timer = 0;
-                    this.led.blink = 0;
-                    this.led.color = 'LIGHTGRAY'; // = led off
-                    break;
-                case "ON":
-                    this.timer = 0;
-                    this.led.color = output.led.color;
-                    this.led.blink = 0;
-                    break;
-                case "FLASH":
-                    this.led.blink = 2;
-                    break;
-                case "DOUBLE_FLASH":
-                    this.led.blink = 4;
-                    break;
-                }
-                if (this.led.blink > 0) {
-                    if (this.timer > 0.5 && this.led.blink == 2) {
-                        this.led.color = output.led.color;
-                    } else if (this.led.blink == 4 && (this.timer > 0.5 && this.timer < 0.67 || this.timer > 0.83)) {
-                        this.led.color = output.led.color;
-                    } else {
-                        this.led.color = 'LIGHTGRAY';
+                if (actions.led) {
+                    switch (actions.led.mode) {
+                    case "OFF":
+                        this.led.timer = 0;
+                        this.led.blink = 0;
+                        this.led.color = 'LIGHTGRAY'; // = led off
+                        break;
+                    case "ON":
+                        this.led.timer = 0;
+                        this.led.color = actions.led.color;
+                        this.led.blink = 0;
+                        break;
+                    case "FLASH":
+                        this.led.blink = 2;
+                        break;
+                    case "DOUBLE_FLASH":
+                        this.led.blink = 4;
+                        break;
                     }
-                    this.timer += SIM.getDt();
-                    if (this.timer > 1.0) {
-                        this.timer = 0;
+                    if (this.led.blink > 0) {
+                        if (this.led.timer > 0.5 && this.led.blink == 2) {
+                            this.led.color = actions.led.color;
+                        } else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
+                            this.led.color = actions.led.color;
+                        } else {
+                            this.led.color = 'LIGHTGRAY';
+                        }
+                        this.led.timer += SIM.getDt();
+                        if (this.led.timer > 1.0) {
+                            this.led.timer = 0;
+                        }
                     }
                 }
                 // update display
-                if (output.display.text != undefined) {
-                    $("#display").html($("#display").html() + '<text x=' + output.display.x + ' y=' + output.display.y + '>' + output.display.text + '</text>');
+                if (actions.display) {
+                    if (actions.display.text) {
+                        $("#display").html(
+                                $("#display").html() + '<text x=' + actions.display.x * 10 + ' y=' + (actions.display.y + 1) * 16 + '>' + actions.display.text
+                                        + '</text>');
+                    }
+                    if (actions.display.picture) {
+                        $("#display").html(this.display[actions.display.picture]);
+                    }
+                    if (actions.display.clear) {
+                        $("#display").html('');
+                    }
+                    $("#led").attr("fill", "url('#" + this.led.color + "')");
                 }
-                if (output.display.picture) {
-                    $("#display").html(this.display[output.display.picture]);
+                // update timer
+                if (actions.timer) {
+                    for (key in actions.timer) {
+                        if (actions.timer[key].reset) {
+                            this.timer[key] = 0;
+                        }
+                    }
                 }
-                if (output.display.clear) {
-                    $("#display").html('');
-                }
-                $("#led").attr("fill", "url('#" + this.led.color + "')");
             };
             /**
              * Translate a position to the global coordinate system

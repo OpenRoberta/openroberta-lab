@@ -118,7 +118,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
             this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Light Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.lightSensor.lightValue, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.colorSensor.lightValue, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Ultra Sensor", endLabel, line);
             this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
@@ -244,7 +244,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
     };
 
-    Scene.prototype.updateSensorValues = function(running, output) {
+    Scene.prototype.updateSensorValues = function(running) {
         var values = {};
         if (this.robot.touchSensor) {
             this.robot.touchSensor.value = 0;
@@ -281,7 +281,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                             y : obstacleLines[k].y2
                         });
                         if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
-                                * Math.max(Math.abs(output.right), Math.abs(output.left))) {
+                                * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
                             this.robot.frontLeft.bumped = true;
                             this.robot.frontRight.bumped = true;
                             this.robot.touchSensor.value = 1;
@@ -310,7 +310,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                                     y : obstacleLines[k].y2
                                 });
                                 if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt()
-                                        * Math.max(Math.abs(output.right), Math.abs(output.left))) {
+                                        * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
                                     this.robot.backLeft.bumped = true;
                                     this.robot.backRight.bumped = true;
                                 }
@@ -351,7 +351,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
             var green = g / num;
             var blue = b / num;
             if (this.robot.colorSensor) {
-                values.color = [];
+                values.color = {};
                 this.robot.colorSensor.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
                 values.color.colorValue = this.robot.colorSensor.colorValue;
                 if (this.robot.colorSensor.colorValue === COLOR_ENUM.NONE) {
@@ -373,13 +373,13 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                 }
                 this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
                 values.color.red = UTIL.round(this.robot.colorSensor.lightValue, 2);
-                values.color.rgb = [ UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0) ];
+                values.color.rgb = [ UTIL.round(red / 2.55, 0), UTIL.round(green / 2.55, 0), UTIL.round(blue / 2.55, 0) ];
             }
         }
 
         if (this.robot.ultraSensor) {
-            values.ultrasonic = [];
-            values.infrared = [];
+            values.ultrasonic = {};
+            values.infrared = {};
             var u3 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
@@ -453,21 +453,28 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
         if (running) {
             this.robot.time += SIM.getDt();
+            for (key in this.robot.timer) {
+                this.robot.timer[key] += SIM.getDt();
+            }
         }
-        values.time = this.robot.time;
+        if (this.robot.timer) {
+            values.timer = {};
+            for (key in this.robot.timer) {
+                values.timer[key] = this.robot.timer[key];
+            }
+        }
         if (this.robot.encoder) {
-            values.encoder = [];
+            values.encoder = {};
             values.encoder.left = this.robot.encoder.left * ENC;
             values.encoder.right = this.robot.encoder.right * ENC;
         }
         if (this.robot.gyroSensor) {
-            values.gyro = [];
+            values.gyro = {};
             values.gyro.angle = UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 2);
             values.gyro.rate = UTIL.round(SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff), 2);
         }
-        // TODO implement buttons
         if (this.robot.buttons) {
-            values.buttons = [];
+            values.buttons = {};
             values.buttons.any = false;
             var i = 0
             for ( var key in this.robot.buttons) {
@@ -481,6 +488,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                 }
             }
         }
+        values.correctDrive = SIM.getBackground() == 5;
+        values.frameTime = SIM.getDt();
         return values;
     };
     return Scene;
