@@ -87,6 +87,7 @@ define(
                 x : 0,
                 y : 10,
                 color : 'LIGHTGREY',
+                blinkColor : 'LIGHTGREY',
                 mode : '',
                 timer : 0
             };
@@ -329,15 +330,18 @@ define(
 
                 //update led(s)
                 if (actions.led) {
+                    if (actions.led.color) {
+                        this.led.color = actions.led.color.toUpperCase();
+                        this.led.blinkColor = actions.led.color.toUpperCase();
+                    }
                     switch (actions.led.mode) {
                     case "OFF":
                         this.led.timer = 0;
                         this.led.blink = 0;
-                        this.led.color = 'LIGHTGRAY'; // = led off
+                        this.led.color = 'LIGHTGRAY';
                         break;
                     case "ON":
                         this.led.timer = 0;
-                        this.led.color = actions.led.color;
                         this.led.blink = 0;
                         break;
                     case "FLASH":
@@ -350,9 +354,9 @@ define(
                 }
                 if (this.led.blink > 0) {
                     if (this.led.timer > 0.5 && this.led.blink == 2) {
-                        this.led.color = actions.led.color;
+                        this.led.color = this.led.blinkColor;
                     } else if (this.led.blink == 4 && (this.led.timer > 0.5 && this.led.timer < 0.67 || this.led.timer > 0.83)) {
-                        this.led.color = actions.led.color;
+                        this.led.color = this.led.blinkColor;
                     } else {
                         this.led.color = 'LIGHTGRAY';
                     }
