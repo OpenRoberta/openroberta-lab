@@ -300,14 +300,14 @@ function createCreateListWithItem(value, size) {
 function createListLength(list) {
     var result = {};
     result[EXPR] = CREATE_LIST_LENGTH;
-    result[VALUE] = list;
+    result[LIST] = list;
     return result;
 }
 
 function createListIsEmpty(list) {
     var result = {};
     result[EXPR] = CREATE_LIST_IS_EMPTY;
-    result[VALUE] = list;
+    result[LIST] = list;
     return result;
 }
 
@@ -315,27 +315,38 @@ function createListFindItem(position, list, item) {
     var result = {};
     result[EXPR] = CREATE_LIST_FIND_ITEM;
     result[POSITION] = position;
-    result[VALUE] = list;
+    result[LIST] = list;
     result[ITEM] = item;
     return result;
 }
 
-function createListsIndex(list, op, position, item) {
+function createListsSetIndex(list, op, newVal, position, item) {
     var result = {};
-    result[EXPR] = CREATE_LISTS_INDEX;
+    result[STMT] = CREATE_LISTS_SET_INDEX;
     result[OP] = op;
     result[POSITION] = position;
-    result[VALUE] = list;
+    result[VALUE] = newVal;
+    result[LIST] = list;
     result[ITEM] = item;
     return result;
 }
 
-function createListsIndexStmt(list, op, position, item) {
+function createListsGetIndex(list, op, position, item) {
     var result = {};
-    result[STMT] = CREATE_LISTS_INDEX_STMT;
+    result[EXPR] = CREATE_LISTS_GET_INDEX;
     result[OP] = op;
     result[POSITION] = position;
-    result[VALUE] = list;
+    result[LIST] = list;
+    result[ITEM] = item;
+    return result;
+}
+
+function createListsGetIndexStmt(list, op, position, item) {
+    var result = {};
+    result[STMT] = CREATE_LISTS_GET_INDEX_STMT;
+    result[OP] = op;
+    result[POSITION] = position;
+    result[LIST] = list;
     result[ITEM] = item;
     return result;
 }

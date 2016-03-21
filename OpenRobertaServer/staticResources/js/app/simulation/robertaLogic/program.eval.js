@@ -134,6 +134,13 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 evalResetEncoderSensor(internal(this), stmt);
                 break;
 
+            case CREATE_LISTS_GET_INDEX_STMT:
+                evalListsGetIndexStmt(internal(this), stmt);
+                break;
+            case CREATE_LISTS_SET_INDEX:
+                evalListsSetIndex(internal(this), stmt);
+                break;
+
             default:
                 throw "Invalid Statement " + stmt.stmt + "!";
             }
@@ -351,13 +358,13 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         case CREATE_LIST_WITH_ITEM:
             return evalCreateArrayWithItem(obj, expr.size, expr.value);
         case CREATE_LIST_LENGTH:
-            return evalListLength(obj, expr.value);
+            return evalListLength(obj, expr.list);
         case CREATE_LIST_IS_EMPTY:
-            return evalListIsEmpty(obj, expr.value);
+            return evalListIsEmpty(obj, expr.list);
         case CREATE_LIST_FIND_ITEM:
-            return evalListFindItem(obj, expr.position, expr.value, expr.item);
-        case CREATE_LISTS_INDEX:
-            return evalListsIndex(obj, expr.value, expr.op, expr.position, expr.item);
+            return evalListFindItem(obj, expr.position, expr.list, expr.item);
+        case CREATE_LISTS_GET_INDEX:
+            return evalListsGetIndex(obj, expr.list, expr.op, expr.position, expr.item);
         case VAR:
             return obj.memory.get(expr.name);
         case BINARY:
@@ -606,8 +613,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         return list.lastIndexOf(ite);
     };
 
-    var evalListsIndex = function(obj, value, op, position, item) {
-        var list = evalExpr(obj, value);
+    var evalListsGetIndex = function(obj, list, op, position, item) {
+        var list = evalExpr(obj, list);
         var it;
         if (item) {
             it = evalExpr(obj, item);
@@ -641,14 +648,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
     };
 
-    var evalListsIndexStmt = function(obj, value, op, position, item) {
-        var list = evalExpr(obj, value);
+    var evalListsGetIndexStmt = function(obj, stmt) {
+        var list = evalExpr(obj, stmt.list);
         var it;
-        if (item) {
-            it = evalExpr(obj, item);
+        if (stmt.item) {
+            it = evalExpr(obj, stmt.item);
         }
 
-        switch (position) {
+        switch (stmt.position) {
         case FROM_START:
             list.splice(it, 1);
             break;
@@ -663,6 +670,56 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             break;
         case RANDOM:
             listsGetRandomItem(list, true);
+            break;
+        default:
+            throw "Position on list is not supported!";
+        }
+    };
+
+    var evalListsSetIndex = function(obj, stmt) {
+        var list = evalExpr(obj, stmt.list);
+        var it;
+        if (stmt.item) {
+            it = evalExpr(obj, stmt.item);
+        }
+        var newValue = stmt.value;
+        var insert = op == INSERT;
+        switch (stmt.position) {
+        case FROM_START:
+            if (insert) {
+                list.splice(it, 0, newValue)
+                break;
+            }
+            list[it] = newValue;
+            break;
+        case FROM_END:
+            if (insert) {
+                list.splice(list.length - it - 1, 0, newValue)
+                break;
+            }
+            list[list.length - it - 1] = newValue;
+            break;
+        case FIRST:
+            if (insert) {
+                list.unshift(newValue)
+                break;
+            }
+            list[0] = newValue;
+            break;
+        case LAST:
+            if (insert) {
+                list.push(newValue)
+                break;
+            }
+            list[list.length - 1] = newValue;
+            break;
+        case RANDOM:
+            var tmp_x = Math.floor(Math.random() * list.length);
+            if (insert) {
+                list.splice(tmp_x, 0, newValue)
+                break;
+            }
+            list[tmp_x] = newValue;
             break;
         default:
             throw "Position on list is not supported!";

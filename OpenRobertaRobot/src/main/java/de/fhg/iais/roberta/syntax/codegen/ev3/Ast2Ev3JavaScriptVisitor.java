@@ -660,11 +660,30 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        String end = createClosingBracket();
+        this.sb.append("createListsSetIndex(");
+        listSetIndex.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        this.sb.append(listSetIndex.getElementOperation());
+        this.sb.append(", ");
+        listSetIndex.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        this.sb.append(listSetIndex.getLocation());
+        if ( listSetIndex.getParam().size() == 3 ) {
+            this.sb.append(", ");
+            listSetIndex.getParam().get(2).visit(this);
+        }
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        String methodName = "createListsIndex(";
+        String methodName = "createListsGetIndex(";
         String end = ")";
         if ( listGetIndex.getElementOperation().isStatment() ) {
-            methodName = "createListsIndexStmt(";
+            methodName = "createListsGetIndexStmt(";
             end = createClosingBracket();
         }
         this.sb.append(methodName);
@@ -688,11 +707,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         this.sb.append(", ");
         listRepeat.getParam().get(1).visit(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         return null;
     }
 

@@ -185,6 +185,7 @@ public final class BlocklyConstants {
     public static final String LISTS_GET_INDEX = "lists_getIndex";
     public static final String ROB_LISTS_GET_INDEX = "robLists_getIndex";
     public static final String LISTS_SET_INDEX = "lists_setIndex";
+    public static final String ROB_LISTS_SET_INDEX = "robLists_setIndex";
     public static final String LISTS_LENGTH = "lists_length";
     public static final String LISTS_IS_EMPTY = "lists_isEmpty";
     public static final String ROB_LISTS_LENGTH = "robLists_length";
@@ -227,5 +228,4 @@ public final class BlocklyConstants {
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
     public static final String SIM_MOTOR_STOP = "sim_motor_stop";
-
 }

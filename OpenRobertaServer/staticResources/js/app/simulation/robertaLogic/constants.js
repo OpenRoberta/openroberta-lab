@@ -45,7 +45,7 @@ RANDOM_INT = "randInt";
 const
 RANDOM_DOUBLE = "randDouble";
 const
-RANODM = "random";
+RANDOM = "random";
 const
 ASSIGN_STMT = "AssignStmt";
 const
@@ -80,7 +80,8 @@ WAIT_TIME_STMT = "WaitTimeSTMT";
 
 const
 TIME = "time";
-
+const
+LIST = "list";
 const
 STMT_LIST = "stmtList";
 const
@@ -284,14 +285,21 @@ FROM_END = "fromEnd";
 const
 GET = "get";
 const
+SET = "set";
+const
 REMOVE = "remove";
 const
 GET_REMOVE = "getRemove";
 const
 ITEM = "item";
 const
-CREATE_LISTS_INDEX = "createListsIndex";
-CREATE_LISTS_INDEX_STMT = "createListsIndexStmt";
+CREATE_LISTS_SET_INDEX = "createListsSetIndex";
+const
+CREATE_LISTS_GET_INDEX = "createListsGetIndex";
+const
+CREATE_LISTS_GET_INDEX_STMT = "createListsGetIndexStmt";
+const
+INSERT = "insert";
 const
 COLOR_ENUM = {
     NONE : "NONE",

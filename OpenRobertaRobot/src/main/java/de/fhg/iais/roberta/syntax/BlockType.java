@@ -195,7 +195,7 @@ public enum BlockType {
     LIST_REPEAT_FUNCT( Category.FUNCTION, ListRepeat.class, BlocklyConstants.LISTS_REPEAT, BlocklyConstants.ROB_LISTS_REPEAT ),
     LIST_CREATE( Category.EXPR, ListCreate.class, BlocklyConstants.LISTS_CREATE_WITH, BlocklyConstants.ROB_LISTS_CREATE_WITH ),
     LIST_INDEX_OF( Category.FUNCTION, ListGetIndex.class, BlocklyConstants.LISTS_GET_INDEX, BlocklyConstants.ROB_LISTS_GET_INDEX ),
-    LIST_SET_INDEX( Category.FUNCTION, ListSetIndex.class, BlocklyConstants.LISTS_SET_INDEX ),
+    LIST_SET_INDEX( Category.FUNCTION, ListSetIndex.class, BlocklyConstants.LISTS_SET_INDEX, BlocklyConstants.ROB_LISTS_SET_INDEX ),
     TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION, null ),
     METHOD_IF_RETURN( Category.METHOD, MethodIfReturn.class, BlocklyConstants.ROB_PROCEDURES_IF_RETURN ),
     METHOD_VOID( Category.METHOD, MethodVoid.class, BlocklyConstants.ROB_PROCEDURES_NO_RETURN ),
