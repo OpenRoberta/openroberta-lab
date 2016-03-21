@@ -45,6 +45,8 @@ RANDOM_INT = "randInt";
 const
 RANDOM_DOUBLE = "randDouble";
 const
+RANODM = "random";
+const
 ASSIGN_STMT = "AssignStmt";
 const
 REPEAT_STMT = "RepeatStmt";
@@ -138,6 +140,14 @@ STRING_CONST = "StringConst";
 const
 NUMERIC = "Numeric";
 const
+NUMERIC_ARRAY = "NumericArray";
+const
+STRING_ARRAY = "StringArray";
+const
+BOOL_ARRAY = "BoolArray";
+const
+COLOR_ARRAY = "ColorArray";
+const
 ADD = "ADD";
 const
 MINUS = "MINUS";
@@ -217,10 +227,18 @@ STATUS_LIGHT_ACTION = "statusLightAction";
 
 const
 TIMES = "TIMES";
-
+const
+SIZE = "size";
+const
+CREATE_LIST_IS_EMPTY = "isListEmpty";
+const
+CREATE_LIST_LENGTH = "listLength";
+const
+CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
+const
+CREATE_LIST_FIND_ITEM = "createListFindItem";
 const
 COLOR_CONST = "COLOR_CONST";
-
 const
 PILOT = "pilot";
 const
@@ -253,7 +271,27 @@ const
 ROTATION = "ROTATION";
 const
 DEGREE = "DEGREE";
-
+const
+POSITION = "position";
+const
+FIRST = "first";
+const
+LAST = "last";
+const
+FROM_START = "fromStart";
+const
+FROM_END = "fromEnd";
+const
+GET = "get";
+const
+REMOVE = "remove";
+const
+GET_REMOVE = "getRemove";
+const
+ITEM = "item";
+const
+CREATE_LISTS_INDEX = "createListsIndex";
+CREATE_LISTS_INDEX_STMT = "createListsIndexStmt";
 const
 COLOR_ENUM = {
     NONE : "NONE",

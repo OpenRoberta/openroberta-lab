@@ -282,6 +282,64 @@ function createWaitTimeStmt(timeValue) {
     return result;
 }
 
+function createCreateListWith(type, values) {
+    var result = {}
+    result[EXPR] = type;
+    result[VALUE] = values;
+    return result;
+}
+
+function createCreateListWithItem(value, size) {
+    var result = {}
+    result[EXPR] = CREATE_LIST_WITH_ITEM;
+    result[SIZE] = size;
+    result[VALUE] = value;
+    return result;
+}
+
+function createListLength(list) {
+    var result = {};
+    result[EXPR] = CREATE_LIST_LENGTH;
+    result[VALUE] = list;
+    return result;
+}
+
+function createListIsEmpty(list) {
+    var result = {};
+    result[EXPR] = CREATE_LIST_IS_EMPTY;
+    result[VALUE] = list;
+    return result;
+}
+
+function createListFindItem(position, list, item) {
+    var result = {};
+    result[EXPR] = CREATE_LIST_FIND_ITEM;
+    result[POSITION] = position;
+    result[VALUE] = list;
+    result[ITEM] = item;
+    return result;
+}
+
+function createListsIndex(list, op, position, item) {
+    var result = {};
+    result[EXPR] = CREATE_LISTS_INDEX;
+    result[OP] = op;
+    result[POSITION] = position;
+    result[VALUE] = list;
+    result[ITEM] = item;
+    return result;
+}
+
+function createListsIndexStmt(list, op, position, item) {
+    var result = {};
+    result[STMT] = CREATE_LISTS_INDEX_STMT;
+    result[OP] = op;
+    result[POSITION] = position;
+    result[VALUE] = list;
+    result[ITEM] = item;
+    return result;
+}
+
 //    var evalStmts = [];
 //    exports.build = function(program) {
 //        var stmts = program.split(";");

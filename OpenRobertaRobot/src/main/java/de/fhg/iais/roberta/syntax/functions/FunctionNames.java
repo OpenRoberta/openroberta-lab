@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.functions;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -38,12 +39,12 @@ public enum FunctionNames {
     ROUND( 10, Assoc.LEFT ),
     ROUNDUP( 10, Assoc.LEFT, "CEIL" ),
     ROUNDDOWN( 10, Assoc.LEFT, "FLOOR" ),
-    LIST_IS_EMPTY( 10, Assoc.LEFT, "LISTS_ISEMPTY" ),
+    LIST_IS_EMPTY( 10, Assoc.LEFT, BlocklyConstants.LISTS_IS_EMPTY, BlocklyConstants.ROB_LISTS_IS_EMPTY ),
     LEFT( 10, Assoc.LEFT ),
     RIGHT( 10, Assoc.LEFT ),
     TEXT( 10, Assoc.LEFT, "TEXT" ),
     NUMBER( 10, Assoc.LEFT, "NUMBER" ),
-    LISTS_LENGTH( 10, Assoc.LEFT, "lists_length" ),
+    LISTS_LENGTH( 10, Assoc.LEFT, BlocklyConstants.LISTS_LENGTH, BlocklyConstants.ROB_LISTS_LENGTH ),
     GET_SUBLIST( 10, Assoc.LEFT );
 
     private final String[] values;
@@ -98,7 +99,7 @@ public enum FunctionNames {
                 return funct;
             }
             for ( String value : funct.values ) {
-                if ( sUpper.equals(value) ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
                     return funct;
                 }
             }

@@ -631,17 +631,29 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        this.sb.append("createListFindItem(" + indexOfFunct.getLocation() + ", ");
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
+        String methodName = "createListLength(";
+        if ( lenghtOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            methodName = "createListIsEmpty(";
+        }
+        this.sb.append(methodName);
+        lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("createCreateListWith([");
+        this.sb.append("createCreateListWith(" + listCreate.getTypeVar() + "_ARRAY, [");
         listCreate.getValue().visit(this);
         this.sb.append("])");
         return null;
@@ -649,6 +661,23 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        String methodName = "createListsIndex(";
+        String end = ")";
+        if ( listGetIndex.getElementOperation().isStatment() ) {
+            methodName = "createListsIndexStmt(";
+            end = createClosingBracket();
+        }
+        this.sb.append(methodName);
+        listGetIndex.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        this.sb.append(listGetIndex.getElementOperation());
+        this.sb.append(", ");
+        this.sb.append(listGetIndex.getLocation());
+        if ( listGetIndex.getParam().size() == 2 ) {
+            this.sb.append(", ");
+            listGetIndex.getParam().get(1).visit(this);
+        }
+        this.sb.append(end);
         return null;
     }
 

@@ -67,6 +67,7 @@ import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
@@ -978,44 +979,27 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        switch ( indexOfFunct.getLocation() ) {
-            case FIRST:
-                this.sb.append("BlocklyMethods.findFirst( ");
-                indexOfFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                indexOfFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            case LAST:
-                this.sb.append("BlocklyMethods.findLast( ");
-                indexOfFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
-                indexOfFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
+        String methodName = "BlocklyMethods.findFirst( ";
+        if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
+            methodName = "BlocklyMethods.findLast( ";
         }
+        this.sb.append(methodName);
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
-        switch ( lenghtOfIsEmptyFunct.getFunctName() ) {
-            case LISTS_LENGTH:
-                this.sb.append("BlocklyMethods.lenght( ");
-                lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-
-            case LIST_IS_EMPTY:
-                this.sb.append("BlocklyMethods.isEmpty( ");
-                lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
+        String methodName = "BlocklyMethods.lenght( ";
+        if ( lenghtOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            methodName = "BlocklyMethods.isEmpty( ";
         }
+        this.sb.append(methodName);
+        lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
         return null;
     }
 

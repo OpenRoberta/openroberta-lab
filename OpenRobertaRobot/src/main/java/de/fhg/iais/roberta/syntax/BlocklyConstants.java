@@ -176,14 +176,19 @@ public final class BlocklyConstants {
 
     public static final String LISTS_CREATE_EMPTY = "lists_create_empty";
     public static final String LISTS_INDEX_OF = "lists_indexOf";
+    public static final String ROB_LISTS_INDEX_OF = "robLists_indexOf";
     public static final String LISTS_GET_SUBLIST = "lists_getSublist";
     public static final String LISTS_REPEAT = "lists_repeat";
+    public static final String ROB_LISTS_REPEAT = "robLists_repeat";
     public static final String LISTS_CREATE_WITH = "lists_create_with";
     public static final String ROB_LISTS_CREATE_WITH = "robLists_create_with";
     public static final String LISTS_GET_INDEX = "lists_getIndex";
+    public static final String ROB_LISTS_GET_INDEX = "robLists_getIndex";
     public static final String LISTS_SET_INDEX = "lists_setIndex";
     public static final String LISTS_LENGTH = "lists_length";
     public static final String LISTS_IS_EMPTY = "lists_isEmpty";
+    public static final String ROB_LISTS_LENGTH = "robLists_length";
+    public static final String ROB_LISTS_IS_EMPTY = "robLists_isEmpty";
 
     public static final String ROB_PROCEDURES_IF_RETURN = "robProcedures_ifreturn";
     public static final String ROB_PROCEDURES_NO_RETURN = "robProcedures_defnoreturn";

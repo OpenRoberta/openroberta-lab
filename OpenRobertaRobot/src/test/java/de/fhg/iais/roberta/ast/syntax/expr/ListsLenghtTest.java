@@ -9,6 +9,6 @@ public class ListsLenghtTest {
     public void Test() throws Exception {
         String a = "BlocklyMethods.lenght(BlocklyMethods.createListWithNumber(((float)0.1),((float)0.0),0))";
 
-        Helper.assertCodeIsOk(a, "/syntax/lists/lists_lenght.xml");
+        Helper.assertCodeIsOk(a, "/syntax/lists/lists_length.xml");
     }
 }

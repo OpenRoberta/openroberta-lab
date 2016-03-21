@@ -384,8 +384,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test27() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createCreateListWith([createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var stmt1 = createShowTextAction(createCreateListWith([createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+            "var stmt0 = createShowTextAction(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createCreateListWith(STRING_ARRAY, [createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator27.xml");
@@ -413,7 +413,6 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/ast/math/math_change.xml");
-
     }
 
     @Test
@@ -421,7 +420,62 @@ public class AstToLejosJavaScriptVisitorTest {
         String a = "createCreateListWithItem(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 5))" + "var pp = [";
 
         assertCodeIsOk(a, "/syntax/lists/lists_create_with_item.xml");
+    }
 
+    @Test
+    public void createListLength() throws Exception {
+        String a =
+            "createListLength(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0.1), createConstant(NUM_CONST, 0.0), createConstant(NUM_CONST, 0)]))"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_length.xml");
+    }
+
+    @Test
+    public void createListIsEmpty() throws Exception {
+        String a =
+            "createListIsEmpty(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]))"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
+    }
+
+    @Test
+    public void createListFindElementFirst() throws Exception {
+        String a =
+            "createListFindItem(FIRST, createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_occurrence.xml");
+    }
+
+    @Test
+    public void createListFindElementLast() throws Exception {
+        String a =
+            "createListFindItem(LAST, createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_occurrence1.xml");
+    }
+
+    @Test
+    public void createListsIndexGetFromStart() throws Exception {
+        String a =
+            "createListsIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET, FROM_START, createConstant(NUM_CONST, 1))"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_get_index.xml");
+    }
+
+    @Test
+    public void createListsIndexRemoveFromStart() throws Exception {
+        String a =
+            "var stmt0 = createListsIndexStmt(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), REMOVE, FROM_START, createConstant(NUM_CONST, 1));\n"
+                + "var pp = [stmt0];";
+        assertCodeIsOk(a, "/syntax/lists/lists_get_index1.xml");
+    }
+
+    @Test
+    public void createListsIndexGetRemoveLast() throws Exception {
+        String a =
+            "createListsIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET_REMOVE, LAST)"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_get_index2.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

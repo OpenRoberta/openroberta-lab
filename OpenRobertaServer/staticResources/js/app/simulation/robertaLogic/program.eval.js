@@ -203,7 +203,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
 
     var evalShowTextAction = function(obj, stmt) {
         obj.outputCommands.display = {};
-        obj.outputCommands.display.text = evalExpr(obj, stmt.text);
+        obj.outputCommands.display.text = String(evalExpr(obj, stmt.text));
         obj.outputCommands.display.x = evalExpr(obj, stmt.x);
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
@@ -343,6 +343,21 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         case COLOR_CONST:
         case STRING_CONST:
             return expr.value;
+        case NUMERIC_ARRAY:
+        case STRING_ARRAY:
+        case COLOR_ARRAY:
+        case BOOL_ARRAY:
+            return evalArray(obj, expr.value);
+        case CREATE_LIST_WITH_ITEM:
+            return evalCreateArrayWithItem(obj, expr.size, expr.value);
+        case CREATE_LIST_LENGTH:
+            return evalListLength(obj, expr.value);
+        case CREATE_LIST_IS_EMPTY:
+            return evalListIsEmpty(obj, expr.value);
+        case CREATE_LIST_FIND_ITEM:
+            return evalListFindItem(obj, expr.position, expr.value, expr.item);
+        case CREATE_LISTS_INDEX:
+            return evalListsIndex(obj, expr.value, expr.op, expr.position, expr.item);
         case VAR:
             return obj.memory.get(expr.name);
         case BINARY:
@@ -558,6 +573,102 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         return Math.random();
     };
 
+    var evalArray = function(obj, values) {
+        var result = [];
+        for (var i = 0; i < values.length; i++) {
+            result.push(evalExpr(obj, values[i]));
+        }
+        return result;
+    };
+
+    var evalCreateArrayWithItem = function(obj, length, value) {
+        var size = evalExpr(obj, length);
+        var val = evalExpr(obj, value);
+        return Array(size).fill(val);
+    };
+
+    var evalListLength = function(obj, value) {
+        var val = evalExpr(obj, value);
+        return val.length;
+    };
+
+    var evalListIsEmpty = function(obj, value) {
+        var val = evalExpr(obj, value);
+        return val.length == 0;
+    };
+
+    var evalListFindItem = function(obj, position, value, item) {
+        var list = evalExpr(obj, value);
+        var ite = evalExpr(obj, item);
+        if (position == FIRST) {
+            return list.indexOf(ite);
+        }
+        return list.lastIndexOf(ite);
+    };
+
+    var evalListsIndex = function(obj, value, op, position, item) {
+        var list = evalExpr(obj, value);
+        var it;
+        if (item) {
+            it = evalExpr(obj, item);
+        }
+        var remove = op == GET_REMOVE;
+        switch (position) {
+        case FROM_START:
+            if (remove) {
+                return list.splice(it, 1)[0];
+            }
+            return list[it];
+        case FROM_END:
+            if (remove) {
+                return listsRemoveFromEnd(list, it);
+            }
+            return list.slice(-(it + 1))[0];
+        case FIRST:
+            if (remove) {
+                return list.shift();
+            }
+            return list[0];
+        case LAST:
+            if (remove) {
+                return list.pop();
+            }
+            return list.slice(-1)[0];
+        case RANDOM:
+            return listsGetRandomItem(list, remove);
+        default:
+            throw "Position on list is not supported!";
+        }
+    };
+
+    var evalListsIndexStmt = function(obj, value, op, position, item) {
+        var list = evalExpr(obj, value);
+        var it;
+        if (item) {
+            it = evalExpr(obj, item);
+        }
+
+        switch (position) {
+        case FROM_START:
+            list.splice(it, 1);
+            break;
+        case FROM_END:
+            listsRemoveFromEnd(list, it);
+            break;
+        case FIRST:
+            list.shift();
+            break;
+        case LAST:
+            list.pop();
+            break;
+        case RANDOM:
+            listsGetRandomItem(list, true);
+            break;
+        default:
+            throw "Position on list is not supported!";
+        }
+    };
+
     var isPrime = function(n) {
         if (isNaN(n) || !isFinite(n) || n % 1 || n < 2) {
             return false;
@@ -566,6 +677,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return true;
         }
         return false;
+    };
+
+    var listsRemoveFromEnd = function(list, x) {
+        x = list.length - x;
+        return list.splice(x, 1)[0];
+    };
+
+    var listsGetRandomItem = function(list, remove) {
+        var x = Math.floor(Math.random() * list.length);
+        if (remove) {
+            return list.splice(x, 1)[0];
+        } else {
+            return list[x];
+        }
     };
 
     var leastFactor = function(n) {
