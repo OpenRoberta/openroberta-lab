@@ -47,15 +47,9 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
              * Switch to Brickly tab
              */
             function switchToBrickly() {
-                if (userState.robot === "oraSim") { //simulation has no configuration, TODO add flag to robot in database
-                    $('#simConfiguration').css('display', 'block');
-                } else {
-                    $('#brickly').css('display', 'inline');
-                    //$('#tabs').css('display', 'none');
-                    // This is only for firefox necessary, should be removed with new Blockly
-                    BRICKLY.getBricklyWorkspace().render();
-                    BRICKLY.loadToolbox();
-                }
+                $('#brickly').css('display', 'inline');
+                BRICKLY.getBricklyWorkspace().render();
+                BRICKLY.loadToolbox();
                 $('#tabBrickly').click();
                 bricklyActive = true;
             }
@@ -158,11 +152,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     } else if (domId === 'menuShowCode') { //  Submenu 'Program'
                         ROBERTA_PROGRAM.showCode();
                     } else if (domId === 'menuImportProg') { //  Submenu 'Program'
-                        console.log('TODO import program');
-                        //ROBERTA_PROGRAM.importProg();
+                        ROBERTA_PROGRAM.importXml();
                     } else if (domId === 'menuExportProg') { //  Submenu 'Program'
-                        console.log('TODO export program');
-                        //ROBERTA_PROGRAM.exportProg();
+                        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+                        var xmlText = Blockly.Xml.domToText(xml);
+                        UTIL.download(xmlText, "xml");
+                        MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", userState.program);
                     } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
                         ROBERTA_TOOLBOX.loadToolbox('beginner');
                     } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
@@ -446,15 +441,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 }, 'codeBack clicked');
 
                 $('#codeDownload').onWrap('click', function(event) {
-                    var blob = new Blob([ userState.programCode ]);
-                    var element = document.createElement('a');
-                    var myURL = window.URL || window.webkitURL;
-                    element.setAttribute('href', myURL.createObjectURL(blob));
-                    element.setAttribute('download', userState.program + ".java");
-                    element.style.display = 'none';
-                    document.body.appendChild(element);
-                    element.click();
-                    document.body.removeChild(element);
+                    //TODO always java?
+                    UTIL.download(userState.programCode, "java");
                 }, 'codeDownload clicked');
 
                 $('.newRelease').onWrap('click', function(event) {

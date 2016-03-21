@@ -55,6 +55,25 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     exports.saveProgramToServer = saveProgramToServer;
 
     /**
+     * Import program from XML
+     * 
+     * @param programName
+     *            {String} - name of the program
+     * @param xmlText
+     *            {String} - that represents the program
+     */
+    function loadProgramFromXML(programName, xmlText, successFn) {
+        COMM.json("/program", {
+            "cmd" : "importXML",
+            "name" : programName,
+            "program" : xmlText
+        }, successFn, "open program '" + programName + "' from XML");
+    }
+    ;
+
+    exports.loadProgramFromXML = loadProgramFromXML;
+
+    /**
      * Share program with another user.
      * 
      * @param programName
@@ -192,7 +211,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.runOnBrick = runOnBrick;
-    
+
     /**
      * Run program
      * 

@@ -340,6 +340,29 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     exports.showCode = showCode;
 
     /**
+     * Open a file select dialog to load a blockly program (xml) from local
+     * disk.
+     */
+    function importXml() {
+        var input = $(document.createElement('input'));
+        input.attr("type", "file");
+        input.attr("accept", ".xml");
+        input.trigger('click'); // opening dialog
+        input.change(function(event) {
+            var file = event.target.files[0]
+            var reader = new FileReader()
+            reader.readAsText(file)
+            reader.onload = function(event) {
+                var name = UTIL.getBasename(file.name);
+                PROGRAM.loadProgramFromXML(name, event.target.result, function(result) {
+                    showProgram(result, true, result.name);
+                });
+            }
+        })
+    }
+    exports.importXml = importXml;
+
+    /**
      * Start the program on the brick
      */
     function runOnBrick() {

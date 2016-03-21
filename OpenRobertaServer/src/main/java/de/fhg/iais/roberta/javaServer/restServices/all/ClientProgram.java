@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -10,9 +11,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -132,6 +138,31 @@ public class ClientProgram {
                     response.put("lastChanged", program.getLastChanged().getTime());
                 }
                 Util.addResultInfo(response, pp);
+
+            } else if ( cmd.equals("importXML") ) {
+                String xmlText = request.getString("program");
+                String programName = request.getString("name");
+                InputStream xsdStream = ClientProgram.class.getClassLoader().getResourceAsStream("blockly.xsd");
+                SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                Schema schema = schemaFactory.newSchema(new StreamSource(xsdStream));
+                Validator validator = schema.newValidator();
+
+                if ( !Util.isValidJavaIdentifier(programName) ) {
+                    programName = "NEPOprog";
+                }
+                boolean xmlIsValid = true;
+                try {
+                    validator.validate(new StreamSource(new java.io.StringReader(xmlText)));
+                } catch ( org.xml.sax.SAXException e ) {
+                    xmlIsValid = false;
+                }
+                if ( xmlIsValid ) {
+                    response.put("name", programName);
+                    response.put("data", xmlText);
+                    Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
+                } else {
+                    Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
+                }
             } else if ( cmd.equals("checkP") ) {
                 Key messageKey = null;
                 String programText = request.optString("programText");

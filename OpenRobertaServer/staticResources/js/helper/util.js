@@ -277,4 +277,33 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
 
     exports.sgn = sgn;
 
+    /**
+     * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
+     * 
+     * @param path
+     *            {String} - path
+     */
+    function getBasename(path) {
+        var base = new String(path).substring(path.lastIndexOf('/') + 1);
+        if (base.lastIndexOf(".") != -1) {
+            base = base.substring(0, base.lastIndexOf("."));
+        }
+        return base;
+    }
+
+    exports.getBasename = getBasename;
+    
+    function download(text, extension) {
+        var blob = new Blob([ text ]);
+        var element = document.createElement('a');
+        var myURL = window.URL || window.webkitURL;
+        element.setAttribute('href', myURL.createObjectURL(blob));
+        element.setAttribute('download', userState.program + "." + extension);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+    exports.download = download;
+
 });
