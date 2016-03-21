@@ -203,16 +203,21 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             $('#iconDisplayRobotState').removeClass('busy');
             $('#iconDisplayRobotState').addClass('wait');
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('runOnBrick');
+            $('#menuRunProg').parent().removeClass('disabled');
+        
         } else if (userState.robotState === 'busy') {
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').removeClass('error');
             $('#iconDisplayRobotState').addClass('busy');
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
+            $('#menuRunProg').parent().addClass('disabled');
+        
         } else {
             $('#iconDisplayRobotState').removeClass('busy');
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').addClass('error');
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
+            $('#menuRunProg').parent().addClass('disabled');
         }
 
     }

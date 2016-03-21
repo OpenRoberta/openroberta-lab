@@ -228,10 +228,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         blocklyWorkspace.clear();
         var x, y;
         if ($(window).width() < 768) {
-            x = blocklyWorkspace.getMetrics().viewWidth/6;
+            x = blocklyWorkspace.getMetrics().viewWidth / 6;
             y = 25;
         } else {
-            x = blocklyWorkspace.getMetrics().viewWidth/5;
+            x = blocklyWorkspace.getMetrics().viewWidth / 5;
             y = 50;
         }
         var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='" + x + "' y='" + y + "'>" + "<block type='robControls_start'>"
@@ -313,33 +313,54 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
                 ROBERTA_ROBOT.setState(result);
                 if ($(window).width() < 768) {
-                     width = '0';
+                    width = '0';
                 } else {
                     width = '30%';
                 }
                 $('#blocklyDiv').animate({
-                  width: width
+                    width : width
                 }, {
-                  duration: 750,
-                  step: function() {  
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);                   
-                  }, 
-                  done: function() {
-                    Blockly.svgResize(blocklyWorkspace);                    
-                  }
+                    duration : 750,
+                    step : function() {
+                        $(window).resize();
+                        Blockly.svgResize(blocklyWorkspace);
+                    },
+                    done : function() {
+                        Blockly.svgResize(blocklyWorkspace);
+                    }
                 });
                 $('#codeContent').addClass('codeActive');
                 $('#codeDiv').addClass('codeActive');
                 $('.nav > li > ul > .robotType').addClass('disabled');
-                $('#head-navigation-program-edit').addClass('disabled');
-                $('#head-navigation-program-edit>ul').addClass('hidden');
                 $(".code").removeClass('hide');
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
             });
         }
     }
     exports.showCode = showCode;
+
+    /**
+     * Open a file select dialog to load a blockly program (xml) from local
+     * disk.
+     */
+    function importXml() {
+        var input = $(document.createElement('input'));
+        input.attr("type", "file");
+        input.attr("accept", ".xml");
+        input.trigger('click'); // opening dialog
+        input.change(function(event) {
+            var file = event.target.files[0]
+            var reader = new FileReader()
+            reader.readAsText(file)
+            reader.onload = function(event) {
+                var name = UTIL.getBasename(file.name);
+                PROGRAM.loadProgramFromXML(name, event.target.result, function(result) {
+                    showProgram(result, true, result.name);
+                });
+            }
+        })
+    }
+    exports.importXml = importXml;
 
     /**
      * Start the program on the brick
@@ -386,21 +407,22 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
 
         PROGRAM.runInSim(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            //TODO return empty sim program with rc = false;
+            //TODO return empty sim program with rc = true and var stmt0 = createDebugAction(); var pp = [stmt0]; eg
             if (result.rc == "ok" && result.javaScriptProgram != "var pp = [") {
                 MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
-                blocklyWorkspace.robControls.setSimStart(false);                   
+                blocklyWorkspace.robControls.setSimStart(false);
                 SIM.init(result.javaScriptProgram);
+                refreshBlocklyProgram(result);
+
                 if ($(".sim").hasClass('hide')) {
-                    $(".sim").removeClass('hide');           
-                    $('#blocklyDiv').addClass('simActive');  
+                    $(".sim").removeClass('hide');
+                    $('#blocklyDiv').addClass('simActive');
                     $('#simDiv').addClass('simActive');
                     $('#simButtonsCollapse').collapse({
-                      'toggle' : false
+                        'toggle' : false
                     });
                     $('.nav > li > ul > .robotType').addClass('disabled');
-                    $('#head-navigation-program-edit').addClass('disabled');
-                    $('#head-navigation-program-edit>ul').addClass('hidden');
+                    $('#menuShowCode').parent().addClass('disabled');
                     var width;
                     var smallScreen;
                     if ($(window).width() < 768) {
@@ -411,43 +433,33 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         width = '30%';
                     }
                     $('#blocklyDiv').animate({
-                      width: width
+                        width : width
                     }, {
-                      duration: 750,
-                      step: function(){  
-                        $(window).resize();
-                        Blockly.svgResize(blocklyWorkspace);                   
-                      }, 
-                      done: function() {
-                        if (smallScreen) {
-                            $('.blocklyToolboxDiv').css('display', 'none');
+                        duration : 750,
+                        step : function() {
+                            $(window).resize();
+                            Blockly.svgResize(blocklyWorkspace);
+                        },
+                        done : function() {
+                            if (smallScreen) {
+                                $('.blocklyToolboxDiv').css('display', 'none');
+                            }
+                            blocklyWorkspace.robControls.toogleSim();
+                            Blockly.svgResize(blocklyWorkspace);
+                            setTimeout(function() {
+                                SIM.setPause(false);
+                            }, 1000);
                         }
-                        blocklyWorkspace.robControls.toogleSim();
-                        Blockly.svgResize(blocklyWorkspace); 
-                        setTimeout(function() {
-                          SIM.setPause(false);
-                        }, 1000);
-                      }
                     });
-                } else {             
+                } else {
                     setTimeout(function() {
                         SIM.setPause(false);
                     }, 1000);
                 }
-                $('#simDiv').addClass('simActive');
-                $('#simButtonsCollapse').collapse({
-                    'toggle' : false
-                });
-                $('.nav > li > ul > .robotType').addClass('disabled');
-                $('#head-navigation-program-edit').addClass('disabled');
-                $('#head-navigation-program-edit>ul').addClass('hidden');
-                UTIL.cacheBlocks(blocklyWorkspace);
-                refreshBlocklyProgram(result);
-                $(".sim").removeClass('hide');
-                } else {
-                  //TODO
-                }
-            });      
+            } else {
+                //TODO
+            }
+        });
     }
     exports.runInSim = runInSim;
 

@@ -47,15 +47,9 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
              * Switch to Brickly tab
              */
             function switchToBrickly() {
-                if (userState.robot === "oraSim") { //simulation has no configuration, TODO add flag to robot in database
-                    $('#simConfiguration').css('display', 'block');
-                } else {
-                    $('#brickly').css('display', 'inline');
-                    //$('#tabs').css('display', 'none');
-                    // This is only for firefox necessary, should be removed with new Blockly
-                    BRICKLY.getBricklyWorkspace().render();
-                    BRICKLY.loadToolbox();
-                }
+                $('#brickly').css('display', 'inline');
+                BRICKLY.getBricklyWorkspace().render();
+                BRICKLY.loadToolbox();
                 $('#tabBrickly').click();
                 bricklyActive = true;
             }
@@ -88,6 +82,9 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $('#menuSaveConfig').parent().removeClass('login');
                     $('#menuSaveConfig').parent().removeClass('disabled');
                     BRICKLY.getBricklyWorkspace().robControls.enable('saveProgram');
+                }
+                if (!$(".sim").hasClass('hide')) {
+                    $('#menuShowCode').parent().addClass('disabled');
                 }
             }
             exports.activateProgConfigMenu = activateProgConfigMenu;
@@ -154,7 +151,13 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_PROGRAM.showSaveAsModal();
                     } else if (domId === 'menuShowCode') { //  Submenu 'Program'
                         ROBERTA_PROGRAM.showCode();
-                        // $("#navbarCollapse").collapse('hide');
+                    } else if (domId === 'menuImportProg') { //  Submenu 'Program'
+                        ROBERTA_PROGRAM.importXml();
+                    } else if (domId === 'menuExportProg') { //  Submenu 'Program'
+                        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+                        var xmlText = Blockly.Xml.domToText(xml);
+                        UTIL.download(xmlText, "xml");
+                        MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", userState.program);
                     } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
                         ROBERTA_TOOLBOX.loadToolbox('beginner');
                     } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
@@ -324,10 +327,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     SIM.cancel();
                     $(".sim").addClass('hide');
                     $('.nav > li > ul > .robotType').removeClass('disabled');
+                    $('#menuShowCode').parent().removeClass('disabled');
                     $("#simButtonsCollapse").collapse('hide');
-                    $("#head-navi-tooltip-program").removeClass('disabled');
-                    $('#head-navigation-program-edit').removeClass('disabled');
-                    $('#head-navigation-program-edit>ul').removeClass('hidden');
                     $('.blocklyToolboxDiv').css('display', 'inherit');
                     Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
                     ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.toogleSim();
@@ -343,6 +344,9 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                             $("#simRobotModal").modal("hide");
                             $('#simDiv').removeClass('simActive');
                             $('#menuSim').parent().addClass('disabled');
+                            $('.nav > li > ul > .robotType').removeClass('disabled');
+                            console.log(userState.robot);
+                            $('.' + userState.robot).addClass('disabled');
                             $(window).resize();
                             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
                         }
@@ -433,22 +437,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     }, function(result) {
                         ROBERTA_PROGRAM.injectBlockly(result, userState.programBlocksSaved);
                     });
-                    $("#head-navi-tooltip-program").removeClass('disabled');
-                    $('#head-navigation-program-edit').removeClass('disabled');
-                    $('#head-navigation-program-edit>ul').removeClass('hidden');
                     $(".code").addClass('hide');
                 }, 'codeBack clicked');
 
                 $('#codeDownload').onWrap('click', function(event) {
-                    var blob = new Blob([ userState.programCode ]);
-                    var element = document.createElement('a');
-                    var myURL = window.URL || window.webkitURL;
-                    element.setAttribute('href', myURL.createObjectURL(blob));
-                    element.setAttribute('download', userState.program + ".java");
-                    element.style.display = 'none';
-                    document.body.appendChild(element);
-                    element.click();
-                    document.body.removeChild(element);
+                    //TODO always java?
+                    UTIL.download(userState.programCode, "java");
                 }, 'codeDownload clicked');
 
                 $('.newRelease').onWrap('click', function(event) {
