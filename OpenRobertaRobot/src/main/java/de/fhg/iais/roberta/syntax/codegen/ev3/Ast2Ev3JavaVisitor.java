@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
@@ -724,15 +723,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         boolean isDuration = driveAction.getParam().getDuration() != null;
-        DriveDirection isReverse = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
         String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
         this.sb.append(methodName);
-        this.sb.append(getEnumCode(this.brickConfiguration.getLeftMotorPort()) + ", ");
-        this.sb.append(
-            getEnumCode(this.brickConfiguration.getRightMotorPort())
-                + ", "
-                + (isReverse == DriveDirection.BACKWARD ? new Boolean(true).toString() : new Boolean(false).toString())
-                + ", ");
         this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
@@ -746,16 +738,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        DriveDirection isReverse = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
+        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : "Regulated") + "(";
         this.sb.append(methodName);
-        this.sb.append(getEnumCode(this.brickConfiguration.getLeftMotorPort()) + ", ");
-        this.sb.append(
-            getEnumCode(this.brickConfiguration.getRightMotorPort())
-                + ", "
-                + (isReverse == DriveDirection.BACKWARD ? new Boolean(true).toString() : new Boolean(false).toString())
-                + ", ");
         this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
@@ -768,11 +752,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        boolean isRegulated = true;
-        String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append(getEnumCode(this.brickConfiguration.getLeftMotorPort()) + ", ");
-        this.sb.append(getEnumCode(this.brickConfiguration.getRightMotorPort()) + ");");
+        this.sb.append("hal.stopRegulatedDrive();");
         return null;
     }
 

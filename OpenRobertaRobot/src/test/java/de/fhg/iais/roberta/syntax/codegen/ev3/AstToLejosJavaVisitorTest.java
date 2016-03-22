@@ -201,7 +201,7 @@ public class AstToLejosJavaVisitorTest {
             + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
             + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
             + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
-            + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
+            + "            hal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);\n"
             + "        }\n"
             + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
             + "            hal.ledOff();\n"
@@ -236,7 +236,7 @@ public class AstToLejosJavaVisitorTest {
 
             + "        hal.turnOnRegulatedMotor(ActorPort.B,0);"
             + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,0);"
-            + "        hal.rotateDirectionRegulated(ActorPort.A,ActorPort.B,false,TurnDirection.RIGHT,0);"
+            + "        hal.rotateDirectionRegulated(TurnDirection.RIGHT,0);"
             + "        hal.setVolume(50);"
             + "        hal.playTone(0,0);"
             + SUFFIX
@@ -321,7 +321,7 @@ public class AstToLejosJavaVisitorTest {
             + "        float variablenName = 0;\n"
             + "    public void run() throwsException {\n"
 
-            + "hal.regulatedDrive(ActorPort.A,ActorPort.B,false,DriveDirection.FOREWARD,50);"
+            + "hal.regulatedDrive(DriveDirection.FOREWARD,50);"
             + "hal.drawPicture(ShowPicture.OLDGLASSES,0,0);"
             + SUFFIX
             + "    }\n"
