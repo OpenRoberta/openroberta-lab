@@ -770,6 +770,9 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        this.sb.append("createMathOnList(" + mathOnListFunct.getFunctName() + ", ");
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
         return null;
     }
 

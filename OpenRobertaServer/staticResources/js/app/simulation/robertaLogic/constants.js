@@ -183,6 +183,14 @@ MIN = "min";
 const
 MAX = "max";
 const
+AVERAGE = "average";
+const
+MEDIAN = "median";
+const
+MODE = "mode";
+const
+STD_DEV = "stdDev";
+const
 FOREWARD = "FOREWARD";
 const
 BACKWARD = "BACKWARD";
@@ -205,11 +213,11 @@ COLOR = "color";
 const
 COLOUR = "colorValue";
 const
-MODE = "mode";
-const
 GREEN = "GREEN";
 const
 RED = "red";
+const
+SUM = "sum";
 const
 RGB = "rgb";
 const
@@ -330,7 +338,8 @@ COLOR_ENUM = {
 
 const
 TIMER = "timer";
-
+const
+MATH_ON_LIST = "createMathOnList";
 const
 TRACKWIDTH = 40;
 const

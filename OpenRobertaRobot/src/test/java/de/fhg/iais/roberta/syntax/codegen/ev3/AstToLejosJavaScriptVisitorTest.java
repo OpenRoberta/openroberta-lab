@@ -546,6 +546,21 @@ public class AstToLejosJavaScriptVisitorTest {
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list3.xml");
     }
 
+    @Test
+    public void createMathOnList() throws Exception {
+        String a =
+            "createMathOnList(SUM, )"
+                + "createMathOnList(MIN, )"
+                + "createMathOnList(MAX, )"
+                + "createMathOnList(AVERAGE, )"
+                + "createMathOnList(MEDIAN, )"
+                + "createMathOnList(MODE, )"
+                + "createMathOnList(STD_DEV, )"
+                + "createMathOnList(RANDOM, )"
+                + "var pp = [";
+        assertCodeIsOk(a, "/ast/math/math_on_list.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
     }

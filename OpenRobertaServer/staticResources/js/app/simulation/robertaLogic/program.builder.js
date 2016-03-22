@@ -372,6 +372,14 @@ function createGetSubList(args) {
     return result;
 }
 
+function createMathOnList(op, list) {
+    var result = {};
+    result[EXPR] = MATH_ON_LIST;
+    result[OP] = op;
+    result[LIST] = list;
+    return result;
+}
+
 //    var evalStmts = [];
 //    exports.build = function(program) {
 //        var stmts = program.split(";");

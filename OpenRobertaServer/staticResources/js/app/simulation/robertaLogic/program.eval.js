@@ -399,6 +399,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return evalRandDouble();
         case MATH_CONSTRAIN_FUNCTION:
             return evalMathPropFunct(obj, expr.value, expr.min, expr.max);
+        case MATH_ON_LIST:
+            return evalMathOnList(obj, expr.op, expr.list);
         case MATH_PROP_FUNCT:
             return evalMathPropFunct(obj, expr.op, expr.arg1, expr.arg2);
         case MATH_CONST:
@@ -561,6 +563,29 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
     };
 
+    var evalMathOnList = function(obj, op, list) {
+        var listVal = evalExpr(obj, list);
+        switch (op) {
+        case SUM:
+            return listVal.reduce(function(x, y) {
+                return x + y;
+            });
+        case MIN:
+            return Math.min.apply(null, listVal);
+        case MAX:
+            return Math.max.apply(null, listVal);
+        case AVERAGE:
+            return mathMean(listVal);
+        case MEDIAN:
+            return mathMedian(listVal);
+        case STD_DEV:
+            return mathStandardDeviation(listVal);
+        case RANDOM:
+            return mathRandomList(listVal);
+        default:
+            throw "Invalid Matematical Operation On List";
+        }
+    };
     var evalMathPropFunct = function(obj, val, min, max) {
         var val_ = evalExpr(obj, val);
         var min_ = evalExpr(obj, min);
@@ -866,6 +891,50 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             b = c;
         }
         return Math.floor(Math.random() * (b - a + 1) + a);
+    };
+
+    var mathMean = function(myList) {
+        return myList.reduce(function(x, y) {
+            return x + y;
+        }) / myList.length;
+    };
+
+    var mathMedian = function(myList) {
+        var localList = myList.filter(function(x) {
+            return typeof x == 'number';
+        });
+        if (!localList.length) {
+            return null;
+        }
+        localList.sort(function(a, b) {
+            return b - a;
+        });
+        if (localList.length % 2 == 0) {
+            return (localList[localList.length / 2 - 1] + localList[localList.length / 2]) / 2;
+        } else {
+            return localList[(localList.length - 1) / 2];
+        }
+    };
+
+    var mathStandardDeviation = function(numbers) {
+        var n = numbers.length;
+        if (!n) {
+            return null;
+        }
+        var mean = numbers.reduce(function(x, y) {
+            return x + y;
+        }) / n;
+        var variance = 0;
+        for (var j = 0; j < n; j++) {
+            variance += Math.pow(numbers[j] - mean, 2);
+        }
+        variance = variance / n;
+        return Math.sqrt(variance);
+    };
+
+    var mathRandomList = function(list) {
+        var x = Math.floor(Math.random() * list.length);
+        return list[x];
     };
 
     return ProgramEval;
