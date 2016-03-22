@@ -302,6 +302,10 @@ CREATE_LISTS_GET_INDEX_STMT = "createListsGetIndexStmt";
 const
 CREATE_LISTS_GET_SUBLIST = "createGetSubList";
 const
+GYRO_SENSOR_RESET = "createResetGyroSensor";
+const
+TIMER_SENSOR_RESET = "createResetTimer";
+const
 WHERE1 = "where1";
 const
 WHERE2 = "where2";
@@ -323,6 +327,9 @@ COLOR_ENUM = {
     WHITE : "WHITE",
     BROWN : "BROWN"
 };
+
+const
+TIMER = "timer";
 
 const
 TRACKWIDTH = 40;

@@ -271,6 +271,10 @@ define(
                         this.encoder.right = 0;
                     }
                 }
+                if (actions.gyroReset) {
+                    this.pose.theta = 0;
+                    this.pose.thetaDiff = 0;
+                }
                 this.bumpedAready = false;
                 if (this.frontLeft.bumped && this.left > 0) {
                     this.left *= -1;
@@ -390,7 +394,7 @@ define(
                 // update timer
                 if (actions.timer) {
                     for (key in actions.timer) {
-                        if (actions.timer[key].reset) {
+                        if (actions.timer[key] == 'reset') {
                             this.timer[key] = 0;
                         }
                     }

@@ -134,6 +134,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 evalResetEncoderSensor(internal(this), stmt);
                 break;
 
+            case GYRO_SENSOR_RESET:
+                evalResetGyroSensor(internal(this), stmt);
+                break;
+
+            case TIMER_SENSOR_RESET:
+                evalResetTimerSensor(internal(this), stmt);
+                break;
+
             case CREATE_LISTS_GET_INDEX_STMT:
                 evalListsGetIndexStmt(internal(this), stmt);
                 break;
@@ -180,6 +188,15 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         } else {
             obj.outputCommands.encoder.rightReset = true;
         }
+    };
+
+    var evalResetGyroSensor = function(obj, stmt) {
+        obj.outputCommands.gyroReset = true;
+    };
+
+    var evalResetTimerSensor = function(obj, stmt) {
+        obj.outputCommands.timer = {};
+        obj.outputCommands.timer[stmt.timer] = 'reset';
     };
 
     var evalWaitTime = function(obj, simulationData, stmt) {

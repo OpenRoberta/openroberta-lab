@@ -233,6 +233,20 @@ function createGetSample(sensorType, senorMode) {
     result[SENSOR_MODE] = senorMode;
     return result;
 }
+
+function createResetGyroSensor() {
+    var result = {};
+    result[STMT] = GYRO_SENSOR_RESET;
+    return result;
+}
+
+function createResetTimer(timer) {
+    var result = {};
+    result[STMT] = TIMER_SENSOR_RESET;
+    result[TIMER] = timer;
+    return result;
+}
+
 function createGetSampleEncoderSensor(motorSide, senorMode) {
     var result = {};
     result[EXPR] = ENCODER_SENSOR_SAMPLE;

@@ -541,7 +541,18 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        //TODO implement timer sensor
+        switch ( timerSensor.getMode() ) {
+            case GET_SAMPLE:
+                this.sb.append("createGetSample(TIMER, 'timer" + timerSensor.getTimer() + "')");
+                break;
+            case RESET:
+                String end = createClosingBracket();
+                this.sb.append("createResetTimer('timer" + timerSensor.getTimer() + "'");
+                this.sb.append(end);
+                break;
+            default:
+                throw new DbcException("Invalid Time Mode!");
+        }
         return null;
     }
 

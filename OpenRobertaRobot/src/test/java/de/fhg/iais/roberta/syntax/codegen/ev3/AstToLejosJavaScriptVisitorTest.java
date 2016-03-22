@@ -382,6 +382,18 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
+    public void createGetTimerSensorSample() throws Exception {
+        String a = "createGetSample(TIMER, 'timer1')" + "var pp = [";
+        assertCodeIsOk(a, "/ast/sensors/sensor_getSampleTimer.xml");
+    }
+
+    @Test
+    public void createResetTimerSensor() throws Exception {
+        String a = "var stmt0 = createResetTimer('timer1');\n" + "var pp = [stmt0];";
+        assertCodeIsOk(a, "/ast/sensors/sensor_resetTimer.xml");
+    }
+
+    @Test
     public void test27() throws Exception {
         String a =
             "var stmt0 = createShowTextAction(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
