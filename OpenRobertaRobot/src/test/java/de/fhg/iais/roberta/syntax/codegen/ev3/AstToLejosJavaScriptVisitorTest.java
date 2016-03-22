@@ -575,6 +575,17 @@ public class AstToLejosJavaScriptVisitorTest {
         assertCodeIsOk(a, "/syntax/text/text_join.xml");
     }
 
+    @Test
+    public void createTernary() throws Exception {
+        String a =
+            "createTernaryExpr("
+                + "createBinaryExpr(EQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)), "
+                + "createConstant(STRING_CONST, '2'), "
+                + "createConstant(STRING_CONST, '3')"
+                + ")var pp = [";
+        assertCodeIsOk(a, "/ast/logic/logic_ternary.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
     }

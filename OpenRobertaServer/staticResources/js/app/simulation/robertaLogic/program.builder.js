@@ -386,6 +386,14 @@ function createTextJoin(values) {
     result[VALUE] = values;
     return result;
 }
+function createTernaryExpr(cond, then, _else) {
+    var result = {};
+    result[EXPR] = TERNARY_EXPR;
+    result[EXPR_LIST] = cond;
+    result[THEN_LIST] = then;
+    result[ELSE_STMTS] = _else;
+    return result;
+}
 
 //    var evalStmts = [];
 //    exports.build = function(program) {

@@ -139,6 +139,10 @@ BOOL_CONST = "BoolConst";
 const
 STRING_CONST = "StringConst";
 const
+NULL_CONST = "null";
+const
+TERNARY_EXPR = "createTernaryExpr";
+const
 NUMERIC = "Numeric";
 const
 NUMERIC_ARRAY = "NumericArray";

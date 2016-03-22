@@ -303,14 +303,24 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        String end = createClosingBracket();
-        this.sb.append("createIfStmt([");
-        appendIfStmtConditions(ifStmt);
-        this.sb.append("], [");
-        appendThenStmts(ifStmt);
-        this.sb.append("]");
-        appendElseStmt(ifStmt);
-        this.sb.append(end);
+        if ( ifStmt.isTernary() ) {
+            this.sb.append("createTernaryExpr(");
+            ifStmt.getExpr().get(0).visit(this);
+            this.sb.append(", ");
+            ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+            this.sb.append(", ");
+            ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+            this.sb.append(")");
+        } else {
+            String end = createClosingBracket();
+            this.sb.append("createIfStmt([");
+            appendIfStmtConditions(ifStmt);
+            this.sb.append("], [");
+            appendThenStmts(ifStmt);
+            this.sb.append("]");
+            appendElseStmt(ifStmt);
+            this.sb.append(end);
+        }
         return null;
     }
 

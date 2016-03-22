@@ -368,6 +368,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         case COLOR_CONST:
         case STRING_CONST:
             return expr.value;
+        case NULL_CONST:
+            return null;
         case NUMERIC_ARRAY:
         case STRING_ARRAY:
         case COLOR_ARRAY:
@@ -393,6 +395,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return evalBinary(obj, expr.op, expr.left, expr.right);
         case UNARY:
             return evalUnary(obj, expr.op, expr.value);
+        case TERNARY_EXPR:
+            return evalTernaryExpr(obj, expr.exprList, expr.thenList, expr.elseStmts);
         case SINGLE_FUNCTION:
             return evalSingleFunction(obj, expr.op, expr.value);
         case RANDOM_INT:
@@ -791,6 +795,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return list.concat();
         }
         return listsGetSubList(list, expr.where1, at1, expr.where2, at2);
+    };
+
+    var evalTernaryExpr = function(obj, cond, then, _else) {
+        var condVal = evalExpr(obj, cond);
+        if (condVal) {
+            return evalExpr(obj, then);
+        }
+        return evalExpr(obj, _else);
     };
 
     var isPrime = function(n) {
