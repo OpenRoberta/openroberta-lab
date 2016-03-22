@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
@@ -626,6 +627,27 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        this.sb.append("createGetSubList({list: ");
+        getSubFunct.getParam().get(0).visit(this);
+        this.sb.append(", where1: ");
+        IndexLocation where1 = IndexLocation.get(getSubFunct.getStrParam().get(0));
+        this.sb.append(where1);
+        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+            this.sb.append(", at1: ");
+            getSubFunct.getParam().get(1).visit(this);
+        }
+        this.sb.append(", where2: ");
+        IndexLocation where2 = IndexLocation.get(getSubFunct.getStrParam().get(1));
+        this.sb.append(where2);
+        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+            this.sb.append(", at2: ");
+            if ( getSubFunct.getParam().size() == 3 ) {
+                getSubFunct.getParam().get(2).visit(this);
+            } else {
+                getSubFunct.getParam().get(1).visit(this);
+            }
+        }
+        this.sb.append("})");
         return null;
     }
 

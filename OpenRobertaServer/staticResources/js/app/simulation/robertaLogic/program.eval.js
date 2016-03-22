@@ -365,6 +365,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return evalListFindItem(obj, expr.position, expr.list, expr.item);
         case CREATE_LISTS_GET_INDEX:
             return evalListsGetIndex(obj, expr.list, expr.op, expr.position, expr.item);
+        case CREATE_LISTS_GET_SUBLIST:
+            return evalListsGetSubList(obj, expr);
         case VAR:
             return obj.memory.get(expr.name);
         case BINARY:
@@ -726,6 +728,22 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
     };
 
+    var evalListsGetSubList = function(obj, expr) {
+        var list = evalExpr(obj, expr.list);
+        var at1 = 1;
+        if (expr.at1) {
+            at1 = evalExpr(obj, expr.at1);
+        }
+        var at2 = 1;
+        if (expr.at2) {
+            at2 = evalExpr(obj, expr.at2);
+        }
+        if (expr.where1 == FIRST && expr.where2 == LAST) {
+            return list.concat();
+        }
+        return listsGetSubList(list, expr.where1, at1, expr.where2, at2);
+    };
+
     var isPrime = function(n) {
         if (isNaN(n) || !isFinite(n) || n % 1 || n < 2) {
             return false;
@@ -749,6 +767,26 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return list[x];
         }
     };
+
+    function listsGetSubList(list, where1, at1, where2, at2) {
+        function getAt(where, at) {
+            if (where == FROM_START) {
+                at = at
+            } else if (where == FROM_END) {
+                at = list.length - 1 - at;
+            } else if (where == FIRST) {
+                at = 0;
+            } else if (where == LAST) {
+                at = list.length - 1;
+            } else {
+                throw 'Unhandled option (lists_getSublist).';
+            }
+            return at;
+        }
+        at1 = getAt(where1, at1);
+        at2 = getAt(where2, at2) + 1;
+        return list.slice(at1, at2);
+    }
 
     var leastFactor = function(n) {
         if (isNaN(n) || !isFinite(n)) {

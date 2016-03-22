@@ -174,7 +174,7 @@ public enum BlockType {
     LOCATION( Category.TASK, null ),
     TEXT_INDEX_OF_FUNCT( Category.FUNCTION, IndexOfFunct.class, BlocklyConstants.LISTS_INDEX_OF, BlocklyConstants.ROB_LISTS_INDEX_OF ),
     TEXT_CHAR_AT_FUNCT( Category.FUNCTION, null ),
-    GET_SUB_FUNCT( Category.FUNCTION, GetSubFunct.class, BlocklyConstants.LISTS_GET_SUBLIST ),
+    GET_SUB_FUNCT( Category.FUNCTION, GetSubFunct.class, BlocklyConstants.LISTS_GET_SUBLIST, BlocklyConstants.ROB_LISTS_GET_SUBLIST ),
     MATH_SINGLE_FUNCT( Category.FUNCTION, MathSingleFunct.class, BlocklyConstants.MATH_ROUND, BlocklyConstants.MATH_TRIG, BlocklyConstants.MATH_SINGLE ),
     MATH_ON_LIST_FUNCT( Category.FUNCTION, MathOnListFunct.class, BlocklyConstants.MATH_ON_LIST ),
     MATH_CONSTRAIN_FUNCT( Category.FUNCTION, MathConstrainFunct.class, BlocklyConstants.MATH_ON_CONSTRAINT ),

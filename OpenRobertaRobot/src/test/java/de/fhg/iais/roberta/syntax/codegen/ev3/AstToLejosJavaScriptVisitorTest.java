@@ -502,9 +502,39 @@ public class AstToLejosJavaScriptVisitorTest {
         assertCodeIsOk(a, "/syntax/lists/lists_set_index2.xml");
     }
 
+    @Test
+    public void createGetSubListFromStartAndFromEnd() throws Exception {
+        String a =
+            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_sub_list.xml");
+    }
+
+    @Test
+    public void createGetSubListFirstAndFromEnd() throws Exception {
+        String a =
+            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_sub_list1.xml");
+    }
+
+    @Test
+    public void createGetSubListFromStartAndLast() throws Exception {
+        String a =
+            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: LAST})"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_sub_list2.xml");
+    }
+
+    @Test
+    public void createGetSubListFirstAndLast() throws Exception {
+        String a =
+            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: LAST})"
+                + "var pp = [";
+        assertCodeIsOk(a, "/syntax/lists/lists_sub_list3.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
-        //        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateJavaScript(fileName).replaceAll("\\s+", ""));
     }
 }
