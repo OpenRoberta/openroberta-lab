@@ -81,6 +81,8 @@ public class Ev3Command {
             nepoExitValue = requestEntity.getInt("nepoexitvalue");
         } catch ( Exception e ) {
             // no program was executed yet on the robot, field in requestEntity does not exist
+            // or the robot system does not support it (nxt)
+            nepoExitValue = 0;
         }
         // todo: validate version serverside
         JSONObject response;
@@ -98,9 +100,7 @@ public class Ev3Command {
                     pushRequestCounterForLogging.set(0);
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
-                state = this.brickCommunicator.getState(token);
-                state.setNepoExitValue(nepoExitValue);
-                String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage);
+                String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
                 if ( command == null ) {
                     LOG.error("No valid command issued by the server as response to a push command request for token " + token);
                     return Response.serverError().build();

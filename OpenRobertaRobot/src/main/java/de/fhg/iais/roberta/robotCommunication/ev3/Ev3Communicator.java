@@ -70,13 +70,15 @@ public class Ev3Communicator {
      * called by the robot to inform the server about the fact, that the robot is still connected and ready to get a command pushed to it
      *
      * @param token identifying the robot
-     * @param batteryvoltage the only information from the robot, which changes over time
+     * @param batteryvoltage changes over time
+     * @param nepoExitValue the return value of the last user program, that was executed. Is 0 if no exitvalue is provided by the robot system.
      * @return a legal command for the robot (in 99% a "repeat" :)
      */
-    public String brickWaitsForAServerPush(String token, String batteryvoltage) {
+    public String brickWaitsForAServerPush(String token, String batteryvoltage, int nepoExitValue) {
         Ev3CommunicationData state = getState(token);
         if ( state != null ) {
             state.setBattery(batteryvoltage);
+            state.setNepoExitValue(nepoExitValue);
             state.brickHasSentAPushRequest();
             return state.getCommand();
         } else {
