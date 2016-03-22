@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class ORAtokenGenerator {
 
-    private static final String alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+    private static final String alphabet = "123456789ABCDEFGHIJKLMNPQRSTUVWXYZ";
     private static final int n = alphabet.length();
 
     /**
