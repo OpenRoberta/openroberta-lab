@@ -79,6 +79,7 @@ public class ORAbrickInfo implements HttpHandler {
         response.put(ORApushCmd.KEY_MENUVERSION, GraphicStartup.getORAmenuVersion());
         response.put(ORApushCmd.KEY_BRICKNAME, GraphicStartup.getBrickName());
         response.put(ORApushCmd.KEY_BATTERY, GraphicStartup.getBatteryStatus());
+        response.put(ORApushCmd.KEY_NEPOEXITVALUE, ORAlauncher.getNepoExitValue());
         response.put(ORApushCmd.KEY_MACADDR, "usb");
         return response;
     }

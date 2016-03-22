@@ -28,12 +28,12 @@ public class ORAlauncher {
     private static boolean isRunning = false;
     private static int exitvalue = 0;
 
-    public static void setRunning(boolean bool) {
-        isRunning = bool;
-    }
-
     public static boolean isRunning() {
         return isRunning;
+    }
+
+    public static int getNepoExitValue() {
+        return exitvalue;
     }
 
     /**
@@ -69,7 +69,7 @@ public class ORAlauncher {
         Process program = null;
         exitvalue = 0;
         try {
-            setRunning(true);
+            isRunning = true;
             glcd.clear();
             glcd.refresh();
             glcd.setAutoRefresh(false);
@@ -110,7 +110,7 @@ public class ORAlauncher {
             glcd.clear();
             glcd.refresh();
             program = null;
-            setRunning(false);
+            isRunning = false;
         }
     }
 
