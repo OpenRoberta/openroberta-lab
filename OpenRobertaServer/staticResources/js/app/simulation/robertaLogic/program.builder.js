@@ -351,6 +351,13 @@ function createListsGetIndexStmt(list, op, position, item) {
     return result;
 }
 
+function createGetSubList(args) {
+    var result = {};
+    result = args;
+    result[EXPR] = CREATE_LISTS_GET_SUBLIST;
+    return result;
+}
+
 //    var evalStmts = [];
 //    exports.build = function(program) {
 //        var stmts = program.split(";");
