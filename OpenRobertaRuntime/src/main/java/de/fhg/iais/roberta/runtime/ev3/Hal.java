@@ -82,6 +82,8 @@ public class Hal {
     private final double wheelDiameter;
     private final double trackWidth;
 
+    DifferentialPilot dPilot = null;
+
     private final BluetoothCom blueCom = new BluetoothComImpl();
 
     private Properties openrobertaProperties = null;
@@ -131,6 +133,20 @@ public class Hal {
 
         for ( int i = 0; i < this.timers.length; i++ ) {
             this.timers[i] = new Stopwatch();
+        }
+
+        try {
+            this.dPilot =
+                new DifferentialPilot(
+                    this.wheelDiameter,
+                    this.trackWidth,
+                    this.deviceHandler.getRegulatedMotor(brickConfiguration.getLeftMotorPort()),
+                    this.deviceHandler.getRegulatedMotor(brickConfiguration.getRightMotorPort()),
+                    (this.brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
+                        ? true
+                        : false);
+        } catch ( DbcException e ) {
+            // do not instantiate because we do not need it (checked form code generation side)
         }
 
         try {
@@ -732,28 +748,17 @@ public class Hal {
      * working and 100 if we want to use full power of the motor.
      * Values larger then 100 set the motor speed again to its maximum.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction of rotation of the motor (forward or backward)
      * @param speedPercent of motor power
      */
-    public void regulatedDrive(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, float speedPercent) {
-        // TODO Use new Pilots of leJOS 0.9.1-beta and instantiate pilot only once!
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setTravelSpeed(dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
+    public void regulatedDrive(DriveDirection direction, float speedPercent) {
+        this.dPilot.setTravelSpeed(this.dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
         switch ( direction ) {
             case FOREWARD:
-                dPilot.forward();
+                this.dPilot.forward();
                 break;
             case BACKWARD:
-                dPilot.backward();
+                this.dPilot.backward();
                 break;
             default:
                 throw new DbcException("wrong DriveAction.Direction");
@@ -768,30 +773,18 @@ public class Hal {
      * working and 100 if we want to use full power of the motor.
      * Values larger then 100 set the motor speed again to its maximum.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction of rotation of the motor (forward or backward)
      * @param speedPercent of motor power
      * @param distance that the robot should travel
      */
-    public void driveDistance(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, float speedPercent, float distance) {
-        // TODO Use new Pilots of leJOS 0.9.1-beta and instantiate pilot only once!
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-
-        dPilot.setTravelSpeed(dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
+    public void driveDistance(DriveDirection direction, float speedPercent, float distance) {
+        this.dPilot.setTravelSpeed(this.dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
         switch ( direction ) {
             case FOREWARD:
-                dPilot.travel(distance);
+                this.dPilot.travel(distance);
                 break;
             case BACKWARD:
-                dPilot.travel(-distance);
+                this.dPilot.travel(-distance);
                 break;
             default:
                 throw new DbcException("incorrect DriveAction");
@@ -802,13 +795,9 @@ public class Hal {
      * Stop regulated drive motors.<br>
      * <br>
      * Client must provide correct ports of the left and right motor.
-     *
-     * @param left motor port name
-     * @param right motor port name
      */
-    public void stopRegulatedDrive(ActorPort left, ActorPort right) {
-        this.deviceHandler.getRegulatedMotor(left).stop(true);
-        this.deviceHandler.getRegulatedMotor(right).stop(true);
+    public void stopRegulatedDrive() {
+        this.dPilot.quickStop();
     }
 
     /**
@@ -819,28 +808,17 @@ public class Hal {
      * working and 100 if we want to use full power of the motor.
      * Values larger then 100 set the motor speed again to its maximum.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction in which the robot will turn (left or right)
      * @param speedPercent of motor power
      */
-    public void rotateDirectionRegulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, float speedPercent) {
-        // TODO Use new Pilots of leJOS 0.9.1-beta and instantiate pilot only once!
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setRotateSpeed(toDegPerSec((int) speedPercent));
+    public void rotateDirectionRegulated(TurnDirection direction, float speedPercent) {
+        this.dPilot.setRotateSpeed(toDegPerSec((int) speedPercent));
         switch ( direction ) {
             case RIGHT:
-                dPilot.rotateRight();
+                this.dPilot.rotateRight();
                 break;
             case LEFT:
-                dPilot.rotateLeft();
+                this.dPilot.rotateLeft();
                 break;
             default:
                 throw new DbcException("incorrect TurnAction");
@@ -855,30 +833,19 @@ public class Hal {
      * working and 100 if we want to use full power of the motor. Values larger then 100 set the motor speed again to its maximum. Client must also provide the
      * angle of the turn of the robot.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction in which the robot will turn (left or right)
      * @param speedPercent of motor power
      * @param angle of the turn
      */
-    public void rotateDirectionAngle(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, float speedPercent, float angle) {
-        // TODO Use new Pilots of leJOS 0.9.1-beta and instantiate pilot only once!
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+    public void rotateDirectionAngle(TurnDirection direction, float speedPercent, float angle) {
+        this.dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
                 angle = angle * -1;
-                dPilot.rotate(angle, false);
+                this.dPilot.rotate(angle, false);
                 break;
             case LEFT:
-                dPilot.rotate(angle, false);
+                this.dPilot.rotate(angle, false);
                 break;
             default:
                 throw new DbcException("incorrect TurnAction");
