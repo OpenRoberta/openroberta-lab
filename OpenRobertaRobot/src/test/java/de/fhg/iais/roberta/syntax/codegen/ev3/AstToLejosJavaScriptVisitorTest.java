@@ -561,6 +561,20 @@ public class AstToLejosJavaScriptVisitorTest {
         assertCodeIsOk(a, "/ast/math/math_on_list.xml");
     }
 
+    @Test
+    public void createTextJoin() throws Exception {
+        String a =
+            "createTextJoin(["
+                + "createConstant(NUM_CONST, 0), "
+                + "createConstant(NUM_CONST, 0), "
+                + "createConstant(STRING_CONST, 'a'), "
+                + "createConstant(STRING_CONST, 'b'), "
+                + "createConstant(BOOL_CONST, true), "
+                + "createGetSample(TOUCH)"
+                + "])var pp = [";
+        assertCodeIsOk(a, "/syntax/text/text_join.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
     }

@@ -383,6 +383,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return evalListFindItem(obj, expr.position, expr.list, expr.item);
         case CREATE_LISTS_GET_INDEX:
             return evalListsGetIndex(obj, expr.list, expr.op, expr.position, expr.item);
+        case TEXT_JOIN:
+            return evalTextJoin(obj, expr.value);
         case CREATE_LISTS_GET_SUBLIST:
             return evalListsGetSubList(obj, expr);
         case VAR:
@@ -586,6 +588,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             throw "Invalid Matematical Operation On List";
         }
     };
+
     var evalMathPropFunct = function(obj, val, min, max) {
         var val_ = evalExpr(obj, val);
         var min_ = evalExpr(obj, min);
@@ -814,7 +817,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
     };
 
-    function listsGetSubList(list, where1, at1, where2, at2) {
+    var listsGetSubList = function(list, where1, at1, where2, at2) {
         function getAt(where, at) {
             if (where == FROM_START) {
                 at = at
@@ -832,7 +835,15 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         at1 = getAt(where1, at1);
         at2 = getAt(where2, at2) + 1;
         return list.slice(at1, at2);
-    }
+    };
+
+    var evalTextJoin = function(obj, values) {
+        var result = "";
+        for (var i = 0; i < values.length; i++) {
+            result += String(evalExpr(obj, values[i]));
+        }
+        return result;
+    };
 
     var leastFactor = function(n) {
         if (isNaN(n) || !isFinite(n)) {

@@ -314,6 +314,8 @@ GYRO_SENSOR_RESET = "createResetGyroSensor";
 const
 TIMER_SENSOR_RESET = "createResetTimer";
 const
+TEXT_JOIN = "createTextJoin";
+const
 WHERE1 = "where1";
 const
 WHERE2 = "where2";

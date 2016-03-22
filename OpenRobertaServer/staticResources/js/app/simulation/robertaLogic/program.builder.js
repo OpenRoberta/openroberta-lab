@@ -380,6 +380,13 @@ function createMathOnList(op, list) {
     return result;
 }
 
+function createTextJoin(values) {
+    var result = {};
+    result[EXPR] = TEXT_JOIN;
+    result[VALUE] = values;
+    return result;
+}
+
 //    var evalStmts = [];
 //    exports.build = function(program) {
 //        var stmts = program.split(";");

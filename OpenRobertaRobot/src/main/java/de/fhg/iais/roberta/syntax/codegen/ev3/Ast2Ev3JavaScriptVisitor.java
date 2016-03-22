@@ -802,6 +802,9 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        this.sb.append("createTextJoin([");
+        textJoinFunct.getParam().visit(this);
+        this.sb.append("])");
         return null;
     }
 
