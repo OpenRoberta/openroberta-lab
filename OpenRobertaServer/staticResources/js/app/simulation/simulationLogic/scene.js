@@ -374,6 +374,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                 this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
                 values.color.red = UTIL.round(this.robot.colorSensor.lightValue, 2);
                 values.color.rgb = [ UTIL.round(red / 2.55, 0), UTIL.round(green / 2.55, 0), UTIL.round(blue / 2.55, 0) ];
+                values.color.ambientlight = 0;
             }
         }
 
@@ -466,8 +467,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
         if (this.robot.encoder) {
             values.encoder = {};
-            values.encoder.left = this.robot.encoder.left * ENC;
-            values.encoder.right = this.robot.encoder.right * ENC;
+            values.encoder.left = UTIL.round(this.robot.encoder.left * ENC, 2);
+            values.encoder.right = UTIL.round(this.robot.encoder.right * ENC, 2);
         }
         if (this.robot.gyroSensor) {
             values.gyro = {};

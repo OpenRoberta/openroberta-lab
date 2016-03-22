@@ -422,9 +422,10 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        String end = createClosingBracket();
         this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
         motorSetPowerAction.getPower().visit(this);
-        this.sb.append(")");
+        this.sb.append(end);
         return null;
     }
 

@@ -225,7 +225,8 @@ DOUBLE_FLASH = "DOUBLE_FLASH";
 
 const
 STATUS_LIGHT_ACTION = "statusLightAction";
-
+const
+AMBIENTLIGHT = "ambientlight";
 const
 TIMES = "TIMES";
 const

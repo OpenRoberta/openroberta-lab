@@ -174,10 +174,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
     };
 
     var evalResetEncoderSensor = function(obj, stmt) {
+        obj.outputCommands.encoder = {};
         if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
-            obj.actors.initLeftTachoMotor(0);
+            obj.outputCommands.encoder.leftReset = true;
         } else {
-            obj.actors.initRightTachoMotor(0);
+            obj.outputCommands.encoder.rightReset = true;
         }
     };
 
@@ -398,7 +399,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
     };
 
     var evalSensor = function(obj, sensorType, sensorMode) {
-        return obj.simulationData[sensorType][sensorMode];
+        if (sensorMode) {
+            return obj.simulationData[sensorType][sensorMode];
+        }
+        return obj.simulationData[sensorType];
     };
 
     var evalEncoderSensor = function(obj, motorSide, sensorMode) {

@@ -264,6 +264,13 @@ define(
                 this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
                 this.encoder.left += this.left * SIM.getDt();
                 this.encoder.right += this.right * SIM.getDt();
+                if (actions.encoder) {
+                    if (actions.encoder.leftReset) {
+                        this.encoder.left = 0;
+                    } else if (actions.encoder.rightReset) {
+                        this.encoder.right = 0;
+                    }
+                }
                 this.bumpedAready = false;
                 if (this.frontLeft.bumped && this.left > 0) {
                     this.left *= -1;
