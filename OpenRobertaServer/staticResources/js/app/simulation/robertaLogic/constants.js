@@ -171,6 +171,8 @@ EQ = "EQ";
 const
 NEQ = "NEQ";
 const
+IN = "in";
+const
 GTE = "GTE";
 const
 LTE = "LTE";
@@ -206,6 +208,8 @@ const
 FOREVER = "FOREVER";
 const
 FOR = "FOR";
+const
+FOR_EACH = "forEach";
 const
 MATH_CHANGE = "mathChange";
 const

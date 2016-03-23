@@ -246,6 +246,26 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+        switch ( emptyExpr.getDefVal().getName() ) {
+            case "java.lang.String":
+                this.sb.append("createConstant(STRING_CONST, '')");
+                break;
+            case "java.lang.Boolean":
+                this.sb.append("createConstant(BOOL_CONST, true)");
+                break;
+            case "java.lang.Integer":
+                this.sb.append("createConstant(NUM_CONST, 0)");
+                break;
+            case "java.util.ArrayList":
+                this.sb.append("[]");
+                break;
+            case "de.fhg.iais.roberta.syntax.expr.NullConst":
+                this.sb.append("createConstant(NULL_CONST, 0)");
+                break;
+            default:
+                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                break;
+        }
         return null;
     }
 
@@ -978,6 +998,11 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", [");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append("], [");
+                break;
+            case FOR_EACH:
+                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append(", [");
                 break;
 
             default:

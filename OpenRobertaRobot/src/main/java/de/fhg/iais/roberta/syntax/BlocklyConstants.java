@@ -119,6 +119,7 @@ public final class BlocklyConstants {
     public static final String CONTROLS_FOR = "controls_for";
     public static final String ROB_CONTROLS_FOR = "robControls_for";
     public static final String CONTROLS_FOR_EACH = "controls_forEach";
+    public static final String ROB_CONTROLS_FOR_EACH = "robControls_forEach";
     public static final String CONTROLS_REPEAT = "controls_repeat";
     public static final String CONTROLS_REPEAT_EXT = "controls_repeat_ext";
 

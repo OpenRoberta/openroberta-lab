@@ -586,6 +586,18 @@ public class AstToLejosJavaScriptVisitorTest {
         assertCodeIsOk(a, "/ast/logic/logic_ternary.xml");
     }
 
+    @Test
+    public void createForEachStmt() throws Exception {
+        String a =
+            "var stmt0 = createRepeatStmt("
+                + "FOR_EACH, "
+                + "createBinaryExpr(IN, createVarDeclaration(NUMERIC, \"item\", createConstant(NUM_CONST, 0)), "
+                + "createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)])), "
+                + "[createShowTextAction(createVarReference(NUMERIC, \"item\"), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))]);\n"
+                + "var pp = [stmt0];";
+        assertCodeIsOk(a, "/ast/control/repeat_stmt_for_each3.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
     }

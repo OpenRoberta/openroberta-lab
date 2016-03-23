@@ -158,7 +158,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 exprList.addExpr(helper.convertPhraseToExpr(by));
                 exprList.setReadOnly();
                 return helper.extractRepeatStatement(block, exprList, BlocklyConstants.FOR);
-
+            case BlocklyConstants.ROB_CONTROLS_FOR_EACH:
             case BlocklyConstants.CONTROLS_FOR_EACH:
                 fields = helper.extractFields(block, (short) 2);
                 EmptyExpr<V> empty = EmptyExpr.make(Integer.class);

@@ -52,13 +52,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             var stmt = internal(this).program.getRemove();
             switch (stmt.stmt) {
             case ASSIGN_STMT:
-                var value = evalExpr(internal(this), stmt.expr);
-                internal(this).memory.assign(stmt.name, value);
+                evalAssignmentStmt(internal(this), stmt);
                 break;
 
             case VAR_DECLARATION:
-                var value = evalExpr(internal(this), stmt.value);
-                internal(this).memory.decl(stmt.name, value);
+                evalValDeclaration(internal(this), stmt);
                 break;
 
             case MATH_CHANGE:
@@ -159,6 +157,16 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         // internal(this).outputCommands.terminated = internal(this).program.isTerminated();
         return internal(this).outputCommands;
 
+    };
+
+    var evalVarDeclaration = function(obj, stmt) {
+        var value = evalExpr(obj, stmt.value);
+        obj.memory.decl(stmt.name, value);
+    };
+
+    var evalAssignmentStmt = function(obj, stmt) {
+        var value = evalExpr(obj, stmt.expr);
+        obj.memory.assign(stmt.name, value);
     };
 
     var setSensorActorValues = function(obj, simulationData) {
@@ -315,6 +323,18 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         switch (stmt.mode) {
         case TIMES:
             for (var i = 0; i < evalExpr(obj, stmt.expr); i++) {
+                obj.program.prepend(stmt.stmtList);
+            }
+            break;
+        case FOR_EACH:
+            var i = stmt.eachCounter++;
+            if (i == 0) {
+                evalVarDeclaration(obj, stmt.expr.left);
+            }
+            var list = evalExpr(obj, stmt.expr.right);
+            if (i < list.length) {
+                obj.memory.assign(stmt.expr.left.name, list[i]);
+                obj.program.prepend([ stmt ])
                 obj.program.prepend(stmt.stmtList);
             }
             break;

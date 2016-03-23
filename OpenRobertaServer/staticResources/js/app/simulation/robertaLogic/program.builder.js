@@ -111,6 +111,7 @@ function createRepeatStmt(mode, expr, stmtList) {
     result[STMT] = REPEAT_STMT;
     result[EXPR] = expr;
     result[STMT_LIST] = stmtList;
+    result.eachCounter = 0;
     return result;
 }
 
