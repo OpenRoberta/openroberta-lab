@@ -598,6 +598,17 @@ public class AstToLejosJavaScriptVisitorTest {
         assertCodeIsOk(a, "/ast/control/repeat_stmt_for_each3.xml");
     }
 
+    @Test
+    public void createForStmt() throws Exception {
+        String a =
+            "var stmt0 = createRepeatStmt("
+                + "FOR, ["
+                + "createVarReference(NUMERIC, \"i\"), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 1)], "
+                + "[createBinaryExpr(TEXT_APPEND, createVarReference(STRING, \"item\"), createConstant(STRING_CONST, 'kllk'))]);\n"
+                + "var pp = [stmt0];";
+        assertCodeIsOk(a, "/ast/control/repeat_stmt_for.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
     }

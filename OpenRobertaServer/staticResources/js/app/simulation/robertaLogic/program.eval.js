@@ -339,6 +339,19 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             }
             break;
         case FOR:
+            if (!obj.memory.get(stmt.expr[0].name)) {
+                obj.memory.decl(stmt.expr[0].name, evalExpr(obj, stmt.expr[1]))
+            } else {
+                var step = evalExpr(obj, stmt.expr[3]);
+                var oldValue = obj.memory.get(stmt.expr[0].name);
+                obj.memory.assign(stmt.expr[0].name, oldValue + step);
+            }
+            var left = obj.memory.get(stmt.expr[0].name);
+            var right = evalExpr(obj, stmt.expr[2]);
+            if (left < right) {
+                obj.program.prepend([ stmt ]);
+                obj.program.prepend(stmt.stmtList);
+            }
             break;
         default:
             var value = evalExpr(obj, stmt.expr);

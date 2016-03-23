@@ -61,9 +61,9 @@ define(function() {
      * @returns {} - value of the required variable
      */
     Memory.prototype.get = function(name) {
-        if (this.memory[name] == undefined) {
-            throw "Variable " + name + " is undefined!";
-        }
+//        if (this.memory[name] == undefined) {
+//            throw "Variable " + name + " is undefined!";
+//        }
 
         return this.memory[name];
     };
