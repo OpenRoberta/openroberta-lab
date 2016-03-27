@@ -6,6 +6,7 @@ require.config({
         'jquery-ui' : 'jquery/jquery-ui-1.10.4.custom.min',
         'datatables' : 'jquery/jquery.dataTables.min',
         'jquery-validate' : 'jquery/jquery.validate.min',
+        'jquery-cookie' : 'jquery/jquery.cookie',
         'bootstrap' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
         'blocks' : '../../blockly/blocks_compressed',
         'blocks-msg' : '../../blockly/msg/js/en',
@@ -68,11 +69,14 @@ require.config({
         },
         'jquery-ui' : {
             deps : [ 'jquery' ]
+        },
+        'jquery-cookie' : {
+            deps : [ 'jquery' ]
         }
     }
 });
 
-require([ 'require', 'wrap', 'roberta.roberta', 'jquery' ], function(require) {
+require(['require', 'wrap', 'roberta.roberta', 'jquery' ], function(require) {
 
     $ = require('jquery');
     WRAP = require('wrap');

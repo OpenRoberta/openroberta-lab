@@ -195,14 +195,13 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_ROBOT.showRobotInfo();
                     } else if (domId === 'menuGeneral') { // Submenu 'Help'
                         window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
-                    } else if (domId === 'menuEV3conf') { // Submenu 'Help'
-                        window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
-                    } else if (domId === 'menuProgramming') { // Submenu 'Help'
-                        window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
                     } else if (domId === 'menuFaq') { // Submenu 'Help'
                         window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
                     } else if (domId === 'menuShowRelease') { // Submenu 'Help'
-                        $("#show-release").modal("show");
+                        if ($.cookie("OpenRoberta_hideStartUp")) {
+                            $('#checkbox_id').prop('checked', true);
+                        }
+                        $("#show-startup-message").modal("show");
                     } else if (domId === 'menuStateInfo') { // Submenu 'Help'
                         ROBERTA_USER.showUserInfo();
                     } else if (domId === 'menuAbout') { // Submenu 'Help'
@@ -287,6 +286,19 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     switchToBrickly();
                 }, 'tabConfiguration clicked');
 
+                $('.menuBuildingInstructions').onWrap('click', function(event) {
+                    window.open("TODO");
+                }, 'head navigation menu item clicked');
+                $('.menuEV3conf').onWrap('click', function(event) {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
+                }, 'head navigation menu item clicked');
+                $('.menuProgramming').onWrap('click', function(event) {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
+                }, 'head navigation menu item clicked');
+                $('.menuPrivacy').onWrap('click', function(event) {
+                    window.open("TODO");
+                }, 'head navigation menu item clicked');
+
                 // controle for simulation
                 $('.simSimple').onWrap('click', function(event) {
                     $('.menuSim').parent().removeClass('disabled');
@@ -345,7 +357,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                             $('#simDiv').removeClass('simActive');
                             $('#menuSim').parent().addClass('disabled');
                             $('.nav > li > ul > .robotType').removeClass('disabled');
-                            console.log(userState.robot);
                             $('.' + userState.robot).addClass('disabled');
                             $(window).resize();
                             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
@@ -439,6 +450,30 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     });
                     $(".code").addClass('hide');
                 }, 'codeBack clicked');
+                $('#show-startup-message').on('hidden.bs.modal', function() {
+                    if ($('#checkbox_id').is(':checked')) {
+                        $.cookie("OpenRoberta_hideStartUp", true, {
+                            expires : 99,
+                            secure : true,
+                            domain : ''
+                        });
+                        // check if it is really stored: chrome issue
+                        if (!$.cookie("OpenRoberta_hideStartUp"))
+                            $.cookie("OpenRoberta_hideStartUp", true, {
+                                expires : 99,
+                                domain : ''
+                            });
+                    } else {
+                        $.removeCookie("OpenRoberta_hideStartUp");
+                    }
+                });
+                $('#moreReleases').onWrap('click', function(event) {
+                    $('#oldReleases').show({
+                        start : function() {
+                            $('#moreReleases').addClass('hidden');
+                        }
+                    });
+                }, 'show more releases clicked');
 
                 $('#codeDownload').onWrap('click', function(event) {
                     //TODO always java?

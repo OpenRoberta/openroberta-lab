@@ -114,9 +114,7 @@ Blockly.Blocks['robControls_start'] = {
             var block = this.workspace.newBlock('math_number');
             block.initSvg();
             block.render();  
-            block.setShadow(true);
             value.connection.connect(block.outputConnection);
-            value.connection.setShadowDom(Blockly.Xml.blockToDom_(block, [])); 
             var connection;
             if (this.getInput('ST').connection.targetConnection) {
                 var block = this.getInput('ST').connection.targetConnection.sourceBlock_;

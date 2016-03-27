@@ -396,7 +396,6 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
     } else if (num == 0) {
       // changes in dropdown field TYPE -> change initial value
       if (this.getInputTargetBlock('VALUE')) {
-        this.getInput('VALUE').connection.setShadowDom(null);
         this.getInputTargetBlock('VALUE').dispose();
       }
       var block = null;
@@ -419,12 +418,10 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
       if (block) {
         block.initSvg();
         block.render();
-        block.setShadow(true);
         if (option.substr(0, 5) === 'Array') {
           block.updateType_(option.substr(6));
         }
         value.connection.connect(block.outputConnection);
-        value.connection.setShadowDom(Blockly.Xml.blockToDom_(block, []));
       }
     }
   },

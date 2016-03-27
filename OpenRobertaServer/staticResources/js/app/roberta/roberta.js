@@ -1,7 +1,7 @@
 define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'roberta.navigation', 'log', 'util', 'comm', 'roberta.brick-configuration',
-        'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'pace', 'blocks', 'jquery', 'jquery-ui',
-        'datatables', 'blocks-msg' ], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM, ROBERTA_BRICK_CONFIGURATION,
-        ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Pace, Blockly, $) {
+        'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'pace', 'blocks', 'jquery',
+        'jquery-cookie', 'jquery-ui', 'datatables', 'blocks-msg' ], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
+        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Pace, Blockly, $) {
 
     var id;
 
@@ -333,7 +333,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
      * Initializations
      */
     function init() {
-        Pace.start();
+        //Pace.start();
         COMM.setErrorFn(handleServerErrors);
         initLogging();
         userState.initUserState();
@@ -347,7 +347,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
         initProgramNameTable();
         initConfigurationNameTable();
         initRelationsTable();
-        
+
         COMM.json("/toolbox", {
             "cmd" : "loadT",
             "name" : userState.toolbox,
@@ -357,9 +357,15 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
             ROBERTA_ROBOT.initRobot();
             initBlockly();
             BRICKLY.init();
-            $("#show-startup-message").modal("show");
+
         });
-        
+        Pace.on("done", function() {
+            $(".cover").fadeOut(1000);
+            if (!$.cookie("OpenRoberta_hideStartUp")) {
+                $("#show-startup-message").modal("show");
+            }
+        });
+
         $('#menuTabProgram').parent().addClass('disabled');
         $('#tabProgram').addClass('tabClicked');
         $('#head-navigation-configuration-edit').css('display', 'none');
@@ -397,7 +403,6 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
         var ping = setInterval(function() {
             pingServer()
         }, 3000);
-        Pace.stop();   
     }
 
     exports.init = init;

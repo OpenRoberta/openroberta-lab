@@ -92,46 +92,47 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
             if (value == undefined) {
                 console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
             }
-            if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
-                $('#loginLabel').text(value);
-                $(this).html(value);
-            } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
-                $(this).html(value);
-            } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
-                $('#hideStartupMessage').text(value);
-            } else if (lkey === 'Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE') {
-                $('#popupTextStartupMessage').html(value);
-            } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
-                $('#show-message h3').text(value);
-                $('#show-startup-message h3').text(value);
-            } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
-                $('.cancelPopup').attr('value', value);
-                $('.backButton').attr('value', value);
-            } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_PASSWORD') {
-                $('#showChangeUserPassword').attr('value', value);
-            } else if (lkey === 'Blockly.Msg.POPUP_ABOUT_JOIN') {
-                $('#about-join').html(value);
-            } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
-                $('.buttonLoad').attr('value', value);
-            } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
-                $('.buttonDelete').attr('value', value);
-            } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
-                $('.buttonShare').attr('value', value);
-                $('#show-relations h2').text(value);
-            } else if (lkey === 'Blockly.Msg.BUTTON_REFRESH') {
-                $('.buttonRefresh').attr('value', value);
-            } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
-                $('#clearLog').attr('value', value);
-            } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
-                $('#show-robot-info h3').text(value);
-                $(this).html(value);
-            } else if (lkey === 'Blockly.Msg.MENU_STATE_INFO') {
-                $('#show-state-info h3').text(value);
-                $(this).html(value);
-            } else if (lkey === 'Blockly.Msg.MENU_ABOUT') {
-                $('#show-about h3').text(value);
-                $(this).html(value);
-            } else if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
+//           if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
+//                $('#loginLabel').text(value);
+//                $(this).html(value);
+//            } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
+//                $(this).html(value);
+//            } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
+//                $('#hideStartupMessage').text(value);
+//            } else if (lkey === 'Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE') {
+//                $('#popupTextStartupMessage').html(value);
+//            } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
+//                $('#show-message h3').text(value);
+//                $('#show-startup-message h3').text(value);
+//            } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
+//                $('.cancelPopup').attr('value', value);
+//                $('.backButton').attr('value', value);
+//            } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_PASSWORD') {
+//                $('#showChangeUserPassword').attr('value', value);
+//            } else if (lkey === 'Blockly.Msg.POPUP_ABOUT_JOIN') {
+//                $('#about-join').html(value);
+//            } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
+//                $('.buttonLoad').attr('value', value);
+//            } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
+//                $('.buttonDelete').attr('value', value);
+//            } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
+//                $('.buttonShare').attr('value', value);
+//                $('#show-relations h2').text(value);
+//            } else if (lkey === 'Blockly.Msg.BUTTON_REFRESH') {
+//                $('.buttonRefresh').attr('value', value);
+//            } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
+//                $('#clearLog').attr('value', value);
+//            } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
+//                $('#show-robot-info h3').text(value);
+//                $(this).html(value);
+//            } else if (lkey === 'Blockly.Msg.MENU_STATE_INFO') {
+//                $('#show-state-info h3').text(value);
+//                $(this).html(value);
+//            } else if (lkey === 'Blockly.Msg.MENU_ABOUT') {
+//                $('#show-about h3').text(value);
+//                $(this).html(value);
+//            } else 
+            if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
                 $('#head-navi-tooltip-program').attr('data-original-title', value).tooltip('fixTitle');
                 $('#head-navi-tooltip-configuration').attr('data-original-title', value).tooltip('fixTitle');
             } else if (lkey === 'Blockly.Msg.MENU_ROBOT_TOOLTIP') {
@@ -146,6 +147,7 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
                 $('#iconDisplayRobotState').attr('data-original-title', value).tooltip('fixTitle');
             } else {
                 $(this).html(value);
+                $(this).attr('value', value);
             }
         });
     }

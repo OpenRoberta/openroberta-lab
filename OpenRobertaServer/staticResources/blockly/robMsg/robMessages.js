@@ -1,4 +1,4 @@
-FF/**
+/**
  * @license
  * Visual Blocks Language
  *
@@ -136,7 +136,7 @@ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'List Colour';
 Blockly.Msg.VARIABLES_TYPE_ARRAY_CONNECTION = 'List Connection';
 Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'doSomething';
 Blockly.Msg.PROCEDURES_VARIABLES_ERROR = 'Error: This block may be used only within the "';
-Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = 'Error: This block may be used only within a loop which delcares ';
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = 'Error: This block may be used only within a loop which declares ';
 Blockly.Msg.PROCEDURES_TITLE = '" procedure';
 Blockly.Msg.YES = 'yes';
 Blockly.Msg.NO = 'no';
@@ -280,7 +280,10 @@ Blockly.Msg.MENU_EDIT = 'edit';
 Blockly.Msg.MENU_ROBOT = 'robot';
 Blockly.Msg.MENU_HELP = 'help';
 Blockly.Msg.MENU_USER = 'login';
-Blockly.Msg.MENU_START = 'run';
+Blockly.Msg.MENU_START_BRICK = 'run on brick';
+Blockly.Msg.MENU_START_SIM = 'run in simulation';
+Blockly.Msg.MENU_EXPORT_PROG = 'export program';
+Blockly.Msg.MENU_IMPORT_PROG = 'import program';
 Blockly.Msg.MENU_CHECK = 'check';
 Blockly.Msg.MENU_NEW = 'new ...';
 Blockly.Msg.MENU_LIST = 'list ...';
@@ -304,6 +307,7 @@ Blockly.Msg.MENU_SHOW_AGAIN = 'show welcome note again'
 Blockly.Msg.MENU_ROBOT_STATE_INFO = 'info';
 Blockly.Msg.MENU_STATE_INFO = 'state information';
 Blockly.Msg.MENU_ABOUT = 'about';
+Blockly.Msg.MENU_BUILDING_INSTRUCTIONS = 'building instructions';
 Blockly.Msg.MENU_LOG_IN = 'login ...';
 Blockly.Msg.MENU_LOG_OUT = 'logout';
 Blockly.Msg.MENU_CHANGE = 'change ...';
@@ -332,7 +336,8 @@ Blockly.Msg.POPUP_ABOUT_TEXT = 'The Open Roberta Lab is a cloud-based integrated
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = 'The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href="http://www.roberta-home.de/">»Roberta – Learning with Robots«</a>';
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = 'Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>';
 Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = 'Three things you should know before starting:<ul class="icon"><li class="document-text">Here you can program real EV3 robots </li><li class="Roberta">Your robot needs a special system <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="wi-fi">Your robot needs wi-fi or a USB program <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="arrow-right-thick">If you are not sure, please have a look at the help pages ... <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM">more</a></li></ul><br /><p>What is new?</p>';
-Blockly.Msg.POPUP_RELEASE = 'Version beta 1.3.2 <ul class="NonIcon" style="font-size:small"><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class="NonIcon" style="font-size:small"><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class="NonIcon" style="font-size:small"><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>';
+Blockly.Msg.POPUP_RELEASE = 'Version beta 1.3.2 <ul class="NonIcon"><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class="NonIcon"><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class="NonIcon"><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>';
+Blockly.Msg.POPUP_NEW_RELEASE = 'Version beta 1.4 <ul class="NonIcon"><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>';
 Blockly.Msg.POPUP_ABOUT_JOIN = 'I want to help';
 Blockly.Msg.POPUP_USERNAME = 'Username';
 Blockly.Msg.POPUP_USERNAME_LOGOFF = 'You are not logged in.';
@@ -345,7 +350,11 @@ Blockly.Msg.POPUP_SHARE_READ = 'READ';
 Blockly.Msg.POPUP_SHARE_WRITE = 'WRITE';
 Blockly.Msg.POPUP_ATTENTION = 'Attention';
 Blockly.Msg.POPUP_VALUE = 'Value';
-Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = 'I got it!';
+Blockly.Msg.POPUP_STARTUP_NEW = 'What"s new?';
+Blockly.Msg.POPUP_STARTUP_HELP = 'Do you need help?';
+Blockly.Msg.POPUP_STARTUP_HIDE = 'Okay, don"t show this window again.';
+Blockly.Msg.POPUP_STARTUP_COOKIES = 'We use cookies to personalise content and to analyse our traffic.';
+Blockly.Msg.POPUP_STARTUP_DETAILS = 'Show details.';
 Blockly.Msg.POPUP_CANCEL = 'Cancel';
 Blockly.Msg.POPUP_ROBOT_NAME = 'Name';
 Blockly.Msg.POPUP_ROBOT_STATE = 'State';
@@ -355,14 +364,23 @@ Blockly.Msg.POPUP_ROBOT_STATE_BUSY = 'busy';
 Blockly.Msg.POPUP_ROBOT_BATTERY = 'Voltage';
 Blockly.Msg.POPUP_ROBOT_WAIT = 'Waiting time';
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = 'You have to make a connection to your robot first.';
-Blockly.Msg.POPUP_ROBOT_BUSY = 'Your robot is busy. Please wait until the current program has finished.';
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = 'Do you really want to delete the program ?';
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = 'Do you really want to delete the configuration ?';
 Blockly.Msg.BUTTON_STOP = 'Stop';
+Blockly.Msg.BUTTON_START = 'Try it';
+Blockly.Msg.BUTTON_MORE = 'more';
 Blockly.Msg.POPUP_BEFOREUNLOAD = 'You have unsaved changes in your program or configuration. Sign in and save your program or configuration.';
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = 'You have unsaved changes in your program or configuration.';
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = 'There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<< and restart the robots system afterwards.';
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = 'Update now';
+Blockly.Msg.POPUP_EMAIL_SEND = 'Send now';
+Blockly.Msg.POPUP_REGISTER_USER = 'Register now';
+Blockly.Msg.POPUP_PASSWORD_RECOVERY = 'reset password ...'
+Blockly.Msg.POPUP_NEW_PASSWORD = 'New Password';
+Blockly.Msg.POPUP_OLD_PASSWORD = 'Old Password';
+Blockly.Msg.POPUP_REPEAT_PASSWORD = 'Repeat password';
+Blockly.Msg.POPUP_CHANGE_PASSWORD = 'change password ...';
+Blockly.Msg.POPUP_STARTUP_TITLE = 'Welcome';
 Blockly.Msg.BUTTON_FINISH = 'Finish';
 Blockly.Msg.BUTTON_LOAD = 'Load';
 Blockly.Msg.BUTTON_DO_DELETE = 'Delete';
@@ -422,7 +440,7 @@ Blockly.Msg.ORA_PROGRAM_SAVE_SUCCESS = 'Program saved';
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = 'An error has occurred while saving the program.';
 Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = 'This program already exists.';
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND = 'The program could not be found, so it is impossible to update it.';
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = 'You do not have the permission to modify this program!';
+Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = 'You don"t have the permission to modify this program!';
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = 'This program has been changed recently by someone else. You can can save your changes in a new program, choose >save as< !';
 Blockly.Msg.ORA_PROGRAM_GET_ALL_SUCCESS = 'Programs loaded';
 Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = 'Program deeleted';
@@ -452,6 +470,7 @@ Blockly.Msg.ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST = 'The program that you would li
 Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = 'The user with which you would like to share the program does not exist. <br />Try it again!';
 Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = 'You cannot share any programs with yourself.';
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = 'Check all required input fields have been filled out.';
+Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = 'This email address is unknown, maybe you have spelled it wrong!';
 Blockly.Msg.ORA_SERVER_ERROR = 'Server-Error';
 
 Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = 'This sensor is not set to the port!';
@@ -483,28 +502,14 @@ Blockly.Msg.DATATABLE_OF = 'of';
 Blockly.Msg.DATATABLE_ENTRIES = 'entries';
 Blockly.Msg.DATATABLE_EMPTY_TABLE = 'There are no entries in this table';
 Blockly.Msg.SEND_DATA = 'data to send';
-Blockly.Msg.USED_CONNECTION = 'via connection';
-Blockly.Msg.RECEIVED_DATA = 'data received';
-Blockly.Msg.CONNECT = 'connect to robot name';
-Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection';
-Blockly.Msg.TOKEN_LENGTH = 'Token length is 8 characters!';
-
 
 // These messages are used for validation of forms (please use short messages)
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = 'This field cannot be empty!';
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = 'Password min length is 6!';
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = 'Token length is 8 characters!';
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
-Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = 'Please enter valid email address!';
+Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = 'Please enter a valid email address!';
 
-Blockly.Msg.POPUP_EMAIL_SEND = 'Send!!!';
-Blockly.Msg.POPUP_REGISTER_USER = 'Register!';
-Blockly.Msg.POPUP_PASSWORD_RECOVERY = 'Password Recovery'
-Blockly.Msg.POPUP_NEW_PASSWORD = 'New Password';
-Blockly.Msg.POPUP_OLD_PASSWORD = 'Old Password';
-Blockly.Msg.POPUP_REPEAT_PASSWORD = 'Repeat password';
-Blockly.Msg.POPUP_CHANGE_PASSWORD = 'Change password';
-Blockly.Msg.POPUP_CHANGE_USER_PASSWORD = 'Change User Password';
-Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = 'Account not found with this email address!';
+
 
 
