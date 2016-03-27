@@ -267,7 +267,8 @@ define(
                 if (actions.encoder) {
                     if (actions.encoder.leftReset) {
                         this.encoder.left = 0;
-                    } else if (actions.encoder.rightReset) {
+                    }
+                    if (actions.encoder.rightReset) {
                         this.encoder.right = 0;
                     }
                 }
