@@ -490,6 +490,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                 }
             }
         }
+        if (this.robot.webAudio) {
+            values.volume = this.robot.webAudio.volume;
+        }       
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();
         return values;

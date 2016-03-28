@@ -65,6 +65,22 @@ CLEAR_DISPLAY_ACTION = "ClearDisplay";
 const
 CREATE_DEBUG_ACTION = "CreateDebugAction";
 const
+TONE_ACTION = "ToneAction";
+const
+FREQUENCY = "frequency";
+const
+DURATION = "duration";
+const
+GET_VOLUME = "GetVolume";
+const
+SET_VOLUME_ACTION = "SetVolumeAction";
+const
+VOLUME = "volume";
+const 
+PLAY_FILE_ACTION = "PlayFileAction";
+const
+FILE = "file";
+const
 TEXT = "text";
 const
 PICTURE = "picture";

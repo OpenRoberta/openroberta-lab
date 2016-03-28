@@ -478,13 +478,23 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        // TODO implementation of visitVolumeAction
+        String end = createClosingBracket();
+        if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
+            this.sb.append("createSetVolumeAction(" + volumeAction.getMode() + ", ");
+            volumeAction.getVolume().visit(this);
+            this.sb.append(end);
+        } else {
+            this.sb.append("createGetVolume(");
+            this.sb.append(end);
+        }
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        // TODO implementation of visitPlayFileAction
+        String end = createClosingBracket();
+        this.sb.append("createPlayFileAction(" + playFileAction.getFileName());
+        this.sb.append(end);
         return null;
     }
 
@@ -522,7 +532,12 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        // TODO implement visitToneAction
+        String end = createClosingBracket();
+        this.sb.append("createToneAction(");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(", ");
+        toneAction.getDuration().visit(this);
+        this.sb.append(end);
         return null;
     }
 

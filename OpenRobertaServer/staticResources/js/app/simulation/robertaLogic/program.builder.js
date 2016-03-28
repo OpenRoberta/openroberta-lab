@@ -189,6 +189,34 @@ function createDuration(motorMoveMode, duration) {
     return result;
 }
 
+function createToneAction(frequency, duration) {
+    var result = {};
+    result[STMT] = TONE_ACTION;
+    result[FREQUENCY] = frequency;
+    result[DURATION] = duration;
+    return result;
+}
+
+function createSetVolumeAction(mode, volume) {
+    var result = {};
+    result[STMT] = SET_VOLUME_ACTION;
+    result[VOLUME] = volume;
+    return result;
+}
+
+function createGetVolume() {
+    var result = {};
+    result[EXPR] = GET_VOLUME;
+    return result;
+}
+
+function createPlayFileAction(file) {
+    var result = {};
+    result[STMT] = PLAY_FILE_ACTION;
+    result[FILE] = file;
+    return result;
+}
+
 function createTurnAction(speed, direction, angle) {
     var result = {};
     result[STMT] = TURN_ACTION;

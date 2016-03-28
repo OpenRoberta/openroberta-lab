@@ -140,6 +140,18 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 evalResetTimerSensor(internal(this), stmt);
                 break;
 
+            case TONE_ACTION:
+                evalToneAction(internal(this), simulationData, stmt);
+                break;
+
+            case PLAY_FILE_ACTION:
+                evalPlayFileAction(internal(this), simulationData, stmt);
+                break;
+
+            case SET_VOLUME_ACTION:
+                evalVolumeAction(internal(this), stmt);
+                break;
+
             case CREATE_LISTS_GET_INDEX_STMT:
                 evalListsGetIndexStmt(internal(this), stmt);
                 break;
@@ -247,6 +259,45 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
 
     };
 
+    var evalToneAction = function(obj, simulationData, stmt) {
+        obj.program.setIsRunningTimer(true);
+        obj.program.resetTimer(simulationData.time);
+        obj.program.setTimer(evalExpr(obj, stmt.duration));
+        obj.outputCommands.tone = {};
+        obj.outputCommands.tone.frequency = evalExpr(obj, stmt.frequency);
+        obj.outputCommands.tone.duration = evalExpr(obj, stmt.duration);
+    }
+
+    var evalPlayFileAction = function(obj, simulationData, stmt) {
+        obj.program.setIsRunningTimer(true);
+        obj.program.resetTimer(simulationData.time);
+        var duration = 0; // ms
+        switch (stmt.file) {
+        case 0:
+            duration = 1000;
+            break;
+        case 1:
+            duration = 350;
+            break;
+        case 2:
+            duration = 700;
+            break;
+        case 3:
+            duration = 700;
+            break;
+        case 4:
+            duration = 500;
+            break;
+        }
+        obj.program.setTimer(duration);
+        obj.outputCommands.tone = {};
+        obj.outputCommands.tone.file = stmt.file;
+    }
+
+    var evalVolumeAction = function(obj, stmt) {
+        obj.outputCommands.volume = evalExpr(obj, stmt.volume);
+    }
+
     var evalTurnAction = function(obj, stmt) {
         obj.actors.initTachoMotors(obj.simulationData.encoder.left, obj.simulationData.encoder.right);
         obj.actors.setAngleSpeed(evalExpr(obj, stmt.speed), stmt[TURN_DIRECTION]);
@@ -339,7 +390,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             }
             break;
         case FOR:
-            if (!obj.memory.get(stmt.expr[0].name)) {
+            if (obj.memory.get(stmt.expr[0].name) == undefined) {
                 obj.memory.decl(stmt.expr[0].name, evalExpr(obj, stmt.expr[1]))
             } else {
                 var step = evalExpr(obj, stmt.expr[3]);
@@ -348,7 +399,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             }
             var left = obj.memory.get(stmt.expr[0].name);
             var right = evalExpr(obj, stmt.expr[2]);
-            if (left < right) {
+            if (left <= right) {
                 obj.program.prepend([ stmt ]);
                 obj.program.prepend(stmt.stmtList);
             }
@@ -451,6 +502,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         case MOTOR_GET_POWER:
             return evalMotorGetPowerAction(obj, expr.motorSide);
             break;
+        case GET_VOLUME:
+            return evalGetVolume(obj);
         default:
             throw "Invalid Expression Type!";
         }
@@ -478,6 +531,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         default:
             throw "Invalid Encoder Mode!";
         }
+    };
+    
+    var evalGetVolume = function(obj) {
+        return obj.simulationData[VOLUME];
     };
 
     var evalBinary = function(obj, op, left, right) {
