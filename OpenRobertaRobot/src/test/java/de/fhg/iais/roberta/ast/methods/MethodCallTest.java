@@ -32,7 +32,7 @@ public class MethodCallTest {
             "BlockAST [project=[[Location [x=5, y=28], MethodVoid [Funktionsblock, "
                 + "VarDeclaration [NUMBER, x, EmptyExpr [defVal=class java.lang.Integer], true, false], "
                 + "VarDeclaration [NUMBER, x2, EmptyExpr [defVal=class java.lang.Integer], false, false], \n"
-                + "AktionStmt [VolumeAction [SET, NumConst [50]]]]], [Location [x=6, y=189], MethodCall [Funktionsblock, Var [x], Var [x2], NumConst [0], NumConst [2], null]]]]";
+                + "AktionStmt [VolumeAction [SET, NumConst [50]]]]], [Location [x=6, y=189], MethodCall [Funktionsblock, Var [x], Var [x2], NumConst [0], NumConst [2], VOID]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_call_3.xml"));
     }
@@ -41,7 +41,7 @@ public class MethodCallTest {
     public void methodCall4() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=5, y=28], MethodVoid [Funktionsblock, , \n"
-                + "AktionStmt [VolumeAction [SET, NumConst [50]]]]], [Location [x=6, y=189], MethodCall [Funktionsblock, , , null]]]]";
+                + "AktionStmt [VolumeAction [SET, NumConst [50]]]]], [Location [x=6, y=189], MethodCall [Funktionsblock, , , VOID]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_call_4.xml"));
     }

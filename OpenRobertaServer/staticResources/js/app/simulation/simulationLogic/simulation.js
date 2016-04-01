@@ -176,7 +176,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         ready = false;
         userProgram = program;
         eval(userProgram);
-        programEval.initProgram(pp);
+        programEval.initProgram(blocklyProgram);
         canceled = false;
         isDownrobot = false;
         isDownObstacle = false;
@@ -237,7 +237,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     function reloadProgram() {
         robot.reset();
         eval(userProgram);
-        programEval.initProgram(pp);
+        programEval.initProgram(blocklyProgram);
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);

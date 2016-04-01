@@ -158,6 +158,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             case CREATE_LISTS_SET_INDEX:
                 evalListsSetIndex(internal(this), stmt);
                 break;
+            case METHOD_CALL_VOID:
+                evalMethodCallVoid(internal(this), stmt);
+                break;
 
             default:
                 throw "Invalid Statement " + stmt.stmt + "!";
@@ -296,6 +299,21 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
 
     var evalVolumeAction = function(obj, stmt) {
         obj.outputCommands.volume = evalExpr(obj, stmt.volume);
+    }
+
+    var evalMethodCallVoid = function(obj, stmt) {
+        var methodName = stmt.name;
+        var method = obj.program.getMethod(methodName);
+        for (var i = 0; i < stmt.parameters.length; i++) {
+            var parameter = stmt.parameters[i];
+            var value = stmt.values[i]
+            if (obj.memory.get(parameter.name) == undefined) {
+                obj.memory.decl(parameter.name, evalExpr(obj, value))
+            } else {
+                obj.memory.assign(parameter.name, evalExpr(obj, value));
+            }
+        }
+        obj.program.prepend(method.stmtList);
     }
 
     var evalTurnAction = function(obj, stmt) {

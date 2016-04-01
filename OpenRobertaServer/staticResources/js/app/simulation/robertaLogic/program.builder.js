@@ -415,6 +415,7 @@ function createTextJoin(values) {
     result[VALUE] = values;
     return result;
 }
+
 function createTernaryExpr(cond, then, _else) {
     var result = {};
     result[EXPR] = TERNARY_EXPR;
@@ -424,11 +425,20 @@ function createTernaryExpr(cond, then, _else) {
     return result;
 }
 
-//    var evalStmts = [];
-//    exports.build = function(program) {
-//        var stmts = program.split(";");
-//        stmts.forEach(function(stmt) {
-//            evalStmts.push(eval(stmt));
-//        });
-//    };
-//});
+function createMethodVoid(methodName, parameters, stmts) {
+    var result = {};
+    result[FUNCTION_DECLARATION] = METHOD_VOID;
+    result[NAME] = methodName;
+    result[PARAMETERS] = parameters;
+    result[STMT_LIST] = stmts;
+    return result;
+}
+
+function createMethodCallVoid(methodName, parameters, values) {
+    var result = {};
+    result[STMT] = METHOD_CALL_VOID;
+    result[NAME] = methodName;
+    result[PARAMETERS] = parameters;
+    result[VALUES] = values;
+    return result;
+}

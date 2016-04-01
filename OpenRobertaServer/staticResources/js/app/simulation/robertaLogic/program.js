@@ -11,6 +11,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
      */
     var Program = function() {
         var privateProperties = {
+            methods : new Map(),
             program : [],
             nextStatement : true,
             nextFrameTimeDuration : 0,
@@ -37,7 +38,27 @@ define([ 'robertaLogic.timer' ], function(Timer) {
      *            program).
      */
     Program.prototype.set = function(newProgram) {
-        privateMem.get(this).program = newProgram;
+        privateMem.get(this).program = newProgram.programStmts;
+        if (newProgram.programMethods != undefined) {
+            for (i in newProgram.programMethods) {
+                method = newProgram.programMethods[i];
+                privateMem.get(this).methods.set(method.name, method);
+            }
+        }
+    };
+
+    /**
+     * Get created method in blockly program using the name of the method.
+     * 
+     * @param {String}
+     *            methodName - name of the method given by the user
+     */
+    Program.prototype.getMethod = function(methodName) {
+        var method = privateMem.get(this).methods.get(methodName);
+        if (method == undefined) {
+            throw "Method not found";
+        }
+        return method;
     };
 
     /**

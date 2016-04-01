@@ -27,7 +27,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt6 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator.xml");
     }
@@ -44,7 +44,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt5 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt6 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT, createConstant(NUM_CONST, 30));\n"
                 + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator1.xml");
     }
@@ -60,7 +60,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt4 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt5 = createTurnAction(createConstant(NUM_CONST, 50), LEFT);\n"
                 + "var stmt6 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator2.xml");
     }
@@ -75,7 +75,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt3 = createStopDrive();\n"
                 + "var stmt4 = createStatusLight(RESET);\n"
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator3.xml");
     }
@@ -86,7 +86,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createIfStmt([createBinaryExpr(NEQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 6)), createBinaryExpr(GTE, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 6))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator4.xml");
     }
@@ -98,7 +98,7 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createIfStmt([createBinaryExpr(LTE, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)]], [createTurnAction(createConstant(NUM_CONST, 50), RIGHT, createConstant(NUM_CONST, 80))]);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt2 = createRepeatStmt(TIMES, createConstant(NUM_CONST, 10), [createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20)), createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 30))]);\n"
-                + "var pp = [stmt0,stmt1,stmt2];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator5.xml");
     }
@@ -109,7 +109,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createBinaryExpr(OR, createConstant(BOOL_CONST, false), createConstant(BOOL_CONST, true)))], [])]);\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator6.xml");
     }
@@ -122,7 +122,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt2 = createIfStmt([createBinaryExpr(EQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))], [[createIfStmt([createBinaryExpr(NEQ, createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 1)), createBinaryExpr(EQ, createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 1))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD), createTurnAction(createConstant(NUM_CONST, 50), RIGHT)]])]], [createStopDrive()]);\n"
                 + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator7.xml");
     }
@@ -133,7 +133,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]), createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [[createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])])]])]);\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator8.xml");
     }
@@ -153,7 +153,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt8 = createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 33));\n"
                 + "var stmt9 = createTurnLight(GREEN, ON);\n"
                 + "var stmt10 = createStatusLight(OFF);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator9.xml");
 
@@ -170,7 +170,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt5 = createVarDeclaration(COLOR, \"variablenName6\", createConstant(COLOR_CONST, COLOR_ENUM.RED));\n"
                 + "var stmt6 = createVarDeclaration(COLOR, \"variablenName7\", createConstant(COLOR_CONST, COLOR_ENUM.WHITE));\n"
                 + "var stmt7 = createVarDeclaration(COLOR, \"variablenName8\", createConstant(COLOR_CONST, COLOR_ENUM.BROWN));\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator10.xml");
 
@@ -183,7 +183,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOR, COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.RED))], [])]);\n"
                 + "var stmt2 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOR, COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.GREEN))], [])]);\n"
                 + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(COLOR, RED), createConstant(NUM_CONST, 45))], [])]);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator11.xml");
     }
@@ -193,7 +193,7 @@ public class AstToLejosJavaScriptVisitorTest {
 
         String a =
             "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, false))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)]]), createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 20))]])]);\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator12.xml");
 
@@ -204,7 +204,7 @@ public class AstToLejosJavaScriptVisitorTest {
 
         String a =
             "var stmt0 = createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true)), createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, false))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 20))]]);\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator13.xml");
 
@@ -218,7 +218,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_LEFT);\n"
                 + "var stmt2 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
                 + "var stmt3 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_LEFT, createDuration(DEGREE, createConstant(NUM_CONST, 1)));\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator14.xml");
 
@@ -231,7 +231,7 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
                 + "var stmt1 = createStopMotorAction(MOTOR_RIGHT);\n"
                 + "var stmt2 = createStopMotorAction(MOTOR_LEFT);\n"
-                + "var pp = [stmt0,stmt1,stmt2];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator15.xml");
 
@@ -241,7 +241,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test16() throws Exception {
         String a =
             "var stmt0 = createMotorOnAction(createUnaryExpr(NEG, createConstant(NUM_CONST, 30)), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator16.xml");
 
@@ -265,7 +265,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt12 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROUND', createConstant(NUM_CONST, 20)));\n"
                 + "var stmt13 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROUNDUP', createConstant(NUM_CONST, 20)));\n"
                 + "var stmt14 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROUNDDOWN', createConstant(NUM_CONST, 20)));\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10,stmt11,stmt12,stmt13,stmt14];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10,stmt11,stmt12,stmt13,stmt14]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator17.xml");
 
@@ -280,7 +280,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt3 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('SQRT2'));\n"
                 + "var stmt4 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('SQRT1_2'));\n"
                 + "var stmt5 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('INFINITY'));\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator18.xml");
 
@@ -290,7 +290,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test19() throws Exception {
         String a =
             "var stmt0 = createShowTextAction(createConstant(STRING_CONST, 'Hallo'), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator19.xml");
 
@@ -306,7 +306,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt4 = createShowTextAction(createMathPropFunct('POSITIVE', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt5 = createShowTextAction(createMathPropFunct('NEGATIVE', createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt6 = createShowTextAction(createMathPropFunct('DIVISIBLE_BY', createConstant(NUM_CONST, 3), createConstant(NUM_CONST, 3)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator20.xml");
 
@@ -318,7 +318,7 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, -200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt2 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 20), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var pp = [stmt0,stmt1,stmt2];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator21.xml");
 
@@ -329,7 +329,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createShowTextAction(createRandInt(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createShowTextAction(createRandDouble(), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator22.xml");
 
@@ -340,7 +340,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createVarDeclaration(NUMBER, \"item\", createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createVarDeclaration(STRING, \"item2\", createConstant(STRING_CONST, 'cc'));\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator23.xml");
 
@@ -350,7 +350,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test24() throws Exception {
         String a =
             "var stmt0 = createShowTextAction(createGetMotorPower(MOTOR_RIGHT), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator24.xml");
 
@@ -363,7 +363,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DEGREE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt2 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DISTANCE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt3 = createResetEncoderSensor(MOTOR_LEFT);\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator25.xml");
 
@@ -375,7 +375,7 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createShowTextAction(createGetSample(GYRO, ANGLE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createShowTextAction(createGetSample(GYRO, RATE), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt2 = createResetGyroSensor();\n"
-                + "var pp = [stmt0,stmt1,stmt2];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator26.xml");
 
@@ -383,13 +383,13 @@ public class AstToLejosJavaScriptVisitorTest {
 
     @Test
     public void createGetTimerSensorSample() throws Exception {
-        String a = "createGetSample(TIMER, 'timer1')" + "var pp = [";
+        String a = "createGetSample(TIMER, 'timer1')" + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/ast/sensors/sensor_getSampleTimer.xml");
     }
 
     @Test
     public void createResetTimerSensor() throws Exception {
-        String a = "var stmt0 = createResetTimer('timer1');\n" + "var pp = [stmt0];";
+        String a = "var stmt0 = createResetTimer('timer1');\n" + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/ast/sensors/sensor_resetTimer.xml");
     }
 
@@ -398,7 +398,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createShowTextAction(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createShowTextAction(createCreateListWith(ARRAY_STRING, [createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator27.xml");
 
@@ -411,7 +411,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createShowPictureAction('OLDGLASSES', createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 11));\n"
                 + "var stmt2 = createShowPictureAction('EYESOPEN', createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 11));\n"
                 + "var stmt3 = createClearDisplayAction();\n"
-                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator28.xml");
 
@@ -422,14 +422,14 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createVarDeclaration(NUMBER, \"variablenName\", createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createMathChange(createVarReference(NUMBER, \"variablenName\"), createConstant(NUM_CONST, 1));\n"
-                + "var pp = [stmt0,stmt1];";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/ast/math/math_change.xml");
     }
 
     @Test
     public void createListWithItem() throws Exception {
-        String a = "createCreateListWithItem(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 5))" + "var pp = [";
+        String a = "createCreateListWithItem(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 5))" + "var blocklyProgram = {'programStmts': []};";
 
         assertCodeIsOk(a, "/syntax/lists/lists_create_with_item.xml");
     }
@@ -438,7 +438,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListLength() throws Exception {
         String a =
             "createListLength(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0.1), createConstant(NUM_CONST, 0.0), createConstant(NUM_CONST, 0)]))"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_length.xml");
     }
 
@@ -446,7 +446,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListIsEmpty() throws Exception {
         String a =
             "createListIsEmpty(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]))"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
     }
 
@@ -454,7 +454,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListFindElementFirst() throws Exception {
         String a =
             "createListFindItem(FIRST, createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_occurrence.xml");
     }
 
@@ -462,7 +462,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListFindElementLast() throws Exception {
         String a =
             "createListFindItem(LAST, createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_occurrence1.xml");
     }
 
@@ -470,7 +470,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListsIndexGetFromStart() throws Exception {
         String a =
             "createListsGetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET, FROM_START, createConstant(NUM_CONST, 1))"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index.xml");
     }
 
@@ -478,7 +478,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListsIndexRemoveFromStart() throws Exception {
         String a =
             "var stmt0 = createListsGetIndexStmt(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), REMOVE, FROM_START, createConstant(NUM_CONST, 1));\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index1.xml");
     }
 
@@ -486,7 +486,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListsIndexGetRemoveLast() throws Exception {
         String a =
             "createListsGetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET_REMOVE, LAST)"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index2.xml");
     }
 
@@ -494,7 +494,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListsSetFromStart() throws Exception {
         String a =
             "var stmt0 = createListsSetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), SET, createConstant(NUM_CONST, 99), FROM_START, createConstant(NUM_CONST, 1));\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index.xml");
     }
 
@@ -502,7 +502,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListsInsertFromStart() throws Exception {
         String a =
             "var stmt0 = createListsSetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), INSERT, createConstant(NUM_CONST, 99), FROM_START, createConstant(NUM_CONST, 1));\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index1.xml");
     }
 
@@ -510,7 +510,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createListsInsertRandom() throws Exception {
         String a =
             "var stmt0 = createListsSetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), INSERT, createConstant(NUM_CONST, 99), RANDOM);\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index2.xml");
     }
 
@@ -518,7 +518,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createGetSubListFromStartAndFromEnd() throws Exception {
         String a =
             "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list.xml");
     }
 
@@ -526,7 +526,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createGetSubListFirstAndFromEnd() throws Exception {
         String a =
             "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list1.xml");
     }
 
@@ -534,7 +534,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createGetSubListFromStartAndLast() throws Exception {
         String a =
             "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: LAST})"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list2.xml");
     }
 
@@ -542,7 +542,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void createGetSubListFirstAndLast() throws Exception {
         String a =
             "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: LAST})"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list3.xml");
     }
 
@@ -557,7 +557,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createMathOnList(MODE, )"
                 + "createMathOnList(STD_DEV, )"
                 + "createMathOnList(RANDOM, )"
-                + "var pp = [";
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/ast/math/math_on_list.xml");
     }
 
@@ -571,7 +571,8 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createConstant(STRING_CONST, 'b'), "
                 + "createConstant(BOOL_CONST, true), "
                 + "createGetSample(TOUCH)"
-                + "])var pp = [";
+                + "])"
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/syntax/text/text_join.xml");
     }
 
@@ -582,7 +583,8 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createBinaryExpr(EQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)), "
                 + "createConstant(STRING_CONST, '2'), "
                 + "createConstant(STRING_CONST, '3')"
-                + ")var pp = [";
+                + ")"
+                + "var blocklyProgram = {'programStmts': []};";
         assertCodeIsOk(a, "/ast/logic/logic_ternary.xml");
     }
 
@@ -594,7 +596,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createBinaryExpr(IN, createVarDeclaration(NUMBER, \"item\", createConstant(NUM_CONST, 0)), "
                 + "createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)])), "
                 + "[createShowTextAction(createVarReference(NUMBER, \"item\"), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))]);\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/ast/control/repeat_stmt_for_each3.xml");
     }
 
@@ -605,8 +607,40 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "FOR, ["
                 + "createVarReference(NUMBER, \"i\"), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 1)], "
                 + "[createBinaryExpr(TEXT_APPEND, createVarReference(STRING, \"item\"), createConstant(STRING_CONST, 'kllk'))]);\n"
-                + "var pp = [stmt0];";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/ast/control/repeat_stmt_for.xml");
+    }
+
+    @Test
+    public void createMethodVoid_two_parameters() throws Exception {
+        String a =
+            "var stmt0 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
+                + "var stmt1 = createMethodCallVoid('macheEtwas', [createVarReference(NUMBER, \"x\"), createVarReference(NUMBER, \"x2\")], [createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 10)]);\n"
+                + "var method0 = createMethodVoid('macheEtwas', [createVarDeclaration(NUMBER, \"x\", createConstant(NUM_CONST, 0)), createVarDeclaration(NUMBER, \"x2\", createConstant(NUM_CONST, 0))], [createShowPictureAction('OLDGLASSES', createVarReference(NUMBER, \"x\"), createVarReference(NUMBER, \"x2\"))]);\n"
+                + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
+        assertCodeIsOk(a, "/syntax/methods/method_void_1.xml");
+    }
+
+    @Test
+    public void createMethodVoid_no_parameters() throws Exception {
+        String a =
+            "var stmt0 = createMethodCallVoid('test', [], []);\n"
+                + "var method0 = createMethodVoid('test', [], [createTurnLight(GREEN, ON)]);\n"
+                + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0]};";
+        assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
+    }
+
+    @Test
+    public void createMethodVoid_multiple_methods() throws Exception {
+        String a =
+            "var stmt0 = createVarDeclaration(NUMBER, \"variablenName\", createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createVarDeclaration(BOOLEAN, \"variablenName2\", createConstant(BOOL_CONST, true));\n"
+                + "var stmt2 = createMethodCallVoid('test1', [createVarReference(NUMBER, \"x\"), createVarReference(NUMBER, \"x2\")], [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]);\n"
+                + "var stmt3 = createMethodCallVoid('test2', [], []);\n"
+                + "var method0 = createMethodVoid('test1', [createVarDeclaration(NUMBER, \"x\", createConstant(NUM_CONST, 0)), createVarDeclaration(NUMBER, \"x2\", createConstant(NUM_CONST, 0))], [createShowTextAction(createConstant(STRING_CONST, 'Hallo'), createVarReference(NUMBER, \"x\"), createVarReference(NUMBER, \"x2\"))]);\n"
+                + "var method1 = createMethodVoid('test2', [], [createIfReturn(createVarReference(BOOLEAN, \"variablenName2\"), createConstant(NULL_CONST, null)), createTurnLight(GREEN, ON)]);\n"
+                + "var blocklyProgram = {'programMethods': [method0,method1], 'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
+        assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

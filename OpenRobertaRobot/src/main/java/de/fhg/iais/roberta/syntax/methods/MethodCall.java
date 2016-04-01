@@ -114,7 +114,7 @@ public class MethodCall<V> extends Method<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        BlocklyType outputType = block.getMutation().getOutputType() == null ? null : BlocklyType.get(block.getMutation().getOutputType());
+        BlocklyType outputType = block.getMutation().getOutputType() == null ? BlocklyType.VOID : BlocklyType.get(block.getMutation().getOutputType());
         String methodName = block.getMutation().getName();
         List<Arg> arguments = block.getMutation().getArg();
         ExprList<V> parameters = helper.argumentsToExprList(arguments);
@@ -132,7 +132,7 @@ public class MethodCall<V> extends Method<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setName(getMethodName());
-        if ( this.returnType != null ) {
+        if ( this.returnType != BlocklyType.VOID ) {
             mutation.setOutputType(this.returnType.getBlocklyName());
         }
         if ( this.parameters.get().size() != 0 ) {

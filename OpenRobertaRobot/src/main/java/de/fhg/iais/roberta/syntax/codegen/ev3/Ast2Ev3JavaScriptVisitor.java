@@ -95,6 +95,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -103,7 +104,8 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     private static final String MOTOR_LEFT = "MOTOR_LEFT";
     private static final String MOTOR_RIGHT = "MOTOR_RIGHT";
     private final StringBuilder sb = new StringBuilder();
-    private int stmtCount = 0;
+    private int stmtsNumber = 0;
+    private int methodsNumber = 0;
     private ArrayList<Boolean> inStmt = new ArrayList<Boolean>();
 
     private Ast2Ev3JavaScriptVisitor() {
@@ -260,7 +262,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 this.sb.append("[]");
                 break;
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
-                this.sb.append("createConstant(NULL_CONST, 0)");
+                this.sb.append("createConstant(NULL_CONST, null)");
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
@@ -311,7 +313,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitExprStmt(ExprStmt<Void> exprStmt) {
         String end = "";
         if ( !isInStmt() ) {
-            this.sb.append("var stmt" + this.stmtCount + " = ");
+            this.sb.append("var stmt" + this.stmtsNumber + " = ");
             increaseStmt();
             end = ";";
         }
@@ -854,6 +856,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        this.sb.append("var method" + this.methodsNumber + " = createMethodVoid('" + methodVoid.getMethodName() + "', [");
+        methodVoid.getParameters().visit(this);
+        this.sb.append("], [");
+        addInStmt();
+        methodVoid.getBody().visit(this);
+        this.sb.append("]);\n");
+        increaseMethods();
         return null;
     }
 
@@ -864,16 +873,31 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+        this.sb.append("createIfReturn(");
+        methodIfReturn.getCondition().visit(this);
+        this.sb.append(", ");
+        methodIfReturn.getReturnValue().visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
+        methodStmt.getMethod().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
+        String end = ")";
+        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
+            end = createClosingBracket();
+        }
+        this.sb.append("createMethodCallVoid('" + methodCall.getMethodName() + "', [");
+        methodCall.getParameters().visit(this);
+        this.sb.append("], [");
+        methodCall.getParametersValues().visit(this);
+        this.sb.append("]" + end);
         return null;
     }
 
@@ -898,7 +922,11 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     private void increaseStmt() {
-        this.stmtCount++;
+        this.stmtsNumber++;
+    }
+
+    private void increaseMethods() {
+        this.methodsNumber++;
     }
 
     /**
@@ -930,18 +958,40 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 phrase.visit(astVisitor);
             }
         }
-        appendInitStmt(astVisitor);
-
+        appendProgramInitialization(astVisitor);
     }
 
-    private static void appendInitStmt(Ast2Ev3JavaScriptVisitor astVisitor) {
-        astVisitor.sb.append("var pp = [");
-        for ( int i = 0; i < astVisitor.stmtCount; i++ ) {
-            astVisitor.sb.append("stmt" + i);
-            if ( i != astVisitor.stmtCount - 1 ) {
-                astVisitor.sb.append(",");
-            } else {
-                astVisitor.sb.append("];");
+    private static void appendProgramInitialization(Ast2Ev3JavaScriptVisitor astVisitor) {
+        astVisitor.sb.append("var blocklyProgram = {");
+        appendMethodsInitialization(astVisitor);
+        appendStmtsInitialization(astVisitor);
+        astVisitor.sb.append("};");
+    }
+
+    private static void appendStmtsInitialization(Ast2Ev3JavaScriptVisitor astVisitor) {
+        astVisitor.sb.append("'programStmts': [");
+        if ( astVisitor.stmtsNumber > 0 ) {
+            for ( int i = 0; i < astVisitor.stmtsNumber; i++ ) {
+                astVisitor.sb.append("stmt" + i);
+                if ( i != astVisitor.stmtsNumber - 1 ) {
+                    astVisitor.sb.append(",");
+                }
+
+            }
+        }
+        astVisitor.sb.append("]");
+    }
+
+    private static void appendMethodsInitialization(Ast2Ev3JavaScriptVisitor astVisitor) {
+        if ( astVisitor.methodsNumber > 0 ) {
+            astVisitor.sb.append("'programMethods': [");
+            for ( int i = 0; i < astVisitor.methodsNumber; i++ ) {
+                astVisitor.sb.append("method" + i);
+                if ( i != astVisitor.methodsNumber - 1 ) {
+                    astVisitor.sb.append(",");
+                } else {
+                    astVisitor.sb.append("], ");
+                }
             }
         }
     }
@@ -1028,7 +1078,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     private String createClosingBracket() {
         String end = ")";
         if ( !isInStmt() ) {
-            this.sb.append("var stmt" + this.stmtCount + " = ");
+            this.sb.append("var stmt" + this.stmtsNumber + " = ");
             increaseStmt();
             end = ");\n";
         }

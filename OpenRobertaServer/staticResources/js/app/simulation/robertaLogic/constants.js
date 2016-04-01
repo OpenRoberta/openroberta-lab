@@ -35,6 +35,10 @@ NAME = "name";
 const
 STMT = "stmt";
 const
+PARAMETERS = "parameters";
+const
+FUNCTION_DECLARATION = "functionDeclaration";
+const
 VAR_DECLARATION = "VarDeclaration";
 const
 SINGLE_FUNCTION = "SingleFunction";
@@ -344,6 +348,10 @@ GYRO_SENSOR_RESET = "createResetGyroSensor";
 const
 TIMER_SENSOR_RESET = "createResetTimer";
 const
+METHOD_VOID = "createMethodVoid";
+const
+METHOD_CALL_VOID = "createMethodCallVoid";
+const
 TEXT_JOIN = "createTextJoin";
 const
 WHERE1 = "where1";
@@ -353,6 +361,9 @@ const
 AT1 = "at1";
 const
 AT2 = "at2";
+
+const
+VALUES = "values";
 
 const
 INSERT = "insert";

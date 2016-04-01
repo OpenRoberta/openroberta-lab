@@ -1287,7 +1287,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
         this.sb.append(")");
-        if ( methodCall.getReturnType() == null ) {
+        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
         }
         return null;
