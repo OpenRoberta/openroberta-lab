@@ -124,7 +124,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 values = helper.extractValues(block, (short) 1);
                 exprList = ExprList.make();
 
-                var = Var.make(BlocklyType.NUMERIC_INT, "k" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
+                var = Var.make(BlocklyType.NUMBER_INT, "k" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
                 from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
                 to = helper.extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
                 if ( block.getType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {

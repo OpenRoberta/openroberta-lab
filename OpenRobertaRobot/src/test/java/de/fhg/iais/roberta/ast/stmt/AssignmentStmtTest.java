@@ -13,7 +13,7 @@ public class AssignmentStmtTest {
 
     @Test
     public void make() throws Exception {
-        Var<Void> var = Var.make(BlocklyType.NUMERIC, "item", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        Var<Void> var = Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         AssignStmt<Void> assignStmt =
             AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
@@ -24,7 +24,7 @@ public class AssignmentStmtTest {
 
     @Test
     public void getName() throws Exception {
-        Var<Void> var = Var.make(BlocklyType.NUMERIC, "item", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        Var<Void> var = Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         AssignStmt<Void> assignStmt =
             AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
@@ -34,7 +34,7 @@ public class AssignmentStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        Var<Void> var = Var.make(BlocklyType.NUMERIC, "item", BlocklyBlockProperties.make("1", "1", true, false, false, false, false, true, false), null);
+        Var<Void> var = Var.make(BlocklyType.NUMBER, "item", BlocklyBlockProperties.make("1", "1", true, false, false, false, false, true, false), null);
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", true, false, false, false, false, true, false), null);
         AssignStmt<Void> assignStmt =
             AssignStmt.make(var, numConst, BlocklyBlockProperties.make("1", "1", true, false, false, false, false, true, false), null);

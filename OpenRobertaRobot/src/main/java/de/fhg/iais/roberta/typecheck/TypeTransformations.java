@@ -10,9 +10,9 @@ public class TypeTransformations {
 
     static {
 
-        FUNCTIONS.put("SIN", Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC));
+        FUNCTIONS.put("SIN", Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER));
 
-        CONSTANTS.put("PI", BlocklyType.NUMERIC);
+        CONSTANTS.put("PI", BlocklyType.NUMBER);
     }
 
     /**

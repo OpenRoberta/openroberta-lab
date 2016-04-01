@@ -181,7 +181,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     @Override
     public BlocklyType visitNumConst(NumConst<BlocklyType> numConst) {
         Assert.isTrue(numConst.getKind().equals(BlockType.NUM_CONST));
-        return BlocklyType.NUMERIC;
+        return BlocklyType.NUMBER;
     }
 
     @Override
@@ -196,7 +196,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     @Override
     public BlocklyType visitBoolConst(BoolConst<BlocklyType> boolConst) {
         Assert.isTrue(boolConst.getKind().equals(BlockType.BOOL_CONST));
-        return BlocklyType.BOOL;
+        return BlocklyType.BOOLEAN;
     }
 
     @Override

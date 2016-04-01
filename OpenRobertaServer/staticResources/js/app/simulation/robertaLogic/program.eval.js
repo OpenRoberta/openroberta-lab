@@ -454,10 +454,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             return expr.value;
         case NULL_CONST:
             return null;
-        case NUMERIC_ARRAY:
-        case STRING_ARRAY:
-        case COLOR_ARRAY:
-        case BOOL_ARRAY:
+        case ARRAY_NUMBER:
+        case ARRAY_STRING:
+        case ARRAY_COLOUR:
+        case ARRAY_BOOLEAN:
             return evalArray(obj, expr.value);
         case CREATE_LIST_WITH_ITEM:
             return evalCreateArrayWithItem(obj, expr.size, expr.value);

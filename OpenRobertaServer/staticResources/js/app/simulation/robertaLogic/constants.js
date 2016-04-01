@@ -76,7 +76,7 @@ const
 SET_VOLUME_ACTION = "SetVolumeAction";
 const
 VOLUME = "volume";
-const 
+const
 PLAY_FILE_ACTION = "PlayFileAction";
 const
 FILE = "file";
@@ -155,19 +155,25 @@ BOOL_CONST = "BoolConst";
 const
 STRING_CONST = "StringConst";
 const
+STRING = "STRING";
+const
+BOOLEAN = "BOOLEAN";
+const
+NUMBER = "NUMBER";
+const
 NULL_CONST = "null";
 const
 TERNARY_EXPR = "createTernaryExpr";
 const
 NUMERIC = "Numeric";
 const
-NUMERIC_ARRAY = "NumericArray";
+ARRAY_NUMBER = "Array_Number";
 const
-STRING_ARRAY = "StringArray";
+ARRAY_STRING = "Array_String";
 const
-BOOL_ARRAY = "BoolArray";
+ARRAY_BOOLEAN = "Array_Boolean";
 const
-COLOR_ARRAY = "ColorArray";
+ARRAY_COLOUR = "Array_Colour";
 const
 ADD = "ADD";
 const

@@ -226,11 +226,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
                 return "ArrayList<Pickcolor>";
             case ARRAY_BOOLEAN:
                 return "ArrayList<Boolean>";
-            case BOOL:
+            case BOOLEAN:
                 return "boolean";
-            case NUMERIC:
+            case NUMBER:
                 return "float";
-            case NUMERIC_INT:
+            case NUMBER_INT:
                 return "int";
             case STRING:
                 return "String";

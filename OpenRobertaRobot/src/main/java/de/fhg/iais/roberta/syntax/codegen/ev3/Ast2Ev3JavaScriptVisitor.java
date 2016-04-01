@@ -731,7 +731,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("createCreateListWith(" + listCreate.getTypeVar() + "_ARRAY, [");
+        this.sb.append("createCreateListWith(ARRAY_" + listCreate.getTypeVar() + ", [");
         listCreate.getValue().visit(this);
         this.sb.append("])");
         return null;

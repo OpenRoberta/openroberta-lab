@@ -323,7 +323,7 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return AST object representing variable
      */
     public Phrase<V> extractVar(Block block) {
-        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMERIC;
+        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
         return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));

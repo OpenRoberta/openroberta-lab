@@ -17,13 +17,13 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test() throws Exception {
 
         String a =
-            "var stmt0 = createVarDeclaration(NUMERIC, \"x\", createConstant(NUM_CONST, 1));\n"
-                + "var stmt1 = createVarDeclaration(NUMERIC, \"y\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 1)));\n"
+            "var stmt0 = createVarDeclaration(NUMBER, \"x\", createConstant(NUM_CONST, 1));\n"
+                + "var stmt1 = createVarDeclaration(NUMBER, \"y\", createBinaryExpr(ADD, createVarReference(NUMBER, \"x\"), createConstant(NUM_CONST, 1)));\n"
                 + "var stmt2 = createDriveAction(createConstant(NUM_CONST, 80), FOREWARD, createConstant(NUM_CONST, 39));\n"
-                + "var stmt3 = createRepeatStmt(WHILE, createBinaryExpr(LT, createVarReference(NUMERIC, \"y\"), createConstant(NUM_CONST, 5)), "
-                + "[createAssignStmt(\"x\", createBinaryExpr(MULTIPLY, createVarReference(NUMERIC, \"x\"), createVarReference(NUMERIC, \"x\"))), "
-                + "createAssignStmt(\"y\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"y\"), createConstant(NUM_CONST, 1)))]);\n"
-                + "var stmt4 = createAssignStmt(\"x\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 10)));\n"
+                + "var stmt3 = createRepeatStmt(WHILE, createBinaryExpr(LT, createVarReference(NUMBER, \"y\"), createConstant(NUM_CONST, 5)), "
+                + "[createAssignStmt(\"x\", createBinaryExpr(MULTIPLY, createVarReference(NUMBER, \"x\"), createVarReference(NUMBER, \"x\"))), "
+                + "createAssignStmt(\"y\", createBinaryExpr(ADD, createVarReference(NUMBER, \"y\"), createConstant(NUM_CONST, 1)))]);\n"
+                + "var stmt4 = createAssignStmt(\"x\", createBinaryExpr(ADD, createVarReference(NUMBER, \"x\"), createConstant(NUM_CONST, 10)));\n"
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt6 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC, DISTANCE), createConstant(NUM_CONST, 30))], [])]);\n"
@@ -36,10 +36,10 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test1() throws Exception {
 
         String a =
-            "var stmt0 = createVarDeclaration(NUMERIC, \"x\", createConstant(NUM_CONST, 1));\n"
-                + "var stmt1 = createVarDeclaration(NUMERIC, \"y\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 1)));\n"
+            "var stmt0 = createVarDeclaration(NUMBER, \"x\", createConstant(NUM_CONST, 1));\n"
+                + "var stmt1 = createVarDeclaration(NUMBER, \"y\", createBinaryExpr(ADD, createVarReference(NUMBER, \"x\"), createConstant(NUM_CONST, 1)));\n"
                 + "var stmt2 = createDriveAction(createConstant(NUM_CONST, 80), FOREWARD, createConstant(NUM_CONST, 39));\n"
-                + "var stmt3 = createAssignStmt(\"x\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 10)));\n"
+                + "var stmt3 = createAssignStmt(\"x\", createBinaryExpr(ADD, createVarReference(NUMBER, \"x\"), createConstant(NUM_CONST, 10)));\n"
                 + "var stmt4 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [])]);\n"
                 + "var stmt5 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt6 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT, createConstant(NUM_CONST, 30));\n"
@@ -53,8 +53,8 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test2() throws Exception {
 
         String a =
-            "var stmt0 = createVarDeclaration(NUMERIC, \"x\", createConstant(NUM_CONST, 1));\n"
-                + "var stmt1 = createVarDeclaration(NUMERIC, \"y\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 1)));\n"
+            "var stmt0 = createVarDeclaration(NUMBER, \"x\", createConstant(NUM_CONST, 1));\n"
+                + "var stmt1 = createVarDeclaration(NUMBER, \"y\", createBinaryExpr(ADD, createVarReference(NUMBER, \"x\"), createConstant(NUM_CONST, 1)));\n"
                 + "var stmt2 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt3 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT);\n"
                 + "var stmt4 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20));\n"
@@ -338,7 +338,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test23() throws Exception {
         String a =
-            "var stmt0 = createVarDeclaration(NUMERIC, \"item\", createConstant(NUM_CONST, 0));\n"
+            "var stmt0 = createVarDeclaration(NUMBER, \"item\", createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createVarDeclaration(STRING, \"item2\", createConstant(STRING_CONST, 'cc'));\n"
                 + "var pp = [stmt0,stmt1];";
 
@@ -396,8 +396,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test27() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
-                + "var stmt1 = createShowTextAction(createCreateListWith(STRING_ARRAY, [createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+            "var stmt0 = createShowTextAction(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createCreateListWith(ARRAY_STRING, [createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'v'), createConstant(STRING_CONST, 'b\')]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator27.xml");
@@ -420,8 +420,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test29() throws Exception {
         String a =
-            "var stmt0 = createVarDeclaration(NUMERIC, \"variablenName\", createConstant(NUM_CONST, 0));\n"
-                + "var stmt1 = createMathChange(createVarReference(NUMERIC, \"variablenName\"), createConstant(NUM_CONST, 1));\n"
+            "var stmt0 = createVarDeclaration(NUMBER, \"variablenName\", createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createMathChange(createVarReference(NUMBER, \"variablenName\"), createConstant(NUM_CONST, 1));\n"
                 + "var pp = [stmt0,stmt1];";
 
         assertCodeIsOk(a, "/ast/math/math_change.xml");
@@ -437,7 +437,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListLength() throws Exception {
         String a =
-            "createListLength(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0.1), createConstant(NUM_CONST, 0.0), createConstant(NUM_CONST, 0)]))"
+            "createListLength(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0.1), createConstant(NUM_CONST, 0.0), createConstant(NUM_CONST, 0)]))"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_length.xml");
     }
@@ -445,7 +445,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListIsEmpty() throws Exception {
         String a =
-            "createListIsEmpty(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]))"
+            "createListIsEmpty(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)]))"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
     }
@@ -453,7 +453,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListFindElementFirst() throws Exception {
         String a =
-            "createListFindItem(FIRST, createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
+            "createListFindItem(FIRST, createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_occurrence.xml");
     }
@@ -461,7 +461,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListFindElementLast() throws Exception {
         String a =
-            "createListFindItem(LAST, createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
+            "createListFindItem(LAST, createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 5), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 2)]), createConstant(NUM_CONST, 2))"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_occurrence1.xml");
     }
@@ -469,7 +469,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListsIndexGetFromStart() throws Exception {
         String a =
-            "createListsGetIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET, FROM_START, createConstant(NUM_CONST, 1))"
+            "createListsGetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET, FROM_START, createConstant(NUM_CONST, 1))"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index.xml");
     }
@@ -477,7 +477,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListsIndexRemoveFromStart() throws Exception {
         String a =
-            "var stmt0 = createListsGetIndexStmt(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), REMOVE, FROM_START, createConstant(NUM_CONST, 1));\n"
+            "var stmt0 = createListsGetIndexStmt(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), REMOVE, FROM_START, createConstant(NUM_CONST, 1));\n"
                 + "var pp = [stmt0];";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index1.xml");
     }
@@ -485,7 +485,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListsIndexGetRemoveLast() throws Exception {
         String a =
-            "createListsGetIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET_REMOVE, LAST)"
+            "createListsGetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), GET_REMOVE, LAST)"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index2.xml");
     }
@@ -493,7 +493,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListsSetFromStart() throws Exception {
         String a =
-            "var stmt0 = createListsSetIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), SET, createConstant(NUM_CONST, 99), FROM_START, createConstant(NUM_CONST, 1));\n"
+            "var stmt0 = createListsSetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), SET, createConstant(NUM_CONST, 99), FROM_START, createConstant(NUM_CONST, 1));\n"
                 + "var pp = [stmt0];";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index.xml");
     }
@@ -501,7 +501,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListsInsertFromStart() throws Exception {
         String a =
-            "var stmt0 = createListsSetIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), INSERT, createConstant(NUM_CONST, 99), FROM_START, createConstant(NUM_CONST, 1));\n"
+            "var stmt0 = createListsSetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), INSERT, createConstant(NUM_CONST, 99), FROM_START, createConstant(NUM_CONST, 1));\n"
                 + "var pp = [stmt0];";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index1.xml");
     }
@@ -509,7 +509,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createListsInsertRandom() throws Exception {
         String a =
-            "var stmt0 = createListsSetIndex(createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), INSERT, createConstant(NUM_CONST, 99), RANDOM);\n"
+            "var stmt0 = createListsSetIndex(createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 55), createConstant(NUM_CONST, 66), createConstant(NUM_CONST, 11)]), INSERT, createConstant(NUM_CONST, 99), RANDOM);\n"
                 + "var pp = [stmt0];";
         assertCodeIsOk(a, "/syntax/lists/lists_set_index2.xml");
     }
@@ -517,7 +517,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createGetSubListFromStartAndFromEnd() throws Exception {
         String a =
-            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
+            "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list.xml");
     }
@@ -525,7 +525,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createGetSubListFirstAndFromEnd() throws Exception {
         String a =
-            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
+            "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: FROM_END, at2: createConstant(NUM_CONST, 1)})"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list1.xml");
     }
@@ -533,7 +533,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createGetSubListFromStartAndLast() throws Exception {
         String a =
-            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: LAST})"
+            "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FROM_START, at1: createConstant(NUM_CONST, 1), where2: LAST})"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list2.xml");
     }
@@ -541,7 +541,7 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createGetSubListFirstAndLast() throws Exception {
         String a =
-            "createGetSubList({list: createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: LAST})"
+            "createGetSubList({list: createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 11), createConstant(NUM_CONST, 22), createConstant(NUM_CONST, 33), createConstant(NUM_CONST, 44)]), where1: FIRST, where2: LAST})"
                 + "var pp = [";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list3.xml");
     }
@@ -591,9 +591,9 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createRepeatStmt("
                 + "FOR_EACH, "
-                + "createBinaryExpr(IN, createVarDeclaration(NUMERIC, \"item\", createConstant(NUM_CONST, 0)), "
-                + "createCreateListWith(NUMERIC_ARRAY, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)])), "
-                + "[createShowTextAction(createVarReference(NUMERIC, \"item\"), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))]);\n"
+                + "createBinaryExpr(IN, createVarDeclaration(NUMBER, \"item\", createConstant(NUM_CONST, 0)), "
+                + "createCreateListWith(ARRAY_NUMBER, [createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0)])), "
+                + "[createShowTextAction(createVarReference(NUMBER, \"item\"), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))]);\n"
                 + "var pp = [stmt0];";
         assertCodeIsOk(a, "/ast/control/repeat_stmt_for_each3.xml");
     }
@@ -603,7 +603,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createRepeatStmt("
                 + "FOR, ["
-                + "createVarReference(NUMERIC, \"i\"), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 1)], "
+                + "createVarReference(NUMBER, \"i\"), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 1)], "
                 + "[createBinaryExpr(TEXT_APPEND, createVarReference(STRING, \"item\"), createConstant(STRING_CONST, 'kllk'))]);\n"
                 + "var pp = [stmt0];";
         assertCodeIsOk(a, "/ast/control/repeat_stmt_for.xml");
