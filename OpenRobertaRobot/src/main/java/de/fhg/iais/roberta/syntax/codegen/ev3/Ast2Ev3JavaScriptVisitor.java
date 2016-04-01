@@ -478,14 +478,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        String end = createClosingBracket();
         if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
+            String end = createClosingBracket();
             this.sb.append("createSetVolumeAction(" + volumeAction.getMode() + ", ");
             volumeAction.getVolume().visit(this);
             this.sb.append(end);
         } else {
-            this.sb.append("createGetVolume(");
-            this.sb.append(end);
+            this.sb.append("createGetVolume()");
         }
         return null;
     }

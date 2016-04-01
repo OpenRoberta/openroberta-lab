@@ -56,7 +56,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 break;
 
             case VAR_DECLARATION:
-                evalValDeclaration(internal(this), stmt);
+                evalVarDeclaration(internal(this), stmt);
                 break;
 
             case MATH_CHANGE:
@@ -532,7 +532,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             throw "Invalid Encoder Mode!";
         }
     };
-    
+
     var evalGetVolume = function(obj) {
         return obj.simulationData[VOLUME];
     };
