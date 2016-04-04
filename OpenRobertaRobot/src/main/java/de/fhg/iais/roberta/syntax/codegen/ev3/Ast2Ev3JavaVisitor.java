@@ -170,7 +170,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         boolean debugging = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, debugging, phrase);
+                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                if ( mainBlock && phrase.getKind() == BlockType.MAIN_TASK ) {
+                    debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
+                }
                 phrase.visit(astVisitor);
             }
             if ( mainBlock ) {
@@ -186,12 +189,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         generateSuffix(withWrapping, astVisitor);
     }
 
-    private static boolean handleMainBlocks(Ast2Ev3JavaVisitor astVisitor, boolean mainBlock, boolean debugging, Phrase<Void> phrase) {
+    private static boolean handleMainBlocks(Ast2Ev3JavaVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
         } else if ( phrase.getKind() != BlockType.LOCATION ) {
             mainBlock = true;
-            debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
         }
         return mainBlock;
     }
@@ -1482,6 +1484,24 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         if ( !withWrapping ) {
             return;
         }
+        generateImports();
+
+        this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append(INDENT).append("private static Ev3Configuration brickConfiguration;").append("\n\n");
+        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
+
+        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
+        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("}\n");
+    }
+
+    private void generateImports() {
         this.sb.append("package generated.main;\n\n");
         this.sb.append("import de.fhg.iais.roberta.runtime.*;\n");
         this.sb.append("import de.fhg.iais.roberta.runtime.ev3.*;\n\n");
@@ -1500,30 +1520,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("import java.util.Arrays;\n\n");
 
         this.sb.append("import lejos.remote.nxt.NXTConnection;\n\n");
-
-        this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append(INDENT).append("private static Ev3Configuration brickConfiguration;").append("\n\n");
-        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
-
-        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
-        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error in the EV3\", 0, 0);\n");
-
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("if (e.getMessage() != null) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error message:\", 0, 2);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("Hal.formatInfoMessage(e.getMessage(), lcd);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("}\n");
-
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n");
     }
 
     /**

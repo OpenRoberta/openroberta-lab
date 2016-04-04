@@ -58,15 +58,7 @@ public class AstToLejosJavaVisitorTest {
         + BRICK_CONFIGURATION
         + "            new Test().run();\n"
         + "        } catch ( Exception e ) {\n"
-        + "            lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n"
-        + "            lcd.clear();\n"
-        + "            lcd.drawString(\"Error in the EV3\", 0, 0);\n"
-        + "            if (e.getMessage() != null) {\n"
-        + "                lcd.drawString(\"Error message:\", 0, 2);\n"
-        + "                Hal.formatInfoMessage(e.getMessage(), lcd);\n"
-        + "            }\n"
-        + "            lcd.drawString(\"Press any key\", 0, 7);\n"
-        + "            lejos.hardware.Button.waitForAnyPress();\n"
+        + "            Hal.displayExceptionWaitForKeyPress(e);\n"
         + "        }\n"
         + "    }\n\n";
     private static final String SUFFIX = "";

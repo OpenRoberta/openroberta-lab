@@ -497,6 +497,18 @@ public class Hal {
     //        }
     //    }
 
+    public static void displayExceptionWaitForKeyPress(Exception e) {
+        lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();
+        lcd.clear();
+        lcd.drawString("Error in the EV3", 0, 0);
+        if ( e.getMessage() != null ) {
+            lcd.drawString("Error message:", 0, 2);
+            Hal.formatInfoMessage(e.getMessage(), lcd);
+        }
+        lcd.drawString("Press any key", 0, 7);
+        lejos.hardware.Button.waitForAnyPress();
+    }
+
     /**
      * Print formatted message on the robot display.
      *
