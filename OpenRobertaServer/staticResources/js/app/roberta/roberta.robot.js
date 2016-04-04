@@ -45,7 +45,7 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
             $('#singleModalInput').addClass('capitalLetters');
         }, function() {
-            setToken($('#singleModalInput').val());
+            setToken($('#singleModalInput').val().toUpperCase());
         }, function() {
             $('#singleModalInput').removeClass('capitalLetters');
         }, {

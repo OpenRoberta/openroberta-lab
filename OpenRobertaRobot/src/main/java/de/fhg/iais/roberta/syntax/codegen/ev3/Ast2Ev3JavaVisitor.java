@@ -509,8 +509,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             case UNTIL:
             case WHILE:
             case FOREVER:
-                this.sb.append("boolean TRUE = true;");
-                nlIndent();
                 this.sb.append("if ( TRUE ) {");
                 incrIndentation();
                 nlIndent();
@@ -1487,6 +1485,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         generateImports();
 
         this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
         this.sb.append(INDENT).append("private static Ev3Configuration brickConfiguration;").append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 

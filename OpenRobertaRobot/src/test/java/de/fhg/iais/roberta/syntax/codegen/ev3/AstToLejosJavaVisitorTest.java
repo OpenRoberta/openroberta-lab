@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class AstToLejosJavaVisitorTest {
 
     private static final String MAIN_CLASS = "" //
-        + "public class Test {\n";
-    //        + "private static final boolean TRUE = true;";
+        + "public class Test {\n"
+        + "private static final boolean TRUE = true;";
 
     private static final String IMPORTS = "" //
         + "package generated.main;\n\n"
@@ -51,16 +51,17 @@ public class AstToLejosJavaVisitorTest {
 
     private static final String USED_SENSORS_DECL = "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();\n";
 
-    private static final String MAIN_METHOD = "" //
-        + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n"
-        + "    public static void main(String[] args) {\n"
-        + "        try {\n"
-        + BRICK_CONFIGURATION
-        + "            new Test().run();\n"
-        + "        } catch ( Exception e ) {\n"
-        + "            Hal.displayExceptionWaitForKeyPress(e);\n"
-        + "        }\n"
-        + "    }\n\n";
+    private static final String MAIN_METHOD =
+        ""
+            + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n"
+            + "    public static void main(String[] args) {\n"
+            + "        try {\n"
+            + BRICK_CONFIGURATION
+            + "            new Test().run();\n"
+            + "        } catch ( Exception e ) {\n"
+            + "            Hal.displayExceptionWaitForKeyPress(e);\n"
+            + "        }\n"
+            + "    }\n\n";
     private static final String SUFFIX = "";
     private static Ev3Configuration brickConfiguration;
 
@@ -126,7 +127,6 @@ public class AstToLejosJavaVisitorTest {
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "        } else if ( Pickcolor.RED == hal.getColorSensorColour(SensorPort.S3) ) {\n"
-            + "        booleanTRUE=true;"
             + "        if ( TRUE ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(ShowPicture.EYESOPEN, 0, 0);\n\n"
@@ -164,7 +164,6 @@ public class AstToLejosJavaVisitorTest {
             + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
             + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
             + "            } else {\n"
-            + "            booleanTRUE=true;"
             + "            if ( TRUE ) {\n"
             + "                while ( !hal.isPressed(BrickKey.UP) ) {\n\n"
             + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
@@ -199,7 +198,6 @@ public class AstToLejosJavaVisitorTest {
             + "            hal.ledOff();\n"
             + "        } else {\n"
             + "            hal.resetGyroSensor(SensorPort.S2);\n"
-            + "        booleanTRUE=true;"
             + "        if ( TRUE ) {\n"
             + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
             + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
