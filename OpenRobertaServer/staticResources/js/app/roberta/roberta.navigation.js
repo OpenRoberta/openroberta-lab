@@ -489,11 +489,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                             domain : ''
                         });
                         // check if it is really stored: chrome issue
-                        if (!$.cookie("OpenRoberta_hideStartUp"))
+                        if (!$.cookie("OpenRoberta_hideStartUp")) {
                             $.cookie("OpenRoberta_hideStartUp", true, {
                                 expires : 99,
                                 domain : ''
                             });
+                        }
                     } else {
                         $.removeCookie("OpenRoberta_hideStartUp");
                     }
