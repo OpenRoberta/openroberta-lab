@@ -17,7 +17,7 @@ html, body {
 	font-family: 'Roboto', sans-serif;
 }
 
-body>:not (.pace ), body:before, body:after {
+body:not(.pace ), body:before, body:after {
 	-webkit-transition: opacity .4s ease-in-out;
 	-moz-transition: opacity .4s ease-in-out;
 	-o-transition: opacity .4s ease-in-out;
@@ -25,8 +25,8 @@ body>:not (.pace ), body:before, body:after {
 	transition: opacity .4s ease-in-out;
 }
 
-body:not (.pace-done ) >:not (.pace ), body:not (.pace-done ):before,
-	body:not (.pace-done ):after {
+body:not(.pace-done ) :not(.pace ), body:not(.pace-done ):before,
+	body:not(.pace-done):after {
 	opacity: 0;
 }
 
@@ -248,7 +248,7 @@ body.blocklyMinimalBody  * {
 #simDiv.simActive {
 	height: 100%;
 	overflow: hidden;
-	background: "#ffffff";
+	background-color: #fff;
 	visibility: visible;
 	position: relative;
 }
@@ -256,7 +256,7 @@ body.blocklyMinimalBody  * {
 #codeDiv.codeActive {
 	height: 100%;
 	overflow: hidden;
-	background: "#ffffff";
+	background-color: #fff;
 	visibility: visible;
 	position: relative;
 }
@@ -292,27 +292,20 @@ body.blocklyMinimalBody  * {
 	color: #bbb;
 }
 
-@
--webkit-keyframes blinker {from { color:#afca04;
-	
-}
-
-to {
+@-webkit-keyframes blinker { 
+	from { color:#afca04;	
+    } to {
 	color: #e2001a;
+    }
 }
 
-}
-}
-@
-keyframes  blinker {from { color:#afca04;
-	
-}
-
-to {
+@keyframes  blinker {
+	from { color:#afca04;
+    } to {
 	color: #e2001a;
+    }
 }
 
-}
 .busy {
 	-webkit-animation-name: blinker;
 	-webkit-animation-iteration-count: infinite;
@@ -337,8 +330,8 @@ to {
 
 #simButtons, #codeButtons {
 	width: 160px;
-	left: 12;
-	bottom: 12;
+	left: 12px;
+	bottom: 12px;
 	position: absolute;
 	z-index: 99;
 }
@@ -515,18 +508,16 @@ to {
 	background: #ddd;
 }
 
-#startup-left-column, #startup-right-column {
-	float: left;
-	width: 50%;
+.connector {
+    margin-top: 19px;
+    position: absolute;
+    right: 5%;
+    z-index: 900;
+    fill:#BACC1E;
 }
-
-#startup-right-column {
-	padding: 10px 0 10px 4%;
-}
-
-#startup-left-column {
-	padding: 10px 4% 10px 0;
-}
+.border-dotted {	
+    border-right: 1px dashed #afca04;
+ }
 
 .popup-checkbox {
 	color: #bbb;
@@ -613,20 +604,13 @@ to {
 	margin-bottom: 12px;
 }
 
-.left-inner-addon {
-	position: relative;
-}
-
-.left-inner-addon i {
-	color: #bbb;
-	position: absolute;
-	padding: 2px 6px;
-	font-size: 20px;
+.with-devider {
+	margin-top: 10px;
 }
 
 .btn:hover, .btn:active:focus, .btn:focus, .btn.focus, .btn:active, .btn.active,
 	.open>.dropdown-toggle.btn {
-	background-color: #b7d032;
+	background-color: #C7D92B;
 	color: #fff;
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -637,7 +621,7 @@ to {
 .btn {
 	margin-right: 16px;
 	margin-left: 0;
-	background-color: #afca04;
+	background-color: #BACC1E;
 	color: #fff;
 	font-size: 16px;
 	border: none;
@@ -669,7 +653,7 @@ to {
 }
 
 .blbtn:hover {
-	background-color: #b7d032;
+	background-color: #C7D92B;
 }
 
 .modal-footer .btn+.btn {
@@ -949,6 +933,11 @@ table.dataTable thead .sorting_desc {
 	.modal.simRobotModal {
 		left: 6px;
 		top: 60px;
+	}
+}
+@media only screen and (max-width: 992px) {
+	.border-dotted {
+	    border-right: 0;
 	}
 }
 
