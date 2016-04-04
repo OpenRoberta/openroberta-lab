@@ -13,6 +13,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
         var privateProperties = {
             methods : new Map(),
             program : [],
+            currentMethod : [],
             nextStatement : true,
             nextFrameTimeDuration : 0,
             wait : false,

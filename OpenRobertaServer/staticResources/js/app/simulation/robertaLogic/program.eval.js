@@ -269,7 +269,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         obj.outputCommands.tone = {};
         obj.outputCommands.tone.frequency = evalExpr(obj, stmt.frequency);
         obj.outputCommands.tone.duration = evalExpr(obj, stmt.duration);
-    }
+    };
 
     var evalPlayFileAction = function(obj, simulationData, stmt) {
         obj.program.setIsRunningTimer(true);
@@ -295,11 +295,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         obj.program.setTimer(duration);
         obj.outputCommands.tone = {};
         obj.outputCommands.tone.file = stmt.file;
-    }
+    };
 
     var evalVolumeAction = function(obj, stmt) {
         obj.outputCommands.volume = evalExpr(obj, stmt.volume);
-    }
+    };
 
     var evalMethodCallVoid = function(obj, stmt) {
         var methodName = stmt.name;
@@ -314,7 +314,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             }
         }
         obj.program.prepend(method.stmtList);
-    }
+    };
+
+    var evalMethodCallReturn = function(obj, name, paramters, values) {
+//        var method = obj.program.getMethod(name);
+//        for (var i = 0; i < parameters.length; i++) {
+//            var parameter = parameters[i];
+//            var value = values[i]
+//            if (obj.memory.get(parameter.name) == undefined) {
+//                obj.memory.decl(parameter.name, evalExpr(obj, value))
+//            } else {
+//                obj.memory.assign(parameter.name, evalExpr(obj, value));
+//            }
+//        }
+    };
 
     var evalTurnAction = function(obj, stmt) {
         obj.actors.initTachoMotors(obj.simulationData.encoder.left, obj.simulationData.encoder.right);
@@ -522,6 +535,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             break;
         case GET_VOLUME:
             return evalGetVolume(obj);
+        case METHOD_CALL_RETURN:
+            return evalMethodCallReturn(obj, expr.name, expr.parameters, expr.values);
         default:
             throw "Invalid Expression Type!";
         }

@@ -868,6 +868,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        this.sb.append("var method" + this.methodsNumber + " = createMethodReturn('" + methodReturn.getMethodName() + "', [");
+        addInStmt();
+        methodReturn.getBody().visit(this);
+        this.sb.append("], ");
+        methodReturn.getReturnValue().visit(this);
+        this.sb.append(");\n");
+        increaseMethods();
         return null;
     }
 
@@ -890,10 +897,12 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         String end = ")";
+        String name = "createMethodCallReturn('";
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
+            name = "createMethodCallVoid('";
             end = createClosingBracket();
         }
-        this.sb.append("createMethodCallVoid('" + methodCall.getMethodName() + "', [");
+        this.sb.append(name + methodCall.getMethodName() + "', [");
         methodCall.getParameters().visit(this);
         this.sb.append("], [");
         methodCall.getParametersValues().visit(this);

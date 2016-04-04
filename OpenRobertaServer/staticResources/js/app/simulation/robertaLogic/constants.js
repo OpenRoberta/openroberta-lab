@@ -350,7 +350,11 @@ TIMER_SENSOR_RESET = "createResetTimer";
 const
 METHOD_VOID = "createMethodVoid";
 const
+METHOD_RETURN = "createMethodReturn";
+const
 METHOD_CALL_VOID = "createMethodCallVoid";
+const
+METHOD_CALL_RETURN = "createMethodCallReturn";
 const
 TEXT_JOIN = "createTextJoin";
 const
@@ -361,6 +365,8 @@ const
 AT1 = "at1";
 const
 AT2 = "at2";
+const
+RETURN = "return";
 
 const
 VALUES = "values";

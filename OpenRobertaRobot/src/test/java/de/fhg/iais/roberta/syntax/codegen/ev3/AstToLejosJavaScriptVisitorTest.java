@@ -612,7 +612,7 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
-    public void createMethodVoid_two_parameters() throws Exception {
+    public void createMethodVoidTwoParameters() throws Exception {
         String a =
             "var stmt0 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
                 + "var stmt1 = createMethodCallVoid('macheEtwas', [createVarReference(NUMBER, \"x\"), createVarReference(NUMBER, \"x2\")], [createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 10)]);\n"
@@ -622,7 +622,7 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
-    public void createMethodVoid_no_parameters() throws Exception {
+    public void createMethodVoidNoParameters() throws Exception {
         String a =
             "var stmt0 = createMethodCallVoid('test', [], []);\n"
                 + "var method0 = createMethodVoid('test', [], [createTurnLight(GREEN, ON)]);\n"
@@ -631,7 +631,7 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
-    public void createMethodVoid_multiple_methods() throws Exception {
+    public void createMethodVoidMultipleMethods() throws Exception {
         String a =
             "var stmt0 = createVarDeclaration(NUMBER, \"variablenName\", createConstant(NUM_CONST, 0));\n"
                 + "var stmt1 = createVarDeclaration(BOOLEAN, \"variablenName2\", createConstant(BOOL_CONST, true));\n"
@@ -641,6 +641,28 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var method1 = createMethodVoid('test2', [], [createIfReturn(createVarReference(BOOLEAN, \"variablenName2\"), createConstant(NULL_CONST, null)), createTurnLight(GREEN, ON)]);\n"
                 + "var blocklyProgram = {'programMethods': [method0,method1], 'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
         assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
+    }
+
+    @Test
+    public void createMethodReturnNumber() throws Exception {
+        String a =
+            "var stmt0 = createVarDeclaration(ARRAY_STRING, \"variablenName\", createCreateListWith(ARRAY_STRING, [createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'b'), createConstant(STRING_CONST, 'c')]));\n"
+                + "var stmt1 = createShowTextAction(createMethodCallReturn('test', [createVarReference(NUMBER, \"x\"), createVarReference(ARRAY_STRING, \"x2\")], [createConstant(NUM_CONST, 0), createVarReference(ARRAY_STRING, \"variablenName\")]), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var method0 = createMethodReturn('test', [createShowTextAction(createVarReference(ARRAY_STRING, \"x2\"), createVarReference(NUMBER, \"x\"), createConstant(NUM_CONST, 0))], createVarReference(NUMBER, \"x\"));\n"
+
+                + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
+        assertCodeIsOk(a, "/syntax/methods/method_return_1.xml");
+    }
+
+    @Test
+    public void createMethodReturnColor() throws Exception {
+        String a =
+            "var stmt0 = createVarDeclaration(ARRAY_STRING, \"variablenName\", createCreateListWith(ARRAY_STRING, [createConstant(STRING_CONST, 'a'), createConstant(STRING_CONST, 'b'), createConstant(STRING_CONST, 'c')]));\n"
+                + "var stmt1 = createShowTextAction(createMethodCallReturn('test', [], []), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0));\n"
+                + "var method0 = createMethodReturn('test', [createShowTextAction(createVarReference(ARRAY_STRING, \"variablenName\"), createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))], createConstant(COLOR_CONST, COLOR_ENUM.NONE));\n"
+
+                + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
+        assertCodeIsOk(a, "/syntax/methods/method_return_2.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

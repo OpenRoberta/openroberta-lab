@@ -434,9 +434,27 @@ function createMethodVoid(methodName, parameters, stmts) {
     return result;
 }
 
+function createMethodReturn(methodName, stmts, return_) {
+    var result = {};
+    result[FUNCTION_DECLARATION] = METHOD_RETURN;
+    result[NAME] = methodName;
+    result[STMT_LIST] = stmts;
+    result[RETURN] = return_;
+    return result;
+}
+
 function createMethodCallVoid(methodName, parameters, values) {
     var result = {};
     result[STMT] = METHOD_CALL_VOID;
+    result[NAME] = methodName;
+    result[PARAMETERS] = parameters;
+    result[VALUES] = values;
+    return result;
+}
+
+function createMethodCallReturn(methodName, parameters, values) {
+    var result = {};
+    result[EXPR] = METHOD_CALL_RETURN;
     result[NAME] = methodName;
     result[PARAMETERS] = parameters;
     result[VALUES] = values;
