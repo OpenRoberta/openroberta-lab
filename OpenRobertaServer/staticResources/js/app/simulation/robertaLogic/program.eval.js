@@ -540,17 +540,17 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
     };
 
     var evalEncoderSensor = function(obj, motorSide, sensorMode) {
-        var motor = obj.actors.getRightMotor();
+        var value = obj.simulationData.encoder.right / 360.0;
         if (motorSide == MOTOR_LEFT) {
-            motor = obj.actors.getLeftMotor()
+            value = obj.simulationData.encoder.left / 360.0;
         }
         switch (sensorMode) {
         case ROTATION:
-            return motor.getCurrentRotations();
+            return value;
         case DEGREE:
-            return motor.getCurrentRotations() * 360.;
+            return value * 360.;
         case DISTANCE:
-            return motor.getCurrentRotations() * (WHEEL_DIAMETER * 3.14);
+            return value * (WHEEL_DIAMETER * 3.14);
         default:
             throw "Invalid Encoder Mode!";
         }
