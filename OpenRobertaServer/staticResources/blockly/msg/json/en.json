@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-03-27 21:38:05.478655",
+		"lastupdated": "2016-04-04 10:40:56.618579",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -681,6 +681,7 @@
 	"POPUP_REPEAT_PASSWORD": "Repeat password",
 	"POPUP_CHANGE_PASSWORD": "change password ...",
 	"POPUP_STARTUP_TITLE": "Welcome",
+	"POPUP_CONTINUE": "continue anyway",
 	"BUTTON_FINISH": "Finish",
 	"BUTTON_LOAD": "Load",
 	"BUTTON_DO_DELETE": "Delete",
@@ -745,6 +746,7 @@
 	"ORA_PROGRAM_GET_ALL_SUCCESS": "Programs loaded",
 	"ORA_PROGRAM_DELETE_SUCCESS": "Program deeleted",
 	"ORA_PROGRAM_DELETE_ERROR": "An error error has occurred while deleding the configuration. Please try it again!",
+	"ORA_PROGRAM_IMPORT_ERROR": "This program is not a valid NEPO program and cannot be uploaded!",
 	"ORA_USER_GET_ONE_SUCCESS": "Login successfull",
 	"ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG": "An error occurred while logging in.",
 	"ORA_USER_CREATE_SUCCESS": "The user was successfully created",

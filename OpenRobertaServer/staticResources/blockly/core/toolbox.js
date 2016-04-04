@@ -191,9 +191,8 @@ Blockly.Toolbox.prototype.position = function() {
     goog.dom.classlist.add(treeDiv, 'scroll');
   };
   // check if workspace is small (small device / simulation active)
-  var blocklyWorkspace = goog.dom.getElementByClass("blocklyWorkspace");
-  var blocklyWorkspaceWidth = blocklyWorkspace.parentElement.clientWidth ||
-                      blocklyWorkspace.parentElement.parentNode.clientWidth;
+  var blocklyWorkspaceWidth = this.HtmlDiv.parentElement.clientWidth ||
+                       this.HtmlDiv.parentElement.parentNode.clientWidth;
   if (blocklyWorkspaceWidth > 767 || blocklyWorkspaceWidth > 767) {
     goog.dom.classlist.remove(treeDiv, 'small'); 
   } else {
@@ -306,7 +305,8 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree, opt_sub) {
         var border = '8px solid ' + (child.hexColour || '#ddd'); 
       } else if (this.hasSvg_ && element.className === "blocklyTreeRow") {        
         if (opt_sub) {
-          child.hexColour = currentColour;  
+          child.hexColour = currentColour; 
+          child.getLabelElement().className += " blocklyTreeSub";
         } 
         var iconClassName = Blockly.CAT_ICON[child.name];
         child.setIconClass('toolboxIcon typcn typcn-' + iconClassName);
@@ -442,7 +442,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
       toolbox.lastCategory_.getRowElement().style.backgroundColor = '';
     } else {
       var html = toolbox.lastCategory_.getAfterLabelHtml().replace('blocklyConSelected', 'blocklyCon');
-      toolbox.lastCategory_.setAfterLabelHtml(html);
+      toolbox.lastCategory_.setAfterLabelSafeHtml(goog.html.SafeHtml.from(html));
     }
   }
   if (node) {

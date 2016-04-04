@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks', 'roberta.brick-configuration'], function(require, exports, LOG, UTIL, COMM, MSG, userState,
-        Blockly, ROBERTA_BRICK_CONFIGURATION) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks', 'roberta.brick-configuration' ], function(require, exports,
+        LOG, UTIL, COMM, MSG, userState, Blockly, ROBERTA_BRICK_CONFIGURATION) {
 
     var bricklyWorkspace;
 
@@ -28,28 +28,37 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
                 trashcan : true,
                 scrollbars : true,
                 zoom : {
-                     controls : true,
-                     wheel : true,
-                     startScale : 1.0,
-                     maxScale : 4,
-                     minScale : .25,
-                     scaleSpeed : 1.1
-                     },
+                    controls : true,
+                    wheel : true,
+                    startScale : 1.0,
+                    maxScale : 4,
+                    minScale : .25,
+                    scaleSpeed : 1.1
+                },
                 checkInTask : [ '-Brick' ],
                 variableDeclaration : true,
                 robControls : true
             });
             bricklyWorkspace.addChangeListener(function(event) {
-                console.log("changedBrickly");
+                if (userState.configurationSaved == 'new') {
+                    userState.configurationSaved = true;
+                } else {
+                    if (userState.id !== -1 && userState.configuration !== 'EV3basis') {
+                        bricklyWorkspace.robControls.enable('saveProgram');
+                        $('#menuSaveConfig').parent().removeClass('disabled');
+                    }
+                    userState.configurationSaved = false;
+                }
             });
             // Configurations can't be executed
             bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
             bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
-            
+
             Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
                 LOG.info('saveProgram from blockly button');
                 ROBERTA_BRICK_CONFIGURATION.save();
             });
+            bricklyWorkspace.robControls.disable('saveProgram');
             initConfigurationEnvironment();
         } else {
             MSG.displayInformation(toolbox, "", toolbox.message, "");
@@ -68,15 +77,31 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
             if (opt_configuration.rc === 'ok') {
                 if (bricklyWorkspace) {
                     bricklyWorkspace.clear();
+                    if ($(window).width() < 768) {
+                        x = $(window).width() / 50;
+                        y = 25;
+                    } else {
+                        x = $(window).width() / 5;
+                        y = 50;
+                    }
                     var xml = Blockly.Xml.textToDom(opt_configuration.data);
                     Blockly.Xml.domToWorkspace(bricklyWorkspace, xml);
+                    var block = bricklyWorkspace.getBlockById(2);
+                    if (block) {
+                        block.moveBy(x, y);
+                    }
+                    $('#menuSaveConfig').parent().addClass('disabled');
+                    bricklyWorkspace.robControls.disable('saveProgram');
+                    userState.configurationSaved = 'new';
                 }
                 userState.bricklyReady = true;
+                Blockly.svgResize(bricklyWorkspace);
             } else {
                 MSG.displayInformation(configuration, "", configuration.message, "");
             }
         }
     }
+    exports.initConfigurationEnvironment = initConfigurationEnvironment;
 
     /**
      * Show configuration
@@ -93,8 +118,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
         }
         Blockly.Xml.domToWorkspace(bricklyWorkspace, xml);
     }
-
     exports.showConfiguration = showConfiguration;
+
     /**
      * Show toolbox
      * 
@@ -159,20 +184,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
     }
 
     exports.loadToolbox = loadToolbox;
-
-    function saveToServer() {
-        ROBERTA_BRICK-CONFIGURATION.saveConfigurationToServer();
-    }
-
-    /**
-     * Set modification state.
-     * 
-     * @param {Boolean}
-     *            modified or not.
-     */
-    function setWorkspaceModified(modified) {
-        userState.configurationModified = modified;
-    }
 
     function getBricklyWorkspace() {
         return bricklyWorkspace;

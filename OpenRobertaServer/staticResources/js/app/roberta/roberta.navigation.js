@@ -32,14 +32,16 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
              * Switch to Blockly tab
              */
             function switchToBlockly() {
-                workspace = ROBERTA_PROGRAM.getBlocklyWorkspace();
-
+                Blockly.hideChaff();
+                var workspace = ROBERTA_PROGRAM.getBlocklyWorkspace();
+                workspace.markFocused();
                 $('#brickly').css('display', 'none');
                 $('#simConfiguration').css('display', 'none');
                 $('#tabBlockly').click();
-                Blockly.svgResize(workspace);
                 workspace.setVisible(true);
+                Blockly.svgResize(workspace);
                 bricklyActive = false;
+                $(window).resize();
             }
             exports.switchToBlockly = switchToBlockly;
 
@@ -47,11 +49,16 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
              * Switch to Brickly tab
              */
             function switchToBrickly() {
-                $('#brickly').css('display', 'inline');
-                BRICKLY.getBricklyWorkspace().render();
-                BRICKLY.loadToolbox();
+                Blockly.hideChaff();
                 $('#tabBrickly').click();
+                var workspace = BRICKLY.getBricklyWorkspace();
+                workspace.render();
+                workspace.markFocused();
+                $('#brickly').css('display', 'inline');
+                workspace.setVisible(true);
+                Blockly.svgResize(workspace);
                 bricklyActive = true;
+                $(window).resize();
             }
             exports.switchToBrickly = switchToBrickly;
 
@@ -73,12 +80,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 $('#head-navigation-program-edit > ul > li').removeClass('disabled');
                 $('#head-navigation-configuration-edit > ul > li').removeClass('disabled');
                 setHeadNavigationMenuState(userState.id === -1 ? 'logout' : 'login');
-                if (userState.programSaved) {
+                if (!userState.programSaved && userState.id === -1 && userState.program !== 'NEPOprog') {
                     $('#menuSaveProg').parent().removeClass('login');
                     $('#menuSaveProg').parent().removeClass('disabled');
                     ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('saveProgram');
                 }
-                if (userState.configurationSaved) {
+                if (!userState.configurationSaved && userState.id === -1 && userState.configuration != 'EV3basis') {
                     $('#menuSaveConfig').parent().removeClass('login');
                     $('#menuSaveConfig').parent().removeClass('disabled');
                     BRICKLY.getBricklyWorkspace().robControls.enable('saveProgram');
@@ -131,13 +138,31 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
              * Initialize the navigation bar in the head of the page
              */
             function initHeadNavigation() {
-                $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
-                    $('.modal').modal('hide'); // close all opened popups
+                $('#navbarCollapse').collapse({
+                    'toggle' : false
+                });
+                $('#simButtonsCollapse').collapse({
+                    'toggle' : false
+                });
+                $('#navbarCollapse').onWrap('click', '.dropdown-menu a,.visible-xs', function(event) {
+                    $('#navbarCollapse').collapse('hide');
+                });
+                $('#simButtonsCollapse').onWrap('click', 'a', function(event) {
+                    $('#simButtonsCollapse').collapse('hide');
+                });
+                $('#navbarButtonsHead').onWrap('click', '', function(event) {
+                    $('#simButtonsCollapse').collapse('hide');
+                });
+                $('#simButtonsHead').onWrap('click', '', function(event) {
+                    $('#navbarCollapse').collapse('hide');
+                });
+
+                $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
                     var domId = event.target.id;
                     if (domId === 'menuRunProg') { //  Submenu 'Program'   
                         ROBERTA_PROGRAM.runOnBrick();
                     } else if (domId === 'menuRunSim') { //  Submenu 'Program'
-                        ROBERTA_PROGRAM.runInSim()();
+                        ROBERTA_PROGRAM.runInSim();
                     } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
                         ROBERTA_PROGRAM.checkProgram();
                     } else if (domId === 'menuNewProg') { //  Submenu 'Program'
@@ -162,14 +187,16 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_TOOLBOX.loadToolbox('beginner');
                     } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
                         ROBERTA_TOOLBOX.loadToolbox('expert');
-                    } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
+                    }
+                }, 'program edit clicked');
+
+                $('#head-navigation-configuration-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+                    $('.modal').modal('hide'); // close all opened popups
+                    var domId = event.target.id;
+                    if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
                         MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
                     } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
-                        ROBERTA_BRICK_CONFIGURATION.setConfiguration("EV3basis");//            
-                        BRICKLY.initConfigurationEnvironment();
-                        $('#menuSaveConfig').parent().addClass('disabled');
-                        BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
-                        BRICKLY.initConfigurationEnvironment();
+                        ROBERTA_BRICK_CONFIGURATION.newConfiguration();
                     } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
                         deactivateProgConfigMenu();
                         $('#tabs').css('display', 'inline');
@@ -180,7 +207,13 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_BRICK_CONFIGURATION.save();
                     } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
                         ROBERTA_BRICK_CONFIGURATION.showSaveAsModal();
-                    } else if (domId === 'menuEv3') { // Submenu 'Robot'
+                    }
+                }, 'configuration edit clicked');
+
+                $('#head-navigation-robot').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+                    $('.modal').modal('hide'); // close all opened popups
+                    var domId = event.target.id;
+                    if (domId === 'menuEv3') { // Submenu 'Robot'
                         alert('yes');
 //                if (ROBERTA_PROGRAM.newProgram()) {
 //                    switchRobot('ev3');
@@ -193,7 +226,13 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_ROBOT.showSetTokenModal();
                     } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
                         ROBERTA_ROBOT.showRobotInfo();
-                    } else if (domId === 'menuGeneral') { // Submenu 'Help'
+                    }
+                }, 'robot clicked');
+
+                $('#head-navigation-help').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+                    $('.modal').modal('hide'); // close all opened popups
+                    var domId = event.target.id;
+                    if (domId === 'menuGeneral') { // Submenu 'Help'
                         window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
                     } else if (domId === 'menuFaq') { // Submenu 'Help'
                         window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
@@ -213,7 +252,13 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         $('#brickly').css('display', 'none');
                         $('#simConfiguration').css('display', 'none');
                         $('#tabLogging').click();
-                    } else if (domId === 'menuLogin') { // Submenu 'Login'
+                    }
+                }, 'help clicked');
+
+                $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+                    $('.modal').modal('hide'); // close all opened popups
+                    var domId = event.target.id;
+                    if (domId === 'menuLogin') { // Submenu 'Login'
                         ROBERTA_USER.showLoginForm();
                     } else if (domId === 'menuLogout') { // Submenu 'Login'
                         ROBERTA_USER.logout();
@@ -225,115 +270,38 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_USER.showDeleteUserModal();
                     }
                     return false;
-                }, 'head navigation menu item clicked');
+                }, 'user clicked');
 
-                $('.navbar-fixed-top .navbar-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
+                $('#head-navigation-sim-controle').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+                    $('.modal').modal('hide'); // head-navigation-sim-controle
                     var domId = event.target.id;
-                    if (domId === 'menuTabProgram') {
-                        if ($('#tabSimulation').hasClass('tabClicked')) {
-                            $('.scroller-left').click();
-                        }
-                        $('.scroller-left').click();
-                        $('#tabProgram').click();
-                    } else if (domId === 'menuTabConfiguration') {
-                        if ($('#tabProgram').hasClass('tabClicked')) {
-                            $('.scroller-right').click();
-                        } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-                            $('.scroller-right').click();
-                        }
-                        $('#tabConfiguration').click();
+                    if (domId === 'menuSimSimple') {
+                        $('.menuSim').parent().removeClass('disabled');
+                        $('.simSimple').parent().addClass('disabled');
+                        SIM.setBackground(1);
+                        $("#simButtonsCollapse").collapse('hide');
+                    } else if (domId === 'menuSimDraw') {
+                        $('.menuSim').parent().removeClass('disabled');
+                        $('.simDraw').parent().addClass('disabled');
+                        SIM.setBackground(2);
+                        $("#simButtonsCollapse").collapse('hide');
+                    } else if (domId === 'menuSimRoberta') {
+                        $('.menuSim').parent().removeClass('disabled');
+                        $('.simRoberta').parent().addClass('disabled');
+                        SIM.setBackground(3);
+                        $("#simButtonsCollapse").collapse('hide');
+                    } else if (domId === 'menuSimRescue') {
+                        $('.menuSim').parent().removeClass('disabled');
+                        $('.simRescue').parent().addClass('disabled');
+                        SIM.setBackground(4);
+                        $("#simButtonsCollapse").collapse('hide');
+                    } else if (domId === 'menuSimMath') {
+                        $('.menuSim').parent().removeClass('disabled');
+                        $('.simMath').parent().addClass('disabled');
+                        SIM.setBackground(5);
+                        $("#simButtonsCollapse").collapse('hide');
                     }
-                    return false;
-                })
-
-                // Close submenu on mouseleave
-                $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
-                    $('.navbar-fixed-top .dropdown').removeClass('open');
-                });
-
-                $('#imgLogo, #imgBeta').onWrap('click', function() {
-                    window.open('http://open-roberta.org');
-                }, 'logo was clicked');
-
-                $('#beta').onWrap('click', function() {
-                    window.open('http://open-roberta.org');
-                }, 'beta logo was clicked');
-
-                $('#tabProgram').onWrap('click', function() {
-                    activateProgConfigMenu();
-                    $('#tabProgram').addClass('tabClicked');
-                    $('#tabConfiguration').removeClass('tabClicked');
-                    $('#tabSimulation').removeClass('tabClicked');
-                    $('#head-navigation-program-edit').css('display', 'inline');
-                    $('#head-navigation-configuration-edit').css('display', 'none');
-                    $('#menuTabProgram').parent().addClass('disabled');
-                    $('#menuTabConfiguration').parent().removeClass('disabled');
-                    $('#menuTabSimulation').parent().removeClass('disabled');
-                    switchToBlockly();
-                }, 'tabProgram clicked');
-
-                $('#tabConfiguration').onWrap('click', function() {
-                    Blockly.hideChaff();
-                    activateProgConfigMenu();
-                    $('#tabProgram').removeClass('tabClicked');
-                    $('#tabConfiguration').addClass('tabClicked');
-                    $('#tabSimulation').removeClass('tabClicked');
-                    $('#head-navigation-program-edit').css('display', 'none');
-                    $('#head-navigation-configuration-edit').css('display', 'inline');
-                    $('#menuTabProgram').parent().removeClass('disabled');
-                    $('#menuTabConfiguration').parent().addClass('disabled');
-                    $('#menuTabSimulation').parent().removeClass('disabled');
-                    switchToBrickly();
-                }, 'tabConfiguration clicked');
-
-                $('.menuBuildingInstructions').onWrap('click', function(event) {
-                    window.open("TODO");
-                }, 'head navigation menu item clicked');
-                $('.menuEV3conf').onWrap('click', function(event) {
-                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
-                }, 'head navigation menu item clicked');
-                $('.menuProgramming').onWrap('click', function(event) {
-                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
-                }, 'head navigation menu item clicked');
-                $('.menuPrivacy').onWrap('click', function(event) {
-                    window.open("TODO");
-                }, 'head navigation menu item clicked');
-
-                // controle for simulation
-                $('.simSimple').onWrap('click', function(event) {
-                    $('.menuSim').parent().removeClass('disabled');
-                    $('.simSimple').parent().addClass('disabled');
-                    SIM.setBackground(1);
-                    $("#simButtonsCollapse").collapse('hide');
-                }, 'simSimple clicked');
-
-                $('.simDraw').onWrap('click', function(event) {
-                    $('.menuSim').parent().removeClass('disabled');
-                    $('.simDraw').parent().addClass('disabled');
-                    SIM.setBackground(2);
-                    $("#simButtonsCollapse").collapse('hide');
-                }, 'simDraw clicked');
-
-                $('.simRoberta').onWrap('click', function(event) {
-                    $('.menuSim').parent().removeClass('disabled');
-                    $('.simRoberta').parent().addClass('disabled');
-                    SIM.setBackground(3);
-                    $("#simButtonsCollapse").collapse('hide');
-                }, 'simRoberta clicked');
-
-                $('.simRescue').onWrap('click', function(event) {
-                    $('.menuSim').parent().removeClass('disabled');
-                    $('.simRescue').parent().addClass('disabled');
-                    SIM.setBackground(4);
-                    $("#simButtonsCollapse").collapse('hide');
-                }, 'simRescue clicked');
-
-                $('.simMath').onWrap('click', function(event) {
-                    $('.menuSim').parent().removeClass('disabled');
-                    $('.simMath').parent().addClass('disabled');
-                    SIM.setBackground(5);
-                    $("#simButtonsCollapse").collapse('hide');
-                }, 'simRescue clicked');
+                }, 'sim clicked');
 
                 $('.simBack').onWrap('click', function(event) {
                     SIM.cancel();
@@ -392,6 +360,76 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $("#simRobotModal").modal("toggle");
                     $("#simButtonsCollapse").collapse('hide');
                 }, 'simRobot clicked');
+
+                $('#menuTabProgram').onWrap('click', '', function(event) {
+                    if ($('#tabSimulation').hasClass('tabClicked')) {
+                        $('.scroller-left').click();
+                    }
+                    $('.scroller-left').click();
+                    $('#tabProgram').click();
+                }, 'tabProgram clicked');
+
+                $('#menuTabConfiguration').onWrap('click', '', function(event) {
+                    if ($('#tabProgram').hasClass('tabClicked')) {
+                        $('.scroller-right').click();
+                    } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+                        $('.scroller-right').click();
+                    }
+                    $('#tabConfiguration').click();
+                }, 'tabConfiguration clicked');
+
+                // Close submenu on mouseleave
+                $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
+                    $('.navbar-fixed-top .dropdown').removeClass('open');
+                });
+
+                $('#imgLogo, #imgBeta').onWrap('click', function() {
+                    window.open('http://open-roberta.org');
+                }, 'logo was clicked');
+
+                $('#beta').onWrap('click', function() {
+                    window.open('http://open-roberta.org');
+                }, 'beta logo was clicked');
+
+                $('#tabProgram').onWrap('click', function() {
+                    activateProgConfigMenu();
+                    $('#tabProgram').addClass('tabClicked');
+                    $('#tabConfiguration').removeClass('tabClicked');
+                    $('#tabSimulation').removeClass('tabClicked');
+                    $('#head-navigation-program-edit').css('display', 'inline');
+                    $('#head-navigation-configuration-edit').css('display', 'none');
+                    $('#menuTabProgram').parent().addClass('disabled');
+                    $('#menuTabConfiguration').parent().removeClass('disabled');
+                    $('#menuTabSimulation').parent().removeClass('disabled');
+                    switchToBlockly();
+                }, 'tabProgram clicked');
+
+                $('#tabConfiguration').onWrap('click', function() {
+                    activateProgConfigMenu();
+                    $('#tabProgram').removeClass('tabClicked');
+                    $('#tabConfiguration').addClass('tabClicked');
+                    $('#tabSimulation').removeClass('tabClicked');
+                    $('#head-navigation-program-edit').css('display', 'none');
+                    $('#head-navigation-configuration-edit').css('display', 'inline');
+                    $('#menuTabProgram').parent().removeClass('disabled');
+                    $('#menuTabConfiguration').parent().addClass('disabled');
+                    $('#menuTabSimulation').parent().removeClass('disabled');
+                    switchToBrickly();
+                }, 'tabConfiguration clicked');
+
+                $('.menuBuildingInstructions').onWrap('click', function(event) {
+                    window.open("TODO");
+                }, 'head navigation menu item clicked');
+                $('.menuEV3conf').onWrap('click', function(event) {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
+                }, 'head navigation menu item clicked');
+                $('.menuProgramming').onWrap('click', function(event) {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
+                }, 'head navigation menu item clicked');
+                $('.menuPrivacy').onWrap('click', function(event) {
+                    window.open("TODO");
+                }, 'head navigation menu item clicked');
+
                 $('#simRobotModal').removeClass("modal-backdrop");
                 $('#simRobotModal').draggable();
                 $('.simScene').onWrap('click', function(event) {
@@ -483,6 +521,16 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 $('.newRelease').onWrap('click', function(event) {
                     $('#show-release').modal("show");
                 }, 'show release clicked');
+
+                $('#confirmContinue').onWrap('click', function(event) {
+                    if ($('#confirmContinue').data('type') === 'program') {
+                        ROBERTA_PROGRAM.newProgram(true);
+                    } else if ($('#confirmContinue').data('type') === 'configuration') {
+                        ROBERTA_BRICK_CONFIGURATION.newConfiguration(true);
+                    } else {
+                        console.log('Confirmation with unknown data type clicked');
+                    }
+                }, 'continue new program clicked');
             }
 
             exports.initHeadNavigation = initHeadNavigation;

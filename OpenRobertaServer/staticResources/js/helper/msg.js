@@ -9,10 +9,16 @@ define([ 'require', 'exports', 'log', 'jquery', 'blocks-msg' ], function(require
     /**
      * Display popup messages
      */
-    function displayPopupMessage(lkey, value) {
-        $('#message').attr('lkey', lkey);
-        $('#message').html(value);
-        $("#show-message").modal("show");
+    function displayPopupMessage(lkey, value, cancel) {
+        if (cancel) {
+            $('#messageContinue').attr('lkey', lkey);
+            $('#messageContinue').html(value);
+            $("#show-messageContinue").modal("show");
+        } else {
+            $('#message').attr('lkey', lkey);
+            $('#message').html(value);
+            $("#show-message").modal("show");
+        }
     }
 
     exports.displayPopupMessage = displayPopupMessage;
@@ -45,7 +51,8 @@ define([ 'require', 'exports', 'log', 'jquery', 'blocks-msg' ], function(require
      *            Text to replace an optional '$' in the message-text
      * 
      */
-    function displayMessage(messageId, output, replaceWith) {
+    function displayMessage(messageId, output, replaceWith, opt_cancel) {
+        var cancel = opt_cancel || false;
         if (messageId != undefined) {
             if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
                 // Invalid Message-Key 
@@ -62,7 +69,7 @@ define([ 'require', 'exports', 'log', 'jquery', 'blocks-msg' ], function(require
             }
 
             if (output === 'POPUP') {
-                displayPopupMessage(lkey, value);
+                displayPopupMessage(lkey, value, cancel);
             } else if (output === 'TOAST') {
                 toastMessages.unshift(value);
                 if (toastMessages.length === 1) {

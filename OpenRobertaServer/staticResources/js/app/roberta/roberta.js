@@ -311,16 +311,6 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
     }
 
     /**
-     * Set modification state.
-     * 
-     * @param {modified}
-     *            modified or not.
-     */
-    function setWorkspaceModified(modified) {
-        userState.programModified = modified;
-    }
-
-    /**
      * Wait for all blocklies ready.
      * 
      */
@@ -376,7 +366,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
         });
 
         $(window).on('beforeunload', function(e) {
-            if (userState.programModified || userState.configurationModified) {
+            if (!userState.programSaved || !userState.configurationSaved) {
                 if (userState.id === -1) {
                     // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
                     return Blockly.Msg.POPUP_BEFOREUNLOAD;

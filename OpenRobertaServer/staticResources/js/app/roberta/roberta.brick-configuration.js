@@ -8,13 +8,14 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
              */
             function saveConfigurationToServer() {
                 if (userState.configuration) {
-                    userState.configurationSaved = true;
                     $('.modal').modal('hide'); // close all opened popups
                     var xmlText = exports.getXmlOfConfiguration(BRICKLY.getBricklyWorkspace());
-                    LOG.info('save brick configuration ' + userState.configuration);
                     CONFIGURATION.saveConfigurationToServer(userState.configuration, xmlText, function(result) {
                         if (result.rc === 'ok') {
-                            userState.configurationModified = false;
+                            userState.configurationSaved = true;
+                            $('#menuSaveConfig').parent().addClass('disabled');
+                            BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
+                            LOG.info('save brick configuration ' + userState.configuration);
                         }
                         MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, userState.configuration);
                     });
@@ -28,17 +29,12 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
                 $formSingleModal.validate();
                 if ($formSingleModal.valid()) {
                     var confName = $('#singleModalInput').val().trim();
-                    setConfiguration(confName);
-                    $('#menuSaveConfig').parent().removeClass('login');
-                    $('#menuSaveConfig').parent().removeClass('disabled');                   
-                    BRICKLY.getBricklyWorkspace().robControls.enable('saveProgram');
-                    userState.configurationSaved = true;
-                    $('.modal').modal('hide'); // close all opened popups
                     var xmlText = exports.getXmlOfConfiguration(BRICKLY.getBricklyWorkspace());
-                    LOG.info('save brick configuration ' + userState.configuration);
-                    CONFIGURATION.saveAsConfigurationToServer(userState.configuration, xmlText, function(result) {
+                    CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function(result) {
                         if (result.rc === 'ok') {
-                            userState.configurationModified = false;
+                            setConfiguration(confName);
+                            $('.modal').modal('hide'); // close all opened popups
+                            LOG.info('save brick configuration ' + userState.configuration);
                         }
                         MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, userState.configuration);
                     });
@@ -52,15 +48,14 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
                 var $configurationRow = $('#configurationNameTable .selected');
                 if ($configurationRow.length > 0) {
                     var configurationName = $configurationRow[0].children[0].textContent;
-                    LOG.info('loadFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
                     CONFIGURATION.loadConfigurationFromListing(configurationName, userState.accountName, function(result) {
                         if (result.rc === 'ok') {
-                            $("#tabs").tabs("option", "active", 0);
-                            userState.configurationSaved = true;
                             showConfiguration(result, true, configurationName);
-                            $('#menuSaveConfig').parent().removeClass('login');
-                            $('#menuSaveConfig').parent().removeClass('disabled');
+                            userState.configurationSaved = 'new';
+                            $('#menuSaveConfig').parent().addClass('disabled');
+                            BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
                             ROBERTA_ROBOT.setState(result);
+                            LOG.info('loadFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
                         }
                         MSG.displayInformation(result, "", result.message);
                     });
@@ -216,4 +211,25 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
             }
             exports.getXmlOfConfiguration = getXmlOfConfiguration;
 
+            /**
+             * New program
+             */
+            function newConfiguration(opt_further) {
+                var further = opt_further || false;
+                if (further || userState.configurationSaved) {
+                    BRICKLY.initConfigurationEnvironment();
+                    setConfiguration("EV3basis");
+                    $('#menuSaveConfig').parent().addClass('disabled');
+                    BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
+                    ROBERTA_USER.setProgram("NEPOprog");
+                } else {
+                    $('#confirmContinue').data('type', 'configuration');
+                    if (userState.id === -1) {
+                        MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+                    } else {
+                        MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+                    }
+                }
+            }
+            exports.newConfiguration = newConfiguration;
         });

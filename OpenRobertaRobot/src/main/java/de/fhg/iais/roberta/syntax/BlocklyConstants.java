@@ -145,7 +145,7 @@ public final class BlocklyConstants {
     public static final String MATH_RANDOM_FLOAT = "math_random_float";
     public static final String MATH_NUMBER_PROPERTY = "math_number_property";
 
-    public static final String TEXT_APPEND = "text_append";
+    public static final String TEXT_APPEND = "robText_append";
     public static final String ROB_TEXT_JOIN = "robText_join";
     public static final String TEXT_JOIN = "text_join";
     public static final String TEXT_PRINT = "text_print";
