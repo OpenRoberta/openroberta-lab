@@ -235,8 +235,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             y = 50;
         }
         var id = Blockly.genUid();
-        var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='0' y='0'>" + "<block id='" + id + "' type='robControls_start'>"
-                + "</block>" + "</instance>" + "</block_set>";
+        var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'><instance x='0' y='0'>" + "<block id='" + id
+                + "' type='robControls_start'><field name='DEBUG'>TRUE</field></block></instance></block_set>";
         var program = opt_programBlocks || text;
         var xml = Blockly.Xml.textToDom(program);
         Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
@@ -422,10 +422,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             if (result.rc == "ok" && result.javaScriptProgram != "var pp = [") {
                 MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
                 blocklyWorkspace.robControls.setSimStart(false);
-                SIM.init(result.javaScriptProgram);
                 refreshBlocklyProgram(result);
 
                 if ($(".sim").hasClass('hide')) {
+                    SIM.init(result.javaScriptProgram, true);
                     $(".sim").removeClass('hide');
                     $('#blocklyDiv').addClass('simActive');
                     $('#simDiv').addClass('simActive');
@@ -463,6 +463,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         }
                     });
                 } else {
+                    SIM.init(result.javaScriptProgram, false);
                     setTimeout(function() {
                         SIM.setPause(false);
                     }, 1000);

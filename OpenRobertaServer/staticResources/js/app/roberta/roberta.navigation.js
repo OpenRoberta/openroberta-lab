@@ -479,13 +479,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         $('#menuNxt').parent().removeClass('disabled');
                     }
                     Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
-                    COMM.json("/toolbox", {
-                        "cmd" : "loadT",
-                        "name" : userState.toolbox,
-                        "owner" : " "
-                    }, function(result) {
-                        ROBERTA_PROGRAM.injectBlockly(result, userState.programBlocksSaved);
-                    });
                     $(".code").addClass('hide');
                 }, 'codeBack clicked');
                 $('#show-startup-message').on('hidden.bs.modal', function() {

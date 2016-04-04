@@ -40,6 +40,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     function setBackground(num) {
         window.removeEventListener("resize", resizeAll);
         setPause(true);
+        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         if (num === 0) {
             currentBackground += 1;
             if (currentBackground > 5) {
@@ -129,8 +130,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
 
     function stopProgram() {
         setPause(true);
-        robot.reset();
-        robot.resetPose();
+//        robot.reset();
+//        robot.resetPose();
         scene.updateBackgrounds();
         reloadProgram();
     }
@@ -172,7 +173,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
 
     var robot = new SimpleRobot();
 
-    function init(program) {
+    function init(program, refresh) {
         ready = false;
         userProgram = program;
         eval(userProgram);
@@ -184,7 +185,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         pause = true;
         info = false;
         robot.reset();
-        robot.resetPose();
+        if (refresh)
+            robot.resetPose();
         img = [];
         if (isIE()) {
             imgSrc = imgSrcIE;
@@ -225,7 +227,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             actionValues = programEval.step(sensorValues);
         } else if (programEval.getProgram().isTerminated()) {
             setPause(true);
-            reloadProgram();
+            //reloadProgram();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         }
         robot.update(actionValues);
@@ -291,6 +293,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         var dy = startY - robot.mouse.ry;
         isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
         isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
+        e.stopPropagation();
     }
 
     function handleMouseUp(e) {
@@ -308,12 +311,14 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         }
         isDownrobot = false;
         isDownObstacle = false;
+        e.stopPropagation();
     }
 
     function handleMouseOut(e) {
         e.preventDefault();
         isDownrobot = false;
         isDownObstacle = false;
+        e.stopPropagation();
     }
 
     function handleMouseMove(e) {
@@ -345,7 +350,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             obstacle.y += dy;
             scene.drawObjects();
         }
-        return;
+        e.stopPropagation();
     }
 
     function resizeAll() {
