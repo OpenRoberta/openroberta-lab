@@ -479,13 +479,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         $('#menuNxt').parent().removeClass('disabled');
                     }
                     Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
-                    COMM.json("/toolbox", {
-                        "cmd" : "loadT",
-                        "name" : userState.toolbox,
-                        "owner" : " "
-                    }, function(result) {
-                        ROBERTA_PROGRAM.injectBlockly(result, userState.programBlocksSaved);
-                    });
                     $(".code").addClass('hide');
                 }, 'codeBack clicked');
                 $('#show-startup-message').on('hidden.bs.modal', function() {
@@ -496,11 +489,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                             domain : ''
                         });
                         // check if it is really stored: chrome issue
-                        if (!$.cookie("OpenRoberta_hideStartUp"))
+                        if (!$.cookie("OpenRoberta_hideStartUp")) {
                             $.cookie("OpenRoberta_hideStartUp", true, {
                                 expires : 99,
                                 domain : ''
                             });
+                        }
                     } else {
                         $.removeCookie("OpenRoberta_hideStartUp");
                     }
