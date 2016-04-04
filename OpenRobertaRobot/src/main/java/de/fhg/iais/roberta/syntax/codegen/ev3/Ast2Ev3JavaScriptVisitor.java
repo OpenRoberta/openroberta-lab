@@ -33,7 +33,6 @@ import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -201,9 +200,17 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         String method = "createBinaryExpr(" + binary.getOp() + ", ";
         String end = ")";
         // FIXME: The math change should be removed from the binary expression since it is a statement
-        if ( binary.getOp() == Op.MATH_CHANGE ) {
-            end = createClosingBracket();
-            method = "createMathChange(";
+        switch ( binary.getOp() ) {
+            case MATH_CHANGE:
+                method = "createMathChange(";
+                end = createClosingBracket();
+                break;
+            case TEXT_APPEND:
+                method = "createTextAppend(";
+                end = createClosingBracket();
+                break;
+            default:
+                break;
         }
         this.sb.append(method);
         binary.getLeft().visit(this);

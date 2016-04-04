@@ -87,6 +87,8 @@ FILE = "file";
 const
 TEXT = "text";
 const
+TEXT_APPEND = "textAppend";
+const
 PICTURE = "picture";
 const
 X = "x";

@@ -59,10 +59,6 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
                 evalVarDeclaration(internal(this), stmt);
                 break;
 
-            case MATH_CHANGE:
-                evalMathChange(internal(this), stmt);
-                break;
-
             case IF_STMT:
                 evalIf(internal(this), stmt);
                 this.step(simulationData);
@@ -395,12 +391,6 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
         }
     };
 
-    var evalMathChange = function(obj, stmt) {
-        var left = evalExpr(obj, stmt.left);
-        var right = evalExpr(obj, stmt.right);
-
-    };
-
     var evalRepeat = function(obj, stmt) {
         switch (stmt.mode) {
         case TIMES:
@@ -589,6 +579,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             break;
         case POWER:
             val = Math.pow(valLeft, valRight);
+            break;
+        case TEXT_APPEND:
+            val = String(valLeft) + String(valRight);
             break;
         case LT:
             val = valLeft < valRight;

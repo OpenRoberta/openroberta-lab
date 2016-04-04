@@ -606,7 +606,7 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createRepeatStmt("
                 + "FOR, ["
                 + "createVarReference(NUMBER, \"i\"), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 10), createConstant(NUM_CONST, 1)], "
-                + "[createBinaryExpr(TEXT_APPEND, createVarReference(STRING, \"item\"), createConstant(STRING_CONST, 'kllk'))]);\n"
+                + "[createTextAppend(createVarReference(STRING, \"item\"), createConstant(STRING_CONST, 'kllk'))]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/ast/control/repeat_stmt_for.xml");
     }
@@ -663,6 +663,14 @@ public class AstToLejosJavaScriptVisitorTest {
 
                 + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
         assertCodeIsOk(a, "/syntax/methods/method_return_2.xml");
+    }
+
+    @Test
+    public void createTextAppend() throws Exception {
+        String a =
+            "var stmt0 = createTextAppend(createVarReference(STRING, \"item\"), createConstant(STRING_CONST, 'text'));\n"
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
+        assertCodeIsOk(a, "/ast/text/text_append.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

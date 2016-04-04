@@ -13,6 +13,12 @@ function createMathChange(left, right) {
     return assignment;
 }
 
+function createTextAppend(left, right) {
+    var binary = createBinaryExpr(TEXT_APPEND, left, right);
+    var assignment = createAssignStmt(left.name, binary)
+    return assignment;
+}
+
 function createBinaryExpr(op, left, right) {
     var result = {};
     result[EXPR] = BINARY;
@@ -88,13 +94,6 @@ function createVarDeclaration(type, name, value) {
 }
 
 function createAssignStmt(name, value) {
-    var result = {};
-    result[STMT] = ASSIGN_STMT;
-    result[NAME] = name;
-    result[EXPR] = value;
-    return result;
-}
-function createCreateMathChange(name, value) {
     var result = {};
     result[STMT] = ASSIGN_STMT;
     result[NAME] = name;
