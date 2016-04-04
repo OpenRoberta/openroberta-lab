@@ -43,10 +43,11 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h3').text(Blockly.Msg["MENU_CONNECT"]);
             $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
+            $('#singleModalInput').addClass('capitalLetters');
         }, function() {
             setToken($('#singleModalInput').val());
         }, function() {
-
+            $('#singleModalInput').removeClass('capitalLetters');
         }, {
             rules : {
                 singleModalInput : {
@@ -204,14 +205,14 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             $('#iconDisplayRobotState').addClass('wait');
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('runOnBrick');
             $('#menuRunProg').parent().removeClass('disabled');
-        
+
         } else if (userState.robotState === 'busy') {
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').removeClass('error');
             $('#iconDisplayRobotState').addClass('busy');
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
-        
+
         } else {
             $('#iconDisplayRobotState').removeClass('busy');
             $('#iconDisplayRobotState').removeClass('wait');
