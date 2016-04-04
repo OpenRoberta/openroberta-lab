@@ -421,7 +421,7 @@ public class BlocklyMethods {
      * @param list
      * @return length of the list
      */
-    public static <T> int lenght(List<T> list) {
+    public static <T> int length(List<T> list) {
         return list.size();
     }
 

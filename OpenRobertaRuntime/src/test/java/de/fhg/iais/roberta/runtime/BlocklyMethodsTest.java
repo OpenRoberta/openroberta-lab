@@ -180,9 +180,9 @@ public class BlocklyMethodsTest {
     }
 
     @Test
-    public void lenght() {
-        Assert.assertTrue(BlocklyMethods.lenght(BlocklyMethods.createListWithItem((float) 1, 5)) == 5);
-        Assert.assertTrue(BlocklyMethods.lenght(BlocklyMethods.createListWithItem("a", 2)) == 2);
+    public void length() {
+        Assert.assertTrue(BlocklyMethods.length(BlocklyMethods.createListWithItem((float) 1, 5)) == 5);
+        Assert.assertTrue(BlocklyMethods.length(BlocklyMethods.createListWithItem("a", 2)) == 2);
     }
 
     @Test

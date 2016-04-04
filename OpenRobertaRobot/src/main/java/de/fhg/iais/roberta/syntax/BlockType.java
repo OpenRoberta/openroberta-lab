@@ -37,7 +37,7 @@ import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
@@ -182,9 +182,9 @@ public enum BlockType {
     MATH_RANDOM_INT_FUNCT( Category.FUNCTION, MathRandomIntFunct.class, BlocklyConstants.MATH_RANDOM_INT ),
     MATH_RANDOM_FLOAT_FUNCT( Category.FUNCTION, MathRandomFloatFunct.class, BlocklyConstants.MATH_RANDOM_FLOAT ),
     MATH_NUM_PROP_FUNCT( Category.FUNCTION, MathNumPropFunct.class, BlocklyConstants.MATH_NUMBER_PROPERTY ),
-    LENGHT_OF_IS_EMPTY_FUNCT(
+    LENGTH_OF_IS_EMPTY_FUNCT(
         Category.FUNCTION,
-        LenghtOfIsEmptyFunct.class,
+        LengthOfIsEmptyFunct.class,
         BlocklyConstants.LISTS_LENGTH,
         BlocklyConstants.ROB_LISTS_LENGTH,
         BlocklyConstants.LISTS_IS_EMPTY,

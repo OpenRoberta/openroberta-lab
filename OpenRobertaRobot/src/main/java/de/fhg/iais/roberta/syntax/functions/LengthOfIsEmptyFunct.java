@@ -24,12 +24,12 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
-public class LenghtOfIsEmptyFunct<V> extends Function<V> {
+public class LengthOfIsEmptyFunct<V> extends Function<V> {
     private final FunctionNames functName;
     private final List<Expr<V>> param;
 
-    private LenghtOfIsEmptyFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LENGHT_OF_IS_EMPTY_FUNCT, properties, comment);
+    private LengthOfIsEmptyFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockType.LENGTH_OF_IS_EMPTY_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -37,16 +37,16 @@ public class LenghtOfIsEmptyFunct<V> extends Function<V> {
     }
 
     /**
-     * Creates instance of {@link LenghtOfIsEmptyFunct}. This instance is read only and can not be modified.
+     * Creates instance of {@link LengthOfIsEmptyFunct}. This instance is read only and can not be modified.
      *
      * @param name of the function; must be <b>not</b> null,
      * @param param list of parameters for the function must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment that user has added to the block,
-     * @return read only object of class {@link LenghtOfIsEmptyFunct}
+     * @return read only object of class {@link LengthOfIsEmptyFunct}
      */
-    public static <V> LenghtOfIsEmptyFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LenghtOfIsEmptyFunct<V>(name, param, properties, comment);
+    public static <V> LengthOfIsEmptyFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LengthOfIsEmptyFunct<V>(name, param, properties, comment);
     }
 
     /**
@@ -75,12 +75,12 @@ public class LenghtOfIsEmptyFunct<V> extends Function<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitLenghtOfIsEmptyFunct(this);
+        return visitor.visitLengthOfIsEmptyFunct(this);
     }
 
     @Override
     public String toString() {
-        return "LenghtOfFunct [" + this.functName + ", " + this.param + "]";
+        return "LengthOfFunct [" + this.functName + ", " + this.param + "]";
     }
 
     /**
@@ -94,7 +94,7 @@ public class LenghtOfIsEmptyFunct<V> extends Function<V> {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return LenghtOfIsEmptyFunct.make(FunctionNames.get(block.getType()), params, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LengthOfIsEmptyFunct.make(FunctionNames.get(block.getType()), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

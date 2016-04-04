@@ -45,7 +45,7 @@ import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
@@ -512,11 +512,11 @@ public interface AstVisitor<V> {
     public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct);
 
     /**
-     * visit a {@link LenghtOfIsEmptyFunct}.
+     * visit a {@link LengthOfIsEmptyFunct}.
      *
-     * @param lenghtOfIsEmptyFunct to be visited
+     * @param lengthOfIsEmptyFunct to be visited
      */
-    public V visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<V> lenghtOfIsEmptyFunct);
+    public V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct);
 
     /**
      * visit a {@link ListCreate}.
