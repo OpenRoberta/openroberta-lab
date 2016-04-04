@@ -798,6 +798,10 @@ label.form-invalid:after {
 }
 
 /***** BEGIN Input-Fields *****/
+.capitalLetters {
+	text-transform: uppercase;
+}
+
 .input-group-addon {
 	border: 1px solid #afca04;
 	background: #fff;
