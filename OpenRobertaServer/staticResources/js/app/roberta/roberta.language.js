@@ -1,5 +1,5 @@
-define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.program', 'roberta.brickly' ], function(exports, $, ROBERTA_TOOLBOX, userState,
-        ROBERTA_PROGRAM, BRICKLY) {
+define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.program', 'roberta.user', 'roberta.brickly' ], function(exports, $,
+        ROBERTA_TOOLBOX, userState, ROBERTA_PROGRAM, ROBERTA_USER, BRICKLY) {
 
     /**
      * Initialize language switching
@@ -59,6 +59,7 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
             future.then(function(newLanguageScript) {
                 switchLanguageInBlockly();
                 BRICKLY.switchLanguageInBrickly();
+                ROBERTA_USER.initValidationMessages();
             });
         }
 
