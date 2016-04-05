@@ -3,7 +3,7 @@
  * reads every statement of the program and gives command to the simulation what
  * the robot should do.
  */
-define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ], function(Actors, Memory, Program) {
+define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'util' ], function(Actors, Memory, Program, UTIL) {
     var privateMem = new WeakMap();
 
     var internal = function(object) {
@@ -247,9 +247,17 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
 
     var evalShowTextAction = function(obj, stmt) {
         obj.outputCommands.display = {};
-        obj.outputCommands.display.text = String(evalExpr(obj, stmt.text));
+        var val = evalExpr(obj, stmt.text);
+        obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
         obj.outputCommands.display.x = evalExpr(obj, stmt.x);
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
+    };
+
+    var roundIfSensorData = function(val, exprType) {
+        if ((exprType == GET_SAMPLE || exprType == ENCODER_SENSOR_SAMPLE) && isNumber(val)) {
+            val = UTIL.round(val, 2);
+        }
+        return val;
     };
 
     var evalClearDisplayAction = function(obj, stmt) {
@@ -581,6 +589,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
             val = Math.pow(valLeft, valRight);
             break;
         case TEXT_APPEND:
+            valLeft = isNumber(valLeft) ? UTIL.round(valLeft, 2) : valLeft
+            valRight = isNumber(valRight) ? UTIL.round(valRight, 2) : valRight
             val = String(valLeft) + String(valRight);
             break;
         case LT:
@@ -968,7 +978,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
     var evalTextJoin = function(obj, values) {
         var result = "";
         for (var i = 0; i < values.length; i++) {
-            result += String(evalExpr(obj, values[i]));
+            var val = evalExpr(obj, values[i]);
+            val = roundIfSensorData(val, values[i].expr)
+            result += String(val);
         }
         return result;
     };
@@ -1074,6 +1086,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program' ],
     var mathRandomList = function(list) {
         var x = Math.floor(Math.random() * list.length);
         return list[x];
+    };
+
+    var isNumber = function(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
     };
 
     return ProgramEval;

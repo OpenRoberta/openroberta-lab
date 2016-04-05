@@ -372,7 +372,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                     this.robot.colorSensor.color = 'lime';
                 }
                 this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
-                values.color.red = UTIL.round(this.robot.colorSensor.lightValue, 2);
+                values.color.red = this.robot.colorSensor.lightValue;
                 values.color.rgb = [ UTIL.round(red / 2.55, 0), UTIL.round(green / 2.55, 0), UTIL.round(blue / 2.55, 0) ];
                 values.color.ambientlight = 0;
             }
@@ -439,14 +439,14 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
             var distance = this.robot.ultraSensor.distance / 3.0;
             // adopt sim sensor to real sensor
             if (distance < 255) {
-                values.ultrasonic.distance = UTIL.round(distance, 2);
+                values.ultrasonic.distance = distance;
             } else {
                 values.ultrasonic.distance = 255.0;
             }
             values.ultrasonic.presence = false;
             // treet the ultrasonic sensor as infrared sensor
             if (distance < 70) {
-                values.infrared.distance = UTIL.round(100.0 / 70.0 * distance, 2);
+                values.infrared.distance = 100.0 / 70.0 * distance;
             } else {
                 values.infrared.distance = 100.0;
             }
@@ -467,13 +467,13 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
         if (this.robot.encoder) {
             values.encoder = {};
-            values.encoder.left = UTIL.round(this.robot.encoder.left * ENC, 2);
-            values.encoder.right = UTIL.round(this.robot.encoder.right * ENC, 2);
+            values.encoder.left = this.robot.encoder.left * ENC;
+            values.encoder.right = this.robot.encoder.right * ENC;
         }
         if (this.robot.gyroSensor) {
             values.gyro = {};
-            values.gyro.angle = UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 2);
-            values.gyro.rate = UTIL.round(SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff), 2);
+            values.gyro.angle = SIMATH.toDegree(this.robot.pose.theta);
+            values.gyro.rate = SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff);
         }
         if (this.robot.buttons) {
             values.buttons = {};
@@ -492,7 +492,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
         if (this.robot.webAudio) {
             values.volume = this.robot.webAudio.volume;
-        }       
+        }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();
         return values;
