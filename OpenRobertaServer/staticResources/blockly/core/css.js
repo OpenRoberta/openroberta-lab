@@ -388,7 +388,7 @@ Blockly.Css.CONTENT = [
   '}', 
   
   'g .robButton:hover rect[class="blocklyButtonBack"] {',
-    'fill: #afca04;',
+    'fill: #BACC1E;',
     'cursor: pointer',
   '}', 
   
