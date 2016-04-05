@@ -481,7 +481,6 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         methodCall.getParametersValues().visit(this);
-
         return null;
     }
 

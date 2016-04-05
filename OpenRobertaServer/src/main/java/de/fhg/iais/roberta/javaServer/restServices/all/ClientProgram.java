@@ -49,7 +49,9 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedPortsCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.ProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.RobotProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
@@ -80,7 +82,7 @@ public class ClientProgram {
         final int userId = httpSessionState.getUserId();
         final int robotId = httpSessionState.getRobotId();
         JSONObject response = new JSONObject();
-        DbSession dbSession = sessionFactoryWrapper.getSession();
+        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
@@ -117,7 +119,7 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.getString("programText");
                 String configurationText = request.getString("configurationText");
-                String javaSource = compilerWorkflow.generateSourceCode(token, programName, programText, configurationText);
+                String javaSource = this.compilerWorkflow.generateSourceCode(token, programName, programText, configurationText);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( javaSource == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
@@ -164,17 +166,18 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
                 }
             } else if ( cmd.equals("checkP") ) {
-                Key messageKey = null;
-                String programText = request.optString("programText");
-                String configurationText = request.optString("configurationText");
-                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-                messageKey = data.getErrorMessage();
-                messageKey = programConfigurationCompatibilityCheck(response, data, "");
-                if ( messageKey == null ) {
-                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
-                } else {
-                    Util.addErrorInfo(response, messageKey);
-                }
+                //TODO: this will not be supported in the feature
+                //                Key messageKey = null;
+                //                String programText = request.optString("programText");
+                //                String configurationText = request.optString("configurationText");
+                //                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                //                messageKey = data.getErrorMessage();
+                //                messageKey = programConfigurationCompatibilityCheck(response, data, "");
+                //                if ( messageKey == null ) {
+                //                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                //                } else {
+                //                    Util.addErrorInfo(response, messageKey);
+                //                }
 
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("programName");
@@ -215,16 +218,17 @@ public class ClientProgram {
                 String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-                messageKey = data.getErrorMessage();
-                messageKey = programConfigurationCompatibilityCheck(response, data, robot.getName());
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                messageKey = programAndConfigTransformer.getErrorMessage();
+                RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
                     if ( robot.getName().equals("ev3") ) {
                         ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                        messageKey = compilerWorkflow.execute(token, programName, data);
+                        messageKey = this.compilerWorkflow.execute(token, programName, programAndConfigTransformer);
                         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                            wasRobotWaiting = brickCommunicator.theRunButtonWasPressed(token, programName);
+                            wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                         } else {
                             if ( messageKey != null ) {
                                 LOG.info(messageKey.toString());
@@ -247,14 +251,15 @@ public class ClientProgram {
                 String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-                messageKey = data.getErrorMessage();
-                messageKey = programConfigurationCompatibilityCheck(response, data, robot.getName());
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                messageKey = programAndConfigTransformer.getErrorMessage();
+                SimulationProgramCheckVisitor programChecker = new SimulationProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
                     if ( robot.getName().equals("ev3") ) {
                         ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                        String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
+                        String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programAndConfigTransformer.getTransformedProgram());
                         ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
@@ -280,18 +285,17 @@ public class ClientProgram {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, brickCommunicator);
+        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         return Response.ok(response).build();
     }
 
-    private Key programConfigurationCompatibilityCheck(JSONObject response, BlocklyProgramAndConfigTransformer data, String robotName)
+    private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, ProgramCheckVisitor programChecker)
         throws JSONException,
         JAXBException {
-        UsedPortsCheckVisitor programChecker = new UsedPortsCheckVisitor(data.getBrickConfiguration());
-        int errorCounter = programChecker.check(data.getProgramTransformer().getTree());
+        int errorCounter = programChecker.check(program);
         response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
         response.put("errorCounter", errorCounter);
-        if ( errorCounter > 0 && !robotName.equals("oraSim") ) {
+        if ( errorCounter > 0 ) {
             return Key.PROGRAM_CONFIGURATION_NOT_COMPATIBLE;
         }
         return null;

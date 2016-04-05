@@ -419,7 +419,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
 
         PROGRAM.runInSim(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             //TODO return empty sim program with rc = true and var stmt0 = createDebugAction(); var pp = [stmt0]; eg
-            if (result.rc == "ok" && result.javaScriptProgram != "var pp = [") {
+//            if (result.rc == "ok" && result.javaScriptProgram != "var pp = [") {
+            if (result.rc == "ok") {
                 MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
                 blocklyWorkspace.robControls.setSimStart(false);
                 refreshBlocklyProgram(result);
@@ -469,8 +470,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     }, 1000);
                 }
             } else {
-                //TODO
+                MSG.displayInformation(result, "", result.message, "");
             }
+            refreshBlocklyProgram(result);
         });
     }
     exports.runInSim = runInSim;

@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.ev3;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -28,12 +26,13 @@ import de.fhg.iais.roberta.syntax.sensor.ev3.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-public class UsedPortsCheckVisitor extends CheckVisitor {
-    private ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
-    private int errorCount = 0;
-    Ev3Configuration brickConfiguration;
+public abstract class ProgramCheckVisitor extends CheckVisitor {
 
-    public UsedPortsCheckVisitor(Ev3Configuration brickConfiguration) {
+    protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
+    protected int errorCount = 0;
+    protected Ev3Configuration brickConfiguration;
+
+    public ProgramCheckVisitor(Ev3Configuration brickConfiguration) {
         this.brickConfiguration = brickConfiguration;
     }
 
@@ -61,6 +60,8 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     public int getErrorCount() {
         return this.errorCount;
     }
+
+    protected abstract void checkSensorPort(BaseSensor<Void> sensor);
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
@@ -189,47 +190,4 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
         }
     }
 
-    private void checkSensorPort(BaseSensor<Void> sensor) {
-        EV3Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
-        if ( usedSensor == null ) {
-            sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
-            this.errorCount++;
-        } else {
-            switch ( sensor.getKind() ) {
-                case COLOR_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_COLOR_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
-                case TOUCH_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_TOUCH_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
-                case ULTRASONIC_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_ULTRASONIC_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
-                case INFRARED_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_IR_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
-                case GYRO_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_GYRO_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
 }

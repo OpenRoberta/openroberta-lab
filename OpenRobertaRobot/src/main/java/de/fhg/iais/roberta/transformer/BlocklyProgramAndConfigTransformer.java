@@ -1,15 +1,18 @@
 package de.fhg.iais.roberta.transformer;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
 
 /**
  * This class stores the AST representation of the program and the brick configuration if transformation is successful, otherwise we have error message
- * 
+ *
  * @author kcvejoski
  */
 public class BlocklyProgramAndConfigTransformer {
@@ -44,6 +47,13 @@ public class BlocklyProgramAndConfigTransformer {
      */
     public Ev3Configuration getBrickConfiguration() {
         return this.brickConfiguration;
+    }
+
+    /**
+     * @return the AST of the user program
+     */
+    public ArrayList<ArrayList<Phrase<Void>>> getTransformedProgram() {
+        return this.programTransformer.getTree();
     }
 
     /**

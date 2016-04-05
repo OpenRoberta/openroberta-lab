@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
 import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedPortsCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.testutil.Helper;
 
@@ -34,7 +34,7 @@ public class ProgramConfigurationCompatabilityTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
-        UsedPortsCheckVisitor programChecker = new UsedPortsCheckVisitor(brickConfiguration);
+        RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(brickConfiguration);
         int countErrors = programChecker.check(phrases);
         ArrayList<ArrayList<Phrase<Void>>> checkedProgram = programChecker.getCheckedProgram();
         System.out.println(countErrors);
