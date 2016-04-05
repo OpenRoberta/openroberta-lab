@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-04-05 12:15:45.001462",
+		"lastupdated": "2016-04-05 13:12:10.031742",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -809,5 +809,6 @@
 	"VALIDATION_VALID_EMAIL_ADDRESS": "Please enter a valid email address!",
 	"SIM_BLOCK_NOT_SUPPORTED": "This block is not supported in the simulation!",
 	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behavior of the program on real robot will be differen!",
-	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "Wrong sensor port! The behavior of the program on real robot will be differen, check the robot configuration!"
+	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "Wrong sensor port! The behavior of the program on real robot will be differen, check the robot configuration!",
+	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "Infrared Sensor is not connected in the configuration! The behavior of the program on real robot will be differen, check the robot configuration!"
 }

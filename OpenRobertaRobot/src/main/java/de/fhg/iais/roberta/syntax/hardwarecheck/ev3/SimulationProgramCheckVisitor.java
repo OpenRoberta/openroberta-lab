@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.ev3;
 import de.fhg.iais.roberta.components.ev3.EV3Sensor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothSendAction;
@@ -65,7 +66,11 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
     protected void checkSensorPort(BaseSensor<Void> sensor) {
         EV3Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
-            sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_SENSOR_MISSING"));
+            if ( sensor.getKind() == BlockType.INFRARED_SENSING ) {
+                sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
+            } else {
+                sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_SENSOR_MISSING"));
+            }
         } else {
             switch ( sensor.getKind() ) {
                 case COLOR_SENSING:
@@ -85,7 +90,7 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
                     break;
                 case INFRARED_SENSING:
                     if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_IR_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
+                        sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
                     }
                     break;
                 case GYRO_SENSING:

@@ -672,6 +672,7 @@ Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = "geklickt";
 Blockly.Msg.SET = "Setze";
 Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "This block is not supported in the simulation!";  // untranslated
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "This sensor is not in the configuration! The behavior of the program on real robot will be differen!";  // untranslated
+Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "Infrared Sensor is not connected in the configuration! The behavior of the program on real robot will be differen, check the robot configuration!";  // untranslated
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "Wrong sensor port! The behavior of the program on real robot will be differen, check the robot configuration!";  // untranslated
 Blockly.Msg.START = "Starte";
 Blockly.Msg.START_ACTIVITY = "Aktivität";
