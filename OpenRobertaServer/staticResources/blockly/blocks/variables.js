@@ -244,7 +244,7 @@ Blockly.Blocks['variables_set'] = {
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
 };
 
-Blockly.Blocks['robGlobalvariables_declare'] = {
+Blockly.Blocks['robGlobalVariables_declare'] = {
   /**
    * Block for variable decaration.
    * @this Blockly.Block
@@ -279,7 +279,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
          setCheck('Number');
     this.setPreviousStatement(true, 'declaration_only');
     //this.setTooltip(Blockly.Msg.VARIABLES_GLOBAL_DECLARE_TOOLTIP);
-    this.setMutatorMinus(new Blockly.MutatorMinus(['robGlobalvariables_declare']));
+    this.setMutatorMinus(new Blockly.MutatorMinus(['robGlobalVariables_declare']));
     this.setMovable(false);
     this.setDeletable(false);
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
@@ -433,7 +433,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
   customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
 };
 
-Blockly.Blocks['robLocalvariables_declare'] = {
+Blockly.Blocks['robLocalVariables_declare'] = {
   /**
    * Block for variable decaration.
    * @this Blockly.Block
@@ -479,7 +479,7 @@ Blockly.Blocks['robLocalvariables_declare'] = {
    * inconsistent as a result of the XML loading.
    * @this Blockly.Block
    */
-  validate: Blockly.Blocks['robGlobalvariables_declare'].validate,
+  validate: Blockly.Blocks['robGlobalVariables_declare'].validate,
   /**
    * Obtain a valid name for the variable.
    * Merge runs of whitespace.  Strip leading and trailing whitespace.
@@ -489,13 +489,13 @@ Blockly.Blocks['robLocalvariables_declare'] = {
    * @private
    * @this Blockly.Block
    */
-  validateName: Blockly.Blocks['robGlobalvariables_declare'].validateName,
+  validateName: Blockly.Blocks['robGlobalVariables_declare'].validateName,
   /**
    * Create XML to represent variable declaration insides.
    * @return {Element} XML storage element.
    * @this Blockly.Block
    */
-  mutationToDom: Blockly.Blocks['robGlobalvariables_declare'].mutationToDom,
+  mutationToDom: Blockly.Blocks['robGlobalVariables_declare'].mutationToDom,
   /**
    * Parse XML to restore variable declarations.
    * @param {!Element} xmlElement XML storage element.
@@ -513,7 +513,7 @@ Blockly.Blocks['robLocalvariables_declare'] = {
    * @param {Element} XML storage element.
    * @this Blockly.Block
    */
-  setNext: Blockly.Blocks['robGlobalvariables_declare'].setNext,
+  setNext: Blockly.Blocks['robGlobalVariables_declare'].setNext,
   getType: function() {
     return this.declarationType_;
   },

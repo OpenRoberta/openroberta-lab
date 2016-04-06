@@ -107,7 +107,7 @@ Blockly.Blocks['robControls_start'] = {
                 this.getInput('ST').connection.setCheck('declaration_only');
                 this.declare_ = true;
             }
-            var vd = this.workspace.newBlock('robGlobalvariables_declare');
+            var vd = this.workspace.newBlock('robGlobalVariables_declare');
             vd.initSvg();
             vd.render();
             var value = vd.getInput('VALUE');

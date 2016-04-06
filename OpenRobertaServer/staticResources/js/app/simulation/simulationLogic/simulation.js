@@ -49,6 +49,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         } else {
             currentBackground = num;
         }
+        var debug = robot.debug;
         if (currentBackground == 1) {
             robot = new SimpleRobot();
         } else if (currentBackground == 2) {
@@ -60,6 +61,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         } else if (currentBackground == 5) {
             robot = new MathRobot();
         }
+        robot.debug = debug;
         setObstacle();
         scene = new Scene(img[currentBackground], layers, robot, obstacle);
         resizeAll();
@@ -174,24 +176,30 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     var robot = new SimpleRobot();
 
     function init(program, refresh) {
-        ready = false;
+        robot.debug = false;
         userProgram = program;
         eval(userProgram);
         programEval.initProgram(blocklyProgram);
-        canceled = false;
-        isDownrobot = false;
-        isDownObstacle = false;
-        stepCounter = 0;
-        pause = true;
-        info = false;
-        robot.reset();
-        if (refresh)
+        if (refresh) {
+            ready = false;
+            removeMouseEvents();
+            canceled = false;
+            isDownrobot = false;
+            isDownObstacle = false;
+            stepCounter = 0;
+            pause = true;
+            info = false;
+            robot.reset();
             robot.resetPose();
-        img = [];
-        if (isIE()) {
-            imgSrc = imgSrcIE;
+            setObstacle();
+            img = [];
+            if (isIE()) {
+                imgSrc = imgSrcIE;
+            }
+            loadImages(0);
+        } else {
+            reloadProgram();
         }
-        loadImages(0);
     }
     exports.init = init;
 
@@ -227,7 +235,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             actionValues = programEval.step(sensorValues);
         } else if (programEval.getProgram().isTerminated()) {
             setPause(true);
-            //reloadProgram();
+            robot.reset();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         }
         robot.update(actionValues);
@@ -237,9 +245,9 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     }
 
     function reloadProgram() {
-        robot.reset();
-        eval(userProgram);
-        programEval.initProgram(blocklyProgram);
+//        robot.reset();
+//        eval(userProgram);
+//        programEval.initProgram(blocklyProgram);
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
@@ -434,7 +442,6 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
 
         layers = createLayers();
         scene = new Scene(img[currentBackground], layers, robot, obstacle);
-        setObstacle();
         scene.updateBackgrounds();
         scene.drawObjects();
         scene.drawRobot();

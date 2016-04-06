@@ -365,13 +365,17 @@ Blockly.Blocks['logic_compare'] = {
     }
     var blockA = this.getInputTargetBlock('A');
     var blockB = this.getInputTargetBlock('B');
-    if (blockA && blockB && (blockA.outputConnection.check_[0] === blockB.outputConnection.check_[0])) {
-      return;
-    } else if (blockA && blockB) {
+    if (blockA && blockB) {
+      if (!blockA.outputConnection.check_ || !blockB.outputConnection.check_) {
+        return;
+      }
+      if ((blockA.outputConnection.check_[0] === blockB.outputConnection.check_[0])) {
+        return;
+      } 
       this.getInput('A').setCheck(blockA.outputConnection.check_);
-      this.getInput('B').setCheck(blockA.outputConnection.check_)
+      this.getInput('B').setCheck(blockA.outputConnection.check_);
     } else if (blockA) {
-      this.getInput('B').setCheck(blockA.outputConnection.check_)
+        this.getInput('B').setCheck(blockA.outputConnection.check_)
     } else if (blockB) {
       this.getInput('A').setCheck(blockB.outputConnection.check_);
     } else {

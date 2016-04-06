@@ -31,7 +31,8 @@ define(
                     this.pose.yOld = initialPose.y;
                     this.pose.thetaOld = initialPose.theta;
                     this.pose.transX = initialPose.transX;
-                    this.pose.transY = initialPose.transY;                    
+                    this.pose.transY = initialPose.transY;
+                    this.debug = false;
                 };
                 this.reset = function() {
                     this.encoder.left = 0;
@@ -56,7 +57,6 @@ define(
                     this.tone.duration = 0;
                     this.tone.frequency = 0;
                     this.webAudio.volume = 0.5;
-                    this.debug = false;
                 };
             }
             Robot.prototype.geom = {
