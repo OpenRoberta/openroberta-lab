@@ -14,7 +14,6 @@ import org.hibernate.Session;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
@@ -40,7 +39,6 @@ import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
-@Ignore
 @Category(IntegrationTest.class)
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
@@ -193,15 +191,15 @@ public class RoundTripTest {
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
         s1 = HttpSessionState.init();
+        System.setProperty("phantomjs.binary", "/home/kcvejoski/dev/OpenRoberta/phantomjs-2.1.1/bin/phantomjs");
     }
 
     private static void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
-        response =
-            restUser.command(
-                s1,
-                sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        response = restUser.command(
+            s1,
+            sessionFactoryWrapper.getSession(),
+            JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!s1.isUserLoggedIn());
         response = //
@@ -229,7 +227,7 @@ public class RoundTripTest {
         driver.get(baseUrl + "/");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         //Welcome message dismiss
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("startEV3"))).click();
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("startupClose"))).click();
 
         //Login
         WebElement user = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("head-navi-icon-user")));
