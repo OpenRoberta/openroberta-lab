@@ -16,6 +16,7 @@ public class PhantomJSAvailableTest {
 
     @Test
     public void shouldHavePhantomJsBinary() {
+
         String binary = System.getProperty("phantomjs.binary");
         assertNotNull(binary);
         assertTrue(new File(binary).exists());
