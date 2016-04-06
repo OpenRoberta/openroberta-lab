@@ -203,8 +203,8 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDisabled>.blocklyPath {',
-    'fill-opacity: .5;',
-    'stroke-opacity: .5;',
+    'fill-opacity: .3;',
+    'stroke-opacity: .3;',
   '}',
 
   '.blocklyDisabled>.blocklyPathLight,',

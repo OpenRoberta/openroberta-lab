@@ -1,7 +1,7 @@
 define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'roberta.navigation', 'log', 'util', 'comm', 'roberta.brick-configuration',
-        'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'pace', 'blocks', 'jquery',
-        'jquery-cookie', 'jquery-ui', 'datatables', 'blocks-msg' ], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
-        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Pace, Blockly, $) {
+        'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'pace', 'blocks', 'blocks-msg',
+        'jquery', 'jquery-cookie', 'jquery-ui', 'datatables' ], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
+        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Pace, Blockly, Blockly, $) {
 
     var id;
 
@@ -295,19 +295,26 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
      * Regularly ping the server to keep status information up-to-date
      */
     function pingServer() {
-        // if (userState.doPing) {
-        COMM.ping(function(result) {
-            ROBERTA_ROBOT.setState(result);
-        });
-        // }
+        if (userState.doPing) {
+            COMM.ping(function(result) {
+                ROBERTA_ROBOT.setState(result);
+            });
+        }
     }
 
     /**
      * Handle server errors
      */
     function handleServerErrors() {
-        // TODO more?
-        LOG.info('network changed');
+        // TODO more?        
+        LOG.info('Server is not available or network is down');
+        userState.doPing = false;
+        $('#message').attr('lkey', Blockly.Msg.SERVER_NOT_AVAILABLE);
+        $('#message').html(Blockly.Msg.SERVER_NOT_AVAILABLE);
+        $('#show-message').on('hidden.bs.modal', function(e) {
+            $("#show-message").modal("show");
+        });
+        $("#show-message").modal("show");
     }
 
     /**

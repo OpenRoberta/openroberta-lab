@@ -669,6 +669,7 @@ Blockly.Msg.SENSOR_TOUCH = "touch sensor";
 Blockly.Msg.SENSOR_ULTRASONIC = "ultrasonic sensor";
 Blockly.Msg.SENSOR_WAIT_PRESSED = "pressed";
 Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = "pressed or released";
+Blockly.Msg.SERVER_NOT_AVAILABLE = "The Open Roberta Lab is currently not available. </br> Please check your internet connection and try to reload this website. If the problem persists, please don't hasitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de";
 Blockly.Msg.SET = "set";
 Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "Unfortunately you can not use this block in the simulation!";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "This sensor is not in the configuration! The behavior of the program on the real robot will be different than expected!";
