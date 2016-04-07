@@ -309,7 +309,10 @@ Blockly.FieldTextInput.numberValidator = function(text) {
   // 'O' is sometimes mistaken for '0' by inexperienced users.
   text = text.replace(/O/ig, '0');
   // Strip out thousands separators.
-  text = text.replace(/,/g, '');
+  text = text.replace(/,/g, '.');
+  // fix for german users ;-)
+  // Only the most right decimal point is valid and persists
+  text = text.replace(/\.(?=.*?\.)/g, '');
   var n = parseFloat(text || 0);
   return isNaN(n) ? null : String(n);
 };

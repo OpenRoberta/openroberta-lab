@@ -470,7 +470,7 @@ Blockly.Variables.allGlobalVariables = function() {
       var descendants = block.getDescendants();
       if (descendants) {
         variable: for (var i = 1; i < descendants.length; i++) {
-          if (descendants[i].getVarDecl && descendants[i].type === 'robGlobalvariables_declare') {
+          if (descendants[i].getVarDecl && descendants[i].type === 'robGlobalVariables_declare') {
             variableList.push(descendants[i].getVarDecl()[0]);
           } else {
             if (!descendants[i].getParent())
@@ -496,7 +496,7 @@ Blockly.Variables.allLocalVariables = function() {
       var descendants = block.getDescendants();
       if (descendants) {
         for (var j = 1; j < descendants.length; j++) {
-         if (descendants[j].getVarDecl && descendants[j].type == 'robLocalvariables_declare') {
+         if (descendants[j].getVarDecl && descendants[j].type == 'robLocalVariables_declare') {
              variableList.push(descendants[j].getVarDecl()[0]);
           } 
         }

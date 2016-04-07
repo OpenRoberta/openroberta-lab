@@ -1423,13 +1423,15 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
     if (!hasClass) {
       Blockly.addClass_(/** @type {!Element} */ (this.svgGroup_),
                         'blocklyDisabled');
-      this.svgPath_.setAttribute('fill',
-          'url(#' + this.workspace.options.disabledPatternId + ')');
+//      this.svgPath_.setAttribute('fill',
+//          'url(#' + this.workspace.options.disabledPatternId + ')');
+      this.svgPath_.setAttribute('stroke', '#000000');
     }
   } else {
     if (hasClass) {
       Blockly.removeClass_(/** @type {!Element} */ (this.svgGroup_),
                            'blocklyDisabled');
+      this.svgPath_.setAttribute('stroke', 'none');
       this.updateColour();
     }
   }

@@ -92,7 +92,7 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
             if (!isNaN(testNum)) {
                 value = String(testNum);
             }
-            var container = goog.dom.createDom('field', null, field.getValue());
+            var container = goog.dom.createDom('field', null, value);
             container.setAttribute('name', field.name);
             element.appendChild(container);
         }
