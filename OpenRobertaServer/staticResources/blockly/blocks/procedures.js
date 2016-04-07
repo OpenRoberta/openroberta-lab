@@ -870,7 +870,7 @@ Blockly.Blocks['robProcedures_defnoreturn'] = {
           this.getInput('STACK').connection.connect(stackConnectionTarget);
         }
       }
-      var vd = this.workspace.newBlock('robLocalVariables_declare');
+      var vd = this.workspace.newBlock('robLocalvariables_declare');
       vd.initSvg();
       vd.render();
       var connection;
@@ -1003,7 +1003,7 @@ Blockly.Blocks['robProcedures_defreturn'] = {
         this.addDeclarationStatement_();
         this.declare_ = true;
       }
-      var vd = this.workspace.newBlock('robLocalVariables_declare');
+      var vd = this.workspace.newBlock('robLocalvariables_declare');
       vd.initSvg();
       vd.render();
       var connection;

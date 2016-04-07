@@ -192,6 +192,15 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
         } else {
             userState.sensorValues = '';
         }
+        if (result['robot.nepoexitvalue'] != undefined) {
+            //TODO: For different robots we have different error messages
+            if (result['robot.nepoexitvalue'] !== userState.nepoExitValue) {
+                userState.nepoExitValue = result['robot.nepoexitvalue'];
+                if (userState.nepoExitValue !== 143 && userState.nepoExitValue !== 0) {
+                    MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '')
+                }
+            }
+        }
         if (userState.accountName) {
             $('#iconDisplayLogin').removeClass('error');
             $('#iconDisplayLogin').addClass('ok');

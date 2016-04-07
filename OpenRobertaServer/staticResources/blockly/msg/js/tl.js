@@ -586,6 +586,7 @@ Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "reset password ...";  // untranslated
+Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Program execution on the robot terminated unexpectedly!";  // untranslated
 Blockly.Msg.POPUP_REGISTER_USER = "Register now";  // untranslated
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon'><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class='NonIcon'><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class='NonIcon'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repeat password";  // untranslated
@@ -669,12 +670,11 @@ Blockly.Msg.SENSOR_TOUCH = "touch sensor";  // untranslated
 Blockly.Msg.SENSOR_ULTRASONIC = "ultrasonic sensor";  // untranslated
 Blockly.Msg.SENSOR_WAIT_PRESSED = "pressed";  // untranslated
 Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = "pressed or released";  // untranslated
-Blockly.Msg.SERVER_NOT_AVAILABLE = "The Open Roberta Lab is currently not available. </br> Please check your internet connection and try to reload this website. If the problem persists, please don't hasitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de";  // untranslated
 Blockly.Msg.SET = "set";  // untranslated
-Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "Unfortunately you can not use this block in the simulation!";  // untranslated
-Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "This sensor is not in the configuration! The behavior of the program on the real robot will be different than expected!";  // untranslated
-Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!";  // untranslated
-Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "In this block you have used a wrong sensor port! The behavior of the program on the real robot will be different than expected, please check the robot configuration!";  // untranslated
+Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "This block is not supported in the simulation!";  // untranslated
+Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "This sensor is not in the configuration! The behavior of the program on real robot will be differen!";  // untranslated
+Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "Infrared Sensor is not connected in the configuration! The behavior of the program on real robot will be differen, check the robot configuration!";  // untranslated
+Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "Wrong sensor port! The behavior of the program on real robot will be differen, check the robot configuration!";  // untranslated
 Blockly.Msg.START = "start";  // untranslated
 Blockly.Msg.START_ACTIVITY = "activity";  // untranslated
 Blockly.Msg.START_ACTIVITY_TOOLTIP = "Starts additional activity.";  // untranslated

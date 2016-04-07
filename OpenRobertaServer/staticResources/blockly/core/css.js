@@ -203,8 +203,8 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyDisabled>.blocklyPath {',
-    'fill-opacity: .3;',
-    'stroke-opacity: .3;',
+    'fill-opacity: .5;',
+    'stroke-opacity: .5;',
   '}',
 
   '.blocklyDisabled>.blocklyPathLight,',
@@ -388,7 +388,7 @@ Blockly.Css.CONTENT = [
   '}', 
   
   'g .robButton:hover rect[class="blocklyButtonBack"] {',
-    'fill: #BACC1E;',
+    'fill: #afca04;',
     'cursor: pointer',
   '}', 
   

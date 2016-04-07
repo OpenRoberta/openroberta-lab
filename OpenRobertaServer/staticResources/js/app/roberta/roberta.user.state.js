@@ -39,6 +39,8 @@ define([ 'exports', 'util', 'rest.user' ], function(exports, UTIL, USER) {
         exports.blocklyReady = false;
         exports.blocklyTranslated = false;
         exports.bricklyTranslated = false;
+
+        exports.nepoExitValue = 0;
     }
     exports.initUserState = initUserState;
 });
