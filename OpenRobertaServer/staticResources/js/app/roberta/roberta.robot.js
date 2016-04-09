@@ -75,12 +75,9 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
      * Show robot info
      */
     function showRobotInfo() {
-        if (userState.robotName) {
-            if (userState.robot === "oraSim") {
-                $("#robotName").text("ORSim");
-            } else {
-                $("#robotName").text(userState.robotName);
-            }
+        if (userState.robotWait) {
+            $("#robotName").text(userState.robotName);
+            $("#robotSystem").text(userState.robotFWName);
             if (userState.robotState === "wait") {
                 $("#robotStateWait").css('display', 'inline');
                 $("#robotStateDisconnected").css('display', 'none');
@@ -166,6 +163,11 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
         }
         if (result['robot.version']) {
             userState.robotVersion = result['robot.version'];
+        }
+        if (result['robot.firmwareName'] != undefined) {
+            userState.robotFWName = result['robot.firmwareName'];
+        } else {
+            userState.robotFWName = '';
         }
         if (result['robot.wait'] != undefined) {
             userState.robotWait = result['robot.wait'];

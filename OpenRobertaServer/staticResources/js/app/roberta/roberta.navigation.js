@@ -181,7 +181,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     } else if (domId === 'menuExportProg') { //  Submenu 'Program'
                         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
                         var xmlText = Blockly.Xml.domToText(xml);
-                        UTIL.download(xmlText, "xml");
+                        UTIL.download(userState.program + ".xml", xmlText);
                         MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", userState.program);
                     } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
                         ROBERTA_TOOLBOX.loadToolbox('beginner');
@@ -508,8 +508,11 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 }, 'show more releases clicked');
 
                 $('#codeDownload').onWrap('click', function(event) {
-                    //TODO always java?
-                    UTIL.download(userState.programCode, "java");
+                    // TODO get the programming language type from robot table in the database.
+                    var extension = userState.robotFWName === "ev3dev" ? ".py" : ".java";
+                    var filename = userState.program + extension;
+                    UTIL.download(filename, userState.programSource);
+                    MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", userState.program);
                 }, 'codeDownload clicked');
 
                 $('.newRelease').onWrap('click', function(event) {

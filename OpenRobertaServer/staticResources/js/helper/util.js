@@ -292,18 +292,18 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
     }
 
     exports.getBasename = getBasename;
-    
-    function download(text, extension) {
-        var blob = new Blob([ text ]);
+
+    function download(filename, content) {
+        var blob = new Blob([ content ]);
         var element = document.createElement('a');
         var myURL = window.URL || window.webkitURL;
         element.setAttribute('href', myURL.createObjectURL(blob));
-        element.setAttribute('download', userState.program + "." + extension);
+        element.setAttribute('download', filename);
         element.style.display = 'none';
         document.body.appendChild(element);
         element.click();
         document.body.removeChild(element);
     }
+    
     exports.download = download;
-
 });

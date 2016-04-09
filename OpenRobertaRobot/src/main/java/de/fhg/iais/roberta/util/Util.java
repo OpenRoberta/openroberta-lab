@@ -150,45 +150,34 @@ public class Util {
     public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, Ev3Communicator brickCommunicator) {
         try {
             response.put("serverTime", new Date());
+            response.put("server.version", Util.openRobertaVersion);
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
-                    if ( !token.equals("00000000") ) {
-                        Ev3CommunicationData state = brickCommunicator.getState(token);
-                        if ( state != null ) {
-                            response.put("robot.wait", state.getRobotConnectionTime());
-                            response.put("robot.battery", state.getBattery());
-                            response.put("robot.name", state.getRobotName());
-                            response.put("robot.version", state.getMenuVersion());
-                            response.put("robot.sensorvalues", state.getSensorValues());
-                            response.put("robot.nepoexitvalue", state.getNepoExitValue());
-                            response.put("server.version", Util.openRobertaVersion);
-                            State communicationState = state.getState();
-                            String infoAboutState;
-                            if ( communicationState == State.BRICK_IS_BUSY ) {
-                                infoAboutState = "busy";
-                            } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
-                                infoAboutState = "disconnected";
-                                brickCommunicator.disconnect(token);
-                            } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
-                                infoAboutState = "wait";
-                            } else if ( communicationState == State.GARBAGE ) {
-                                infoAboutState = "disconnected";
-                                //FIXME: showInfo on client side uses this as checking if the robot is available
-                                response.put("robot.name", "");
-                            } else {
-                                infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
-                            }
-                            response.put("robot.state", infoAboutState);
+                    Ev3CommunicationData state = brickCommunicator.getState(token);
+                    if ( state != null ) {
+                        response.put("robot.wait", state.getRobotConnectionTime());
+                        response.put("robot.battery", state.getBattery());
+                        response.put("robot.name", state.getRobotName());
+                        response.put("robot.version", state.getMenuVersion());
+                        response.put("robot.firmwareName", state.getFirmwareName());
+                        response.put("robot.sensorvalues", state.getSensorValues());
+                        response.put("robot.nepoexitvalue", state.getNepoExitValue());
+                        State communicationState = state.getState();
+                        String infoAboutState;
+                        if ( communicationState == State.BRICK_IS_BUSY ) {
+                            infoAboutState = "busy";
+                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
+                            infoAboutState = "disconnected";
+                            brickCommunicator.disconnect(token);
+                        } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+                            infoAboutState = "wait";
+                        } else if ( communicationState == State.GARBAGE ) {
+                            infoAboutState = "disconnected";
+                        } else {
+                            infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
                         }
-                    } else {
-                        // TODO create SimCommunicator / SimCommunicatorData and remove this
-                        response.put("robot.wait", 0);
-                        response.put("robot.battery", 0);
-                        response.put("robot.name", "oraSim");
-                        response.put("robot.version", Util.openRobertaVersion);
-                        response.put("server.version", Util.openRobertaVersion);
-                        response.put("robot.state", "wait");
+                        response.put("robot.state", infoAboutState);
                     }
                 }
             }

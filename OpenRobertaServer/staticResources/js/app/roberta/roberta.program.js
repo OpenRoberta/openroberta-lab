@@ -340,6 +340,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 $('.nav > li > ul > .robotType').addClass('disabled');
                 $(".code").removeClass('hide');
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
+                userState.programSource = result.javaSource
             });
         }
     }

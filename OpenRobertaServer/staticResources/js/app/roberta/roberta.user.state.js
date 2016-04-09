@@ -18,6 +18,7 @@ define([ 'exports', 'util', 'rest.user' ], function(exports, UTIL, USER) {
         exports.program = 'NEPOprog';
         exports.programSaved = false;
         exports.programShared = false;
+        exports.programSource ='';
 
         exports.configuration = 'EV3basis';
         exports.configurationSaved = false;
@@ -32,6 +33,7 @@ define([ 'exports', 'util', 'rest.user' ], function(exports, UTIL, USER) {
         exports.robotBattery = '';
         exports.robotWait = '';
         exports.robotVersion = '';
+        exports.robotFWName = ''
         exports.serverVersion = '';
         exports.sensorValues = '';
 

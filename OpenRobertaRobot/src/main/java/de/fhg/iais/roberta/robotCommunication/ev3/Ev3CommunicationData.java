@@ -288,6 +288,10 @@ public class Ev3CommunicationData {
     public String getFirmwareName() {
         return this.firmwarename;
     }
+    
+    public String getFirmwareVersion() {
+        return this.firmwareversion;
+    }
 
     public JSONObject getSensorValues() {
         return this.sensorvalues;
