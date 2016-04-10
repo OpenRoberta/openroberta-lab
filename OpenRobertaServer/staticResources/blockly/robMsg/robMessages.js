@@ -329,6 +329,10 @@ Blockly.Msg.MENU_SIM_START_PAUSE = 'Start/Pause';
 Blockly.Msg.MENU_SIM_STEP = 'Step';
 Blockly.Msg.MENU_SIM_STOP = 'Stop';
 Blockly.Msg.MENU_SIM_BACK = 'Back';
+Blockly.Msg.MENU_ZOOM = 'zoom';
+Blockly.Msg.MENU_ZOOM_IN = 'zoom in';
+Blockly.Msg.MENU_ZOOM_RESET = 'reset zoom';
+Blockly.Msg.MENU_ZOOM_OUT = 'zoom out';
 Blockly.Msg.TAB_PROGRAM = 'Program';
 Blockly.Msg.TAB_CONFIGURATION = 'Robot configuration';
 Blockly.Msg.TAB_SIMULATION = 'Simulation';
@@ -371,7 +375,7 @@ Blockly.Msg.BUTTON_START = 'Try it';
 Blockly.Msg.BUTTON_MORE = 'more';
 Blockly.Msg.POPUP_BEFOREUNLOAD = 'You have unsaved changes in your program or configuration. Sign in and save your program or configuration.';
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = 'You have unsaved changes in your program or configuration.';
-Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = 'There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<< and restart the robots system afterwards.';
+Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = 'There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<<.';
 Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = 'Update now';
 Blockly.Msg.POPUP_EMAIL_SEND = 'Send now';
 Blockly.Msg.POPUP_REGISTER_USER = 'Register now';
@@ -406,7 +410,7 @@ Blockly.Msg.MESSAGE_USER_DELETED = 'User deleted';
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = 'Program "$" was deleted';
 Blockly.Msg.MESSAGE_RELATION_DELETED = 'A relation of Program "$" was deleted';
 Blockly.Msg.MESSAGE_CONFIGURATION_DELETED = 'Configuration "$" was deleted';
-Blockly.Msg.MESSAGE_RESTART_ROBOT = 'Your robot can only use the new firmware, if you restart its system. Just turn the robot off and on again and reconnect the robot afterwards to the Open Roberta Lab.';
+Blockly.Msg.MESSAGE_RESTART_ROBOT = 'Please reconnect the robot to the Open Roberta Lab.';
 Blockly.Msg.MESSAGE_FIRMWARE_ERROR = 'There is a conflict with the firmware version of your robot and the Open Roberta Lab. Please contact us.';
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = 'Token set';
 Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = 'Check if your robot is switched on and connected to the server. <br />If you have problems to do this, please have a look at our help pages.';
@@ -518,8 +522,9 @@ Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = 'This sensor is not in th
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = 'In this block you have used a wrong sensor port! The behavior of the program on the real robot will be different than expected, please check the robot configuration!';
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = 'The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!';
 Blockly.Msg.SERVER_NOT_AVAILABLE = 'The Open Roberta Lab is currently not available. </br> Please check your internet connection and try to reload this website. If the problem persists, please don"t hasitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de';
-
-Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = 'Program execution on the robot terminated unexpectedly!';
+Blockly.Msg.MENU_MESSAGE_DOWNLOAD = 'Your program has been successfully downloaded.';
+Blockly.Msg.POPUP_ROBOT_SYSTEM = 'System';
+Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = 'The execution of the program on the robot has terminated unexpectedly!';
 
 
 

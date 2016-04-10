@@ -79,6 +79,7 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
         }
         // translate programming tab
         ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
+        ROBERTA_PROGRAM.updateRobControls();
         ROBERTA_PROGRAM.initProgramEnvironment(programBlocks);
     }
 

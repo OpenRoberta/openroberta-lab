@@ -179,10 +179,10 @@ Blockly.RobControls.prototype.createDom = function() {
   this.simVisible_ = false;
   var control = this;  
   this.svgGroup_ = Blockly.createSvgElement('g', {'class': 'blocklyButtons'}, null);
-  this.runOnBrick = this.createButton_(this.PATH_RUNONBRICK_, 0);
+  this.runOnBrick = this.createButton_(this.PATH_RUNONBRICK_, 0, 0, Blockly.Msg.MENU_START_BRICK);
   this.runOnBrick.setAttribute("id", "runInSim");
-  this.runInSim = this.createButton_(this.PATH_RUNINSIM_, 1);
-  this.simStop = this.createButton_(this.PATH_SIMSTOP_, 1);
+  this.runInSim = this.createButton_(this.PATH_RUNINSIM_, 1, 0, Blockly.Msg.MENU_START_SIM);
+  this.simStop = this.createButton_(this.PATH_SIMSTOP_, 1, 0, Blockly.Msg.MENU_SIM_STOP);
 //  this.simStep = this.createButton_(this.PATH_SIMSTEP_, 1, 1);
 //  this.simForward = this.createButton_(this.PATH_SIMFORWARD_, 1, 2);
 //  this.simPause = this.createButton_(this.PATH_SIMPAUSE_, 1, 2);
@@ -195,15 +195,15 @@ Blockly.RobControls.prototype.createDom = function() {
 //  this.simStep.setAttribute('class', 'robButtonHidden');
 //  this.simPause.setAttribute("id", "simPause");
 //  this.simPause.setAttribute('class', 'robButtonHidden');
-  this.saveProgram = this.createButton_(this.PATH_SAVEPROGRAM_, 2);
+  this.saveProgram = this.createButton_(this.PATH_SAVEPROGRAM_, 2, 0, Blockly.Msg.MENU_SAVE);
   this.saveProgram.setAttribute("id", "saveProgram");
    
   if (this.zoom_) {
     this.zoomVisible_ = false;
-    var zoom = this.createButton_(this.PATH_ZOOM_, 3);
-    var zoominSvg = this.createButton_(this.PATH_ZOOMIN_, 3);
-    var zoomresetSvg = this.createButton_(this.PATH_ZOOMRESET_, 3, 1);
-    var zoomoutSvg = this.createButton_(this.PATH_ZOOMOUT_, 3, 2);
+    var zoom = this.createButton_(this.PATH_ZOOM_, 3, 0, Blockly.Msg.MENU_ZOOM);
+    var zoominSvg = this.createButton_(this.PATH_ZOOMIN_, 3, 0, Blockly.Msg.MENU_ZOOM_IN);
+    var zoomresetSvg = this.createButton_(this.PATH_ZOOMRESET_, 3, 1, Blockly.Msg.MENU_ZOOM_RESET);
+    var zoomoutSvg = this.createButton_(this.PATH_ZOOMOUT_, 3, 2, Blockly.Msg.MENU_ZOOM_OUT);
     zoominSvg.setAttribute('class', 'robButtonHidden');
     zoomoutSvg.setAttribute('class', 'robButtonHidden');
     zoomresetSvg.setAttribute('class', 'robButtonHidden');
@@ -240,30 +240,33 @@ Blockly.RobControls.prototype.createDom = function() {
  * @return {!Element} The button.
  * @private
  */
-Blockly.RobControls.prototype.createButton_ = function(path, posX, posY) {
-  var y = posY || 0;
+Blockly.RobControls.prototype.createButton_ = function(pathD, posX, posY, tooltip) {
   var button = Blockly.createSvgElement('g',
       {'class': 'robButton',
-       'transform': 'translate(' + (posX * 50) + ',' + (y * -50) + ')'}, this.svgGroup_);
-  Blockly.createSvgElement('rect',
+       'transform': 'translate(' + (posX * 50) + ',' + (posY * -50) + ')'}, this.svgGroup_);
+  var rect = Blockly.createSvgElement('rect',
       {'class': 'blocklyButtonBack',
        'y': '0',
        'rx': '2',
        'ry': '2',
        'width':'48',
        'height':'48',
-      },
-      button);
-  Blockly.createSvgElement('path',
+      });
+  rect.tooltip = tooltip;
+  Blockly.Tooltip.bindMouseEvents(rect);
+  button.appendChild(rect);
+  var path = Blockly.createSvgElement('path',
       {'class': 'blocklyButtonPath',
-       'd': path,
+       'd': pathD,
        'transform': 'scale(1.5)',
        'fill-rule': 'evenodd',
        'fill':'#fff',
        'stroke-width': '0px',
        'fill': '#333'
-      },
-      button);
+      });
+  path.tooltip = tooltip;
+  Blockly.Tooltip.bindMouseEvents(path);
+  button.appendChild(path);
   return button;
 }
 
@@ -372,3 +375,11 @@ Blockly.RobControls.prototype.setSimStart = function(visible) {
     this.simStartVisible_ = false;
   }
 };
+
+Blockly.RobControls.prototype.dispose = function() {
+    if (this.svgGroup_) {
+    goog.dom.removeNode(this.svgGroup_);
+    this.svgGroup_ = null;
+  }
+  this.workspace_ = null;
+}

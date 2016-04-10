@@ -489,6 +489,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 blocklyWorkspace.clear();
             } else {
                 $('#blocklyDiv').html('');
+                if (blocklyWorkspace)
+                    blocklyWorkspace.dispose();
                 blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
                     path : '/blockly/',
                     toolbox : toolbox.data,
@@ -517,43 +519,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         userState.programSaved = false;
                     }
                 });
-                Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
-                    LOG.info('runOnBrick from blockly button');
-                    runOnBrick();
-                    return false;
-                });
-                Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
-                    LOG.info('runInSim from blockly button');
-                    runInSim();
-                    return false;
-                });
-                Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
-                    LOG.info('saveProgram from blockly button');
-                    saveToServer();
-                    return false;
-                });
-                Blockly.bindEvent_(blocklyWorkspace.robControls.simStop, 'mousedown', null, function(e) {
-                    LOG.info('simStop from blockly button');
-                    SIM.stopProgram();
-                    blocklyWorkspace.robControls.setSimStart(true);
-                    return false;
-                });
-//                Blockly.bindEvent_(blocklyWorkspace.robControls.simStep, 'mousedown', null, function(e) {
-//                    LOG.info('simStep from blockly button');
-//                    SIM.setStep();
-//                    return false;
-//                });
-//                Blockly.bindEvent_(blocklyWorkspace.robControls.simForward, 'mousedown', null, function(e) {
-//                    LOG.info('simForward from blockly button');
-//                    SIM.setPause(false);
-//                    return false;
-//                });
-//                Blockly.bindEvent_(blocklyWorkspace.robControls.simPause, 'mousedown', null, function(e) {
-//                    LOG.info('simPause from blockly button');
-//                    SIM.setPause(true);
-//                    return false;
-//                });
-                blocklyWorkspace.robControls.disable('saveProgram');
+                bindControl();
             }
             initProgramEnvironment(opt_programBlocks);
             ROBERTA_ROBOT.setState(toolbox);
@@ -566,4 +532,35 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     }
 
     exports.getBlocklyWorkspace = getBlocklyWorkspace;
+
+    function updateRobControls() {
+        blocklyWorkspace.updateRobControls();
+        bindControl();
+    }
+    exports.updateRobControls = updateRobControls;
+
+    function bindControl() {
+        Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
+            LOG.info('runOnBrick from blockly button');
+            runOnBrick();
+            return false;
+        });
+        Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
+            LOG.info('runInSim from blockly button');
+            runInSim();
+            return false;
+        });
+        Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
+            LOG.info('saveProgram from blockly button');
+            saveToServer();
+            return false;
+        });
+        Blockly.bindEvent_(blocklyWorkspace.robControls.simStop, 'mousedown', null, function(e) {
+            LOG.info('simStop from blockly button');
+            SIM.stopProgram();
+            blocklyWorkspace.robControls.setSimStart(true);
+            return false;
+        });
+        blocklyWorkspace.robControls.disable('saveProgram');
+    }
 });

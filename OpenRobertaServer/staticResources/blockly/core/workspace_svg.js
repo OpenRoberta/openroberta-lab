@@ -243,6 +243,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_.dispose();
     this.zoomControls_ = null;
   }
+  if (this.robControls) {
+    this.robControls.dispose();
+    this.robControls = null;
+  }
   if (!this.options.parentWorkspace) {
     // Top-most workspace.  Dispose of the SVG too.
     goog.dom.removeNode(this.getParentSvg());
@@ -938,6 +942,20 @@ Blockly.WorkspaceSvg.prototype.updateToolbox = function(tree) {
     this.options.languageTree = tree;
     this.flyout_.show(tree.childNodes);
   }
+};
+
+/**
+ * Modify the block tree on the existing toolbox.
+ * @param {Node|string} tree DOM tree of blocks, or text representation of same.
+ */
+Blockly.WorkspaceSvg.prototype.updateRobControls = function() {
+  if (!this.robControls) {
+    return;
+  }
+  this.robControls.dispose();
+  if (this.options.robControls && this.options.zoomOptions && this.options.zoomOptions.controls) {
+    this.addRobControls_(this.options.zoomOptions.controls);
+  } 
 };
 
 /**

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-04-07 12:44:02.426141",
+		"lastupdated": "2016-04-11 00:19:16.064443",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -629,6 +629,10 @@
 	"MENU_SIM_STEP": "Step",
 	"MENU_SIM_STOP": "Stop",
 	"MENU_SIM_BACK": "Back",
+	"MENU_ZOOM": "zoom",
+	"MENU_ZOOM_IN": "zoom in",
+	"MENU_ZOOM_RESET": "reset zoom",
+	"MENU_ZOOM_OUT": "zoom out",
 	"TAB_PROGRAM": "Program",
 	"TAB_CONFIGURATION": "Robot configuration",
 	"TAB_SIMULATION": "Simulation",
@@ -671,7 +675,7 @@
 	"BUTTON_MORE": "more",
 	"POPUP_BEFOREUNLOAD": "You have unsaved changes in your program or configuration. Sign in and save your program or configuration.",
 	"POPUP_BEFOREUNLOAD_LOGGEDIN": "You have unsaved changes in your program or configuration.",
-	"POPUP_CONFIRM_UPDATE_FIRMWARE": "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<< and restart the robots system afterwards.",
+	"POPUP_CONFIRM_UPDATE_FIRMWARE": "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<<.",
 	"POPUP_DO_UPDATE_FIRMWARE": "Update now",
 	"POPUP_EMAIL_SEND": "Send now",
 	"POPUP_REGISTER_USER": "Register now",
@@ -706,7 +710,7 @@
 	"MESSAGE_PROGRAM_DELETED": "Program '$' was deleted",
 	"MESSAGE_RELATION_DELETED": "A relation of Program '$' was deleted",
 	"MESSAGE_CONFIGURATION_DELETED": "Configuration '$' was deleted",
-	"MESSAGE_RESTART_ROBOT": "Your robot can only use the new firmware, if you restart its system. Just turn the robot off and on again and reconnect the robot afterwards to the Open Roberta Lab.",
+	"MESSAGE_RESTART_ROBOT": "Please reconnect the robot to the Open Roberta Lab.",
 	"MESSAGE_FIRMWARE_ERROR": "There is a conflict with the firmware version of your robot and the Open Roberta Lab. Please contact us.",
 	"ORA_TOKEN_SET_SUCCESS": "Token set",
 	"ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING": "Check if your robot is switched on and connected to the server. <br />If you have problems to do this, please have a look at our help pages.",
@@ -812,5 +816,7 @@
 	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "In this block you have used a wrong sensor port! The behavior of the program on the real robot will be different than expected, please check the robot configuration!",
 	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!",
 	"SERVER_NOT_AVAILABLE": "The Open Roberta Lab is currently not available. </br> Please check your internet connection and try to reload this website. If the problem persists, please don't hasitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de",
-	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "Program execution on the robot terminated unexpectedly!"
+	"MENU_MESSAGE_DOWNLOAD": "Your program has been successfully downloaded.",
+	"POPUP_ROBOT_SYSTEM": "System",
+	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "The execution of the program on the robot has terminated unexpectedly!"
 }
