@@ -387,7 +387,7 @@ body.blocklyMinimalBody  * {
 }
 
 .nav#head-navigation-tabs>li>a.tabClicked:hover {
-	background-color: #afca04;
+	background-color: #BACC1E;
 	outline: none;
 }
 
@@ -418,12 +418,12 @@ body.blocklyMinimalBody  * {
 
 .navbar-default .navbar-nav>li>a:hover
 	{
-	background-color: #afca04;
+	background-color: #BACC1E;
 }
 
 .navbar-default .navbar-toggle:hover
 	{
-	background-color: #afca04;
+	background-color: #BACC1E;
 }
 
 .nav>li>a {
@@ -467,7 +467,7 @@ body.blocklyMinimalBody  * {
 }
 
 .dropdown-menu>li:not(.disabled)>a:hover, .dropdown-menu>li:not(.disabled)>a:focus {
-	background-color: #afca04 !important;
+	background-color: #BACC1E !important;
 }
 
 .dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:hover,
@@ -666,7 +666,7 @@ body.blocklyMinimalBody  * {
 }
 
 .blbtn:hover {
-	background-color: #C7D92B;
+	background-color: #BACC1E;
 }
 
 .modal-footer .btn+.btn {
@@ -830,7 +830,7 @@ legend {
 
 #progListing table tbody tr.selected, #confListing table tbody tr.selected,
 	#relationsListing table tbody tr.selected {
-	background-color: #b7d032;
+	background-color: #BACC1E;
 }
 
 #progListing table thead, #progListing table thead .DataTables_sort_wrapper,

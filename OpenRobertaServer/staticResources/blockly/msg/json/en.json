@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-04-11 00:19:16.064443",
+		"lastupdated": "2016-04-13 12:28:41.215500",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -633,6 +633,12 @@
 	"MENU_ZOOM_IN": "zoom in",
 	"MENU_ZOOM_RESET": "reset zoom",
 	"MENU_ZOOM_OUT": "zoom out",
+<<<<<<< HEAD
+=======
+	"MENU_SIM_BACK_TOOLTIP": "back to programming editor",
+	"MENU_SIM_SCENE_TOOLTIP": "change the scene",
+	"MENU_SIM_ROBOT_TOOLTIP": "open/close the robot's view",
+>>>>>>> fix missing tooltips on editor buttons, add latest blockly
 	"TAB_PROGRAM": "Program",
 	"TAB_CONFIGURATION": "Robot configuration",
 	"TAB_SIMULATION": "Simulation",
@@ -686,6 +692,7 @@
 	"POPUP_CHANGE_PASSWORD": "change password ...",
 	"POPUP_STARTUP_TITLE": "Welcome",
 	"POPUP_CONTINUE": "continue anyway",
+	"POPUP_ROBOT_SYSTEM": "System",
 	"BUTTON_FINISH": "Finish",
 	"BUTTON_LOAD": "Load",
 	"BUTTON_DO_DELETE": "Delete",
@@ -818,5 +825,10 @@
 	"SERVER_NOT_AVAILABLE": "The Open Roberta Lab is currently not available. </br> Please check your internet connection and try to reload this website. If the problem persists, please don't hasitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de",
 	"MENU_MESSAGE_DOWNLOAD": "Your program has been successfully downloaded.",
 	"POPUP_ROBOT_SYSTEM": "System",
+<<<<<<< HEAD
 	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "The execution of the program on the robot has terminated unexpectedly!"
+=======
+	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "The execution of the program on the robot has terminated unexpectedly!",
+	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!"
+>>>>>>> fix missing tooltips on editor buttons, add latest blockly
 }

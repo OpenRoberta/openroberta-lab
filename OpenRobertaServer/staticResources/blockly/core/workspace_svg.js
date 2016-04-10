@@ -626,31 +626,53 @@ Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
   if (Blockly.isRightButton(e)) {
     // Right-click.
     this.showContextMenu_(e);
-  } else if (this.scrollbar) {
-    Blockly.removeAllRanges();
-    // If the workspace is editable, only allow scrolling when gripping empty
-    // space.  Otherwise, allow scrolling when gripping anywhere.
-    this.isScrolling = true;
-    // Record the current mouse position.
-    this.startDragMouseX = e.clientX;
-    this.startDragMouseY = e.clientY;
-    this.startDragMetrics = this.getMetrics();
-    this.startScrollX = this.scrollX;
-    this.startScrollY = this.scrollY;
-
-    // If this is a touch event then bind to the mouseup so workspace drag mode
-    // is turned off and double move events are not performed on a block.
-    // See comment in inject.js Blockly.init_ as to why mouseup events are
-    // bound to the document instead of the SVG's surface.
-    if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
-      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_ || [];
-      Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_.concat(
-          Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_));
+  } else {
+    // Beate: Close all bubbles with a click on the document
+    var allBlocks = this.getAllBlocks();
+    for (var i = 0; i < allBlocks.length; i++) {
+      var icons = allBlocks[i].getIcons();
+      for (var k = 0; k < icons.length; k++) {
+        if (icons[k].bubble_) {
+          var block = icons[k].block_;
+          // Beate: Errors and warnings that are visible will be closed and deleted
+          if (icons[k].block_.error) {
+            block.error.dispose();
+            block.render();
+          } else if (icons[k].block_.warning) {
+            block.warning.dispose();
+            block.render();
+          } else {
+            icons[k].setVisible(false);
+          }
+        }
+      }
     }
-    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];
-    Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
-        Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_));
-  }
+    if (this.scrollbar) {
+      Blockly.removeAllRanges();
+      // If the workspace is editable, only allow scrolling when gripping empty
+      // space.  Otherwise, allow scrolling when gripping anywhere.
+      this.isScrolling = true;
+      // Record the current mouse position.
+      this.startDragMouseX = e.clientX;
+      this.startDragMouseY = e.clientY;
+      this.startDragMetrics = this.getMetrics();
+      this.startScrollX = this.scrollX;
+      this.startScrollY = this.scrollY;
+
+      // If this is a touch event then bind to the mouseup so workspace drag mode
+      // is turned off and double move events are not performed on a block.
+      // See comment in inject.js Blockly.init_ as to why mouseup events are
+      // bound to the document instead of the SVG's surface.
+      if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
+        Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_ || [];
+        Blockly.onTouchUpWrapper_ = Blockly.onTouchUpWrapper_.concat(
+        Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_));
+      }
+      Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_ || [];
+      Blockly.onMouseMoveWrapper_ = Blockly.onMouseMoveWrapper_.concat(
+      Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_));
+    }
+  } 
   // This event has been handled.  No need to bubble up to the document.
   e.stopPropagation();
 };

@@ -272,7 +272,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     return false;
                 }, 'user clicked');
 
-                $('#head-navigation-sim-controle').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+                $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
                     $('.modal').modal('hide'); // head-navigation-sim-controle
                     var domId = event.target.id;
                     if (domId === 'menuSimSimple') {

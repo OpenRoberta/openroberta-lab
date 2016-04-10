@@ -147,6 +147,12 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
                 $('#iconDisplayLogin').attr('data-original-title', value).tooltip('fixTitle');
             } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP') {
                 $('#iconDisplayRobotState').attr('data-original-title', value).tooltip('fixTitle');
+            } else if (lkey === "Blockly.Msg.MENU_SIM_BACK_TOOLTIP") {
+                $('#simBack').attr('data-original-title', value).tooltip('fixTitle');
+            } else if (lkey === "Blockly.Msg.MENU_SIM_SCENE_TOOLTIP") {
+                $('#simScene').attr('data-original-title', value).tooltip('fixTitle');
+            } else if (lkey === "Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP") {
+                $('#simRobot').attr('data-original-title', value).tooltip('fixTitle');
             } else {
                 $(this).html(value);
                 $(this).attr('value', value);

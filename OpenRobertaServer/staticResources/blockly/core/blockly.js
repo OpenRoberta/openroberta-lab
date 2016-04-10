@@ -115,7 +115,7 @@ Blockly.CAT_SENSOR_RGB = "#8FA402";
 /**
  * The rgb value for block colours in text category.
  */
-Blockly.CAT_TEXT_RGB = "#B1C800";
+Blockly.CAT_TEXT_RGB = "#BACC1E";
 /**
  * The rgb value for block colours in variables category.
  */
@@ -227,20 +227,18 @@ Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
  * @const
  */
 Blockly.DATA_TYPE = [];
-Blockly.DATA_TYPE['Number'] = Blockly.CAT_MATH_RGB;
-Blockly.DATA_TYPE['String'] = Blockly.CAT_TEXT_RGB;
-Blockly.DATA_TYPE['Boolean'] = Blockly.CAT_LOGIC_RGB;
-Blockly.DATA_TYPE['Colour'] = Blockly.CAT_COLOUR_RGB;
-Blockly.DATA_TYPE['Connection'] = Blockly.CAT_COMMUNICATION_RGB;
-Blockly.DATA_TYPE['Sensor'] = Blockly.CAT_SENSOR_RGB;
-Blockly.DATA_TYPE['Actor'] = Blockly.CAT_ACTION_RGB;
-Blockly.DATA_TYPE['Array_Number'] = Blockly.CAT_LIST_RGB;
-Blockly.DATA_TYPE['Array_String'] = Blockly.CAT_LIST_RGB;
-Blockly.DATA_TYPE['Array_Boolean'] = Blockly.CAT_LIST_RGB;
-Blockly.DATA_TYPE['Array_Colour'] = Blockly.CAT_LIST_RGB;
-Blockly.DATA_TYPE['Array_Connection'] = Blockly.CAT_LIST_RGB;
-
-
+Blockly.DATA_TYPE['Number'] = "#005A94";
+Blockly.DATA_TYPE['String'] = "#BACC1E";
+Blockly.DATA_TYPE['Boolean'] = "#33B8CA";
+Blockly.DATA_TYPE['Colour'] = "#EBC300";
+Blockly.DATA_TYPE['Connection'] = "#FF69B4";
+Blockly.DATA_TYPE['Sensor'] = "#8FA402";
+Blockly.DATA_TYPE['Actor'] = "#F29400";
+Blockly.DATA_TYPE['Array_Number'] = "#39378B";
+Blockly.DATA_TYPE['Array_String'] = "#39378B";
+Blockly.DATA_TYPE['Array_Boolean'] = "#39378B";
+Blockly.DATA_TYPE['Array_Colour'] = "#39378B";
+Blockly.DATA_TYPE['Array_Connection'] = "#39378B";
 
 /**
  * Currently selected block.

@@ -333,6 +333,9 @@ Blockly.Msg.MENU_ZOOM = 'zoom';
 Blockly.Msg.MENU_ZOOM_IN = 'zoom in';
 Blockly.Msg.MENU_ZOOM_RESET = 'reset zoom';
 Blockly.Msg.MENU_ZOOM_OUT = 'zoom out';
+Blockly.Msg.MENU_SIM_BACK_TOOLTIP = 'back to programming editor';
+Blockly.Msg.MENU_SIM_SCENE_TOOLTIP = 'change the scene';
+Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP = 'open/close the robot"s view';
 Blockly.Msg.TAB_PROGRAM = 'Program';
 Blockly.Msg.TAB_CONFIGURATION = 'Robot configuration';
 Blockly.Msg.TAB_SIMULATION = 'Simulation';
@@ -386,6 +389,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = 'Repeat password';
 Blockly.Msg.POPUP_CHANGE_PASSWORD = 'change password ...';
 Blockly.Msg.POPUP_STARTUP_TITLE = 'Welcome';
 Blockly.Msg.POPUP_CONTINUE = 'continue anyway';
+Blockly.Msg.POPUP_ROBOT_SYSTEM = 'System';
 Blockly.Msg.BUTTON_FINISH = 'Finish';
 Blockly.Msg.BUTTON_LOAD = 'Load';
 Blockly.Msg.BUTTON_DO_DELETE = 'Delete';
@@ -516,7 +520,6 @@ Blockly.Msg.VALIDATION_TOKEN_LENGTH = 'Token length is 8 characters!';
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
 Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = 'Please enter a valid email address!';
 
-
 Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = 'Unfortunately you can not use this block in the simulation!';
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = 'This sensor is not in the configuration! The behavior of the program on the real robot will be different than expected!';
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = 'In this block you have used a wrong sensor port! The behavior of the program on the real robot will be different than expected, please check the robot configuration!';
@@ -525,7 +528,3 @@ Blockly.Msg.SERVER_NOT_AVAILABLE = 'The Open Roberta Lab is currently not availa
 Blockly.Msg.MENU_MESSAGE_DOWNLOAD = 'Your program has been successfully downloaded.';
 Blockly.Msg.POPUP_ROBOT_SYSTEM = 'System';
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = 'The execution of the program on the robot has terminated unexpectedly!';
-
-
-
-

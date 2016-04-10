@@ -69,7 +69,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						<ul class="dropdown-menu">
 							<li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
 							<li><a href="#" id="menuRunSim" class="typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
-							<li><a href="#" id="menuCheckProg" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
 							<li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
 							<li class="logout"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
 							<li class="login logout"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
@@ -106,7 +105,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						</a>
 						<ul class="dropdown-menu">
 							<li class="robotType ev3"><a href="#" id="menuEv3" class="typcn typcn-ev3">EV3</a></li>
-							<li class="robotType nxt"><a href="#" id="menuNxt" class="typcn typcn-Roberta">NXT</a></li>
+							<li class="robotType nxt hidden"><a href="#" id="menuNxt" class="typcn typcn-Roberta">NXT</a></li>
 							<li class="divider"></li>
 							<li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
 							<li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
@@ -147,7 +146,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
 					<li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
 					<!--  only if simulation is active -->
-					<li class="dropdown sim hide hidden-xs" id="head-navigation-sim-controle"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
+					<li class="dropdown sim hide hidden-xs sim-nav" id="head-navigation-sim-controle"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
 							id="head-navi-tooltip-program" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
 							<span id="head-navi-icon-program" class="head-navi-icons typcn typcn-th-small"></span><span class="hidden-sm hidden-md hidden-lg"
 								lkey="Blockly.Msg.MENU_EDIT"></span>
@@ -159,15 +158,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
 							<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
 							<li class="divider"></li>
-							<li><a href="#" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_SIM_INFO">Info</a></li>
-							<li><a href="#" class="simForward typcn typcn-media-pause" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
-							<li><a href="#" class="simStep typcn typcn-step" lkey="Blockly.Msg.MENU_SIM_STEP">Step</a></li>
-							<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-							<li><a href="#" class="simBack typcn typcn-times" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+					    	<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+							<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
 						</ul></li>
 				</ul>
 			</div>
-			<div class="collapse navbar-collapse " id="simButtonsCollapse">
+			<div class="collapse navbar-collapse sim-nav" id="simButtonsCollapse">
 				<ul class="nav navbar-nav visible-xs">
 					<li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
 					<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
@@ -175,11 +171,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
 					<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
 					<legend class="visible-xs"></legend>
-					<li><a href="#" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_SIM_INFO">Info</a></li>
-					<li><a href="#" class="simForward typcn typcn-media-play" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
-					<li><a href="#" class="simStep typcn typcn-step" lkey="Blockly.Msg.MENU_SIM_STEP">Step</a></li>
 					<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-					<li><a href="#" class="simBack typcn typcn-times" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+					<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
 				</ul>
 			</div>
 			<!-- Head-navigation-tabs -->
@@ -464,9 +457,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<h3 class="modal-title" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Robot state</h3>
 				</div>
 				<div class="modal-body left-inner-addon">
-					<span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br />
-					<span lkey="Blockly.Msg.POPUP_ROBOT_SYSTEM">System</span>:&nbsp;<span id="robotSystem"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
-						id="robotStateWait" lkey="Blockly.Msg.POPUP_ROBOT_STATE_WAIT"></span><span id="robotStateDisconnected" lkey="Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED"></span><span
+					<span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_SYSTEM">System</span>:&nbsp;<span
+						id="robotSystem"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotStateWait"
+						lkey="Blockly.Msg.POPUP_ROBOT_STATE_WAIT"></span><span id="robotStateDisconnected" lkey="Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED"></span><span
 						id="robotStateBusy" lkey="Blockly.Msg.POPUP_ROBOT_STATE_BUSY"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span
 						id="robotBattery"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
 				</div>
@@ -786,12 +779,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	</div>
 	<!-- Popup for simulated robot -> EV3 -->
 	<div id="simRobotModal" class="modal fade simRobotModal" data-backdrop="false">
-		<div class="modal-dialog">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
-			<div id="simRobotContent"></div>
+		<!-- <div class="modal-dialog"> -->
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 		</div>
+		<div id="simRobotContent"></div>
+		<!-- </div> -->
 	</div>
 	<!-- ################## END POPUPS ################## -->
 	<!-- ################## TABS ################## -->
@@ -813,9 +806,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
 					<div id="infoDiv" width="100px" height="200px" style="position: absolute; right: 0; top: 0; z-index: 1"></div>
 					<div id="simButtons">
-						<button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-left-thick"></button>
-						<button id="simScene" type="button" class="simScene blbtn typcn typcn-image"></button>
-						<button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3"></button>
+						<button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK_TOOLTIP" rel="tooltip"
+							data-original-title="" title=""></button>
+						<button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip"
+							data-original-title="" title=""></button>
+						<button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3" lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip" data-original-title=""
+							title=""></button>
 					</div>
 				</div>
 				<div id="codeDiv">
