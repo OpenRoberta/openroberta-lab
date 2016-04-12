@@ -100,8 +100,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
-    private static final String MOTOR_LEFT = "MOTOR_LEFT";
-    private static final String MOTOR_RIGHT = "MOTOR_RIGHT";
+    private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
+    private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
     private final StringBuilder sb = new StringBuilder();
     private int stmtsNumber = 0;
     private int methodsNumber = 0;
@@ -120,7 +120,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append("createConstant(" + numConst.getKind() + ", " + numConst.getValue() + ")");
+        this.sb.append("createConstant(CONST." + numConst.getKind() + ", " + numConst.getValue() + ")");
         return null;
     }
 
@@ -132,25 +132,25 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append("createConstant(" + boolConst.getKind() + ", " + boolConst.isValue() + ")");
+        this.sb.append("createConstant(CONST." + boolConst.getKind() + ", " + boolConst.isValue() + ")");
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("createConstant(" + stringConst.getKind() + ", '" + stringConst.getValue() + "')");
+        this.sb.append("createConstant(CONST." + stringConst.getKind() + ", '" + stringConst.getValue() + "')");
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("createConstant(" + nullConst.getKind() + ", undefined)");
+        this.sb.append("createConstant(CONST." + nullConst.getKind() + ", undefined)");
         return null;
     }
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("createConstant(" + colorConst.getKind() + ", COLOR_ENUM." + colorConst.getValue() + ")");
+        this.sb.append("createConstant(CONST." + colorConst.getKind() + ", CONST.COLOR_ENUM." + colorConst.getValue() + ")");
         return null;
     }
 
@@ -166,13 +166,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVar(Var<Void> var) {
-        this.sb.append("createVarReference(" + var.getTypeVar() + ", \"" + var.getValue() + "\")");
+        this.sb.append("createVarReference(CONST." + var.getTypeVar() + ", \"" + var.getValue() + "\")");
         return null;
     }
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append("createVarDeclaration(" + var.getTypeVar() + ", \"" + var.getName() + "\", ");
+        this.sb.append("createVarDeclaration(CONST." + var.getTypeVar() + ", \"" + var.getName() + "\", ");
         if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
             ExprList<Void> list = (ExprList<Void>) var.getValue();
             if ( list.get().size() == 2 ) {
@@ -189,7 +189,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        this.sb.append("createUnaryExpr(" + unary.getOp() + ", ");
+        this.sb.append("createUnaryExpr(CONST." + unary.getOp() + ", ");
         unary.getExpr().visit(this);
         this.sb.append(")");
         return null;
@@ -197,7 +197,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        String method = "createBinaryExpr(" + binary.getOp() + ", ";
+        String method = "createBinaryExpr(CONST." + binary.getOp() + ", ";
         String end = ")";
         // FIXME: The math change should be removed from the binary expression since it is a statement
         switch ( binary.getOp() ) {
@@ -222,7 +222,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("createBinaryExpr(" + mathPowerFunct.getFunctName() + ", ");
+        this.sb.append("createBinaryExpr(CONST." + mathPowerFunct.getFunctName() + ", ");
         mathPowerFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
@@ -257,19 +257,19 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
-                this.sb.append("createConstant(STRING_CONST, '')");
+                this.sb.append("createConstant(CONST.STRING_CONST, '')");
                 break;
             case "java.lang.Boolean":
-                this.sb.append("createConstant(BOOL_CONST, true)");
+                this.sb.append("createConstant(CONST.BOOL_CONST, true)");
                 break;
             case "java.lang.Integer":
-                this.sb.append("createConstant(NUM_CONST, 0)");
+                this.sb.append("createConstant(CONST.NUM_CONST, 0)");
                 break;
             case "java.util.ArrayList":
                 this.sb.append("[]");
                 break;
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
-                this.sb.append("createConstant(NULL_CONST, null)");
+                this.sb.append("createConstant(CONST.NULL_CONST, null)");
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
@@ -396,7 +396,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createDriveAction(");
         driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + driveAction.getDirection());
+        this.sb.append(", CONST." + driveAction.getDirection());
         if ( isDuration ) {
             this.sb.append(", ");
             driveAction.getParam().getDuration().getValue().visit(this);
@@ -411,7 +411,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createTurnAction(");
         turnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + turnAction.getDirection());
+        this.sb.append(", CONST." + turnAction.getDirection());
         if ( isDuration ) {
             this.sb.append(", ");
             turnAction.getParam().getDuration().getValue().visit(this);
@@ -423,7 +423,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         String end = createClosingBracket();
-        this.sb.append("createTurnLight(" + lightAction.getColor() + ", " + lightAction.getBlinkMode());
+        this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
         this.sb.append(end);
         return null;
     }
@@ -431,7 +431,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String end = createClosingBracket();
-        this.sb.append("createStatusLight(" + lightStatusAction.getStatus());
+        this.sb.append("createStatusLight(CONST." + lightStatusAction.getStatus());
         this.sb.append(end);
         return null;
     }
@@ -450,7 +450,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(", " + (motorOnAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         if ( isDuration ) {
-            this.sb.append(", createDuration(");
+            this.sb.append(", createDuration(CONST.");
             this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
             motorOnAction.getParam().getDuration().getValue().visit(this);
             this.sb.append(")");
@@ -489,7 +489,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
             String end = createClosingBracket();
-            this.sb.append("createSetVolumeAction(" + volumeAction.getMode() + ", ");
+            this.sb.append("createSetVolumeAction(CONST." + volumeAction.getMode() + ", ");
             volumeAction.getVolume().visit(this);
             this.sb.append(end);
         } else {
@@ -501,7 +501,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         String end = createClosingBracket();
-        this.sb.append("createPlayFileAction(" + playFileAction.getFileName());
+        this.sb.append("createPlayFileAction(CONST." + playFileAction.getFileName());
         this.sb.append(end);
         return null;
     }
@@ -551,13 +551,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(BUTTONS, " + brickSensor.getKey() + ")");
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getKey() + ")");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(COLOR, " + colorSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.COLOR, CONST." + colorSensor.getMode() + ")");
         return null;
     }
 
@@ -569,7 +569,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
             this.sb.append("createResetEncoderSensor(" + encoderMotor);
             this.sb.append(end);
         } else {
-            this.sb.append("createGetSampleEncoderSensor(" + encoderMotor + ", " + encoderSensor.getMode() + ")");
+            this.sb.append("createGetSampleEncoderSensor(" + encoderMotor + ", CONST." + encoderSensor.getMode() + ")");
         }
         return null;
     }
@@ -581,14 +581,14 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
             this.sb.append("createResetGyroSensor(");
             this.sb.append(end);
         } else {
-            this.sb.append("createGetSample(GYRO, " + gyroSensor.getMode() + ")");
+            this.sb.append("createGetSample(CONST.GYRO, CONST." + gyroSensor.getMode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("createGetSample(INFRARED, " + infraredSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.INFRARED, " + infraredSensor.getMode() + ")");
         return null;
     }
 
@@ -596,7 +596,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("createGetSample(TIMER, 'timer" + timerSensor.getTimer() + "')");
+                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getTimer() + "')");
                 break;
             case RESET:
                 String end = createClosingBracket();
@@ -611,13 +611,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("createGetSample(TOUCH)");
+        this.sb.append("createGetSample(CONST.TOUCH)");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("createGetSample(ULTRASONIC, " + ultrasonicSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.ULTRASONIC, CONST." + ultrasonicSensor.getMode() + ")");
         return null;
     }
 
@@ -694,14 +694,14 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         this.sb.append("createGetSubList({list: ");
         getSubFunct.getParam().get(0).visit(this);
-        this.sb.append(", where1: ");
+        this.sb.append(", where1: CONST.");
         IndexLocation where1 = IndexLocation.get(getSubFunct.getStrParam().get(0));
         this.sb.append(where1);
         if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
             this.sb.append(", at1: ");
             getSubFunct.getParam().get(1).visit(this);
         }
-        this.sb.append(", where2: ");
+        this.sb.append(", where2: CONST.");
         IndexLocation where2 = IndexLocation.get(getSubFunct.getStrParam().get(1));
         this.sb.append(where2);
         if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
@@ -718,7 +718,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        this.sb.append("createListFindItem(" + indexOfFunct.getLocation() + ", ");
+        this.sb.append("createListFindItem(CONST." + indexOfFunct.getLocation() + ", ");
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
@@ -740,7 +740,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("createCreateListWith(ARRAY_" + listCreate.getTypeVar() + ", [");
+        this.sb.append("createCreateListWith(CONST.ARRAY_" + listCreate.getTypeVar() + ", [");
         listCreate.getValue().visit(this);
         this.sb.append("])");
         return null;
@@ -751,11 +751,11 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createListsSetIndex(");
         listSetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
+        this.sb.append(", CONST.");
         this.sb.append(listSetIndex.getElementOperation());
         this.sb.append(", ");
         listSetIndex.getParam().get(1).visit(this);
-        this.sb.append(", ");
+        this.sb.append(", CONST.");
         this.sb.append(listSetIndex.getLocation());
         if ( listSetIndex.getParam().size() == 3 ) {
             this.sb.append(", ");
@@ -775,9 +775,9 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         }
         this.sb.append(methodName);
         listGetIndex.getParam().get(0).visit(this);
-        this.sb.append(", ");
+        this.sb.append(", CONST.");
         this.sb.append(listGetIndex.getElementOperation());
-        this.sb.append(", ");
+        this.sb.append(", CONST.");
         this.sb.append(listGetIndex.getLocation());
         if ( listGetIndex.getParam().size() == 2 ) {
             this.sb.append(", ");
@@ -823,7 +823,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        this.sb.append("createMathOnList(" + mathOnListFunct.getFunctName() + ", ");
+        this.sb.append("createMathOnList(CONST." + mathOnListFunct.getFunctName() + ", ");
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
         return null;
@@ -1063,24 +1063,24 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 this.sb.append("], [");
                 break;
             case TIMES:
-                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
                 ((NumConst<Void>) ((ExprList<Void>) repeatStmt.getExpr()).get().get(2)).visit(this);
                 this.sb.append(", [");
                 break;
             case FOREVER:
             case WHILE:
             case UNTIL:
-                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append(", [");
                 break;
             case FOR:
-                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", [");
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", [");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append("], [");
                 break;
             case FOR_EACH:
-                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append(", [");
                 break;

@@ -36,6 +36,7 @@ require.config({
         'simulation.scene' : '../app/simulation/simulationLogic/scene',
         'simulation.math' : '../app/simulation/simulationLogic/math',
         'simulation.program.eval' : '../app/simulation/robertaLogic/program.eval',
+        'simulation.program.builder' : '../app/simulation/robertaLogic/program.builder',
 
         'rest.configuration' : '../app/roberta/rest/configuration',
         'rest.program' : '../app/roberta/rest/program',
@@ -52,7 +53,8 @@ require.config({
         'robertaLogic.actors' : '../app/simulation/robertaLogic/actors',
         'robertaLogic.motor' : '../app/simulation/robertaLogic/motor',
         'robertaLogic.memory' : '../app/simulation/robertaLogic/memory',
-        'robertaLogic.program' : '../app/simulation/robertaLogic/program'
+        'robertaLogic.program' : '../app/simulation/robertaLogic/program',
+        'robertaLogic.constants' : '../app/simulation/robertaLogic/constants',
 
     },
     shim : {
@@ -76,7 +78,7 @@ require.config({
     }
 });
 
-require(['require', 'wrap', 'roberta.roberta', 'jquery' ], function(require) {
+require([ 'require', 'wrap', 'roberta.roberta', 'jquery' ], function(require) {
 
     $ = require('jquery');
     WRAP = require('wrap');

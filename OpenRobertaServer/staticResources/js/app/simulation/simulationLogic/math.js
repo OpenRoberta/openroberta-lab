@@ -4,7 +4,7 @@
  * @version 0.1
  */
 
-define(function(require, exports) {
+define([ 'exports', 'robertaLogic.constants' ], function(exports, CONSTANTS) {
     /**
      * exports helper for calculations in ORsimulation
      * 
@@ -203,27 +203,27 @@ define(function(require, exports) {
      */
     exports.getColor = function(hsv) {
         if (hsv[2] <= 10) {
-            return COLOR_ENUM.BLACK;
+            return CONSTANTS.COLOR_ENUM.BLACK;
         }
         if ((hsv[0] < 10 || hsv[0] > 350) && hsv[1] > 90 && hsv[2] > 50) {
-            return COLOR_ENUM.RED;
+            return CONSTANTS.COLOR_ENUM.RED;
         }
         if (hsv[0] > 40 && hsv[0] < 70 && hsv[1] > 90 && hsv[2] > 50) {
-            return COLOR_ENUM.YELLOW;
+            return CONSTANTS.COLOR_ENUM.YELLOW;
         }
         if (hsv[0] < 50 && hsv[1] > 50 && hsv[1] < 100 && hsv[2] < 50) {
-            return COLOR_ENUM.BROWN;
+            return CONSTANTS.COLOR_ENUM.BROWN;
         }
         if (hsv[1] < 10 && hsv[2] > 90) {
-            return COLOR_ENUM.WHITE;
+            return CONSTANTS.COLOR_ENUM.WHITE;
         }
         if (hsv[0] > 70 && hsv[0] < 160 && hsv[1] > 80) {
-            return COLOR_ENUM.GREEN;
+            return CONSTANTS.COLOR_ENUM.GREEN;
         }
         if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
-            return COLOR_ENUM.BLUE;
+            return CONSTANTS.COLOR_ENUM.BLUE;
         }
-        return COLOR_ENUM.NONE;
+        return CONSTANTS.COLOR_ENUM.NONE;
     }
 
 });

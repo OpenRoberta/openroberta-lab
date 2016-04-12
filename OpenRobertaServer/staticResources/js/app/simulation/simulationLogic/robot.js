@@ -1,6 +1,6 @@
 define(
-        [ 'simulation.simulation' ],
-        function(SIM) {
+        [ 'simulation.simulation', 'robertaLogic.constants' ],
+        function(SIM, CONSTANTS) {
 
             /**
              * Creates a new robot for a simulation.
@@ -38,7 +38,7 @@ define(
                     this.encoder.left = 0;
                     this.encoder.right = 0;
                     this.led.color = "LIGHTGRAY";
-                    this.led.mode = OFF;
+                    this.led.mode = "OFF";
                     this.led.blink = 0;
                     this.time = 0;
                     for (key in this.timer) {
@@ -330,8 +330,8 @@ define(
                     } else if (right < -100) {
                         right = -100
                     }
-                    this.left = left * MAXPOWER;
-                    this.right = right * MAXPOWER;
+                    this.left = left * CONSTANTS.MAXPOWER;
+                    this.right = right * CONSTANTS.MAXPOWER;
                 } else {
                     this.left = 0;
                     this.right = 0;
@@ -388,8 +388,8 @@ define(
                     }
                     this.pose.thetaDiff = 0;
                 } else {
-                    var R = TRACKWIDTH / 2 * ((this.left + this.right) / (this.left - this.right));
-                    var rot = (this.left - this.right) / TRACKWIDTH;
+                    var R = CONSTANTS.TRACKWIDTH / 2 * ((this.left + this.right) / (this.left - this.right));
+                    var rot = (this.left - this.right) / CONSTANTS.TRACKWIDTH;
                     var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
                     var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
                     this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;

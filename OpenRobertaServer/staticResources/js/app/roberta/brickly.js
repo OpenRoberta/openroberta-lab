@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks', 'roberta.brick-configuration' ], function(require, exports,
-        LOG, UTIL, COMM, MSG, userState, Blockly, ROBERTA_BRICK_CONFIGURATION) {
+define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks', 'roberta.brick-configuration' ], function(exports, LOG, UTIL, COMM, MSG,
+        userState, Blockly, ROBERTA_BRICK_CONFIGURATION) {
 
     var bricklyWorkspace;
 

@@ -3,7 +3,7 @@
  * 
  * @module robertaLogic/actors
  */
-define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
+define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Motor, UTIL, CONSTANTS) {
     var privateMem = new WeakMap();
 
     var internal = function(object) {
@@ -52,7 +52,7 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
      *            {String} - of rotation of actors (FOREWARD or BACKWARD)
      */
     Actors.prototype.setSpeed = function(speed, direction) {
-        if (direction != FOREWARD) {
+        if (direction != CONSTANTS.FOREWARD) {
             speed = -speed;
         }
         internal(this).leftMotor.setPower(speed);
@@ -69,7 +69,7 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
      *            {String} - of rotation of actors (LEFT or RIGHT)
      */
     Actors.prototype.setAngleSpeed = function(speed, direction) {
-        if (direction == LEFT) {
+        if (direction == CONSTANTS.LEFT) {
             internal(this).leftMotor.setPower(-speed);
             internal(this).rightMotor.setPower(speed);
         } else {
@@ -134,7 +134,7 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
 
         if (internal(this).distanceToCover) {
             switch (internal(this).driveMode) {
-            case PILOT:
+            case CONSTANTS.PILOT:
                 if (isLeftMotorFinished && isRightMotorFinished) {
                     internal(this).leftMotor.setPower(0);
                     internal(this).rightMotor.setPower(0);
@@ -146,7 +146,7 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
                 }
                 break;
 
-            case MOTOR_LEFT:
+            case CONSTANTS.MOTOR_LEFT:
                 if (isLeftMotorFinished) {
                     internal(this).leftMotor.setPower(0);
                     internal(this).distanceToCover = false;
@@ -156,7 +156,7 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
                 }
                 break;
 
-            case MOTOR_RIGHT:
+            case CONSTANTS.MOTOR_RIGHT:
                 if (isRightMotorFinished) {
                     internal(this).rightMotor.setPower(0);
                     internal(this).distanceToCover = false;
@@ -180,11 +180,11 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
      *            {Number} - angle we want to cover
      */
     Actors.prototype.calculateAngleToCover = function(program, angle) {
-        extraRotation = TURN_RATIO * (angle / 720.);
+        extraRotation = CONSTANTS.TURN_RATIO * (angle / 720.);
         internal(this).leftMotor.setGoalRotations(extraRotation);
         internal(this).rightMotor.setGoalRotations(extraRotation);
         internal(this).distanceToCover = true;
-        internal(this).driveMode = PILOT;
+        internal(this).driveMode = CONSTANTS.PILOT;
         program.setNextStatement(false);
     };
 
@@ -201,7 +201,7 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
         internal(this).leftMotor.setGoalRotations(rotations);
         internal(this).rightMotor.setGoalRotations(rotations);
         internal(this).distanceToCover = true;
-        internal(this).driveMode = PILOT;
+        internal(this).driveMode = CONSTANTS.PILOT;
         program.setNextStatement(false);
     };
 
@@ -236,15 +236,15 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
      */
     Actors.prototype.setMotorDuration = function(program, durationType, duration, motorSide) {
         var rotations = duration;
-        if (durationType == DEGREE) {
+        if (durationType == CONSTANTS.DEGREE) {
             rotations = duration / 360.
         }
-        if (motorSide == MOTOR_LEFT) {
+        if (motorSide == CONSTANTS.MOTOR_LEFT) {
             internal(this).leftMotor.setGoalRotations(rotations);
-            internal(this).driveMode = MOTOR_LEFT;
+            internal(this).driveMode = CONSTANTS.MOTOR_LEFT;
         } else {
             internal(this).rightMotor.setGoalRotations(rotations);
-            internal(this).driveMode = MOTOR_RIGHT;
+            internal(this).driveMode = CONSTANTS.MOTOR_RIGHT;
         }
         internal(this).distanceToCover = true;
         program.setNextStatement(false);
@@ -268,13 +268,13 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
     Actors.prototype.speedCorrection = function(nextFrameTimeDuration, motor) {
         var roundUP = 3;
         var correctedSpeed;
-        var nextFrameDistanceL = Math.abs(motor.getPower()) * MAXPOWER * nextFrameTimeDuration / 3.0;
+        var nextFrameDistanceL = Math.abs(motor.getPower()) * CONSTANTS.MAXPOWER * nextFrameTimeDuration / 3.0;
         var nextFrameRotationsL = distanceToRotations(nextFrameDistanceL);
 
         if (UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotationsL > UTIL.round(motor.getGoalRotations(), roundUP)) {
             var dRotations = motor.getGoalRotations() - motor.getCurrentRotations();
             var dDistance = rotationsToDistance(dRotations);
-            correctedSpeed = (3 * dDistance) / (MAXPOWER * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
+            correctedSpeed = (3 * dDistance) / (CONSTANTS.MAXPOWER * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
         }
         return correctedSpeed;
     };
@@ -284,11 +284,11 @@ define([ 'robertaLogic.motor', 'util' ], function(Motor, UTIL) {
     };
 
     var distanceToRotations = function(distance) {
-        return distance / (WHEEL_DIAMETER * Math.PI);
+        return distance / (CONSTANTS.WHEEL_DIAMETER * Math.PI);
     };
 
     var rotationsToDistance = function(rotations) {
-        return (WHEEL_DIAMETER * Math.PI) * rotations;
+        return (CONSTANTS.WHEEL_DIAMETER * Math.PI) * rotations;
     };
     return Actors;
 });

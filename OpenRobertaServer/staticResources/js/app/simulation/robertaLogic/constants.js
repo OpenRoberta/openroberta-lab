@@ -1,411 +1,407 @@
-const
-ARG1 = "arg1";
-const
-ARG2 = "arg2";
-const
-EXPR = "expr";
-const
-VALUE = "value";
-const
-OP = "op";
-const
-LEFT = "left";
-const
-RIGHT = "right";
-const
-ENTER = "enter";
-const
-DOWN = "down";
-const
-UP = "up";
-const
-ANY = "any";
-const
-ESCAPE = "escape";
-const
-BINARY = "Binary";
-const
-UNARY = "Unary";
-const
-VAR = "Var";
-const
-TYPE = "type";
-const
-NAME = "name";
-const
-STMT = "stmt";
-const
-PARAMETERS = "parameters";
-const
-FUNCTION_DECLARATION = "functionDeclaration";
-const
-VAR_DECLARATION = "VarDeclaration";
-const
-SINGLE_FUNCTION = "SingleFunction";
-const
-MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
-const
-RANDOM_INT = "randInt";
-const
-RANDOM_DOUBLE = "randDouble";
-const
-RANDOM = "random";
-const
-ASSIGN_STMT = "AssignStmt";
-const
-REPEAT_STMT = "RepeatStmt";
-const
-IF_STMT = "IfStatement";
-const
-WAIT_STMT = "WaitStmt";
-const
-MATH_CONST = "MathConst";
-const
-SHOW_TEXT_ACTION = "ShowTextAction";
-const
-SHOW_PICTURE_ACTION = "ShowPictureAction";
-const
-CLEAR_DISPLAY_ACTION = "ClearDisplay";
-const
-CREATE_DEBUG_ACTION = "CreateDebugAction";
-const
-TONE_ACTION = "ToneAction";
-const
-FREQUENCY = "frequency";
-const
-DURATION = "duration";
-const
-GET_VOLUME = "GetVolume";
-const
-SET_VOLUME_ACTION = "SetVolumeAction";
-const
-VOLUME = "volume";
-const
-PLAY_FILE_ACTION = "PlayFileAction";
-const
-FILE = "file";
-const
-TEXT = "text";
-const
-TEXT_APPEND = "textAppend";
-const
-PICTURE = "picture";
-const
-X = "x";
-const
-Y = "y";
-const
-MATH_PROP_FUNCT = "MathPropFunct";
+define({
 
-const
-WAIT_TIME_STMT = "WaitTimeSTMT";
+    ARG1 : "arg1",
 
-const
-TIME = "time";
-const
-LIST = "list";
-const
-STMT_LIST = "stmtList";
-const
-DRIVE_ACTION = "DriveAction";
-const
-TURN_LIGHT = "turnLight";
-const
-TURN_ACTION = "TurnAction";
-const
-STOP_DRIVE = "stopDrive";
-const
-DRIVE_DIRECTION = "driveDirection";
-const
-TURN_DIRECTION = "turnDirection";
-const
-SPEED = "speed";
-const
-DISTANCE = "distance";
-const
-PRESENCE = "presence";
-const
-SEEK = "presence";
-const
-RESET = "reset";
-const
-GET_SAMPLE = "GetSample";
-const
-SENSOR_TYPE = "sensorType";
-const
-SENSOR_MODE = "sensorMode";
-const
-THEN_LIST = "thenList";
-const
-ELSE_STMTS = "elseStmts";
-const
-EXPR_LIST = "exprList";
-const
-STATEMENTS = "statements";
-const
-TOUCH = "touch";
-const
-INFRARED = "infrared";
-const
-ULTRASONIC = "ultrasonic";
-const
-GYRO = "gyro";
-const
-BUTTONS = "buttons";
-const
-RATE = "rate";
-const
-NUM_CONST = "NumConst";
-const
-BOOL_CONST = "BoolConst";
-const
-STRING_CONST = "StringConst";
-const
-STRING = "STRING";
-const
-BOOLEAN = "BOOLEAN";
-const
-NUMBER = "NUMBER";
-const
-NULL_CONST = "null";
-const
-TERNARY_EXPR = "createTernaryExpr";
-const
-NUMERIC = "Numeric";
-const
-ARRAY_NUMBER = "Array_Number";
-const
-ARRAY_STRING = "Array_String";
-const
-ARRAY_BOOLEAN = "Array_Boolean";
-const
-ARRAY_COLOUR = "Array_Colour";
-const
-ADD = "ADD";
-const
-MINUS = "MINUS";
-const
-POWER = "POWER";
-const
-DIVIDE = "DIVIDE";
-const
-MULTIPLY = "MULTIPLY";
-const
-LT = "LT";
-const
-GT = "GT";
-const
-EQ = "EQ";
-const
-NEQ = "NEQ";
-const
-IN = "in";
-const
-GTE = "GTE";
-const
-LTE = "LTE";
-const
-OR = "OR";
-const
-AND = "AND";
-const
-NEG = "NEG";
-const
-MOD = "MOD";
-const
-MIN = "min";
-const
-MAX = "max";
-const
-AVERAGE = "average";
-const
-MEDIAN = "median";
-const
-MODE = "mode";
-const
-STD_DEV = "stdDev";
-const
-FOREWARD = "FOREWARD";
-const
-BACKWARD = "BACKWARD";
-const
-WHILE = "WHILE";
-const
-UNTIL = "UNTIL";
-const
-FOREVER = "FOREVER";
-const
-FOR = "FOR";
-const
-FOR_EACH = "forEach";
-const
-MATH_CHANGE = "mathChange";
-const
-NOT = "NOT";
-const
-ANGLE = "angle";
-const
-COLOR = "color";
-const
-COLOUR = "colorValue";
-const
-GREEN = "GREEN";
-const
-RED = "red";
-const
-SUM = "sum";
-const
-RGB = "rgb";
-const
-ORANGE = "ORANGE";
-const
-ON = "ON";
-const
-OFF = "OFF";
-const
-FLASH = "FLASH";
-const
-DOUBLE_FLASH = "DOUBLE_FLASH";
+    ARG2 : "arg2",
 
-const
-STATUS_LIGHT_ACTION = "statusLightAction";
-const
-AMBIENTLIGHT = "ambientlight";
-const
-TIMES = "TIMES";
-const
-SIZE = "size";
-const
-CREATE_LIST_IS_EMPTY = "isListEmpty";
-const
-CREATE_LIST_LENGTH = "listLength";
-const
-CREATE_LIST_WITH_ITEM = "createCreateListWithItem";
-const
-CREATE_LIST_FIND_ITEM = "createListFindItem";
-const
-COLOR_CONST = "COLOR_CONST";
-const
-PILOT = "pilot";
-const
-MOTOR_LEFT = "C";
-const
-MOTOR_RIGHT = "B";
-const
-MOTOR_SIDE = "motorSide";
-const
-MOTOR_ON_ACTION = "motorOnAction";
-const
-MOTOR_GET_POWER = "motorGetPowerAction";
-const
-MOTOR_SET_POWER = "motorSetPowerAction";
-const
-ENCODER_SENSOR_RESET = "encoderSensorReset";
-const
-ENCODER_SENSOR_SAMPLE = "encoderSensorSample";
-const
-MOTOR_STOP = "motorStop";
-const
-MOTOR_MOVE_MODE = "motorMoveMode";
-const
-MOTOR_DURATION = "motorDuration";
-const
-MOTOR_DURATION_VALUE = "motorDurationValue";
-const
-ROTATIONS = "ROTATIONS";
-const
-ROTATION = "ROTATION";
-const
-DEGREE = "DEGREE";
-const
-POSITION = "position";
-const
-FIRST = "first";
-const
-LAST = "last";
-const
-FROM_START = "fromStart";
-const
-FROM_END = "fromEnd";
-const
-GET = "get";
-const
-SET = "set";
-const
-REMOVE = "remove";
-const
-GET_REMOVE = "getRemove";
-const
-ITEM = "item";
-const
-CREATE_LISTS_SET_INDEX = "createListsSetIndex";
-const
-CREATE_LISTS_GET_INDEX = "createListsGetIndex";
-const
-CREATE_LISTS_GET_INDEX_STMT = "createListsGetIndexStmt";
-const
-CREATE_LISTS_GET_SUBLIST = "createGetSubList";
-const
-GYRO_SENSOR_RESET = "createResetGyroSensor";
-const
-TIMER_SENSOR_RESET = "createResetTimer";
-const
-METHOD_VOID = "createMethodVoid";
-const
-METHOD_RETURN = "createMethodReturn";
-const
-METHOD_CALL_VOID = "createMethodCallVoid";
-const
-METHOD_CALL_RETURN = "createMethodCallReturn";
-const
-TEXT_JOIN = "createTextJoin";
-const
-WHERE1 = "where1";
-const
-WHERE2 = "where2";
-const
-AT1 = "at1";
-const
-AT2 = "at2";
-const
-RETURN = "return";
+    EXPR : "expr",
 
-const
-VALUES = "values";
+    VALUE : "value",
 
-const
-INSERT = "insert";
-const
-COLOR_ENUM = {
-    NONE : "NONE",
-    BLACK : "BLACK",
-    BLUE : "BLUE",
+    OP : "op",
+
+    LEFT : "left",
+
+    RIGHT : "right",
+
+    ENTER : "enter",
+
+    DOWN : "down",
+
+    UP : "up",
+
+    ANY : "any",
+
+    ESCAPE : "escape",
+
+    BINARY : "Binary",
+
+    UNARY : "Unary",
+
+    VAR : "Var",
+
+    TYPE : "type",
+
+    NAME : "name",
+
+    STMT : "stmt",
+
+    PARAMETERS : "parameters",
+
+    FUNCTION_DECLARATION : "functionDeclaration",
+
+    VAR_DECLARATION : "VarDeclaration",
+
+    SINGLE_FUNCTION : "SingleFunction",
+
+    MATH_RAIN_FUNCTION : "MathrainFunct",
+
+    RANDOM_INT : "randInt",
+
+    RANDOM_DOUBLE : "randDouble",
+
+    RANDOM : "random",
+
+    ASSIGN_STMT : "AssignStmt",
+
+    REPEAT_STMT : "RepeatStmt",
+
+    IF_STMT : "IfStatement",
+
+    WAIT_STMT : "WaitStmt",
+
+    MATH_ : "Math",
+
+    SHOW_TEXT_ACTION : "ShowTextAction",
+
+    SHOW_PICTURE_ACTION : "ShowPictureAction",
+
+    CLEAR_DISPLAY_ACTION : "ClearDisplay",
+
+    CREATE_DEBUG_ACTION : "CreateDebugAction",
+
+    TONE_ACTION : "ToneAction",
+
+    FREQUENCY : "frequency",
+
+    DURATION : "duration",
+
+    GET_VOLUME : "GetVolume",
+
+    SET_VOLUME_ACTION : "SetVolumeAction",
+
+    VOLUME : "volume",
+
+    PLAY_FILE_ACTION : "PlayFileAction",
+
+    FILE : "file",
+
+    TEXT : "text",
+
+    TEXT_APPEND : "textAppend",
+
+    PICTURE : "picture",
+
+    X : "x",
+
+    Y : "y",
+
+    MATH_PROP_FUNCT : "MathPropFunct",
+
+    WAIT_TIME_STMT : "WaitTimeSTMT",
+
+    TIME : "time",
+
+    LIST : "list",
+
+    STMT_LIST : "stmtList",
+
+    DRIVE_ACTION : "DriveAction",
+
+    TURN_LIGHT : "turnLight",
+
+    TURN_ACTION : "TurnAction",
+
+    STOP_DRIVE : "stopDrive",
+
+    DRIVE_DIRECTION : "driveDirection",
+
+    TURN_DIRECTION : "turnDirection",
+
+    SPEED : "speed",
+
+    DISTANCE : "distance",
+
+    PRESENCE : "presence",
+
+    SEEK : "presence",
+
+    RESET : "reset",
+
+    GET_SAMPLE : "GetSample",
+
+    SENSOR_TYPE : "sensorType",
+
+    SENSOR_MODE : "sensorMode",
+
+    THEN_LIST : "thenList",
+
+    ELSE_STMTS : "elseStmts",
+
+    EXPR_LIST : "exprList",
+
+    STATEMENTS : "statements",
+
+    TOUCH : "touch",
+
+    INFRARED : "infrared",
+
+    ULTRASONIC : "ultrasonic",
+
+    GYRO : "gyro",
+
+    BUTTONS : "buttons",
+
+    RATE : "rate",
+
+    NUM_CONST : "NumConst",
+
+    BOOL_CONST : "BoolConst",
+
+    STRING_CONST : "StringConst",
+
+    STRING : "STRING",
+
+    BOOLEAN : "BOOLEAN",
+
+    NUMBER : "NUMBER",
+
+    NULL_CONST : "null",
+
+    TERNARY_EXPR : "createTernaryExpr",
+
+    NUMERIC : "Numeric",
+
+    ARRAY_NUMBER : "Array_Number",
+
+    ARRAY_STRING : "Array_String",
+
+    ARRAY_BOOLEAN : "Array_Boolean",
+
+    ARRAY_COLOUR : "Array_Colour",
+
+    ADD : "ADD",
+
+    MINUS : "MINUS",
+
+    POWER : "POWER",
+
+    DIVIDE : "DIVIDE",
+
+    MULTIPLY : "MULTIPLY",
+
+    LT : "LT",
+
+    GT : "GT",
+
+    EQ : "EQ",
+
+    NEQ : "NEQ",
+
+    IN : "in",
+
+    GTE : "GTE",
+
+    LTE : "LTE",
+
+    OR : "OR",
+
+    AND : "AND",
+
+    NEG : "NEG",
+
+    MOD : "MOD",
+
+    MIN : "min",
+
+    MAX : "max",
+
+    AVERAGE : "average",
+
+    MEDIAN : "median",
+
+    MODE : "mode",
+
+    STD_DEV : "stdDev",
+
+    FOREWARD : "FOREWARD",
+
+    BACKWARD : "BACKWARD",
+
+    WHILE : "WHILE",
+
+    UNTIL : "UNTIL",
+
+    FOREVER : "FOREVER",
+
+    FOR : "FOR",
+
+    FOR_EACH : "forEach",
+
+    MATH_CHANGE : "mathChange",
+
+    NOT : "NOT",
+
+    ANGLE : "angle",
+
+    COLOR : "color",
+
+    COLOUR : "colorValue",
+
     GREEN : "GREEN",
-    YELLOW : "YELLOW",
-    RED : "RED",
-    WHITE : "WHITE",
-    BROWN : "BROWN"
-};
 
-const
-TIMER = "timer";
-const
-MATH_ON_LIST = "createMathOnList";
-const
-TRACKWIDTH = 40;
-const
-TURN_RATIO = (TRACKWIDTH / 3.) / 2.8;
-const
-WHEEL_DIAMETER = 5.6;
-const
-MAXDIAG = 2500;
-const
-MAXPOWER = 0.351858377 * 3; // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix = 1cm
-const
-ENC = 360.0 / (3.0 * Math.PI * WHEEL_DIAMETER);
-const
-MAX_WIDTH = 2000;
-const
-MAX_HEIGHT = 1000;
-const
-WAVE_LENGTH = 60;
+    RED : "red",
+
+    SUM : "sum",
+
+    RGB : "rgb",
+
+    ORANGE : "ORANGE",
+
+    ON : "ON",
+
+    OFF : "OFF",
+
+    FLASH : "FLASH",
+
+    DOUBLE_FLASH : "DOUBLE_FLASH",
+
+    STATUS_LIGHT_ACTION : "statusLightAction",
+
+    AMBIENTLIGHT : "ambientlight",
+
+    TIMES : "TIMES",
+
+    SIZE : "size",
+
+    CREATE_LIST_IS_EMPTY : "isListEmpty",
+
+    CREATE_LIST_LENGTH : "listLength",
+
+    CREATE_LIST_WITH_ITEM : "createCreateListWithItem",
+
+    CREATE_LIST_FIND_ITEM : "createListFindItem",
+
+    COLOR_CONST : "COLOR_CONST",
+
+    PILOT : "pilot",
+
+    MOTOR_LEFT : "C",
+
+    MOTOR_RIGHT : "B",
+
+    MOTOR_SIDE : "motorSide",
+
+    MOTOR_ON_ACTION : "motorOnAction",
+
+    MOTOR_GET_POWER : "motorGetPowerAction",
+
+    MOTOR_SET_POWER : "motorSetPowerAction",
+
+    ENCODER_SENSOR_RESET : "encoderSensorReset",
+
+    ENCODER_SENSOR_SAMPLE : "encoderSensorSample",
+
+    MOTOR_STOP : "motorStop",
+
+    MOTOR_MOVE_MODE : "motorMoveMode",
+
+    MOTOR_DURATION : "motorDuration",
+
+    MOTOR_DURATION_VALUE : "motorDurationValue",
+
+    ROTATIONS : "ROTATIONS",
+
+    ROTATION : "ROTATION",
+
+    DEGREE : "DEGREE",
+
+    POSITION : "position",
+
+    FIRST : "first",
+
+    LAST : "last",
+
+    FROM_START : "fromStart",
+
+    FROM_END : "fromEnd",
+
+    GET : "get",
+
+    SET : "set",
+
+    REMOVE : "remove",
+
+    GET_REMOVE : "getRemove",
+
+    ITEM : "item",
+
+    CREATE_LISTS_SET_INDEX : "createListsSetIndex",
+
+    CREATE_LISTS_GET_INDEX : "createListsGetIndex",
+
+    CREATE_LISTS_GET_INDEX_STMT : "createListsGetIndexStmt",
+
+    CREATE_LISTS_GET_SUBLIST : "createGetSubList",
+
+    GYRO_SENSOR_RESET : "createResetGyroSensor",
+
+    TIMER_SENSOR_RESET : "createResetTimer",
+
+    METHOD_VOID : "createMethodVoid",
+
+    METHOD_RETURN : "createMethodReturn",
+
+    METHOD_CALL_VOID : "createMethodCallVoid",
+
+    METHOD_CALL_RETURN : "createMethodCallReturn",
+
+    TEXT_JOIN : "createTextJoin",
+
+    WHERE1 : "where1",
+
+    WHERE2 : "where2",
+
+    AT1 : "at1",
+
+    AT2 : "at2",
+
+    RETURN : "return",
+
+    VALUES : "values",
+
+    INSERT : "insert",
+
+    COLOR_ENUM : {
+        NONE : "NONE",
+        BLACK : "BLACK",
+        BLUE : "BLUE",
+        GREEN : "GREEN",
+        YELLOW : "YELLOW",
+        RED : "RED",
+        WHITE : "WHITE",
+        BROWN : "BROWN"
+    },
+
+    TIMER : "timer",
+
+    MATH_ON_LIST : "createMathOnList",
+
+    TRACKWIDTH : 40,
+
+    TURN_RATIO : (40 / 3.) / 2.8,
+
+    WHEEL_DIAMETER : 5.6,
+
+    MAXDIAG : 2500,
+
+    MAXPOWER : 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
+
+    ENC : 360.0 / (3.0 * Math.PI * 5.6),
+
+    MAX_WIDTH : 2000,
+
+    MAX_HEIGHT : 1000,
+
+    WAVE_LENGTH : 60
+});

@@ -2,7 +2,7 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIMATH, UTIL) {
+define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.constants' ], function(SIM, SIMATH, UTIL, CONSTANTS) {
 
     /**
      * Creates a new Scene.
@@ -35,7 +35,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         var ctx = option_context || this.bCtx;
         var sc = option_scale || SIM.getScale();
         ctx.restore();
-        ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+        ctx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
@@ -70,7 +70,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
     };
 
     Scene.prototype.drawRobot = function() {
-        this.rCtx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+        this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information   
@@ -109,10 +109,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
             this.rCtx.fillText(UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0), endValue, line);
             line += 25;
             this.rCtx.fillText("Motor left", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * ENC, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Motor right", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * ENC, 0), endValue, line);
+            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Touch Sensor", endLabel, line);
             this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
@@ -204,9 +204,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         this.rCtx.restore();
 
         // ultra 
-        this.wave += WAVE_LENGTH * SIM.getDt();
-        this.wave = this.wave % WAVE_LENGTH;
-        this.rCtx.lineDashOffset = WAVE_LENGTH - this.wave;
+        this.wave += CONSTANTS.WAVE_LENGTH * SIM.getDt();
+        this.wave = this.wave % CONSTANTS.WAVE_LENGTH;
+        this.rCtx.lineDashOffset = CONSTANTS.WAVE_LENGTH - this.wave;
         this.rCtx.setLineDash([ 20, 40 ]);
         this.rCtx.beginPath();
 
@@ -354,21 +354,21 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
                 values.color = {};
                 this.robot.colorSensor.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
                 values.color.colorValue = this.robot.colorSensor.colorValue;
-                if (this.robot.colorSensor.colorValue === COLOR_ENUM.NONE) {
+                if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.NONE) {
                     this.robot.colorSensor.color = 'grey';
-                } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.BLACK) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BLACK) {
                     this.robot.colorSensor.color = 'black';
-                } else if (this.robot.colorSensor.colorValue == COLOR_ENUM.WHITE) {
+                } else if (this.robot.colorSensor.colorValue == CONSTANTS.COLOR_ENUM.WHITE) {
                     this.robot.colorSensor.color = 'white';
-                } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.YELLOW) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.YELLOW) {
                     this.robot.colorSensor.color = 'yellow';
-                } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.BROWN) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BROWN) {
                     this.robot.colorSensor.color = 'brown';
-                } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.RED) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.RED) {
                     this.robot.colorSensor.color = 'red';
-                } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.BLUE) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BLUE) {
                     this.robot.colorSensor.color = 'blue';
-                } else if (this.robot.colorSensor.colorValue === COLOR_ENUM.GREEN) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.GREEN) {
                     this.robot.colorSensor.color = 'lime';
                 }
                 this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
@@ -384,39 +384,39 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
             var u3 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + MAXDIAG * Math.cos(this.robot.pose.theta),
-                y2 : this.robot.ultraSensor.ry + MAXDIAG * Math.sin(this.robot.pose.theta)
+                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta),
+                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta)
             }
             var u1 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + MAXDIAG * Math.cos(this.robot.pose.theta - Math.PI / 8),
-                y2 : this.robot.ultraSensor.ry + MAXDIAG * Math.sin(this.robot.pose.theta - Math.PI / 8)
+                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta - Math.PI / 8),
+                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta - Math.PI / 8)
             }
             var u2 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + MAXDIAG * Math.cos(this.robot.pose.theta - Math.PI / 16),
-                y2 : this.robot.ultraSensor.ry + MAXDIAG * Math.sin(this.robot.pose.theta - Math.PI / 16)
+                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta - Math.PI / 16),
+                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta - Math.PI / 16)
             }
             var u5 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + MAXDIAG * Math.cos(this.robot.pose.theta + Math.PI / 8),
-                y2 : this.robot.ultraSensor.ry + MAXDIAG * Math.sin(this.robot.pose.theta + Math.PI / 8)
+                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta + Math.PI / 8),
+                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta + Math.PI / 8)
             }
             var u4 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + MAXDIAG * Math.cos(this.robot.pose.theta + Math.PI / 16),
-                y2 : this.robot.ultraSensor.ry + MAXDIAG * Math.sin(this.robot.pose.theta + Math.PI / 16)
+                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta + Math.PI / 16),
+                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta + Math.PI / 16)
             }
 
             var uA = new Array(u1, u2, u3, u4, u5);
-            this.robot.ultraSensor.distance = MAXDIAG;
+            this.robot.ultraSensor.distance = CONSTANTS.MAXDIAG;
             for (var i = 0; i < SIM.obstacleList.length; i++) {
                 var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
-                var uDis = [ MAXDIAG, MAXDIAG, MAXDIAG, MAXDIAG, MAXDIAG ];
+                var uDis = [ CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG ];
                 for (var k = 0; k < obstacleLines.length; k++) {
                     for (var j = 0; j < uA.length; j++) {
                         var interPoint = SIMATH.getIntersectionPoint(uA[j], obstacleLines[k]);
@@ -467,8 +467,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util' ], function(SIM, SIM
         }
         if (this.robot.encoder) {
             values.encoder = {};
-            values.encoder.left = this.robot.encoder.left * ENC;
-            values.encoder.right = this.robot.encoder.right * ENC;
+            values.encoder.left = this.robot.encoder.left * CONSTANTS.ENC;
+            values.encoder.right = this.robot.encoder.right * CONSTANTS.ENC;
         }
         if (this.robot.gyroSensor) {
             values.gyro = {};
