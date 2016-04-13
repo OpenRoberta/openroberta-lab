@@ -2,12 +2,10 @@ package de.fhg.iais.roberta.javaServer.restServices.ev3;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -36,8 +34,8 @@ public class Ev3Command {
     private static final String CMD_ABORT = "abort";
 
     private final Ev3Communicator brickCommunicator;
-    @Context
-    private HttpServletRequest servletRequest;
+    //    @Context
+    //    private HttpServletRequest servletRequest;
 
     @Inject
     public Ev3Command(Ev3Communicator brickCommunicator) {
@@ -92,7 +90,8 @@ public class Ev3Command {
         JSONObject response;
         switch ( cmd ) {
             case CMD_REGISTER:
-                LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
+                LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
+                // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
                 Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
