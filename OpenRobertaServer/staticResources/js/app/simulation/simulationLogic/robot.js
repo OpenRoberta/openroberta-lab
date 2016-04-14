@@ -173,7 +173,7 @@ define(
                         var ts = a.context.currentTime;
                         for (var i = 0; i < 2; i++) {
                             a.oscillator.frequency.setValueAtTime(600, ts);
-                            a.gainNode.gain.setValueAtTime(1, ts);
+                            a.gainNode.gain.setValueAtTime(a.volume, ts);
                             ts += (150 / 1000.0);
                             a.gainNode.gain.setValueAtTime(0, ts);
                             ts += (25 / 1000.0);
@@ -185,7 +185,7 @@ define(
                         var ts = a.context.currentTime;
                         for (var i = 4; i < 8; i++) {
                             a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                            a.gainNode.gain.setValueAtTime(1, ts);
+                            a.gainNode.gain.setValueAtTime(a.volume, ts);
                             ts += (100 / 1000.0);
                             a.gainNode.gain.setValueAtTime(0, ts);
                             ts += (25 / 1000.0);
@@ -197,7 +197,7 @@ define(
                         var ts = a.context.currentTime;
                         for (var i = 7; i >= 4; i--) {
                             a.oscillator.frequency.setValueAtTime(C2 * i / 4, ts);
-                            a.gainNode.gain.setValueAtTime(1, ts);
+                            a.gainNode.gain.setValueAtTime(a.volume, ts);
                             ts += (100 / 1000.0);
                             a.gainNode.gain.setValueAtTime(0, ts);
                             ts += (25 / 1000.0);
@@ -206,7 +206,7 @@ define(
                     4 : function(a) {
                         var ts = a.context.currentTime;
                         a.oscillator.frequency.setValueAtTime(100, ts);
-                        a.gainNode.gain.setValueAtTime(1, ts);
+                        a.gainNode.gain.setValueAtTime(a.volume, ts);
                         ts += (500 / 1000.0);
                         a.gainNode.gain.setValueAtTime(0, ts);
                     }
