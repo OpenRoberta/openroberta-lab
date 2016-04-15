@@ -330,7 +330,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
      * Initializations
      */
     function init() {
-        //Pace.start();
+        Pace.start();
         COMM.setErrorFn(handleServerErrors);
         initLogging();
         userState.initUserState();
