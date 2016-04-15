@@ -491,7 +491,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             }
         }
         if (this.robot.webAudio) {
-            values.volume = this.robot.webAudio.volume;
+            values.volume = this.robot.webAudio.volume * 100;
         }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();
