@@ -277,13 +277,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     function showProgram(result, load, name, opt_owner) {
         UTIL.response(result);
         if (result.rc === 'ok') {
-            ROBERTA_NAVIGATION.switchToBlockly();
-            ROBERTA_USER.setProgram(name, opt_owner);
             var xml = Blockly.Xml.textToDom(result.data);
             if (load) {
                 blocklyWorkspace.clear();
             }
             Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
+            ROBERTA_NAVIGATION.switchToBlockly();
+            ROBERTA_USER.setProgram(name, opt_owner);
             LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
         }
     }
@@ -351,6 +351,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      * disk.
      */
     function importXml() {
+        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlProgramSave = Blockly.Xml.domToText(xmlProgram);
         var input = $(document.createElement('input'));
         input.attr("type", "file");
         input.attr("accept", ".xml");
@@ -363,11 +365,18 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 var name = UTIL.getBasename(file.name);
                 PROGRAM.loadProgramFromXML(name, event.target.result, function(result) {
                     if (result.rc == "ok") {
-                        showProgram(result, true, result.name);
+                        // on server side we only test case insensitiv block names, displaying xml can still fail:
+                        try {
+                            showProgram(result, true, result.name);
+                        } catch (e) {
+                            result.data = xmlProgramSave;
+                            showProgram(result, true, userState.program);
+                            result.rc = "error";
+                            MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, result.name);
+                        }
                     } else {
                         MSG.displayInformation(result, "", result.message, "");
                     }
-
                 });
             }
         })
