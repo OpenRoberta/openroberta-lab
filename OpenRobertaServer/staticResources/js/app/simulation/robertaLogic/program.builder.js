@@ -262,11 +262,11 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
-    function createGetSample(sensorType, senorMode) {
+    function createGetSample(sensorType, sensorMode) {
         var result = {};
         result[CONST.EXPR] = CONST.GET_SAMPLE;
         result[CONST.SENSOR_TYPE] = sensorType;
-        result[CONST.SENSOR_MODE] = senorMode;
+        result[CONST.SENSOR_MODE] = sensorMode;
         return result;
     }
 

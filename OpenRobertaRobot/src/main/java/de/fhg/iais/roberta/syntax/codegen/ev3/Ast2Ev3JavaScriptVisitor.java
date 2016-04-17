@@ -588,7 +588,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("createGetSample(CONST.INFRARED, " + infraredSensor.getMode() + ")");
+        this.sb.append("createGetSample(CONST.INFRARED, CONST." + infraredSensor.getMode() + ")");
         return null;
     }
 

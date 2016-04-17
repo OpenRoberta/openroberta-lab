@@ -36,7 +36,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 var workspace = ROBERTA_PROGRAM.getBlocklyWorkspace();
                 workspace.markFocused();
                 $('#brickly').css('display', 'none');
-                $('#simConfiguration').css('display', 'none');
                 $('#tabBlockly').click();
                 workspace.setVisible(true);
                 Blockly.svgResize(workspace);
@@ -201,7 +200,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         deactivateProgConfigMenu();
                         $('#tabs').css('display', 'inline');
                         $('#brickly').css('display', 'none');
-                        $('#simConfiguration').css('display', 'none');
                         $('#tabConfigurationListing').click();
                     } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
                         ROBERTA_BRICK_CONFIGURATION.save();
@@ -250,7 +248,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         deactivateProgConfigMenu();
                         $('#tabs').css('display', 'inline');
                         $('#brickly').css('display', 'none');
-                        $('#simConfiguration').css('display', 'none');
                         $('#tabLogging').click();
                     }
                 }, 'help clicked');
@@ -432,6 +429,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
 
                 $('#simRobotModal').removeClass("modal-backdrop");
                 $('#simRobotModal').draggable();
+              //  $('#simRobotModal').resizable();
                 $('.simScene').onWrap('click', function(event) {
                     SIM.setBackground(0);
                     var scene = $("#simButtonsCollapse").collapse('hide');

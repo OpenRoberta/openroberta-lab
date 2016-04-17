@@ -157,7 +157,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
 							<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
 							<li class="divider"></li>
-					    	<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+							<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
 							<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
 						</ul></li>
 				</ul>
@@ -778,12 +778,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	</div>
 	<!-- Popup for simulated robot -> EV3 -->
 	<div id="simRobotModal" class="modal fade simRobotModal" data-backdrop="false">
-		<!-- <div class="modal-dialog"> -->
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<div class="modal-dialog">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div id="simRobotContent"> </div>
 		</div>
-		<div id="simRobotContent"></div>
-		<!-- </div> -->
 	</div>
 	<!-- ################## END POPUPS ################## -->
 	<!-- ################## TABS ################## -->
@@ -861,12 +861,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<input id="clearLog" class="btn" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren"></input>
 					<input id="backLogging" class="btn backButton" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"></input>
 				</div>
-			</div>
-			<div id="simConfiguration">
-				<h2>OR Simulation</h2>
-				<img class="DE" src="../js/app/simulation/simBackgrounds/simConfiguration.svg" alt="OR Simulation Robot" height="80%" width="100%"
-					style="max-height: 80%; max-width: 100%"><img class="EN DA FI ES FR IT" src="../js/app/simulation/simBackgrounds/simConfigurationEN.svg"
-					alt="OR Simulation Robot" height="100%" width="100%" style="max-height: 80%; max-width: 100%">
 			</div>
 			<div id="brickly">
 				<div id="bricklyDiv"></div>

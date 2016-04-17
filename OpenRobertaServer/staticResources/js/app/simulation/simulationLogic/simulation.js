@@ -234,7 +234,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                         setPause(true);
                     }
                     actionValues = programEval.step(sensorValues);
-                } else if (programEval.getProgram().isTerminated()) {
+                } else if (programEval.getProgram().isTerminated() && !pause) {
                     setPause(true);
                     robot.reset();
                     ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
