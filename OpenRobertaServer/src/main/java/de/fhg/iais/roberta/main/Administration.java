@@ -1,16 +1,32 @@
 package de.fhg.iais.roberta.main;
 
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.Encryption;
 import de.fhg.iais.roberta.util.Option;
 
@@ -57,6 +73,9 @@ public class Administration {
                 break;
             case "user:encryptpasswords":
                 adminWork.encryptpasswords();
+                break;
+            case "db:update":
+                adminWork.update_db();
                 break;
             default:
                 Administration.LOG.error("invalid argument: " + args[0] + " - exit 4");
@@ -176,11 +195,129 @@ public class Administration {
         nativeSession.close();
     }
 
+    private void update_db() throws Exception {
+        HashMap<String, String> blockNames = new HashMap<>();
+        blockNames.put("math_change", "robMath_change");
+        blockNames.put("controls_forEach", "robControls_forEach");
+        blockNames.put("controls_for", "robControls_for");
+        blockNames.put("lists_repeat", "robLists_repeat");
+        blockNames.put("lists_length", "robLists_length");
+        blockNames.put("lists_isEmpty", "robLists_isEmpty");
+        blockNames.put("lists_indexOf", "robLists_indexOf");
+        blockNames.put("lists_getIndex", "robLists_getIndex");
+        blockNames.put("lists_setIndex", "robLists_setIndex");
+        blockNames.put("text_append", "robText_append");
+        blockNames.put("lists_create_empty", "robLists_create_with");
+        blockNames.put("elseIf", "elseif");
+        blockNames.put("sim_colour_getSample", "robSensors_colour_getSample");
+        blockNames.put("robGlobalvariables_declare", "robGlobalVariables_declare");
+        blockNames.put("variables_declare", "robGlobalVariables_declare");
+        blockNames.put("<mutation list_type=\"", "<mutation items=\"0\" list_type=\"");
+        blockNames.put("<block_set>", "<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\">");
+        //        blockNames.put(
+        //            "(<block type=\"robControls_start\".*deletable=\"false\">)(<\\/block>)",
+        //            "$1<mutation declare=\"false\"></mutation><field name=\"DEBUG\">FALSE</field>$2");
+
+        //        blockNames.put("(<block type=\"robSensors_.*_getSample\" id=\"\\d*\">)(<field name=\"MODE\">(PRESENCE)<\\/field>)", "$1<mutation mode=\"$3\"/>$2");
+        //        blockNames.put("(<block type=\"robSensors_.*_getSample\" id=\"\\d*\">)(<field name=\"MODE\">(DISTANCE)<\\/field>)", "$1<mutation mode=\"$3\"/>$2");
+        //        blockNames.put("(<block type=\"robSensors_.*_getSample\" id=\"\\d*\">)(<field name=\"MODE\">(COLOUR)<\\/field>)", "$1<mutation mode=\"$3\"/>$2");
+        //        blockNames.put("(<block type=\"robSensors_.*_getSample\" id=\"\\d*\">)(<field name=\"MODE\">(RED)<\\/field>)", "$1<mutation mode=\"$3\"/>$2");
+        //        blockNames.put("(<block type=\"robSensors_.*_getSample\" id=\"\\d*\">)(<field name=\"MODE\">(RGB)<\\/field>)", "$1<mutation mode=\"$3\"/>$2");
+        //        blockNames.put("(<block type=\"robSensors_.*_getSample\" id=\"\\d*\">)(<field name=\"MODE\">(AMBIENTLIGHT)<\\/field>)", "$1<mutation mode=\"$3\"/>$2");
+        //        blockNames.put("<field name=\"MODE\">PRESENCE</field>", "<mutation mode=\"PRESENCE\"/><field name=\"MODE\">PRESENCE</field>");
+        //        blockNames.put("<field name=\"MODE\">DISTANCE</field>", "<mutation mode=\"DISTANCE\"/><field name=\"MODE\">DISTANCE</field>");
+        //        blockNames.put("<field name=\"MODE\">COLOUR</field>", "<mutation mode=\"COLOUR\"/><field name=\"MODE\">COLOUR</field>");
+        //        blockNames.put("<field name=\"MODE\">RED</field>", "<mutation mode=\"RED\"/><field name=\"MODE\">RED</field>");
+        //        blockNames.put("<field name=\"MODE\">RGB</field>", "<mutation mode=\"RED\"/><field name=\"MODE\">RGB</field>");
+        //        blockNames.put("<field name=\"MODE\">AMBIENTLIGHT</field>", "<mutation mode=\"RED\"/><field name=\"MODE\">AMBIENTLIGHT</field>");
+
+        Administration.LOG.info("*** update database ***");
+        expectArgs(2);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        nativeSession.beginTransaction();
+        String sqlGetQuery = "select ID, PROGRAM_TEXT from PROGRAM";
+        String sqlUpdQuery = "update PROGRAM set PROGRAM_TEXT=:program where ID=:id";
+        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
+        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
+        Administration.LOG.info("there are " + resultSet.size() + " programs in the data base");
+        int counter = 0;
+        for ( Object[] object : resultSet ) {
+            try {
+                String updatedProgram = renameBlocksInProgram((String) object[1], blockNames);
+                BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
+                Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+                transformer.transform(program);
+
+                BlockSet blockSet = astToJaxb(transformer.getTree());
+                String newXml = jaxbToXml(blockSet);
+                if ( !newXml.equals(object[1]) ) {
+                    System.out.println((int) object[0]);
+                    upd.setInteger("id", (Integer) object[0]);
+                    upd.setString("program", newXml);
+                    int count = upd.executeUpdate();
+                    Administration.LOG.info("!!! processed program id: " + object[0] + ". Update count: " + count);
+
+                }
+            } catch ( Exception e ) {
+                Administration.LOG.info("??? exception when transforming program: id: " + object[0] + "msg: " + e);
+                Administration.LOG.info((String) object[1]);
+                counter++;
+            }
+        }
+        System.out.println(resultSet.size());
+        System.out.println(counter);
+        nativeSession.getTransaction().commit();
+        nativeSession.createSQLQuery("shutdown").executeUpdate();
+        nativeSession.close();
+
+    }
+
     private void expectArgs(int number) {
         if ( this.args == null || this.args.length < number ) {
             Administration.LOG.error("not enough arguments - exit 8");
             System.exit(8);
         }
+    }
+
+    private String renameBlocksInProgram(String program, Map<String, String> blockNames) {
+        for ( Entry<String, String> entry : blockNames.entrySet() ) {
+            program = replaceWord(program, entry.getKey(), entry.getValue());
+        }
+        return program;
+    }
+
+    private String replaceWord(String source, String oldWord, String newWord) {
+
+        return source.replaceAll(oldWord, newWord);
+    }
+
+    private BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
+        BlockSet blockSet = new BlockSet();
+
+        Instance instance = null;
+        for ( ArrayList<Phrase<Void>> tree : astProgram ) {
+            for ( Phrase<Void> phrase : tree ) {
+                if ( phrase.getKind() == BlockType.LOCATION ) {
+                    blockSet.getInstance().add(instance);
+                    instance = new Instance();
+                    instance.setX(((Location<Void>) phrase).getX());
+                    instance.setY(((Location<Void>) phrase).getY());
+                }
+                instance.getBlock().add(phrase.astToBlock());
+            }
+        }
+        blockSet.getInstance().add(instance);
+        return blockSet;
+    }
+
+    public String jaxbToXml(BlockSet blockSet) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        Marshaller m = jaxbContext.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        StringWriter writer = new StringWriter();
+        m.marshal(blockSet, writer);
+        return writer.toString();
     }
 
 }

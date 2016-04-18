@@ -232,6 +232,26 @@ public class Helper {
     }
 
     /**
+     * Asserts if two XML string are identical by ignoring white space.
+     *
+     * @param arg1 first XML string
+     * @param arg2 second XML string
+     * @throws Exception
+     */
+    public static void assertXMLtransformation(String xml) throws Exception {
+        BlockSet program = JaxbHelper.xml2BlockSet(xml);
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        transformer.transform(program);
+
+        BlockSet blockSet = astToJaxb(transformer.getTree());
+        String newXml = jaxbToXml(blockSet);
+
+        XMLUnit.setIgnoreWhitespace(true);
+        Diff diff = XMLUnit.compareXML(xml, newXml);
+        Assert.assertTrue(diff.toString(), diff.identical());
+    }
+
+    /**
      * Assert that Java code generated from Blockly XML program is correct.<br>
      * All white space are ignored!
      *
