@@ -1,7 +1,6 @@
 require.config({
     baseUrl : 'js/libs',
     paths : {
-        'pace' : 'pace',
         'jquery' : 'jquery/jquery-2.1.4.min',
         'jquery-ui' : 'jquery/jquery-ui-1.10.4.custom.min',
         'datatables' : 'jquery/jquery.dataTables.min',

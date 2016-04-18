@@ -1,7 +1,7 @@
 define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'roberta.navigation', 'log', 'util', 'comm', 'roberta.brick-configuration',
-        'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'pace', 'blocks', 'blocks-msg',
+        'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'blocks', 'blocks-msg',
         'jquery', 'jquery-cookie', 'jquery-ui', 'datatables' ], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
-        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Pace, Blockly, Blockly, $) {
+        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Blockly, Blockly, $) {
 
     var id;
 
@@ -330,7 +330,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
      * Initializations
      */
     function init() {
-        Pace.start();
+        // Pace.start();
         COMM.setErrorFn(handleServerErrors);
         initLogging();
         userState.initUserState();
@@ -354,13 +354,13 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
             ROBERTA_ROBOT.initRobot();
             initBlockly();
             BRICKLY.init();
-
-        });
-        Pace.on("done", function() {
-            $(".cover").fadeOut(1000);
-            if (!$.cookie("OpenRoberta_hideStartUp")) {
-                $("#show-startup-message").modal("show");
-            }
+            $(".pace-progress").fadeOut(1000, function() {
+                $(".cover").fadeOut(500);
+                $(".pace").removeClass("pace-progress");
+                if (!$.cookie("OpenRoberta_hideStartUp")) {
+                    $("#show-startup-message").modal("show");
+                }
+            });
         });
 
         $('#menuTabProgram').parent().addClass('disabled');
