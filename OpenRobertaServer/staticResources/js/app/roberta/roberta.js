@@ -354,9 +354,8 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
             ROBERTA_ROBOT.initRobot();
             initBlockly();
             BRICKLY.init();
-            $(".pace-progress").fadeOut(1000, function() {
+            $(".pace").fadeOut(1000, function() {
                 $(".cover").fadeOut(500);
-                $(".pace").removeClass("pace-progress");
                 if (!$.cookie("OpenRoberta_hideStartUp")) {
                     $("#show-startup-message").modal("show");
                 }
