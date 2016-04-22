@@ -3,14 +3,14 @@ package de.fhg.iais.roberta.javaServer.basics;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.junit.Test;
+import org.junit.Ignore;
 
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class DbTest {
 
-    @Test
+    @Ignore
     public void test() {
 
         SessionFactoryWrapper sessionFactoryWrapper =
