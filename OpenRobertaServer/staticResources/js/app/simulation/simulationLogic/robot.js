@@ -146,7 +146,7 @@ define(
                     || false;
 
             if (AudioContext) {
-                var context = new AudioContext;
+                var context = new AudioContext();
 
                 var oscillator = context.createOscillator();
                 oscillator.type = 'square';
