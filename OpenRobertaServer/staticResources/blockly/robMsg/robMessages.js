@@ -344,7 +344,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT_DEV = 'The Open Roberta Lab is an open-source progr
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = 'Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>';
 Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = 'Three things you should know before starting:<ul class="icon"><li class="document-text">Here you can program real EV3 robots </li><li class="Roberta">Your robot needs a special system <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="wi-fi">Your robot needs wi-fi or a USB program <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="arrow-right-thick">If you are not sure, please have a look at the help pages ... <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM">more</a></li></ul><br /><p>What is new?</p>';
 Blockly.Msg.POPUP_RELEASE = 'Version beta 1.3.2 <ul class="NonIcon"><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class="NonIcon"><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class="NonIcon"><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>';
-Blockly.Msg.POPUP_NEW_RELEASE = 'Version beta 1.4 <ul class="NonIcon"><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>';
+Blockly.Msg.POPUP_NEW_RELEASE = 'Version beta 1.4 <ul class="NonIcon"><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Export and import your program locally</li><li>Update blockly for better performance and zoom function</li></ul>';
 Blockly.Msg.POPUP_ABOUT_JOIN = 'I want to help';
 Blockly.Msg.POPUP_USERNAME = 'Username';
 Blockly.Msg.POPUP_USERNAME_LOGOFF = 'You are not logged in.';
@@ -361,7 +361,7 @@ Blockly.Msg.POPUP_STARTUP_NEW = 'What"s new?';
 Blockly.Msg.POPUP_STARTUP_HELP = 'Do you need help?';
 Blockly.Msg.POPUP_STARTUP_HIDE = 'Okay, don"t show this window again.';
 Blockly.Msg.POPUP_STARTUP_COOKIES = 'We use cookies to personalise content and to analyse our traffic.';
-Blockly.Msg.POPUP_STARTUP_DETAILS = 'Show details.';
+Blockly.Msg.POPUP_STARTUP_DETAILS = '<a href="http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1" target="_blank" class="EN" style="display: inline;">Show details.</a>';
 Blockly.Msg.POPUP_CANCEL = 'Cancel';
 Blockly.Msg.POPUP_ROBOT_NAME = 'Name';
 Blockly.Msg.POPUP_ROBOT_STATE = 'State';
@@ -528,3 +528,4 @@ Blockly.Msg.SERVER_NOT_AVAILABLE = 'The Open Roberta Lab is currently not availa
 Blockly.Msg.MENU_MESSAGE_DOWNLOAD = 'Your program has been successfully downloaded.';
 Blockly.Msg.POPUP_ROBOT_SYSTEM = 'System';
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = 'The execution of the program on the robot has terminated unexpectedly!';
+

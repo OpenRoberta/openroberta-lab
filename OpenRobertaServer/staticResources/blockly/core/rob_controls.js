@@ -260,7 +260,6 @@ Blockly.RobControls.prototype.createButton_ = function(pathD, posX, posY, toolti
        'd': pathD,
        'transform': 'scale(1.5)',
        'fill-rule': 'evenodd',
-       'fill':'#fff',
        'stroke-width': '0px',
        'fill': '#333'
       });

@@ -590,7 +590,7 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";  // untranslated
 Blockly.Msg.POPUP_EMAIL_SEND = "Send now";  // untranslated
 Blockly.Msg.POPUP_NAME = "Name";  // untranslated
 Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
-Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>";  // untranslated
+Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Export and import your program locally</li><li>Update blockly for better performance and zoom function</li></ul>";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "reset password ...";  // untranslated
@@ -611,7 +611,7 @@ Blockly.Msg.POPUP_SHARE_READ = "READ";  // untranslated
 Blockly.Msg.POPUP_SHARE_WITH = "Share with ...";  // untranslated
 Blockly.Msg.POPUP_SHARE_WRITE = "WRITE";  // untranslated
 Blockly.Msg.POPUP_STARTUP_COOKIES = "We use cookies to personalise content and to analyse our traffic.";  // untranslated
-Blockly.Msg.POPUP_STARTUP_DETAILS = "Show details.";  // untranslated
+Blockly.Msg.POPUP_STARTUP_DETAILS = "<a href='http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1' target='_blank' class='EN' style='display: inline;'>Show details.</a>";  // untranslated
 Blockly.Msg.POPUP_STARTUP_HELP = "Do you need help?";  // untranslated
 Blockly.Msg.POPUP_STARTUP_HIDE = "Okay, don't show this window again.";  // untranslated
 Blockly.Msg.POPUP_STARTUP_NEW = "What's new?";  // untranslated
