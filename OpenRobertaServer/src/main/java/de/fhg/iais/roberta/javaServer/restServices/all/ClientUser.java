@@ -142,7 +142,19 @@ public class ClientUser {
                 if ( user != null ) {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
-                    this.mailManagement.send(user.getEmail(), "sub", "localhost:1999/#forgotPassword&" + lostPassword.getUrlPostfix());
+                    // TODO move this to properties!!!
+                    this.mailManagement.send(
+                        user.getEmail(),
+                        "Dein Open Roberta Passwort zurücksetzen",
+                        "Hallo, \n\n"
+                            + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
+                            + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
+                            + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
+                            + "https://lab.open-roberta.org/#forgotPassword&"
+                            + lostPassword.getUrlPostfix()
+                            + "\n\n"
+                            + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n"
+                            + "Viel Spass weiterhin mit Open Roberta");
                 }
 
             } else if ( cmd.equals("obtainUsers") ) {
