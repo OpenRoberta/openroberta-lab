@@ -3,7 +3,7 @@
 ip='0.0.0.0' # The ip default. For servers, 0.0.0.0 means "all IPv4 addresses on the local machine". (see: https://en.wikipedia.org/wiki/0.0.0.0)
 port='1999'  # the port default.
 lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
-oraversion='1.3.2-SNAPSHOT'                      # version for the export command (goes into openroberta.properties). BE CAREFUL !!!
+oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openroberta.properties). BE CAREFUL !!!
 databaseurl='jdbc:hsqldb:hsql://localhost/oradb' # server mode for the database. This setting should be used for production.
                                                  # embedded would be, e.g. jdbc:hsqldb:file:db/openroberta-db
 
