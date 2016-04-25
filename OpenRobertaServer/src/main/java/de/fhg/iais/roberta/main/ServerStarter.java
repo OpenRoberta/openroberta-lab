@@ -137,6 +137,8 @@ public class ServerStarter {
         deprecatedHttpHandler.addFilter(GuiceFilter.class, "/user/*", null);
         deprecatedHttpHandler.addFilter(GuiceFilter.class, "/hello/*", null);
         deprecatedHttpHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/download/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/update/*", null);
         deprecatedHttpHandler.addServlet(DefaultServlet.class, "/*");
 
         // websockets with /ws/<version>/ prefix
