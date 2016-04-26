@@ -35,20 +35,34 @@ public class Ev3Communicator {
         LOG.info("timer thread created");
     }
 
-    public boolean brickWantsTokenToBeApproved(Ev3CommunicationData registration) {
+    /**
+     * check the new registration ticket.
+     * only used by brickWantsTokenToBeApproved(), extracted for testing
+     *
+     * @throws assertions for various types of issues
+     * @return true if the ticket has been accepted
+     */
+    public boolean addNewRegistration(Ev3CommunicationData registration) {
         String token = registration.getToken();
         String robotIdentificator = registration.getRobotIdentificator();
         Assert.isTrue(token != null && robotIdentificator != null);
         Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
         for ( String storedToken : this.allStates.keySet() ) {
             Ev3CommunicationData storedState = this.allStates.get(storedToken);
-            if ( robotIdentificator.equals(storedState.getRobotIdentificator()) && !robotIdentificator.equals("usb") ) {
-                LOG.error("Token approval request for robotId " + robotIdentificator + ", but an old request is pending. Old request aborted.");
+            if ( robotIdentificator.equals(storedState.getRobotIdentificator())
+                && !robotIdentificator.equals("usb")
+                && !robotIdentificator.equals("unknown") ) {
+                LOG.error("Token approval request for robot [" + robotIdentificator + "], but an old request is pending. Old request aborted.");
                 storedState.abortPush(); // notifyAll() executed
                 this.allStates.remove(storedToken);
             }
         }
         this.allStates.put(token, registration);
+        return true;
+    }
+
+    public boolean brickWantsTokenToBeApproved(Ev3CommunicationData registration) {
+        addNewRegistration(registration);
         return registration.brickTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
@@ -56,13 +70,15 @@ public class Ev3Communicator {
      * called by the robot to inform the server about the fact, that the robot is still connected and ready to get a command pushed to it
      *
      * @param token identifying the robot
-     * @param batteryvoltage the only information from the robot, which changes over time
+     * @param batteryvoltage changes over time
+     * @param nepoExitValue the return value of the last user program, that was executed. Is 0 if no exitvalue is provided by the robot system.
      * @return a legal command for the robot (in 99% a "repeat" :)
      */
-    public String brickWaitsForAServerPush(String token, String batteryvoltage) {
+    public String brickWaitsForAServerPush(String token, String batteryvoltage, int nepoExitValue) {
         Ev3CommunicationData state = getState(token);
         if ( state != null ) {
             state.setBattery(batteryvoltage);
+            state.setNepoExitValue(nepoExitValue);
             state.brickHasSentAPushRequest();
             return state.getCommand();
         } else {
@@ -91,7 +107,7 @@ public class Ev3Communicator {
         } else {
             state.abortPush(); // notifyAll() executed
             this.allStates.remove(token);
-            LOG.info("token " + token + " disconnected");
+            LOG.info("Robot [" + state.getRobotIdentificator() + "] token " + token + " disconnected.");
         }
     }
 

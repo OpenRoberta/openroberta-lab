@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
@@ -25,6 +26,7 @@ import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -234,7 +236,11 @@ abstract public class Jaxb2AstTransformer<V> {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
             Var<V> parametar =
-                Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
+                Var.make(
+                    BlocklyType.get(arg.getType()),
+                    arg.getName(),
+                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                    null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();
@@ -317,7 +323,7 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return AST object representing variable
      */
     public Phrase<V> extractVar(Block block) {
-        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMERIC;
+        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMBER;
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
         return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
@@ -349,10 +355,35 @@ abstract public class Jaxb2AstTransformer<V> {
     public Phrase<V> extractValue(List<Value> values, ExprParam param) {
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
-                return blockToAST(value.getBlock());
+                return extractBlock(value);
             }
         }
         return EmptyExpr.make(param.getDefaultValue());
+    }
+
+    private Phrase<V> extractBlock(Value value) {
+        Shadow shadow = value.getShadow();
+        Block block = value.getBlock();
+        if ( shadow != null ) {
+            Block shadowBlock = shadow2block(shadow);
+            if ( block != null ) {
+                return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)), convertPhraseToExpr(blockToAST(block)));
+            }
+            return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)));
+        } else {
+            return blockToAST(block);
+        }
+
+    }
+
+    private Block shadow2block(Shadow shadow) {
+        Block block = new Block();
+        block.setId(shadow.getId());
+        block.setType(shadow.getType());
+        block.setIntask(shadow.isIntask());
+        block.getField().add(shadow.getField());
+        block.setShadow(true);
+        return block;
     }
 
     /**
@@ -476,7 +507,8 @@ abstract public class Jaxb2AstTransformer<V> {
             isInline(block),
             isDeletable(block),
             isMovable(block),
-            isInTask(block));
+            isInTask(block),
+            isShadow(block));
     }
 
     public int getElseIf(Mutation mutation) {
@@ -577,5 +609,12 @@ abstract public class Jaxb2AstTransformer<V> {
             return null;
         }
         return block.isIntask();
+    }
+
+    private Boolean isShadow(Block block) {
+        if ( block.isShadow() == null ) {
+            return null;
+        }
+        return block.isShadow();
     }
 }

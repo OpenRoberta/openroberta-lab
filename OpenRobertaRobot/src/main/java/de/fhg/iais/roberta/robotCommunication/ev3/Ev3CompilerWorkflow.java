@@ -32,6 +32,28 @@ public class Ev3CompilerWorkflow {
     public final String crossCompilerResourcesDir;
     public final String pathToCrossCompilerBuildXMLResource;
 
+    private enum Language {
+        JAVA( ".java" ), PYTHON( ".py" );
+
+        private String extension;
+
+        Language(String ext) {
+            this.extension = ext;
+        }
+
+        String getExtension() {
+            return this.extension;
+        }
+
+        public static Language fromCommunicationData(Ev3CommunicationData state) {
+            if ( state == null ) {
+                return JAVA;
+            }
+            String fwName = state.getFirmwareName();
+            return (fwName != null && fwName.equals("ev3dev")) ? PYTHON : JAVA;
+        }
+    }
+
     @Inject
     public Ev3CompilerWorkflow(
         Ev3Communicator brickCommunicator,
@@ -61,67 +83,54 @@ public class Ev3CompilerWorkflow {
      * @param configurationText the hardware configuration source that describes characteristic data of the robot
      * @return a message key in case of an error; null otherwise
      */
-    public Key execute(String token, String programName, String programText, String configurationText) {
-        BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-        if ( data.getErrorMessage() != null ) {
-            return data.getErrorMessage();
-        }
+    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
+        Language lang = Language.fromCommunicationData(this.brickCommunicator.getState(token));
+        String sourceCode = generateProgram(lang, programName, data);
 
-        String fwName = this.brickCommunicator.getState(token).getFirmwareName();
-        boolean doPython = fwName.equals("ev3dev");
-        Ev3CompilerWorkflow.LOG.info("compiling for firmware: '" + fwName + "'");
-
-        String sourceCode, ext;
-        if ( doPython ) {
-            sourceCode = Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-            ext = ".py";
-            Ev3CompilerWorkflow.LOG.info("generating python code");
-        } else {
-            sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-            ext = ".java";
-            Ev3CompilerWorkflow.LOG.info("generating java code");
-        }
-
-        Ev3CompilerWorkflow.LOG.info("to be compiled:\n{}", sourceCode); // only needed for EXTREME debugging
+        //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
-            storeGeneratedProgram(token, programName, sourceCode, ext);
+            storeGeneratedProgram(token, programName, sourceCode, lang.getExtension());
         } catch ( Exception e ) {
             Ev3CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        if ( !doPython ) {
-            Key messageKey = runBuild(token, programName, "generated.main");
-            if ( messageKey == null ) {
-                Ev3CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
-            }
-            return messageKey;
-        } else {
-            // maybe copy from /src/ to /target/
-            // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
-            return null;
+        switch ( lang ) {
+            case JAVA:
+                Key messageKey = runBuild(token, programName, "generated.main");
+                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                    Ev3CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
+                } else {
+                    Ev3CompilerWorkflow.LOG.info(messageKey.toString());
+                }
+                return messageKey;
+            case PYTHON:
+                // maybe copy from /src/ to /target/
+                // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
+                return Key.COMPILERWORKFLOW_SUCCESS;
         }
+        return null;
     }
 
     /**
      * - take the program given<br>
      * - generate the AST<br>
      * - typecheck the AST, execute sanity checks, check a matching brick configuration<br>
-     * - generate Java code<br>
+     * - generate source code in the right language for the robot<br>
      * - and return it
      *
+     * @param token the credential the end user (at the terminal) and the brick have both agreed to use
      * @param programName name of the program
      * @param programText source of the program
      * @param configurationText the hardware configuration source that describes characteristic data of the robot
-     * @return the generated Java program; null in case of an error
+     * @return the generated source code; null in case of an error
      */
-    public String generateJavaProgram(String programName, String programText, String configurationText) {
+    public String generateSourceCode(String token, String programName, String programText, String configurationText) {
         BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        String sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-        Ev3CompilerWorkflow.LOG.info("generated Java code:\n{}", sourceCode); // only needed for EXTREME debugging
-        return sourceCode;
+        Language lang = Language.fromCommunicationData(this.brickCommunicator.getState(token));
+        return generateProgram(lang, programName, data);
     }
 
     /**
@@ -151,10 +160,24 @@ public class Ev3CompilerWorkflow {
         return transformer.transform(project);
     }
 
+    private String generateProgram(Language lang, String programName, BlocklyProgramAndConfigTransformer data) {
+        String sourceCode = "";
+        switch ( lang ) {
+            case JAVA:
+                sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+                break;
+            case PYTHON:
+                sourceCode = Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+                break;
+        }
+        Ev3CompilerWorkflow.LOG.info("generating {} code", lang.toString().toLowerCase());
+        return sourceCode;
+    }
+
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
         Assert.isTrue(token != null && programName != null && sourceCode != null);
         File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
-        Ev3CompilerWorkflow.LOG.info("stored under: ", sourceFile.getPath());
+        Ev3CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
         FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
     }
 
@@ -218,7 +241,7 @@ public class Ev3CompilerWorkflow {
             });
             project.executeTarget(project.getDefaultTarget());
             // LOG.info("build ok. Messages from build script are:\n" + sb.toString());
-            return null;
+            return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
                 Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);

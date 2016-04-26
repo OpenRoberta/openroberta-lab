@@ -19,7 +19,7 @@ public class ExprList<V> extends Expr<V> {
     private final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
-        super(BlockType.EXPR_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null), null);
+        super(BlockType.EXPR_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null, false), null);
     }
 
     /**

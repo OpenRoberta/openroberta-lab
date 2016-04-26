@@ -106,4 +106,9 @@ public class VersionChecker {
         }
         return s;
     }
+
+    public static void checkRestVersion(String version) {
+        // TODO Auto-generated method stub
+
+    }
 }

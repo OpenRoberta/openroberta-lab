@@ -34,6 +34,8 @@ public class Ev3Command {
     private static final String CMD_ABORT = "abort";
 
     private final Ev3Communicator brickCommunicator;
+    //    @Context
+    //    private HttpServletRequest servletRequest;
 
     @Inject
     public Ev3Command(Ev3Communicator brickCommunicator) {
@@ -53,6 +55,7 @@ public class Ev3Command {
         String menuversion = null;
         String firmwarename = null;
         String firmwareversion = null;
+        int nepoExitValue = 0;
         try {
             macaddr = requestEntity.getString("macaddr");
             token = requestEntity.getString("token");
@@ -70,17 +73,25 @@ public class Ev3Command {
             try {
                 // legacy
                 firmwareversion = requestEntity.getString("lejosversion");
-                firmwarename = "lejos";
+                firmwarename = "leJOS";
             } catch ( Exception ee ) {
                 LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
                 return Response.serverError().build();
             }
         }
+        try {
+            nepoExitValue = requestEntity.getInt("nepoexitvalue");
+        } catch ( Exception e ) {
+            // no program was executed yet on the robot, field in requestEntity does not exist
+            // or the robot system does not support it (nxt)
+            nepoExitValue = 0;
+        }
         // todo: validate version serverside
         JSONObject response;
         switch ( cmd ) {
             case CMD_REGISTER:
-                LOG.info("pushcmd - brick sends token " + token + " for registration");
+                LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
+                // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
                 Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
@@ -92,7 +103,7 @@ public class Ev3Command {
                     pushRequestCounterForLogging.set(0);
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
-                String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage);
+                String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
                 if ( command == null ) {
                     LOG.error("No valid command issued by the server as response to a push command request for token " + token);
                     return Response.serverError().build();

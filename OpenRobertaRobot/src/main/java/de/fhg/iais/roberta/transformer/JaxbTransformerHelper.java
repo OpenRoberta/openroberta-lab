@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
+import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
@@ -14,6 +15,7 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -145,7 +147,16 @@ public final class JaxbTransformerHelper {
         if ( value.getKind() != BlockType.EMPTY_EXPR ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            blockValue.setBlock(value.astToBlock());
+            if ( value.getKind() == BlockType.SHADOW_EXPR ) {
+                ShadowExpr<?> shadowExpr = (ShadowExpr<?>) value;
+                blockValue.setShadow(block2shadow(shadowExpr.getShadow().astToBlock()));
+                if ( shadowExpr.getBlock() != null ) {
+                    blockValue.setBlock(shadowExpr.getBlock().astToBlock());
+                }
+            } else {
+                blockValue.setBlock(value.astToBlock());
+            }
+
             block.getValue().add(blockValue);
         }
     }
@@ -181,6 +192,15 @@ public final class JaxbTransformerHelper {
         field.setName(name);
         field.setValue(value);
         block.getField().add(field);
+    }
+
+    private static Shadow block2shadow(Block block) {
+        Shadow shadow = new Shadow();
+        shadow.setId(block.getId());
+        shadow.setType(block.getType());
+        shadow.setIntask(block.isIntask());
+        shadow.setField(block.getField().get(0));
+        return shadow;
     }
 
     private static List<Block> extractStmtList(Phrase<?> phrase) {

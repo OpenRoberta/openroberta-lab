@@ -141,7 +141,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-93, y=290], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMERIC, i, EmptyExpr [defVal=class java.lang.Integer], false, false], EmptyExpr [defVal=class java.util.ArrayList]]]\n)]]]";
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, i, EmptyExpr [defVal=class java.lang.Integer], false, false], EmptyExpr [defVal=class java.util.ArrayList]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each1.xml"));
     }
@@ -150,7 +150,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach2() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=39, y=60], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMERIC, j, EmptyExpr [defVal=class java.lang.Integer], false, false], ListCreate [NUMERIC, EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList]]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, j, EmptyExpr [defVal=class java.lang.Integer], false, false], ListCreate [NUMBER, EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList]]]]\n"
                 + "AktionStmt [LightAction [GREEN, ON]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each2.xml"));

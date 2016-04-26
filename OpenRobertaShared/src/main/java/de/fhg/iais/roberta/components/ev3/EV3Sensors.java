@@ -41,7 +41,11 @@ public final class EV3Sensors extends HardwareComponentType {
     }
 
     private static final EV3Sensors[] values = {
-        EV3_COLOR_SENSOR, EV3_TOUCH_SENSOR, EV3_ULTRASONIC_SENSOR, EV3_IR_SENSOR, EV3_GYRO_SENSOR
+        EV3_COLOR_SENSOR,
+        EV3_TOUCH_SENSOR,
+        EV3_ULTRASONIC_SENSOR,
+        EV3_IR_SENSOR,
+        EV3_GYRO_SENSOR
     };
 
     public static final List<EV3Sensors> SENSORS = Collections.unmodifiableList(Arrays.asList(values));

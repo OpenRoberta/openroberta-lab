@@ -1,8 +1,7 @@
 #!/bin/bash
 
-#.sh --java
-
-__commands_ora_sh=`ora.sh --help | tr [:blank:] '\n' | grep "^--"`
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+__commands_ora_sh=`cat $scriptdir/ora-help.txt | tr [:blank:] '\n' | grep "^--"`
 
 function __complete_ora_sh {
   COMPREPLY=()

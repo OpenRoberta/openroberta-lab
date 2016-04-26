@@ -17,7 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * @fileoverview Colour input field.
  * @author fraser@google.com (Neil Fraser)
@@ -32,7 +31,6 @@ goog.require('Blockly.FieldColour');
 Blockly.FieldRobColour = function(colour, opt_changeHandler) {
     Blockly.FieldRobColour.superClass_.constructor.call(this, '\u00A0\u00A0\u00A0\u00A0\u00A0');
     this.changeHandler_ = opt_changeHandler;
-    this.borderRect_.style['fillOpacity'] = 1;
     // Set the initial state.
     this.setValue(colour);
     Blockly.FieldColour.COLUMNS = 8;

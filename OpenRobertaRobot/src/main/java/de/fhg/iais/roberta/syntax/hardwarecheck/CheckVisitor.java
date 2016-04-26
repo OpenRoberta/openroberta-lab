@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
@@ -39,7 +40,7 @@ import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
@@ -363,8 +364,8 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
-        for ( Expr<Void> expr : lenghtOfIsEmptyFunct.getParam() ) {
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        for ( Expr<Void> expr : lengthOfIsEmptyFunct.getParam() ) {
             expr.visit(this);
         }
         return null;
@@ -447,9 +448,7 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        for ( Expr<Void> expr : textJoinFunct.getParam() ) {
-            expr.visit(this);
-        }
+        textJoinFunct.getParam().visit(this);
         return null;
     }
 
@@ -482,7 +481,6 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         methodCall.getParametersValues().visit(this);
-
         return null;
     }
 
@@ -511,6 +509,15 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+        return null;
+    }
+
+    @Override
+    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
+        shadowExpr.getShadow().visit(this);
+        if ( shadowExpr.getBlock() != null ) {
+            shadowExpr.getBlock().visit(this);
+        }
         return null;
     }
 

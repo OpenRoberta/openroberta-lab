@@ -1,10 +1,29 @@
 package de.fhg.iais.roberta.runtime.ev3;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
+import org.java_websocket.WebSocket.READYSTATE;
+import org.json.JSONObject;
+
+import de.fhg.iais.roberta.components.ev3.EV3Actor;
+import de.fhg.iais.roberta.components.ev3.EV3Actors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.runtime.Utils;
 import de.fhg.iais.roberta.shared.Pickcolor;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
@@ -20,13 +39,16 @@ import de.fhg.iais.roberta.shared.sensor.ev3.ColorSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
+import lejos.hardware.lcd.LCDOutputStream;
 import lejos.hardware.lcd.TextLCD;
+import lejos.internal.ev3.EV3IOPort;
 import lejos.remote.nxt.NXTConnection;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -40,20 +62,41 @@ import lejos.utility.Stopwatch;
  */
 public class Hal {
 
+    private enum ConnectionType {
+        NONE, WEBSOCKET, REST
+    };
+
     private static final int NUMBER_OF_CHARACTERS_IN_ROW = 17;
     private static final int BLUETOOTH_TIMEOUT = 20;
 
+    private static final String OPENROBERTAPROPERTIESFILE = "/home/roberta/openroberta.properties";
+
+    private final Set<UsedSensor> usedSensors;
     private final DeviceHandler deviceHandler;
 
     private final EV3 brick;
+    private final LCDOutputStream lcdos = new LCDOutputStream();
 
     private final Stopwatch[] timers = new Stopwatch[5];
 
     private final double wheelDiameter;
     private final double trackWidth;
 
-    private BluetoothCom blueCom = new BluetoothComImpl();
-    private NXTConnection bluetoothConnection = null;
+    DifferentialPilot dPilot = null;
+
+    private final BluetoothCom blueCom = new BluetoothComImpl();
+
+    private Properties openrobertaProperties = null;
+    private URI sensorloggingWebSocketURI = null;
+    private URL sensorloggingRestURL = null;
+    private Thread serverLoggerThread = null;
+    private Thread screenLoggerThread = null;
+    private final Ev3Configuration brickConfiguration;
+
+    private String token = "";
+    private String serverAddress = "";
+    private boolean wifiLogging = false;
+    private ConnectionType connectionType = ConnectionType.NONE;
 
     private static final String rawOldGlasses =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u0007\u00fc\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0080\u00ff\u0001\u00f0\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u00fe\u003f\u00f0\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u00e0\u00ff\u0000\u00f0\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u00ff\u000f\u00c0\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u00f0\u003f\u0000\u00e0\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0080\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u00f8\u001f\u0000\u00e0\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u00c0\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00fc\u000f\u0000\u00e0\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u00e0\u007f\u0000\u0080\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00fe\u0007\u0000\u00e0\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u00f0\u003f\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u00ff\u0003\u0000\u00f0\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u00f8\u001f\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0080\u00ff\u0001\u0000\u00f0\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f8\u000f\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u00ff\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00fc\u0007\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u00fe\u0003\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u007f\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fe\u0001\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00e0\u003f\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00ff\u0001\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f0\u003f\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f0\u001f\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0080\u00ff\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00f8\u001f\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0080\u007f\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00f8\u000f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00c0\u007f\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u003f\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u0007\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u003f\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fc\u0007\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00e0\u001f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0080\u0001\u00fe\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00f0\u000f\u00ff\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00f0\u001f\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00f8\u001f\u00ff\u0003\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u003f\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003e\u007c\u00ff\u0007\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u003f\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u00f8\u00ff\u0007\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u00f0\u00ff\u001f\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00e3\u00c7\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00fb\u00df\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
@@ -73,11 +116,15 @@ public class Hal {
     private static final Image tacho = new Image(178, 128, Utils.stringToBytes8(rawTacho));
 
     /**
+     * Setup the hardware components of the robot, which are used by the NEPO program.
+     *
      * @param brickConfiguration
+     * @param usedSensors
      */
-    public Hal(Ev3Configuration brickConfiguration, Set<EV3Sensors> usedSensors) {
+    public Hal(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors) {
+        this.usedSensors = usedSensors;
         this.deviceHandler = new DeviceHandler(brickConfiguration, usedSensors);
-
+        this.brickConfiguration = brickConfiguration;
         this.wheelDiameter = brickConfiguration.getWheelDiameterCM();
         this.trackWidth = brickConfiguration.getTrackWidthCM();
 
@@ -87,6 +134,379 @@ public class Hal {
         for ( int i = 0; i < this.timers.length; i++ ) {
             this.timers[i] = new Stopwatch();
         }
+
+        try {
+            this.dPilot =
+                new DifferentialPilot(
+                    this.wheelDiameter,
+                    this.trackWidth,
+                    this.deviceHandler.getRegulatedMotor(brickConfiguration.getLeftMotorPort()),
+                    this.deviceHandler.getRegulatedMotor(brickConfiguration.getRightMotorPort()),
+                    (this.brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
+                        ? true
+                        : false);
+        } catch ( DbcException e ) {
+            // do not instantiate because we do not need it (checked form code generation side)
+        }
+
+        try {
+            this.openrobertaProperties = loadOpenRobertaProperties();
+            this.serverAddress = this.openrobertaProperties.getProperty("lastaddress");
+            this.token = this.openrobertaProperties.getProperty("lasttoken");
+            this.wifiLogging = this.openrobertaProperties.getProperty("connection").equals("wifi") ? true : false;
+            this.sensorloggingWebSocketURI = new URI("ws://" + this.serverAddress + "/ws/");
+            this.sensorloggingRestURL = new URL("http://" + this.serverAddress + "/rest/sensorlogging");
+        } catch ( Exception e ) {
+            this.wifiLogging = false;
+        }
+    }
+
+    /**
+     * Load properties from /home/roberta/openroberta.properties .
+     * These are shared informations between the menu (read and write) and the NEPO program (only read).
+     *
+     * @return All stored key value pairs from the file
+     * @throws IOException Should never occur if the menu is working correctly.
+     */
+    private Properties loadOpenRobertaProperties() throws IOException {
+        File f = new File(OPENROBERTAPROPERTIESFILE);
+        Properties p = new Properties();
+        p.load(new FileInputStream(f));
+        return p;
+    }
+
+    private HttpURLConnection openConnection() throws SocketTimeoutException, IOException {
+        HttpURLConnection httpURLConnection = (HttpURLConnection) this.sensorloggingRestURL.openConnection();
+        httpURLConnection.setDoInput(true);
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setReadTimeout(5000);
+        httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
+        return httpURLConnection;
+    }
+
+    /**
+     * Starts logging of the sensor data to the server and brick screen.
+     */
+    public void startLogging() {
+        startServerLoggingThread();
+        startScreenLoggingThread();
+    }
+
+    /**
+     * <b>!!!Temporary solution for version 1.4!!!</b></br>
+     * Ugly fix, we can not upload websocket library to the ev3 in version 1.4, therefor use special method without websocket reference.
+     * Logging is only allowed, if the last connection is wifi set by the ev3 menu.
+     */
+    private void startServerLoggingThread() {
+        if ( this.wifiLogging ) {
+            File f = new File("/home/roberta/lib/Java-WebSocket.jar");
+            if ( f.exists() ) {
+                loggingWithWebSocket();
+            } else {
+                loggingWithoutWebSocket();
+            }
+        }
+    }
+
+    /**
+     * <b>!!!Temporary solution for version 1.4!!!</b></br>
+     * Start a new thread for logging with websocket reference.
+     */
+    private void loggingWithWebSocket() {
+        final ClientWebSocket ws = new ClientWebSocket(this.sensorloggingWebSocketURI);
+        ws.connect();
+        this.connectionType = ConnectionType.WEBSOCKET;
+
+        this.serverLoggerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while ( true ) {
+                    switch ( Hal.this.connectionType ) {
+                        case NONE:
+                            return;
+                        case WEBSOCKET:
+                            try {
+                                logToServerWS(ws);
+                            } catch ( Exception programFinished ) {
+                                return;
+                            }
+                            break;
+                        case REST:
+                            try {
+                                logToServerRest();
+                            } catch ( Exception programFinished ) {
+                                return;
+                            }
+                            break;
+                        default:
+                            return;
+                    }
+                    Delay.msDelay(2000);
+                }
+            }
+        });
+        this.serverLoggerThread.setDaemon(true);
+        this.serverLoggerThread.start();
+    }
+
+    /**
+     * <b>!!!Temporary solution for version 1.4!!!</b></br>
+     * Start a new thread for logging without websocket reference.
+     */
+    private void loggingWithoutWebSocket() {
+        this.connectionType = ConnectionType.REST;
+        this.serverLoggerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while ( true ) {
+                    switch ( Hal.this.connectionType ) {
+                        case NONE:
+                            return;
+                        case REST:
+                            try {
+                                logToServerRest();
+                            } catch ( Exception programFinished ) {
+                                return;
+                            }
+                            break;
+                        default:
+                            return;
+                    }
+                    Delay.msDelay(2000);
+                }
+            }
+        });
+        this.serverLoggerThread.setDaemon(true);
+        this.serverLoggerThread.start();
+    }
+
+    /**
+     * Start a new Thread in the NEPO program to regularly display sensor information on the ev3 screen.
+     */
+    private void startScreenLoggingThread() {
+        this.screenLoggerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                logToScreen();
+            }
+        });
+        this.screenLoggerThread.setDaemon(true);
+        this.screenLoggerThread.start();
+    }
+
+    /**
+     * Send sensor values to Open Roberta Lab via websocket.
+     * Fall back to REST if the websocket is not able to connect to the server at least once.
+     */
+    private void logToServerWS(ClientWebSocket ws) {
+        // READYSTATE.CONNECTING not working/ unused
+        System.out.println(ws.getReadyState());
+        if ( ws.getReadyState() == READYSTATE.OPEN ) {
+            sendJSONviaWebsocket(ws);
+        } else if ( ws.getReadyState() == READYSTATE.CLOSED || ws.getReadyState() == READYSTATE.CLOSING ) {
+            ws.close();
+            this.connectionType = ConnectionType.REST;
+            return;
+        }
+    }
+
+    /**
+     * Send sensor values to Open Roberta Lab via websocket.
+     * Give up the logging if no connection is possible.
+     */
+    public void logToServerRest() {
+        try {
+            HttpURLConnection httpURLConnection = openConnection();
+            sendJSONviaRest(httpURLConnection);
+            System.out.println(httpURLConnection.getResponseCode());
+            httpURLConnection.disconnect();
+            this.connectionType = ConnectionType.REST;
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            this.wifiLogging = false;
+            this.connectionType = ConnectionType.NONE;
+        }
+    }
+
+    /**
+     * Write sensor values as JSON object to the websocket.
+     */
+    private void sendJSONviaWebsocket(ClientWebSocket ws) {
+        JSONObject ev3Values = new JSONObject();
+        ev3Values.put("token", this.token);
+        addSensorsValues(ev3Values);
+        addActorsTacho(ev3Values);
+        ws.send(ev3Values.toString());
+    }
+
+    /**
+     * Write sensor values as JSON object to the websocket.
+     *
+     * @throws IOException
+     */
+    private void sendJSONviaRest(HttpURLConnection httpURLConnection) throws IOException {
+        JSONObject ev3Values = new JSONObject();
+        ev3Values.put("token", this.token);
+        addSensorsValues(ev3Values);
+        addActorsTacho(ev3Values);
+        OutputStream os = httpURLConnection.getOutputStream();
+        os.write(ev3Values.toString().getBytes("UTF-8"));
+        os.close();
+    }
+
+    /**
+     * Put motor tacho information into the JSON object which will be send to the server.
+     *
+     * @param ev3Values
+     */
+    private void addActorsTacho(JSONObject ev3Values) {
+        for ( Entry<ActorPort, EV3Actor> mapEntry : this.brickConfiguration.getActors().entrySet() ) {
+            int hardwareId = mapEntry.getValue().getComponentType().hashCode();
+            ActorPort port = mapEntry.getKey();
+            String partKey = port.name() + "-";
+
+            partKey +=
+                EV3Actors.EV3_LARGE_MOTOR.hashCode() == hardwareId ? EV3Actors.EV3_LARGE_MOTOR.getShortName() : EV3Actors.EV3_MEDIUM_MOTOR.getShortName();
+
+            if ( this.brickConfiguration.isMotorRegulated(port) ) {
+                ev3Values.put(partKey + MotorTachoMode.DEGREE, getRegulatedMotorTachoValue(port, MotorTachoMode.DEGREE));
+            } else {
+                ev3Values.put(partKey + MotorTachoMode.DEGREE, getUnregulatedMotorTachoValue(port, MotorTachoMode.DEGREE));
+            }
+        }
+    }
+
+    /**
+     * Put sensor information into the JSON object which will be send to the server.
+     *
+     * @param ev3Values
+     */
+    private void addSensorsValues(JSONObject ev3Values) {
+        for ( UsedSensor sensor : this.usedSensors ) {
+            SensorPort port = sensor.getPort();
+            SensorMode mode = (SensorMode) sensor.getMode();
+
+            String methodName = mode.getHalJavaMethod();
+            Method method;
+            String result = null;
+            try {
+                method = Hal.class.getMethod(methodName, SensorPort.class);
+                result = String.valueOf(method.invoke(this, port));
+            } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+                break;
+            }
+            ev3Values.put(port + "-" + mode.getClass().getSimpleName() + "-" + mode, result);
+        }
+    }
+
+    /**
+     * Display the port and the sensor values on the ev3 screen every two seconds.
+     */
+    public void logToScreen() {
+        while ( !Thread.currentThread().isInterrupted() ) {
+            for ( UsedSensor sensor : this.usedSensors ) {
+                SensorPort port = sensor.getPort();
+                SensorMode mode = (SensorMode) sensor.getMode();
+                String methodName = mode.getHalJavaMethod();
+                Method method;
+                String result = "";
+                try {
+                    method = Hal.class.getMethod(methodName, SensorPort.class);
+                    result = String.valueOf(method.invoke(this, port));
+                } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+                    break;
+                }
+                formatAndPrintToScreen(port, result);
+            }
+            for ( Entry<ActorPort, EV3Actor> mapEntry : this.brickConfiguration.getActors().entrySet() ) {
+                ActorPort port = mapEntry.getKey();
+                String line = "";
+                try {
+                    if ( this.brickConfiguration.isMotorRegulated(port) ) {
+                        line = port.name() + " " + getRegulatedMotorTachoValue(port, MotorTachoMode.DEGREE) + "\n";
+                        this.lcdos.write(line.getBytes());
+                    } else {
+                        line = port.name() + " " + getUnregulatedMotorTachoValue(port, MotorTachoMode.DEGREE) + "\n";
+                        this.lcdos.write(line.getBytes());
+                    }
+                } catch ( IOException e ) {
+                    // ok
+                }
+            }
+            Delay.msDelay(2000);
+        }
+    }
+
+    /**
+     * TODO not nice, find better solution
+     *
+     * @param port
+     * @param result
+     */
+    private void formatAndPrintToScreen(SensorPort port, String result) {
+        try {
+            if ( result.startsWith("[") ) {
+                String tmp = result.substring(1, result.length() - 1);
+                List<String> list = new ArrayList<String>(Arrays.asList(tmp.split(", ")));
+                this.lcdos.write((port + " ").getBytes());
+                for ( String string : list ) {
+                    this.lcdos.write((string + " ").getBytes());
+                }
+                this.lcdos.write("\n".getBytes());
+            } else {
+                this.lcdos.write((port + " " + result + "\n").getBytes());
+            }
+        } catch ( IOException e ) {
+            return;
+        }
+    }
+
+    /**
+     * Properly close all resources at the end of the NEPO program: ev3 io ports, debugging threads, websocket and the lcd output stream.
+     *
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    public void closeResources() throws InterruptedException, IOException {
+        EV3IOPort.closeAll();
+        this.lcdos.close();
+        System.exit(0);
+    }
+
+    //    /**
+    //     * Send a message to the server. This is similar to a system.out.println() command, so the user can see if his program reaches a specific point during
+    //     * runtime.
+    //     *
+    //     * @param msg Message to send to the server.
+    //     */
+    //    public void infoMessage(String msg) {
+    //        if ( this.ws != null ) {
+    //            try {
+    //                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
+    //                    JSONObject debugMsg = new JSONObject();
+    //                    debugMsg.put("token", this.token);
+    //                    debugMsg.put("msg", msg);
+    //                    this.ws.send(debugMsg.toString());
+    //                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
+    //                    this.ws.connect();
+    //                }
+    //            } catch ( JSONException e ) {
+    //                // ok
+    //            }
+    //        }
+    //    }
+
+    public static void displayExceptionWaitForKeyPress(Exception e) {
+        lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();
+        lcd.clear();
+        lcd.drawString("Error in the EV3", 0, 0);
+        if ( e.getMessage() != null ) {
+            lcd.drawString("Error message:", 0, 2);
+            Hal.formatInfoMessage(e.getMessage(), lcd);
+        }
+        lcd.drawString("Press any key", 0, 7);
+        lejos.hardware.Button.waitForAnyPress();
     }
 
     /**
@@ -340,27 +760,17 @@ public class Hal {
      * working and 100 if we want to use full power of the motor.
      * Values larger then 100 set the motor speed again to its maximum.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction of rotation of the motor (forward or backward)
      * @param speedPercent of motor power
      */
-    public void regulatedDrive(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, float speedPercent) {
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setTravelSpeed(dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
+    public void regulatedDrive(DriveDirection direction, float speedPercent) {
+        this.dPilot.setTravelSpeed(this.dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
         switch ( direction ) {
             case FOREWARD:
-                dPilot.forward();
+                this.dPilot.forward();
                 break;
             case BACKWARD:
-                dPilot.backward();
+                this.dPilot.backward();
                 break;
             default:
                 throw new DbcException("wrong DriveAction.Direction");
@@ -375,29 +785,18 @@ public class Hal {
      * working and 100 if we want to use full power of the motor.
      * Values larger then 100 set the motor speed again to its maximum.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction of rotation of the motor (forward or backward)
      * @param speedPercent of motor power
      * @param distance that the robot should travel
      */
-    public void driveDistance(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, float speedPercent, float distance) {
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-
-        dPilot.setTravelSpeed(dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
+    public void driveDistance(DriveDirection direction, float speedPercent, float distance) {
+        this.dPilot.setTravelSpeed(this.dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
         switch ( direction ) {
             case FOREWARD:
-                dPilot.travel(distance);
+                this.dPilot.travel(distance);
                 break;
             case BACKWARD:
-                dPilot.travel(-distance);
+                this.dPilot.travel(-distance);
                 break;
             default:
                 throw new DbcException("incorrect DriveAction");
@@ -408,13 +807,9 @@ public class Hal {
      * Stop regulated drive motors.<br>
      * <br>
      * Client must provide correct ports of the left and right motor.
-     *
-     * @param left motor port name
-     * @param right motor port name
      */
-    public void stopRegulatedDrive(ActorPort left, ActorPort right) {
-        this.deviceHandler.getRegulatedMotor(left).stop(true);
-        this.deviceHandler.getRegulatedMotor(right).stop(true);
+    public void stopRegulatedDrive() {
+        this.dPilot.quickStop();
     }
 
     /**
@@ -425,27 +820,17 @@ public class Hal {
      * working and 100 if we want to use full power of the motor.
      * Values larger then 100 set the motor speed again to its maximum.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction in which the robot will turn (left or right)
      * @param speedPercent of motor power
      */
-    public void rotateDirectionRegulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, float speedPercent) {
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setRotateSpeed(toDegPerSec((int) speedPercent));
+    public void rotateDirectionRegulated(TurnDirection direction, float speedPercent) {
+        this.dPilot.setRotateSpeed(toDegPerSec((int) speedPercent));
         switch ( direction ) {
             case RIGHT:
-                dPilot.rotateRight();
+                this.dPilot.rotateRight();
                 break;
             case LEFT:
-                dPilot.rotateLeft();
+                this.dPilot.rotateLeft();
                 break;
             default:
                 throw new DbcException("incorrect TurnAction");
@@ -460,29 +845,19 @@ public class Hal {
      * working and 100 if we want to use full power of the motor. Values larger then 100 set the motor speed again to its maximum. Client must also provide the
      * angle of the turn of the robot.
      *
-     * @param left motor port name
-     * @param right motor port name
-     * @param isReverse is true if the motors should be in reverse mode
      * @param direction in which the robot will turn (left or right)
      * @param speedPercent of motor power
      * @param angle of the turn
      */
-    public void rotateDirectionAngle(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, float speedPercent, float angle) {
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+    public void rotateDirectionAngle(TurnDirection direction, float speedPercent, float angle) {
+        this.dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
                 angle = angle * -1;
-                dPilot.rotate(angle, false);
+                this.dPilot.rotate(angle, false);
                 break;
             case LEFT:
-                dPilot.rotate(angle, false);
+                this.dPilot.rotate(angle, false);
                 break;
             default:
                 throw new DbcException("incorrect TurnAction");
@@ -653,7 +1028,7 @@ public class Hal {
      * @param sensorPort on which the touch sensor is connected
      * @return true if the sensor is pressed
      */
-    public boolean isPressed(SensorPort sensorPort) {
+    public synchronized boolean isPressed(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, "Touch");
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -674,7 +1049,7 @@ public class Hal {
      * @param sensorPort on which the ultrasonic sensor is connected
      * @return true if exists other ultrasonic sensor
      */
-    public boolean getUltraSonicSensorPresence(SensorPort sensorPort) {
+    public synchronized boolean getUltraSonicSensorPresence(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.PRESENCE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -691,7 +1066,7 @@ public class Hal {
      * @param sensorPort on which the ultrasonic sensor is connected
      * @return value in <i>cm</i> of the distance of the ultrasonic sensor and some object
      */
-    public float getUltraSonicSensorDistance(SensorPort sensorPort) {
+    public synchronized float getUltraSonicSensorDistance(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.DISTANCE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0); // ^= distance in cm
@@ -713,7 +1088,7 @@ public class Hal {
      * @param sensorPort on which the color sensor is connected
      * @return the value of the measurement of the sensor
      */
-    public float getColorSensorAmbient(SensorPort sensorPort) {
+    public synchronized float getColorSensorAmbient(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.AMBIENTLIGHT.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -726,7 +1101,7 @@ public class Hal {
      * @param sensorPort on which the sensor is connected
      * @return color that is detected with the sensor (see {@link Pickcolor} for all colors that can be detected)
      */
-    public Pickcolor getColorSensorColour(SensorPort sensorPort) {
+    public synchronized Pickcolor getColorSensorColour(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.COLOUR.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -739,7 +1114,7 @@ public class Hal {
      * @param sensorPort on which the sensor is connected
      * @return the value of the measurement of the sensor
      */
-    public float getColorSensorRed(SensorPort sensorPort) {
+    public synchronized float getColorSensorRed(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RED.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -752,7 +1127,7 @@ public class Hal {
      * @param sensorPort on which the sensor is connected
      * @return array of size three where in each element of the array is encode on color channel (RGB), values are between 0 and 255
      */
-    public ArrayList<Float> getColorSensorRgb(SensorPort sensorPort) {
+    public synchronized ArrayList<Float> getColorSensorRgb(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RGB.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -772,7 +1147,7 @@ public class Hal {
      * @param sensorPort on which the infrared sensor is connected
      * @return value in <i>cm</i> of the distance of the infrared sensor and some object
      */
-    public float getInfraredSensorDistance(SensorPort sensorPort) {
+    public synchronized float getInfraredSensorDistance(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.DISTANCE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -786,7 +1161,7 @@ public class Hal {
      * @param sensorPort on which the infrared sensor is connected
      * @return array of size 7
      */
-    public ArrayList<Float> getInfraredSensorSeek(SensorPort sensorPort) {
+    public synchronized ArrayList<Float> getInfraredSensorSeek(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.SEEK.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
@@ -811,22 +1186,28 @@ public class Hal {
      * Client must provide sensor port on which the sensor is connected and the mode in which sensor would working (see {@link GyroSensorMode})
      *
      * @param sensorPort on which the gyro sensor sensor is connected
-     * @param sensorMode in which the sensor is working
-     * @return value of the measurment of the sensor
+     * @return angle of the measurment of the sensor
      */
-    public float getGyroSensorValue(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.getLejosModeName());
+    public synchronized float getGyroSensorAngle(SensorPort sensorPort) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, GyroSensorMode.ANGLE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
+        return Math.round(sample[0]);
+    }
 
-        switch ( sensorMode ) { // maybe no switch necessary
-            case ANGLE:
-                return Math.round(sample[0]); // ok
-            case RATE:
-                return Math.round(sample[0]); // ok
-            default:
-                throw new DbcException("sensor type or sensor mode missmatch");
-        }
+    /**
+     * Get sample from gyro sensor.<br>
+     * <br>
+     * Client must provide sensor port on which the sensor is connected and the mode in which sensor would working (see {@link GyroSensorMode})
+     *
+     * @param sensorPort on which the gyro sensor sensor is connected
+     * @return rate of the measurment of the sensor
+     */
+    public synchronized float getGyroSensorRate(SensorPort sensorPort) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, GyroSensorMode.RATE.getLejosModeName());
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
+        return Math.round(sample[0]);
     }
 
     /**
@@ -834,7 +1215,7 @@ public class Hal {
      *
      * @param sensorPort on which the gyro sensor sensor is connected
      */
-    public void resetGyroSensor(SensorPort sensorPort) {
+    public synchronized void resetGyroSensor(SensorPort sensorPort) {
         this.deviceHandler.getGyroSensor().reset();
     }
 
@@ -890,13 +1271,13 @@ public class Hal {
      * @param mode in which the sensor is working
      * @return value of the measurement (number of rotations or angle of rotation)
      */
-    public double getRegulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
+    public synchronized float getRegulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
         switch ( mode ) {
             case DEGREE:
                 return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
             case ROTATION:
             case DISTANCE:
-                double rotations = Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+                float rotations = (float) (Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0);
                 if ( mode == MotorTachoMode.ROTATION ) {
                     return rotations;
                 } else {
@@ -916,13 +1297,13 @@ public class Hal {
      * @param mode in which the sensor is working
      * @return value of the measurement (number of rotations or angle of rotation)
      */
-    public double getUnregulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
+    public synchronized float getUnregulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
         switch ( mode ) {
             case DEGREE:
                 return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
             case ROTATION:
             case DISTANCE:
-                double rotations = Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+                float rotations = (float) (Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0);
                 if ( mode == MotorTachoMode.ROTATION ) {
                     return rotations;
                 } else {
@@ -984,16 +1365,14 @@ public class Hal {
      * @param host the host.
      */
     public NXTConnection establishConnectionTo(String host) {
-        this.bluetoothConnection = this.blueCom.establishConnectionTo(host, BLUETOOTH_TIMEOUT);
-        return this.bluetoothConnection;
+        return this.blueCom.establishConnectionTo(host, BLUETOOTH_TIMEOUT);
     }
 
     /**
      * Awaits an incoming connection via {@link BluetoothCom#waitForConnection(int)} with a timeout of {@link #BLUETOOTH_TIMEOUT}.
      */
     public NXTConnection waitForConnection() {
-        this.bluetoothConnection = this.blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
-        return this.bluetoothConnection;
+        return this.blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
     }
 
     /**
@@ -1002,10 +1381,10 @@ public class Hal {
      * @param bluetoothConnection
      * @return the message or "NO MESSAGE"
      */
-    public String readMessage() {
+    public String readMessage(NXTConnection bluetoothConnection) {
         String message = "NO MESSAGE";
-        if ( this.bluetoothConnection != null ) {
-            message = this.blueCom.readMessage(this.bluetoothConnection);
+        if ( bluetoothConnection != null ) {
+            message = this.blueCom.readMessage(bluetoothConnection);
         }
         return message;
     }
@@ -1016,9 +1395,9 @@ public class Hal {
      * @param message the message to be sent
      * @param bluetoothConnection
      */
-    public void sendMessage(String message) {
-        if ( this.bluetoothConnection != null ) {
-            this.blueCom.sendTo(this.bluetoothConnection, message);
+    public void sendMessage(String message, NXTConnection bluetoothConnection) {
+        if ( bluetoothConnection != null ) {
+            this.blueCom.sendTo(bluetoothConnection, message);
         }
     }
 

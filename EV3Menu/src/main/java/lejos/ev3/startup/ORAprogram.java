@@ -32,8 +32,7 @@ public class ORAprogram implements HttpHandler {
         exchange.getResponseBody().write(response.toString().getBytes());
         exchange.close();
 
-        ORAlauncher launcher = new ORAlauncher();
-        launcher.runProgram(filename);
+        ORAlauncher.runProgram(filename);
     }
 
 }

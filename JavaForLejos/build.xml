@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="toEV3" basedir="." default="copy">
+
+	<property name="jar-name"   value="light-hal"/>
+	<property name="main-class" value="de.budde.Light"/>
+	<property name="ev3-host"   value="10.0.1.1"/>
+
+	<target name="jar" description="create the jar with the main class">
+		<mkdir dir="program"/>
+		<jar destfile="program/${jar-name}.jar" basedir="bin">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}"/>
+				<attribute name="Class-Path" value="/home/root/lejos/lib/ev3classes.jar /home/root/lejos/libjna/usr/share/java/jna.jar /home/roberta/lib/Java-WebSocket.jar /home/roberta/lib/OpenRobertaRuntime.jar /home/roberta/lib/OpenRobertaShared.jar /home/roberta/lib/json.jar"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- as described in the ant manual (http://ant.apache.org/manual/index.html), the scp task has a dependency
+	     to the library jsch.jar 0.1.50 or later, to be retrieved from http://www.jcraft.com/jsch/index.html
+	     and placed into the lib directory of your ant installation or in the lib folder of the ant installation
+	     contained in your eclipse installation (path is similar to plugins\org.apache.ant_1.9.4.v201504302020\lib
+	     If this doesn't work for whatsoever reason, you may manually copy (scp!) the jar to the ev3
+	-->
+	<target name="copy" depends="jar" description="copy the jar with the main class to the EV3">
+		<scp todir="root:@${ev3-host}:/home/lejos/programs/" trust="true">
+			<fileset file="program/${jar-name}.jar"/>
+		</scp>
+	</target>
+</project>

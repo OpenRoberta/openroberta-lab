@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Websocket Example</title>
+	<script>
+        var webSocket = new WebSocket('ws://localhost:1999/ws/example');
+        // this is not a robust solution. Wait long enough to establish the connection.
+        setTimeout(function () {
+            webSocket.send('message from a javascript websocket!');        	
+        }, 500);
+        alert('message sent. Look into the server log file!');
+	</script>
+</head>
+<body>
+	<h3>this is an example page using websockets. it is not productive code :-)</h3>
+</body>
+</html>

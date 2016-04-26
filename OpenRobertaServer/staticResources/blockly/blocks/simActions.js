@@ -29,13 +29,13 @@ Blockly.Blocks['sim_motor_on'] = {
 
         init : function() {
             this.setHelpUrl(Blockly.Msg.MOTOR_ON_HELPURL);
-            this.setColourRGB(Blockly.CAT_ACTION_RGB);
+            this.setColour(Blockly.CAT_ACTION_RGB);
             var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
             this.appendValueInput('POWER').appendField(motorPort, 'MOTORPORT').appendField(Blockly.Msg.ON).appendField(Blockly.Msg.MOTOR_SPEED).setCheck('Number');
             this.setPreviousStatement(true);
             this.setNextStatement(true);
             this.setTooltip(Blockly.Msg.MOTOR_ON_TOOLTIP);
-            this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_HELP));
+            // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_HELP));
         }
     };
 
@@ -58,7 +58,7 @@ Blockly.Blocks['sim_motor_on'] = {
          */
         init : function() {
             this.setHelpUrl(Blockly.Msg.MOTOR_ON_FOR_HELPURL);
-            this.setColourRGB(Blockly.CAT_ACTION_RGB);
+            this.setColour(Blockly.CAT_ACTION_RGB);
             // this.setInputsInline(true);
             var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
             var motorRotation = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_ROTATION, 'ROTATIONS' ], [ Blockly.Msg.MOTOR_DEGREE, 'DEGREE' ] ]);
@@ -68,7 +68,7 @@ Blockly.Blocks['sim_motor_on'] = {
             this.setPreviousStatement(true);
             this.setNextStatement(true);
             this.setTooltip(Blockly.Msg.MOTOR_ON_FOR_TOOLTIP);
-            this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_FOR_HELP));
+            // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_FOR_HELP));
         }
     };
     
@@ -87,7 +87,7 @@ Blockly.Blocks['sim_motor_on'] = {
              */
             init : function() {
                 this.setHelpUrl(Blockly.Msg.MOTOR_STOP_HELPURL);
-                this.setColourRGB(Blockly.CAT_ACTION_RGB);
+                this.setColour(Blockly.CAT_ACTION_RGB);
                 var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
                 var mode = new Blockly.FieldDropdown([ [ '', 'FLOAT' ], [ '', 'NONFLOAT' ] ]);
                 mode.setVisible(false);
@@ -95,7 +95,7 @@ Blockly.Blocks['sim_motor_on'] = {
                 this.setPreviousStatement(true);
                 this.setNextStatement(true);
                 this.setTooltip(Blockly.Msg.MOTOR_STOP_TOOLTIP);
-                this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_STOP_HELP));
+                // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_STOP_HELP));
             }
         };
 
@@ -114,18 +114,21 @@ Blockly.Blocks['sim_LED_on'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.BRICKLIGHT_ON_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         // this.setInputsInline(true);
         var dropdownColor = new Blockly.FieldDropdown([ [ Blockly.Msg.BRICKLIGHT_GREEN, 'GREEN' ], [ Blockly.Msg.BRICKLIGHT_ORANGE, 'ORANGE' ],
                 [ Blockly.Msg.BRICKLIGHT_RED, 'RED' ] ]);
-        var dropdownLightState = new Blockly.FieldDropdown([ [ Blockly.Msg.BRICKLIGHT_ON, 'ON' ] ]);
+        var dropdownLightState = new Blockly.FieldDropdown([ 
+            [ Blockly.Msg.BRICKLIGHT_ON, 'ON' ], 
+            [ Blockly.Msg.BRICKLIGHT_FLASH, 'FLASH' ],
+            [ Blockly.Msg.BRICKLIGHT_DOUBLE_FLASH, 'DOUBLE_FLASH' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT);
         this.appendDummyInput().setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.BRICKLIGHT_COLOR).appendField(dropdownColor, 'SWITCH_COLOR');
         this.appendDummyInput().setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOD).appendField(dropdownLightState, 'SWITCH_BLINK');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.BRICKLIGHT_ON_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_ON_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_ON_HELP));
     }
 };
 
@@ -140,11 +143,11 @@ Blockly.Blocks['sim_LED_off'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.BRICKLIGHT_OFF_HELP);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        this.setColour(Blockly.CAT_ACTION_RGB);
          this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT).appendField(Blockly.Msg.OFF);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.BRICKLIGHT_OFF_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_OFF_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_OFF_HELP));
     }
 };

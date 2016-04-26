@@ -1,0 +1,19 @@
+#!/bin/sh
+# The logic to stop the application.
+# to be safe, the hello-world-ruby-server is stopped, too
+
+if [ -z "$(ps -ef | grep testrubyserver.rb | grep -v grep)" ]
+then
+    echo "`date` ruby server was already stopped" >>/tmp/action_hooks.log
+else
+    echo "`date` stop ruby server" >> /tmp/action_hooks.log
+    kill `ps -ef | grep testrubyserver.rb | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
+fi
+
+if [ -z "$(ps -eF | grep de.fhg.iais.roberta.main.ServerStarter | grep -v grep)" ]
+then
+    echo "`date` openRoberta was not running" >>/tmp/action_hooks.log
+else
+    echo "`date` stop openRoberta" >> /tmp/action_hooks.log
+    kill `ps -ef | grep de.fhg.iais.roberta.main.ServerStarter | grep -v grep | awk '{ print $2 }'` > /dev/null 2>&1
+fi

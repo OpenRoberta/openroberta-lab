@@ -3,15 +3,15 @@ package lejos.ev3.startup;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-import ora.rmi.ORAmenu;
-import ora.rmi.ORArmiMenu;
+import lejos.remote.ev3.Menu;
+import lejos.remote.ev3.RMIMenu;
 
-public class RMIRemoteMenu extends UnicastRemoteObject implements ORArmiMenu {
-    private final ORAmenu menu;
+public class RMIRemoteMenu extends UnicastRemoteObject implements RMIMenu {
+    private final Menu menu;
 
     private static final long serialVersionUID = 9132686914626791288L;
 
-    protected RMIRemoteMenu(ORAmenu menu) throws RemoteException {
+    protected RMIRemoteMenu(Menu menu) throws RemoteException {
         super(0);
         this.menu = menu;
     }
@@ -125,35 +125,4 @@ public class RMIRemoteMenu extends UnicastRemoteObject implements ORArmiMenu {
     public void resume() throws RemoteException {
         this.menu.resume();
     }
-
-    @Override
-    public String getORAversion() throws RemoteException {
-        return this.menu.getORAversion();
-    }
-
-    @Override
-    public String getORAbattery() throws RemoteException {
-        return this.menu.getORAbattery();
-    }
-
-    @Override
-    public void setORAregistration(boolean status) throws RemoteException {
-        this.menu.setORAregistration(status);
-    }
-
-    @Override
-    public void runORAprogram(String programName) throws RemoteException {
-        this.menu.runORAprogram(programName);
-    }
-
-    @Override
-    public void setORAupdateState() throws RemoteException {
-        this.menu.setORAupdateState();
-    }
-
-    @Override
-    public boolean getORAupdateState() throws RemoteException {
-        return this.menu.getORAupdateState();
-    }
-
 }

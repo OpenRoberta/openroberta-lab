@@ -43,7 +43,8 @@ public class EV3Actors extends HardwareComponentType {
     }
 
     private static final EV3Actors[] values = {
-        EV3_MEDIUM_MOTOR, EV3_LARGE_MOTOR
+        EV3_MEDIUM_MOTOR,
+        EV3_LARGE_MOTOR
     };
 
     public static final List<EV3Actors> ACTORS = Collections.unmodifiableList(Arrays.asList(values));

@@ -1,7 +1,27 @@
 /**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2012 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @fileoverview Controle blocks for EV3.
  * @requires Blockly.Blocks
- * @author Beate
+ * @author beate.jost@iais.fraunhofer.de (Beate Jost)
  */
 
 'use strict';
@@ -29,14 +49,17 @@ Blockly.Blocks['robControls_start'] = {
      */
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
-        this.appendDummyInput().appendField(Blockly.Msg.START_PROGRAM);
+        this.setColour(Blockly.CAT_ACTIVITY_RGB);
+        this.appendDummyInput().
+             appendField(Blockly.Msg.START_PROGRAM).
+             appendField('  ').
+             appendField(new Blockly.FieldCheckbox("FALSE"), "DEBUG").
+             appendField(Blockly.Msg.START_PROGRAM_DEBUG);
         this.declare_ = false;
         this.setPreviousStatement(false);
         this.setNextStatement(true);
         this.setDeletable(false);
-        this.setHelp(new Blockly.Help(Blockly.Msg.START_HELP));
-        this.setMutatorPlus(new Blockly.MutatorPlus(this));
+        this.setMutatorPlus(new Blockly.MutatorPlus(['robControls_start']));
         this.setTooltip(Blockly.Msg.START_TOOLTIP);
     },
     /**
@@ -84,13 +107,13 @@ Blockly.Blocks['robControls_start'] = {
                 this.getInput('ST').connection.setCheck('declaration_only');
                 this.declare_ = true;
             }
-            var vd = Blockly.Block.obtain(Blockly.mainWorkspace, 'robGlobalvariables_declare');
+            var vd = this.workspace.newBlock('robGlobalVariables_declare');
             vd.initSvg();
             vd.render();
             var value = vd.getInput('VALUE');
-            var block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
+            var block = this.workspace.newBlock('math_number');
             block.initSvg();
-            block.render();
+            block.render();  
             value.connection.connect(block.outputConnection);
             var connection;
             if (this.getInput('ST').connection.targetConnection) {
@@ -130,7 +153,7 @@ Blockly.Blocks['robControls_activity'] = {
      */
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
+        this.setColour(Blockly.CAT_ACTIVITY_RGB);
         this.appendDummyInput().appendField(new Blockly.FieldTextInput(Blockly.Msg.START_ACTIVITY, Blockly.Procedures.rename), 'ACTIVITY');
         this.setPreviousStatement(false);
         this.setNextStatement(true);
@@ -151,7 +174,7 @@ Blockly.Blocks['robControls_start_activity'] = {
      */
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
+        this.setColour(Blockly.CAT_ACTIVITY_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.START).appendField(new Blockly.FieldTextInput(Blockly.Msg.START_ACTIVITY, Blockly.Procedures.rename),
                 'ACTIVITY');
         this.setPreviousStatement(true);
@@ -173,7 +196,7 @@ Blockly.Blocks['robControls_start_activity'] = {
 Blockly.Blocks['robControls_wait'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
+        this.setColour(Blockly.CAT_CONTROL_RGB);
         // this.setInputsInline(true);
         this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_UNTIL).setCheck('Boolean');
         this.setPreviousStatement(true);
@@ -261,13 +284,13 @@ Blockly.Blocks['robControls_wait'] = {
  * @param {Boolean} -
  *            any condition.
  * @returns after (first) condition is true.
- * @memberof Block
+ * @memberof BlockrobControls_wait_for
  */
 
 Blockly.Blocks['robControls_wait_time'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
+        this.setColour(Blockly.CAT_CONTROL_RGB);
         this.setInputsInline(true);
         this.appendValueInput('WAIT').appendField(Blockly.Msg.WAIT).setCheck('Number');
         this.appendDummyInput().appendField('ms');
@@ -290,12 +313,12 @@ Blockly.Blocks['robControls_wait_time'] = {
 Blockly.Blocks['robControls_wait_for'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
+        this.setColour(Blockly.CAT_CONTROL_RGB);
         this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_UNTIL).setCheck('Boolean');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.waitCount_ = 0;
-        this.setHelp(new Blockly.Help(Blockly.Msg.WAIT_FOR_HELP));
+        //this.setHelp(new Blockly.Help(Blockly.Msg.WAIT_FOR_HELP));
         this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.setTooltip(Blockly.Msg.WAIT_FOR_TOOLTIP);
     },
@@ -349,20 +372,20 @@ Blockly.Blocks['robControls_wait_for'] = {
                 this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
             this.appendValueInput('WAIT' + this.waitCount_).appendField(Blockly.Msg.WAIT_OR).setCheck('Boolean');
             this.appendStatementInput('DO' + this.waitCount_).appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-            var lc = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_compare');
+            var lc = this.workspace.newBlock('logic_compare');
             lc.initSvg();
             lc.render();
             lc.updateShape('BOOL');
             var connection = this.getInput('WAIT' + this.waitCount_).connection;
             connection.connect(lc.outputConnection);
 
-            var s = Blockly.Block.obtain(Blockly.mainWorkspace, 'robSensors_getSample');
+            var s = this.workspace.newBlock('robSensors_getSample');
             s.initSvg();
             s.render();
             connection = lc.getInput('A').connection;
             connection.connect(s.outputConnection);
 
-            var v = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_boolean');
+            var v = this.workspace.newBlock('logic_boolean');
             v.initSvg();
             v.render();
             connection = lc.getInput('B').connection;
@@ -394,7 +417,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 
 Blockly.Blocks['robControls_loopForever'] = {
     init : function() {
-        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
+        this.setColour(Blockly.CAT_CONTROL_RGB);
         var title = new Blockly.FieldLabel(Blockly.Msg.LOOP_FOREVER);
         this.appendDummyInput().appendField(title, 'TITLE_FOREVER');
         this.appendStatementInput('DO').appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
@@ -402,159 +425,5 @@ Blockly.Blocks['robControls_loopForever'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.LOOPFOREVER_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robControls_ifElse'] = {
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
-        this.appendValueInput('IF0').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
-        this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-        this.appendStatementInput('ELSE').appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setMutatorPlus(new Blockly.MutatorPlus(this));
-        this.elseIfCount_ = 0;
-        this.elseCount_ = 1;
-        this.setTooltip(Blockly.Msg.IFELSE_TOOLTIP);
-    },
-    mutationToDom : function() {
-        if (!this.elseIfCount_ && !this.elseCount_) {
-            return null;
-        }
-        var container = document.createElement('mutation');
-        if (this.elseIfCount_) {
-            container.setAttribute('elseIf', this.elseIfCount_);
-        }
-        if (this.elseCount_) {
-            container.setAttribute('else', 1);
-        }
-        return container;
-    },
-
-    /**
-     * Parse XML to restore the ifElse inputs.
-     * 
-     * @param {!Element}
-     *            xmlElement XML storage element.
-     * @this Blockly.Block
-     */
-    domToMutation : function(xmlElement) {
-        if (xmlElement.hasAttribute('elseif')) {
-            this.elseIfCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
-        }
-        this.removeInput('ELSE');
-        for (var x = 1; x <= this.elseIfCount_; x++) {
-            this.appendValueInput('IF' + x).appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF).setCheck('Boolean');
-            this.appendStatementInput('DO' + x).appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-        }
-        this.appendStatementInput('ELSE').appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-        if (this.elseIfCount_ >= 1) {
-            this.setMutatorMinus(new Blockly.MutatorMinus(this));
-        }
-    },
-    /**
-     * Update the shape according to the number of elseIf inputs.
-     * 
-     * @param {Number}
-     *            number of elseIf inputs.
-     * @this Blockly.Block
-     */
-    updateShape_ : function(num) {
-        if (num == 1) {
-            this.elseIfCount_++;
-            this.removeInput('ELSE');
-            this.appendValueInput('IF' + this.elseIfCount_).appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF).setCheck('Boolean');
-            this.appendStatementInput('DO' + this.elseIfCount_).appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-            this.appendStatementInput('ELSE').appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-        } else if (num == 0) {
-            this.elseIfCount_ = 0;
-        } else if (num == -1) {
-            this.removeInput('ELSE');
-            this.removeInput('DO' + this.elseIfCount_);
-            this.removeInput('IF' + this.elseIfCount_);
-            this.appendStatementInput('ELSE').appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-            this.elseIfCount_--;
-        }
-        if (this.elseIfCount_ >= 1) {
-            if (this.elseIfCount_ == 1) {
-                this.setMutatorMinus(new Blockly.MutatorMinus(this));
-                this.render();
-            }
-        } else {
-            this.mutatorMinus.dispose();
-            this.mutatorMinus = null;
-        }
-    }
-};
-
-Blockly.Blocks['robControls_if'] = {
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
-        this.appendValueInput('IF0').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
-        this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-        // this.setInputsInline(true);
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setMutatorPlus(new Blockly.MutatorPlus(this));
-        this.elseIfCount_ = 0;
-        this.setTooltip(Blockly.Msg.IF_TOOLTIP);
-    },
-    mutationToDom : function() {
-        if (!this.elseIfCount_) {
-            return null;
-        }
-        var container = document.createElement('mutation');
-        if (this.elseIfCount_) {
-            container.setAttribute('elseIf', this.elseIfCount_);
-        }
-        return container;
-    },
-
-    /**
-     * Parse XML to restore the wait inputs.
-     * 
-     * @param {!Element}
-     *            xmlElement XML storage element.
-     * @this Blockly.Block
-     */
-    domToMutation : function(xmlElement) {
-        this.elseIfCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
-        for (var x = 1; x <= this.elseIfCount_; x++) {
-            this.appendValueInput('IF' + x).appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF).setCheck('Boolean');
-            this.appendStatementInput('DO' + x).appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-        }
-        if (this.elseIfCount_ >= 1) {
-            this.setMutatorMinus(new Blockly.MutatorMinus(this));
-        }
-    },
-    /**
-     * Update the shape according to the number of elseIf inputs.
-     * 
-     * @param {Number}
-     *            number of else inputs.
-     * @this Blockly.Block
-     */
-    updateShape_ : function(num) {
-        if (num == 1) {
-            this.elseIfCount_++;
-            this.appendValueInput('IF' + this.elseIfCount_).appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSEIF).setCheck('Boolean');
-            this.appendStatementInput('DO' + this.elseIfCount_).appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
-        } else if (num == -1) {
-            this.removeInput('DO' + this.elseIfCount_);
-            this.removeInput('IF' + this.elseIfCount_);
-            this.elseIfCount_--;
-        }
-        if (this.elseIfCount_ >= 1) {
-            if (this.elseIfCount_ == 1) {
-                this.setMutatorMinus(new Blockly.MutatorMinus(this));
-                this.render();
-            }
-        } else {
-            this.mutatorMinus.dispose();
-            this.mutatorMinus = null;
-        }
     }
 };

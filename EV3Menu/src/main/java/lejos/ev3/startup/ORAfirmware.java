@@ -22,8 +22,6 @@ public class ORAfirmware implements HttpHandler {
         if ( filename.equals("EV3Menu.jar") ) {
             dir = menuDir;
         }
-        System.out.println("Request arrived: " + filename);
-        System.out.println("To: " + new File(dir, filename));
 
         InputStream is = exchange.getRequestBody();
         int n;
@@ -40,9 +38,6 @@ public class ORAfirmware implements HttpHandler {
         exchange.sendResponseHeaders(200, response.toString().getBytes().length);
         exchange.getResponseBody().write(response.toString().getBytes());
         exchange.close();
-
-        System.out.println("Request finished!");
-
     }
 
 }

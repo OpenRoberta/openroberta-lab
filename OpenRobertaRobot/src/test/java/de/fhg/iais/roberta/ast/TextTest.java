@@ -10,7 +10,7 @@ public class TextTest {
     @Test
     public void text1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-616, y=42], TextJoinFunct [[StringConst [text1], EmptyExpr [defVal=class java.lang.String], StringConst [text2]]]]]]";
+            "BlockAST [project=[[Location [x=-616, y=42], TextJoinFunct [StringConst [text1], EmptyExpr [defVal=class java.lang.String], StringConst [text2]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text1.xml"));
     }

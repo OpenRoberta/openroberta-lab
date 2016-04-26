@@ -75,17 +75,25 @@ public class ClientAdmin {
                 RobotDao robotDao = new RobotDao(dbSession);
                 Robot robot = robotDao.loadRobot(robotName);
                 if ( robot != null ) {
-                    // TODO remove this and use a communicator
-                    if ( robotName.equals("oraSim") ) {
-                        httpSessionState.setToken("00000000");
-                    } else {
-                        httpSessionState.setToken("123");
-                    }
                     Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
-                    httpSessionState.setRobotId(robot.getId());
-                    response.put("robotId", robot.getId());
-                    response.put("robotName", robot.getName());
-                    LOG.info("set Robot: robot {} with id {} ", robot.getName(), robot.getId());
+                    if ( httpSessionState.getRobotId() != robot.getId() ) {
+                        // disconnect previous robot
+                        // TODO consider keeping it so that we can switch between robot and simulation
+                        //      see: https://github.com/OpenRoberta/robertalab/issues/43
+                        this.brickCommunicator.disconnect(httpSessionState.getToken());
+                        // TODO remove this and use a communicator
+                        if ( robotName.equals("oraSim") ) {
+                            httpSessionState.setToken("00000000");
+                        } else {
+                            httpSessionState.setToken("123");
+                        }
+                        httpSessionState.setRobotId(robot.getId());
+                        response.put("robotId", robot.getId());
+                        response.put("robotName", robot.getName());
+                        LOG.info("set Robot: robot {} with id {}", robot.getName(), robot.getId());
+                    } else {
+                        LOG.info("set Robot: robot {} with id {} already set", robot.getName(), robot.getId());
+                    }
                 } else {
                     LOG.error("Invalid command: " + cmd + " " + robotName);
                     Util.addErrorInfo(response, Key.COMMAND_INVALID);

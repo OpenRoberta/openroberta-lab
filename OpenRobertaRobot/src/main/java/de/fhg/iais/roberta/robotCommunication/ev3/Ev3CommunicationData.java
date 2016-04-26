@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.robotCommunication.ev3;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,8 @@ public class Ev3CommunicationData {
     private final String menuversion;
     private final String firmwarename;
     private final String firmwareversion;
+    private JSONObject sensorvalues;
+    private int nepoExitValue;
 
     private Clock timerStartedByLastRequest;
     private Clock timerStartedByTokenApproval;
@@ -52,6 +55,7 @@ public class Ev3CommunicationData {
         this.menuversion = menuversion;
         this.firmwarename = firmwarename;
         this.firmwareversion = firmwareversion;
+        this.sensorvalues = new JSONObject();
 
         this.timerStartedByLastRequest = Clock.start();
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
@@ -63,7 +67,7 @@ public class Ev3CommunicationData {
      * @return true, if user approved the token; false otherwise
      */
     public synchronized boolean brickTokenAgreementRequest() {
-        LOG.info("BRICK " + this.robotName + " [" + this.robotIdentificator + "] starts waiting for the client to approve a token");
+        LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " starts waiting for the client to approve the token");
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
         this.timerStartedByLastRequest = Clock.start();
         while ( this.timerStartedByLastRequest.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE
@@ -75,15 +79,29 @@ public class Ev3CommunicationData {
                 // try again
             }
         }
-        boolean success = this.state != State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
-        if ( success ) {
-            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
-            LOG.info("Robot request for token approval terminated SUCCESSFULLY. Time elapsed: " + this.timerStartedByLastRequest.elapsedMsec());
+        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_BRICK ) {
+            LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " approval terminated SUCCESSFULLY.");
+            return true;
+        } else if ( this.state == State.GARBAGE ) {
+            LOG.info(
+                "Robot ["
+                    + this.robotIdentificator
+                    + "] token "
+                    + this.token
+                    + " user canceled the first registration request and sends another one after "
+                    + this.timerStartedByLastRequest.elapsedMsecFormatted());
+            return false;
         } else {
             this.state = State.GARBAGE;
-            LOG.info("Robot request for token approval FAILED. Time elapsed: " + this.timerStartedByLastRequest.elapsedMsec());
+            LOG.info(
+                "Robot ["
+                    + this.robotIdentificator
+                    + "] token "
+                    + this.token
+                    + " approval FAILED. Time elapsed: "
+                    + this.timerStartedByLastRequest.elapsedMsecFormatted());
+            return false;
         }
-        return success;
     }
 
     /**
@@ -98,9 +116,8 @@ public class Ev3CommunicationData {
             this.timerStartedByTokenApproval = Clock.start();
             notifyAll();
         } else {
-            LOG.info("user approval lost. Nobody is waiting. The approval request was scheduled "
-                + this.timerStartedByLastRequest.elapsedSecFormatted()
-                + " ago");
+            LOG.info(
+                "user approval lost. Nobody is waiting. The approval request was scheduled " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
         }
     }
 
@@ -112,17 +129,19 @@ public class Ev3CommunicationData {
      */
     public synchronized void brickHasSentAPushRequest() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
-            LOG.error("Brick has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
-                + "Waiting started "
-                + this.timerStartedByLastRequest.elapsedSecFormatted()
-                + " ago. ");
-        } else {
-            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_BRICK && this.state != State.BRICK_IS_BUSY ) {
-                LOG.error("Brick has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
-                    + this.state
-                    + ". The state setting request was scheduled "
+            LOG.error(
+                "Brick has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
+                    + "Waiting started "
                     + this.timerStartedByLastRequest.elapsedSecFormatted()
                     + " ago. ");
+        } else {
+            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_BRICK && this.state != State.BRICK_IS_BUSY ) {
+                LOG.error(
+                    "Brick has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
+                        + this.state
+                        + ". The state setting request was scheduled "
+                        + this.timerStartedByLastRequest.elapsedSecFormatted()
+                        + " ago. ");
             }
             this.state = State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
             this.timerStartedByLastRequest = Clock.start();
@@ -171,9 +190,8 @@ public class Ev3CommunicationData {
             LOG.error("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
         } else {
-            LOG.info("RUN button pressed and robot is waiting for that event. Wait state entered "
-                + this.timerStartedByLastRequest.elapsedSecFormatted()
-                + " ago");
+            LOG.info(
+                "RUN button pressed and robot is waiting for that event. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
             this.command = "download";
             this.programName = programName;
             this.timerStartedByLastRequest = Clock.start();
@@ -235,6 +253,14 @@ public class Ev3CommunicationData {
         this.battery = battery;
     }
 
+    public void setSensorValues(JSONObject sensorvalues) {
+        this.sensorvalues = sensorvalues;
+    }
+
+    public void setNepoExitValue(int nepoExitValue) {
+        this.nepoExitValue = nepoExitValue;
+    }
+
     public String getCommand() {
         return this.command;
     }
@@ -261,6 +287,18 @@ public class Ev3CommunicationData {
 
     public String getFirmwareName() {
         return this.firmwarename;
+    }
+    
+    public String getFirmwareVersion() {
+        return this.firmwareversion;
+    }
+
+    public JSONObject getSensorValues() {
+        return this.sensorvalues;
+    }
+
+    public int getNepoExitValue() {
+        return this.nepoExitValue;
     }
 
     /**

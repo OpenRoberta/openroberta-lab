@@ -21,7 +21,7 @@ public class ListsTest<V> {
 
     @Test
     public void listRepeat() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [NUMERIC, [NumConst [4], NumConst [5]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [NUMBER, [NumConst [4], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_repeat.xml"));
     }
@@ -33,19 +33,19 @@ public class ListsTest<V> {
 
     @Test
     public void listLength() throws Exception {
-        String a = "BlockAST [project=[[Location [x=14, y=197], LenghtOfFunct [LISTS_LENGTH, [Var [item]]]]]]";
+        String a = "BlockAST [project=[[Location [x=14, y=197], LengthOfFunct [LISTS_LENGTH, [Var [item]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_length.xml"));
     }
 
     @Test
-    public void reverseTransformatinListLenght() throws Exception {
+    public void reverseTransformatinListLength() throws Exception {
         Helper.assertTransformationIsOk("/ast/lists/list_length.xml");
     }
 
     @Test
     public void listIsEmpty() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-7, y=230], LenghtOfFunct [LIST_IS_EMPTY, [Var [item]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-7, y=230], LengthOfFunct [LIST_IS_EMPTY, [Var [item]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_isEmpty.xml"));
     }
@@ -69,7 +69,7 @@ public class ListsTest<V> {
 
     @Test
     public void listCreateWith() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [NUMERIC, [NumConst [4], NumConst [5]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [NUMBER, [NumConst [4], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_repeat.xml"));
     }

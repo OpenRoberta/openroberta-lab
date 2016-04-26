@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
@@ -48,7 +49,7 @@ import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
@@ -462,7 +463,7 @@ public class InfoCollector<T> implements AstVisitor<T> {
     }
 
     @Override
-    public T visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<T> lenghtOfIsEmptyFunct) {
+    public T visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<T> lengthOfIsEmptyFunct) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -607,6 +608,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitStmtExpr(StmtExpr<T> stmtExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitShadowExpr(ShadowExpr<T> shadowExpr) {
         // TODO Auto-generated method stub
         return null;
     }

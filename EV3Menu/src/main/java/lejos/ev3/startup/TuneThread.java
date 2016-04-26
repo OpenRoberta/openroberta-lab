@@ -1,7 +1,6 @@
 package lejos.ev3.startup;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import lejos.hardware.Sound;
 

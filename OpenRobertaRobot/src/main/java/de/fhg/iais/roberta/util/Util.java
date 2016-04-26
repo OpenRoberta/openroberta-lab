@@ -31,7 +31,7 @@ public class Util {
         "new", "null", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
         "throw", "throws", "transient", "true", "try", "void", "volatile", "while"
         //  @formatter:on
-        };
+    };
 
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
@@ -42,12 +42,10 @@ public class Util {
     }
 
     /**
-     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. To be used for production and test. If
-     * the parameters is null,
-     * the classpath is searched for a default property file.<br>
-     * <br>
-     * The URI start with "file:" if a path of the file system should be used or starts with "classpath:" if the properties should be loaded as a resource
-     * from the classpath. If <code>null</code>, the resource is loaded from the classpath using the default name "openRoberta.properties".
+     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. Is used in both production and test.<br>
+     * If the URI-parameter is null, the classpath is searched for the default property file "openRoberta.properties".<br>
+     * If the URI-parameters start with "file:" the file system is to load the properties.<br>
+     * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
      * @param propertyURI URI of the property file. May be null
      * @return the properties. Returns null, if errors occur (file not found, ...)
@@ -55,24 +53,24 @@ public class Util {
     public static Properties loadProperties(String propertyURI) {
         Properties properties = new Properties();
         try {
-            if ( propertyURI == null ) {
-                LOG.info("properties from classpath. Using the resource: " + PROPERTY_DEFAULT_PATH);
-                properties.load(Util.class.getClassLoader().getResourceAsStream(PROPERTY_DEFAULT_PATH));
+            if ( propertyURI == null || propertyURI.trim().equals("") ) {
+                Util.LOG.info("properties from classpath. Using the resource: " + Util.PROPERTY_DEFAULT_PATH);
+                properties.load(Util.class.getClassLoader().getResourceAsStream(Util.PROPERTY_DEFAULT_PATH));
             } else if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
-                LOG.info("properties from file system. Path: " + filesystemPathName);
+                Util.LOG.info("properties from file system. Path: " + filesystemPathName);
                 properties.load(new FileReader(filesystemPathName));
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
-                LOG.info("properties from classpath. Using the resource: " + classPathName);
+                Util.LOG.info("properties from classpath. Using the resource: " + classPathName);
                 properties.load(Util.class.getClassLoader().getResourceAsStream(classPathName));
             } else {
-                LOG.error("Could not load properties. Invalid URI: " + propertyURI);
+                Util.LOG.error("Could not load properties. Invalid URI: " + propertyURI);
                 return null;
             }
             return properties;
         } catch ( Exception e ) {
-            LOG.error("Could not load properties. Inspect the stacktrace", e);
+            Util.LOG.error("Could not load properties. Inspect the stacktrace", e);
             return null;
         }
     }
@@ -81,8 +79,7 @@ public class Util {
      * Check whether a String is a valid Java identifier. It is checked, that no reserved word is used
      *
      * @param s String to check
-     * @return <code>true</code> if the given String is a valid Java
-     *         identifier; <code>false</code> otherwise.
+     * @return <code>true</code> if the given String is a valid Java identifier; <code>false</code> otherwise.
      */
     public final static boolean isValidJavaIdentifier(String s) {
         if ( s == null || s.length() == 0 ) {
@@ -105,7 +102,7 @@ public class Util {
             }
             c = citer.next();
         }
-        return Arrays.binarySearch(reservedWords, s) < 0;
+        return Arrays.binarySearch(Util.reservedWords, s) < 0;
     }
 
     /**
@@ -126,12 +123,12 @@ public class Util {
     }
 
     public static JSONObject addSuccessInfo(JSONObject response, Key key) throws JSONException {
-        addResultInfo(response, "ok", key);
+        Util.addResultInfo(response, "ok", key);
         return response;
     }
 
     public static JSONObject addErrorInfo(JSONObject response, Key key) throws JSONException {
-        addResultInfo(response, "error", key);
+        Util.addResultInfo(response, "error", key);
         return response;
     }
 
@@ -144,8 +141,7 @@ public class Util {
 
     /**
      * add information for the Javascript client to the result json, especially about the state of the robot.<br>
-     * This method must be <b>total</b>, i.e. must
-     * <b>never</b> throw exceptions.
+     * This method must be <b>total</b>, i.e. must <b>never</b> throw exceptions.
      *
      * @param response the response object to enrich with data
      * @param httpSessionState needed to access the token
@@ -154,51 +150,44 @@ public class Util {
     public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, Ev3Communicator brickCommunicator) {
         try {
             response.put("serverTime", new Date());
+            response.put("server.version", Util.openRobertaVersion);
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
-                    if ( !token.equals("00000000") ) {
-                        Ev3CommunicationData state = brickCommunicator.getState(token);
-                        if ( state != null ) {
-                            response.put("robot.wait", state.getRobotConnectionTime());
-                            response.put("robot.battery", state.getBattery());
-                            response.put("robot.name", state.getRobotName());
-                            response.put("robot.version", state.getMenuVersion());
-                            response.put("server.version", openRobertaVersion);
-                            State communicationState = state.getState();
-                            String infoAboutState;
-                            if ( communicationState == State.BRICK_IS_BUSY ) {
-                                infoAboutState = "busy";
-                            } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
-                                infoAboutState = "disconnected";
-                                brickCommunicator.disconnect(token);
-                            } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
-                                infoAboutState = "wait";
-                            } else if ( communicationState == State.GARBAGE ) {
-                                infoAboutState = "disconnected";
-                            } else {
-                                infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
-                            }
-                            response.put("robot.state", infoAboutState);
+                    Ev3CommunicationData state = brickCommunicator.getState(token);
+                    if ( state != null ) {
+                        response.put("robot.wait", state.getRobotConnectionTime());
+                        response.put("robot.battery", state.getBattery());
+                        response.put("robot.name", state.getRobotName());
+                        response.put("robot.version", state.getMenuVersion());
+                        response.put("robot.firmwareName", state.getFirmwareName());
+                        response.put("robot.sensorvalues", state.getSensorValues());
+                        response.put("robot.nepoexitvalue", state.getNepoExitValue());
+                        State communicationState = state.getState();
+                        String infoAboutState;
+                        if ( communicationState == State.BRICK_IS_BUSY ) {
+                            infoAboutState = "busy";
+                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
+                            infoAboutState = "disconnected";
+                            brickCommunicator.disconnect(token);
+                        } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+                            infoAboutState = "wait";
+                        } else if ( communicationState == State.GARBAGE ) {
+                            infoAboutState = "disconnected";
+                        } else {
+                            infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
                         }
-                    } else {
-                        // TODO create SimCommunicator / SimCommunicatorData and remove this
-                        response.put("robot.wait", 0);
-                        response.put("robot.battery", 0);
-                        response.put("robot.name", "oraSim");
-                        response.put("robot.version", openRobertaVersion);
-                        response.put("server.version", openRobertaVersion);
-                        response.put("robot.state", "wait");
+                        response.put("robot.state", infoAboutState);
                     }
                 }
             }
         } catch ( Exception e ) {
-            LOG.error("when adding info for the client, an unexpected exception occured. Some info for the client may be missing", e);
+            Util.LOG.error("when adding info for the client, an unexpected exception occurred. Some info for the client may be missing", e);
         }
     }
 
     public static String getErrorTicketId() {
-        return "E-" + errorTicketNumber.incrementAndGet();
+        return "E-" + Util.errorTicketNumber.incrementAndGet();
     }
 
     public static String formatDouble1digit(double d) {

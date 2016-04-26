@@ -50,13 +50,10 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
         if ( block == null ) {
             throw new DbcException("Invalid block: " + block);
         }
-        String sUpper = block.getType().trim();
+        String type = block.getType().trim().toLowerCase();
         for ( BlockType co : BlockType.values() ) {
-            if ( co.toString().equals(sUpper) ) {
-                return invokeMethod(block, co.getAstClass().getName());
-            }
             for ( String value : co.getBlocklyNames() ) {
-                if ( sUpper.equals(value) ) {
+                if ( type.equals(value.toLowerCase()) ) {
                     return invokeMethod(block, co.getAstClass().getName());
                 }
 

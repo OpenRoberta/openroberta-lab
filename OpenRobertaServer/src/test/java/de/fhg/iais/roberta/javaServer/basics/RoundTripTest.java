@@ -71,7 +71,7 @@ public class RoundTripTest {
     private static String buildXml;
     private static String connectionUrl;
     private static String crosscompilerBasedir;
-    private static String robotResourcesDir;
+    private static String crossCompilerResourcesDir;
 
     private static Ev3CompilerWorkflow compilerWorkflow;
 
@@ -178,7 +178,7 @@ public class RoundTripTest {
         buildXml = properties.getProperty("crosscompiler.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
         crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        robotResourcesDir = properties.getProperty("robot.resources.dir");
+        crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
         browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
 
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
@@ -186,33 +186,33 @@ public class RoundTripTest {
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
         brickCommunicator = new Ev3Communicator();
-        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, robotResourcesDir, buildXml);
-        restUser = new ClientUser(brickCommunicator);
+        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, crossCompilerResourcesDir, buildXml);
+        restUser = new ClientUser(brickCommunicator, null);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
         s1 = HttpSessionState.init();
+        System.setProperty("phantomjs.binary", "/home/kcvejoski/dev/OpenRoberta/phantomjs-2.1.1/bin/phantomjs");
     }
 
     private static void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
-        response =
-            restUser.command(
+        response = restUser.command(
+            s1,
+            sessionFactoryWrapper.getSession(),
+            JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
+        Assert.assertTrue(!s1.isUserLoggedIn());
+        response = //
+            restUser.command( //
                 s1,
                 sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        Assert.assertEquals(2, RoundTripTest.getOneBigInteger("select count(*) from USER"));
-        Assert.assertTrue(!RoundTripTest.s1.isUserLoggedIn());
-        RoundTripTest.response = //
-            RoundTripTest.restUser.command( //
-                RoundTripTest.s1,
-                RoundTripTest.sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", null);
         Assert.assertTrue(s1.isUserLoggedIn());
         int s1Id = s1.getUserId();
         Assert.assertEquals(0, getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
         for ( String program : blocklyPrograms ) {
-            blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
+            blocklyProgram = Resources.toString(PerformanceUserInteractionTest.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
             response = restProgram.command(s1, fullRequest);
@@ -221,13 +221,13 @@ public class RoundTripTest {
     }
 
     private static void startServerAndLogin() throws IOException, InterruptedException {
-        server = new ServerStarter("classpath:openRoberta.properties").start();
+        server = new ServerStarter("classpath:openRoberta.properties").start("localhost", 1997);
         int port = server.getURI().getPort();
         baseUrl = "http://localhost:" + port;
         driver.get(baseUrl + "/");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         //Welcome message dismiss
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("startEV3"))).click();
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("startupClose"))).click();
 
         //Login
         WebElement user = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("head-navi-icon-user")));
@@ -239,10 +239,10 @@ public class RoundTripTest {
         WebElement userLoginElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
         userLoginElement.click();
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
-        driver.findElement(By.id("accountNameS")).clear();
-        driver.findElement(By.id("accountNameS")).sendKeys("orA");
-        driver.findElement(By.id("pass1S")).clear();
-        driver.findElement(By.id("pass1S")).sendKeys("Pid");
+        driver.findElement(By.id("loginAccountName")).clear();
+        driver.findElement(By.id("loginAccountName")).sendKeys("orA");
+        driver.findElement(By.id("loginPassword")).clear();
+        driver.findElement(By.id("loginPassword")).sendKeys("Pid");
         driver.findElement(By.id("doLogin")).click();
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
     }
@@ -299,7 +299,7 @@ public class RoundTripTest {
         loadProgram(programName);
 
         String resultProgram = saveProgram(programName);
-        blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(resourcePath + programName + ".xml"), Charsets.UTF_8);
+        blocklyProgram = Resources.toString(PerformanceUserInteractionTest.class.getResource(resourcePath + programName + ".xml"), Charsets.UTF_8);
         Helper.assertXML(blocklyProgram, resultProgram);
     }
 

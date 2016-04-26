@@ -51,14 +51,23 @@ public class UserDao extends AbstractDao<User> {
         Query hql = this.session.createQuery("from User where account=:account");
         hql.setString("account", account);
 
-        @SuppressWarnings("unchecked")
-        List<User> il = hql.list();
-        Assert.isTrue(il.size() <= 1);
-        if ( il.size() == 0 ) {
-            return null;
-        } else {
-            return il.get(0);
-        }
+        return checkUserExistance(hql);
+    }
+
+    public User loadUser(int id) {
+        Assert.notNull(id);
+        Query hql = this.session.createQuery("from User where id=:id");
+        hql.setInteger("id", id);
+
+        return checkUserExistance(hql);
+    }
+
+    public User loadUserByEmail(String email) {
+        Assert.notNull(email);
+        Query hql = this.session.createQuery("from User where email=:email");
+        hql.setString("email", email);
+
+        return checkUserExistance(hql);
     }
 
     public List<User> loadUserList(String sortBy, int offset, String tagFilter) {
@@ -113,4 +122,16 @@ public class UserDao extends AbstractDao<User> {
         this.session.delete(userToBeDeleted);
         return 1;
     }
+
+    private User checkUserExistance(Query hql) {
+        @SuppressWarnings("unchecked")
+        List<User> il = hql.list();
+        Assert.isTrue(il.size() <= 1);
+        if ( il.size() == 0 ) {
+            return null;
+        } else {
+            return il.get(0);
+        }
+    }
+
 }

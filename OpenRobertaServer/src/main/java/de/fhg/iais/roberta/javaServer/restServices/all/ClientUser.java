@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.main.MailManagement;
+import de.fhg.iais.roberta.persistence.LostPasswordProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
+import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -30,10 +33,12 @@ public class ClientUser {
     private static final Logger LOG = LoggerFactory.getLogger(ClientUser.class);
 
     private final Ev3Communicator brickCommunicator;
+    private final MailManagement mailManagement;
 
     @Inject
-    public ClientUser(Ev3Communicator brickCommunicator) {
+    public ClientUser(Ev3Communicator brickCommunicator, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
+        this.mailManagement = mailManagement;
     }
 
     @POST
@@ -50,6 +55,7 @@ public class ClientUser {
             ClientUser.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
 
             if ( cmd.equals("clear") ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
@@ -74,6 +80,20 @@ public class ClientUser {
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
+            } else if ( cmd.equals("getUser") && httpSessionState.isUserLoggedIn() ) {
+                String userAccountName = request.getString("accountName");
+                User user = up.getUser(userAccountName);
+                Util.addResultInfo(response, up);
+                if ( user != null ) {
+                    int id = user.getId();
+                    String account = user.getAccount();
+                    String userName = user.getUserName();
+                    String email = user.getEmail();
+                    response.put("userId", id);
+                    response.put("userAccountName", account);
+                    response.put("userName", userName);
+                    response.put("userEmail", email);
+                }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
@@ -85,10 +105,57 @@ public class ClientUser {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
                 String email = request.getString("userEmail");
+                String userName = request.getString("userName");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                up.saveUser(account, password, role, email, null);
+                up.createUser(account, password, userName, role, email, null);
                 Util.addResultInfo(response, up);
+
+            } else if ( cmd.equals("updateUser") ) {
+                String account = request.getString("accountName");
+                String userName = request.getString("userName");
+                String email = request.getString("userEmail");
+                String role = request.getString("role");
+                //String tag = request.getString("tag");
+                up.updateUser(account, userName, role, email, null);
+                Util.addResultInfo(response, up);
+
+            } else if ( cmd.equals("changePassword") ) {
+                String account = request.getString("accountName");
+                String oldPassword = request.getString("oldPassword");
+                String newPassword = request.getString("newPassword");
+                up.updatePassword(account, oldPassword, newPassword);
+                Util.addResultInfo(response, up);
+            } else if ( cmd.equals("resetPassword") ) {
+                String resetPasswordLink = request.getString("resetPasswordLink");
+                String newPassword = request.getString("newPassword");
+                LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
+                if ( lostPassword != null ) {
+                    up.resetPassword(lostPassword.getUserID(), newPassword);
+                }
+                Util.addResultInfo(response, up);
+
+            } else if ( cmd.equals("passwordRecovery") ) {
+                String lostEmail = request.getString("lostEmail");
+                User user = up.getUserByEmail(lostEmail);
+                Util.addResultInfo(response, up);
+                if ( user != null ) {
+                    LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
+                    ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
+                    // TODO move this to properties!!!
+                    this.mailManagement.send(
+                        user.getEmail(),
+                        "Dein Open Roberta Passwort zurücksetzen",
+                        "Hallo, \n\n"
+                            + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
+                            + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
+                            + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
+                            + "https://lab.open-roberta.org/#forgotPassword&"
+                            + lostPassword.getUrlPostfix()
+                            + "\n\n"
+                            + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n"
+                            + "Viel Spass weiterhin mit Open Roberta");
+                }
 
             } else if ( cmd.equals("obtainUsers") ) {
 

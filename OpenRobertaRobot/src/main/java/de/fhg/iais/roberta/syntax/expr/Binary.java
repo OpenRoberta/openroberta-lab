@@ -112,28 +112,28 @@ public final class Binary<V> extends Expr<V> {
      * Operators for the binary expression.
      */
     public static enum Op {
-        ADD( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "+" ),
-        MINUS( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "-" ),
-        MULTIPLY( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "*" ),
-        DIVIDE( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "/" ),
-        MOD( 200, Assoc.NONE, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "%" ),
-        EQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "==" ),
-        NEQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "!=", "<>" ),
-        LT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "<" ),
-        LTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "<=" ),
-        GT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), ">" ),
-        GTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), ">=" ),
-        AND( 70, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.BOOL, BlocklyType.BOOL), "&&" ),
-        OR( 60, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.BOOL, BlocklyType.BOOL), "||" ),
+        ADD( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+" ),
+        MINUS( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-" ),
+        MULTIPLY( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*" ),
+        DIVIDE( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/" ),
+        MOD( 200, Assoc.NONE, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%" ),
+        EQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "==" ),
+        NEQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "!=", "<>" ),
+        LT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "<" ),
+        LTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "<=" ),
+        GT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">" ),
+        GTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">=" ),
+        AND( 70, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "&&" ),
+        OR( 60, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "||" ),
         MATH_CHANGE( 80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "+=" ),
         TEXT_APPEND( 1, Assoc.LEFT, Sig.of(BlocklyType.STRING, BlocklyType.STRING, BlocklyType.STRING), "+", "TEXTAPPEND" ),
         IN( 1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":" ),
         ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "=" ),
-        ADD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "+=" ),
-        MINUS_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "-=" ),
-        MULTIPLY_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "*=" ),
-        DIVIDE_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "/=" ),
-        MOD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "%=" );
+        ADD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+=" ),
+        MINUS_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-=" ),
+        MULTIPLY_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*=" ),
+        DIVIDE_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/=" ),
+        MOD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%=" );
 
         private final String[] values;
         private final int precedence;
@@ -231,6 +231,7 @@ public final class Binary<V> extends Expr<V> {
                     "",
                     helper.extractBlockProperties(block),
                     helper.extractComment(block));
+            case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = helper.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));

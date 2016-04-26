@@ -25,7 +25,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * tree).
  * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
- * The client must provide the {@link SensorPort} and {@link UltrasonicSensorMode}. See enum {@link UltrasonicSensorMode} for all possible modes of the sensor.<br>
+ * The client must provide the {@link SensorPort} and {@link UltrasonicSensorMode}. See enum {@link UltrasonicSensorMode} for all possible modes of the sensor.
+ * <br>
  * <br>
  * To create an instance from this class use the method {@link #make(UltrasonicSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
@@ -62,7 +63,7 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
 
     @Override
     public String toString() {
-        return "UltraSSensor [mode=" + this.mode + ", port=" + getPort() + "]";
+        return "UltrasonicSensor [mode=" + this.mode + ", port=" + getPort() + "]";
     }
 
     @Override
@@ -81,11 +82,8 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return UltrasonicSensor.make(
-            UltrasonicSensorMode.get(modeName),
-            SensorPort.get(portName),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return UltrasonicSensor
+            .make(UltrasonicSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

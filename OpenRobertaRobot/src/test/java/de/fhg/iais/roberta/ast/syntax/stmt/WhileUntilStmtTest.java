@@ -9,18 +9,18 @@ public class WhileUntilStmtTest {
     @Test
     public void whileUntilStmt() throws Exception {
         String a =
-            "\nif ( TRUE ) {\nwhile ( true ) {\n"
+            "if ( TRUE ) {\nwhile ( true ) {\n"
                 + "}}\n"
                 + "if ( TRUE ) {\nwhile ( !(0 == 0) ) {\n"
                 + "}}\n"
                 + "if ( TRUE ) {\nwhile ( !true ) {\n"
                 + "}}\n"
                 + "if ( TRUE ) {\nwhile ( !(15 == 20) ) {\n"
-                + "    variablenName += 1;;\n"
+                + "    variablenName += 1;\n"
                 + "}}\n"
                 + "if ( TRUE ) {\nwhile ( !true ) {\n"
                 + "    if ( TRUE ) {\nwhile ( !(15 == 20) ) {\n"
-                + "        variablenName += 1;;\n"
+                + "        variablenName += 1;\n"
                 + "    }}\n"
                 + "}}";
 
@@ -29,15 +29,15 @@ public class WhileUntilStmtTest {
 
     @Test
     public void loopForever() throws Exception {
-        String a = "" //
-            + "if ( TRUE ) {\n"
-            + "\nwhile ( true ) {\n"
-            + "    System.out.println(Pickcolor.GREEN);\n"
-            + "}}\n"
-            + "if ( TRUE ) {\n"
-            + "while ( true ) {\n"
-            + "    System.out.println(\"\");\n"
-            + "}}";
+        String a = //
+            "if ( TRUE ) {\n"
+                + "\nwhile ( true ) {\n"
+                + "    System.out.println(Pickcolor.GREEN);\n"
+                + "}}\n"
+                + "if ( TRUE ) {\n"
+                + "while ( true ) {\n"
+                + "    System.out.println(\"\");\n"
+                + "}}";
 
         Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt_loopForever.xml");
     }

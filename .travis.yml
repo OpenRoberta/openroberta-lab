@@ -1,0 +1,8 @@
+language: java
+
+before_script:
+- cd OpenRobertaParent
+
+notifications:
+  irc: "chat.freenode.net#open-roberta"
+

@@ -80,7 +80,7 @@ public final class BlocklyConstants {
     public static final String RETURN = "RETURN";
     public static final String CONDITION = "CONDITION";
     public static final String ARG = "ARG";
-    public static final String NUMERIC = "NUMERIC";
+    public static final String NUMBER = "NUMBER";
     public static final String CONNECTION = "CONNECTION";
     public static final String MESSAGE = "sendData";
     public static final String ADDRESS = "ADDRESS";
@@ -117,7 +117,9 @@ public final class BlocklyConstants {
     public static final String ROB_CONTROLS_LOOP_FOREVER = "robControls_loopForever";
     public static final String CONTROLS_WHILE_UNTIL = "controls_whileUntil";
     public static final String CONTROLS_FOR = "controls_for";
+    public static final String ROB_CONTROLS_FOR = "robControls_for";
     public static final String CONTROLS_FOR_EACH = "controls_forEach";
+    public static final String ROB_CONTROLS_FOR_EACH = "robControls_forEach";
     public static final String CONTROLS_REPEAT = "controls_repeat";
     public static final String CONTROLS_REPEAT_EXT = "controls_repeat_ext";
 
@@ -129,6 +131,7 @@ public final class BlocklyConstants {
     public static final String LOGIC_COPERATION = "logic_operation";
 
     public static final String MATH_ARITHMETIC = "math_arithmetic";
+    public static final String ROB_MATH_CHANGE = "robMath_change";
     public static final String MATH_CHANGE = "math_change";
     public static final String MATH_MODULO = "math_modulo";
     public static final String MATH_NUMBER = "math_number";
@@ -142,7 +145,7 @@ public final class BlocklyConstants {
     public static final String MATH_RANDOM_FLOAT = "math_random_float";
     public static final String MATH_NUMBER_PROPERTY = "math_number_property";
 
-    public static final String TEXT_APPEND = "text_append";
+    public static final String TEXT_APPEND = "robText_append";
     public static final String ROB_TEXT_JOIN = "robText_join";
     public static final String TEXT_JOIN = "text_join";
     public static final String TEXT_PRINT = "text_print";
@@ -174,14 +177,21 @@ public final class BlocklyConstants {
 
     public static final String LISTS_CREATE_EMPTY = "lists_create_empty";
     public static final String LISTS_INDEX_OF = "lists_indexOf";
+    public static final String ROB_LISTS_INDEX_OF = "robLists_indexOf";
     public static final String LISTS_GET_SUBLIST = "lists_getSublist";
+    public static final String ROB_LISTS_GET_SUBLIST = "robLists_getSublist";
     public static final String LISTS_REPEAT = "lists_repeat";
+    public static final String ROB_LISTS_REPEAT = "robLists_repeat";
     public static final String LISTS_CREATE_WITH = "lists_create_with";
     public static final String ROB_LISTS_CREATE_WITH = "robLists_create_with";
     public static final String LISTS_GET_INDEX = "lists_getIndex";
+    public static final String ROB_LISTS_GET_INDEX = "robLists_getIndex";
     public static final String LISTS_SET_INDEX = "lists_setIndex";
+    public static final String ROB_LISTS_SET_INDEX = "robLists_setIndex";
     public static final String LISTS_LENGTH = "lists_length";
     public static final String LISTS_IS_EMPTY = "lists_isEmpty";
+    public static final String ROB_LISTS_LENGTH = "robLists_length";
+    public static final String ROB_LISTS_IS_EMPTY = "robLists_isEmpty";
 
     public static final String ROB_PROCEDURES_IF_RETURN = "robProcedures_ifreturn";
     public static final String ROB_PROCEDURES_NO_RETURN = "robProcedures_defnoreturn";
@@ -220,5 +230,4 @@ public final class BlocklyConstants {
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
     public static final String SIM_MOTOR_STOP = "sim_motor_stop";
-
 }

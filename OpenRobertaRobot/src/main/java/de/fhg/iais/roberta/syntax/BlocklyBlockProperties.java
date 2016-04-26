@@ -21,6 +21,7 @@ public class BlocklyBlockProperties {
     private final Boolean inline;
     private final Boolean deletable;
     private final Boolean movable;
+    private final Boolean shadow;
 
     private BlocklyBlockProperties(
         String blockType,
@@ -30,7 +31,8 @@ public class BlocklyBlockProperties {
         Boolean inline,
         Boolean deletable,
         Boolean movable,
-        Boolean inTask) {
+        Boolean inTask,
+        Boolean shadow) {
         super();
         Assert.isTrue(!blocklyId.equals("") && !blockType.equals(""));
         this.blockType = blockType;
@@ -41,6 +43,7 @@ public class BlocklyBlockProperties {
         this.deletable = deletable;
         this.movable = movable;
         this.inTask = inTask;
+        this.shadow = shadow;
     }
 
     /**
@@ -63,8 +66,9 @@ public class BlocklyBlockProperties {
         Boolean inline,
         Boolean deletable,
         Boolean movable,
-        Boolean inTask) {
-        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable, movable, inTask);
+        Boolean inTask,
+        Boolean shadow) {
+        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable, movable, inTask, shadow);
     }
 
     /**
@@ -123,6 +127,10 @@ public class BlocklyBlockProperties {
         return this.inTask;
     }
 
+    public Boolean isShadow() {
+        return this.shadow;
+    }
+
     @Override
     public String toString() {
         return "BlocklyBlockProperties [blockType="
@@ -141,6 +149,8 @@ public class BlocklyBlockProperties {
             + this.movable
             + ", inTask="
             + this.inTask
+            + ", shadow="
+            + this.shadow
             + "]";
     }
 

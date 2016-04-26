@@ -3,12 +3,11 @@ package de.fhg.iais.roberta.runtime.ev3;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import de.fhg.iais.roberta.components.HardwareComponent;
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -33,14 +32,14 @@ import lejos.robotics.SampleProvider;
  * This class instantiates all sensors (sensor modes) and actors used in blockly program.
  */
 public class DeviceHandler {
-    private final Set<EV3Sensors> usedSensors;
+    private final Set<UsedSensor> usedSensors;
     private final Map<SensorPort, SampleProviderBean[]> lejosSensors = new HashMap<>();
     private EV3GyroSensor gyroSensor = null;
 
-    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
-    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
+    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new HashMap<>();
+    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new HashMap<>();
 
-    private TextLCD lcd = LocalEV3.get().getTextLCD();
+    private final TextLCD lcd = LocalEV3.get().getTextLCD();
 
     /**
      * Construct new initialization for actors and sensors on the brick. Client must provide
@@ -49,7 +48,7 @@ public class DeviceHandler {
      * @param brickConfiguration for the particular brick
      * @param usedSensors in the blockly program
      */
-    public DeviceHandler(Ev3Configuration brickConfiguration, Set<EV3Sensors> usedSensors) {
+    public DeviceHandler(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors) {
         this.usedSensors = usedSensors;
         createDevices(brickConfiguration);
     }
@@ -160,7 +159,12 @@ public class DeviceHandler {
     }
 
     private boolean isUsed(HardwareComponent actorType) {
-        return this.usedSensors.contains(actorType.getComponentType());
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            if ( usedSensor.getSensorType() == actorType.getComponentType() ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {

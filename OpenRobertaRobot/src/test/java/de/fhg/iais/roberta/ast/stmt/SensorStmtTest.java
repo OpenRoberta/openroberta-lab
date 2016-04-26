@@ -12,7 +12,8 @@ public class SensorStmtTest {
 
     @Test
     public void make() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
+        TouchSensor<Void> touchSensor =
+            TouchSensor.make(SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
 
         String a = "\nSensorStmt TouchSensor [port=S1]";
@@ -21,7 +22,8 @@ public class SensorStmtTest {
 
     @Test
     public void getSensor() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
+        TouchSensor<Void> touchSensor =
+            TouchSensor.make(SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
 
         Assert.assertEquals("TouchSensor [port=S1]", sensorStmt.getSensor().toString());

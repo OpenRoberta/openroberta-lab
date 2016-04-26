@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,7 +8,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.HardwareComponent;
-import de.fhg.iais.roberta.components.HardwareComponentType;
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
@@ -47,7 +45,6 @@ import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -61,6 +58,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
@@ -68,7 +66,7 @@ import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
@@ -81,7 +79,6 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
@@ -158,7 +155,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<EV3Sensors> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
+        Set<EV3Sensors> usedSensors = null;// = UsedSensorsCheckVisitor.check(phrasesSet);//TODO checking for used sensors is not needed since ev3dev is much faster than lejos
         Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(programName, brickConfiguration, usedSensors, 0);
         astVisitor.generatePrefix(withWrapping);
 
@@ -301,16 +298,26 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(var.getName());
         if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
             this.sb.append(" = ");
-            var.getValue().visit(this);
+            if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+                ExprList<Void> list = (ExprList<Void>) var.getValue();
+                if ( list.get().size() == 2 ) {
+                    list.get().get(1).visit(this);
+                } else {
+                    list.get().get(0).visit(this);
+                }
+            } else {
+                var.getValue().visit(this);
+            }
         }
         return null;
     }
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        String sym = unary.getOp().getOpSymbol();
+        Unary.Op op = unary.getOp();
+        String sym = op.getOpSymbol();
         // fixup language specific symbols
-        if ( sym.equals("!") ) {
+        if ( op == Unary.Op.NOT ) {
             sym = "not ";
         }
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
@@ -326,16 +333,29 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(' ').append(binary.getOp().getOpSymbol()).append(' ');
-        if ( binary.getOp() == Op.TEXT_APPEND ) {
+        Binary.Op op = binary.getOp();
+        String sym = op.getOpSymbol();
+        // fixup language specific symbols
+        switch ( op ) {
+            case OR:
+                sym = "or";
+                break;
+            case AND:
+                sym = "and";
+                break;
+            case IN:
+                sym = "in";
+                break;
+            default:
+                break;
+        }
+        this.sb.append(' ').append(sym).append(' ');
+        if ( binary.getOp() == Binary.Op.TEXT_APPEND ) {
             this.sb.append("str(");
             generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        }
-        if ( binary.getOp() == Op.MATH_CHANGE ) {
-            this.sb.append(";"); // FIXME
         }
         return null;
     }
@@ -360,7 +380,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) { // FIXME
+        switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
                 this.sb.append("\"\"");
                 break;
@@ -377,6 +397,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
+        if ( shadowExpr.getBlock() != null ) {
+            shadowExpr.getBlock().visit(this);
+        } else {
+            shadowExpr.getShadow().visit(this);
         }
         return null;
     }
@@ -487,10 +517,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         appendBreakStmt(repeatStmt);
         decrIndentation();
-        nlIndent();
         if ( additionalClosingScope ) {
             decrIndentation();
-            nlIndent();
         }
         return null;
     }
@@ -503,7 +531,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
     }
 
@@ -652,7 +680,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + ", ");
+        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(")");
         return null;
@@ -825,9 +853,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        mainTask.getVariables().visit(this);
         this.sb.append("\n").append("def run():");
         incrIndentation();
-        mainTask.getVariables().visit(this);
         return null;
     }
 
@@ -864,7 +892,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         functionStmt.getFunction().visit(this);
-        this.sb.append(";");
         return null;
     }
 
@@ -925,17 +952,17 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
-        switch ( lenghtOfIsEmptyFunct.getFunctName() ) {
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        switch ( lengthOfIsEmptyFunct.getFunctName() ) {
             case LISTS_LENGTH:
-                this.sb.append("BlocklyMethods.lenght( ");
-                lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
+                this.sb.append("BlocklyMethods.length( ");
+                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
 
             case LIST_IS_EMPTY:
                 this.sb.append("BlocklyMethods.isEmpty( ");
-                lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
+                lengthOfIsEmptyFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             default:
@@ -970,7 +997,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex(");
+        this.sb.append("BlocklyMethods.listsGetIndex(");
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
         this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
@@ -981,15 +1008,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             listGetIndex.getParam().get(1).visit(this);
         }
         this.sb.append(")");
-        //if ( listGetIndex.getElementOperation().isStatment() ) {
-        //    this.sb.append(";");
-        //}
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex(");
+        this.sb.append("BlocklyMethods.listsSetIndex(");
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
         this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
@@ -1180,25 +1204,15 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        boolean isFirst = true;
-        List<Expr<Void>> params = textJoinFunct.getParam();
         this.sb.append("BlocklyMethods.textJoin(");
-        for ( Expr<Void> expr : params ) {
-            if ( isFirst ) {
-                isFirst = false;
-            } else {
-                this.sb.append(", ");
-            }
-            expr.visit(this);
-        }
+        textJoinFunct.getParam().visit(this);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append("def ");
-        this.sb.append(methodVoid.getMethodName() + "(");
+        this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
         methodVoid.getBody().visit(this);
@@ -1207,8 +1221,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append("def ");
-        this.sb.append(" " + methodReturn.getMethodName() + "(");
+        this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
         methodReturn.getBody().visit(this);
@@ -1222,15 +1235,18 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
         this.sb.append("if ");
         methodIfReturn.getCondition().visit(this);
-        this.sb.append(": return");
-        methodIfReturn.getReturnValue().visit(this);
+        if ( methodIfReturn.getReturnValue().getKind() != BlockType.EMPTY_EXPR ) {
+            this.sb.append(": return ");
+            methodIfReturn.getReturnValue().visit(this);
+        } else {
+            this.sb.append(": return None");
+        }
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        //this.sb.append(";");
         return null;
     }
 
@@ -1239,9 +1255,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
         this.sb.append(")");
-        if ( methodCall.getReturnType() == null ) {
-            //this.sb.append(";");
-        }
         return null;
     }
 
@@ -1290,7 +1303,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == BlockType.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+        return binary.getOp() == Binary.Op.MINUS
+            && binary.getRight().getKind() == BlockType.BINARY
+            && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
@@ -1316,7 +1331,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append("if ( ");
+        this.sb.append(" if ( ");
         ifStmt.getExpr().get(0).visit(this);
         this.sb.append(" ) else ");
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
@@ -1327,15 +1342,18 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
             } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
+                nlIndent();
+                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
             }
             incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
-            decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
+            StmtList<Void> then = ifStmt.getThenList().get(i);
+            if ( then.get().isEmpty() ) {
                 nlIndent();
-                //this.sb.append("} "));
+                this.sb.append("pass");
+            } else {
+                then.visit(this);
             }
+            decrIndentation();
         }
     }
 
@@ -1347,13 +1365,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             ifStmt.getElseList().visit(this);
             decrIndentation();
         }
-        nlIndent();
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType).append(' ');
         expr.visit(this);
-        this.sb.append(" :");
+        this.sb.append(":");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
@@ -1372,7 +1389,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         if ( repeatStmt.getMode() == Mode.WAIT ) {
             nlIndent();
-            this.sb.append("break;");
+            this.sb.append("break");
         }
     }
 
@@ -1382,15 +1399,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("from __future__ import absolute_import\n");
-        this.sb.append("from roberta.ev3 import Hal,BlocklyMethods\n");
+        this.sb.append("from roberta.ev3 import Hal\n");
+        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
         this.sb.append("from sets import Set\n");
-        this.sb.append("import ev3dev\n");
+        this.sb.append("from ev3dev import ev3 as ev3dev\n");
         this.sb.append("import math\n\n");
 
         this.sb.append("TRUE = True\n");
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append(generateRegenerateUsedSensors()).append("\n");
-        this.sb.append("hal = Hal(brickConfiguration, usedSensors)\n");
+        this.sb.append("hal = Hal(_brickConfiguration, _usedSensors)\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1403,9 +1421,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
+        this.sb.append(INDENT).append(INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
         this.sb.append(INDENT).append(INDENT).append("if e.message:\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 1)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 3)\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 2)\n");
+        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 4)\n");
         this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
         this.sb.append(INDENT).append(INDENT).append("raise\n");
 
@@ -1416,7 +1435,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
-        sb.append("brickConfiguration = {\n");
+        sb.append("_brickConfiguration = {\n");
         sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameterCM() + ",\n");
         sb.append("    'track-width': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
         appendActors(sb);
@@ -1455,18 +1474,22 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private String generateRegenerateUsedSensors() {
         StringBuilder sb = new StringBuilder();
-        String arrayOfSensors = "";
+        //String arrayOfSensors = "";
         // FIXME: what is this used for?
-        for ( EV3Sensors usedSensor : this.usedSensors ) {
-            arrayOfSensors += "'" + getHardwareComponentTypeCode(usedSensor) + "',";
-        }
-        sb.append("usedSensors = Set([");
-        if ( this.usedSensors.size() > 0 ) {
-            sb.append(arrayOfSensors.substring(0, arrayOfSensors.length() - 1));
-        }
+        //        for ( EV3Sensors usedSensor : this.usedSensors ) {
+        //            arrayOfSensors += "'" + getHardwareComponentTypeCode(usedSensor) + "',";
+        //        }
+        sb.append("_usedSensors = Set([");
+        //        if ( this.usedSensors.size() > 0 ) {
+        //            sb.append(arrayOfSensors.substring(0, arrayOfSensors.length() - 1));
+        //        }
         sb.append("])");
         return sb.toString();
     }
+
+    //private static String getHardwareComponentTypeCode(HardwareComponentType type) {
+    //    return type.getClass().getSimpleName() + "." + type.getTypeName();
+    //}
 
     private static String generateRegenerateEV3Actor(HardwareComponent actor, ActorPort port) {
         StringBuilder sb = new StringBuilder();
@@ -1496,32 +1519,28 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         // FIXME: that won't scale
         String name = null;
         // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
-        // ['color_sensor', 'gyro_sensor', 'infrared_sensor', 'light_sensor', 'sound_sensor', 'touch_sensor', 'ultrasonic_sensor']
+        // ['ColorSensor', 'GyroSensor', 'I2cSensor', 'InfraredSensor', 'LightSensor', 'SoundSensor', 'TouchSensor', 'UltrasonicSensor']
         switch ( sensor.getComponentType().getShortName() ) {
             case "color":
-                name = "color_sensor";
-                break;
-            case "touch":
-                name = "touch_sensor";
-                break;
-            case "ultrasonic":
-                name = "ultrasonic_sensor";
-                break;
-            case "infrared":
-                name = "infrared_sensor";
+                name = "ColorSensor";
                 break;
             case "gyro":
-                name = "gyro_sensor";
+                name = "GyroSensor";
+                break;
+            case "infrared":
+                name = "InfraredSensor";
+                break;
+            case "touch":
+                name = "TouchSensor";
+                break;
+            case "ultrasonic":
+                name = "UltrasonicSensor";
                 break;
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");
         }
-        sb.append("ev3dev.").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
+        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
-    }
-
-    private static String getHardwareComponentTypeCode(HardwareComponentType type) {
-        return type.getClass().getSimpleName() + "." + type.getTypeName();
     }
 
     private static boolean isInteger(String str) {

@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
@@ -52,7 +53,7 @@ import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
@@ -180,7 +181,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     @Override
     public BlocklyType visitNumConst(NumConst<BlocklyType> numConst) {
         Assert.isTrue(numConst.getKind().equals(BlockType.NUM_CONST));
-        return BlocklyType.NUMERIC;
+        return BlocklyType.NUMBER;
     }
 
     @Override
@@ -195,7 +196,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     @Override
     public BlocklyType visitBoolConst(BoolConst<BlocklyType> boolConst) {
         Assert.isTrue(boolConst.getKind().equals(BlockType.BOOL_CONST));
-        return BlocklyType.BOOL;
+        return BlocklyType.BOOLEAN;
     }
 
     @Override
@@ -513,7 +514,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     @Override
-    public BlocklyType visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<BlocklyType> lenghtOfIsEmptyFunct) {
+    public BlocklyType visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<BlocklyType> lengthOfIsEmptyFunct) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -658,6 +659,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitStmtExpr(StmtExpr<BlocklyType> stmtExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitShadowExpr(ShadowExpr<BlocklyType> shadowExpr) {
         // TODO Auto-generated method stub
         return null;
     }

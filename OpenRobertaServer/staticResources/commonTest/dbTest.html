@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Database Test</title>
+<script src="../blockly/blockly_compressed.js"></script>
+<script src="../blockly/blocks_compressed.js"></script>
+<script src="../blockly/msg/js/en.js"></script>
+<script src="dbTest.js"></script>
+
+<style>
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+h1 {
+  font-weight: normal;
+  font-size: 140%;
+}
+#blocklyDiv {
+  float: right;
+  height: 95%;
+  width: 70%;
+}
+#collaborators {
+  float: right;
+  width: 30px;
+  margin-left: 10px;
+}
+#collaborators > img {
+  margin-right: 5px;
+  height: 30px;
+  padding-bottom: 5px;
+  width: 30px;
+  border-radius: 3px;
+}
+#importExport {
+  font-family: monospace;
+}
+</style>
+</head>
+<body onload="start()">
+
+  <div id="collaborators"></div>
+
+  <div id="blocklyDiv"></div>
+
+<toolbox_set id='toolbox' style='display: none'>
+    <category name='TOOLBOX_ACTION' svg="true">
+        <category name='brick'>
+        <block type='robBrick_EV3-Brick'></block>
+        <block type='robBrick_ultrasonic'></block>
+        <block type='robBrick_colour'></block>
+        <block type='robBrick_infrared'></block>
+        <block type='robBrick_touch'></block>
+        <block type='robBrick_gyro'></block>
+        <block type='robBrick_motor_big'></block>
+        <block type='robBrick_motor_middle'></block>
+        <block type='robBrick_actor'></block>
+        </category>
+        <category name='TOOLBOX_MOVE' svg="true">
+            <block type='robActions_motor_on'>
+                <field name='MOTORPORT'>B</field>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+            </block>
+            <block type='sim_motor_on'>
+                <field name='MOTORPORT'>B</field>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_motor_on_for'>
+                <field name='MOTORPORT'>B</field>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+                <value name='VALUE'>
+                    <block type='math_number'>
+                        <field name='NUM'>1</field>
+                    </block>
+                </value>
+            </block>
+            <block type='sim_motor_on_for'>
+                <field name='MOTORPORT'>B</field>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+                <value name='VALUE'>
+                    <block type='math_number'>
+                        <field name='NUM'>1</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_motor_getPower'>
+                <field name='MOTORPORT'>B</field>
+            </block>
+            <block type='robActions_motor_stop'>
+                <field name='MOTORPORT'>A</field>
+            </block>
+            <block type='sim_motor_stop'>
+            </block>
+        </category>
+        <category name='TOOLBOX_DRIVE' svg="true">
+            <block type='robActions_motorDiff_on'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_motorDiff_on_for'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+                <value name='DISTANCE'>
+                    <block type='math_number'>
+                        <field name='NUM'>20</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_motorDiff_stop'>
+            </block>
+            <block type='robActions_motorDiff_turn'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_motorDiff_turn_for'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+                <value name='DEGREE'>
+                    <block type='math_number'>
+                        <field name='NUM'>20</field>
+                    </block>
+                </value>
+            </block>
+        </category> 
+        <category name='TOOLBOX_DISPLAY' svg="true">
+            <block type='robActions_display_text'>
+                <value name='OUT'>
+                    <block type='text'>
+                        <field name='TEXT'>Hallo</field>
+                    </block>
+                </value>
+                <value name='COL'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='ROW'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_display_picture'>
+                <value name='X'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='Y'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_display_clear'>
+            </block>
+        </category>
+        <category name='TOOLBOX_SOUND' svg="true">
+            <block type='robActions_play_tone'>
+                <value name='FREQUENCE'>
+                    <block type='math_number'>
+                        <field name='NUM'>300</field>
+                    </block>
+                </value>
+                <value name='DURATION'>
+                    <block type='math_number'>
+                        <field name='NUM'>100</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_play_file'>
+            </block>
+            <block type='robActions_play_setVolume'>
+                <value name='VOLUME'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_play_getVolume'>
+            </block>
+        </category>
+        <category name='TOOLBOX_LIGHT' svg="true">
+            <block type='robActions_brickLight_on'></block>
+            <block type='robActions_brickLight_off'></block>
+            <block type='robActions_brickLight_reset'></block>
+        </category> 
+    </category> 
+    <category name='TOOLBOX_SENSOR' svg="true">
+        <block type='robSensors_touch_isPressed'>
+        </block>
+        <block type='sim_touch_isPressed'>
+        </block>
+        <block type='robSensors_ultrasonic_getSample'>
+            <field name='SENSORPORT'>4</field> 
+        </block>
+        <block type='robSensors_colour_getSample'>
+            <field name='SENSORPORT'>3</field> 
+        </block>
+        <block type='robSensors_infrared_getSample'>
+            <field name='SENSORPORT'>4</field> 
+        </block>
+        <block type='robSensors_encoder_reset'>
+        </block>
+        <block type='robSensors_encoder_getSample'>
+        </block>
+        <block type='robSensors_key_isPressed'>
+        </block>
+        <block type='robSensors_gyro_reset'>
+            <field name='SENSORPORT'>2</field> 
+        </block>
+        <block type='robSensors_gyro_getSample'>
+            <field name='SENSORPORT'>2</field> 
+        </block>
+        <block type='robSensors_timer_getSample'>
+        </block>
+        <block type='robSensors_timer_reset'>
+        </block>
+    </category>
+    <category name='TOOLBOX_CONTROL' svg="true">
+        <category name='TOOLBOX_DECISION'>
+            <block type='robControls_if'></block>
+            <block type='robControls_ifElse'></block>
+        </category> 
+        <category name='TOOLBOX_LOOP'>
+            <!-- <block type='controls_repeat'></block> -->
+            <block type='controls_repeat_ext'>
+                <value name='TIMES'>
+                    <block type='math_number'>
+                        <field name='NUM'>10</field>
+                    </block> 
+                </value>
+            </block>
+            <block type='controls_whileUntil'></block>
+            <block type='robControls_for'>
+                <value name='FROM'> 
+                    <block type='math_number'> 
+                        <field name='NUM'>1</field> 
+                    </block>             
+                </value> 
+                <value name='TO'>  
+                    <block type='math_number'> 
+                        <field name='NUM'>10</field>  
+                    </block>  
+                </value>  
+                <value name='BY'>  
+                    <block type='math_number'>  
+                        <field name='NUM'>1</field>  
+                    </block>
+                </value>  
+            </block> 
+            <block type='robControls_forEach'>
+            </block> 
+            <block type='controls_flow_statements'></block>
+        </category> 
+        <category name=TOOLBOX_WAIT>
+            <block type='robControls_wait'> 
+            </block>
+            <block type='robControls_wait_time'>
+                <value name='WAIT'>
+                    <block type='math_number'>
+                        <field name='NUM'>500</field>
+                    </block> 
+                </value>
+            </block>
+            <block type='robControls_wait_for'>
+                <value name='WAIT0'>
+                    <block type='logic_compare'>
+                    <mutation operator_range='BOOL'></mutation>
+                        <value name='A'>
+                            <block type='robSensors_getSample'>
+                            </block> 
+                        </value>
+                        <value name='B'>
+                            <block type='logic_boolean'>
+                            </block> 
+                        </value>
+                    </block> 
+                </value>
+            </block> 
+        </category>
+        <category name='Tasks'> 
+            <block type='robControls_start'></block> 
+        </category> 
+    </category>
+    <category name='TOOLBOX_LOGIC' svg="true">
+        <block type='logic_compare'></block>
+        <block type='logic_operation'></block>
+        <block type='logic_negate'></block>
+        <block type='logic_boolean'></block>
+        <block type='logic_null'></block>
+        <block type='logic_ternary'></block> 
+    </category>
+    <category name='TOOLBOX_MATH' svg="true">
+        <block type='math_number'></block>
+        <block type='math_arithmetic'></block>
+        <block type='math_single'></block>
+        <block type='math_trig'></block>
+        <block type='math_constant'></block>
+        <block type='math_number_property'></block>
+        <block type='robMath_change'>
+            <value name='DELTA'>
+                <block type='math_number'>
+                    <field name='NUM'>1</field>
+                </block> 
+            </value>
+        </block>
+        <block type='math_round'></block>
+        <block type='math_on_list'></block>
+        <block type='math_modulo'></block>
+        <block type='math_constrain'>
+            <value name='LOW'>
+                <block type='math_number'>
+                    <field name='NUM'>1</field>
+                </block> 
+            </value>
+            <value name='HIGH'>
+                <block type='math_number'>
+                    <field name='NUM'>100</field>
+                </block> 
+            </value> 
+        </block>
+        <block type='math_random_int'>
+            <value name='FROM'>
+                <block type='math_number'>
+                    <field name='NUM'>1</field>
+                </block> 
+            </value>
+            <value name='TO'>
+                <block type='math_number'>
+                    <field name='NUM'>100</field>
+                </block> 
+            </value> 
+        </block>
+        <block type='math_random_float'></block> 
+    </category>
+    <category name='TOOLBOX_TEXT' svg="true">
+        <block type='text'></block>
+        <block type='robText_join'></block>
+        <block type='robText_append'>
+            <value name='TEXT'>
+                <shadow type='text'></shadow> 
+            </value>
+        </block>
+    </category>
+    <category name='TOOLBOX_LIST' svg="true">
+        <block type='robLists_create_with'>
+            <mutation items="0" list_type="Number"></mutation>
+        </block>  
+        <block type='robLists_create_with'>
+            <value name='ADD0'>
+                <block type='math_number'></block> 
+            </value> 
+            <value name='ADD1'>
+                <block type='math_number'></block> 
+            </value> 
+            <value name='ADD2'>
+                <block type='math_number'></block> 
+            </value> 
+        </block>  
+        <block type='robLists_repeat'>
+            <value name='NUM'>
+                <block type='math_number'>
+                    <field name='NUM'>5</field>
+                </block> 
+            </value> 
+        </block>
+        <block type='robLists_length'></block>
+        <block type='robLists_isEmpty'></block>
+        <block type='robLists_indexOf'> 
+        </block>
+        <block type='robLists_getIndex'> 
+        </block>
+        <block type='robLists_setIndex'> 
+        </block>
+        <block type='robLists_getSublist'> 
+        </block>
+    </category> 
+    <category name='TOOLBOX_COLOUR' svg="true">
+        <block type='robColour_picker'> 
+        </block>
+    </category>
+    <category name='TOOLBOX_VARIABLE' custom='VARIABLE' svg="true"></category>
+    <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE' svg="true"></category>
+    <category name='TOOLBOX_COMMUNICATION' svg="true">
+        <block type='robCommunication_startConnection'></block>
+        <block type='robCommunication_sendBlock'></block>
+        <block type='robCommunication_receiveBlock'></block>
+        <block type='robCommunication_waitForConnection'></block>
+    </category>
+</toolbox_set>
+
+  <h1>Test Database programs</h1>
+
+  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
+   - <a href="javascript:void(workspace.setVisible(false))">Hide</a></p>
+
+  <p>
+    <input type="button" value="Export to XML" onclick="toXml()">
+    &nbsp;
+    <input type="button" value="Import from XML" onclick="fromXml()">
+    
+    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
+  </p>
+  <hr>
+
+  <p>
+  <input type="file" id="file-input"/>	
+   <input type="button" value="Test" onclick="test()"/>
+  </p>
+
+</body>
+</html>

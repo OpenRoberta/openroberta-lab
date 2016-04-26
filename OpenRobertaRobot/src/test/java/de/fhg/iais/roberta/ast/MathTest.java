@@ -161,7 +161,7 @@ public class MathTest {
     public void mathChange() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=182, y=34], MainTask [\n"
-                + "exprStmt VarDeclaration [NUMERIC, variablenName, NumConst [0], false, true]], "
+                + "exprStmt VarDeclaration [NUMBER, variablenName, NumConst [0], false, true]], "
                 + "Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_change.xml"));
@@ -199,7 +199,8 @@ public class MathTest {
 
     @Test
     public void math_on_list() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-25, y=-449], MathOnListFunct [AVERAGE, [EmptyList [NUMERIC]]]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-714, y=201], MathOnListFunct [SUM, [EmptyList [NUMBER]]]], [Location [x=-694, y=241], MathOnListFunct [MIN, [EmptyList [NUMBER]]]], [Location [x=-674, y=281], MathOnListFunct [MAX, [EmptyList [NUMBER]]]], [Location [x=-654, y=321], MathOnListFunct [AVERAGE, [EmptyList [NUMBER]]]], [Location [x=-634, y=361], MathOnListFunct [MEDIAN, [EmptyList [NUMBER]]]], [Location [x=-614, y=401], MathOnListFunct [MODE, [EmptyList [NUMBER]]]], [Location [x=-594, y=441], MathOnListFunct [STD_DEV, [EmptyList [NUMBER]]]], [Location [x=-574, y=481], MathOnListFunct [RANDOM, [EmptyList [NUMBER]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list.xml"));
     }
@@ -207,19 +208,6 @@ public class MathTest {
     @Test
     public void reverseTransformationMathOnList() throws Exception {
         Helper.assertTransformationIsOk("/ast/math/math_on_list.xml");
-    }
-
-    @Test
-    public void math_on_list1() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=-714, y=201], MathOnListFunct [SUM, [EmptyList [NUMERIC]]]], [Location [x=-694, y=241], MathOnListFunct [MIN, [EmptyList [NUMERIC]]]], [Location [x=-674, y=281], MathOnListFunct [MAX, [EmptyList [NUMERIC]]]], [Location [x=-654, y=321], MathOnListFunct [AVERAGE, [EmptyList [NUMERIC]]]], [Location [x=-634, y=361], MathOnListFunct [MEDIAN, [EmptyList [NUMERIC]]]], [Location [x=-614, y=401], MathOnListFunct [MODE, [EmptyList [NUMERIC]]]], [Location [x=-594, y=441], MathOnListFunct [STD_DEV, [EmptyList [NUMERIC]]]], [Location [x=-574, y=481], MathOnListFunct [RANDOM, [EmptyList [NUMERIC]]]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list1.xml"));
-    }
-
-    @Test
-    public void reverseTransformationMathOnList1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/math/math_on_list1.xml");
     }
 
     @Test

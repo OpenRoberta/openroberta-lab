@@ -5,6 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,9 +27,11 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class TouchSensor<V> extends BaseSensor<V> {
+    private final TouchSensorMode mode;
 
     private TouchSensor(SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockType.TOUCH_SENSING, properties, comment);
+        this.mode = TouchSensorMode.TOUCH;
         setReadOnly();
     }
 
@@ -43,6 +46,13 @@ public class TouchSensor<V> extends BaseSensor<V> {
      */
     public static <V> TouchSensor<V> make(SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TouchSensor<V>(port, properties, comment);
+    }
+
+    /**
+     * @return the mode
+     */
+    public TouchSensorMode getMode() {
+        return this.mode;
     }
 
     @Override
@@ -78,5 +88,4 @@ public class TouchSensor<V> extends BaseSensor<V> {
 
         return jaxbDestination;
     }
-
 }

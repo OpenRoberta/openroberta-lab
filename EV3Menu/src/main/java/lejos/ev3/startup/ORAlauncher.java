@@ -26,20 +26,14 @@ public class ORAlauncher {
     private static final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
     private static boolean isRunning = false;
-
-    /**
-     * Creates a new object for launching the Open Roberta Lab user program.
-     */
-    public ORAlauncher() {
-        //
-    }
-
-    public static void setRunning(boolean bool) {
-        isRunning = bool;
-    }
+    private static int exitvalue = 0;
 
     public static boolean isRunning() {
         return isRunning;
+    }
+
+    public static int getNepoExitValue() {
+        return exitvalue;
     }
 
     /**
@@ -48,9 +42,9 @@ public class ORAlauncher {
      * @param programName
      *        Filename without directory, for example Linefollower.jar.
      */
-    public void runProgram(String programName) {
+    public static int runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
-        System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath());
+        //System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath());
         GraphicStartup.menu.suspend();
         exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
         Delay.msDelay(1000);
@@ -59,6 +53,7 @@ public class ORAlauncher {
         if ( GraphicStartup.selection == 0 ) {
             GraphicStartup.redrawIPs();
         }
+        return exitvalue;
     }
 
     /**
@@ -70,10 +65,11 @@ public class ORAlauncher {
      * @param directory
      *        The programs where all user programs are saved.
      */
-    private void exec(String command, String directory) {
+    private static void exec(String command, String directory) {
         Process program = null;
+        exitvalue = 0;
         try {
-            setRunning(true);
+            isRunning = true;
             glcd.clear();
             glcd.refresh();
             glcd.setAutoRefresh(false);
@@ -83,7 +79,7 @@ public class ORAlauncher {
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
 
-            System.out.println("Running an Open Roberta Lab Program!");
+            //System.out.println("Running an Open Roberta Lab Program!");
             while ( true ) {
                 int b = Button.getButtons();
                 if ( b == 6 ) {
@@ -97,27 +93,24 @@ public class ORAlauncher {
                     // exitvalue is 143 if process was killed by another one
                     // exitvalue is 0 if process terminates regularly
                     // throws exception if not yet terminated
-                    System.out.println("ORA process exitvalue: " + program.exitValue());
+                    exitvalue = program.exitValue();
+                    System.out.println("ORA process exitvalue: " + exitvalue);
                     break;
                 } catch ( IllegalThreadStateException e ) {
                     // go on
                 }
                 Delay.msDelay(200);
             }
-
-            System.out.println("Waiting for process to die");
             program.waitFor();
-            System.out.println("Program finished");
         } catch ( Exception e ) {
-            System.err.println("Failed to execute ORA program: " + e);
+            System.err.println("Failed to execute ORA program: " + e.getMessage());
         } finally {
-            // Turn the LED off, in case left on
             Button.LEDPattern(0);
             glcd.setAutoRefresh(true);
             glcd.clear();
             glcd.refresh();
             program = null;
-            setRunning(false);
+            isRunning = false;
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,12 +24,13 @@ import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.VersionChecker;
 
-@Path("/ping")
+@Path("/{version:([^/]+/)?}ping")
 public class ClientPing {
     private static final Logger LOG = LoggerFactory.getLogger(ClientPing.class);
 
-    private static final int EVERY_REQUEST = 100; // after EVERY_PING many ping requests have arrived, a log entry is written
+    private static final int EVERY_REQUEST = 100; // after arrival of EVERY_PING many ping requests , a log entry is written
     private static final AtomicInteger pingCounterForLogging = new AtomicInteger(0);
 
     private final String version;
@@ -43,7 +45,8 @@ public class ClientPing {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response handle(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
+    public Response handle(@OraData HttpSessionState httpSessionState, JSONObject fullRequest, @PathParam("version") String version) throws Exception {
+        VersionChecker.checkRestVersion(version);
         AliveData.rememberClientCall();
         int logLen = new ClientLogger().log(LOG, fullRequest);
         int counter = pingCounterForLogging.incrementAndGet();

@@ -80,11 +80,8 @@ public class InfraredSensor<V> extends BaseSensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return InfraredSensor.make(
-            InfraredSensorMode.get(modeName),
-            SensorPort.get(portName),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return InfraredSensor
+            .make(InfraredSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

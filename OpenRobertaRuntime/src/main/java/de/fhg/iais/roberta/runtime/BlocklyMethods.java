@@ -23,6 +23,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class BlocklyMethods {
 
     public static final float GOLDEN_RATIO = (float) ((1.0 + Math.sqrt(5.0)) / 2.0);
+    public static final float PI = (float) Math.PI;
+    public static final float E = (float) Math.E;
 
     /**
      * Check if numbers is even.
@@ -156,12 +158,163 @@ public class BlocklyMethods {
     }
 
     /**
+     * Square root of a number
+     *
+     * @param number
+     * @return
+     */
+    public static float sqrt(float number) {
+        return (float) Math.sqrt(number);
+    }
+
+    /**
+     * Absolute value of a number
+     *
+     * @param number
+     * @return
+     */
+    public static float abs(float number) {
+        return Math.abs(number);
+    }
+
+    /**
+     * Returns the natural logarithm (base e) of a float value
+     *
+     * @param number
+     * @return
+     */
+    public static float log(float number) {
+        return (float) Math.log(number);
+    }
+
+    /**
+     * Returns the natural logarithm (base e) of a float value
+     *
+     * @param number
+     * @return
+     */
+    public static float log10(float number) {
+        return (float) Math.log10(number);
+    }
+
+    /**
+     * Returns Euler's number e raised to the power of a float value
+     *
+     * @param number
+     * @return
+     */
+    public static float exp(float number) {
+        return (float) Math.exp(number);
+    }
+
+    /**
+     * Returns the value of the first argument raised to the power of the second argument
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static float pow(float a, float b) {
+        return (float) Math.pow(a, b);
+    }
+
+    /**
+     * Returns the trigonometric sine of an angle
+     *
+     * @param number
+     * @return
+     */
+    public static float sin(float number) {
+        return (float) Math.sin(number);
+    }
+
+    /**
+     * Returns the trigonometric cosine of an angle
+     *
+     * @param number
+     * @return
+     */
+    public static float cos(float number) {
+        return (float) Math.cos(number);
+    }
+
+    /**
+     * Returns the trigonometric tangent of an angle
+     *
+     * @param number
+     * @return
+     */
+    public static float tan(float number) {
+        return (float) Math.tan(number);
+    }
+
+    /**
+     * Returns the arc sine of a value; the returned angle is in the range -pi/2 through pi/2
+     *
+     * @param number
+     * @return
+     */
+    public static float asin(float number) {
+        return (float) Math.asin(number);
+    }
+
+    /**
+     * Returns the arc tangent of a value; the returned angle is in the range -pi/2 through pi/2
+     *
+     * @param number
+     * @return
+     */
+    public static float atan(float number) {
+        return (float) Math.atan(number);
+    }
+
+    /**
+     * Returns the arc cosine of a value; the returned angle is in the range 0.0 through pi
+     *
+     * @param number
+     * @return
+     */
+    public static float acos(float number) {
+        return (float) Math.acos(number);
+    }
+
+    /**
+     * Returns the closest whole number to the argument, with ties rounding up
+     *
+     * @param number
+     * @return
+     */
+    public static float round(float number) {
+        return Math.round(number);
+    }
+
+    /**
+     * Returns the smallest (closest to negative infinity) float value that is greater than or equal to the argument and is equal to a mathematical integer
+     *
+     * @param number
+     * @return
+     */
+    public static float ceil(float number) {
+        return (float) Math.ceil(number);
+    }
+
+    /**
+     * Returns the largest (closest to positive infinity) float value that is less than or equal to the argument and is equal to a mathematical integer
+     *
+     * @param number
+     * @return
+     */
+    public static float floor(float number) {
+        return (float) Math.floor(number);
+    }
+
+    /**
      * Create float ArrayList. Client must provide elements to be added to the ArrayList.
      *
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Float> createListWith(Number... elements) {
+    public static ArrayList<Float> createListWithNumber(Number... elements) {
         ArrayList<Float> result = new ArrayList<Float>();
         for ( Number number : elements ) {
             result.add(number.floatValue());
@@ -176,7 +329,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Boolean> createListWith(Boolean... elements) {
+    public static ArrayList<Boolean> createListWithBoolean(Boolean... elements) {
         return new ArrayList<Boolean>(Arrays.asList(elements));
     }
 
@@ -186,7 +339,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<String> createListWith(String... elements) {
+    public static ArrayList<String> createListWithString(String... elements) {
         return new ArrayList<String>(Arrays.asList(elements));
     }
 
@@ -197,7 +350,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Pickcolor> createListWith(Pickcolor... elements) {
+    public static ArrayList<Pickcolor> createListWithColour(Pickcolor... elements) {
         return new ArrayList<Pickcolor>(Arrays.asList(elements));
     }
 
@@ -268,7 +421,7 @@ public class BlocklyMethods {
      * @param list
      * @return length of the list
      */
-    public static <T> int lenght(List<T> list) {
+    public static <T> int length(List<T> list) {
         return list.size();
     }
 
@@ -375,7 +528,7 @@ public class BlocklyMethods {
      * @return modified list
      */
     public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, IndexLocation indexLocation, float index) {
-        Assert.isTrue(list.size() != 0, "List size is 0!");
+        Assert.isTrue(operation == ListElementOperations.INSERT || list.size() != 0, "List size is 0!");
         return listsIndex(list, operation, null, indexLocation, index);
     }
 
@@ -393,7 +546,7 @@ public class BlocklyMethods {
      * @return modified list
      */
     public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, T element, IndexLocation indexLocation, float index) {
-        Assert.isTrue(list.size() != 0, "List size is 0!");
+        Assert.isTrue(operation == ListElementOperations.INSERT || list.size() != 0, "List size iss 0!");
         int resultIndex = calculateIndex(list, indexLocation, index);
         return executeOperation(list, operation, resultIndex, element);
     }
@@ -534,11 +687,7 @@ public class BlocklyMethods {
      * @return average of the elements
      */
     public static float averageOnList(ArrayList<Float> list) {
-        float sum = 0;
-        for ( float element : list ) {
-            sum += element;
-        }
-        return sum / list.size();
+        return sumOnList(list) / list.size();
     }
 
     /**
@@ -548,12 +697,16 @@ public class BlocklyMethods {
      * @return median of the elements
      */
     public static float medianOnList(ArrayList<Float> list) {
+        int n = list.size();
+        if ( n == 0 ) {
+            return 0;
+        }
         Collections.sort(list);
         float median;
-        if ( list.size() % 2 == 0 ) {
-            median = (list.get(list.size() / 2) + list.get(list.size() / 2 - 1)) / 2;
+        if ( n % 2 == 0 ) {
+            median = (list.get(n / 2) + list.get(n / 2 - 1)) / 2;
         } else {
-            median = list.get(list.size() / 2);
+            median = list.get(n / 2);
         }
         return median;
     }
@@ -611,21 +764,21 @@ public class BlocklyMethods {
     }
 
     private static <T> T executeOperation(ArrayList<T> list, ListElementOperations operation, float resultIndex, T element) {
-        T result = list.get((int) resultIndex);
+        T result = null;
+        if ( resultIndex < list.size() ) {
+            result = list.get((int) resultIndex);
+        }
         switch ( operation ) {
             case SET:
                 list.set((int) resultIndex, element);
-                return result;
+                break;
             case INSERT:
-                //check if it is last index
                 resultIndex = resultIndex == list.size() - 1 ? resultIndex + 1 : resultIndex;
                 list.add((int) resultIndex, element);
-                return result;
+                result = list.get((int) resultIndex);
             case GET:
                 break;
             case GET_REMOVE:
-                list.remove((int) resultIndex);
-                return result;
             case REMOVE:
                 list.remove((int) resultIndex);
                 break;
@@ -633,15 +786,16 @@ public class BlocklyMethods {
                 throw new DbcException("Invalid operation!");
         }
         return result;
+
     }
 
     private static <T> int calculateIndex(ArrayList<T> list, IndexLocation indexLocation, float index) {
-        Assert.isTrue(index < list.size(), "Index location is larger then the size of array!");
+        //Assert.isTrue(index < list.size(), "Index location is larger then the size of array!");
         switch ( indexLocation ) {
             case FROM_START:
                 return (int) index;
             case FROM_END:
-                return (int) (list.size() - index);
+                return (int) ((list.size() - 1) - index);
             case FIRST:
                 return 0;
             case LAST:

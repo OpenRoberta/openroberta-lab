@@ -10,12 +10,16 @@
 	<property name="main.class" value="${main.package}.${main.name}" />
 	<property name="program.jar" value="${main.name}.jar" />
 
+	<!-- leJOS is only running Java 7 -->
+	<property name="source.version" value="1.7" />
+	<property name="target.version" value="1.7" />
+
 	<path id="lejos">
 		<fileset dir="${crosscompiler.resources.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
-	
+
 	<target name="info">
 		<echo>basedir:                     ${basedir}</echo>
 		<echo>crosscompiler.resources.dir: ${crosscompiler.resources.dir}</echo>
@@ -28,12 +32,12 @@
 	<target name="emptyOutDir" depends="info">
 		<mkdir dir="${output.dir}" />
 		<delete includeEmptyDirs="true">
-			<fileset dir="${output.dir}" includes="**/*" defaultexcludes="no"/>
+			<fileset dir="${output.dir}" includes="**/*" defaultexcludes="no" />
 		</delete>
 	</target>
 
 	<target name="compile" description="build class files" depends="emptyOutDir">
-		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
+		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source" source="${source.version}" target="${target.version}">
 			<include name="${main.name}.java" />
 			<classpath refid="lejos" />
 		</javac>
@@ -47,7 +51,9 @@
 					${brick.runtime}/lib/dbusjava.jar \
 					${brick.runtime}/libjna/usr/share/java/jna.jar \
 					${brick.roberta}/OpenRobertaRuntime.jar \
-					${brick.roberta}/OpenRobertaShared.jar" />
+					${brick.roberta}/OpenRobertaShared.jar \
+					${brick.roberta}/Java-WebSocket.jar \
+					${brick.roberta}/json.jar" />
 			</manifest>
 			<fileset dir="${output.dir}">
 				<include name="**/${main.name}.class" />

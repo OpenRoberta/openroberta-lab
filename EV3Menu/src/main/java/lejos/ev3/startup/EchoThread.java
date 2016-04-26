@@ -26,7 +26,7 @@ public class EchoThread extends Thread {
 	
 	public void close() {
 		try {
-			System.out.println("Closing echo stream");
+			//System.out.println("Closing echo stream");
 			if (in != null) in.close();
 			if (log != null) log.close();
 		} catch (IOException e) {

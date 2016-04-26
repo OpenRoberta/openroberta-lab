@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.AliveData;
 @Path("/alive")
 public class Alive {
     private static final Logger LOG = LoggerFactory.getLogger(Alive.class);
-    private static final int EVERY_REQUEST = 10; // after EVERY_PING many /alive requests have arrived, a log entry is written
+    private static final int EVERY_REQUEST = 10; // after arrival of EVERY_PING many /alive requests, a log entry is written
     private static final AtomicInteger aliveRequestCounterForLogging = new AtomicInteger(0);
 
     @GET
