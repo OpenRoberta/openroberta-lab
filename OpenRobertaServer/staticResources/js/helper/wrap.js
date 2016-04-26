@@ -1,8 +1,4 @@
-define([ 'require', 'exports', 'comm', 'log', 'jquery' ], function(require, exports) {
-
-    var LOG = require('log');
-    var $ = require('jquery');
-
+define([ 'exports', 'comm', 'log', 'jquery' ], function(exports, COMM, LOG, $) {
     /**
      * wrap a function with up to 3 parameters (!) to catch and display errors.
      * An not undefined 2nd parameter is a messages that activates time
@@ -27,7 +23,7 @@ define([ 'require', 'exports', 'comm', 'log', 'jquery' ], function(require, expo
                 } else {
                     LOG.error("fn3 caught an EXCEPTION: " + e);
                 }
-                require('comm').ping(); // transfer data to the server
+                COMM.ping(); // transfer data to the server
             }
         };
         return wrap;

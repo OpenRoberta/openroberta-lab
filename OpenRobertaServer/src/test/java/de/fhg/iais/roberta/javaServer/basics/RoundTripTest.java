@@ -191,15 +191,15 @@ public class RoundTripTest {
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
         s1 = HttpSessionState.init();
-        System.setProperty("phantomjs.binary", "/home/kcvejoski/dev/OpenRoberta/phantomjs-2.1.1/bin/phantomjs");
     }
 
     private static void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
-        response = restUser.command(
-            s1,
-            sessionFactoryWrapper.getSession(),
-            JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        response =
+            restUser.command(
+                s1,
+                sessionFactoryWrapper.getSession(),
+                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!s1.isUserLoggedIn());
         response = //

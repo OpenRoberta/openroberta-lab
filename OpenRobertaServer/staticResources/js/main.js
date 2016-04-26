@@ -53,8 +53,7 @@ require.config({
         'robertaLogic.motor' : '../app/simulation/robertaLogic/motor',
         'robertaLogic.memory' : '../app/simulation/robertaLogic/memory',
         'robertaLogic.program' : '../app/simulation/robertaLogic/program',
-        'robertaLogic.constants' : '../app/simulation/robertaLogic/constants',
-
+        'robertaLogic.constants' : '../app/simulation/robertaLogic/constants'
     },
     shim : {
         'bootstrap' : {

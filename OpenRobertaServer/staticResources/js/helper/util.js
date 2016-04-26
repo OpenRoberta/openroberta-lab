@@ -1,51 +1,33 @@
-define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui', 'jquery-validate', 'datatables', 'bootstrap' ], function(require,
-        exports) {
-
-    var $ = require('jquery');
-    var MSG = require('message');
-    var LOG = require('log');
-    var userState = require('roberta.user-state');
-
+define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui', 'jquery-validate', 'datatables', 'bootstrap' ],
+		function(exports, userState, MSG, LOG, $) {
     /**
      * Set cookie
      * 
-     * @memberof UTIL
-     * 
-     * @param {key}
-     *            Key of the cookie
-     * @param {value}
-     *            Value of the cookie
+     * @param {key} Key of the cookie
+     * @param {value} Value of the cookie
      */
     function setCookie(key, value) {
         var expires = new Date();
         expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000));
         document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
     }
-
     exports.setCookie = setCookie;
 
     /**
      * Get cookie
      * 
-     * @memberof UTIL
-     * 
-     * @param {key}
-     *            Key of the cookie to read
+     * @param {key} Key of the cookie to read
      */
     function getCookie(key) {
         var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
         return keyValue ? keyValue[2] : null;
     }
-
     exports.getCookie = getCookie;
 
     /**
      * Format date
      * 
-     * @memberof UTIL
-     * 
-     * @param {date}
-     *            date from server to be formatted
+     * @param {date} date from server to be formatted
      */
     function formatDate(dateLong) {
         if (dateLong) {
@@ -53,19 +35,16 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
                     + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
+        } else {
+        	return "";        	
         }
-        return "";
     }
-
     exports.formatDate = formatDate;
 
     /**
      * Convert date into numeric value
      * 
-     * @memberof UTIL
-     * 
-     * @param {d}
-     *            date in the form 'dd.mm.yyyy, hh:mm:ss'
+     * @param {d} date in the form 'dd.mm.yyyy, hh:mm:ss'
      */
     function parseDate(d) {
         if (d) {
@@ -83,16 +62,12 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         }
         return 0;
     }
-
     exports.parseDate = parseDate;
 
     /**
      * Format result of server call for logging
      * 
-     * @memberof UTIL
-     * 
-     * @param {result}
-     *            Result-object from server call
+     * @param {result} Result-object from server call
      */
     function formatResultLog(result) {
         var str = "{";
@@ -116,13 +91,10 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         str += '}';
         return str;
     }
-
     exports.formatResultLog = formatResultLog;
 
     /**
      * Extension of Jquery-datatables for sorting German date fields
-     * 
-     * @memberof UTIL
      */
     function initDataTables() {
         $.extend($.fn.dataTableExt.oSort['date-de-asc'] = function(a, b) {
@@ -137,18 +109,14 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         });
     }
-
     exports.initDataTables = initDataTables;
 
     /**
      * Calculate height of data table
-     * 
-     * @memberof exports
      */
     function calcDataTableHeight() {
         return Math.round($(window).height() - 260);
     }
-
     exports.calcDataTableHeight = calcDataTableHeight;
 
     function cacheBlocks(workspace) {
@@ -177,7 +145,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             }
         }
     }
-
     exports.cacheBlocks = cacheBlocks;
 
     function checkVisibility() {
@@ -200,7 +167,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             return !document[stateKey];
         };
     }
-
     exports.checkVisibility = checkVisibility;
 
     function setFocusOnElement($elem) {
@@ -210,7 +176,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             }
         }, 800);
     }
-
     exports.setFocusOnElement = setFocusOnElement;
 
     function showSingleModal(customize, onSubmit, onHidden, validator) {
@@ -230,14 +195,12 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         setFocusOnElement($("#singleModalInput"));
         $("#single-modal").modal('show');
     }
-
     exports.showSingleModal = showSingleModal;
 
     /**
      * Handle result of server call
      * 
-     * @param {result}
-     *            Result-object from server call
+     * @param {result} Result-object from server call
      */
     function response(result) {
         LOG.info('result from server: ' + formatResultLog(result));
@@ -245,43 +208,36 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             MSG.displayMessage(result.message, "POPUP", "");
         }
     }
-
     exports.response = response;
 
     /**
      * Rounds a number to required decimal
      * 
-     * @param value
-     *            {Number} - to be rounded
-     * @param decimals
-     *            {Number} - number of decimals after rounding
+     * @param value {Number} - to be rounded
+     * @param decimals {Number} - number of decimals after rounding
      * @return {Number} rounded number
      * 
      */
     function round(value, decimals) {
         return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
     }
-
     exports.round = round;
 
     /**
      * Get the sign of the number.
      * 
-     * @param x
-     *            {Number} -
+     * @param x {Number} -
      * @return {Number} - 1 if it is positive number o/w return -1
      */
     function sgn(x) {
         return (x > 0) - (x < 0);
     }
-
     exports.sgn = sgn;
 
     /**
      * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
      * 
-     * @param path
-     *            {String} - path
+     * @param path {String} - path
      */
     function getBasename(path) {
         var base = new String(path).substring(path.lastIndexOf('/') + 1);
@@ -290,7 +246,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         }
         return base;
     }
-
     exports.getBasename = getBasename;
 
     function download(filename, content) {
@@ -304,6 +259,5 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         element.click();
         document.body.removeChild(element);
     }
-    
     exports.download = download;
 });

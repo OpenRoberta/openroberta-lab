@@ -1,3 +1,16 @@
+require.config({
+    baseUrl : '.',
+    paths : {
+        'jquery' : '../js/jquery/jquery-2.1.4.min',
+        'log' : '../js/helper/log',
+        'comm' : '../js/helper/comm',
+        'dbc' : '../js/helper/dbc',
+        'wrap' : '../js/helper/wrap'
+    }
+});
+
+require([ 'jquery', 'log', 'comm', 'dbc', 'util', 'wrap' ], function($, LOG, COMM, DBC, WRAP) {
+
 var setReady = function(value) {
     $('#ready').text(value);
 };
@@ -125,3 +138,5 @@ var init = function() {
 };
 
 $(document).ready(init);
+
+});

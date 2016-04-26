@@ -324,7 +324,6 @@
                     <!-- setting phantomjs path for integration tests, webdriver capabilities -->
                     <systemPropertyVariables>
                         <phantomjs.binary>${phantomjs.binary}</phantomjs.binary>
-                        <phantomjs.binary.path>${phantomjs.binary}</phantomjs.binary.path>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
