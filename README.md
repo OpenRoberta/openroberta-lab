@@ -70,3 +70,15 @@ Start your browser at: http://localhost:1999
 
 
 That's it!
+
+### Development notes
+
+You can follow the test status on https://travis-ci.org/OpenRoberta/.
+
+#### Blockly
+
+We are using Blockly as a submodule. The build of the blockly is only done in
+the OpenRoberta/Blockly project and then copied to the
+OpenRobertaServer/StaticResources. You can not build Blockly in
+OpenRobertaServer project directly.
+
