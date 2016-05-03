@@ -27,8 +27,6 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.VersionChecker;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -102,7 +100,7 @@ public class ServerStarter {
     public Server start(String host, int port) throws IOException {
         String versionFrom = this.properties.getProperty("validversionrange.From", "?");
         String versionTo = this.properties.getProperty("validversionrange.To", "?");
-        Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
+        //        Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
         Server server = new Server();
         ServerConnector http = new ServerConnector(server);
         http.setHost(host);

@@ -26,15 +26,10 @@ limitations under the License.
 	<artifactId>OpenRobertaRobot</artifactId>
 	<name>OpenRobertaRobot</name>
 	<description>the robot related part of the OpenRoberta application</description>
-	<dependencies>
+	<dependencies>		
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaShared</artifactId>
-		</dependency>
-		<!-- this is a "invisible" dependency, as the cross compiler from server needs runtime for testing -->
-		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>OpenRobertaRuntime</artifactId>
+			<artifactId>EV3Runtime</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>

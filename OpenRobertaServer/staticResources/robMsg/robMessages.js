@@ -21,12 +21,11 @@
 /**
  * @fileoverview English strings.
  * @author Beate.Jost@iais.fraunhofer.de (Beate Jost)
- *
+ * 
  * After modifying this file, either run "build.py" from the parent directory,
- * or run (from this directory):
- * ../i18n/js_to_json.py
- * to regenerate json/{en,qqq,synonyms}.json.
- *
+ * or run (from this directory): ../i18n/js_to_json.py to regenerate
+ * json/{en,qqq,synonyms}.json.
+ * 
  * To convert all of the json files to .js files, run:
  * ../i18n/create_messages.py json/*.json
  */
@@ -36,18 +35,18 @@ goog.provide('Blockly.Msg.en');
 
 goog.require('Blockly.Msg');
 
-
 /**
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
  * to message files.
  */
 
 /**
- * Tip: Generate URLs for read-only blocks by creating the blocks in the Code app,
- * then evaluating this in the console:
- * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' + encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
+ * Tip: Generate URLs for read-only blocks by creating the blocks in the Code
+ * app, then evaluating this in the console:
+ * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' +
+ * encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5,
+ * -6))
  */
-
 
 // Tooltips for the robot blocks
 /// Rob Actions tooltips
@@ -252,7 +251,7 @@ Blockly.Msg.CONNECTION_WAIT_FOR_CONNECTION = 'wait for connection';
 Blockly.Msg.CONNECTION_START_TOOLTIP = 'Tries to make a connection to another robot via bluetooth.';
 Blockly.Msg.CONNECTION_WAIT_TOOLTIP = 'Waits for a connection via bluetooth.';
 Blockly.Msg.CONNECTION_RECEIVE_TOOLTIP = 'Waits for a message from the robot which you declare in the connection.';
-Blockly.Msg.CONNECTION_SEND_TOOLTIP = 'Sends a text message to another robot.'; 
+Blockly.Msg.CONNECTION_SEND_TOOLTIP = 'Sends a text message to another robot.';
 Blockly.Msg.TOOLBOX_ACTION = 'Action';
 Blockly.Msg.TOOLBOX_COMMUNICATION = 'Messages';
 Blockly.Msg.TOOLBOX_SENSOR = 'Sensors';
@@ -523,16 +522,8 @@ Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = 'Please enter a valid email address
 Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = 'Unfortunately you can not use this block in the simulation!';
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = 'This sensor is not in the configuration! The behavior of the program on the real robot will be different than expected!';
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = 'In this block you have used a wrong sensor port! The behavior of the program on the real robot will be different than expected, please check the robot configuration!';
-<<<<<<< Updated upstream
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = 'The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!';
 Blockly.Msg.SERVER_NOT_AVAILABLE = 'The Open Roberta Lab is currently not available. </br> Please check your internet connection and try to reload this website. If the problem persists, please don"t hasitate to contact us via mail:</br>roberta-zentrale@iais.fraunhofer.de';
 Blockly.Msg.MENU_MESSAGE_DOWNLOAD = 'Your program has been successfully downloaded.';
 Blockly.Msg.POPUP_ROBOT_SYSTEM = 'System';
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = 'The execution of the program on the robot has terminated unexpectedly!';
-
-
-
-
-=======
-Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = 'The infrared sensor is not connected in the configuration! The behavior of the program on the real robot will be different than expected, please check the robot configuration!';
->>>>>>> Stashed changes
