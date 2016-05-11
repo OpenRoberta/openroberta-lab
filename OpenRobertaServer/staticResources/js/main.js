@@ -3,6 +3,7 @@ require.config({
     paths : {
         'jquery' : 'jquery/jquery-2.1.4.min',
         'jquery-ui' : 'jquery/jquery-ui-1.10.4.custom.min',
+        'jquery-scrollto' : 'jquery/jquery.scrollTo.min',
         'datatables' : 'jquery/jquery.dataTables.min',
         'jquery-validate' : 'jquery/jquery.validate.min',
         'jquery-cookie' : 'jquery/jquery.cookie',
@@ -11,6 +12,7 @@ require.config({
         'blocks-msg' : '../../blockly/msg/js/en',
         'blockly' : '../../blockly/blockly_compressed',
         'prettify' : 'code-prettify/prettify',
+        'enjoyHint': 'enjoyHint/enjoyhint.min',
 
         'roberta.roberta' : '../app/roberta/roberta',
         'roberta.user-state' : '../app/roberta/roberta.user.state',
@@ -23,6 +25,7 @@ require.config({
         'roberta.navigation' : '../app/roberta/roberta.navigation',
         'roberta.language' : '../app/roberta/roberta.language',
         'roberta.brick-configuration' : '../app/roberta/roberta.brick-configuration',
+        'roberta.tour' : '../app/roberta/roberta.tour',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.simulation' : '../app/simulation/simulationLogic/simulation',
@@ -53,11 +56,12 @@ require.config({
         'robertaLogic.motor' : '../app/simulation/robertaLogic/motor',
         'robertaLogic.memory' : '../app/simulation/robertaLogic/memory',
         'robertaLogic.program' : '../app/simulation/robertaLogic/program',
-        'robertaLogic.constants' : '../app/simulation/robertaLogic/constants'
+        'robertaLogic.constants' : '../app/simulation/robertaLogic/constants',
+
     },
     shim : {
         'bootstrap' : {
-            "deps" : [ 'jquery' ]
+            deps : [ 'jquery' ]
         },
         'blocks-msg' : {
             deps : [ 'blocks' ],
@@ -72,11 +76,11 @@ require.config({
         },
         'jquery-cookie' : {
             deps : [ 'jquery' ]
-        }
+        },        
     }
 });
 
-require([ 'require', 'wrap', 'roberta.roberta', 'jquery' ], function(require) {
+require([ 'require', 'wrap', 'roberta.roberta', 'jquery'], function(require) {
 
     $ = require('jquery');
     WRAP = require('wrap');

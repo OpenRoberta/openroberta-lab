@@ -1,7 +1,7 @@
 define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'roberta.navigation', 'log', 'util', 'comm', 'roberta.brick-configuration',
         'roberta.program', 'roberta.program.sharing', 'roberta.user-state', 'roberta.user', 'roberta.robot', 'roberta.brickly', 'blocks', 'blocks-msg',
-        'jquery', 'jquery-cookie', 'jquery-ui', 'datatables' ], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
-        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Blockly, Blockly, $) {
+        'enjoyHint', 'jquery', 'jquery-cookie', 'jquery-ui', 'datatables'], function(require, exports, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
+        ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, BRICKLY, Blockly, Blockly, EnjoyHint, $) {
 
     var id;
 
@@ -399,7 +399,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
         var ping = setInterval(function() {
             pingServer()
         }, 3000);
-    }
 
+    }
     exports.init = init;
 });

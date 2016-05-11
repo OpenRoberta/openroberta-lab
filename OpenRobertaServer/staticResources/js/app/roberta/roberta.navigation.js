@@ -1,7 +1,7 @@
 define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 'rest.configuration', 'roberta.toolbox', 'roberta.robot', 'roberta.user',
-        'roberta.brick-configuration', 'roberta.user-state', 'roberta.program', 'roberta.brickly', 'simulation.simulation', 'jquery', 'blocks', 'jquery-ui' ],
+        'roberta.brick-configuration', 'roberta.user-state', 'roberta.program', 'roberta.brickly', 'enjoyHint', 'roberta.tour', 'simulation.simulation', 'jquery', 'blocks', 'jquery-ui' ],
         function(exports, UTIL, MSG, COMM, ROBOT, PROGRAM, CONFIGURATION, ROBERTA_TOOLBOX, ROBERTA_ROBOT, ROBERTA_USER, ROBERTA_BRICK_CONFIGURATION, userState,
-                ROBERTA_PROGRAM, BRICKLY, SIM, $, Blockly) {
+                ROBERTA_PROGRAM, BRICKLY, EnjoyHint, ROBERTA_TOUR, SIM, $, Blockly) {
 
             var bricklyActive = false;
 
@@ -168,6 +168,11 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         ROBERTA_PROGRAM.newProgram();
                     } else if (domId === 'menuListProg') { //  Submenu 'Program'
                         deactivateProgConfigMenu();
+                        $('#progListing').data('type', 'userProgram');
+                        $('#tabListing').click();
+                    } else if (domId === 'menuListExamples') { //  Submenu 'Program'
+                        deactivateProgConfigMenu();
+                        $('#progListing').data('type', 'exampleProgram');
                         $('#tabListing').click();
                     } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
                         ROBERTA_PROGRAM.save();
@@ -429,7 +434,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
 
                 $('#simRobotModal').removeClass("modal-backdrop");
                 $('#simRobotModal').draggable();
-              //  $('#simRobotModal').resizable();
+                //  $('#simRobotModal').resizable();
                 $('.simScene').onWrap('click', function(event) {
                     SIM.setBackground(0);
                     var scene = $("#simButtonsCollapse").collapse('hide');
@@ -526,14 +531,26 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                         console.log('Confirmation with unknown data type clicked');
                     }
                 }, 'continue new program clicked');
+                $('#takeATour').onWrap('click', function(event) {
+                    ROBERTA_TOUR.start('welcome');
+                }, 'take a tour clicked');
+
             }
 
             exports.initHeadNavigation = initHeadNavigation;
 
             function beforeActivateTab(event, ui) {
                 $('#tabs').tabs("refresh");
-                if (ui.newPanel.selector === '#progListing') {
+                if (ui.newPanel.selector === '#progListing' && $('#progListing').data('type') === 'userProgram') {
+                    $("#deleteFromListing").show();
+                    $("#shareFromListing").show();
+                    $("#refreshListing").show();
                     PROGRAM.refreshList(ROBERTA_PROGRAM.showPrograms);
+                } else if (ui.newPanel.selector === '#progListing' && $('#progListing').data('type') === 'exampleProgram') {
+                    $("#deleteFromListing").hide();
+                    $("#shareFromListing").hide();
+                    $("#refreshListing").hide();
+                    PROGRAM.refreshExamplesList(ROBERTA_PROGRAM.showPrograms);
                 } else if (ui.newPanel.selector === '#confListing') {
                     CONFIGURATION.refreshList(ROBERTA_BRICK_CONFIGURATION.showConfigurations);
                 }

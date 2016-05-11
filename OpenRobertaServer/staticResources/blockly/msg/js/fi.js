@@ -590,7 +590,7 @@ Blockly.Msg.POPUP_EMAIL = "Sähköposti";
 Blockly.Msg.POPUP_EMAIL_SEND = "Send now";  // untranslated
 Blockly.Msg.POPUP_NAME = "Nimi";
 Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
-Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Export and import your program locally</li><li>Update blockly for better performance and zoom function</li></ul>";  // untranslated
+Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Salasana";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "reset password ...";  // untranslated
@@ -611,7 +611,7 @@ Blockly.Msg.POPUP_SHARE_READ = "READ";  // untranslated
 Blockly.Msg.POPUP_SHARE_WITH = "Nimi";
 Blockly.Msg.POPUP_SHARE_WRITE = "WRITE";  // untranslated
 Blockly.Msg.POPUP_STARTUP_COOKIES = "We use cookies to personalise content and to analyse our traffic.";  // untranslated
-Blockly.Msg.POPUP_STARTUP_DETAILS = "<a href='http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1' target='_blank' class='EN' style='display: inline;'>Show details.</a>";  // untranslated
+Blockly.Msg.POPUP_STARTUP_DETAILS = "Show details.";  // untranslated
 Blockly.Msg.POPUP_STARTUP_HELP = "Do you need help?";  // untranslated
 Blockly.Msg.POPUP_STARTUP_HIDE = "Okay, don't show this window again.";  // untranslated
 Blockly.Msg.POPUP_STARTUP_NEW = "What's new?";  // untranslated
@@ -781,6 +781,23 @@ Blockly.Msg.TOOLBOX_VARIABLE = "Muuttujat";
 Blockly.Msg.TOOLBOX_WAIT = "Odota";
 Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP = "Is the touch sensor pressed?";  // untranslated
 Blockly.Msg.TOUCH_TOOLTIP = "Is the touch sensor pressed?";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION00 = "next";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION01 = "Welcome,<br>click on  »next« and start a tour through the Open Roberta Lab.<br>I'll show you how you can program your robot with NEPO.<br>You can cancel this tour all the time with a click on »X« in the right upper corner.";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION02 = "The menu ;-)";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION03 = "Here you can find everything you need around the robot programming!<br><span class='typcn typcn-document-text'></span> Save and load programs<br><span class='typcn typcn-Roberta'></span> Connect your robot to the Open Roberta Lab<br><span class='typcn typcn-lightbulb'></span> Help for all kind of problems<br><span class='typcn typcn-user'></span> All about user accounts, e.g. login or logoff";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION04 = "Click here and switch to the robot configuration";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION05 = "You can adapt the robot configuration later,<br>if you've constructed another robot.<br>If you don't have a robot by hand and want to test your program in the simulation <br>this configuration is applied.";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION06 = "Click here and switch back to the programming area!";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION07 = "The toolbox.<br>Here you can find all programming blocks.";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION08 = "Each program starts with the program-start-block«.<br>Further programming blocks, which the robot should execute, should be attached to this block.<br>Just drag'n drop the desired block right under the start block.";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION09 = "Here you find some shortcuts!<br>From left to right:<br><span class='typcn typcn-media-play'></span> Click here to execute the program on the real robo<br><span class='typcn typcn-media-play-outline'></span> Click here to start the robot in the simulation<br><span class='typcn typcn-cloud-storage'></span> Save your program, but before that you have to sign in<br><span class='typcn typcn-zoom'></span> Click here and zoom the blocks, if you want to<br><span class='typcn typcn-archive'></span> The trashcan! Just move blocks into the trashcan and they will be deleted.<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Attention: You cannot recover blocks once they are deleted!<br>";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION10 = "Click on »Action«";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION11 = "Click and create the block in the workspace";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION12 = "Drag'n drop the new block now to just below the start-program-block so that they connect";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION13 = "Now test your program in the simulation!";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION14 = "Just a moment!";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION15 = "Super,<br>your robot is driveing 20 cm forward,<br>this is what you have programmed!";  // untranslated
+Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun while trying out more!";  // untranslated
 Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP = "Gets the mode of the ultrasonic sensor.";  // untranslated
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor.";  // untranslated
 Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP = "Sets the mode of the ultrasonic sensor.";  // untranslated

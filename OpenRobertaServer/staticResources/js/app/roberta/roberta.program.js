@@ -1,6 +1,7 @@
 define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'roberta.user-state', 'rest.program', 'roberta.user', 'roberta.robot',
-        'roberta.brick-configuration', 'roberta.navigation', 'blocks', 'prettify', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG,
-        LOG, UTIL, SIM, userState, PROGRAM, ROBERTA_USER, ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, ROBERTA_NAVIGATION, Blockly, Prettify, $) {
+        'roberta.brick-configuration', 'roberta.navigation', 'roberta.tour', 'blocks', 'prettify', 'jquery', 'jquery-validate', 'blocks-msg' ], function(
+        exports, COMM, MSG, LOG, UTIL, SIM, userState, PROGRAM, ROBERTA_USER, ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, ROBERTA_NAVIGATION, ROBERTA_TOUR,
+        Blockly, Prettify, $) {
 
     var $formSingleModal;
 
@@ -170,6 +171,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             PROGRAM.refreshList(showPrograms);
         }, 'refresh list of programs');
 
+        // Refresh expamle list of programs
+        $('#refreshExamplesListing').onWrap('click', function() {
+            PROGRAM.refreshExamplesList(showPrograms);
+        }, 'refresh list of programs');
+
         // confirm program deletion
         $('#deleteFromListing').onWrap('click', function() {
             var $programRow = $('#programNameTable .selected');
@@ -231,10 +237,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             x = $(window).width() / 50;
             y = 25;
         } else {
-            x = $(window).width() / 5;
+            x = 200,//$(window).width() / 5;
             y = 50;
         }
-        var id = Blockly.genUid();
+        var id = "StartBlock";//Blockly.genUid();
         var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'><instance x='0' y='0'>" + "<block id='" + id
                 + "' type='robControls_start'><field name='DEBUG'>TRUE</field></block></instance></block_set>";
         var program = opt_programBlocks || text;
@@ -468,6 +474,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             }
                             blocklyWorkspace.robControls.toogleSim();
                             Blockly.svgResize(blocklyWorkspace);
+                            setTimeout(function() {
+                                ROBERTA_TOUR.getInstance().trigger('SimLoaded');
+                            }, 500);
                             setTimeout(function() {
                                 SIM.setPause(false);
                             }, 1000);

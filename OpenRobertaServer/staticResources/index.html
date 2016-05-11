@@ -26,7 +26,8 @@ limitations under the License.
 <script data-main="js/main" src="js/require.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico" type="image/vnd.microsoft.icon"></link>
-<!-- enable linenumbers for all lines on highlighted source code -->
+<link href="/css/enjoyhint.css" rel="stylesheet">
+	<!-- enable linenumbers for all lines on highlighted source code -->
 <style>
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	list-style-type: decimal !important
@@ -70,6 +71,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a href="#" id="menuRunSim" class="typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
 							<li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
 							<li class="logout"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
+							<li><a href="#" id="menuListExamples" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_EXAMPLES">Beispielprogramme ...</a></li>
 							<li class="login logout"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
 							<li class="logout"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
 							<li class=""><a href="#" id="menuShowCode" class="typcn typcn-code" lkey="Blockly.Msg.MENU_SHOW_CODE">show code</a></li>
@@ -582,11 +584,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				</div>
 				<div class="modal-footer" style="text-align: center">
 					<button id="startupClose" type="button" data-dismiss="modal" class="btn" lkey="Blockly.Msg.BUTTON_START">Start</button>
+					<button type="button" class="btn hidden-xs" data-dismiss="modal" id="takeATour">take a tour</button>
 				</div>
 				<div class="modal-body left-inner-addon popup-checkbox">
 					<input type="checkbox" name="checkbox" id="checkbox_id" value="value">
-					<label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br />
-					<br /> <span lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
+					<label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br /> <br /> <span
+						lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
 					<a href="http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1" target="_blank" class="DE" style="display: inline;">Details ansehen.</a>
 					<a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN FI ES DA" style="display: inline;">Show details.</a>
 				</div>
@@ -598,6 +601,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
