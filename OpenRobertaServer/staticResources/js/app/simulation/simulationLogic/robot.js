@@ -47,9 +47,15 @@ define(
                     var robot = this;
                     $("#simRobotContent").html(this.svg);
                     for ( var property in robot.buttons) {
-                        $('#' + property).off('click');
-                        $('#' + property).on('click', function() {
+                        $('#' + property).off('mousedown');
+                        $('#' + property).on('mousedown', function() {
+                            console.log("mousedown");
                             robot.buttons[this.id] = true;
+                        });
+                        $('#' + property).off('mouseup');
+                        $('#' + property).on('mouseup', function() {
+                            console.log("mouseup");
+                            robot.buttons[this.id] = false;
                         });
                     }
                     $("#display").html('');

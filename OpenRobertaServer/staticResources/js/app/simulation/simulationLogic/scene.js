@@ -482,12 +482,6 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
                 values.buttons.any = values.buttons.any || this.robot.buttons[key];
-                //once the state of the button is delivered, reset the button
-                this.robot.buttons[key] = false;
-                // for testing only
-                if (values.buttons[key]) {
-                    console.log(key + ' pressed');
-                }
             }
         }
         if (this.robot.webAudio) {
