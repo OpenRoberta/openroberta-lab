@@ -1,14 +1,9 @@
 define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollto', 'enjoyHint', 'blocks-msg' ],
         function(exports, COMM, MSG, LOG, Blockly, $) {
 
-            var enjoyhint_instance = null;
+            var enjoyhint_instance = new EnjoyHint({});;
 
             function start(tour) {
-                enjoyhint_instance = new EnjoyHint({
-                    onStart : function() {
-                        console.log('End');
-                    }
-                });
                 var enjoyhint_script_steps = [ {} ];
                 switch (tour) {
                 case 'welcome':
