@@ -474,9 +474,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             }
                             blocklyWorkspace.robControls.toogleSim();
                             Blockly.svgResize(blocklyWorkspace);
-                            setTimeout(function() {
-                                ROBERTA_TOUR.getInstance().trigger('SimLoaded');
-                            }, 500);
+                            ROBERTA_TOUR.getInstance().trigger('SimLoaded');
                             setTimeout(function() {
                                 SIM.setPause(false);
                             }, 1000);
