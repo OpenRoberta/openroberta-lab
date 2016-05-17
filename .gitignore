@@ -4,4 +4,5 @@
 Resources/resources/*.jar
 Resources/updateResources/*.jar
 OpenRobertaRuntime/userProjects/*
+OpenRobertaServer/userProjects/*
 **/phantomjsdriver.log

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="compileLejos" basedir="." default="jar">
+	<!-- note: the basedir will be set to the directory in which this build file is stored -->
+	<property name="brick.runtime" value="/home/root/lejos" />
+	<property name="brick.roberta" value="/home/roberta/lib" />
+
+	<property name="input.dir" value="${user.projects.dir}/${token.dir}/src" />
+	<property name="output.dir" value="${user.projects.dir}/${token.dir}/target" />
+
+	<property name="main.class" value="${main.package}.${main.name}" />
+	<property name="program.jar" value="${main.name}.jar" />
+
+	<!-- leJOS is only running Java 7 -->
+	<property name="source.version" value="1.7" />
+	<property name="target.version" value="1.7" />
+
+	<path id="lejos">
+		<fileset dir="${crosscompiler.resources.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="info">
+		<echo>basedir:                     ${basedir}</echo>
+		<echo>crosscompiler.resources.dir: ${crosscompiler.resources.dir}</echo>
+		<echo>user.projects.dir:           ${user.projects.dir}</echo>
+		<echo>token.dir:                   ${token.dir}</echo>
+		<echo>main.package:                ${main.package}</echo>
+		<echo>main.name:                   ${main.name}</echo>
+	</target>
+
+	<target name="emptyOutDir" depends="info">
+		<mkdir dir="${output.dir}" />
+		<delete includeEmptyDirs="true">
+			<fileset dir="${output.dir}" includes="**/*" defaultexcludes="no" />
+		</delete>
+	</target>
+
+	<target name="compile" description="build class files" depends="emptyOutDir">
+		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source" source="${source.version}" target="${target.version}">
+			<include name="${main.name}.java" />
+			<classpath refid="lejos" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${output.dir}/${program.jar}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar \
+					${brick.runtime}/lib/dbusjava.jar \
+					${brick.runtime}/libjna/usr/share/java/jna.jar \
+					${brick.roberta}/OpenRobertaRuntime.jar \
+					${brick.roberta}/OpenRobertaShared.jar \
+					${brick.roberta}/Java-WebSocket.jar \
+					${brick.roberta}/json.jar" />
+			</manifest>
+			<fileset dir="${output.dir}">
+				<include name="**/${main.name}.class" />
+			</fileset>
+		</jar>
+	</target>
+</project>
