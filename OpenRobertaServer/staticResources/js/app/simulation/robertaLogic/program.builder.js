@@ -14,6 +14,13 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createMathConstant(value) {
+        var result = {};
+        result[CONST.EXPR] = CONST.MATH_CONST;
+        result[CONST.VALUE] = value;
+        return result;
+    }
+
     function createMathChange(left, right) {
         var binary = createBinaryExpr(CONST.ADD, left, right);
         var assignment = createAssignStmt(left.name, binary)

@@ -51,17 +51,16 @@ public class AstToLejosJavaVisitorTest {
 
     private static final String USED_SENSORS_DECL = "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();\n";
 
-    private static final String MAIN_METHOD =
-        ""
-            + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n"
-            + "    public static void main(String[] args) {\n"
-            + "        try {\n"
-            + BRICK_CONFIGURATION
-            + "            new Test().run();\n"
-            + "        } catch ( Exception e ) {\n"
-            + "            Hal.displayExceptionWaitForKeyPress(e);\n"
-            + "        }\n"
-            + "    }\n\n";
+    private static final String MAIN_METHOD = ""
+        + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n"
+        + "    public static void main(String[] args) {\n"
+        + "        try {\n"
+        + BRICK_CONFIGURATION
+        + "            new Test().run();\n"
+        + "        } catch ( Exception e ) {\n"
+        + "            Hal.displayExceptionWaitForKeyPress(e);\n"
+        + "        }\n"
+        + "    }\n\n";
     private static final String SUFFIX = "";
     private static Ev3Configuration brickConfiguration;
 
@@ -194,7 +193,7 @@ public class AstToLejosJavaVisitorTest {
             + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
             + "            hal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);\n"
             + "        }\n"
-            + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+            + "        if ( (hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4)) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
             + "            hal.ledOff();\n"
             + "        } else {\n"
             + "            hal.resetGyroSensor(SensorPort.S2);\n"

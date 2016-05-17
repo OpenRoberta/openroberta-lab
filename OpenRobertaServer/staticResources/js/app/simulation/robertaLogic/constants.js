@@ -60,7 +60,7 @@ define({
 
     WAIT_STMT : "WaitStmt",
 
-    MATH_ : "Math",
+    MATH_CONST : "createMathConstant",
 
     SHOW_TEXT_ACTION : "ShowTextAction",
 

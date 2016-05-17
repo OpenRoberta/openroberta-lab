@@ -43,7 +43,7 @@ public class IfStmtTest {
 
     @Test
     public void ifStmt1() throws Exception {
-        String a = "\nif ( ( 5 + 7 == 5 + 7 ) >= ( 5 + 7 == 5 + 7 && 5 + 7 <= 5 + 7 ) ) {\n}";
+        String a = "\nif ( ( (5 + 7) == (5 + 7) ) >= ( ((5 + 7) == (5 + 7)) && ((5 + 7) <= (5 + 7) )) ) {\n}";
 
         Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt1.xml");
     }
