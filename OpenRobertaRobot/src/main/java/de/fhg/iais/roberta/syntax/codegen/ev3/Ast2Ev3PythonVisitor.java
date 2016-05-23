@@ -1309,7 +1309,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && expr.getKind() != BlockType.BINARY ) {
             // parentheses are omitted
             expr.visit(this);
         } else {

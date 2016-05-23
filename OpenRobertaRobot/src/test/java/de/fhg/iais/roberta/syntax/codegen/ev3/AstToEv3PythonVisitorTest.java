@@ -149,7 +149,7 @@ public class AstToEv3PythonVisitorTest {
             + "        hal.turnOnRegulatedMotor('B', 30)\n"
             + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
             + "        hal.rotateDirectionRegulated('A', 'B', False, 'right', 50)\n"
-            + "    if hal.getMotorTachoValue('A', 'rotation') + hal.getInfraredSensorDistance('4') == hal.getUltraSonicSensorDistance('4'):\n"
+            + "    if ( hal.getMotorTachoValue('A', 'rotation') + hal.getInfraredSensorDistance('4') ) == hal.getUltraSonicSensorDistance('4'):\n"
             + "        hal.ledOff()\n"
             + "    else:\n"
             + "        hal.resetGyroSensor('2')\n"
@@ -236,11 +236,11 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "8 + -3 + 5\n"
-            + "88 - ( 8 + -3 + 5 )\n"
-            + "88 - ( 8 + -3 + 5 ) - ( 88 - ( 8 + -3 + 5 ) )\n"
+            + "8 + ( -3 + 5 )\n"
+            + "88 - ( 8 + ( -3 + 5 ) )\n"
+            + "( 88 - ( 8 + ( -3 + 5 ) ) ) - ( 88 - ( 8 + ( -3 + 5 ) ) )\n"
             + "2 * ( 2 - 2 )\n"
-            + "2 - 2 * 2\n\n"
+            + "2 - ( 2 * 2 )\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/expr/expr1.xml");
@@ -254,12 +254,12 @@ public class AstToEv3PythonVisitorTest {
             + "False == True\n"
             + "True != False\n"
             + "False == False\n"
-            + "5 <= 7 == 8 > 9\n"
+            + "( 5 <= 7 ) == ( 8 > 9 )\n"
             + "( 5 != 7 ) >= ( 8 == 9 )\n"
-            + "5 + 7 >= ( 8 + 4 ) / ( 9 + 3 )\n"
-            + "( 5 + 7 == 5 + 7 ) >= ( 8 + 4 ) / ( 9 + 3 )\n"
-            + "( 5 + 7 == 5 + 7 ) >= ( 5 + 7 == 5 + 7 and 5 + 7 <= 5 + 7 )\n"
-            + "not (5 + 7 == 5 + 7) == True\n\n"
+            + "( 5 + 7 ) >= ( ( 8 + 4 ) / ( 9 + 3 ) )\n"
+            + "( ( 5 + 7 ) == ( 5 + 7 ) ) >= ( ( 8 + 4 ) / ( 9 + 3 ) )\n"
+            + "( ( 5 + 7 ) == ( 5 + 7 ) ) >= ( ( ( 5 + 7 ) == ( 5 + 7 ) ) and ( ( 5 + 7 ) <= ( 5 + 7 ) ) )\n"
+            + "not (( 5 + 7 ) == ( 5 + 7 )) == True\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/expr/logic_expr.xml");
@@ -270,7 +270,7 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "not (0 != 0 and False)\n\n"
+            + "not (( 0 != 0 ) and False)\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/expr/logic_negate.xml");
@@ -573,7 +573,7 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "if ( 5 + 7 == 5 + 7 ) >= ( 5 + 7 == 5 + 7 and 5 + 7 <= 5 + 7 ):\n"
+            + "if ( ( 5 + 7 ) == ( 5 + 7 ) ) >= ( ( ( 5 + 7 ) == ( 5 + 7 ) ) and ( ( 5 + 7 ) <= ( 5 + 7 ) ) ):\n"
             + "    pass\n\n"
             + MAIN_METHOD;
 
