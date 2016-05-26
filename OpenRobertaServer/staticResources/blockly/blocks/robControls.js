@@ -250,6 +250,7 @@ Blockly.Blocks['robControls_wait'] = {
      * @this Blockly.Block
      */
     updateShape_ : function(num) {
+        Blockly.dragMode_ = Blockly.DRAG_NONE;
         if (num == 1) {
             this.waitCount_++;
             if (this.waitCount_ == 1)
@@ -257,12 +258,24 @@ Blockly.Blocks['robControls_wait'] = {
             this.appendValueInput('WAIT' + this.waitCount_).appendField(Blockly.Msg.WAIT_OR).setCheck('Boolean');
             this.appendStatementInput('DO' + this.waitCount_).appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
         } else if (num == -1) {
+            var target = this.getInputTargetBlock('DO' + this.waitCount_);
+            if (target) {
+                target.unplug();
+                target.bumpNeighbours_();        
+            }
+            var target = this.getInputTargetBlock('WAIT' + this.waitCount_);
+            if (target) {
+                target.unplug();
+                target.bumpNeighbours_();        
+            }
             this.removeInput('DO' + this.waitCount_);
             this.removeInput('WAIT' + this.waitCount_);
             this.waitCount_--;
             if (this.waitCount_ == 0) {
                 this.removeInput('DO0');
             }
+            this.itemCount_--;
+      this.removeInput('ADD' + this.itemCount_);
         }
         if (this.waitCount_ >= 1) {
             if (this.waitCount_ == 1) {
@@ -366,6 +379,7 @@ Blockly.Blocks['robControls_wait_for'] = {
      * @this Blockly.Block
      */
     updateShape_ : function(num) {
+        Blockly.dragMode_ = Blockly.DRAG_NONE;           
         if (num == 1) {
             this.waitCount_++;
             if (this.waitCount_ == 1)
@@ -391,11 +405,17 @@ Blockly.Blocks['robControls_wait_for'] = {
             connection = lc.getInput('B').connection;
             connection.connect(v.outputConnection);
         } else if (num == -1) {
-            this.removeInput('DO' + this.waitCount_);
-            var targetBlock = this.getInputTargetBlock('WAIT' + this.waitCount_);
-            if (targetBlock){
-                targetBlock.dispose();
+            var target = this.getInputTargetBlock('DO' + this.waitCount_);
+            if (target) {
+                target.unplug();
+                target.bumpNeighbours_();        
             }
+            var target = this.getInputTargetBlock('WAIT' + this.waitCount_);
+            if (target) {
+                target.unplug();
+                target.bumpNeighbours_();        
+            }
+            this.removeInput('DO' + this.waitCount_);
             this.removeInput('WAIT' + this.waitCount_);
             this.waitCount_--;
             if (this.waitCount_ == 0) {

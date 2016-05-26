@@ -61,7 +61,7 @@ Blockly.Blocks['variables_get'] = {
   setType: function(name, type) {
     if (type !== this.dataType_) {
       this.dataType_ = type;
-      this.changeOutput(this.dataType_);
+      this.setOutput(true, this.dataType_);
     }
   },
   mutationToDom: function() {
@@ -84,7 +84,7 @@ Blockly.Blocks['variables_get'] = {
                    Blockly.Variables.getType(this.getFieldValue('VAR'));
     if (dataType && this.workspace.variableDeclaration) {
       this.dataType_ = dataType;
-      this.changeOutput(this.dataType_);
+      this.setOutput(true, this.dataType_);
     }
   },
   /**

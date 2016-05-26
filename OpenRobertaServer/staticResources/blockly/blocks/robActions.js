@@ -168,7 +168,7 @@ Blockly.Blocks['robActions_motorDiff_on_for'] = {
     init : function() {
         // this.setHelpUrl(Blockly.Msg.MOTORDIFF_ON_HELPURL);
         this.setColour(Blockly.CAT_ACTION_RGB);
-       var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARDS' ] ]);
+        var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARDS' ] ]);
         this.appendValueInput('POWER').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
                 'Number');
         this.appendValueInput('DISTANCE').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_DISTANCE).setCheck('Number');
@@ -301,6 +301,36 @@ Blockly.Blocks['robActions_display_clear'] = {
     }
 };
 
+Blockly.Blocks['robActions_display_matrix'] = {
+    /**
+     * Display points on the matrix.
+     * 
+     * @constructs robActions_display_matrix
+     * @this.Blockly.Block
+     * @returns immediately
+     * @memberof Block
+     */
+
+    init : function() {
+        this.setColour(Blockly.CAT_ACTION_RGB);
+        var checkBoxes = [];
+        this.appendDummyInput().appendField(Blockly.Msg.DISPLAY_SHOW + ' ' + Blockly.Msg.DISPLAY_PICTURE);
+        for (var i = 0; i < 8; i++) {
+            for (var j = 0; j < 8; j++) {
+                checkBoxes.push(new Blockly.FieldCheckbox());
+
+            }
+            this.appendDummyInput().appendField(checkBoxes[(i * 8) + 0], 'POINT' + (i * 8 + 0)).appendField(checkBoxes[(i * 8) + 1], 'POINT' + (i * 8 + 1))
+                    .appendField(checkBoxes[(i * 8) + 2], 'POINT' + (i * 8 + 2)).appendField(checkBoxes[(i * 8) + 3], 'POINT' + (i * 8 + 3)).appendField(
+                            checkBoxes[(i * 8) + 4], 'POINT' + (i * 8 + 4)).appendField(checkBoxes[(i * 8) + 5], 'POINT' + (i * 8 + 5)).appendField(
+                            checkBoxes[(i * 8) + 6], 'POINT' + (i * 8 + 6)).appendField(checkBoxes[(i * 8) + 7], 'POINT' + (i * 8 + 7));
+        }
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        // this.setTooltip(Blockly.Msg.DISPLAY_PICTURE_TOOLTIP);
+    }
+};
+
 Blockly.Blocks['robActions_play_tone'] = {
     /**
      * Play a tone.
@@ -342,7 +372,7 @@ Blockly.Blocks['robActions_play_file'] = {
     init : function() {
         // this.setHelpUrl(Blockly.Msg.PLAY_FILE_HELPURL);
         this.setColour(Blockly.CAT_ACTION_RGB);
-         //LEJOS system sounds from 0 to 4 in HAL 
+        //LEJOS system sounds from 0 to 4 in HAL 
         var file = new Blockly.FieldDropdown([ [ '1', '0' ], [ '2', '1' ], [ '3', '2' ], [ '4', '3' ], [ '5', '4' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.PLAY + ' ' + Blockly.Msg.PLAY_FILE).appendField(file, 'FILE');
         this.setPreviousStatement(true);
@@ -438,7 +468,7 @@ Blockly.Blocks['robActions_brickLight_off'] = {
     init : function() {
         // this.setHelpUrl(Blockly.Msg.BRICKLIGHT_OFF_HELP);
         this.setColour(Blockly.CAT_ACTION_RGB);
-         this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT).appendField(Blockly.Msg.OFF);
+        this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT).appendField(Blockly.Msg.OFF);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.BRICKLIGHT_OFF_TOOLTIP);

@@ -27,6 +27,7 @@
 goog.provide('Blockly.inject');
 
 goog.require('Blockly.Css');
+goog.require('Blockly.Options');
 goog.require('Blockly.WorkspaceSvg');
 goog.require('goog.dom');
 goog.require('goog.ui.Component');
@@ -35,19 +36,21 @@ goog.require('goog.userAgent');
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
- * @param {!Element|string} container Containing element or its ID.
+ * @param {!Element|string} container Containing element, or its ID,
+ *     or a CSS selector.
  * @param {Object=} opt_options Optional dictionary of options.
  * @return {!Blockly.Workspace} Newly created main workspace.
  */
 Blockly.inject = function(container, opt_options) {
   if (goog.isString(container)) {
-    container = document.getElementById(container);
+    container = document.getElementById(container) ||
+        document.querySelector(container);
   }
   // Verify that the container is in document.
   if (!goog.dom.contains(document, container)) {
     throw 'Error: container is not in current document.';
   }
-  var options = Blockly.parseOptions_(opt_options || {});
+  var options = new Blockly.Options(opt_options || {});
   var svg = Blockly.createDom_(container, options);
   var workspace = Blockly.createMainWorkspace_(svg, options);
   Blockly.init_(workspace);
@@ -214,7 +217,7 @@ Blockly.parseOptions_ = function(options) {
 /**
  * Create the SVG image.
  * @param {!Element} container Containing element.
- * @param {Object} options Dictionary of options.
+ * @param {!Blockly.Options} options Dictionary of options.
  * @return {!Element} Newly created SVG image.
  * @private
  */
@@ -328,7 +331,7 @@ Blockly.createDom_ = function(container, options) {
 /**
  * Create a main workspace and add it to the SVG.
  * @param {!Element} svg SVG element with pattern defined.
- * @param {Object} options Dictionary of options.
+ * @param {!Blockly.Options} options Dictionary of options.
  * @return {!Blockly.Workspace} Newly created main workspace.
  * @private
  */
@@ -345,7 +348,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
 
   if (!options.readOnly && !options.hasScrollbars) {
     var workspaceChanged = function() {
-      if (Blockly.dragMode_ == 0) {
+      if (Blockly.dragMode_ == Blockly.DRAG_NONE) {
         var metrics = mainWorkspace.getMetrics();
         var edgeLeft = metrics.viewLeft + metrics.absoluteLeft;
         var edgeTop = metrics.viewTop + metrics.absoluteTop;
@@ -363,26 +366,27 @@ Blockly.createMainWorkspace_ = function(svg, options) {
             var blockXY = block.getRelativeToSurfaceXY();
             var blockHW = block.getHeightWidth();
             // Bump any block that's above the top back inside.
-            var overflow = edgeTop + MARGIN - blockHW.height - blockXY.y;
-            if (overflow > 0) {
-              block.moveBy(0, overflow);
+            var overflowTop = edgeTop + MARGIN - blockHW.height - blockXY.y;
+            if (overflowTop > 0) {
+              block.moveBy(0, overflowTop);
             }
             // Bump any block that's below the bottom back inside.
-            var overflow = edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
-            if (overflow < 0) {
-              block.moveBy(0, overflow);
+            var overflowBottom =
+                edgeTop + metrics.viewHeight - MARGIN - blockXY.y;
+            if (overflowBottom < 0) {
+              block.moveBy(0, overflowBottom);
             }
             // Bump any block that's off the left back inside.
-            var overflow = MARGIN + edgeLeft -
+            var overflowLeft = MARGIN + edgeLeft -
                 blockXY.x - (options.RTL ? 0 : blockHW.width);
-            if (overflow > 0) {
-              block.moveBy(overflow, 0);
+            if (overflowLeft > 0) {
+              block.moveBy(overflowLeft, 0);
             }
             // Bump any block that's off the right back inside.
-            var overflow = edgeLeft + metrics.viewWidth - MARGIN -
+            var overflowRight = edgeLeft + metrics.viewWidth - MARGIN -
                 blockXY.x + (options.RTL ? blockHW.width : 0);
-            if (overflow < 0) {
-              block.moveBy(overflow, 0);
+            if (overflowRight < 0) {
+              block.moveBy(overflowRight, 0);
             }
           }
         }
@@ -405,6 +409,7 @@ Blockly.createMainWorkspace_ = function(svg, options) {
 Blockly.init_ = function(mainWorkspace) {
   var options = mainWorkspace.options;
   var svg = mainWorkspace.getParentSvg();
+
   // Supress the browser's context menu.
   Blockly.bindEvent_(svg, 'contextmenu', null,
       function(e) {
@@ -412,19 +417,56 @@ Blockly.init_ = function(mainWorkspace) {
           e.preventDefault();
         }
       });
-  // Bind events for scrolling the workspace.
-  // Most of these events should be bound to the SVG's surface.
-  // However, 'mouseup' has to be on the whole document so that a block dragged
-  // out of bounds and released will know that it has been released.
-  // Also, 'keydown' has to be on the whole document since the browser doesn't
-  // understand a concept of focus on the SVG image.
 
   Blockly.bindEvent_(window, 'resize', null,
-                     function() {Blockly.svgResize(mainWorkspace);});
+      function() {
+        Blockly.hideChaff(true);
+        Blockly.asyncSvgResize(mainWorkspace);
+      });
 
+  Blockly.inject.bindDocumentEvents_();
+
+  if (options.languageTree) {
+    if (mainWorkspace.toolbox_) {
+      mainWorkspace.toolbox_.init(mainWorkspace);
+    } else if (mainWorkspace.flyout_) {
+      // Build a fixed flyout with the root blocks.
+      mainWorkspace.flyout_.init(mainWorkspace);
+      mainWorkspace.flyout_.show(options.languageTree.childNodes);
+      mainWorkspace.flyout_.scrollToStart();
+      // Translate the workspace sideways to avoid the fixed flyout.
+      mainWorkspace.scrollX = mainWorkspace.flyout_.width_;
+      if (options.toolboxPosition == Blockly.TOOLBOX_AT_RIGHT) {
+        mainWorkspace.scrollX *= -1;
+      }
+      mainWorkspace.translate(mainWorkspace.scrollX, 0);
+    }
+  }
+
+  if (options.hasScrollbars) {
+    mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
+    mainWorkspace.scrollbar.resize();
+  }
+
+  // Load the sounds.
+  if (options.hasSounds) {
+    Blockly.inject.loadSounds_(options.pathToMedia, mainWorkspace);
+  }
+};
+
+/**
+ * Bind document events, but only once.  Destroying and reinjecting Blockly
+ * should not bind again.
+ * Bind events for scrolling the workspace.
+ * Most of these events should be bound to the SVG's surface.
+ * However, 'mouseup' has to be on the whole document so that a block dragged
+ * out of bounds and released will know that it has been released.
+ * Also, 'keydown' has to be on the whole document since the browser doesn't
+ * understand a concept of focus on the SVG image.
+ * @private
+ */
+Blockly.inject.bindDocumentEvents_ = function() {
   if (!Blockly.documentEventsBound_) {
-    // Only bind the window/document events once.
-    // Destroying and reinjecting Blockly should not bind again.
     Blockly.bindEvent_(document, 'keydown', null, Blockly.onKeyDown_);
     Blockly.bindEvent_(document, 'touchend', null, Blockly.longStop_);
     Blockly.bindEvent_(document, 'touchcancel', null, Blockly.longStop_);
@@ -435,63 +477,46 @@ Blockly.init_ = function(mainWorkspace) {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (goog.userAgent.IPAD) {
       Blockly.bindEvent_(window, 'orientationchange', document, function() {
-        Blockly.fireUiEvent(window, 'resize');
+        Blockly.asyncSvgResize();
       });
     }
-    Blockly.documentEventsBound_ = true;
   }
+  Blockly.documentEventsBound_ = true;
+};
 
-  if (options.languageTree) {
-    if (mainWorkspace.toolbox_) {
-      mainWorkspace.toolbox_.init(mainWorkspace);
-    } else if (mainWorkspace.flyout_) {
-      // Build a fixed flyout with the root blocks.
-      mainWorkspace.flyout_.init(mainWorkspace);
-      mainWorkspace.flyout_.show(options.languageTree.childNodes);
-      // Translate the workspace sideways to avoid the fixed flyout.
-      mainWorkspace.scrollX = mainWorkspace.flyout_.width_;
-      if (options.RTL) {
-        mainWorkspace.scrollX *= -1;
-      }
-      var translation = 'translate(' + mainWorkspace.scrollX + ',0)';
-      mainWorkspace.getCanvas().setAttribute('transform', translation);
-      mainWorkspace.getBubbleCanvas().setAttribute('transform', translation);
+/**
+ * Load sounds for the given workspace.
+ * @param {string} pathToMedia The path to the media directory.
+ * @param {!Blockly.Workspace} workspace The workspace to load sounds for.
+ * @private
+ */
+Blockly.inject.loadSounds_ = function(pathToMedia, workspace) {
+  workspace.loadAudio_(
+      [pathToMedia + 'click.mp3',
+       pathToMedia + 'click.wav',
+       pathToMedia + 'click.ogg'], 'click');
+  workspace.loadAudio_(
+      [pathToMedia + 'disconnect.wav',
+       pathToMedia + 'disconnect.mp3',
+       pathToMedia + 'disconnect.ogg'], 'disconnect');
+  workspace.loadAudio_(
+      [pathToMedia + 'delete.mp3',
+       pathToMedia + 'delete.ogg',
+       pathToMedia + 'delete.wav'], 'delete');
+
+  // Bind temporary hooks that preload the sounds.
+  var soundBinds = [];
+  var unbindSounds = function() {
+    while (soundBinds.length) {
+      Blockly.unbindEvent_(soundBinds.pop());
     }
-  }
-  if (options.hasScrollbars) {
-    mainWorkspace.scrollbar = new Blockly.ScrollbarPair(mainWorkspace);
-    mainWorkspace.scrollbar.resize();
-  }
-
-  // Load the sounds.
-  if (options.hasSounds) {
-    mainWorkspace.loadAudio_(
-        [options.pathToMedia + 'click.mp3',
-         options.pathToMedia + 'click.wav',
-         options.pathToMedia + 'click.ogg'], 'click');
-    mainWorkspace.loadAudio_(
-        [options.pathToMedia + 'disconnect.wav',
-         options.pathToMedia + 'disconnect.mp3',
-         options.pathToMedia + 'disconnect.ogg'], 'disconnect');
-    mainWorkspace.loadAudio_(
-        [options.pathToMedia + 'delete.mp3',
-         options.pathToMedia + 'delete.ogg',
-         options.pathToMedia + 'delete.wav'], 'delete');
-
-    // Bind temporary hooks that preload the sounds.
-    var soundBinds = [];
-    var unbindSounds = function() {
-      while (soundBinds.length) {
-        Blockly.unbindEvent_(soundBinds.pop());
-      }
-      mainWorkspace.preloadAudio_();
-    };
-    // Android ignores any sound not loaded as a result of a user action.
-    soundBinds.push(
-        Blockly.bindEvent_(document, 'mousemove', null, unbindSounds));
-    soundBinds.push(
-        Blockly.bindEvent_(document, 'touchstart', null, unbindSounds));
-  }
+    workspace.preloadAudio_();
+  };
+  // Android ignores any sound not loaded as a result of a user action.
+  soundBinds.push(
+      Blockly.bindEvent_(document, 'mousemove', null, unbindSounds));
+  soundBinds.push(
+      Blockly.bindEvent_(document, 'touchstart', null, unbindSounds));
 };
 
 /**

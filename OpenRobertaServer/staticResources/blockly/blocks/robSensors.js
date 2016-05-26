@@ -114,48 +114,48 @@ Blockly.Blocks['robSensors_getSample'] = {
         if (this.sensorType_ == 'ENCODER_ROTATION') {
             input.appendField(motorPort, 'MOTORPORT');
             this.appendValue_('NUM_REV', 2);
-            this.changeOutput('Number');
+            this.setOutput(true, 'Number');
         }  else if (this.sensorType_ == 'ENCODER_DEGREE') {
             input.appendField(motorPort, 'MOTORPORT');
             this.appendValue_('NUM_REV', 180);
-            this.changeOutput('Number');
+            this.setOutput(true, 'Number');
         } else if (this.sensorType_ == 'KEYS_PRESSED') {
             input.appendField(key, 'KEY');
             this.appendValue_('BOOL');
-            this.changeOutput('Boolean');
+            this.setOutput(true, 'Boolean');
         } else if (this.sensorType_ == 'TIME') {
             input.appendField(Blockly.Msg.SENSOR_MS_TIMER).appendField(sensorNum, 'SENSORNUM');
             this.appendValue_('NUM_REV', 500);
-            this.changeOutput('Number');
+            this.setOutput(true, 'Number');
         } else {
             input.appendField(sensorPort, 'SENSORPORT');
             if (this.sensorType_ == 'TOUCH') {
                 this.appendValue_('BOOL');
-                this.changeOutput('Boolean');
+                this.setOutput(true, 'Boolean');
             } else if (this.sensorType_ == 'GYRO_ANGLE' || this.sensorType_ == 'GYRO_RATE') {
                 this.appendValue_('NUM_REV', 90);
                 sensorPort.setValue('2');
-                this.changeOutput('Number');
+                this.setOutput(true, 'Number');
             } else if (this.sensorType_ == 'ULTRASONIC_DISTANCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
-                this.changeOutput('Number');
+                this.setOutput(true, 'Number');
             } else if (this.sensorType_ == 'ULTRASONIC_PRESENCE') {
                 this.appendValue_('BOOL');
                 sensorPort.setValue('4');
-                this.changeOutput('Boolean');
+                this.setOutput(true, 'Boolean');
             } else if (this.sensorType_ == 'COLOUR_COLOUR') {
                 this.appendValue_('COLOUR');
                 sensorPort.setValue('3');
-                this.changeOutput('Colour');
+                this.setOutput(true, 'Colour');
             } else if (this.sensorType_ == 'COLOUR_LIGHT' || this.sensorType_ == 'COLOUR_AMBIENTLIGHT') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('3');
-                this.changeOutput('Number');
+                this.setOutput(true, 'Number');
             } else if (this.sensorType_ == 'INFRARED_DISTANCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
-                this.changeOutput('Number');
+                this.setOutput(true, 'Number');
             }
         }
         // sensorType.setValue(this.sensorType_);
@@ -287,9 +287,9 @@ Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
     updateShape_ : function(option) {
         this.sensorMode_ = option;
         if (this.sensorMode_ == 'DISTANCE') {
-            this.changeOutput('Number');
+            this.setOutput(true, 'Number');
         } else if (this.sensorMode_ == 'PRESENCE') {
-            this.changeOutput('Boolean');
+            this.setOutput(true, 'Boolean');
         }
     }
 }
@@ -331,11 +331,11 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
     updateShape_ : function(option) {
         this.sensorMode_ = option;
         if (this.sensorMode_ == 'COLOUR') {
-            this.changeOutput('Colour');
+            this.setOutput(true, 'Colour');
         } else if (this.sensorMode_ == 'RGB') {
-            this.changeOutput('Array_Number');
+            this.setOutput(true, 'Array_Number');
         } else {
-            this.changeOutput('Number')
+            this.setOutput(true, 'Number')
         }
     }
 };
@@ -374,9 +374,9 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
     updateShape_ : function(option) {
         this.sensorMode_ = option;
         if (this.sensorMode_ == 'DISTANCE') {
-            this.changeOutput('Number');
+            this.setOutput(true, 'Number');
         } else if (this.sensorMode_ == 'SEEK') {
-            this.changeOutput('Array_Number');
+            this.setOutput(true, 'Array_Number');
         }
     }
 };

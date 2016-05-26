@@ -47,7 +47,14 @@ Blockly.Blocks['text'] = {
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
         .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
-    this.setTooltip(Blockly.Msg.TEXT_TEXT_TOOLTIP);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    // Text block is trivial.  Use tooltip of parent block if it exists.
+    this.setTooltip(function() {
+      var parent = thisBlock.getParent();
+      return (parent && parent.getInputsInline() && parent.tooltip) ||
+          Blockly.Msg.TEXT_TEXT_TOOLTIP;
+    });
   },
   /**
    * Create an image of an open or closed quote.
@@ -131,13 +138,18 @@ Blockly.Blocks['text_join'] = {
       itemBlock = itemBlock.nextConnection &&
           itemBlock.nextConnection.targetBlock();
     }
+    // Disconnect any children that don't belong.
+    for (var i = 0; i < this.itemCount_; i++) {
+      var connection = this.getInput('ADD' + i).connection.targetConnection;
+      if (connection && connections.indexOf(connection) == -1) {
+        connection.disconnect();
+      }
+    }
     this.itemCount_ = connections.length;
     this.updateShape_();
     // Reconnect any child blocks.
     for (var i = 0; i < this.itemCount_; i++) {
-      if (connections[i]) {
-        this.getInput('ADD' + i).connection.connect(connections[i]);
-      }
+      Blockly.Mutator.reconnect(connections[i], this, 'ADD' + i);
     }
   },
   /**
@@ -162,28 +174,26 @@ Blockly.Blocks['text_join'] = {
    * @this Blockly.Block
    */
   updateShape_: function() {
-    // Delete everything.
-    if (this.getInput('EMPTY')) {
+    if (this.itemCount_ && this.getInput('EMPTY')) {
       this.removeInput('EMPTY');
-    } else {
-      var i = 0;
-      while (this.getInput('ADD' + i)) {
-        this.removeInput('ADD' + i);
-        i++;
-      }
-    }
-    // Rebuild block.
-    if (this.itemCount_ == 0) {
+    } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
       this.appendDummyInput('EMPTY')
           .appendField(this.newQuote_(true))
           .appendField(this.newQuote_(false));
-    } else {
-      for (var i = 0; i < this.itemCount_; i++) {
+    }
+    // Add new inputs.
+    for (var i = 0; i < this.itemCount_; i++) {
+      if (!this.getInput('ADD' + i)) {
         var input = this.appendValueInput('ADD' + i);
         if (i == 0) {
           input.appendField(Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH);
         }
       }
+    }
+    // Remove deleted inputs.
+    while (this.getInput('ADD' + i)) {
+      this.removeInput('ADD' + i);
+      i++;
     }
   },
   newQuote_: Blockly.Blocks['text'].newQuote_
@@ -241,26 +251,6 @@ Blockly.Blocks['text_append'] = {
       return Blockly.Msg.TEXT_APPEND_TOOLTIP.replace('%1',
           thisBlock.getFieldValue('VAR'));
     });
-  },
-  /**
-   * Return all variables referenced by this block.
-   * @return {!Array.<string>} List of variable names.
-   * @this Blockly.Block
-   */
-  getVars: function() {
-    return [this.getFieldValue('VAR')];
-  },
-  /**
-   * Notification that a variable is renaming.
-   * If the name matches one of this block's variables, rename it.
-   * @param {string} oldName Previous name of variable.
-   * @param {string} newName Renamed variable.
-   * @this Blockly.Block
-   */
-  renameVar: function(oldName, newName) {
-    if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-      this.setFieldValue(newName, 'VAR');
-    }
   }
 };
 
@@ -622,11 +612,7 @@ Blockly.Blocks['text_prompt_ext'] = {
    * @this Blockly.Block
    */
   updateType_: function(newOp) {
-    if (newOp == 'NUMBER') {
-      this.outputConnection.setCheck('Number');
-    } else {
-      this.outputConnection.setCheck('String');
-    }
+    this.outputConnection.setCheck(newOp == 'NUMBER' ? 'Number' : 'String');
   },
   /**
    * Create XML to represent the output type.
@@ -658,7 +644,7 @@ Blockly.Blocks['text_prompt'] = {
     var TYPES =
         [[Blockly.Msg.TEXT_PROMPT_TYPE_TEXT, 'TEXT'],
          [Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER, 'NUMBER']];
-    // Assign 'this' to a variable for use in the closure below.
+    // Assign 'this' to a variable for use in the closures below.
     var thisBlock = this;
     this.setHelpUrl(Blockly.Msg.TEXT_PROMPT_HELPURL);
     this.setColour(Blockly.CAT_TEXT_RGB);
@@ -671,8 +657,6 @@ Blockly.Blocks['text_prompt'] = {
         .appendField(new Blockly.FieldTextInput(''), 'TEXT')
         .appendField(this.newQuote_(false));
     this.setOutput(true, 'String');
-    // Assign 'this' to a variable for use in the tooltip closure below.
-    var thisBlock = this;
     this.setTooltip(function() {
       return (thisBlock.getFieldValue('TYPE') == 'TEXT') ?
           Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT :
@@ -731,6 +715,7 @@ Blockly.Blocks['robText_join'] = {
    * @this Blockly.Block
    */
   updateShape_ : function(num) {
+    Blockly.dragMode_ = Blockly.DRAG_NONE;
     if (num == 1) {
       if (this.itemCount_ == 2) {
         this.setMutatorMinus(new Blockly.MutatorMinus(this));
@@ -742,7 +727,8 @@ Blockly.Blocks['robText_join'] = {
       this.itemCount_--;
       var target = this.getInputTargetBlock('ADD' + this.itemCount_);
       if (target) {
-        target.unplug(false, true);
+        target.unplug();
+        target.bumpNeighbours_();    
       }
       this.removeInput('ADD' + this.itemCount_);
     }
