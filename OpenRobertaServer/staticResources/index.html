@@ -27,7 +27,7 @@ limitations under the License.
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico" type="image/vnd.microsoft.icon"></link>
 <link href="/css/enjoyhint.css" rel="stylesheet">
-	<!-- enable linenumbers for all lines on highlighted source code -->
+<!-- enable linenumbers for all lines on highlighted source code -->
 <style>
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	list-style-type: decimal !important
@@ -176,17 +176,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
 				</ul>
 			</div>
-			<!-- Head-navigation-tabs -->
-			<div id="headNavigationTabs" class="navigation-row collapse navbar-collapse">
-				<ul class="nav nav-pills" id="head-navigation-tabs">
-					<li><a href="#" id="tabProgram">
-							<span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span>
-						</a></li>
-					<li><a href="#" id="tabConfiguration">
-							<span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span id="tabConfigurationName"></span>
-						</a></li>
-				</ul>
-			</div>
 		</div>
 		<!-- Roberta-Logo -->
 		<div class="logo">
@@ -217,8 +206,94 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<span id="toastText"></span>
 			</div>
 		</div>
+		<!-- Head-navigation-tabs -->
+		<div id="headNavigationTabs" class="navigation-row collapse navbar-collapse container">
+			<ul class="nav nav-tabs" id="head-navigation-tabs">
+				<li class="active"><a data-toggle="tab" id="tabProgram" href="#blockly">
+						<span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span>
+					</a></li>
+				<li><a data-toggle="tab" id="tabConfiguration" href="#bricklyDiv">
+						<span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span id="tabConfigurationName"></span>
+					</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabProgList" href="#progList">Listing of programs</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabConfList" href="#confList">Listing of configurations</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabLogList" href="#logList">Logging</a></li>
+			</ul>
+		</div>
 	</nav>
 	<!-- ################## END HEAD NAVIGATION ################## -->
+	<!-- ################## TABS ################## -->
+	<div class="tab-content container" id="main-section">
+		<div id="blockly" class="tab-pane fade in active">
+			<div id="blocklyDiv"></div>
+			<div id="simDiv">
+				<div id="uniDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
+				<div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
+				<div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
+				<div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
+				<div id="infoDiv" width="100px" height="200px" style="position: absolute; right: 0; top: 0; z-index: 1"></div>
+				<div id="simButtons">
+					<button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
+					<button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip" data-original-title=""
+						title=""></button>
+					<button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3" lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip" data-original-title=""
+						title=""></button>
+				</div>
+			</div>
+			<div id="codeDiv">
+				<div id="codeContent">
+					<div id="codePackage" class="codeActive"></div>
+					<button type="button" class="btn typcn typcn-plus" data-toggle="collapse" data-target="#codeImport">simple collapsible</button>
+					<div id="codeImport" class="collapse in codeActive"></div>
+				</div>
+				<div id="codeButtons" class="code">
+					<button id="codeBack" type="button" class="codeBack blbtn typcn typcn-arrow-left-thick" data-toggle="collapse"></button>
+					<button id="codeDownload" type="button" class="codeDownload blbtn typcn typcn-download" data-toggle="collapse"></button>
+				</div>
+			</div>
+		</div>
+		<div id="progList" class="tab-pane fade">
+			<h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
+			<table id="programNameTable" class="tableSize table table-striped table-hover">
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+			<div class="navbar navbar-fixed-bottom">
+				<input class="btn buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
+				<input class="btn buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+				<input class="btn buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
+				<input class="btn backButton" id="backProgram" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+				<input class="btn buttonRefresh" id="refreshListing" type="submit" lkey="Blockly.Msg.BUTTON_REFRESH" value="Refresh" />
+			</div>
+		</div>
+		<div id="confList" class="tab-pane fade">
+			<h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2>
+			<table id="configurationNameTable" class="tableSize table table-striped table-hover">
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+			<div class="navbar navbar-fixed-bottom">
+				<input class="btn buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
+				<input class="btn buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+				<input class="btn backButton" id="backConfiguration" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+			</div>
+		</div>
+		<div id="logList" class="tab-pane fade">
+			<h2>Logging</h2>
+			<ol id="log" class="log" reversed>
+			</ol>
+			<div class="navbar navbar-fixed-bottom">
+				<input id="clearLog" class="btn" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren"></input>
+				<input id="backLogging" class="btn backButton" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"></input>
+			</div>
+		</div>
+		<div id="bricklyDiv" class="tab-pane fade">
+		</div>
+	</div>
+	<!--  ################## END TABS ################## -->
 	<!-- ################## POPUPS ################## -->
 	<!-- Popup login -->
 	<div class="modal fade" id="login-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -697,87 +772,5 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		</div>
 	</div>
 	<!-- ################## END POPUPS ################## -->
-	<!-- ################## TABS ################## -->
-	<div id="main-section">
-		<div id="tabs">
-			<ul>
-				<li class="hidden"><a id="tabBlockly" href="#blockly">Blockly</a></li>
-				<li class="hidden"><a id="tabListing" href="#progListing">Listing of programs</a></li>
-				<li class="hidden"><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
-				<li class="hidden"><a id="tabLogging" href="#logging">Logging</a></li>
-				<li class="hidden"><a id="tabBrickly" href="#brickly">Brickly</a></li>
-			</ul>
-			<div id="blockly">
-				<div id="blocklyDiv"></div>
-				<div id="simDiv">
-					<div id="uniDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
-					<div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
-					<div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-					<div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-					<div id="infoDiv" width="100px" height="200px" style="position: absolute; right: 0; top: 0; z-index: 1"></div>
-					<div id="simButtons">
-						<button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK_TOOLTIP" rel="tooltip"
-							data-original-title="" title=""></button>
-						<button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip"
-							data-original-title="" title=""></button>
-						<button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3" lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip" data-original-title=""
-							title=""></button>
-					</div>
-				</div>
-				<div id="codeDiv">
-					<div id="codeContent">
-						<div id="codePackage" class="codeActive"></div>
-						<button type="button" class="btn typcn typcn-plus" data-toggle="collapse" data-target="#codeImport">simple collapsible</button>
-						<div id="codeImport" class="collapse in codeActive"></div>
-					</div>
-					<div id="codeButtons" class="code">
-						<button id="codeBack" type="button" class="codeBack blbtn typcn typcn-arrow-left-thick" data-toggle="collapse"></button>
-						<button id="codeDownload" type="button" class="codeDownload blbtn typcn typcn-download" data-toggle="collapse"></button>
-					</div>
-				</div>
-			</div>
-			<div id="progListing">
-				<h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
-				<table id="programNameTable" class="tableSize table table-striped table-hover">
-					<tr>
-						<td></td>
-					</tr>
-				</table>
-				<div class="navbar navbar-fixed-bottom">
-					<input class="btn buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-					<input class="btn buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-					<input class="btn buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
-					<input class="btn backButton" id="backProgram" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
-					<input class="btn buttonRefresh" id="refreshListing" type="submit" lkey="Blockly.Msg.BUTTON_REFRESH" value="Refresh" />
-				</div>
-			</div>
-			<div id="confListing">
-				<h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2>
-				<table id="configurationNameTable" class="tableSize table table-striped table-hover">
-					<tr>
-						<td></td>
-					</tr>
-				</table>
-				<div class="navbar navbar-fixed-bottom">
-					<input class="btn buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-					<input class="btn buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-					<input class="btn backButton" id="backConfiguration" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
-				</div>
-			</div>
-			<div id="logging">
-				<h2>Logging</h2>
-				<ol id="log" class="log" reversed>
-				</ol>
-				<div class="navbar navbar-fixed-bottom">
-					<input id="clearLog" class="btn" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren"></input>
-					<input id="backLogging" class="btn backButton" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"></input>
-				</div>
-			</div>
-			<div id="brickly">
-				<div id="bricklyDiv"></div>
-			</div>
-		</div>
-	</div>
-	<!--  ################## END TABS ################## -->
 </body>
 </html>

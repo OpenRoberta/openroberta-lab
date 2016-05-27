@@ -88,7 +88,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
                     Blockly.Xml.domToWorkspace(bricklyWorkspace, xml);
                     var block = bricklyWorkspace.getBlockById(2);
                     if (block) {
-                        block.moveBy(x, y);
+                        var coord = block.getRelativeToSurfaceXY()
+                        block.moveBy(x-coord.x, y-coord.y);
                     }
                     $('#menuSaveConfig').parent().addClass('disabled');
                     bricklyWorkspace.robControls.disable('saveProgram');

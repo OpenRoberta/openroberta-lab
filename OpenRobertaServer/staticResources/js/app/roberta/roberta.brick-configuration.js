@@ -50,7 +50,10 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
                     var configurationName = $configurationRow[0].children[0].textContent;
                     CONFIGURATION.loadConfigurationFromListing(configurationName, userState.accountName, function(result) {
                         if (result.rc === 'ok') {
-                            showConfiguration(result, true, configurationName);
+                            $('#tabConfiguration').one('shown.bs.tab', function() {
+                                showConfiguration(result, true, configurationName);
+                            });
+                            $('#tabConfiguration').trigger('click');
                             userState.configurationSaved = 'new';
                             $('#menuSaveConfig').parent().addClass('disabled');
                             BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');

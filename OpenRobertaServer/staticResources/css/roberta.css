@@ -189,10 +189,6 @@ body.blocklyMinimalBody  * {
 	margin: 0;
 }
 
-#headNavigationTabs {
-	margin-left: -16px;
-}
-
 .scroller {
 	margin: 0;
 	font-size: 24px;
@@ -213,7 +209,8 @@ body.blocklyMinimalBody  * {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	padding-top: 92px;
+	padding: 92px 0 0 0;
+	margin: 0;
 	z-index: 99;
 	height: 100%;
 	width: 100%;
@@ -221,16 +218,12 @@ body.blocklyMinimalBody  * {
 	overflow: hidden;
 }
 
-#tabs, #blockly, #progListing, #confListing, #logging, #brickly {
-	background: transparent;
-	border: 0;
-	margin: 0;
-	padding: 0;
+#blocklyDiv, #bricklyDiv  {
 	width: 100%;
-	height: 100%;
-	min-height: 100%;
-	display: block;
-	float: left;
+    height: 100%;
+    overflow: hidden;
+    background: url(../css/img/ev3Background.jpg) repeat;
+    background-size: 100%;
 }
 
 .log {
@@ -241,36 +234,15 @@ body.blocklyMinimalBody  * {
 	margin: 16px 68px 32px 68px;
 }
 
-#progListing, #confListing, #logging {
-	display: none;
-}
-
-#blocklyDiv, #bricklyDiv {
-	height: 100%;
-	width: 100%;
-	min-height: 100%;
-	float: left;
-	overflow: hidden;
-	background: url(../css/img/ev3Background.jpg) repeat;
-	background-size: 100%;
-}
-
-#blocklyDiv.simBackground {
-	background: url(../css/svg/simBlockBackground.svg) repeat;
-	background-size: 100%;
-}
-
 #simDiv {
-	height: 0;
 	position: relative;
 	visibility: hidden;
 }
 
 #codeDiv {
-	height: 0;
 	position: relative;
 	visibility: hidden;
-}
+} 
 
 .codeActive>pre {
 	width: 100%;
@@ -374,6 +346,14 @@ body.blocklyMinimalBody  * {
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
+
+.tab-content > .tab-pane:not(.active),
+.pill-content > .pill-pane:not(.active) {
+    display: block;
+    height: 0;
+    overflow-y: hidden;
+} 
+
 .tooltip.right>.tooltip-inner {
 	background-color: #333;
 }
@@ -392,7 +372,7 @@ body.blocklyMinimalBody  * {
 	padding-left: 16px;
 }
 
-.nav-pills>li+li {
+.nav-tabs>li+li {
 	margin: 0;
 }
 
@@ -410,22 +390,25 @@ body.blocklyMinimalBody  * {
 
 .nav#head-navigation-tabs>li>a {
 	margin: 0;
+	border: 0;
 	padding: 8px 16px 4px 16px;
 	border-radius: 2px 2px 0 0;
 	border-bottom: 4px solid #fff;
+	background-color: #fff;
 }
 
-.nav#head-navigation-tabs>li>a:hover {
+.nav#head-navigation-tabs>li>a:hover, .nav#head-navigation-tabs>li>a:active, .nav#head-navigation-tabs>li>a:focus {
 	border-bottom: 4px solid #eee;
+	background-color: #eee;
 }
 
-.nav#head-navigation-tabs>li>a.tabClicked {
-	border-bottom: 4px solid #afca04;
+.nav#head-navigation-tabs>li.active>a {
+	border-bottom: 4px solid #BACC1E;
 }
 
-.nav#head-navigation-tabs>li>a.tabClicked:hover {
+.nav#head-navigation-tabs>li.active>a:hover, .nav#head-navigation-tabs>li.active>a:active, .nav#head-navigation-tabs>li.active>a.focus {
 	background-color: #BACC1E;
-	outline: none;
+	border-bottom: 4px solid #BACC1E;
 }
 
 .navbar-default .navbar-brand {
@@ -865,14 +848,14 @@ legend {
 	margin: 0px 68px;
 }
 
-#progListing table tbody tr.selected, #confListing table tbody tr.selected,
-	#relationsListing table tbody tr.selected {
+#progList table tbody tr.selected, #confList table tbody tr.selected,
+	#relationsList table tbody tr.selected {
 	background-color: #BACC1E;
 }
 
-#progListing table thead, #progListing table thead .DataTables_sort_wrapper,
-	#confListing table thead, #confListing table thead .DataTables_sort_wrapper,
-	#relationsListing table thead, #relationsListing table thead .DataTables_sort_wrapper
+#progList table thead, #progList table thead .DataTables_sort_wrapper,
+	#confList table thead, #confList table thead .DataTables_sort_wrapper,
+	#relationsList table thead, #relationsList table thead .DataTables_sort_wrapper
 	{
 	text-transform: uppercase;
 	background-color: #898989;
@@ -881,7 +864,7 @@ legend {
 	padding-left: 10px;
 }
 
-#progListing table, #confListing table, #relationsListing table {
+#progList table, #confList table, #relationsList table {
 	margin: 0;
 	width: 100%;
 }
@@ -895,7 +878,7 @@ legend {
 	border-bottom: none !important;
 }
 
-#progListing .programs, #confListing .configurations, #relationsListing .relations
+#progList .programs, #confList .configurations, #relationsList .relations
 	{
 	border-bottom: 1px solid #eee;
 }
@@ -904,7 +887,7 @@ legend {
 	margin-bottom: 15px;
 }
 
-#progListing>h2, #confListing>h2, #logging>h2 {
+#progList>h2, #confList>h2, #logList>h2 {
 	margin-left: 68px;
 }
 
@@ -969,7 +952,7 @@ table.dataTable thead .sorting_desc {
 	.dataTables_wrapper {
 		margin: 0px 16px;
 	}
-	#progListing>h2, #confListing>h2, #relationsListing>h2, #logging>h2 {
+	#progList>h2, #confList>h2, #relationsList>h2, #logList>h2 {
 		margin-left: 16px;
 	}
 	.navbar-fixed-bottom {
