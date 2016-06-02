@@ -372,26 +372,25 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        if ( binary.getOp() == Op.EQ || binary.getOp() == Op.NEQ ) {
-            if ( isStringExpr(binary.getLeft()) && isStringExpr(binary.getRight()) ) {
-                if ( binary.getOp() == Op.NEQ ) {
-                    this.sb.append("!");
-                }
-                generateSubExpr(this.sb, false, binary.getLeft(), binary);
-                this.sb.append(".equals(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                return null;
-            }
+        Op op = binary.getOp();
+        if ( isEqualityOpOnStrings(binary) ) {
+            generateCodeForStringEqualityOp(binary);
+            return null;
         }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-        if ( binary.getOp() == Op.TEXT_APPEND ) {
-            this.sb.append("String.valueOf(");
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
-            this.sb.append(")");
-        } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        this.sb.append(whitespace() + op.getOpSymbol() + whitespace());
+        switch ( op ) {
+            case TEXT_APPEND:
+                generateCodeToStringCastOnExpr(binary);
+                break;
+            case DIVIDE:
+                this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                break;
         }
         return null;
     }
@@ -1469,6 +1468,28 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("+=" + whitespace());
         expressions.get().get(3).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
+    }
+
+    private boolean isEqualityOpOnStrings(Binary<Void> binary) {
+        boolean isLeftAndRightString = isStringExpr(binary.getLeft()) && isStringExpr(binary.getRight());
+        boolean isEqualityOp = binary.getOp() == Op.EQ || binary.getOp() == Op.NEQ;
+        return isEqualityOp && isLeftAndRightString;
+    }
+
+    private void generateCodeToStringCastOnExpr(Binary<Void> binary) {
+        this.sb.append("String.valueOf(");
+        generateSubExpr(this.sb, false, binary.getRight(), binary);
+        this.sb.append(")");
+    }
+
+    private void generateCodeForStringEqualityOp(Binary<Void> binary) {
+        if ( binary.getOp() == Op.NEQ ) {
+            this.sb.append("!");
+        }
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(".equals(");
+        generateSubExpr(this.sb, false, binary.getRight(), binary);
+        this.sb.append(")");
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {

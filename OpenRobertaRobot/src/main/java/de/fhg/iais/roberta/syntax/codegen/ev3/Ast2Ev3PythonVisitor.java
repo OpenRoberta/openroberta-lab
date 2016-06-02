@@ -350,14 +350,26 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 break;
         }
         this.sb.append(' ').append(sym).append(' ');
-        if ( binary.getOp() == Binary.Op.TEXT_APPEND ) {
-            this.sb.append("str(");
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
-            this.sb.append(")");
-        } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        }
+        generateCodeRightExpression(binary, op);
         return null;
+    }
+
+    private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
+        switch ( op ) {
+            case TEXT_APPEND:
+                this.sb.append("str(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            case DIVIDE:
+                this.sb.append("float(");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                break;
+        }
     }
 
     @Override
