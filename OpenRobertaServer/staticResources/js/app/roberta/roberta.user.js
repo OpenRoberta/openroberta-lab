@@ -63,13 +63,14 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
      * Update User Password
      */
     function updateUserPasswordOnServer() {
-        restPasswordLink = $("#passOld").val()
+        restPasswordLink = $("#resetPassLink").val()
         $formUserPasswordChange.validate();
         if ($formUserPasswordChange.valid()) {
             if (restPasswordLink) {
                 USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
                     if (result.rc === "ok") {
                         $("#change-user-password").modal('hide');
+                        $("#resetPassLink").val(undefined);
                     }
                     MSG.displayInformation(result, "", result.message);
                 });

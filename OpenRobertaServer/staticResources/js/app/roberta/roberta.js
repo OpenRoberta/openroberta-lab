@@ -263,7 +263,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
                 var target = document.location.hash.split("&");
 
                 if (target[0] === "#forgotPassword") {
-                    $('#passOld').val(target[1]);
+                    $('#resetPassLink').val(target[1]);
                     $('#show-startup-message').modal('hide');
                     ROBERTA_USER.showResetPassword();
                 }
