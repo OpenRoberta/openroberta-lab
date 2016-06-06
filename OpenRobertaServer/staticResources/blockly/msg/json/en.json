@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-05-26 10:41:40.297919",
+		"lastupdated": "2016-06-03 10:57:16.300348",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -706,7 +706,7 @@
 	"BUTTON_DO_SHARE": "Share",
 	"BUTTON_REFRESH": "Refresh",
 	"BUTTON_EMPTY_LIST": "Empty list",
-	"MESSAGE_PASSWORD_ERROR": "Something went wrong while you filled in the two passwords.",
+	"MESSAGE_PASSWORD_ERROR": "Password does not match the confirm password.",
 	"MESSAGE_NOT_AVAILABLE": "Not available.",
 	"MESSAGE_INVALID_NAME": "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers.",
 	"MESSAGE_EDIT_START": "Your program $ will run in a moment!",
@@ -766,7 +766,7 @@
 	"ORA_PROGRAM_DELETE_ERROR": "An error error has occurred while deleding the configuration. Please try it again!",
 	"ORA_PROGRAM_IMPORT_ERROR": "This program is not a valid NEPO program and cannot be uploaded!",
 	"ORA_USER_GET_ONE_SUCCESS": "Login successfull",
-	"ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG": "An error occurred while logging in.",
+	"ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG": "You have entered wrong user name or password. Please try again!",
 	"ORA_USER_CREATE_SUCCESS": "The user was successfully created",
 	"ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB": "The given user name already exists in the database.",
 	"ORA_USER_DELETE_SUCCESS": "The user was successfully deleted",
