@@ -211,7 +211,7 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
                 },
                 registerUserName : "required",
                 registerUserEmail : {
-                    required : true,
+                    required : false,
                     email : true
                 },
             },
