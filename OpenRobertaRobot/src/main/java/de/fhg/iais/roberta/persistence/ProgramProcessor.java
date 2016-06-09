@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -77,22 +79,29 @@ public class ProgramProcessor extends AbstractProcessor {
         Robot robot = robotDao.get(robotId);
         // First we obtain all programs owned by the user
         List<Program> programs = programDao.loadAll(owner, robot);
+
         JSONArray programInfos = new JSONArray();
         for ( Program program : programs ) {
             JSONArray programInfo = new JSONArray();
             programInfo.put(program.getName());
             programInfo.put(program.getOwner().getAccount());
             // programInfo.put(program.getNumberOfBlocks());
-
             List<AccessRight> accessRights = accessRightDao.loadAccessRightsByProgram(program);
-            boolean sharedWithUser = true;
-            if ( accessRights.isEmpty() ) {
-                sharedWithUser = false;
+            JSONObject sharedWith = new JSONObject();
+            try {
+                if ( !accessRights.isEmpty() ) {
+                    JSONArray sharedWithArray = new JSONArray();
+                    for ( AccessRight accessRight : accessRights ) {
+                        JSONObject sharedWithUser = new JSONObject();
+                        sharedWithUser.put(accessRight.getUser().getAccount(), accessRight.getRelation().toString());
+                        sharedWithArray.put(sharedWithUser);
+                    }
+                    sharedWith.put("sharedWith", sharedWithArray);
+                }
+            } catch ( JSONException e ) {
             }
-
-            programInfo.put(sharedWithUser);
+            programInfo.put(sharedWith);
             programInfo.put(program.getCreated().getTime());
-            programInfo.put(program.getLastChanged().getTime());
             programInfo.put(program.getLastChanged().getTime());
             programInfos.put(programInfo);
         }
@@ -103,9 +112,13 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfo2.put(accessRight.getProgram().getName());
             programInfo2.put(accessRight.getProgram().getOwner().getAccount());
             //            programInfo2.put(userProgram.getProgram().getNumberOfBlocks());
-            programInfo2.put(accessRight.getRelation().toString());
+            JSONObject sharedFrom = new JSONObject();
+            try {
+                sharedFrom.put("sharedFrom", accessRight.getRelation().toString());
+            } catch ( JSONException e ) {
+            }
+            programInfo2.put(sharedFrom);
             programInfo2.put(accessRight.getProgram().getCreated().getTime());
-            programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
             programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
             programInfos.put(programInfo2);
         }

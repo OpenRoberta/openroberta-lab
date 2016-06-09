@@ -127,4 +127,5 @@ define([ 'exports', 'message', 'log', 'util', 'roberta.user-state', 'roberta.pro
                     $("#show-relations").modal('show');
                 }
             }
+            exports.showRelations = showRelations;
         });

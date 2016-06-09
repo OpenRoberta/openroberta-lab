@@ -525,7 +525,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             $("#deleteFromListing").show();
             $("#shareFromListing").show();
             $("#refreshListing").show();
-            PROGRAM.refreshList(ROBERTA_PROGRAM.showPrograms);
+            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
         } else {
             $("#deleteFromListing").hide();
             $("#shareFromListing").hide();

@@ -196,6 +196,23 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
         $("#single-modal").modal('show');
     }
     exports.showSingleModal = showSingleModal;
+    
+     /**
+     * Helper to show the information on top of the share modal.
+     * 
+     */
+    function showMsgOnTop(msg) {
+
+        $('#show-message').find('button').removeAttr("data-dismiss");
+        $('#show-message').find('button').one('click', function(e) {
+            $('#show-message').modal("hide");
+            $('#show-message').find('button').attr("data-dismiss", "modal");
+        });
+        MSG.displayInformation({
+            rc : "not ok"
+        }, "", msg);
+    }
+    exports.showMsgOnTop = showMsgOnTop;
 
     /**
      * Handle result of server call

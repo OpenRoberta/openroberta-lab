@@ -1,21 +1,21 @@
 @charset "UTF-8";
 
 *:hover, *:active, *:visited, *:focus, a:focus {
-	outline: 0;
-	outline: none;
+    outline: 0;
+    outline: none;
 }
 
 ul, ol {
-	margin: 0;
+    margin: 0;
 }
 
 html, body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
-	width: 100%;
-	font-family: 'Roboto', sans-serif;
-	-webkit-transform: translate3d(0px, 0px, 0px);
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    -webkit-transform: translate3d(0px, 0px, 0px);
 }
 
 .pace {
@@ -51,7 +51,7 @@ html, body {
 }
 
 @-webkit-keyframes pace-theme-center-circle-spin {
-	from { -webkit-transform: perspective( 12rem ) rotateY( 0deg ); }
+    from { -webkit-transform: perspective( 12rem ) rotateY( 0deg ); }
     to { -webkit-transform: perspective( 12rem ) rotateY( 360deg ); }
 }
 
@@ -74,6 +74,7 @@ html, body {
   0% { transform: perspective( 12rem ) rotateY( 0deg ); }
   100% { transform: perspective( 12rem ) rotateY( 360deg ); }
 }
+
 body.blocklyMinimalBody  * {
 	opacity: 1 !important;
 	overflow: hidden;
@@ -218,12 +219,12 @@ body.blocklyMinimalBody  * {
 	overflow: hidden;
 }
 
-#blocklyDiv, #bricklyDiv  {
+#blocklyDiv, #bricklyDiv {
 	width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: url(../css/img/ev3Background.jpg) repeat;
-    background-size: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: url(../css/img/ev3Background.jpg) repeat;
+	background-size: 100%;
 }
 
 .log {
@@ -242,7 +243,7 @@ body.blocklyMinimalBody  * {
 #codeDiv {
 	position: relative;
 	visibility: hidden;
-} 
+}
 
 .codeActive>pre {
 	width: 100%;
@@ -301,20 +302,26 @@ body.blocklyMinimalBody  * {
 	color: #bbb;
 }
 
-@-webkit-keyframes blinker { 
-	from { color:#afca04;	
-    } to {
-	color: #e2001a;
-    }
+@
+-webkit-keyframes blinker {from { color:#afca04;
+	
 }
 
-@keyframes  blinker {
-	from { color:#afca04;
-    } to {
+to {
 	color: #e2001a;
-    }
 }
 
+}
+@
+keyframes  blinker {from { color:#afca04;
+	
+}
+
+to {
+	color: #e2001a;
+}
+
+}
 .busy {
 	-webkit-animation-name: blinker;
 	-webkit-animation-iteration-count: infinite;
@@ -346,14 +353,45 @@ body.blocklyMinimalBody  * {
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
+.tab-content
+>
+.tab-pane
+:not
+ 
+(
+.active
+ 
+),
+.pill-content
+>
+.pill-pane
+:not
+ 
+(
+.active
 
-.tab-content > .tab-pane:not(.active),
-.pill-content > .pill-pane:not(.active) {
-    display: block;
-    height: 0;
-    overflow-y: hidden;
-} 
+	
+)
+{
+display
+:
+ 
+block
+;
 
+	
+height
+:
+ 
+0;
+overflow-y
+:
+ 
+hidden
+;
+
+
+}
 .tooltip.right>.tooltip-inner {
 	background-color: #333;
 }
@@ -397,7 +435,8 @@ body.blocklyMinimalBody  * {
 	background-color: #fff;
 }
 
-.nav#head-navigation-tabs>li>a:hover, .nav#head-navigation-tabs>li>a:active, .nav#head-navigation-tabs>li>a:focus {
+.nav#head-navigation-tabs>li>a:hover, .nav#head-navigation-tabs>li>a:active,
+	.nav#head-navigation-tabs>li>a:focus {
 	border-bottom: 4px solid #eee;
 	background-color: #eee;
 }
@@ -406,7 +445,8 @@ body.blocklyMinimalBody  * {
 	border-bottom: 4px solid #BACC1E;
 }
 
-.nav#head-navigation-tabs>li.active>a:hover, .nav#head-navigation-tabs>li.active>a:active, .nav#head-navigation-tabs>li.active>a.focus {
+.nav#head-navigation-tabs>li.active>a:hover, .nav#head-navigation-tabs>li.active>a:active,
+	.nav#head-navigation-tabs>li.active>a.focus {
 	background-color: #BACC1E;
 	border-bottom: 4px solid #BACC1E;
 }
@@ -421,10 +461,35 @@ body.blocklyMinimalBody  * {
 	padding: 12px;
 	margin: 4px 4px 4px 16px;
 }
-.navbar-default .navbar-toggle:not(:first-child) {
-    margin: 4px 4px 4px 4px;
-}
 
+.navbar-default
+ 
+.navbar-toggle
+:not
+ 
+(
+:first-child
+ 
+)
+{
+margin
+:
+ 
+4
+px
+ 
+4
+px
+ 
+4
+px
+ 
+4
+px
+;
+
+
+}
 .navbar-default {
 	background-color: #fff;
 }
@@ -436,13 +501,11 @@ body.blocklyMinimalBody  * {
 	overflow: visible;
 }
 
-.navbar-default .navbar-nav>li>a:hover
-	{
+.navbar-default .navbar-nav>li>a:hover {
 	background-color: #BACC1E;
 }
 
-.navbar-default .navbar-toggle:hover
-	{
+.navbar-default .navbar-toggle:hover {
 	background-color: #BACC1E;
 }
 
@@ -469,7 +532,7 @@ body.blocklyMinimalBody  * {
 }
 
 .collapse.in>.nav li.disabled a {
-    color: #bbb;
+	color: #bbb;
 }
 
 .dropdown-menu {
@@ -486,7 +549,8 @@ body.blocklyMinimalBody  * {
 	padding: 6px 12px;
 }
 
-.dropdown-menu>li:not(.disabled)>a:hover, .dropdown-menu>li:not(.disabled)>a:focus {
+.dropdown-menu>li:not (.disabled )>a:hover, .dropdown-menu>li:not (.disabled
+	 )>a:focus {
 	background-color: #BACC1E !important;
 }
 
@@ -529,15 +593,15 @@ body.blocklyMinimalBody  * {
 }
 
 .connector {
-    margin-top: 19px;
-    position: absolute;
-    right: 5%;
-    z-index: 900;
-    fill:#BACC1E;
+	margin-top: 19px;
+	position: absolute;
+	right: 5%;
+	z-index: 900;
+	fill: #BACC1E;
 }
 
-.border-dotted {	
-    border-right: 1px dashed #afca04;
+.border-dotted {
+	border-right: 1px dashed #afca04;
 }
 
 .popupTitel {
@@ -545,7 +609,7 @@ body.blocklyMinimalBody  * {
 	margin-bottom: 10px;
 	text-align: center;
 }
- 
+
 .popup-checkbox {
 	color: #bbb;
 	font-size: 14px;
@@ -577,9 +641,9 @@ body.blocklyMinimalBody  * {
 }
 
 .bigNumber {
-    color: #8fa402;
-    font-size: large;
-    font-weight: bold;
+	color: #8fa402;
+	font-size: large;
+	font-weight: bold;
 }
 
 .simRobotModal .modal-header {
@@ -663,6 +727,60 @@ body.blocklyMinimalBody  * {
 	box-shadow: none;
 	cursor: pointer;
 	box-shadow: none;
+}
+
+.fixed-table-toolbar .btn {
+	width: 48px;
+	height: 48px;
+	margin-right: 4px;
+	margin-left: 0;
+	background-color: #BACC1E;
+	color: #fff;
+	font-size: 24px;
+	border: none;
+	border-radius: 2px;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	cursor: pointer;
+	box-shadow: none;
+}
+
+.fixed-table-toolbar .btn:hover {
+	background-color: #C7D92B;
+}
+
+.btn-group.pull-right>.btn:last-child {
+	margin-right: 0px;
+}
+
+table .typcn-flow-merge:before, table .typcn-chevron-left:before, table .typcn-chevron-right:before
+	{
+	display: inline-block;
+	transform: rotate(-90deg);
+}
+
+table [data-toggle="collapse"]:after {
+	font-family: 'typicons';
+	content: "\e60a";
+	float: right;
+	color: #333;
+	-webkit-transform: otate(-90deg);
+	-moz-transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-o-transform: rotate(-90deg);
+	transform: rotate(-90deg);
+}
+
+table [data-toggle="collapse"].collapsed:after {
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+
+.modal-body>.bootstrap-table {
+	margin: 0;
 }
 
 .blbtn {
@@ -766,6 +884,10 @@ ul.icon li.arrow-right-thick:before {
 	margin-right: 0;
 }
 
+.bootstrap-table .typcn:before {
+	margin-right: 0;
+}
+
 .head-navi-icons.typcn:before {
 	margin: 0;
 	font-size: 24px;
@@ -844,6 +966,40 @@ legend {
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
+.bootstrap-table {
+	margin: 0px 16px 0px 16px;
+	color: #333;
+}
+
+.bootstrap-table a {
+	color: #333;
+	margin-right: 4px;
+	margin-left: 4px;
+}
+
+.bootstrap-table .extend:a {
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+.bootstrap-table a.disabled {
+	color: #bbb;
+	pointer-events: none;
+}
+
+td.bs-checkbox {
+	padding: 14px 8px 0px 8px !important;
+}
+
+.bootstrap-table a:hover, .bootstrap-table a:focus {
+	color: #000;
+	text-decoration: none;
+}
+
+.bootstrap-table a>span {
+	padding: 0;
+}
+
 .dataTables_wrapper {
 	margin: 0px 68px;
 }
@@ -853,9 +1009,39 @@ legend {
 	background-color: #BACC1E;
 }
 
-#progList table thead, #progList table thead .DataTables_sort_wrapper,
-	#confList table thead, #confList table thead .DataTables_sort_wrapper,
-	#relationsList table thead, #relationsList table thead .DataTables_sort_wrapper
+#progList .fixed-table-container tbody .selected td {
+	background-color: #BACC1E;
+}
+
+#progList table tbody tr:hover, #confList table tbody tr:hover,
+	#relationsList table tbody tr:hover {
+	background-color: #BACC1E;
+}
+
+#progList
+ 
+.fixed-table-container
+ 
+tbody
+ 
+td
+:hover
+:not
+ 
+(
+a
+.showRelations
+ 
+){
+background-color
+:
+ 
+#BACC1E
+;
+
+
+}
+#progList table thead, #confList table thead, #show-relations table thead
 	{
 	text-transform: uppercase;
 	background-color: #898989;
@@ -864,9 +1050,13 @@ legend {
 	padding-left: 10px;
 }
 
-#progList table, #confList table, #relationsList table {
+#progList table, #confList table, #show-relations table {
 	margin: 0;
 	width: 100%;
+}
+
+.updatedRow {
+	color: #BACC1E;
 }
 
 .table>thead>tr>th, .table>tbody>tr>th, .table>thead>tr>td, .table>tbody>tr>td
@@ -968,9 +1158,10 @@ table.dataTable thead .sorting_desc {
 		top: 60px;
 	}
 }
+
 @media only screen and (max-width: 992px) {
 	.border-dotted {
-	    border-right: 0;
+		border-right: 0;
 	}
 }
 

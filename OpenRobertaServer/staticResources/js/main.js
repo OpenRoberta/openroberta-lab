@@ -8,6 +8,7 @@ require.config({
         'jquery-validate' : 'jquery/jquery.validate.min',
         'jquery-cookie' : 'jquery/jquery.cookie',
         'bootstrap' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
+        'bootstrap-table' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
         'blocks' : '../../blockly/blocks_compressed',
         'blocks-msg' : '../../blockly/msg/js/en',
         'blockly' : '../../blockly/blockly_compressed',
@@ -26,6 +27,12 @@ require.config({
         'roberta.language' : '../app/roberta/roberta.language',
         'roberta.brick-configuration' : '../app/roberta/roberta.brick-configuration',
         'roberta.tour' : '../app/roberta/roberta.tour',
+        
+        'progDelete.controller' : '../app/roberta/controller/progDelete.controller',
+        'progShare.controller' : '../app/roberta/controller/progShare.controller',
+       // 'progShare.controller' : '../app/roberta/controller/progDelete.controller',
+        'progList.controller' : '../app/roberta/controller/progList.controller',
+        'progList.model' : '../app/roberta/models/progList.model',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.simulation' : '../app/simulation/simulationLogic/simulation',

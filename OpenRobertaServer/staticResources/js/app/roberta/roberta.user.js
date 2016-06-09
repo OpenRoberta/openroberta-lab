@@ -562,9 +562,12 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
      * @param {name}
      *            Name to be set
      */
-    function setProgram(name, opt_owner) {
-        if (name) {
-            userState.program = name;
+    function setProgram(result, opt_owner) {
+        if (result) {
+            userState.program = result.name;
+            userState.programSaved = result.programSaved;
+            userState.programShared = result.programShared;
+            userState.programTimestamp = result.lastChanged;
             if (opt_owner) {
                 name += ' (<span class="typcn typcn-user progName"></span>' + opt_owner + ')';
             }
