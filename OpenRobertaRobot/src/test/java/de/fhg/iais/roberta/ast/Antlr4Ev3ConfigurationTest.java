@@ -33,16 +33,17 @@ import de.fhg.iais.roberta.util.Option;
 
 public class Antlr4Ev3ConfigurationTest {
     private static final boolean DO_ASSERT = true;
-    private static final boolean DO_PRINT = true;
+    private static final boolean DO_PRINT = false;
 
     @Test
     public void testParsing() throws Exception {
         String actual =
-            expr2String("robot ev3 Craesy-PID-2014 {"
-                + "size { wheel diameter 5 cm; track width 2.5 cm; } "
-                + "sensor port { 1: touch; } "
-                + "actor port { B: middle motor, regulated, forward; }"
-                + " }");
+            expr2String(
+                "robot ev3 Craesy-PID-2014 {"
+                    + "size { wheel diameter 5 cm; track width 2.5 cm; } "
+                    + "sensor port { 1: touch; } "
+                    + "actor port { B: middle motor, regulated, forward; }"
+                    + " }");
         String expected = "" //
             + "(conf robot ev3 Craesy-PID-2014 { "
             + "(sizes size { wheel diameter 5 cm ; track width 2.5 cm ; }) "
@@ -82,7 +83,7 @@ public class Antlr4Ev3ConfigurationTest {
         expected.setWheelDiameter(5.0).setTrackWidth(2.5);
         Ev3Configuration actual =
             Ev3ConfigurationParseTree2Ev3ConfigurationVisitor
-            .startWalkForVisiting("robot ev3 Craesy-PID-2014 { size {wheel diameter 5 cm;track width 2.5 cm;} }")
+                .startWalkForVisiting("robot ev3 Craesy-PID-2014 { size {wheel diameter 5 cm;track width 2.5 cm;} }")
                 .getVal();
         assertEquals(expected.build(), actual);
     }
@@ -111,9 +112,10 @@ public class Antlr4Ev3ConfigurationTest {
         expectedBuilder.addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_IR_SENSOR));
         Ev3Configuration expected = expectedBuilder.build();
 
-        assertAllEquals("Craesy-PID-2014", expected, "robot ev3 Craesy-PID-2014 { "
-            + "size { wheel diameter 5 cm; track width 2.5 cm; } "
-            + "sensor port { 1: touch; 4: infrared } }");
+        assertAllEquals(
+            "Craesy-PID-2014",
+            expected,
+            "robot ev3 Craesy-PID-2014 { " + "size { wheel diameter 5 cm; track width 2.5 cm; } " + "sensor port { 1: touch; 4: infrared } }");
     }
 
     @Test
@@ -123,12 +125,15 @@ public class Antlr4Ev3ConfigurationTest {
         expectedBuilder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE));
         Ev3Configuration expected = expectedBuilder.build();
 
-        assertAllEquals("Craesy-PID-2014", expected, "robot ev3 Craesy-PID-2014 { size {"
-            + "wheel diameter 5 cm;\n"
-            + "track width 2.5 cm;\n}\n"
-            + "actor port { A:\n"
-            + "middle motor, regulated, forward;\n"
-            + "}}");
+        assertAllEquals(
+            "Craesy-PID-2014",
+            expected,
+            "robot ev3 Craesy-PID-2014 { size {"
+                + "wheel diameter 5 cm;\n"
+                + "track width 2.5 cm;\n}\n"
+                + "actor port { A:\n"
+                + "middle motor, regulated, forward;\n"
+                + "}}");
     }
 
     @Test
@@ -140,13 +145,16 @@ public class Antlr4Ev3ConfigurationTest {
         expectedBuilder.addActor(ActorPort.D, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.BACKWARD, MotorSide.RIGHT));
         Ev3Configuration expected = expectedBuilder.build();
 
-        assertAllEquals("Craesy-PID-2015", expected, "robot ev3 Craesy-PID-2015 {"
-            + "size { wheel diameter 5 cm; track width 2.5 cm; } "
-            + "actor port {"
-            + "A: middle motor, regulated, forward;\n"
-            + "C: large motor, unregulated, backward, left;\n"
-            + "D: large motor, unregulated, backward, right;\n"
-            + "} }");
+        assertAllEquals(
+            "Craesy-PID-2015",
+            expected,
+            "robot ev3 Craesy-PID-2015 {"
+                + "size { wheel diameter 5 cm; track width 2.5 cm; } "
+                + "actor port {"
+                + "A: middle motor, regulated, forward;\n"
+                + "C: large motor, unregulated, backward, left;\n"
+                + "D: large motor, unregulated, backward, right;\n"
+                + "} }");
     }
 
     @Test
@@ -161,12 +169,15 @@ public class Antlr4Ev3ConfigurationTest {
             .addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT));
         Ev3Configuration expected = expectedBuilder.build();
 
-        assertAllEquals("EV3basis", expected, "robot ev3 EV3basis {\n"
-            + "size { wheel diameter 5.6 cm; track width 13.5 cm; }\n"
-            + "sensor port { 1: touch; 4: ultrasonic; }\n"
-            + "actor port { B: large motor, regulated, forward, right;\n"
-            + "             C: large motor, regulated, forward, left;"
-            + "}}");
+        assertAllEquals(
+            "EV3basis",
+            expected,
+            "robot ev3 EV3basis {\n"
+                + "size { wheel diameter 5.6 cm; track width 13.5 cm; }\n"
+                + "sensor port { 1: touch; 4: ultrasonic; }\n"
+                + "actor port { B: large motor, regulated, forward, right;\n"
+                + "             C: large motor, regulated, forward, left;"
+                + "}}");
     }
 
     @Test

@@ -10,7 +10,7 @@ public class BluetoothTest {
     @Test
     public void connection() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=97, y=7], MainTask [\n"
+            "BlockAST [project=[[Location [x=113, y=163], MainTask [\n"
                 + "exprStmt VarDeclaration [CONNECTION, variablenName, ActionExpr [BluetoothConnectAction [StringConst [101010]]], false, true]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BluetoothConnection.xml"));

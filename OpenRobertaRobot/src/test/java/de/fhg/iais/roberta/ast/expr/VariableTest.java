@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast.expr;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.expr.Assoc;
@@ -38,9 +37,16 @@ public class VariableTest {
         Assert.assertEquals(Assoc.NONE, var.getAssoc());
     }
 
-    @Ignore
+    @Test
     public void variableSet4() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-23, y=-797], Var [item]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=1, y=7], MainTask [\n"
+                + "exprStmt VarDeclaration [NUMBER, Element2, NumConst [0], true, true]\n"
+                + "exprStmt VarDeclaration [STRING, Element3, StringConst [], true, true]\n"
+                + "exprStmt VarDeclaration [BOOLEAN, Element4, BoolConst [true], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_NUMBER, Element5, ListCreate [NUMBER, NumConst [0], NumConst [0], NumConst [0]], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_STRING, Element6, ListCreate [STRING, StringConst [], StringConst [], StringConst []], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_BOOLEAN, Element, ListCreate [BOOLEAN, BoolConst [true], BoolConst [true], BoolConst [true]], false, true]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/variables/variable_set4.xml"));
     }
 
