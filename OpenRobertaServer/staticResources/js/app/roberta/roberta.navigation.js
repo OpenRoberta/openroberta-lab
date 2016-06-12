@@ -530,7 +530,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             $("#deleteFromListing").hide();
             $("#shareFromListing").hide();
             $("#refreshListing").hide();
-            PROGRAM.refreshExamplesList(ROBERTA_PROGRAM.showPrograms);
+            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
         }
     }
     exports.beforeActivateProgList = beforeActivateProgList;

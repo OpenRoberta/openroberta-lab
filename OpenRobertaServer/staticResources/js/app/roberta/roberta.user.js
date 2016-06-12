@@ -568,8 +568,13 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             userState.programSaved = result.programSaved;
             userState.programShared = result.programShared;
             userState.programTimestamp = result.lastChanged;
+            var name = result.name;
             if (opt_owner) {
-                name += ' (<span class="typcn typcn-user progName"></span>' + opt_owner + ')';
+                if (userState.programShared == 'WRITE') {
+                    name += ' (<span class="typcn typcn-pencil progName"></span>' + opt_owner + ')';
+                } else {
+                    name += ' (<span class="typcn typcn-eye progName"></span>' + opt_owner + ')';
+                }
             }
             $('#tabProgramName').html(name);
         }

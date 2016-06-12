@@ -86,7 +86,11 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
         });
 
         $('.bootstrap-table').find('button[name="refresh"]').onWrap('click', function() {
-            PROGLIST_MODEL.loadProgList(update);
+            if ($('#tabProgList').data('type') === 'userProgram') {
+                PROGLIST_MODEL.loadProgList(update);
+            } else {
+                PROGLIST_MODEL.loadExampleList(update);
+            }
             return false;
         }, "refresh program list clicked");
 
@@ -151,16 +155,26 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
             return false;
         }, "delete programs");
 
-        $('#shareSome').onWrap('click', function() {
-            alert('shareSome');
-            return false;
-        }, "share programs");
+        $('#programNameTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
+            $('#programNameTable').bootstrapTable('resetWidth');
+        });
 
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
                 $('#programNameTable').bootstrapTable({});
                 $('#programNameTable').bootstrapTable("load", result.programNames);
+                if ($('#tabProgList').data('type') === 'userProgram') {
+                    $('#programNameTable').bootstrapTable("showColumn", '2');
+                    $('#programNameTable').bootstrapTable("showColumn", '3');
+                    $('#programNameTable').bootstrapTable("showColumn", '5');
+                    $('#deleteSome').show();
+                } else {
+                    $('#programNameTable').bootstrapTable("hideColumn", '2');
+                    $('#programNameTable').bootstrapTable("hideColumn", '3');
+                    $('#programNameTable').bootstrapTable("hideColumn", '5');
+                    $('#deleteSome').hide();
+                }
             }
         }
     }
@@ -256,11 +270,14 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
     }
 
     var formatDeleteShareLoad = function(value, row, index) {
-        var result = '<a href="#" class="delete" title="Delete program"><span class="typcn typcn-delete"></span></a>';
-        if (row[2].sharedFrom) {
-            result += '<a href="#" class="share disabled" title="Share program"><span class="typcn typcn-flow-merge"></span></a>';
-        } else {
-            result += '<a href="#" class="share" title="Share program"><span class="typcn typcn-flow-merge"></span></a>';
+        var result = '';
+        if ($('#tabProgList').data('type') === 'userProgram') {
+            result += '<a href="#" class="delete" title="Delete program"><span class="typcn typcn-delete"></span></a>';
+            if (row[2].sharedFrom) {
+                result += '<a href="#" class="share disabled" title="Share program"><span class="typcn typcn-flow-merge"></span></a>';
+            } else {
+                result += '<a href="#" class="share" title="Share program"><span class="typcn typcn-flow-merge"></span></a>';
+            }
         }
         result += '<a href="#" class="load "  title="Load program"><span class="typcn typcn-document"></span></a>';
         return result;

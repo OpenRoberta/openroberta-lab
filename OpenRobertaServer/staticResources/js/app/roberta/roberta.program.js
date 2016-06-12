@@ -16,7 +16,7 @@ define(
                     var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
                     var xmlText = Blockly.Xml.domToText(xml);
                     $('.modal').modal('hide'); // close all opened popups
-                    PROGRAM.saveProgramToServer(userState.program, userState.programShared, userState.programTimestamp, xmlText, function(result) {
+                    PROGRAM.saveProgramToServer(userState.program, userState.programShared?true:false, userState.programTimestamp, xmlText, function(result) {
                         if (result.rc === 'ok') {
                             $('#menuSaveProg').parent().addClass('disabled');
                             blocklyWorkspace.robControls.disable('saveProgram');
@@ -88,20 +88,18 @@ define(
                 LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
                 PROGRAM.loadProgramFromListing(program[0], program[1], function(result) {
                     if (result.rc === 'ok') {
-                        userState.programShared = false;
-                        $('#menuSaveProg').parent().addClass('disabled');
-                        blocklyWorkspace.robControls.disable('saveProgram');
-                        userState.programSaved = 'new';
-                        if (program[2] === 'sharedFrom') {
-                            var right = program[2].sharedFrom;
-                            userState.programShared = right;
-                        }
+                        result.programShared = false;
                         var alien = program[1] === userState.accountName ? null : program[1];
-                        $('#tabProgram').one('shown.bs.tab', function() {
-                            result.name = program[0];
-                            result.programSaved = true;
+                        if (alien) {
+                            result.programShared = 'READ';
+                        }
+                        if (program[2].sharedFrom) {
+                            var right = program[2].sharedFrom;
                             result.programShared = right;
-                            result.programTimestamp = program[5];
+                        }
+                        result.name = program[0];
+                        result.programSaved = true;
+                        $('#tabProgram').one('shown.bs.tab', function() {
                             showProgram(result, alien);
                         });
                         $('#tabProgram').trigger('click');
@@ -280,10 +278,14 @@ define(
 
             function showProgram(result, alien) {
                 if (result.rc === 'ok') {
+                    ROBERTA_USER.setProgram(result, alien);
                     var xml = Blockly.Xml.textToDom(result.data);
                     blocklyWorkspace.clear();
                     Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
-                    ROBERTA_USER.setProgram(result, alien);
+
+                    $('#menuSaveProg').parent().addClass('disabled');
+                    blocklyWorkspace.robControls.disable('saveProgram');
+                    
                     LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
                 }
             }
@@ -522,15 +524,15 @@ define(
                             variableDeclaration : true,
                             robControls : true
                         });
+
                         blocklyWorkspace.addChangeListener(function(event) {
-                            if (userState.programSaved == 'new') {
-                                userState.programSaved = true;
+                            if (event.type === 'ui' && userState.programSaved && (!userState.programShared || userState.programShared === 'WRITE')) {
+                                userState.programSaved = false;
                             } else {
-                                if (userState.id !== -1 && userState.program !== 'NEPOprog') {
+                                if (!userState.programSaved && userState.id !== -1 && userState.program !== 'NEPOprog') {
                                     $('#menuSaveProg').parent().removeClass('disabled');
                                     blocklyWorkspace.robControls.enable('saveProgram');
                                 }
-                                userState.programSaved = false;
                             }
                         });
                         bindControl();

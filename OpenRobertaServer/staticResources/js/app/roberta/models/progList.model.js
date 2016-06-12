@@ -16,4 +16,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
     exports.loadProgList = loadProgList;
 
+    /**
+     * Refresh example list
+     */
+    function loadExampleList(successFn) {
+        COMM.json("/program", {
+            "cmd" : "loadEN"
+        }, successFn, "load example list");
+    }
+    exports.loadExampleList = loadExampleList;
+
 });

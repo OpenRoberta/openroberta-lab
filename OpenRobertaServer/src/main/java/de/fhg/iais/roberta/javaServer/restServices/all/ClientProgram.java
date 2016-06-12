@@ -202,6 +202,10 @@ public class ClientProgram {
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
+            } else if ( cmd.equals("loadEN") ) {
+                JSONArray programInfo = pp.getProgramInfo(1, robotId);
+                response.put("programNames", programInfo);
+                Util.addResultInfo(response, pp);
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
                 JSONArray relations = pp.getProgramRelations(programName, userId, robotId);
