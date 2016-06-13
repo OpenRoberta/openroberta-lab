@@ -210,16 +210,21 @@ Blockly.RobControls.prototype.createDom = function() {
 
     // Attach event listeners. 
     Blockly.bindEvent_(zoomresetSvg, 'mousedown', workspace, function(e) {
-      workspace.zoomReset(e);
+      workspace.setScale(1);
+      workspace.scrollCenter();
+      e.stopPropagation();
+      e.preventDefault()
       control.showZoom(false);
     });
     Blockly.bindEvent_(zoominSvg, 'mousedown', null, function(e) {
       workspace.zoomCenter(1);
-      e.stopPropagation();  // Don't start a workspace scroll.
-    });
+      e.stopPropagation();
+      e.preventDefault()
+   });
     Blockly.bindEvent_(zoomoutSvg, 'mousedown', null, function(e) {
       workspace.zoomCenter(-1);
-      e.stopPropagation();  // Don't start a workspace scroll.
+      e.stopPropagation();
+      e.preventDefault()
     });
     Blockly.bindEvent_(zoom, 'mousedown', null, function(e) {
       control.showZoom(true);

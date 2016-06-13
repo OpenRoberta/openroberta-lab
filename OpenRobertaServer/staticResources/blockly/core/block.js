@@ -361,8 +361,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
             otherConnection.bumpAwayFrom_(connection);
           } else {
             connection.bumpAwayFrom_(otherConnection);
-            connection.sourceBlock_.setInTask(false);
-          }
+           }
         }
       }
     }

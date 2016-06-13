@@ -94,6 +94,8 @@ Blockly.RenderedConnection.prototype.bumpAwayFrom_ = function(staticConnection) 
     dx = -dx;
   }
   rootBlock.moveBy(dx, dy);
+  rootBlock.setInTask(false);
+      
 };
 
 /**
@@ -164,12 +166,15 @@ Blockly.RenderedConnection.prototype.closest = function(maxLimit, dx, dy) {
 Blockly.RenderedConnection.prototype.highlight = function() {
   var steps;
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
-    var tabWidth = this.sourceBlock_.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
-        Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 ' + Blockly.BlockSvg.TAB_PATH_DOWN + ' v 5';
-
-  } else {
-    steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
+   steps = 
+      'M -1, 4.6 l-4.892 -0.446l-0.561 1.8c-1.109 3.66 -1.01 6.28 0.32 8.021c'+
+      '0.972 1.289 1.758 2.015 5.132 2.015 z';
+   } else {
+    if (this.sourceBlock_.RTL) {
+      steps = 'm 20,0 h -5 ' + Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h -5';
+    } else {
+      steps = 'm -20,0 h 5 ' + Blockly.BlockSvg.NOTCH_PATH_LEFT + ' h 5';
+    }
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;

@@ -89,7 +89,7 @@ Blockly.Blocks['math_arithmetic'] = {
       ],
       "inputsInline": true,
       "output": "Number",
-      "colour": Blockly.Blocks.math.HUE,
+      "colour": Blockly.CAT_MATH_RGB,
       "helpUrl": Blockly.Msg.MATH_ARITHMETIC_HELPURL
     });
     // Assign 'this' to a variable for use in the tooltip closure below.
@@ -363,7 +363,7 @@ Blockly.Blocks['math_round'] = {
         }
       ],
       "output": "Number",
-      "colour": Blockly.Blocks.math.HUE,
+      "colour": Blockly.CAT_MATH_RGB,
       "tooltip": Blockly.Msg.MATH_ROUND_TOOLTIP,
       "helpUrl": Blockly.Msg.MATH_ROUND_HELPURL
     });
