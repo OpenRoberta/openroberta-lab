@@ -62,6 +62,12 @@
 .typcn-ev3:before {
     content: "\e602";
 }
+.typcn-nxt:before {
+    content: "\e6d7";
+}
+.typcn-bayduino:before {
+    content: "\e6df";
+}
 .typcn-Roberta:before {
     content: "\e603";
 }

@@ -96,26 +96,22 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             return;
         }
         ROBOT.setRobot(robot, function(result) {
+            console.log(result);
             if (result.rc === "ok") {
+                $('.robotType').removeClass('disabled');
+                $('.' + robot).addClass('disabled');
+                $('#iconDisplayRobotState').removeClass('typcn-' + userState.robot);
+                $('#iconDisplayRobotState').addClass('typcn-' + robot);
                 userState.robot = robot;
                 ROBERTA_ROBOT.setState(result);
-                if (robot === "ev3") {
-                    ROBERTA_BRICK_CONFIGURATION.setConfiguration("EV3basis");
-                    $('#blocklyDiv').removeClass('simBackground');
-                    $('#menuEv3').parent().addClass('disabled');
-                    $('#menuSim').parent().removeClass('disabled');
-                    $('#menuConnect').parent().removeClass('disabled');
-                    $('#iconDisplayRobotState').removeClass('typcn-Roberta');
-                    $('#iconDisplayRobotState').addClass('typcn-ev3');
-                    $('#menuShowCode').parent().removeClass('disabled');
-                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('showCode');
-                    BRICKLY.loadToolboxAndConfiguration();
-                } else if (robot === "nxt") {
-                    // coming soon
-                }
                 ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
+                BRICKLY.loadToolboxAndConfiguration();
+            } else {
+                alert('Robot not available');
             }
+
         });
+    
     }
 
     /**
@@ -207,13 +203,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         $('#head-navigation-robot').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
-            if (domId === 'menuEv3') { // Submenu 'Robot'
-                alert('yes');
-//                if (ROBERTA_PROGRAM.newProgram()) {
-//                    switchRobot('ev3');
-//                }
-            } else if (domId === 'menuNxt') { // Submenu 'Robot'
-                alert('NXT is coming soon!')
+            if (domId === 'menu-ev3') { // Submenu 'Robot'             
+                switchRobot('ev3');
+            } else if (domId === 'menu-nxt') { // Submenu 'Robot'
+                switchRobot('nxt');
+            } else if (domId === 'menu-bayduino') { // Submenu 'Robot'
+                switchRobot('bayduino');
             } else if (domId === 'menuConnect') { // Submenu 'Robot'
                 $('#buttonCancelFirmwareUpdate').css('display', 'inline');
                 $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');

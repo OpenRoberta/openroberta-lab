@@ -6,7 +6,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
     function init() {
         COMM.json("/toolbox", {
             "cmd" : "loadT",
-            "name" : "ev3Brick",
+            "name" : userState.robot,
             "owner" : " "
         }, injectBrickly);
     }
@@ -70,7 +70,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
         if (!opt_configuration || !opt_configuration.data) {
             COMM.json("/conf", {
                 "cmd" : "loadC",
-                "name" : "ev3Brick",
+                "name" : userState.robot,
                 "owner" : " "
             }, initConfigurationEnvironment);
         } else {
@@ -164,7 +164,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
     function loadToolboxAndConfiguration(opt_configurationBlocks) {
         COMM.json("/toolbox", {
             "cmd" : "loadT",
-            "name" : "ev3Brick", // TODO do not use a hardcoded name!
+            "name" : userState.robot,
             "owner" : " "
         }, function(toolbox) {
             showToolbox(toolbox);
@@ -177,7 +177,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
     function loadToolbox() {
         COMM.json("/toolbox", {
             "cmd" : "loadT",
-            "name" : "ev3Brick", // TODO do not use a hardcoded name!
+            "name" : userState.robot,
             "owner" : " "
         }, function(toolbox) {
             showToolbox(toolbox);
