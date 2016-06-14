@@ -800,7 +800,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
         if (item) {
             it = evalExpr(obj, item);
         }
-        var remove = op == GET_REMOVE;
+        var remove = op == CONSTANTS.GET_REMOVE;
         switch (position) {
         case CONSTANTS.FROM_START:
             if (remove) {
