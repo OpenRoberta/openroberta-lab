@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 
 public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
@@ -82,5 +85,32 @@ public class JaxbHelper {
      */
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
         return xml2BlockSet(IOUtils.toString(JaxbHelper.class.getResourceAsStream(pathToblocklyXml), "UTF-8"));
+    }
+
+    /**
+     * return the jaxb transformer for a given XML program text.
+     *
+     * @param blocklyXml the program XML as String
+     * @return jaxb the transformer
+     * @throws Exception
+     */
+    public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        transformer.transform(project);
+        return transformer;
+    }
+
+    /**
+     * return the brick configuration for given XML configuration text.
+     *
+     * @param blocklyXml the configuration XML as String
+     * @return brick configuration
+     * @throws Exception
+     */
+    public static Ev3Configuration generateConfiguration(String blocklyXml) throws Exception {
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        return transformer.transform(project);
     }
 }

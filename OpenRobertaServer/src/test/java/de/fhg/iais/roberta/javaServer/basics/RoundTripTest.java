@@ -32,13 +32,13 @@ import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
@@ -176,7 +176,7 @@ public class RoundTripTest {
     }
 
     private static void initialize() {
-        Properties properties = Util.loadProperties("classpath:openRoberta.properties");
+        Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
         buildXml = properties.getProperty("crosscompiler.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
         crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");

@@ -18,11 +18,12 @@ import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/admin")
 public class ClientAdmin {
@@ -58,6 +59,7 @@ public class ClientAdmin {
                     LOG.info("error: token " + token + " not registered in the session");
                 }
             } else if ( cmd.equals("updateFirmware") ) {
+                // TODO: This should be moved to update server
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
                     // everything is fine
@@ -105,7 +107,7 @@ public class ClientAdmin {
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {

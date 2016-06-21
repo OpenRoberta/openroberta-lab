@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -80,8 +80,8 @@ public class ServerStarter {
      * @param propertyPath optional URI to properties resource. May be null.
      */
     public ServerStarter(String propertyPath) {
-        Properties mailProperties = Util.loadProperties("classpath:openRobertaMailServer.properties");
-        Properties tmpProperties = Util.loadProperties(propertyPath);
+        Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
+        Properties tmpProperties = Util1.loadProperties(propertyPath);
         this.properties = mergeProperties(mailProperties, tmpProperties);
     }
 

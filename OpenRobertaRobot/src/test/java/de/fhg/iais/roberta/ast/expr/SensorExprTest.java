@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.sensor.ev3.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 
 public class SensorExprTest {
 

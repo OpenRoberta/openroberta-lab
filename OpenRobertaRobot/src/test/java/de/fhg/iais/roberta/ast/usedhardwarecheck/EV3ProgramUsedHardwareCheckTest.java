@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedSensorsCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class EV3ProgramUsedHardwareCheckTest {

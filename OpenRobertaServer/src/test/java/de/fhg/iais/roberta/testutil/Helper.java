@@ -26,10 +26,10 @@ import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaVisitor;
-import de.fhg.iais.roberta.syntax.codegen.ev3.AstToTextlyVisitor;
+import de.fhg.iais.roberta.syntax.codegen.generic.Ast2Ev3JavaVisitor;
+import de.fhg.iais.roberta.syntax.codegen.generic.AstToTextlyVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.

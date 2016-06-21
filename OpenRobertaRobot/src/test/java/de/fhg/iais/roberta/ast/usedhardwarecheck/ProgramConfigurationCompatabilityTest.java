@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
 import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.RobotProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedSensorsCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class ProgramConfigurationCompatabilityTest {

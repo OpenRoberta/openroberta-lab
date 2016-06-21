@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 public class PersistUserProgramTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
@@ -33,7 +33,7 @@ public class PersistUserProgramTest {
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util.loadProperties("classpath:persistUserProgramTest.properties");
+        Properties properties = Util1.loadProperties("classpath:persistUserProgramTest.properties");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();

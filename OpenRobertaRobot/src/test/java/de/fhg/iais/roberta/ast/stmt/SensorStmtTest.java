@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.sensor.ev3.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 
 public class SensorStmtTest {

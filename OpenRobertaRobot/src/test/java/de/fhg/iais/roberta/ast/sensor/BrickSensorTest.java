@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.shared.sensor.ev3.BrickKey;
-import de.fhg.iais.roberta.syntax.sensor.ev3.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 
@@ -37,7 +37,7 @@ public class BrickSensorTest {
             BrickSensor<Void> va = BrickSensor.make(BrickSensor.Mode.valueOf("invalid"), null, null, null);
             Assert.fail();
         } catch ( Exception e ) {
-            Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.sensor.ev3.BrickSensor.Mode.invalid", e.getMessage());
+            Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode.invalid", e.getMessage());
         }
 
     }

@@ -43,20 +43,21 @@ import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.ProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.RobotProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.codegen.generic.Ast2Ev3JavaScriptVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.ProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/program")
 public class ClientProgram {
@@ -64,10 +65,10 @@ public class ClientProgram {
 
     private final SessionFactoryWrapper sessionFactoryWrapper;
     private final Ev3Communicator brickCommunicator;
-    private final Ev3CompilerWorkflow compilerWorkflow;
+    private final ICompilerWorkflow compilerWorkflow;
 
     @Inject
-    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, Ev3Communicator brickCommunicator, Ev3CompilerWorkflow compilerWorkflow) {
+    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, Ev3Communicator brickCommunicator, ICompilerWorkflow compilerWorkflow) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
         this.compilerWorkflow = compilerWorkflow;
@@ -149,7 +150,7 @@ public class ClientProgram {
                 Schema schema = schemaFactory.newSchema(new StreamSource(xsdStream));
                 Validator validator = schema.newValidator();
 
-                if ( !Util.isValidJavaIdentifier(programName) ) {
+                if ( !Util1.isValidJavaIdentifier(programName) ) {
                     programName = "NEPOprog";
                 }
                 boolean xmlIsValid = true;
@@ -281,7 +282,7 @@ public class ClientProgram {
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             ClientProgram.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {

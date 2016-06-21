@@ -25,16 +25,16 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
-import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
-import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
+import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
+import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Ignore
@@ -59,15 +59,15 @@ public class PerformanceUserInteractionTest {
     private ClientUser restUser;
     private ClientProgram restProgram;
     private ClientAdmin restBlocks;
-    private Ev3DownloadJar downloadJar;
-    private Ev3Command brickCommand;
+    private RobotDownloadProgram downloadJar;
+    private RobotCommand brickCommand;
 
     private String theProgramOfAllUserLol;
     private ExecutorService executorService;
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util.loadProperties("classpath:performanceUserInteraction.properties");
+        Properties properties = Util1.loadProperties("classpath:performanceUserInteraction.properties");
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
@@ -81,8 +81,8 @@ public class PerformanceUserInteractionTest {
         this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
-        this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
-        this.brickCommand = new Ev3Command(this.brickCommunicator);
+        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator, this.crosscompilerBasedir);
+        this.brickCommand = new RobotCommand(this.brickCommunicator);
         this.theProgramOfAllUserLol =
             Resources.toString(PerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(PerformanceUserInteractionTest.MAX_PARALLEL_USERS + 10);
@@ -147,16 +147,11 @@ public class PerformanceUserInteractionTest {
 
         // create user "pid-*" with success
         thinkTimeInMillisec += think(random, 1, 4);
-        Response response =
-            this.restUser.command(
-                s,
-                this.sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD(
-                    "{'cmd':'createUser';'accountName':'pid-"
-                        + userNumber
-                        + "';'password':'dip-"
-                        + userNumber
-                        + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        Response response = this.restUser.command(
+            s,
+            this.sessionFactoryWrapper.getSession(),
+            JSONUtilForServer.mkD(
+                "{'cmd':'createUser';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
         JSONUtilForServer.assertEntityRc(response, "ok", null);
 
         // login with user "pid", create 2 programs

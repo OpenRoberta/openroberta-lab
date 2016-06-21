@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.action.ev3.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 
@@ -36,7 +36,7 @@ public class VolumeActionTest {
             VolumeAction<Void> va = VolumeAction.make(VolumeAction.Mode.valueOf("invalid"), null, null, null);
             Assert.fail();
         } catch ( Exception e ) {
-            Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.ev3.VolumeAction.Mode.invalid", e.getMessage());
+            Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode.invalid", e.getMessage());
         }
     }
 

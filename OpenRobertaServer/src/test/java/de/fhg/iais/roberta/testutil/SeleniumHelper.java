@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 public class SeleniumHelper {
     private static final Logger LOG = LoggerFactory.getLogger(SeleniumHelper.class);
@@ -33,7 +33,7 @@ public class SeleniumHelper {
     public boolean browserVisibility;
 
     public SeleniumHelper(String baseUrl) throws Exception {
-        Properties properties = Util.loadProperties("classpath:openRoberta.properties");
+        Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
         this.server = this.serverStarter.start("localhost", 1998);

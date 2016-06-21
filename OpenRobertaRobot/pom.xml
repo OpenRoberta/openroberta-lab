@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright 2014, 2015 The Open Roberta project.
-See the NOTICE file distributed with this work for additional information
-regarding copyright ownership.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
+<!-- Copyright 2014, 2015 The Open Roberta project. See the NOTICE file distributed with this work for additional information regarding copyright ownership. Licensed 
+	under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -26,54 +14,14 @@ limitations under the License.
 	<artifactId>OpenRobertaRobot</artifactId>
 	<name>OpenRobertaRobot</name>
 	<description>the robot related part of the OpenRoberta application</description>
-	<dependencies>		
+	<dependencies>
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>EV3Runtime</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-servlet</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant-launcher</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -83,10 +31,10 @@ limitations under the License.
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -173,128 +121,25 @@ limitations under the License.
 							<overWriteSnapshots>true</overWriteSnapshots>
 						</configuration>
 					</execution>
-					<!-- <execution>
-						<id>copyServer</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>OpenRobertaServer</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/resources</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution> -->
-<!-- 					<execution>
-						<id>copyUpdateResources</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>OpenRobertaShared</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>OpenRobertaRuntime</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>EV3Menu</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/updateResources</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution> -->
-					<!-- <execution>
-						<id>copyCrossCompilerResources</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>OpenRobertaShared</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>OpenRobertaRuntime</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
-									<artifactId>ev3classes</artifactId>
-									<version>${ev3classes.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
-									<artifactId>dbusjava</artifactId>
-									<version>${dbusjava.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.lejos</groupId>
-									<artifactId>jna</artifactId>
-									<version>${jna.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/crossCompilerResources</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution> -->
+					<!-- <execution> <id>copyServer</id> <phase>pre-integration-test</phase> <goals> <goal>copy</goal> </goals> <configuration> <artifactItems> <artifactItem> <groupId>de.fhg.iais.openroberta</groupId> 
+						<artifactId>OpenRobertaServer</artifactId> <version>${project.version}</version> <type>jar</type> <overWrite>true</overWrite> </artifactItem> </artifactItems> <outputDirectory>${project.build.directory}/resources</outputDirectory> 
+						<overWriteReleases>true</overWriteReleases> <overWriteSnapshots>true</overWriteSnapshots> <stripVersion>true</stripVersion> </configuration> </execution> -->
+					<!-- <execution> <id>copyUpdateResources</id> <phase>pre-integration-test</phase> <goals> <goal>copy</goal> </goals> <configuration> <artifactItems> <artifactItem> 
+						<groupId>de.fhg.iais.openroberta</groupId> <artifactId>OpenRobertaShared</artifactId> <version>${project.version}</version> <type>jar</type> <overWrite>true</overWrite> 
+						</artifactItem> <artifactItem> <groupId>de.fhg.iais.openroberta</groupId> <artifactId>OpenRobertaRuntime</artifactId> <version>${project.version}</version> <type>jar</type> 
+						<overWrite>true</overWrite> </artifactItem> <artifactItem> <groupId>de.fhg.iais.openroberta</groupId> <artifactId>EV3Menu</artifactId> <version>${project.version}</version> 
+						<type>jar</type> <overWrite>true</overWrite> </artifactItem> <artifactItem> <groupId>org.json</groupId> <artifactId>json</artifactId> <version>${json.version}</version> 
+						<type>jar</type> <overWrite>true</overWrite> </artifactItem> </artifactItems> <outputDirectory>${project.build.directory}/updateResources</outputDirectory> <overWriteReleases>true</overWriteReleases> 
+						<overWriteSnapshots>true</overWriteSnapshots> <stripVersion>true</stripVersion> </configuration> </execution> -->
+					<!-- <execution> <id>copyCrossCompilerResources</id> <phase>pre-integration-test</phase> <goals> <goal>copy</goal> </goals> <configuration> <artifactItems> 
+						<artifactItem> <groupId>de.fhg.iais.openroberta</groupId> <artifactId>OpenRobertaShared</artifactId> <version>${project.version}</version> <type>jar</type> <overWrite>true</overWrite> 
+						</artifactItem> <artifactItem> <groupId>de.fhg.iais.openroberta</groupId> <artifactId>OpenRobertaRuntime</artifactId> <version>${project.version}</version> <type>jar</type> 
+						<overWrite>true</overWrite> </artifactItem> <artifactItem> <groupId>org.json</groupId> <artifactId>json</artifactId> <version>${json.version}</version> <type>jar</type> 
+						<overWrite>true</overWrite> </artifactItem> <artifactItem> <groupId>de.fhg.iais.roberta</groupId> <artifactId>ev3classes</artifactId> <version>${ev3classes.version}</version> 
+						<type>jar</type> <overWrite>true</overWrite> </artifactItem> <artifactItem> <groupId>de.fhg.iais.roberta</groupId> <artifactId>dbusjava</artifactId> <version>${dbusjava.version}</version> 
+						<type>jar</type> <overWrite>true</overWrite> </artifactItem> <artifactItem> <groupId>org.lejos</groupId> <artifactId>jna</artifactId> <version>${jna.version}</version> 
+						<type>jar</type> <overWrite>true</overWrite> </artifactItem> </artifactItems> <outputDirectory>${project.build.directory}/crossCompilerResources</outputDirectory> 
+						<overWriteReleases>true</overWriteReleases> <overWriteSnapshots>true</overWriteSnapshots> <stripVersion>true</stripVersion> </configuration> </execution> -->
 				</executions>
 			</plugin>
 			<plugin>
@@ -366,7 +211,7 @@ limitations under the License.
 					<reportSet>
 						<reports>
 							<!-- include the desired reports -->
-							<!--<report>jslint</report>-->
+							<!--<report>jslint</report> -->
 							<report>jsdoc</report>
 						</reports>
 					</reportSet>

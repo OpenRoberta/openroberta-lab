@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.syntax.sensor.ev3.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 

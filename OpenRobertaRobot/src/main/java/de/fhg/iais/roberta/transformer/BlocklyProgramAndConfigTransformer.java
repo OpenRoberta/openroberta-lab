@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
 
@@ -73,14 +73,14 @@ public class BlocklyProgramAndConfigTransformer {
 
         Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
         try {
-            programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
+            programTransformer = JaxbHelper.generateProgramTransformer(programText);
         } catch ( Exception e ) {
             LOG.error("Transformer failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
         }
         Ev3Configuration brickConfiguration = null;
         try {
-            brickConfiguration = Ev3CompilerWorkflow.generateConfiguration(configurationText);
+            brickConfiguration = JaxbHelper.generateConfiguration(configurationText);
         } catch ( Exception e ) {
             LOG.error("Generation of the configuration failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;

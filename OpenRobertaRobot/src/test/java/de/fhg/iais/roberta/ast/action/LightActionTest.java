@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.shared.action.ev3.BlinkMode;
 import de.fhg.iais.roberta.shared.action.ev3.BrickLedColor;
-import de.fhg.iais.roberta.syntax.action.ev3.LightAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class LightActionTest {

@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData;
+import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
 
 @WebSocket
 public class Ev3SensorLoggingWS {

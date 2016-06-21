@@ -10,28 +10,28 @@ public class UtilTest {
 
     @Test
     public void testJavaIdentifier() {
-        assertTrue(Util.isValidJavaIdentifier("P"));
-        assertTrue(Util.isValidJavaIdentifier("Pid"));
-        assertTrue(Util.isValidJavaIdentifier("€Pid_diP€"));
-        assertTrue(Util.isValidJavaIdentifier("_ö_ä_ü_ß_"));
-        assertTrue(Util.isValidJavaIdentifier("ö_ä_ü_ß"));
-        assertTrue(Util.isValidJavaIdentifier("__üäö$€"));
-        assertFalse(Util.isValidJavaIdentifier(null));
-        assertFalse(Util.isValidJavaIdentifier(""));
-        assertFalse(Util.isValidJavaIdentifier("1qay"));
-        assertFalse(Util.isValidJavaIdentifier(" Pid"));
-        assertFalse(Util.isValidJavaIdentifier("class"));
-        assertFalse(Util.isValidJavaIdentifier("for"));
+        assertTrue(Util1.isValidJavaIdentifier("P"));
+        assertTrue(Util1.isValidJavaIdentifier("Pid"));
+        assertTrue(Util1.isValidJavaIdentifier("€Pid_diP€"));
+        assertTrue(Util1.isValidJavaIdentifier("_ö_ä_ü_ß_"));
+        assertTrue(Util1.isValidJavaIdentifier("ö_ä_ü_ß"));
+        assertTrue(Util1.isValidJavaIdentifier("__üäö$€"));
+        assertFalse(Util1.isValidJavaIdentifier(null));
+        assertFalse(Util1.isValidJavaIdentifier(""));
+        assertFalse(Util1.isValidJavaIdentifier("1qay"));
+        assertFalse(Util1.isValidJavaIdentifier(" Pid"));
+        assertFalse(Util1.isValidJavaIdentifier("class"));
+        assertFalse(Util1.isValidJavaIdentifier("for"));
     }
 
     @Test
     public void testFormat() {
-        assertEquals("1.0", Util.formatDouble1digit(1.0));
-        assertEquals("1.3", Util.formatDouble1digit(1.3));
-        assertEquals("1.3", Util.formatDouble1digit(1.28));
-        assertEquals("1.3", Util.formatDouble1digit(1.32));
-        assertEquals("15.6", Util.formatDouble1digit(15.600005));
-        assertEquals("-5.5", Util.formatDouble1digit(-5.50006));
-        assertEquals("15567.6", Util.formatDouble1digit(15567.6005));
+        assertEquals("1.0", Util1.formatDouble1digit(1.0));
+        assertEquals("1.3", Util1.formatDouble1digit(1.3));
+        assertEquals("1.3", Util1.formatDouble1digit(1.28));
+        assertEquals("1.3", Util1.formatDouble1digit(1.32));
+        assertEquals("15.6", Util1.formatDouble1digit(15.600005));
+        assertEquals("-5.5", Util1.formatDouble1digit(-5.50006));
+        assertEquals("15567.6", Util1.formatDouble1digit(15567.6005));
     }
 }

@@ -68,6 +68,7 @@
     <modules>
         <module>../Resources</module>
         <module>../OpenRobertaRobot</module>
+        <module>../RobotEV3</module>
         <module>../OpenRobertaServer</module>
     </modules>
     <repositories>
@@ -117,7 +118,11 @@
                 <artifactId>OpenRobertaRobot</artifactId>
                 <version>${project.version}</version>
             </dependency>                       
-
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotEV3</artifactId>
+                <version>${project.version}</version>
+            </dependency>      
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
