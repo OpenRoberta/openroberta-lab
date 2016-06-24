@@ -195,7 +195,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
 //                    $('#programNameTable').bootstrapTable('uncheckAll', {});
 //                    $('.selected').removeClass('selected');
 //                }
-            })
+            });
             $("#confirmDeleteProgram").modal("show");
             return false;
         },
@@ -228,7 +228,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
                     if (right === 'READ') {
                         result += '<span class="typcn typcn-eye"></span>';
                     } else {
-                        result += '<span title="WRITE" class="typcn typcn-pecil"></span>';
+                        result += '<span title="WRITE" class="typcn typcn-pencil"></span>';
                     }
                     result += '&nbsp;';
                     result += user;

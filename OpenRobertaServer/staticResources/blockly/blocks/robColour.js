@@ -32,7 +32,17 @@ Blockly.Blocks['robColour_picker'] = {
     init : function() {
         this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
         this.setColour(Blockly.CAT_COLOUR_RGB);
-        this.appendDummyInput().appendField(new Blockly.FieldRobColour('#585858'), 'COLOUR');
+        var colorField = new Blockly.FieldColour('#585858');
+        if (this.workspace.device === 'nxt') {
+            Blockly.FieldColour.COLUMNS = 7;
+            Blockly.FieldColour.COLOURS = new Array("#585858", "#000000", "#0057a6", "#00642e", "#f7d117", "#b30006", "#FFFFFF");
+            this.data = 'nxt';
+        } else {
+            Blockly.FieldColour.COLUMNS = 8;
+            Blockly.FieldColour.COLOURS = new Array("#585858", "#000000", "#0057a6", "#00642e", "#f7d117", "#b30006", "#FFFFFF", "#532115");
+            this.data = 'ev3';
+        }
+        this.appendDummyInput().appendField(colorField, 'COLOUR');
         this.setOutput(true, 'Colour');
         this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP);
     }

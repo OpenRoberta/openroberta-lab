@@ -91,27 +91,40 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
     /**
      * Switch robot
      */
-    function switchRobot(robot) {
+
+    function switchRobot(robot, opt_continue) {
         if (robot === userState.robot) {
             return;
         }
-        ROBOT.setRobot(robot, function(result) {
-            console.log(result);
-            if (result.rc === "ok") {
-                $('.robotType').removeClass('disabled');
-                $('.' + robot).addClass('disabled');
-                $('#iconDisplayRobotState').removeClass('typcn-' + userState.robot);
-                $('#iconDisplayRobotState').addClass('typcn-' + robot);
-                userState.robot = robot;
-                ROBERTA_ROBOT.setState(result);
-                ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
-                BRICKLY.loadToolboxAndConfiguration();
+        var further = opt_continue || false;
+        if (further || (userState.programSaved && userState.configurationSaved)) {
+            ROBOT.setRobot(robot, function(result) {
+                if (result.rc === "ok") {
+                    $('.robotType').removeClass('disabled');
+                    $('.' + robot).addClass('disabled');
+                    $('#iconDisplayRobotState').removeClass('typcn-' + userState.robot);
+                    $('#iconDisplayRobotState').addClass('typcn-' + robot);
+                    userState.robot = robot;
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().device = robot;
+                    BRICKLY.getBricklyWorkspace().device = robot;
+                    ROBERTA_ROBOT.setState(result);
+                    ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
+                    BRICKLY.loadToolboxAndConfiguration();
+                    ROBERTA_PROGRAM.newProgram(true);
+                    ROBERTA_BRICK_CONFIGURATION.newConfiguration(true);
+                } else {
+                    alert('Robot not available');
+                }
+            });
+        } else {
+            $('#confirmContinue').data('type', 'switchRobot');
+            $('#confirmContinue').data('robot', robot);
+            if (userState.id === -1) {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
             } else {
-                alert('Robot not available');
+                MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
             }
-
-        });
-    
+        }
     }
 
     /**
@@ -503,6 +516,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 ROBERTA_PROGRAM.newProgram(true);
             } else if ($('#confirmContinue').data('type') === 'configuration') {
                 ROBERTA_BRICK_CONFIGURATION.newConfiguration(true);
+            } else if ($('#confirmContinue').data('type') === 'switchRobot') {
+                switchRobot($('#confirmContinue').data('robot'), true);
             } else {
                 console.log('Confirmation with unknown data type clicked');
             }

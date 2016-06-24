@@ -826,43 +826,8 @@ table [data-toggle="collapse"].collapsed:after {
 	opacity: 1;
 }
 
-ul.icon, ul.nonIcon {
-	list-style-type: none;
-	padding-left: 16px;
-}
+#takeATour:after { font-family: 'typicons'; content: " \e669"; }
 
-ul.icon li {
-	text-indent: -1.4em;
-}
-
-ul.icon li:before {
-	font-family: 'typicons';
-	float: left;
-	width: 1.4em;
-}
-
-ul.nonIcon li:before {
-	content: ">" " ";
-	font-weight: 600;
-	margin-left: -15px;
-	color: #8fa402;
-}
-
-ul.icon li.document-text:before {
-	content: "\e6e9";
-}
-
-ul.icon li.Roberta:before {
-	content: "\e602";
-}
-
-ul.icon li.wi-fi:before {
-	content: "\e623";
-}
-
-ul.icon li.arrow-right-thick:before {
-	content: "\e60c";
-}
 /***** END Overwrite Bootstrap-CSS *****/
 .atlwdg-trigger.atlwdg-RIGHT {
 	left: 100%;

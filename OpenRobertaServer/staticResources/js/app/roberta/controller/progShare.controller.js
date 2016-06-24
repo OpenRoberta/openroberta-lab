@@ -89,7 +89,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'rest.program',
             if (right !== rightOld) {
                 PROGRAM.shareProgram(progName, sharedWith, right, function(result) {
                     if (result.rc === 'ok') {
-                        MSG.displayMessage(result.message, "TOAST", progName);
+                        MSG.displayMessage(result.message, "TOAST", sharedWith);
                         LOG.info("share program " + progName + " with '" + sharedWith + " having right '" + right + "'");
                     }
                 });
@@ -257,6 +257,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'rest.program',
                         });
                     }
                     LOG.info("share program " + row.name + " with '" + values.shareWithInput + " having right '" + right + "'");
+                    $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
                 } else {
                     UTIL.showMsgOnTop(result.message);
                     returnValue = false;

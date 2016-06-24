@@ -16,16 +16,17 @@ define(
                     var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
                     var xmlText = Blockly.Xml.domToText(xml);
                     $('.modal').modal('hide'); // close all opened popups
-                    PROGRAM.saveProgramToServer(userState.program, userState.programShared?true:false, userState.programTimestamp, xmlText, function(result) {
-                        if (result.rc === 'ok') {
-                            $('#menuSaveProg').parent().addClass('disabled');
-                            blocklyWorkspace.robControls.disable('saveProgram');
-                            userState.programSaved = true;
-                            LOG.info('save program ' + userState.program + ' login: ' + userState.id);
-                            userState.programTimestamp = result.lastChanged;
-                        }
-                        MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
-                    });
+                    PROGRAM.saveProgramToServer(userState.program, userState.programShared ? true : false, userState.programTimestamp, xmlText,
+                            function(result) {
+                                if (result.rc === 'ok') {
+                                    $('#menuSaveProg').parent().addClass('disabled');
+                                    blocklyWorkspace.robControls.disable('saveProgram');
+                                    userState.programSaved = true;
+                                    LOG.info('save program ' + userState.program + ' login: ' + userState.id);
+                                    userState.programTimestamp = result.lastChanged;
+                                }
+                                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
+                            });
                 }
             }
             exports.saveToServer = saveToServer;
@@ -285,7 +286,7 @@ define(
 
                     $('#menuSaveProg').parent().addClass('disabled');
                     blocklyWorkspace.robControls.disable('saveProgram');
-                    
+
                     LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
                 }
             }
@@ -524,6 +525,7 @@ define(
                             variableDeclaration : true,
                             robControls : true
                         });
+                        blocklyWorkspace.device = userState.robot;
 
                         blocklyWorkspace.addChangeListener(function(event) {
                             if (event.type === 'ui' && userState.programSaved && (!userState.programShared || userState.programShared === 'WRITE')) {

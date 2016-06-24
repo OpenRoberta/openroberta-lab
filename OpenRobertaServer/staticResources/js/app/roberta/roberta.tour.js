@@ -1,7 +1,8 @@
 define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollto', 'enjoyHint', 'blocks-msg' ],
         function(exports, COMM, MSG, LOG, Blockly, $) {
 
-            var enjoyhint_instance = new EnjoyHint({});;
+            var enjoyhint_instance = new EnjoyHint({});
+            ;
 
             function start(tour) {
                 var enjoyhint_script_steps = [ {} ];
@@ -105,7 +106,10 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
                 'nextButton' : {
                     text : 'TOUR1_DESCRIPTION00'
                 },
-                'showSkip' : false
+                'showSkip' : false,
+                onBeforeStart : function() {
+                    Blockly.hideChaff();
+                }
             }, {
                 'event_type' : 'next',
                 'selector' : '.blocklyButtons:eq(1)',
@@ -144,12 +148,6 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
                 'description' : 'TOUR1_DESCRIPTION13',
                 'showSkip' : false,
                 'showNext' : false,
-                onBeforeStart : function() {
-                    var blocks = Blockly.getMainWorkspace().getTopBlocks();
-                    if (!blocks[0].getNextBlock()) {
-                        enjoyhint_instance.setCurrentStepBack();
-                    }
-                }
             }, {
                 'event_type' : 'next',
                 'selector' : '#simDiv',

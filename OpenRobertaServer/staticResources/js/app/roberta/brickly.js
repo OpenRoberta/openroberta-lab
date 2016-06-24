@@ -50,6 +50,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
                     userState.configurationSaved = false;
                 }
             });
+            bricklyWorkspace.device = userState.robot;
             // Configurations can't be executed
             bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
             bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
