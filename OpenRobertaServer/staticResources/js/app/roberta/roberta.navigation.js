@@ -451,8 +451,10 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         }, 'start with ev3 clicked');
 
         $('.codeBack').onWrap('click', function(event) {
-            $('#blocklyDiv').removeClass('codeActive');
-            $('#codeDiv').removeClass('codeActive');
+            $(".code").addClass('hide');
+            $('.nav > li > ul > .robotType').removeClass('disabled');
+            $('.blocklyToolboxDiv').css('display', 'inherit');
+            Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
             $('#blocklyDiv').animate({
                 width : '100%'
             }, {
@@ -462,16 +464,15 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
                 },
                 done : function() {
+                    $('#codeDiv').removeClass('codeActive');
+                    $('.nav > li > ul > .robotType').removeClass('disabled');
+                    $('.' + userState.robot).addClass('disabled');
                     $(window).resize();
+                    Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
                 }
             });
-            if (userState.robot === "nxt") {
-                $('#menuEv3').parent().removeClass('disabled');
-            } else {
-                $('#menuNxt').parent().removeClass('disabled');
-            }
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
-            $(".code").addClass('hide');
+
         }, 'codeBack clicked');
         $('#show-startup-message').on('hidden.bs.modal', function() {
             if ($('#checkbox_id').is(':checked')) {

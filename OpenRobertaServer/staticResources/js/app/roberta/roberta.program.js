@@ -258,10 +258,12 @@ define(
             function newProgram(opt_further) {
                 var further = opt_further || false;
                 if (further || userState.programSaved) {
-                    ROBERTA_USER.setProgram("NEPOprog");
-                    userState.programShared = false;
-                    userState.programSaved = 'new';
-                    userState.programTimestamp = '';
+                    var result = {};
+                    result.name = "NEPOprog"
+                    result.programSaved = 'new';
+                    result.programShared = false;
+                    result.lastChanged = '';
+                    ROBERTA_USER.setProgram(result);
                     initProgramEnvironment();
                     //$('#tabProgram').click();
                     $('#menuSaveProg').parent().addClass('disabled');
@@ -313,7 +315,7 @@ define(
              * Show program code
              */
             function showCode() {
-                if (userState.robot === 'ev3') {
+                //if (userState.robot === 'ev3') {
                     LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
                     var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
                     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
@@ -338,14 +340,15 @@ define(
                                 Blockly.svgResize(blocklyWorkspace);
                             }
                         });
-                        $('#codeContent').addClass('codeActive');
+                        $('#blocklyDiv').addClass('codeActive');
                         $('#codeDiv').addClass('codeActive');
                         $('.nav > li > ul > .robotType').addClass('disabled');
                         $(".code").removeClass('hide');
                         $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
                         userState.programSource = result.javaSource
+                        console.log(prettyPrintOne(result.javaSource, null, true));
                     });
-                }
+               // }
             }
             exports.showCode = showCode;
 
