@@ -98,6 +98,7 @@ Blockly.Msg.TIMER_RESET_TOOLTIP = 'Resets the timer.';
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = 'Gets the current reading from the timer.';
 /// Rob Brick tooltips
 Blockly.Msg.EV3BRICK_TOOLTIP = 'EV3 brick.';
+Blockly.Msg.NXTBRICK_TOOLTIP = 'NXT brick.';
 Blockly.Msg.ULTRASONIC_TOOLTIP = 'Represents EV3 ultrasonic sensor.';
 Blockly.Msg.COLOUR_TOOLTIP = 'Represents EV3 colour sensor.';
 Blockly.Msg.INFRARED_TOOLTIP = 'Represents infrared sensor.';
@@ -252,6 +253,9 @@ Blockly.Msg.CONNECTION_START_TOOLTIP = 'Tries to make a connection to another ro
 Blockly.Msg.CONNECTION_WAIT_TOOLTIP = 'Waits for a connection via bluetooth.';
 Blockly.Msg.CONNECTION_RECEIVE_TOOLTIP = 'Waits for a message from the robot which you declare in the connection.';
 Blockly.Msg.CONNECTION_SEND_TOOLTIP = 'Sends a message to another robot.'; 
+Blockly.Msg.CONNECTION_TOOLTIP = 'A robot"s connection';
+Blockly.Msg.CONNECTION_CHECK = 'connection to robot %1 active?';
+Blockly.Msg.CONNECTION_CHECK_TOOLTIP = 'check if the connection to the robot is active.';
 Blockly.Msg.TOOLBOX_ACTION = 'Action';
 Blockly.Msg.TOOLBOX_COMMUNICATION = 'Messages';
 Blockly.Msg.TOOLBOX_SENSOR = 'Sensors';

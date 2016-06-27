@@ -218,6 +218,35 @@ Blockly.Blocks['robActions_motorDiff_turn_for'] = {
     }
 };
 
+Blockly.Blocks['robActions_motorDiff_curve'] = {
+    init : function() {
+        this.setColour(Blockly.CAT_ACTION_RGB);
+        var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARD' ] ]);
+        this.appendValueInput('POWER_LEFT').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+                'Number');
+        this.appendValueInput('POWER_RIGHT').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+                'Number');
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip(Blockly.Msg.MOTORDIFF_ON_TOOLTIP);
+    }
+};
+
+Blockly.Blocks['robActions_motorDiff_curve_for'] = {
+    init : function() {
+        this.setColour(Blockly.CAT_ACTION_RGB);
+        var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARDS' ] ]);
+        this.appendValueInput('POWER_LEFT').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+                'Number');
+         this.appendValueInput('POWER_RIGHT').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+                'Number');
+        this.appendValueInput('DISTANCE').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_DISTANCE).setCheck('Number');
+        this.setPreviousStatement(true);
+        this.setNextStatement(true);
+        this.setTooltip(Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP);
+    }
+};
+
 Blockly.Blocks['robActions_display_picture'] = {
     /**
      * Display a picture on the screen.

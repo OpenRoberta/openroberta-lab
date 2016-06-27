@@ -61,6 +61,7 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
+var device = 'ev3'
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -90,6 +91,7 @@ function start() {
            variableDeclaration: true,
            robControls: true
           });
+  workspace.setDevice('ev3');
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -191,6 +193,15 @@ function spaghetti(n) {
   Blockly.Xml.domToWorkspace(dom, workspace);
   console.timeEnd('Spaghetti domToWorkspace');
 }
+
+function toggleDevice() {
+  if (device ==='ev3')
+      device = 'nxt';
+      else
+          device = 'ev3';
+  workspace.setDevice(device);  
+}
+
 var spaghettiXml = [
   '  <block type="robControls_if">',
   '    <value name="IF0">',
@@ -335,6 +346,12 @@ h1 {
                         <field name='NUM'>20</field>
                     </block>
                 </value>
+            </block>
+            <block type='robActions_motorDiff_curve'>
+                
+            </block>
+            <block type='robActions_motorDiff_curve_for'>
+                
             </block>
         </category> 
         <category name='TOOLBOX_DISPLAY' svg="true">
@@ -609,6 +626,11 @@ h1 {
         <block type='robCommunication_receiveBlock'></block>
         <block type='robCommunication_waitForConnection'></block>
         <block type='robCommunication_connection'></block>
+        <block type='robCommunication_checkConnection'>
+           <value name='CONNECTION'>
+           <block type='robCommunication_connection'></block>
+           </value> 
+        </block>
     </category>
 </toolbox_set>
 
@@ -648,6 +670,7 @@ h1 {
     Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="Toggle device!" onclick="toggleDevice()">
   </p>
   <p>
     Log events: &nbsp;

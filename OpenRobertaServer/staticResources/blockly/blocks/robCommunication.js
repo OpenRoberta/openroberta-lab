@@ -14,17 +14,6 @@ goog.require('Blockly.Blocks');
  */
 
 Blockly.Blocks['robCommunication_startConnection'] = {
-    /**
-     * EV3 brick.
-     * 
-     * @constructs robBrick_EV3_brick
-     * @this.Blockly.Block
-     * @param {Number}
-     *            POWER relative - -100-100
-     * @returns immediately
-     * @memberof Block
-     */
-
     init : function() {
         this.setColour(Blockly.CAT_COMMUNICATION_RGB);
         this.setPreviousStatement(false);
@@ -76,8 +65,8 @@ Blockly.Blocks['robCommunication_sendBlock'] = {
             this.data = 'ev3';
         }
 
-        this.appendValueInput('sendData').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_SEND_DATA, 'DATA').appendField(dataType, 'TYPE')
-                .setCheck(this.dataType_);
+        this.appendValueInput('sendData').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_SEND_DATA).appendField(dataType, 'TYPE').setCheck(
+                this.dataType_);
         this.appendDummyInput().appendField("via").setAlign(Blockly.ALIGN_RIGHT).appendField(protocol, 'PROTOCOL');
         if (channel) {
             this.appendValueInput('CONNECTION').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_OVER_CHANNEL).appendField(channel, 'CHANNEL')
@@ -150,7 +139,7 @@ Blockly.Blocks['robCommunication_receiveBlock'] = {
             this.data = 'ev3';
         }
 
-        this.appendDummyInput().setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_RECEIVED_DATA, 'DATA').appendField(dataType, 'TYPE');
+        this.appendDummyInput().setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_RECEIVED_DATA).appendField(dataType, 'TYPE');
         this.appendDummyInput().appendField("via").setAlign(Blockly.ALIGN_RIGHT).appendField(protocol, 'PROTOCOL');
         if (channel) {
             this.appendValueInput('CONNECTION').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_OVER_CHANNEL).appendField(channel, 'CHANNEL')
@@ -183,45 +172,15 @@ Blockly.Blocks['robCommunication_receiveBlock'] = {
 };
 
 Blockly.Blocks['robCommunication_waitForConnection'] = {
-    /**
-     * EV3 brick.
-     * 
-     * @constructs robBrick_EV3_brick
-     * @this.Blockly.Block
-     * @param {Number}
-     *            POWER relative - -100-100
-     * @returns immediately
-     * @memberof Block
-     */
-
     init : function() {
-        // this.setHelpUrl(Blockly.Msg.CONNECTION_WAIT_HELPURL);
         this.setColour(Blockly.CAT_COMMUNICATION_RGB);
         this.appendDummyInput('').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.CONNECTION_WAIT_FOR_CONNECTION);
         this.setOutput(true, 'Connection');
         this.setTooltip(Blockly.Msg.CONNECTION_WAIT_TOOLTIP);
-        // this.setHelp(new Blockly.Help(Blockly.Msg.CONNECTION_WAIT_HELP));
     }
 };
 
 Blockly.Blocks['robCommunication_connection'] = {
-    /**
-     * Send a message to another device, maybe via the roberta lab server.
-     * 
-     * @constructs robBrick_EV3_brick
-     * @this.Blockly.Block
-     * @param {String}
-     *            CONNECTION name of the device, eg (nxt) 0, 1, 2, 3
-     * @param {String/dropdown}
-     *            VIA type of protocol, eg. Wifi, bluetooth, nxt only bluetooth
-     * @param {data
-     *            type/dropdown} TYPE String, Boolean, Number
-     * @param {data}
-     *            DATA - message content
-     * @returns immediately
-     * @memberof Block
-     */
-
     init : function() {
         this.setColour(Blockly.CAT_COMMUNICATION_RGB);
         if (this.workspace.device === 'nxt') {
@@ -230,8 +189,24 @@ Blockly.Blocks['robCommunication_connection'] = {
             this.appendDummyInput().appendField(connection, 'CONNECTION');
         } else {
             // nxt is the only system using this block so far
-        }        
+        }
         this.setOutput(true, 'Connection');
-        this.setTooltip(Blockly.Msg.CONNECTION_RECEIVE_TOOLTIP);
+        this.setTooltip(Blockly.Msg.CONNECTION_TOOLTIP);
+    }
+};
+
+Blockly.Blocks['robCommunication_checkConnection'] = {
+    init : function() {
+        this.jsonInit({
+            "message0" : Blockly.Msg.CONNECTION_CHECK,
+            "args0" : [ {
+                "type" : "input_value",
+                "name" : "CONNECTION",
+                "check" : "Connection"
+            } ],
+            "output" : "Boolean",
+            "colour" : Blockly.CAT_COMMUNICATION_RGB,
+            "tooltip" : Blockly.Msg.CONNECTION_TOOLTIP,
+        });
     }
 };

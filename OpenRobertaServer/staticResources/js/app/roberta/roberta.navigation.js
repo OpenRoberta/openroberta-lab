@@ -105,8 +105,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $('#iconDisplayRobotState').removeClass('typcn-' + userState.robot);
                     $('#iconDisplayRobotState').addClass('typcn-' + robot);
                     userState.robot = robot;
-                    ROBERTA_PROGRAM.getBlocklyWorkspace().device = robot;
-                    BRICKLY.getBricklyWorkspace().device = robot;
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().setDevice(robot);
+                    BRICKLY.getBricklyWorkspace().setDevice(robot);
                     ROBERTA_ROBOT.setState(result);
                     ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
                     BRICKLY.loadToolboxAndConfiguration();

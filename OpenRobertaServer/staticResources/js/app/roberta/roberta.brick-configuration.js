@@ -221,10 +221,9 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
                 var further = opt_further || false;
                 if (further || userState.configurationSaved) {
                     BRICKLY.initConfigurationEnvironment();
-                    setConfiguration("EV3basis");
+                    setConfiguration(userState.robot.toUpperCase() + "basis");
                     $('#menuSaveConfig').parent().addClass('disabled');
                     BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
-                    ROBERTA_USER.setProgram("NEPOprog");
                 } else {
                     $('#confirmContinue').data('type', 'configuration');
                     if (userState.id === -1) {

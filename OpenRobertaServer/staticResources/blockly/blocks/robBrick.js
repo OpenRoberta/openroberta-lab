@@ -26,7 +26,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
         this.setInputsInline(false);
         var wheelDiameter = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
         var trackWidth = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
-        
+        this.appendDummyInput().appendField(new Blockly.FieldLabel(this.workspace.device.toUpperCase(), 'brick_label'));
         this.appendDummyInput().appendField(Blockly.Msg.BRICK_WHEEL_DIAMETER).appendField(wheelDiameter, 'WHEEL_DIAMETER').appendField('cm');
         this.appendDummyInput().appendField(Blockly.Msg.BRICK_TRACK_WIDTH).appendField(trackWidth, 'TRACK_WIDTH').appendField('cm');
         this.appendValueInput('S1').appendField('Sensor 1').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');
@@ -36,10 +36,13 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
         this.appendValueInput('MA').appendField('Motor A').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
         this.appendValueInput('MB').appendField('Motor B').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
         this.appendValueInput('MC').appendField('Motor C').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
-        if (this.workspace.device === 'ev3'){
-        this.appendValueInput('MD').appendField('Motor D').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');}
+        if (this.workspace.device === 'ev3') {
+            this.appendValueInput('MD').appendField('Motor D').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
+            this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
+        } else {
+            this.setTooltip(Blockly.Msg.NXTBRICK_TOOLTIP);
+        }
         this.setDeletable(false);
-        this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
     }
 };
 
@@ -75,19 +78,19 @@ Blockly.Blocks['robBrick_colour'] = {
 };
 
 Blockly.Blocks['robBrick_light'] = {
-        /**
-         * Represent EV3 colour sensor.
-         * 
-         * @constructs robBrick_colour
-         * @memberof Block
-         */
-        init : function() {
-            this.setColour(Blockly.CAT_SENSOR_RGB);
-            this.appendDummyInput().appendField(Blockly.Msg.SENSOR_LIGHT);
-            this.setOutput(true, 'Sensor');
-            this.setTooltip(Blockly.Msg.COLOUR_TOOLTIP);
-        }
-    };
+    /**
+     * Represent EV3 colour sensor.
+     * 
+     * @constructs robBrick_colour
+     * @memberof Block
+     */
+    init : function() {
+        this.setColour(Blockly.CAT_SENSOR_RGB);
+        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_LIGHT);
+        this.setOutput(true, 'Sensor');
+        this.setTooltip(Blockly.Msg.COLOUR_TOOLTIP);
+    }
+};
 
 Blockly.Blocks['robBrick_infrared'] = {
     /**
@@ -149,11 +152,11 @@ Blockly.Blocks['robBrick_sound'] = {
      */
 
     init : function() {
-       this.setColour(Blockly.CAT_SENSOR_RGB);
-       this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SOUND);
-       this.setOutput(true, 'Sensor');
-       this.setTooltip(Blockly.Msg.GYRO_TOOLTIP);
-       this.data = 'nxt';
+        this.setColour(Blockly.CAT_SENSOR_RGB);
+        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SOUND);
+        this.setOutput(true, 'Sensor');
+        this.setTooltip(Blockly.Msg.GYRO_TOOLTIP);
+        this.data = 'nxt';
     }
 };
 
