@@ -9,15 +9,15 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -28,13 +28,13 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * Generates a BrickConfiguration object.
  */
 public class Jaxb2Ev3ConfigurationTransformer {
-    public Ev3Configuration transform(BlockSet blockSet) {
+    public Configuration transform(BlockSet blockSet) {
         List<Instance> instances = blockSet.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
         return blockToBrickConfiguration(blocks.get(0));
     }
 
-    public BlockSet transformInverse(Ev3Configuration conf) {
+    public BlockSet transformInverse(Configuration conf) {
         int idCount = 1;
         BlockSet blockSet = new BlockSet();
         Instance instance = new Instance();
@@ -49,31 +49,31 @@ public class Jaxb2Ev3ConfigurationTransformer {
         fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getTrackWidthCM())));
         List<Value> values = block.getValue();
         {
-            Map<SensorPort, EV3Sensor> sensors = conf.getSensors();
+            Map<SensorPort, Sensor> sensors = conf.getSensors();
             for ( SensorPort port : sensors.keySet() ) {
-                EV3Sensor sensor = sensors.get(port);
+                Sensor sensor = sensors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.toString());
                 Block sensorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(sensorBlock);
-                sensorBlock.setType(sensor.getComponentType().getName());
+                sensorBlock.setType(sensor.getName().blocklyName());
                 values.add(hardwareComponent);
             }
         }
         {
-            Map<ActorPort, EV3Actor> actors = conf.getActors();
+            Map<ActorPort, Actor> actors = conf.getActors();
             for ( ActorPort port : actors.keySet() ) {
-                EV3Actor actor = actors.get(port);
+                Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.getXmlName());
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
-                actorBlock.setType(actor.getComponentType().getName());
+                actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
                 actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
                 String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
                 actorFields.add(mkField("MOTOR_REVERSE", rotation));
-                if ( !actor.getComponentType().getName().equals("robBrick_motor_middle") ) {
+                if ( !actor.getName().blocklyName().equals("robBrick_motor_middle") ) {
                     actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
                 }
                 values.add(hardwareComponent);
@@ -98,11 +98,11 @@ public class Jaxb2Ev3ConfigurationTransformer {
         return field;
     }
 
-    private Ev3Configuration blockToBrickConfiguration(Block block) {
+    private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
-                List<Pair<SensorPort, EV3Sensor>> sensors = new ArrayList<Pair<SensorPort, EV3Sensor>>();
-                List<Pair<ActorPort, EV3Actor>> actors = new ArrayList<Pair<ActorPort, EV3Actor>>();
+                List<Pair<SensorPort, Sensor>> sensors = new ArrayList<Pair<SensorPort, Sensor>>();
+                List<Pair<ActorPort, Actor>> actors = new ArrayList<Pair<ActorPort, Actor>>();
                 List<Field> fields = extractFields(block, (short) 2);
                 double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 double trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
@@ -110,17 +110,17 @@ public class Jaxb2Ev3ConfigurationTransformer {
                 List<Value> values = extractValues(block, (short) 8);
                 extractHardwareComponent(values, sensors, actors);
 
-                return new Ev3Configuration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
+                return new Configuration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }
     }
 
-    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, EV3Sensor>> sensors, List<Pair<ActorPort, EV3Actor>> actors) {
+    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, Sensor>> sensors, List<Pair<ActorPort, Actor>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 // Extract sensor
-                sensors.add(Pair.of(SensorPort.get(value.getName()), new EV3Sensor(EV3Sensors.find(value.getBlock().getType()))));
+                sensors.add(Pair.of(SensorPort.get(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
             } else {
                 List<Field> fields;
                 // Extract actor
@@ -130,20 +130,21 @@ public class Jaxb2Ev3ConfigurationTransformer {
                         actors.add(
                             Pair.of(
                                 ActorPort.get(value.getName()),
-                                new EV3Actor(
-                                    EV3Actors.find(value.getBlock().getType()),
+                                new Actor(
+                                    ActorType.get(value.getBlock().getType()),
                                     extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
                                     DriveDirection.get(extractField(fields, "MOTOR_REVERSE", 1)),
                                     MotorSide.NONE)));
 
                         break;
                     case "robBrick_motor_big":
+
                         fields = extractFields(value.getBlock(), (short) 3);
                         actors.add(
                             Pair.of(
                                 ActorPort.get(value.getName()),
-                                new EV3Actor(
-                                    EV3Actors.find(value.getBlock().getType()),
+                                new Actor(
+                                    ActorType.get(value.getBlock().getType()),
                                     extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
                                     DriveDirection.get(extractField(fields, "MOTOR_REVERSE", 1)),
                                     MotorSide.get(extractField(fields, "MOTOR_DRIVE", 2)))));

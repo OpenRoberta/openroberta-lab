@@ -4,8 +4,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.TouchSensorMode;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

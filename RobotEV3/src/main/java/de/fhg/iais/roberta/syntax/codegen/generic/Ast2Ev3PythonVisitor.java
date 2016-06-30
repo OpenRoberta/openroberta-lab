@@ -6,18 +6,17 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.HardwareComponent;
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -117,10 +116,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final Ev3Configuration brickConfiguration;
+    private final Configuration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
-    private final Set<EV3Sensors> usedSensors;
+    private final Set<SensorType> usedSensors;
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
 
@@ -132,7 +131,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2Ev3PythonVisitor(String programName, Ev3Configuration brickConfiguration, Set<EV3Sensors> usedSensors, int indentation) {
+    Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<SensorType> usedSensors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -149,13 +148,13 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, Ev3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
+    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<EV3Sensors> usedSensors = null;// = UsedSensorsCheckVisitor.check(phrasesSet);//TODO checking for used sensors is not needed since ev3dev is much faster than lejos
+        Set<SensorType> usedSensors = null;// = UsedSensorsCheckVisitor.check(phrasesSet);//TODO checking for used sensors is not needed since ev3dev is much faster than lejos
         Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(programName, brickConfiguration, usedSensors, 0);
         astVisitor.generatePrefix(withWrapping);
 
@@ -1458,12 +1457,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private void appendActors(StringBuilder sb) {
         sb.append("    'actors': {\n");
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            HardwareComponent hc = entry.getValue();
-            if ( hc != null ) {
+        for ( Map.Entry<ActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
+            Actor actor = entry.getValue();
+            if ( actor != null ) {
                 ActorPort port = entry.getKey();
                 sb.append("        '").append(port.toString()).append("':");
-                sb.append(generateRegenerateEV3Actor(hc, port));
+                sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
             }
         }
@@ -1472,12 +1471,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private void appendSensors(StringBuilder sb) {
         sb.append("    'sensors': {\n");
-        for ( Map.Entry<SensorPort, EV3Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            HardwareComponent hc = entry.getValue();
-            if ( hc != null ) {
+        for ( Map.Entry<SensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+            Sensor sensor = entry.getValue();
+            if ( sensor != null ) {
                 SensorPort port = entry.getKey();
                 sb.append("        '").append(port.getPortNumber()).append("':");
-                sb.append(generateRegenerateEV3Sensor(hc, port));
+                sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
             }
         }
@@ -1503,53 +1502,53 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     //    return type.getClass().getSimpleName() + "." + type.getTypeName();
     //}
 
-    private static String generateRegenerateEV3Actor(HardwareComponent actor, ActorPort port) {
+    private static String generateRegenerateActor(Actor actor, ActorPort port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;
-        switch ( actor.getComponentType().getShortName() ) {
-            case "middle motor":
+        switch ( actor.getName() ) {
+            case MEDIUM:
                 name = "MediumMotor";
                 break;
-            case "big motor":
+            case LARGE:
                 name = "LargeMotor";
                 break;
             default:
-                throw new IllegalArgumentException("no mapping for " + actor.getComponentType().getShortName() + "to ev3dev-lang-python");
+                throw new IllegalArgumentException("no mapping for " + actor.getName() + "to ev3dev-lang-python");
         }
-        EV3Actor ev3Actor = (EV3Actor) actor;
+
         sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
-        sb.append(", ").append(ev3Actor.isRegulated() ? "'on'" : "'off'");
-        sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection()));
-        sb.append(", ").append(getEnumCode(ev3Actor.getMotorSide()));
+        sb.append(", ").append(actor.isRegulated() ? "'on'" : "'off'");
+        sb.append(", ").append(getEnumCode(actor.getRotationDirection()));
+        sb.append(", ").append(getEnumCode(actor.getMotorSide()));
         sb.append(")");
         return sb.toString();
     }
 
-    private static String generateRegenerateEV3Sensor(HardwareComponent sensor, SensorPort port) {
+    private static String generateRegenerateSensor(Sensor sensor, SensorPort port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;
         // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
         // ['ColorSensor', 'GyroSensor', 'I2cSensor', 'InfraredSensor', 'LightSensor', 'SoundSensor', 'TouchSensor', 'UltrasonicSensor']
-        switch ( sensor.getComponentType().getShortName() ) {
-            case "color":
+        switch ( sensor.getName() ) {
+            case COLOR:
                 name = "ColorSensor";
                 break;
-            case "gyro":
+            case GYRO:
                 name = "GyroSensor";
                 break;
-            case "infrared":
+            case INFRARED:
                 name = "InfraredSensor";
                 break;
-            case "touch":
+            case TOUCH:
                 name = "TouchSensor";
                 break;
-            case "ultrasonic":
+            case ULTRASONIC:
                 name = "UltrasonicSensor";
                 break;
             default:
-                throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");
+                throw new IllegalArgumentException("no mapping for " + sensor.getName() + "to ev3dev-lang-python");
         }
         sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();

@@ -16,13 +16,13 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorSide;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
@@ -46,12 +46,12 @@ public class Helper {
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        Ev3Configuration brickConfiguration =
-            new Ev3Configuration.Builder()
-                .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.D, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+        Configuration brickConfiguration =
+            new Configuration.Builder()
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         String javaCode = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         // System.out.println(javaCode); // only needed for EXTREME debugging
@@ -67,7 +67,7 @@ public class Helper {
      * @return the code as string
      * @throws Exception
      */
-    public static String generateString(String pathToProgramXml, Ev3Configuration brickConfiguration) throws Exception {
+    public static String generateString(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
@@ -81,7 +81,7 @@ public class Helper {
      * @return the code as string
      * @throws Exception
      */
-    public static String generatePython(String pathToProgramXml, Ev3Configuration brickConfiguration) throws Exception {
+    public static String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ast2Ev3PythonVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
@@ -109,7 +109,7 @@ public class Helper {
      * @return brick configuration
      * @throws Exception
      */
-    public static Ev3Configuration generateConfiguration(String blocklyXml) throws Exception {
+    public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         return transformer.transform(project);

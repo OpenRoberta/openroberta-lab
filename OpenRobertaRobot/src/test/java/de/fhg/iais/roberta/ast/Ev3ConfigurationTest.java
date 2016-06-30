@@ -5,7 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
@@ -26,7 +26,7 @@ public class Ev3ConfigurationTest {
 
     @Test
     public void test1() throws Exception {
-        String a = // 
+        String a = //
             "robotev3test{" //
                 + "size{wheeldiameter5.0cm;trackwidth17.0cm;}"
                 + "sensorport{3:infrared;}"
@@ -34,7 +34,7 @@ public class Ev3ConfigurationTest {
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
-        Ev3Configuration b = transformer.transform(project);
+        Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
@@ -48,7 +48,7 @@ public class Ev3ConfigurationTest {
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
-        Ev3Configuration b = transformer.transform(project);
+        Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
@@ -62,7 +62,7 @@ public class Ev3ConfigurationTest {
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration3.xml");
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
-        Ev3Configuration b = transformer.transform(project);
+        Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
@@ -80,13 +80,13 @@ public class Ev3ConfigurationTest {
         // 1.
         String xmlExpected = resourceAsString(baseName + ".xml");
         BlockSet bs1 = JaxbHelper.xml2BlockSet(xmlExpected);
-        Ev3Configuration bc1 = transformer.transform(bs1);
+        Configuration bc1 = transformer.transform(bs1);
         // 2.
         String textExpected = resourceAsString(baseName + ".conf");
         String text = bc1.generateText("craesy");
         assertEq(textExpected, text);
         // 3.
-        Ev3Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text).getVal();
+        Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text).getVal();
         Assert.assertEquals(bc1, bc2);
         // 4.
         BlockSet bs2 = transformer.transformInverse(bc2);
@@ -94,7 +94,7 @@ public class Ev3ConfigurationTest {
         assertEq(xmlExpected, xmlActual);
         // 5.
         BlockSet bs3 = JaxbHelper.xml2BlockSet(xmlActual);
-        Ev3Configuration bc3 = transformer.transform(bs3);
+        Configuration bc3 = transformer.transform(bs3);
         Assert.assertEquals(bc1, bc3);
         Assert.assertEquals(bc2, bc3);
     }
@@ -111,10 +111,10 @@ public class Ev3ConfigurationTest {
      */
     private void testText2Text(String baseName, String name) throws Exception {
         String text1 = resourceAsString(baseName + ".conf"); // 1.
-        Ev3Configuration bc1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1).getVal(); // 2.
+        Configuration bc1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1).getVal(); // 2.
         String text2 = bc1.generateText(name); // 3.
         assertEq(text1, text2); // 4.
-        Ev3Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1).getVal();
+        Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1).getVal();
         Assert.assertEquals(bc1, bc2);
     }
 

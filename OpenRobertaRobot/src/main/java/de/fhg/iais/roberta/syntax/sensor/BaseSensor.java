@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

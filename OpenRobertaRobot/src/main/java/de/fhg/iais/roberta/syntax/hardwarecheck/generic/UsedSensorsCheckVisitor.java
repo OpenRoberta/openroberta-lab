@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.UsedSensor;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
@@ -102,7 +102,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(new UsedSensor(colorSensor.getPort(), EV3Sensors.EV3_COLOR_SENSOR, colorSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(colorSensor.getPort(), SensorType.COLOR, colorSensor.getMode()));
         return null;
     }
 
@@ -113,25 +113,26 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), EV3Sensors.EV3_GYRO_SENSOR, gyroSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), EV3Sensors.EV3_IR_SENSOR, infraredSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SensorType.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(new UsedSensor(touchSensor.getPort(), EV3Sensors.EV3_TOUCH_SENSOR, touchSensor.getMode()));
+        UsedSensor usedSensor = new UsedSensor(touchSensor.getPort(), SensorType.TOUCH, touchSensor.getMode());
+        this.usedSensors.add(usedSensor);
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), EV3Sensors.EV3_ULTRASONIC_SENSOR, ultrasonicSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), SensorType.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 }

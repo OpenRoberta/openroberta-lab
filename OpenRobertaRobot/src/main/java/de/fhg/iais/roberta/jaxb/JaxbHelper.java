@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 
@@ -108,7 +108,7 @@ public class JaxbHelper {
      * @return brick configuration
      * @throws Exception
      */
-    public static Ev3Configuration generateConfiguration(String blocklyXml) throws Exception {
+    public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         return transformer.transform(project);

@@ -5,16 +5,16 @@ import java.util.Set;
 
 import org.junit.Assert;
 
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.components.ev3.UsedSensor;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.UsedSensorsCheckVisitor;
@@ -23,14 +23,14 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class ProgramConfigurationCompatabilityTest {
 
     public void test() throws Exception {
-        Ev3Configuration.Builder builder = new Ev3Configuration.Builder();
+        Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
+        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
-            new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR)).addSensor(SensorPort.S2, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR));
+            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
 
-        Ev3Configuration brickConfiguration = builder.build();
+        Configuration brickConfiguration = builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);

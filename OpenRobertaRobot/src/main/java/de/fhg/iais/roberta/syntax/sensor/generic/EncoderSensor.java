@@ -4,9 +4,9 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -103,7 +103,7 @@ public class EncoderSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getMotor().name();
-        if ( getMode() != MotorTachoMode.RESET) {
+        if ( getMode() != MotorTachoMode.RESET ) {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
         }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, fieldValue);

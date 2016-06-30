@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.shared.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -77,11 +77,8 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-        return MotorSetPowerAction.make(
-            ActorPort.get(portName),
-            helper.convertPhraseToExpr(left),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return MotorSetPowerAction
+            .make(ActorPort.get(portName), helper.convertPhraseToExpr(left), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

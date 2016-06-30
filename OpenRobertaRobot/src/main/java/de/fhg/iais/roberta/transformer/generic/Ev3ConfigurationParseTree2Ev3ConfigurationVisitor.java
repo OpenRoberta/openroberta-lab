@@ -13,11 +13,11 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationBaseVisitor;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
@@ -27,35 +27,36 @@ import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.Con
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.MotorSpecContext;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.SdeclContext;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.SizesContext;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Option;
 
 public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3ConfigurationBaseVisitor<Void> {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.class);
 
-    private final Ev3Configuration.Builder builder = new Ev3Configuration.Builder();
+    private final Configuration.Builder builder = new Configuration.Builder();
     private ActorPort nextActorToAttach = null;
     private String parseErrorMessage = null;
 
     /**
-     * take a brick configuration program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create a configuration.<br>
+     * take a brick configuration program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create a configuration.
+     * <br>
      * Factory method
      */
-    public static Option<Ev3Configuration> startWalkForVisiting(String stmt) {
+    public static Option<Configuration> startWalkForVisiting(String stmt) {
         Ev3ConfigurationParseTree2Ev3ConfigurationVisitor visitor = new Ev3ConfigurationParseTree2Ev3ConfigurationVisitor();
         visitor.parseAndVisit(stmt);
         return visitor.result();
     }
 
-    private Option<Ev3Configuration> result() {
-        if ( parseErrorMessage == null ) {
-            return Option.of(builder.build());
+    private Option<Configuration> result() {
+        if ( this.parseErrorMessage == null ) {
+            return Option.of(this.builder.build());
         } else {
-            return Option.empty(parseErrorMessage);
+            return Option.empty(this.parseErrorMessage);
         }
     }
 
@@ -80,18 +81,19 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
                     int charPositionInLine,
                     String msg,
                     RecognitionException e) {
-                    if ( parseErrorMessage == null ) {
-                        parseErrorMessage = "syntax error at line " + line + ":" + charPositionInLine + " --- " + msg;
+                    if ( Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.this.parseErrorMessage == null ) {
+                        Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.this.parseErrorMessage =
+                            "syntax error at line " + line + ":" + charPositionInLine + " --- " + msg;
                     }
                 }
             });
             ConfContext tree = parser.conf();
-            if ( parseErrorMessage == null ) {
+            if ( this.parseErrorMessage == null ) {
                 visit(tree);
             }
         } catch ( Exception e ) {
             LOG.error("exception when parsing configuration", e);
-            parseErrorMessage = "exception when parsing configuration - should not happen. Contact the developers.";
+            this.parseErrorMessage = "exception when parsing configuration - should not happen. Contact the developers.";
         }
     }
 
@@ -110,9 +112,10 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
     public Void visitSdecl(SdeclContext ctx) {
         SensorPort port = SensorPort.get(ctx.SENSORPORT().getText());
         String sensorShortName = ctx.SENSOR().getText();
-        EV3Sensors attachedSensor = null;
-        for ( EV3Sensors s : EV3Sensors.SENSORS ) {
-            if ( s.getShortName().equalsIgnoreCase(sensorShortName) ) {
+        SensorType attachedSensor = null;
+
+        for ( SensorType s : SensorType.values() ) {
+            if ( s.toString().equalsIgnoreCase(sensorShortName) ) {
                 attachedSensor = s;
                 break;
             }
@@ -120,7 +123,7 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
         if ( attachedSensor == null ) {
             throw new RuntimeException("Keys.E2");
         }
-        this.builder.addSensor(port, new EV3Sensor(attachedSensor));
+        this.builder.addSensor(port, new Sensor(attachedSensor));
         return null;
     }
 
@@ -132,11 +135,11 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
 
     @Override
     public Void visitActor(ActorContext ctx) {
-        EV3Actors motorKind;
+        ActorType motorKind;
         if ( "large".equalsIgnoreCase(ctx.MOTORKIND().getText()) ) {
-            motorKind = EV3Actors.EV3_LARGE_MOTOR;
+            motorKind = ActorType.LARGE;
         } else {
-            motorKind = EV3Actors.EV3_MEDIUM_MOTOR;
+            motorKind = ActorType.MEDIUM;
         }
         MotorSpecContext motorSpec = ctx.motorSpec();
         boolean regulated = "regulated".equalsIgnoreCase(motorSpec.REGULATION().getText());
@@ -155,7 +158,7 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
         } else {
             motorSide = MotorSide.RIGHT;
         }
-        EV3Actor actor = new EV3Actor(motorKind, regulated, direction, motorSide);
+        Actor actor = new Actor(motorKind, regulated, direction, motorSide);
         this.builder.addActor(this.nextActorToAttach, actor);
         this.nextActorToAttach = null;
         return null;

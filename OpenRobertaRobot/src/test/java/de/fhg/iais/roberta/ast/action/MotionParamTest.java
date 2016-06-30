@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.shared.action.ev3.MotorMoveMode;
+import de.fhg.iais.roberta.shared.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.MotorDuration;

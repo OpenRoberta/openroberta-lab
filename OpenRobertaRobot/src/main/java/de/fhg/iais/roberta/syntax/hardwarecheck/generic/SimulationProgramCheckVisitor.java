@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
 
-    public SimulationProgramCheckVisitor(Ev3Configuration brickConfiguration) {
+    public SimulationProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
     }
 
@@ -64,7 +64,7 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     protected void checkSensorPort(BaseSensor<Void> sensor) {
-        EV3Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
+        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind() == BlockType.INFRARED_SENSING ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
@@ -74,27 +74,27 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
         } else {
             switch ( sensor.getKind() ) {
                 case COLOR_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_COLOR_SENSOR.getTypeName() ) {
+                    if ( usedSensor.getName() != SensorType.COLOR ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case TOUCH_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_TOUCH_SENSOR.getTypeName() ) {
+                    if ( usedSensor.getName() != SensorType.TOUCH ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case ULTRASONIC_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_ULTRASONIC_SENSOR.getTypeName() ) {
+                    if ( usedSensor.getName() != SensorType.ULTRASONIC ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case INFRARED_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_IR_SENSOR.getTypeName() ) {
+                    if ( usedSensor.getName() != SensorType.INFRARED ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
                     }
                     break;
                 case GYRO_SENSING:
-                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_GYRO_SENSOR.getTypeName() ) {
+                    if ( usedSensor.getName() != SensorType.GYRO ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;

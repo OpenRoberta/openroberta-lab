@@ -5,8 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorMoveMode;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -117,9 +117,8 @@ public class DriveAction<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         if ( getProperty().getBlockType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR) ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection() == DriveDirection.FOREWARD
-                ? getDirection().name()
-                : "BACKWARDS");
+            JaxbTransformerHelper
+                .addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection() == DriveDirection.FOREWARD ? getDirection().name() : "BACKWARDS");
         } else {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().name());
         }

@@ -15,19 +15,19 @@ import org.antlr.v4.runtime.Recognizer;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration.Builder;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Configuration.Builder;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.util.Option;
 
@@ -79,9 +79,9 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2ConfigurationEmpty() throws Exception {
-        Builder expected = new Ev3Configuration.Builder();
+        Builder expected = new Configuration.Builder();
         expected.setWheelDiameter(5.0).setTrackWidth(2.5);
-        Ev3Configuration actual =
+        Configuration actual =
             Ev3ConfigurationParseTree2Ev3ConfigurationVisitor
                 .startWalkForVisiting("robot ev3 Craesy-PID-2014 { size {wheel diameter 5 cm;track width 2.5 cm;} }")
                 .getVal();
@@ -90,27 +90,27 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration1Sensor() throws Exception {
-        Builder expectedBuilder = new Ev3Configuration.Builder();
+        Builder expectedBuilder = new Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
-        expectedBuilder.addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR));
-        Ev3Configuration expected = expectedBuilder.build();
+        expectedBuilder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH));
+        Configuration expected = expectedBuilder.build();
 
-        Ev3Configuration actual1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting( //
+        Configuration actual1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting( //
             "robot ev3 Craesy-PID-2014 { size { wheel diameter 5 cm; track width 2.5 cm; } sensor port {1: touch; } }").getVal();
         assertEquals(expected, actual1);
 
         String expectedAsString = expected.generateText("Craesy-PID-2014");
-        Ev3Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString).getVal();
+        Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString).getVal();
         assertEquals(expected, actual2);
     }
 
     @Test
     public void testParseTree2Configuration2Sensors() throws Exception {
-        Builder expectedBuilder = new Ev3Configuration.Builder();
+        Builder expectedBuilder = new Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
-        expectedBuilder.addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR));
-        expectedBuilder.addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_IR_SENSOR));
-        Ev3Configuration expected = expectedBuilder.build();
+        expectedBuilder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH));
+        expectedBuilder.addSensor(SensorPort.S4, new Sensor(SensorType.INFRARED));
+        Configuration expected = expectedBuilder.build();
 
         assertAllEquals(
             "Craesy-PID-2014",
@@ -120,10 +120,10 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration1Actor() throws Exception {
-        Builder expectedBuilder = new Ev3Configuration.Builder();
+        Builder expectedBuilder = new Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
-        expectedBuilder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE));
-        Ev3Configuration expected = expectedBuilder.build();
+        expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE));
+        Configuration expected = expectedBuilder.build();
 
         assertAllEquals(
             "Craesy-PID-2014",
@@ -138,12 +138,12 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration3Actors() throws Exception {
-        Builder expectedBuilder = new Ev3Configuration.Builder();
+        Builder expectedBuilder = new Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
-        expectedBuilder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE));
-        expectedBuilder.addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.BACKWARD, MotorSide.LEFT));
-        expectedBuilder.addActor(ActorPort.D, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.BACKWARD, MotorSide.RIGHT));
-        Ev3Configuration expected = expectedBuilder.build();
+        expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE));
+        expectedBuilder.addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.BACKWARD, MotorSide.LEFT));
+        expectedBuilder.addActor(ActorPort.D, new Actor(ActorType.LARGE, false, DriveDirection.BACKWARD, MotorSide.RIGHT));
+        Configuration expected = expectedBuilder.build();
 
         assertAllEquals(
             "Craesy-PID-2015",
@@ -159,15 +159,15 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2ConfigurationStandardConfiguration() throws Exception {
-        Builder expectedBuilder = new Ev3Configuration.Builder();
+        Builder expectedBuilder = new Configuration.Builder();
         expectedBuilder
             .setWheelDiameter(5.6)
             .setTrackWidth(13.5)
-            .addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR))
-            .addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))
-            .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-            .addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT));
-        Ev3Configuration expected = expectedBuilder.build();
+            .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))
+            .addSensor(SensorPort.S4, new Sensor(SensorType.ULTRASONIC))
+            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+            .addActor(ActorPort.C, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT));
+        Configuration expected = expectedBuilder.build();
 
         assertAllEquals(
             "EV3basis",
@@ -189,7 +189,7 @@ public class Antlr4Ev3ConfigurationTest {
                 + "actor port { B: large mOtOr, regulated, forward, right;\n"
                 + "             C: large motor, regulated, forward, left;"
                 + "}}";
-        Option<Ev3Configuration> confResult = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(conf);
+        Option<Configuration> confResult = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(conf);
         assertTrue(!confResult.isSet());
         assertTrue(confResult.getMessage().matches(".*mOtOr.*"));
     }
@@ -209,12 +209,12 @@ public class Antlr4Ev3ConfigurationTest {
         return parser;
     }
 
-    private void assertAllEquals(String configurationName, Ev3Configuration expected, String actualAsString) throws Exception {
-        Ev3Configuration actual = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(actualAsString).getVal();
+    private void assertAllEquals(String configurationName, Configuration expected, String actualAsString) throws Exception {
+        Configuration actual = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(actualAsString).getVal();
         assertEquals(expected, actual);
 
         String expectedAsString = expected.generateText(configurationName);
-        Ev3Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString).getVal();
+        Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString).getVal();
         assertEquals(expected, actual2);
     }
 

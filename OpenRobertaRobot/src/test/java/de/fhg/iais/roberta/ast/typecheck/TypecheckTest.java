@@ -3,14 +3,14 @@ package de.fhg.iais.roberta.ast.typecheck;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.TypecheckVisitor;
 
 public class TypecheckTest {
-    private static final Ev3Configuration BRICK_CONFIGURATION = new Ev3Configuration.Builder().build();
+    private static final Configuration BRICK_CONFIGURATION = new Configuration.Builder().build();
 
     @Test
     public void test0ok() throws Exception {

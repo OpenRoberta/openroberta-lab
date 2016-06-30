@@ -6,18 +6,18 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.HardwareComponent;
-import de.fhg.iais.roberta.components.HardwareComponentType;
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.components.ev3.UsedSensor;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -122,7 +122,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final Ev3Configuration brickConfiguration;
+    private final Configuration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
     private final Set<UsedSensor> usedSensors;
@@ -136,7 +136,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2Ev3JavaVisitor(String programName, Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
+    Ast2Ev3JavaVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -150,7 +150,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, Ev3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
+    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
@@ -1507,7 +1507,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
-        this.sb.append(INDENT).append("private static Ev3Configuration brickConfiguration;").append("\n\n");
+        this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
         this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
@@ -1527,11 +1527,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.runtime.ev3.*;\n\n");
 
         this.sb.append("import de.fhg.iais.roberta.shared.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.shared.action.ev3.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.shared.sensor.ev3.*;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.shared.action.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.shared.sensor.*;\n\n");
 
         this.sb.append("import de.fhg.iais.roberta.components.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.components.ev3.*;\n\n");
 
         this.sb.append("import java.util.LinkedHashSet;\n");
         this.sb.append("import java.util.Set;\n");
@@ -1547,7 +1546,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      */
     public String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
-        sb.append(" brickConfiguration = new Ev3Configuration.Builder()\n");
+        sb.append(" brickConfiguration = new Configuration.Builder()\n");
         sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
         sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
         appendActors(sb);
@@ -1557,27 +1556,21 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void appendSensors(StringBuilder sb) {
-        for ( Map.Entry<SensorPort, EV3Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+        for ( Map.Entry<SensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             sb.append(INDENT).append(INDENT).append(INDENT);
-            appendOptional(sb, "    .addSensor(", entry.getKey(), entry.getValue());
+            sb.append("    .addSensor(");
+            sb.append(getEnumCode(entry.getKey())).append(", ");
+            sb.append(generateRegenerateSensor(entry.getValue()));
+            sb.append(")\n");
         }
     }
 
     private void appendActors(StringBuilder sb) {
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
+        for ( Map.Entry<ActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             sb.append(INDENT).append(INDENT).append(INDENT);
-            appendOptional(sb, "    .addActor(", entry.getKey(), entry.getValue());
-        }
-    }
-
-    private static void appendOptional(StringBuilder sb, String type, @SuppressWarnings("rawtypes") Enum port, HardwareComponent hardwareComponent) {
-        if ( hardwareComponent != null ) {
-            sb.append(type).append(getEnumCode(port)).append(", ");
-            if ( hardwareComponent.getCategory() == Category.SENSOR ) {
-                sb.append(generateRegenerateEV3Sensor(hardwareComponent));
-            } else {
-                sb.append(generateRegenerateEV3Actor(hardwareComponent));
-            }
+            sb.append("    .addActor(");
+            sb.append(getEnumCode(entry.getKey())).append(", ");
+            sb.append(generateRegenerateActor(entry.getValue()));
             sb.append(")\n");
         }
     }
@@ -1598,24 +1591,28 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         return sb.toString();
     }
 
-    private static String generateRegenerateEV3Actor(HardwareComponent actor) {
+    private static String generateRegenerateActor(Actor actor) {
         StringBuilder sb = new StringBuilder();
-        EV3Actor ev3Actor = (EV3Actor) actor;
-        sb.append("new EV3Actor(").append(getHardwareComponentTypeCode(actor.getComponentType()));
-        sb.append(", ").append(ev3Actor.isRegulated());
-        sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection())).append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
+
+        sb.append("new Actor(").append(getActorTypeCode(actor.getName()));
+        sb.append(", ").append(actor.isRegulated());
+        sb.append(", ").append(getEnumCode(actor.getRotationDirection())).append(", ").append(getEnumCode(actor.getMotorSide())).append(")");
         return sb.toString();
     }
 
-    private static String generateRegenerateEV3Sensor(HardwareComponent sensor) {
+    private static String generateRegenerateSensor(Sensor sensor) {
         StringBuilder sb = new StringBuilder();
-        sb.append("new EV3Sensor(").append(getHardwareComponentTypeCode(sensor.getComponentType()));
+        sb.append("new Sensor(").append(getSensorTypeCode(sensor.getName()));
         sb.append(")");
         return sb.toString();
     }
 
-    private static String getHardwareComponentTypeCode(HardwareComponentType type) {
-        return type.getClass().getSimpleName() + "." + type.getTypeName();
+    private static String getActorTypeCode(ActorType type) {
+        return type.getClass().getSimpleName() + "." + type.name();
+    }
+
+    private static String getSensorTypeCode(SensorType type) {
+        return type.getClass().getSimpleName() + "." + type.name();
     }
 
     private static boolean isInteger(String str) {

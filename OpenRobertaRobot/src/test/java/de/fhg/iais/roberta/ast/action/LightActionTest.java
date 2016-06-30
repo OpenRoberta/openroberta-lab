@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.shared.action.ev3.BlinkMode;
-import de.fhg.iais.roberta.shared.action.ev3.BrickLedColor;
+import de.fhg.iais.roberta.shared.action.BlinkMode;
+import de.fhg.iais.roberta.shared.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.testutil.Helper;
 

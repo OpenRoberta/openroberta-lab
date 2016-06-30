@@ -4,15 +4,15 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.testutil.ev3.Helper;
 
 public class AstToLejosJavaVisitorTest {
@@ -26,10 +26,9 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.runtime.*;\n"
         + "import de.fhg.iais.roberta.runtime.ev3.*;\n\n"
         + "import de.fhg.iais.roberta.shared.*;\n"
-        + "import de.fhg.iais.roberta.shared.action.ev3.*;\n"
-        + "import de.fhg.iais.roberta.shared.sensor.ev3.*;\n\n"
+        + "import de.fhg.iais.roberta.shared.action.*;\n"
+        + "import de.fhg.iais.roberta.shared.sensor.*;\n\n"
         + "import de.fhg.iais.roberta.components.*;\n"
-        + "import de.fhg.iais.roberta.components.ev3.*;\n\n"
         + "import java.util.LinkedHashSet;\n"
         + "import java.util.Set;\n"
         + "import java.util.List;\n"
@@ -38,16 +37,16 @@ public class AstToLejosJavaVisitorTest {
         + "import lejos.remote.nxt.NXTConnection;\n\n";
 
     private static final String BRICK_CONFIGURATION = "" //
-        + "    brickConfiguration = new Ev3Configuration.Builder()\n"
+        + "    brickConfiguration = new Configuration.Builder()\n"
         + "    .setWheelDiameter(5.6)\n"
         + "    .setTrackWidth(17.0)\n"
-        + "    .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
-        + "    .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
-        + "    .addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR))\n"
-        + "    .addSensor(SensorPort.S2, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))\n"
+        + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
+        + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
+        + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
+        + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
         + "    .build();\n\n";
 
-    private static final String BRICK_CONFIGURATION_DECL = "private static Ev3Configuration brickConfiguration;\n";
+    private static final String BRICK_CONFIGURATION_DECL = "private static Configuration brickConfiguration;\n";
 
     private static final String USED_SENSORS_DECL = "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();\n";
 
@@ -62,16 +61,16 @@ public class AstToLejosJavaVisitorTest {
         + "        }\n"
         + "    }\n\n";
     private static final String SUFFIX = "";
-    private static Ev3Configuration brickConfiguration;
+    private static Configuration brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        Ev3Configuration.Builder builder = new Ev3Configuration.Builder();
+        Configuration.Builder builder = new Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
+        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
-            new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR)).addSensor(SensorPort.S2, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR));
+            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = builder.build();
     }
 
@@ -120,7 +119,7 @@ public class AstToLejosJavaVisitorTest {
             + IMPORTS
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
-            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, EV3Sensors.EV3_TOUCH_SENSOR, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S3, EV3Sensors.EV3_COLOR_SENSOR, ColorSensorMode.COLOUR)));\n"
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR)));\n"
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
@@ -152,7 +151,7 @@ public class AstToLejosJavaVisitorTest {
             + IMPORTS
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
-            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, EV3Sensors.EV3_TOUCH_SENSOR, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, EV3Sensors.EV3_ULTRASONIC_SENSOR, UltrasonicSensorMode.DISTANCE)));\n"
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE)));\n"
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
@@ -184,8 +183,8 @@ public class AstToLejosJavaVisitorTest {
             + IMPORTS
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
-            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S4, EV3Sensors.EV3_IR_SENSOR, InfraredSensorMode.DISTANCE), new UsedSensor(SensorPort.S4, EV3Sensors.EV3_ULTRASONIC_SENSOR, UltrasonicSensorMode.DISTANCE), new UsedSensor(SensorPort.S2, EV3Sensors.EV3_GYRO_SENSOR, GyroSensorMode.RESET)"
-            + ", new UsedSensor(SensorPort.S1, EV3Sensors.EV3_TOUCH_SENSOR, TouchSensorMode.TOUCH)));\n"
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S4, SensorType.INFRARED, InfraredSensorMode.DISTANCE), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE), new UsedSensor(SensorPort.S2, SensorType.GYRO, GyroSensorMode.RESET)"
+            + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));\n"
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"

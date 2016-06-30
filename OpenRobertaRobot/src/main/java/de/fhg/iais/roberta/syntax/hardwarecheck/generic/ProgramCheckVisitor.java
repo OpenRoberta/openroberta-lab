@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.shared.action.ActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
@@ -30,9 +30,9 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
 
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
-    protected Ev3Configuration brickConfiguration;
+    protected Configuration brickConfiguration;
 
-    public ProgramCheckVisitor(Ev3Configuration brickConfiguration) {
+    public ProgramCheckVisitor(Configuration brickConfiguration) {
         this.brickConfiguration = brickConfiguration;
     }
 

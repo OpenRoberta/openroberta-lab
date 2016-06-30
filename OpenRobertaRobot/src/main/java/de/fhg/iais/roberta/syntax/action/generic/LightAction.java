@@ -4,8 +4,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.shared.action.ev3.BlinkMode;
-import de.fhg.iais.roberta.shared.action.ev3.BrickLedColor;
+import de.fhg.iais.roberta.shared.action.BlinkMode;
+import de.fhg.iais.roberta.shared.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

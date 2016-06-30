@@ -6,7 +6,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ev3.UsedSensor;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.testutil.Helper;
@@ -33,9 +33,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator2.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
-        Assert.assertEquals(
-            "[[S1, HardwareComponentType [robBrick_touch, SENSOR], TOUCH], [S3, HardwareComponentType [robBrick_colour, SENSOR], COLOUR]]",
-            hardwareCheckVisitor.toString());
+        Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S3, COLOR, COLOUR]]", hardwareCheckVisitor.toString());
     }
 
     @Test
@@ -43,9 +41,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator3.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
-        Assert.assertEquals(
-            "[[S1, HardwareComponentType [robBrick_touch, SENSOR], TOUCH], [S4, HardwareComponentType [robBrick_ultrasonic, SENSOR], DISTANCE]]",
-            hardwareCheckVisitor.toString());
+        Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S4, ULTRASONIC, DISTANCE]]", hardwareCheckVisitor.toString());
     }
 
     @Test
@@ -54,7 +50,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
-            "[[S4, HardwareComponentType [robBrick_infrared, SENSOR], DISTANCE], [S4, HardwareComponentType [robBrick_ultrasonic, SENSOR], DISTANCE], [S2, HardwareComponentType [robBrick_gyro, SENSOR], RESET], [S1, HardwareComponentType [robBrick_touch, SENSOR], TOUCH]]",
+            "[UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE], UsedSensor [S2, GYRO, RESET], UsedSensor [S1, TOUCH, TOUCH]]",
             hardwareCheckVisitor.toString());
     }
 
@@ -71,7 +67,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/ast/control/wait_stmt1.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
-        Assert.assertEquals("[[S1, HardwareComponentType [robBrick_touch, SENSOR], TOUCH]]", hardwareCheckVisitor.toString());
+        Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH]]", hardwareCheckVisitor.toString());
     }
 
     @Test
@@ -87,7 +83,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/ast/control/wait_stmt3.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
-        Assert.assertEquals("[[S4, HardwareComponentType [robBrick_infrared, SENSOR], DISTANCE]]", hardwareCheckVisitor.toString());
+        Assert.assertEquals("[UsedSensor [S4, INFRARED, DISTANCE]]", hardwareCheckVisitor.toString());
     }
 
     @Test
@@ -104,7 +100,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
-            "[[S3, HardwareComponentType [robBrick_colour, SENSOR], COLOUR], [S4, HardwareComponentType [robBrick_infrared, SENSOR], DISTANCE], [S4, HardwareComponentType [robBrick_ultrasonic, SENSOR], DISTANCE]]",
+            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE]]",
             hardwareCheckVisitor.toString());
     }
 
@@ -114,7 +110,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
-            "[[S3, HardwareComponentType [robBrick_colour, SENSOR], COLOUR], [S1, HardwareComponentType [robBrick_touch, SENSOR], TOUCH], [S4, HardwareComponentType [robBrick_infrared, SENSOR], DISTANCE], [S2, HardwareComponentType [robBrick_gyro, SENSOR], ANGLE], [S4, HardwareComponentType [robBrick_ultrasonic, SENSOR], DISTANCE]]",
+            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S2, GYRO, ANGLE], UsedSensor [S4, ULTRASONIC, DISTANCE]]",
             hardwareCheckVisitor.toString());
     }
 
@@ -124,7 +120,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
-            "[[S3, HardwareComponentType [robBrick_colour, SENSOR], COLOUR], [S3, HardwareComponentType [robBrick_colour, SENSOR], AMBIENTLIGHT], [S4, HardwareComponentType [robBrick_colour, SENSOR], RED]]",
+            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S3, COLOR, AMBIENTLIGHT], UsedSensor [S4, COLOR, RED]]",
             hardwareCheckVisitor.toString());
     }
 }

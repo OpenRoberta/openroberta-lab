@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -31,7 +31,7 @@ public class ConfigurationHelper {
     public static String xmlString2textString(String name, String xmlString) throws Exception {
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         BlockSet bs = JaxbHelper.xml2BlockSet(xmlString);
-        Ev3Configuration bc = transformer.transform(bs);
+        Configuration bc = transformer.transform(bs);
         String textString = bc.generateText(name);
         return textString;
     }
@@ -46,9 +46,9 @@ public class ConfigurationHelper {
     public static Option<String> textString2xmlString(String textString) {
         try {
             Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
-            Option<Ev3Configuration> msgConf = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(textString);
+            Option<Configuration> msgConf = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(textString);
             if ( msgConf.isSet() ) {
-                Ev3Configuration bc = msgConf.getVal();
+                Configuration bc = msgConf.getVal();
                 BlockSet bs = transformer.transformInverse(bc);
                 String xmlString = JaxbHelper.blockSet2xml(bs);
                 return Option.of(xmlString);

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
@@ -19,9 +19,9 @@ public class BlocklyProgramAndConfigTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyProgramAndConfigTransformer.class);
     private Key errorMessage;
     private Jaxb2BlocklyProgramTransformer<Void> programTransformer;
-    private Ev3Configuration brickConfiguration;
+    private Configuration brickConfiguration;
 
-    private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2BlocklyProgramTransformer<Void> programTransformer, Ev3Configuration brickConfiguration) {
+    private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2BlocklyProgramTransformer<Void> programTransformer, Configuration brickConfiguration) {
         super();
         this.errorMessage = errorMessage;
         this.programTransformer = programTransformer;
@@ -45,7 +45,7 @@ public class BlocklyProgramAndConfigTransformer {
     /**
      * @return the brickConfiguration
      */
-    public Ev3Configuration getBrickConfiguration() {
+    public Configuration getBrickConfiguration() {
         return this.brickConfiguration;
     }
 
@@ -78,7 +78,7 @@ public class BlocklyProgramAndConfigTransformer {
             LOG.error("Transformer failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
         }
-        Ev3Configuration brickConfiguration = null;
+        Configuration brickConfiguration = null;
         try {
             brickConfiguration = JaxbHelper.generateConfiguration(configurationText);
         } catch ( Exception e ) {

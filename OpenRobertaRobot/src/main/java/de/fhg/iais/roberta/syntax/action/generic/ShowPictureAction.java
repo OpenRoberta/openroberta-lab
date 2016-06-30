@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.shared.action.ev3.ShowPicture;
+import de.fhg.iais.roberta.shared.action.ShowPicture;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

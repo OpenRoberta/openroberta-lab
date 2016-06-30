@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -102,7 +102,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
-    private final Ev3Configuration brickConfiguration;
+    private final Configuration brickConfiguration;
     private final String programName;
     private final Phrase<BlocklyType> phrase;
 
@@ -117,7 +117,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase
      */
-    TypecheckVisitor(String programName, Ev3Configuration brickConfiguration, Phrase<BlocklyType> phrase) {
+    TypecheckVisitor(String programName, Configuration brickConfiguration, Phrase<BlocklyType> phrase) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.phrase = phrase;
@@ -131,7 +131,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param phrase to typecheck
      * @return the typecheck visitor (to get information about errors and the derived type)
      */
-    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, Ev3Configuration brickConfiguration, Phrase<BlocklyType> phrase) //
+    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, Configuration brickConfiguration, Phrase<BlocklyType> phrase) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
