@@ -188,20 +188,19 @@ function _createemptydb {
 }
 
 function _updateLejos {
-  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 OpenRobertaServer/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
   run="echo ${serverurl} | ssh root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
-  shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
+  runtime="OpenRobertaServer/target/updateResources/EV3Runtime.jar"
   json='OpenRobertaServer/target/updateResources/json.jar'
   websocket='OpenRobertaServer/target/updateResources/Java-WebSocket.jar'
-  run="ssh root@${lejosipaddr} mkdir -p /home/roberta/lib"
+  run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
-  run="scp ${runtime} ${shared} ${json} ${websocket} root@${lejosipaddr}:/home/roberta/lib"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 ${runtime} ${json} ${websocket} root@${lejosipaddr}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
 }

@@ -50,8 +50,7 @@
 				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar \
 					${brick.runtime}/lib/dbusjava.jar \
 					${brick.runtime}/libjna/usr/share/java/jna.jar \
-					${brick.roberta}/OpenRobertaRuntime.jar \
-					${brick.roberta}/OpenRobertaShared.jar \
+					${brick.roberta}/EV3Runtime.jar \
 					${brick.roberta}/Java-WebSocket.jar \
 					${brick.roberta}/json.jar" />
 			</manifest>
