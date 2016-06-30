@@ -9,6 +9,6 @@ public class ShowPictureActionTest {
     public void drawPicture() throws Exception {
         String a = "\nhal.drawPicture(ShowPicture.EYESOPEN, 0, 0);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_ShowPicture.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_ShowPicture.xml");
     }
 }

@@ -10,6 +10,6 @@ public class SetMotorSpeedActionTest {
     public void setMotorSpeed() throws Exception {
         String a = "\nhal.setRegulatedMotorSpeed(ActorPort.B, 30);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_MotorSetPower.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorSetPower.xml");
     }
 }

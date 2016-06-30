@@ -9,6 +9,6 @@ public class BrickSensorTest {
     public void isPressed() throws Exception {
         String a = "\nhal.isPressed(BrickKey.ENTER)";
 
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
+        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_brick1.xml");
     }
 }

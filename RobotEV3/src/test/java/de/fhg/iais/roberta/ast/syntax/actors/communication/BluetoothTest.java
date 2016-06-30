@@ -9,21 +9,21 @@ public class BluetoothTest {
     public void connection() throws Exception {
         String a = "NXTConnectionvariablenName=hal.establishConnectionTo(\"101010\");publicvoidrun()throwsException{}";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_BluetoothConnection.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnection.xml");
     }
 
     @Test
     public void connectionWait() throws Exception {
         String a = "NXTConnectionvariablenName=hal.waitForConnection();publicvoidrun()throwsException{}";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_BluetoothConnectionWait.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnectionWait.xml");
     }
 
     @Test
     public void send() throws Exception {
         String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun()throwsException{hal.sendMessage(\"\", variablenName2);}";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_BluetoothSend.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothSend.xml");
     }
 
     @Test
@@ -31,6 +31,6 @@ public class BluetoothTest {
         String a =
             "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun()throwsException{hal.drawText(String.valueOf(hal.readMessage(variablenName2)),0,0);}";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_BluetoothReceive.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothReceive.xml");
     }
 }

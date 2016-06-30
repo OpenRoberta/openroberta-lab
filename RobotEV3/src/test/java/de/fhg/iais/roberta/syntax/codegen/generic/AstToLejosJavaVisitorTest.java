@@ -341,7 +341,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/ast/task/task_mainTask.xml");
+        assertCodeIsOk(a, "/syntax/task/task_mainTask.xml");
     }
 
     @Test

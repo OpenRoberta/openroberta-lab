@@ -9,6 +9,6 @@ public class TouchSensorTest {
     public void isPressed() throws Exception {
         String a = "\nhal.isPressed(SensorPort.S1)";
 
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_Touch.xml");
+        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_Touch.xml");
     }
 }

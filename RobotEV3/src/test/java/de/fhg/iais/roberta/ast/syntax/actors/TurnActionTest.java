@@ -10,13 +10,13 @@ public class TurnActionTest {
     public void turn() throws Exception {
         String a = "\nhal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurn.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffTurn.xml");
     }
 
     @Test
     public void turnFor() throws Exception {
         String a = "\nhal.rotateDirectionAngle(TurnDirection.RIGHT, 50, 20);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurnFor.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffTurnFor.xml");
     }
 }

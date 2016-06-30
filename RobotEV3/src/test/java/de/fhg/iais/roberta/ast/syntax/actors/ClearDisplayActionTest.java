@@ -9,6 +9,6 @@ public class ClearDisplayActionTest {
     public void clearDisplay() throws Exception {
         String a = "publicvoidrun()throwsException{hal.clearDisplay();}";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_ClearDisplay.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_ClearDisplay.xml");
     }
 }

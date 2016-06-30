@@ -10,6 +10,6 @@ public class MotorStopActionTest {
     public void stopMotor() throws Exception {
         String a = "\nhal.stopRegulatedMotor(ActorPort.A, MotorStopMode.FLOAT);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_MotorStop.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorStop.xml");
     }
 }

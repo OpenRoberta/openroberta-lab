@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class EV3ProgramUsedHardwareCheckTest {
     @Test
     public void test0ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[]", hardwareCheckVisitor.toString());
@@ -22,7 +22,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test1ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator1.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check1.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[]", hardwareCheckVisitor.toString());
@@ -30,7 +30,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test2ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator2.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check2.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S3, COLOR, COLOUR]]", hardwareCheckVisitor.toString());
@@ -38,7 +38,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test3ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator3.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check3.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S4, ULTRASONIC, DISTANCE]]", hardwareCheckVisitor.toString());
@@ -46,7 +46,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test4ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator4.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check4.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
@@ -88,7 +88,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test9ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/methods/method_void_1.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check5.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[]", hardwareCheckVisitor.toString());
@@ -96,7 +96,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test10ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/methods/method_void_4.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check6.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
@@ -106,17 +106,15 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test11ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/methods/method_return_3.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/ast/methods/method_return_3.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
-        Assert.assertEquals(
-            "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S2, GYRO, ANGLE], UsedSensor [S4, ULTRASONIC, DISTANCE]]",
-            hardwareCheckVisitor.toString());
+        Assert.assertEquals("[]", hardwareCheckVisitor.toString());
     }
 
     @Test
     public void test12ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator10.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/visitors/hardware_check7.xml");
 
         Set<UsedSensor> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(

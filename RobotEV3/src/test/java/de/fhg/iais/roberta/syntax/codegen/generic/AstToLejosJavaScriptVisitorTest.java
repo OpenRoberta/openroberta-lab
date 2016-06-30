@@ -384,13 +384,13 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createGetTimerSensorSample() throws Exception {
         String a = "createGetSample(CONST.TIMER, 'timer1')" + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/ast/sensors/sensor_getSampleTimer.xml");
+        assertCodeIsOk(a, "/syntax/sensors/sensor_getSampleTimer.xml");
     }
 
     @Test
     public void createResetTimerSensor() throws Exception {
         String a = "var stmt0 = createResetTimer('timer1');\n" + "var blocklyProgram = {'programStmts': [stmt0]};";
-        assertCodeIsOk(a, "/ast/sensors/sensor_resetTimer.xml");
+        assertCodeIsOk(a, "/syntax/sensors/sensor_resetTimer.xml");
     }
 
     @Test
@@ -424,7 +424,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createMathChange(createVarReference(CONST.NUMBER, \"variablenName\"), createConstant(CONST.NUM_CONST, 1));\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
-        assertCodeIsOk(a, "/ast/math/math_change.xml");
+        assertCodeIsOk(a, "/syntax/math/math_change.xml");
     }
 
     @Test
@@ -559,7 +559,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createMathOnList(CONST.STD_DEV, )"
                 + "createMathOnList(CONST.RANDOM, )"
                 + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/ast/math/math_on_list.xml");
+        assertCodeIsOk(a, "/syntax/math/math_on_list.xml");
     }
 
     @Test
@@ -586,7 +586,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createConstant(CONST.STRING_CONST, '3')"
                 + ")"
                 + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/ast/logic/logic_ternary.xml");
+        assertCodeIsOk(a, "/syntax/logic/logic_ternary.xml");
     }
 
     @Test
@@ -598,7 +598,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)])), "
                 + "[createShowTextAction(createVarReference(CONST.NUMBER, \"item\"), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0]};";
-        assertCodeIsOk(a, "/ast/control/repeat_stmt_for_each3.xml");
+        assertCodeIsOk(a, "/syntax/control/repeat_stmt_for_each3.xml");
     }
 
     @Test
@@ -609,7 +609,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "createVarReference(CONST.NUMBER, \"i\"), createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 10), createConstant(CONST.NUM_CONST, 1)], "
                 + "[createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'kllk'))]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0]};";
-        assertCodeIsOk(a, "/ast/control/repeat_stmt_for.xml");
+        assertCodeIsOk(a, "/syntax/control/repeat_stmt_for.xml");
     }
 
     @Test
@@ -669,9 +669,11 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void createTextAppend() throws Exception {
         String a =
-            "var stmt0 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'text'));\n"
-                + "var blocklyProgram = {'programStmts': [stmt0]};";
-        assertCodeIsOk(a, "/ast/text/text_append.xml");
+            "var stmt0 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createGetSample(CONST.TOUCH));\n"
+                + "var stmt1 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.NUM_CONST, 0));\n"
+                + "var stmt2 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'aaa'));\n"
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
+        assertCodeIsOk(a, "/syntax/text/text_append.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

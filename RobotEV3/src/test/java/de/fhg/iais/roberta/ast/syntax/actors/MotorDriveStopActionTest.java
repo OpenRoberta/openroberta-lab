@@ -10,6 +10,6 @@ public class MotorDriveStopActionTest {
     public void stop() throws Exception {
         String a = "\nhal.stopRegulatedDrive();";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_Stop.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_Stop.xml");
     }
 }

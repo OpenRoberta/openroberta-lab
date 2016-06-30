@@ -30,7 +30,7 @@ public class ForStmtTest {
         String a =
             "for ( float k0 = 0; k0 < 10; k0+=1 ) {item3 + String.valueOf(\"Proba\");item3 + String.valueOf(\"Proba1\");for ( float k1 = 0; k1 < 10; k1+=1 ) {}}";
 
-        Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt.xml");
+        Helper.assertCodeIsOk(a, "/syntax/control/repeat_stmt.xml");
     }
 
     @Test

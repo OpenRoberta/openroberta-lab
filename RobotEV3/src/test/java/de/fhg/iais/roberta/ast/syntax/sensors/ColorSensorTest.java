@@ -14,6 +14,6 @@ public class ColorSensorTest {
                 + "hal.getColorSensorRgb(SensorPort.S2)"
                 + "hal.getColorSensorAmbient(SensorPort.S4)";
 
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setColor.xml");
+        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_setColor.xml");
     }
 }

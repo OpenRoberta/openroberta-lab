@@ -9,13 +9,13 @@ public class VolumeActionTest {
     public void setVolume() throws Exception {
         String a = "\nhal.setVolume(50);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_SetVolume.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_SetVolume.xml");
     }
 
     @Test
     public void getVolume() throws Exception {
         String a = "\nhal.getVolume()";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_GetVolume.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_GetVolume.xml");
     }
 }

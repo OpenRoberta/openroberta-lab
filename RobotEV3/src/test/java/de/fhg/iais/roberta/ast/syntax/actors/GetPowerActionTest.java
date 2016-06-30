@@ -9,6 +9,6 @@ public class GetPowerActionTest {
     public void getSpeed() throws Exception {
         String a = "\nhal.getRegulatedMotorSpeed(ActorPort.B)";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_MotorGetPower.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorGetPower.xml");
     }
 }

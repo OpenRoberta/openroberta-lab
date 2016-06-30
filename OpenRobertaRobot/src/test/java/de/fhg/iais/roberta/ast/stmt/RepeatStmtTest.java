@@ -246,7 +246,7 @@ public class RepeatStmtTest {
 
     @Test
     public void reverseTransformationForEach3() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/forEach_stmt.xml");
+        Helper.assertTransformationIsOk("/ast/control/forEach_stmt.xml");
     }
 
     @Test

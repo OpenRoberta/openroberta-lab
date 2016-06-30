@@ -9,6 +9,6 @@ public class PlayFileActionTest {
     public void playFile() throws Exception {
         String a = "\nhal.playFile(1);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_PlayFile.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_PlayFile.xml");
     }
 }

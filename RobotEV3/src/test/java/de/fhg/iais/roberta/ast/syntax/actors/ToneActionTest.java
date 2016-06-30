@@ -9,6 +9,6 @@ public class ToneActionTest {
     public void playTone() throws Exception {
         String a = "\nhal.playTone(300, 100);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_PlaySound.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_PlaySound.xml");
     }
 }

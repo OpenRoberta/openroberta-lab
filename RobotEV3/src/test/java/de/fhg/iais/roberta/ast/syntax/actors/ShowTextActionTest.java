@@ -9,7 +9,7 @@ public class ShowTextActionTest {
     public void clearDisplay() throws Exception {
         String a = "\nhal.drawText(\"Hallo\", 0, 0);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_ShowText.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_ShowText.xml");
 
     }
 }

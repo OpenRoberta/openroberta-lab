@@ -39,7 +39,7 @@ public class WhileUntilStmtTest {
                 + "    System.out.println(\"\");\n"
                 + "}}";
 
-        Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt_loopForever.xml");
+        Helper.assertCodeIsOk(a, "/syntax/control/repeat_stmt_loopForever.xml");
     }
 
     @Test

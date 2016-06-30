@@ -9,6 +9,6 @@ public class LightActionTest {
     public void ledOn() throws Exception {
         String a = "\nhal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);";
 
-        Helper.assertCodeIsOk(a, "/ast/actions/action_BrickLight.xml");
+        Helper.assertCodeIsOk(a, "/syntax/actions/action_BrickLight.xml");
     }
 }

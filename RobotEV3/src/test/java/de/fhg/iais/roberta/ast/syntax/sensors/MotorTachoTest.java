@@ -11,13 +11,13 @@ public class MotorTachoTest {
         String a =
             "\nhal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION)" + "hal.getUnregulatedMotorTachoValue(ActorPort.D, MotorTachoMode.DEGREE)";
 
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setEncoder.xml");
+        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_setEncoder.xml");
     }
 
     @Test
     public void resetMotorTacho() throws Exception {
         String a = "\nhal.resetRegulatedMotorTacho(ActorPort.A);";
 
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_resetEncoder.xml");
+        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_resetEncoder.xml");
     }
 }
