@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.generic.factory.action;
 
-import de.fhg.iais.roberta.factory.IShowPicture;
+import de.fhg.iais.roberta.factory.action.IShowPicture;
 
 public enum ShowPicture implements IShowPicture {
     OLDGLASSES( "BRILLE", "Brille" ),

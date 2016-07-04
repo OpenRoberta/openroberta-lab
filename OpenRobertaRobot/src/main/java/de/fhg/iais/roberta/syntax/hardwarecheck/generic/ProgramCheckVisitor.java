@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.IActorPort;
+import de.fhg.iais.roberta.factory.action.IActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;

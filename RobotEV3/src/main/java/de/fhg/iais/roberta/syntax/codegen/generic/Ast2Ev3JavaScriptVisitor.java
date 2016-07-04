@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.codegen.generic;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
-import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.generic.factory.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -594,7 +595,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( timerSensor.getMode() ) {
+        switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getTimer() + "')");
                 break;

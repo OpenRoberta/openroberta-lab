@@ -7,14 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.shared.sensor.BrickKey;
-import de.fhg.iais.roberta.shared.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -52,28 +44,29 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.sensorType = sensorType;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                this.sensor = TouchSensor.make(SensorPort.get(port), properties, comment);
+                this.sensor = TouchSensor.make(factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.ULTRASONIC:
-                this.sensor = UltrasonicSensor.make(UltrasonicSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
+                this.sensor =
+                    UltrasonicSensor.make(factory.getUltrasonicSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.COLOUR:
-                this.sensor = ColorSensor.make(ColorSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
+                this.sensor = ColorSensor.make(factory.getColorSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.INFRARED:
-                this.sensor = InfraredSensor.make(InfraredSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
+                this.sensor = InfraredSensor.make(factory.getInfraredSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.ENCODER:
-                this.sensor = EncoderSensor.make(MotorTachoMode.get(sensorType.getSensorMode()), factory.getActorPort(port), properties, comment);
+                this.sensor = EncoderSensor.make(factory.getMotorTachoMode(sensorType.getSensorMode()), factory.getActorPort(port), properties, comment);
                 break;
             case BlocklyConstants.KEY_PRESSED:
-                this.sensor = BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
+                this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);
                 break;
             case BlocklyConstants.GYRO:
-                this.sensor = GyroSensor.make(GyroSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
+                this.sensor = GyroSensor.make(factory.getGyroSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.TIME:
-                this.sensor = TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), properties, comment);
+                this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");

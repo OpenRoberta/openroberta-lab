@@ -6,8 +6,10 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.ListElementOperations;
+import de.fhg.iais.roberta.factory.IIndexLocation;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generic.factory.IndexLocation;
+import de.fhg.iais.roberta.generic.factory.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -30,11 +32,11 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class ListGetIndex<V> extends Function<V> {
     private final ListElementOperations mode;
-    private final IndexLocation location;
+    private final IIndexLocation location;
 
     private final List<Expr<V>> param;
 
-    private ListGetIndex(ListElementOperations mode, IndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ListGetIndex(ListElementOperations mode, IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.LIST_INDEX_OF, properties, comment);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
@@ -55,7 +57,7 @@ public class ListGetIndex<V> extends Function<V> {
      */
     public static <V> ListGetIndex<V> make(
         ListElementOperations mode,
-        IndexLocation name,
+        IIndexLocation name,
         List<Expr<V>> param,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
@@ -65,7 +67,7 @@ public class ListGetIndex<V> extends Function<V> {
     /**
      * @return name of the function
      */
-    public IndexLocation getLocation() {
+    public IIndexLocation getLocation() {
         return this.location;
     }
 
@@ -108,6 +110,7 @@ public class ListGetIndex<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         String op = helper.extractField(fields, BlocklyConstants.MODE_);
@@ -118,7 +121,7 @@ public class ListGetIndex<V> extends Function<V> {
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return ListGetIndex.make(
             ListElementOperations.get(op),
-            IndexLocation.get(helper.extractField(fields, BlocklyConstants.WHERE)),
+            factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
             params,
             helper.extractBlockProperties(block),
             helper.extractComment(block));
@@ -133,7 +136,7 @@ public class ListGetIndex<V> extends Function<V> {
         mutation.setAt(false);
         mutation.setStatement(getElementOperation().isStatment());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getElementOperation().name());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
         if ( getParam().size() > 1 ) {
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT, getParam().get(1));

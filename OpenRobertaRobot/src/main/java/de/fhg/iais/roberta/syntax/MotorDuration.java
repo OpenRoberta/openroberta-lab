@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax;
 
-import de.fhg.iais.roberta.factory.IMotorMoveMode;
+import de.fhg.iais.roberta.factory.action.IMotorMoveMode;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 
 /**

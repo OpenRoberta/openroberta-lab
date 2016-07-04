@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.generic.factory.action;
 
-import de.fhg.iais.roberta.factory.IMotorStopMode;
+import de.fhg.iais.roberta.factory.action.IMotorStopMode;
 
 public enum MotorStopMode implements IMotorStopMode {
     NONFLOAT(), FLOAT();

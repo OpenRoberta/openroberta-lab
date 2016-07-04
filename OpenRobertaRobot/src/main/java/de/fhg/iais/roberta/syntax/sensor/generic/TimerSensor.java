@@ -4,8 +4,9 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.sensor.ITimerSensorMode;
+import de.fhg.iais.roberta.generic.factory.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -28,10 +29,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(TimerSensorMode, int, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class TimerSensor<V> extends Sensor<V> {
-    private final TimerSensorMode mode;
+    private final ITimerSensorMode mode;
     private final int timer;
 
-    private TimerSensor(TimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private TimerSensor(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.TIMER_SENSING, properties, comment);
         Assert.isTrue(timer < 10);
         this.mode = mode;
@@ -48,14 +49,14 @@ public class TimerSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link TimerSensor}
      */
-    static <V> TimerSensor<V> make(TimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> TimerSensor<V> make(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TimerSensor<V>(mode, timer, properties, comment);
     }
 
     /**
      * @return get the mode of sensor. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
      */
-    public TimerSensorMode getMode() {
+    public ITimerSensorMode getMode() {
         return this.mode;
     }
 
@@ -84,13 +85,16 @@ public class TimerSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORNUM);
 
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) ) {
-            return TimerSensor.make(TimerSensorMode.RESET, Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            return TimerSensor
+                .make(factory.getTimerSensorMode("RESET"), Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return TimerSensor
+            .make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

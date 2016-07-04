@@ -11,12 +11,15 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.factory.IActorPort;
-import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
+import de.fhg.iais.roberta.generic.factory.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -220,7 +223,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("\n").append(this.indent);
     }
 
-    private static String getEnumCode(@SuppressWarnings("rawtypes") Enum value) {
+    private static String getEnumCode(Enum value) {
         return "'" + value.toString().toLowerCase() + "'";
     }
 
@@ -764,10 +767,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isKeyPressed(" + getEnumCode((Enum) brickSensor.getKey()) + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode((Enum) brickSensor.getKey()) + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
@@ -778,7 +781,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String colorSensorPort = colorSensor.getPort().getPortNumber();
-        switch ( colorSensor.getMode() ) {
+        switch ( (ColorSensorMode) colorSensor.getMode() ) {
             case AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
                 break;
@@ -803,7 +806,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
-            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode((Enum) encoderSensor.getMode()) + ")");
         }
         return null;
     }
@@ -814,7 +817,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + ", " + getEnumCode(gyroSensor.getMode()) + "')");
+            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + ", " + getEnumCode((Enum) gyroSensor.getMode()) + "')");
         }
         return null;
     }
@@ -822,7 +825,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String infraredSensorPort = infraredSensor.getPort().getPortNumber();
-        switch ( infraredSensor.getMode() ) {
+        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
                 break;
@@ -838,7 +841,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( timerSensor.getMode() ) {
+        switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
                 break;
@@ -947,7 +950,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        switch ( indexOfFunct.getLocation() ) {
+        switch ( (IndexLocation) indexOfFunct.getLocation() ) {
             case FIRST:
                 this.sb.append("BlocklyMethods.findFirst( ");
                 indexOfFunct.getParam().get(0).visit(this);
@@ -1019,7 +1022,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(", ");
         this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
         this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getLocation()));
+        this.sb.append(getEnumCode((Enum) listGetIndex.getLocation()));
         if ( listGetIndex.getParam().size() == 2 ) {
             this.sb.append(", ");
             listGetIndex.getParam().get(1).visit(this);
@@ -1037,7 +1040,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(", ");
         listSetIndex.getParam().get(1).visit(this);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getLocation()));
+        this.sb.append(getEnumCode((Enum) listSetIndex.getLocation()));
         if ( listSetIndex.getParam().size() == 3 ) {
             this.sb.append(", ");
             listSetIndex.getParam().get(2).visit(this);
@@ -1477,10 +1480,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private void appendSensors(StringBuilder sb) {
         sb.append("    'sensors': {\n");
-        for ( Map.Entry<SensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+        for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             Sensor sensor = entry.getValue();
             if ( sensor != null ) {
-                SensorPort port = entry.getKey();
+                ISensorPort port = entry.getKey();
                 sb.append("        '").append(port.getPortNumber()).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
@@ -1531,7 +1534,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         return sb.toString();
     }
 
-    private static String generateRegenerateSensor(Sensor sensor, SensorPort port) {
+    private static String generateRegenerateSensor(Sensor sensor, ISensorPort port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;

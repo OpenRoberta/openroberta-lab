@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.fhg.iais.roberta.factory.IActorPort;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
 import de.fhg.iais.roberta.generic.factory.action.ActorPort;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  */
 public class Configuration {
     private final Map<IActorPort, Actor> actors;
-    private final Map<SensorPort, Sensor> sensors;
+    private final Map<ISensorPort, Sensor> sensors;
 
     private final double wheelDiameterCM;
     private final double trackWidthCM;
@@ -35,7 +35,7 @@ public class Configuration {
      * @param wheelDiameterCM of the brick wheels
      * @param trackWidthCM of the brick
      */
-    public Configuration(Map<IActorPort, Actor> actors, Map<SensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
+    public Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super();
         this.actors = actors;
         this.sensors = sensors;
@@ -49,7 +49,7 @@ public class Configuration {
      * @param sensorPort
      * @return connected sensor on given port
      */
-    public Sensor getSensorOnPort(SensorPort sensorPort) {
+    public Sensor getSensorOnPort(ISensorPort sensorPort) {
         Sensor sensor = this.sensors.get(sensorPort);
         return sensor;
     }
@@ -80,7 +80,7 @@ public class Configuration {
      *
      * @return the sensors
      */
-    public Map<SensorPort, Sensor> getSensors() {
+    public Map<ISensorPort, Sensor> getSensors() {
         return this.sensors;
     }
 
@@ -142,7 +142,7 @@ public class Configuration {
         }
         if ( this.sensors.size() > 0 ) {
             sb.append("  sensor port {\n");
-            for ( SensorPort port : this.sensors.keySet() ) {
+            for ( ISensorPort port : this.sensors.keySet() ) {
                 sb.append("    ").append(port.getPortNumber()).append(": ");
                 String sensor = this.sensors.get(port).getName().toString();
                 sb.append(sensor.toLowerCase()).append(";\n");
@@ -263,7 +263,7 @@ public class Configuration {
      */
     public static class Builder {
         private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
-        private final Map<SensorPort, Sensor> sensorMapping = new TreeMap<>();
+        private final Map<ISensorPort, Sensor> sensorMapping = new TreeMap<>();
 
         private double wheelDiameter;
         private double trackWidth;
@@ -300,7 +300,7 @@ public class Configuration {
          * @param component we want to connect
          * @return
          */
-        public Builder addSensor(SensorPort port, Sensor sensor) {
+        public Builder addSensor(ISensorPort port, Sensor sensor) {
             this.sensorMapping.put(port, sensor);
             return this;
         }
@@ -311,8 +311,8 @@ public class Configuration {
          * @param sensors we want to connect to the brick configuration
          * @return
          */
-        public Builder addSensors(List<Pair<SensorPort, Sensor>> sensors) {
-            for ( Pair<SensorPort, Sensor> pair : sensors ) {
+        public Builder addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
+            for ( Pair<ISensorPort, Sensor> pair : sensors ) {
                 this.sensorMapping.put(pair.getFirst(), pair.getSecond());
             }
             return this;

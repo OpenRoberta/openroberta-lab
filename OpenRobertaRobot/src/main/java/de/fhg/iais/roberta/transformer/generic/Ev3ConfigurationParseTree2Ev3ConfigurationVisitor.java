@@ -27,11 +27,11 @@ import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.Con
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.MotorSpecContext;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.SdeclContext;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.SizesContext;
-import de.fhg.iais.roberta.factory.IActorPort;
-import de.fhg.iais.roberta.factory.IDriveDirection;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.action.IDriveDirection;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Option;
 
@@ -113,7 +113,7 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
 
     @Override
     public Void visitSdecl(SdeclContext ctx) {
-        SensorPort port = SensorPort.get(ctx.SENSORPORT().getText());
+        ISensorPort port = this.factory.getSensorPort(ctx.SENSORPORT().getText());
         String sensorShortName = ctx.SENSOR().getText();
         SensorType attachedSensor = null;
 

@@ -14,11 +14,11 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.factory.IActorPort;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
 import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -56,8 +56,8 @@ public class Jaxb2Ev3ConfigurationTransformer {
         fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getTrackWidthCM())));
         List<Value> values = block.getValue();
         {
-            Map<SensorPort, Sensor> sensors = conf.getSensors();
-            for ( SensorPort port : sensors.keySet() ) {
+            Map<ISensorPort, Sensor> sensors = conf.getSensors();
+            for ( ISensorPort port : sensors.keySet() ) {
                 Sensor sensor = sensors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.toString());
@@ -108,7 +108,7 @@ public class Jaxb2Ev3ConfigurationTransformer {
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
-                List<Pair<SensorPort, Sensor>> sensors = new ArrayList<Pair<SensorPort, Sensor>>();
+                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<Pair<ISensorPort, Sensor>>();
                 List<Pair<IActorPort, Actor>> actors = new ArrayList<Pair<IActorPort, Actor>>();
                 List<Field> fields = extractFields(block, (short) 2);
                 double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
@@ -123,11 +123,11 @@ public class Jaxb2Ev3ConfigurationTransformer {
         }
     }
 
-    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
+    private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 // Extract sensor
-                sensors.add(Pair.of(SensorPort.get(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
+                sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
             } else {
                 List<Field> fields;
                 // Extract actor

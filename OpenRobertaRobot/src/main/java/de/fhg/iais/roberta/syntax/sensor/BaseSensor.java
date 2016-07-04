@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 
 public abstract class BaseSensor<V> extends Sensor<V> {
-    private final SensorPort port;
+    private final ISensorPort port;
 
     /**
      * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
@@ -15,7 +15,7 @@ public abstract class BaseSensor<V> extends Sensor<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
      */
-    public BaseSensor(SensorPort port, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public BaseSensor(ISensorPort port, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(kind, properties, comment);
         this.port = port;
     }
@@ -23,7 +23,7 @@ public abstract class BaseSensor<V> extends Sensor<V> {
     /**
      * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      */
-    public SensorPort getPort() {
+    public ISensorPort getPort() {
         return this.port;
     }
 }

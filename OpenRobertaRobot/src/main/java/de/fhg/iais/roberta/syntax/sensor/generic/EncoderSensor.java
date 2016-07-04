@@ -4,10 +4,11 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IActorPort;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.sensor.IMotorTachoMode;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,10 +32,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(MotorTachoMode, ActorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class EncoderSensor<V> extends Sensor<V> {
-    private final MotorTachoMode mode;
+    private final IMotorTachoMode mode;
     private final IActorPort motor;
 
-    private EncoderSensor(MotorTachoMode mode, IActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private EncoderSensor(IMotorTachoMode mode, IActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.ENCODER_SENSING, properties, comment);
         Assert.isTrue(mode != null && motor != null);
         this.mode = mode;
@@ -51,14 +52,14 @@ public class EncoderSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link EncoderSensor}
      */
-    public static <V> EncoderSensor<V> make(MotorTachoMode mode, IActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> EncoderSensor<V> make(IMotorTachoMode mode, IActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new EncoderSensor<V>(mode, motor, properties, comment);
     }
 
     /**
      * @return get the mode of sensor. See enum {@link MotorTachoMode} for all possible modes that the sensor have
      */
-    public MotorTachoMode getMode() {
+    public IMotorTachoMode getMode() {
         return this.mode;
     }
 
@@ -91,13 +92,14 @@ public class EncoderSensor<V> extends Sensor<V> {
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_ENCODER_RESET) ) {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-            return EncoderSensor.make(MotorTachoMode.RESET, factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            return EncoderSensor
+                .make(factory.getMotorTachoMode("RESET"), factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
         }
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
         return EncoderSensor
-            .make(MotorTachoMode.get(modeName), factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(factory.getMotorTachoMode(modeName), factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -106,8 +108,8 @@ public class EncoderSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getMotor().toString();
-        if ( getMode() != MotorTachoMode.RESET ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+        if ( !getMode().toString().equals("RESET") ) {
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
         }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, fieldValue);
 

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.generic.factory.action;
 
-import de.fhg.iais.roberta.factory.IMotorSide;
+import de.fhg.iais.roberta.factory.action.IMotorSide;
 
 public enum MotorSide implements IMotorSide {
     RIGHT( "right" ), LEFT( "left" ), NONE( "" );

@@ -4,9 +4,9 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IActorPort;
-import de.fhg.iais.roberta.factory.IMotorStopMode;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.action.IMotorStopMode;
 import de.fhg.iais.roberta.generic.factory.action.MotorStopMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;

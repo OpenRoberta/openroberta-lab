@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.sensor;
 
 import java.util.Locale;
 
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**

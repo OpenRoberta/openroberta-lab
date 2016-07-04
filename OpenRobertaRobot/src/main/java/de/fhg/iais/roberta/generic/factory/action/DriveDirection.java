@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.generic.factory.action;
 
-import de.fhg.iais.roberta.factory.IDriveDirection;
+import de.fhg.iais.roberta.factory.action.IDriveDirection;
 
 public enum DriveDirection implements IDriveDirection {
     //TODO: rename FOREWARD first in blockly

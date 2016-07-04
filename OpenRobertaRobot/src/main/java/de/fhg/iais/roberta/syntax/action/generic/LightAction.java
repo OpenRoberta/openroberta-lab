@@ -4,9 +4,9 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IBlinkMode;
-import de.fhg.iais.roberta.factory.IBrickLedColor;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.action.IBlinkMode;
+import de.fhg.iais.roberta.factory.action.IBrickLedColor;
 import de.fhg.iais.roberta.generic.factory.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;

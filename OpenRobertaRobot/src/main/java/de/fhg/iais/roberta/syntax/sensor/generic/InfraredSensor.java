@@ -5,8 +5,10 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.shared.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
+import de.fhg.iais.roberta.generic.factory.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -30,9 +32,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(InfraredSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class InfraredSensor<V> extends BaseSensor<V> {
-    private final InfraredSensorMode mode;
+    private final IInfraredSensorMode mode;
 
-    private InfraredSensor(InfraredSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private InfraredSensor(IInfraredSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockType.INFRARED_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
@@ -48,14 +50,14 @@ public class InfraredSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link InfraredSensor}
      */
-    static <V> InfraredSensor<V> make(InfraredSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> InfraredSensor<V> make(IInfraredSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new InfraredSensor<V>(mode, port, properties, comment);
     }
 
     /**
      * @return get the mode of sensor. See enum {@link InfraredSensorMode} for all possible modes that the sensor have.
      */
-    public InfraredSensorMode getMode() {
+    public IInfraredSensorMode getMode() {
         return this.mode;
     }
 
@@ -77,11 +79,12 @@ public class InfraredSensor<V> extends BaseSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
         return InfraredSensor
-            .make(InfraredSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(factory.getInfraredSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -89,10 +92,10 @@ public class InfraredSensor<V> extends BaseSensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
-        mutation.setMode(getMode().name());
+        mutation.setMode(getMode().toString());
         jaxbDestination.setMutation(mutation);
         String fieldValue = getPort().getPortNumber();
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;

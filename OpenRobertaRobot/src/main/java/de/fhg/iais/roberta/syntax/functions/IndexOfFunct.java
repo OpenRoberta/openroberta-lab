@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.shared.IndexLocation;
+import de.fhg.iais.roberta.factory.IIndexLocation;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,10 +27,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class IndexOfFunct<V> extends Function<V> {
-    private final IndexLocation location;
+    private final IIndexLocation location;
     private final List<Expr<V>> param;
 
-    private IndexOfFunct(IndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private IndexOfFunct(IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.TEXT_INDEX_OF_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null);
         this.location = name;
@@ -46,14 +47,14 @@ public class IndexOfFunct<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link IndexOfFunct}
      */
-    public static <V> IndexOfFunct<V> make(IndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> IndexOfFunct<V> make(IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new IndexOfFunct<V>(name, param, properties, comment);
     }
 
     /**
      * @return name of the function
      */
-    public IndexLocation getLocation() {
+    public IIndexLocation getLocation() {
         return this.location;
     }
 
@@ -92,12 +93,13 @@ public class IndexOfFunct<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
         exprParams.add(new ExprParam(BlocklyConstants.FIND, String.class));
         String op = helper.getOperation(block, BlocklyConstants.END);
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return IndexOfFunct.make(IndexLocation.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
+        return IndexOfFunct.make(factory.getIndexLocation(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -105,7 +107,7 @@ public class IndexOfFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.END, getLocation().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.END, getLocation().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FIND, getParam().get(1));
         return jaxbDestination;

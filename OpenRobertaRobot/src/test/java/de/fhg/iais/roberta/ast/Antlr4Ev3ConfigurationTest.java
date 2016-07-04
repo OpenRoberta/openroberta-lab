@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
 import de.fhg.iais.roberta.generic.factory.action.ActorPort;
 import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.generic.factory.sensor.SensorPort;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.util.Option;
 

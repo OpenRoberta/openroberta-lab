@@ -5,8 +5,10 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.shared.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
+import de.fhg.iais.roberta.generic.factory.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -29,9 +31,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(ColorSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorSensor<V> extends BaseSensor<V> {
-    private final ColorSensorMode mode;
+    private final IColorSensorMode mode;
 
-    private ColorSensor(ColorSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ColorSensor(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockType.COLOR_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
@@ -47,14 +49,14 @@ public class ColorSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorSensor}
      */
-    static <V> ColorSensor<V> make(ColorSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> ColorSensor<V> make(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ColorSensor<V>(mode, port, properties, comment);
     }
 
     /**
      * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have
      */
-    public ColorSensorMode getMode() {
+    public IColorSensorMode getMode() {
         return this.mode;
     }
 
@@ -76,10 +78,12 @@ public class ColorSensor<V> extends BaseSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return ColorSensor.make(ColorSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ColorSensor
+            .make(factory.getColorSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -87,10 +91,10 @@ public class ColorSensor<V> extends BaseSensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
-        mutation.setMode(getMode().name());
+        mutation.setMode(getMode().toString());
         jaxbDestination.setMutation(mutation);
         String fieldValue = getPort().getPortNumber();
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;

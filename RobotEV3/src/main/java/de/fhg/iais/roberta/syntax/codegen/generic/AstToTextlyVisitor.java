@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -593,7 +594,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( timerSensor.getMode() ) {
+        switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("Timer.getValue(" + timerSensor.getTimer() + ")");
                 break;

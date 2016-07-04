@@ -6,7 +6,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -140,11 +139,11 @@ public class GetSubFunct<V> extends Function<V> {
         } else {
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.STRING, getParam().get(0));
         }
-        if ( IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_END ) {
+        if ( getStrParam().get(0).equals("FROM_START") || getStrParam().get(0).equals("FROM_END") ) {
             mutation.setAt1(true);
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT1, getParam().get(1));
         }
-        if ( IndexLocation.get(getStrParam().get(1)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(1)) == IndexLocation.FROM_END ) {
+        if ( getStrParam().get(1).equals("FROM_START") || getStrParam().get(1).equals("FROM_END") ) {
             mutation.setAt2(true);
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT2, getParam().get(getParam().size() - 1));
         }

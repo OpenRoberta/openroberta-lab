@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
+import de.fhg.iais.roberta.factory.IMode;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
 
 /**
  * Stores information for port, type and the mode of used sensor in a blockly program.
@@ -11,20 +12,26 @@ import de.fhg.iais.roberta.shared.sensor.SensorPort;
  */
 @SuppressWarnings("rawtypes")
 public class UsedSensor {
-    private final SensorPort port;
+    private final ISensorPort port;
     private final SensorType sensor;
     private final Enum mode;
 
-    public UsedSensor(SensorPort port, SensorType sensor, Enum mode) {
+    public UsedSensor(ISensorPort port, SensorType sensor, Enum mode) {
         this.port = port;
         this.sensor = sensor;
         this.mode = mode;
     }
 
+    public UsedSensor(ISensorPort port, SensorType sensor, IMode mode) {
+        this.port = port;
+        this.sensor = sensor;
+        this.mode = (Enum) mode;
+    }
+
     /**
      * @return the port
      */
-    public SensorPort getPort() {
+    public ISensorPort getPort() {
         return this.port;
     }
 
@@ -48,9 +55,9 @@ public class UsedSensor {
     public String generateRegenerate() {
         StringBuilder sb = new StringBuilder();
         sb.append("new UsedSensor(");
-        sb.append("SensorPort." + this.port.name()).append(", ");
+        sb.append("SensorPort." + this.port.toString()).append(", ");
         sb.append(this.sensor.getClass().getSimpleName() + "." + this.sensor.name()).append(", ");
-        sb.append(this.mode.getClass().getSimpleName() + "." + this.mode.name()).append(")");
+        sb.append(this.mode.getClass().getSimpleName() + "." + this.mode.toString()).append(")");
         return sb.toString();
     }
 

@@ -13,11 +13,15 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.factory.IActorPort;
-import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.ev3.factory.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
+import de.fhg.iais.roberta.generic.factory.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -760,10 +764,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                this.sb.append("hal.isPressed(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isPressed(" + getEnumCode((Enum) brickSensor.getKey()) + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isPressedAndReleased(" + getEnumCode((Enum) brickSensor.getKey()) + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
@@ -773,8 +777,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = getEnumCode(colorSensor.getPort());
-        switch ( colorSensor.getMode() ) {
+        String colorSensorPort = getEnumCode((Enum) colorSensor.getPort());
+        switch ( (ColorSensorMode) colorSensor.getMode() ) {
             case AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient(" + colorSensorPort + ")");
                 break;
@@ -802,15 +806,15 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             this.sb.append(methodName + getEnumCode((Enum) encoderMotorPort) + ");");
         } else {
             String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-            this.sb.append(methodName + getEnumCode((Enum) encoderMotorPort) + ", " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append(methodName + getEnumCode((Enum) encoderMotorPort) + ", " + getEnumCode((Enum) encoderSensor.getMode()) + ")");
         }
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = getEnumCode(gyroSensor.getPort());
-        switch ( gyroSensor.getMode() ) {
+        String gyroSensorPort = getEnumCode((Enum) gyroSensor.getPort());
+        switch ( (GyroSensorMode) gyroSensor.getMode() ) {
             case ANGLE:
                 this.sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
                 break;
@@ -828,8 +832,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = getEnumCode(infraredSensor.getPort());
-        switch ( infraredSensor.getMode() ) {
+        String infraredSensorPort = getEnumCode((Enum) infraredSensor.getPort());
+        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
                 break;
@@ -844,7 +848,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( timerSensor.getMode() ) {
+        switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
                 break;
@@ -859,13 +863,13 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed(" + getEnumCode(touchSensor.getPort()) + ")");
+        this.sb.append("hal.isPressed(" + getEnumCode((Enum) touchSensor.getPort()) + ")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = getEnumCode(ultrasonicSensor.getPort());
+        String ultrasonicSensorPort = getEnumCode((Enum) ultrasonicSensor.getPort());
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
             this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
         } else {
@@ -1018,7 +1022,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(", ");
         this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
         this.sb.append(", ");
-        this.sb.append(getEnumCode(listGetIndex.getLocation()));
+        this.sb.append(getEnumCode((Enum) listGetIndex.getLocation()));
         if ( listGetIndex.getParam().size() == 2 ) {
             this.sb.append(", ");
             listGetIndex.getParam().get(1).visit(this);
@@ -1039,7 +1043,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(", ");
         listSetIndex.getParam().get(1).visit(this);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(listSetIndex.getLocation()));
+        this.sb.append(getEnumCode((Enum) listSetIndex.getLocation()));
         if ( listSetIndex.getParam().size() == 3 ) {
             this.sb.append(", ");
             listSetIndex.getParam().get(2).visit(this);
@@ -1557,10 +1561,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void appendSensors(StringBuilder sb) {
-        for ( Map.Entry<SensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+        for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             sb.append(INDENT).append(INDENT).append(INDENT);
             sb.append("    .addSensor(");
-            sb.append(getEnumCode(entry.getKey())).append(", ");
+            sb.append(getEnumCode((Enum) entry.getKey())).append(", ");
             sb.append(generateRegenerateSensor(entry.getValue()));
             sb.append(")\n");
         }

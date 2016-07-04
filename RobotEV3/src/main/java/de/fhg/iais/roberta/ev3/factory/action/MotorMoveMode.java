@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ev3.factory.action;
 
-import de.fhg.iais.roberta.factory.IMotorMoveMode;
+import de.fhg.iais.roberta.factory.action.IMotorMoveMode;
 
 public enum MotorMoveMode implements IMotorMoveMode {
     ROTATIONS(), DEGREE(), DISTANCE();

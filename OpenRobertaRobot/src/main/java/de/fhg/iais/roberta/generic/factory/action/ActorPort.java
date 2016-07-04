@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.generic.factory.action;
 
-import de.fhg.iais.roberta.factory.IActorPort;
+import de.fhg.iais.roberta.factory.action.IActorPort;
 
 public enum ActorPort implements IActorPort {
     A( "MA" ), B( "MB" ), C( "MC" ), D( "MD" );

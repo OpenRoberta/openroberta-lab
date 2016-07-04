@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ev3.factory.action;
 
-import de.fhg.iais.roberta.factory.ITurnDirection;
+import de.fhg.iais.roberta.factory.action.ITurnDirection;
 
 public enum TurnDirection implements ITurnDirection {
     RIGHT(), LEFT();

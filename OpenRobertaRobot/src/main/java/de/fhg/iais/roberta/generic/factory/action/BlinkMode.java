@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.generic.factory.action;
 
-import de.fhg.iais.roberta.factory.IBlinkMode;
+import de.fhg.iais.roberta.factory.action.IBlinkMode;
 
 public enum BlinkMode implements IBlinkMode {
     ON(), FLASH(), DOUBLE_FLASH();

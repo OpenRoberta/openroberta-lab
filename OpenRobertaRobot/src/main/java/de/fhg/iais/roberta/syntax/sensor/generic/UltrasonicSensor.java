@@ -5,8 +5,10 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.sensor.ISensorPort;
+import de.fhg.iais.roberta.factory.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.generic.factory.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,9 +33,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(UltrasonicSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class UltrasonicSensor<V> extends BaseSensor<V> {
-    private final UltrasonicSensorMode mode;
+    private final IUltrasonicSensorMode mode;
 
-    private UltrasonicSensor(UltrasonicSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private UltrasonicSensor(IUltrasonicSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockType.ULTRASONIC_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
@@ -50,14 +52,14 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link UltrasonicSensor}
      */
-    static <V> UltrasonicSensor<V> make(UltrasonicSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> UltrasonicSensor<V> make(IUltrasonicSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new UltrasonicSensor<V>(mode, port, properties, comment);
     }
 
     /**
      * @return get the mode of sensor. See enum {@link UltrasonicSensorMode} for all possible modes that the sensor have
      */
-    public UltrasonicSensorMode getMode() {
+    public IUltrasonicSensorMode getMode() {
         return this.mode;
     }
 
@@ -79,11 +81,15 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return UltrasonicSensor
-            .make(UltrasonicSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return UltrasonicSensor.make(
+            factory.getUltrasonicSensorMode(modeName),
+            factory.getSensorPort(portName),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override
@@ -91,10 +97,10 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
-        mutation.setMode(getMode().name());
+        mutation.setMode(getMode().toString());
         jaxbDestination.setMutation(mutation);
         String fieldValue = getPort().getPortNumber();
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;
