@@ -20,6 +20,7 @@ import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 
@@ -96,7 +97,9 @@ public class JaxbHelper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        //TODO: change the static robotModeFactory
+        RobotModeFactory robotModeFactory = new RobotModeFactory();
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
     }
@@ -110,7 +113,8 @@ public class JaxbHelper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        RobotModeFactory robotModeFactory = new RobotModeFactory();
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(robotModeFactory);
         return transformer.transform(project);
     }
 }

@@ -5,8 +5,9 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.shared.action.MotorMoveMode;
-import de.fhg.iais.roberta.shared.action.TurnDirection;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.ITurnDirection;
+import de.fhg.iais.roberta.generic.factory.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -28,10 +29,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * The client must provide the {@link TurnDirection} and {@link MotionParam} (distance the robot should cover and speed).
  */
 public class TurnAction<V> extends Action<V> {
-    private final TurnDirection direction;
+    private final ITurnDirection direction;
     private final MotionParam<V> param;
 
-    private TurnAction(TurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private TurnAction(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.TURN_ACTION, properties, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -49,14 +50,14 @@ public class TurnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link TurnAction}.
      */
-    private static <V> TurnAction<V> make(TurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> TurnAction<V> make(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TurnAction<V>(direction, param, properties, comment);
     }
 
     /**
      * @return {@link TurnDirection} in which the robot will drive
      */
-    public TurnDirection getDirection() {
+    public ITurnDirection getDirection() {
         return this.direction;
     }
 
@@ -89,6 +90,7 @@ public class TurnAction<V> extends Action<V> {
         String mode;
         List<Value> values;
         MotionParam<V> mp;
+        IRobotFactory factory = helper.getModeFactory();
         fields = helper.extractFields(block, (short) 1);
         mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
 
@@ -100,10 +102,10 @@ public class TurnAction<V> extends Action<V> {
             values = helper.extractValues(block, (short) 2);
             Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, Integer.class));
-            MotorDuration<V> md = new MotorDuration<V>(MotorMoveMode.DEGREE, helper.convertPhraseToExpr(right));
+            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DEGREE"), helper.convertPhraseToExpr(right));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
-        return TurnAction.make(TurnDirection.get(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return TurnAction.make(factory.getTurnDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -111,11 +113,11 @@ public class TurnAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
 
         if ( getParam().getDuration() != null ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().name(), getParam().getDuration().getValue());
+            JaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().toString(), getParam().getDuration().getValue());
         }
 
         return jaxbDestination;

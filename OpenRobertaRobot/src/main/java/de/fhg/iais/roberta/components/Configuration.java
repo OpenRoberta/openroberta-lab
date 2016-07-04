@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.fhg.iais.roberta.shared.action.ActorPort;
-import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.factory.IActorPort;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Pair;
@@ -18,7 +19,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * The {@link Configuration} contains four sensor ports and four actor ports. Client cannot connect more than that.
  */
 public class Configuration {
-    private final Map<ActorPort, Actor> actors;
+    private final Map<IActorPort, Actor> actors;
     private final Map<SensorPort, Sensor> sensors;
 
     private final double wheelDiameterCM;
@@ -34,7 +35,7 @@ public class Configuration {
      * @param wheelDiameterCM of the brick wheels
      * @param trackWidthCM of the brick
      */
-    public Configuration(Map<ActorPort, Actor> actors, Map<SensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
+    public Configuration(Map<IActorPort, Actor> actors, Map<SensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super();
         this.actors = actors;
         this.sensors = sensors;
@@ -60,7 +61,7 @@ public class Configuration {
      * @param actorPort
      * @return connected actor on given port
      */
-    public Actor getActorOnPort(ActorPort actorPort) {
+    public Actor getActorOnPort(IActorPort actorPort) {
         Actor actor = this.actors.get(actorPort);
         return actor;
     }
@@ -70,7 +71,7 @@ public class Configuration {
      *
      * @return the actors
      */
-    public Map<ActorPort, Actor> getActors() {
+    public Map<IActorPort, Actor> getActors() {
         return this.actors;
     }
 
@@ -103,7 +104,7 @@ public class Configuration {
      * @param port on which the motor is connected
      * @return if the motor is regulated
      */
-    public boolean isMotorRegulated(ActorPort port) {
+    public boolean isMotorRegulated(IActorPort port) {
         Actor actor = this.actors.get(port);
         Assert.isTrue(actor != null, "No actor connected to the port " + port);
         return actor.isRegulated();
@@ -114,7 +115,7 @@ public class Configuration {
      *
      * @return port on which the left motor is connected
      */
-    public ActorPort getLeftMotorPort() {
+    public IActorPort getLeftMotorPort() {
         return getMotorOnSide(MotorSide.LEFT);
     }
 
@@ -123,7 +124,7 @@ public class Configuration {
      *
      * @return port on which the left motor is connected
      */
-    public ActorPort getRightMotorPort() {
+    public IActorPort getRightMotorPort() {
         return getMotorOnSide(MotorSide.RIGHT);
     }
 
@@ -150,8 +151,8 @@ public class Configuration {
         }
         if ( this.actors.size() > 0 ) {
             sb.append("  actor port {\n");
-            for ( ActorPort port : this.actors.keySet() ) {
-                sb.append("    ").append(port.name()).append(": ");
+            for ( IActorPort port : this.actors.keySet() ) {
+                sb.append("    ").append(port.toString()).append(": ");
                 Actor actor = this.actors.get(port);
                 if ( actor.getName() == ActorType.LARGE ) {
                     sb.append("large");
@@ -169,7 +170,7 @@ public class Configuration {
                 sb.append(", ");
                 String rotationDirection = actor.getRotationDirection().toString().toLowerCase();
                 sb.append(rotationDirection.equals("foreward") ? "forward" : rotationDirection); // TODO: remove this hack; rename FOIREWARD tp FORWARD (be careful!)
-                MotorSide motorSide = actor.getMotorSide();
+                MotorSide motorSide = (MotorSide) actor.getMotorSide();
                 if ( motorSide != MotorSide.NONE ) {
                     sb.append(", ").append(motorSide.getText());
 
@@ -246,9 +247,9 @@ public class Configuration {
             + "]";
     }
 
-    private ActorPort getMotorOnSide(MotorSide side) {
+    private IActorPort getMotorOnSide(MotorSide side) {
         Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
-        for ( Map.Entry<ActorPort, Actor> entry : this.actors.entrySet() ) {
+        for ( Map.Entry<IActorPort, Actor> entry : this.actors.entrySet() ) {
             if ( entry.getValue().getMotorSide() == side ) {
                 return entry.getKey();
             }
@@ -261,7 +262,7 @@ public class Configuration {
      * This class is a builder of {@link Configuration}
      */
     public static class Builder {
-        private final Map<ActorPort, Actor> actorMapping = new TreeMap<>();
+        private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
         private final Map<SensorPort, Sensor> sensorMapping = new TreeMap<>();
 
         private double wheelDiameter;
@@ -274,7 +275,7 @@ public class Configuration {
          * @param actor we want to connect
          * @return
          */
-        public Builder addActor(ActorPort port, Actor actor) {
+        public Builder addActor(IActorPort port, Actor actor) {
             this.actorMapping.put(port, actor);
             return this;
         }
@@ -285,8 +286,8 @@ public class Configuration {
          * @param actors we want to connect to the brick configuration
          * @return
          */
-        public Builder addActors(List<Pair<ActorPort, Actor>> actors) {
-            for ( Pair<ActorPort, Actor> pair : actors ) {
+        public Builder addActors(List<Pair<IActorPort, Actor>> actors) {
+            for ( Pair<IActorPort, Actor> pair : actors ) {
                 this.actorMapping.put(pair.getFirst(), pair.getSecond());
             }
             return this;

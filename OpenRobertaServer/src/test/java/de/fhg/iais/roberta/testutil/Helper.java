@@ -19,10 +19,12 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.ev3.factory.Ev3ModeFactory;
+import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
+import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
+import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.shared.action.ActorPort;
-import de.fhg.iais.roberta.shared.action.DriveDirection;
-import de.fhg.iais.roberta.shared.action.MotorSide;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
@@ -81,7 +83,8 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        RobotModeFactory robotModeFactory = new RobotModeFactory();
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(robotModeFactory);
         return transformer.transform(project);
     }
 
@@ -108,7 +111,9 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        //TODO: change the static ev3modeFactory
+        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
         transformer.transform(project);
         return transformer;
     }
@@ -122,7 +127,9 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        //TODO: change the static ev3modeFactory
+        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
         transformer.transform(project);
         return transformer;
     }
@@ -147,7 +154,10 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>();
+        //TODO: change the static ev3modeFactory
+        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
+
         transformer.transform(project);
         ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;
@@ -240,7 +250,9 @@ public class Helper {
      */
     public static void assertXMLtransformation(String xml) throws Exception {
         BlockSet program = JaxbHelper.xml2BlockSet(xml);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        //TODO: change the static ev3modeFactory
+        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
         transformer.transform(program);
 
         BlockSet blockSet = astToJaxb(transformer.getTree());

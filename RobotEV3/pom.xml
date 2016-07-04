@@ -15,10 +15,10 @@
 	<name>RobotEV3</name>
 	<description>the robot related part of the OpenRoberta application</description>
 	<dependencies>
-		<dependency>
+<!-- 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>EV3Runtime</artifactId>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaRobot</artifactId>

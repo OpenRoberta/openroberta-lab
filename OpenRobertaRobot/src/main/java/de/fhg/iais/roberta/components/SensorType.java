@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.components;
 import java.util.Arrays;
 import java.util.Locale;
 
-import de.fhg.iais.roberta.shared.action.DriveDirection;
+import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum SensorType {
@@ -16,31 +16,8 @@ public enum SensorType {
         Arrays.sort(this.values);
     }
 
-    private boolean attributesMatchAttributes(String... attributes) {
-        for ( String attribute : attributes ) {
-            attribute = attribute.toUpperCase();
-            if ( Arrays.binarySearch(this.values, attribute) >= 0 ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public String blocklyName() {
         return this.values[0];
-    }
-
-    /**
-     * @param attributes which direction should contain
-     * @return {@link DriveDirection} which contains given attributes
-     */
-    public static SensorType attributesMatch(String... attributes) {
-        for ( SensorType driveDirection : SensorType.values() ) {
-            if ( driveDirection.attributesMatchAttributes(attributes) ) {
-                return driveDirection;
-            }
-        }
-        throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
     }
 
     /**

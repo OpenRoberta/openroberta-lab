@@ -5,7 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.shared.action.ShowPicture;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.IShowPicture;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,11 +27,11 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * The client must provide the name of the picture and x and y coordinates.
  */
 public class ShowPictureAction<V> extends Action<V> {
-    private final ShowPicture pic;
+    private final IShowPicture pic;
     private final Expr<V> x;
     private final Expr<V> y;
 
-    private ShowPictureAction(ShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ShowPictureAction(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.SHOW_PICTURE_ACTION, properties, comment);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
@@ -49,14 +50,14 @@ public class ShowPictureAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowPictureAction}
      */
-    private static <V> ShowPictureAction<V> make(ShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> ShowPictureAction<V> make(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowPictureAction<V>(pic, x, y, properties, comment);
     }
 
     /**
      * @return name of the picture that
      */
-    public ShowPicture getPicture() {
+    public IShowPicture getPicture() {
         return this.pic;
     }
 
@@ -92,13 +93,14 @@ public class ShowPictureAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 2);
         String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
         Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, Integer.class));
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, Integer.class));
         return ShowPictureAction.make(
-            ShowPicture.get(pic),
+            factory.getShowPicture(pic),
             helper.convertPhraseToExpr(x),
             helper.convertPhraseToExpr(y),
             helper.extractBlockProperties(block),
@@ -109,7 +111,7 @@ public class ShowPictureAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = getPicture().name();
+        String fieldValue = getPicture().toString();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PICTURE, fieldValue);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X_, getX());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y_, getY());

@@ -29,7 +29,7 @@ public class ConfigurationHelper {
 
     @Deprecated
     public static String xmlString2textString(String name, String xmlString) throws Exception {
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(null);
         BlockSet bs = JaxbHelper.xml2BlockSet(xmlString);
         Configuration bc = transformer.transform(bs);
         String textString = bc.generateText(name);
@@ -45,8 +45,8 @@ public class ConfigurationHelper {
     @Deprecated
     public static Option<String> textString2xmlString(String textString) {
         try {
-            Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
-            Option<Configuration> msgConf = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(textString);
+            Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(null);
+            Option<Configuration> msgConf = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(textString, null);
             if ( msgConf.isSet() ) {
                 Configuration bc = msgConf.getVal();
                 BlockSet bs = transformer.transformInverse(bc);

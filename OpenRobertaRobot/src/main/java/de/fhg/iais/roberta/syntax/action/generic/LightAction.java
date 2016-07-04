@@ -4,8 +4,10 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.shared.action.BlinkMode;
-import de.fhg.iais.roberta.shared.action.BrickLedColor;
+import de.fhg.iais.roberta.factory.IBlinkMode;
+import de.fhg.iais.roberta.factory.IBrickLedColor;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generic.factory.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,10 +28,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * of blinking.
  */
 public class LightAction<V> extends Action<V> {
-    private final BrickLedColor color;
-    private final BlinkMode blinkMode;
+    private final IBrickLedColor color;
+    private final IBlinkMode blinkMode;
 
-    private LightAction(BrickLedColor color, BlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LightAction(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.LIGHT_ACTION, properties, comment);
         Assert.isTrue(color != null && blinkMode != null);
         this.color = color;
@@ -47,21 +49,21 @@ public class LightAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightAction}
      */
-    private static <V> LightAction<V> make(BrickLedColor color, BlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> LightAction<V> make(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightAction<V>(color, blinkMode, properties, comment);
     }
 
     /**
      * @return {@link BrickLedColor} of the lights.
      */
-    public BrickLedColor getColor() {
+    public IBrickLedColor getColor() {
         return this.color;
     }
 
     /**
      * @return type of blinking.
      */
-    public BlinkMode getBlinkMode() {
+    public IBlinkMode getBlinkMode() {
         return this.blinkMode;
     }
 
@@ -83,10 +85,12 @@ public class LightAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
         String blink = helper.extractField(fields, BlocklyConstants.SWITCH_BLINK);
-        return LightAction.make(BrickLedColor.get(color), BlinkMode.get(blink), helper.extractBlockProperties(block), helper.extractComment(block));
+        return LightAction
+            .make(factory.getBrickLedColor(color), factory.getBlinkMode(blink), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -94,8 +98,8 @@ public class LightAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().name());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_BLINK, getBlinkMode().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_BLINK, getBlinkMode().toString());
 
         return jaxbDestination;
 

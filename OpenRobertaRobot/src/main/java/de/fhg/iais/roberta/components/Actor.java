@@ -1,14 +1,14 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.shared.action.DriveDirection;
-import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.factory.IDriveDirection;
+import de.fhg.iais.roberta.factory.IMotorSide;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class Actor {
     private final ActorType name;
     private final boolean regulated;
-    private final DriveDirection rotationDirection;
-    private final MotorSide motorSide;
+    private final IDriveDirection rotationDirection;
+    private final IMotorSide motorSide;
 
     /**
      * Creates hardware component of type {@link Category#ACTOR} that will be attached to the brick configuration.
@@ -19,7 +19,7 @@ public class Actor {
      * @param rotationDirection rotation direction of the motor
      * @param motorSide on the brick
      */
-    public Actor(ActorType actorName, boolean regulated, DriveDirection rotationDirection, MotorSide motorSide) {
+    public Actor(ActorType actorName, boolean regulated, IDriveDirection rotationDirection, IMotorSide motorSide) {
         Assert.isTrue(rotationDirection != null && motorSide != null);
         this.name = actorName;
         this.regulated = regulated;
@@ -30,14 +30,14 @@ public class Actor {
     /**
      * @return side on which the motor is connected
      */
-    public MotorSide getMotorSide() {
+    public IMotorSide getMotorSide() {
         return this.motorSide;
     }
 
     /**
      * @return rotation direction for the motor
      */
-    public DriveDirection getRotationDirection() {
+    public IDriveDirection getRotationDirection() {
         return this.rotationDirection;
     }
 

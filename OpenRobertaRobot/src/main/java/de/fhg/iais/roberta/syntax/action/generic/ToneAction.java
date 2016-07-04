@@ -83,11 +83,8 @@ public class ToneAction<V> extends Action<V> {
         List<Value> values = helper.extractValues(block, (short) 2);
         Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCE, Integer.class));
         Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, Integer.class));
-        return ToneAction.make(
-            helper.convertPhraseToExpr(left),
-            helper.convertPhraseToExpr(right),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return ToneAction
+            .make(helper.convertPhraseToExpr(left), helper.convertPhraseToExpr(right), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

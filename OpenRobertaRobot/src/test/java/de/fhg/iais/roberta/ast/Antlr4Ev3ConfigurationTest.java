@@ -24,14 +24,16 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
-import de.fhg.iais.roberta.shared.action.ActorPort;
-import de.fhg.iais.roberta.shared.action.DriveDirection;
-import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
+import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.util.Option;
 
 public class Antlr4Ev3ConfigurationTest {
+    RobotModeFactory robotModeFactory = new RobotModeFactory();
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
 
@@ -83,7 +85,7 @@ public class Antlr4Ev3ConfigurationTest {
         expected.setWheelDiameter(5.0).setTrackWidth(2.5);
         Configuration actual =
             Ev3ConfigurationParseTree2Ev3ConfigurationVisitor
-                .startWalkForVisiting("robot ev3 Craesy-PID-2014 { size {wheel diameter 5 cm;track width 2.5 cm;} }")
+                .startWalkForVisiting("robot ev3 Craesy-PID-2014 { size {wheel diameter 5 cm;track width 2.5 cm;} }", this.robotModeFactory)
                 .getVal();
         assertEquals(expected.build(), actual);
     }
@@ -96,11 +98,12 @@ public class Antlr4Ev3ConfigurationTest {
         Configuration expected = expectedBuilder.build();
 
         Configuration actual1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting( //
-            "robot ev3 Craesy-PID-2014 { size { wheel diameter 5 cm; track width 2.5 cm; } sensor port {1: touch; } }").getVal();
+            "robot ev3 Craesy-PID-2014 { size { wheel diameter 5 cm; track width 2.5 cm; } sensor port {1: touch; } }",
+            this.robotModeFactory).getVal();
         assertEquals(expected, actual1);
 
         String expectedAsString = expected.generateText("Craesy-PID-2014");
-        Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString).getVal();
+        Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString, this.robotModeFactory).getVal();
         assertEquals(expected, actual2);
     }
 
@@ -189,7 +192,7 @@ public class Antlr4Ev3ConfigurationTest {
                 + "actor port { B: large mOtOr, regulated, forward, right;\n"
                 + "             C: large motor, regulated, forward, left;"
                 + "}}";
-        Option<Configuration> confResult = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(conf);
+        Option<Configuration> confResult = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(conf, this.robotModeFactory);
         assertTrue(!confResult.isSet());
         assertTrue(confResult.getMessage().matches(".*mOtOr.*"));
     }
@@ -210,11 +213,11 @@ public class Antlr4Ev3ConfigurationTest {
     }
 
     private void assertAllEquals(String configurationName, Configuration expected, String actualAsString) throws Exception {
-        Configuration actual = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(actualAsString).getVal();
+        Configuration actual = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(actualAsString, this.robotModeFactory).getVal();
         assertEquals(expected, actual);
 
         String expectedAsString = expected.generateText(configurationName);
-        Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString).getVal();
+        Configuration actual2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(expectedAsString, this.robotModeFactory).getVal();
         assertEquals(expected, actual2);
     }
 

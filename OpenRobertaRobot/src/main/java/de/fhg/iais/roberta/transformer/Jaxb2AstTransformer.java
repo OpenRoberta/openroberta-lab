@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -48,7 +49,17 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 abstract public class Jaxb2AstTransformer<V> {
     protected ArrayList<ArrayList<Phrase<V>>> tree = new ArrayList<ArrayList<Phrase<V>>>();
+    private IRobotFactory modeFactory;
     private int variableCounter = 0;
+
+    protected Jaxb2AstTransformer(IRobotFactory factory) {
+        this.modeFactory = factory;
+
+    }
+
+    public IRobotFactory getModeFactory() {
+        return this.modeFactory;
+    }
 
     /**
      * @return abstract syntax tree generated from JAXB objects.

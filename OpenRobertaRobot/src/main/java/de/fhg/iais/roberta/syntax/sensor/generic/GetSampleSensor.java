@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.shared.sensor.BrickKey;
 import de.fhg.iais.roberta.shared.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
@@ -45,7 +45,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final String sensorPort;
     private final GetSampleType sensorType;
 
-    private GetSampleSensor(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private GetSampleSensor(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment, IRobotFactory factory) {
         super(BlockType.SENSOR_GET_SAMPLE, properties, comment);
         Assert.isTrue(sensorType != null && port != "");
         this.sensorPort = port;
@@ -64,7 +64,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = InfraredSensor.make(InfraredSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
             case BlocklyConstants.ENCODER:
-                this.sensor = EncoderSensor.make(MotorTachoMode.get(sensorType.getSensorMode()), ActorPort.get(port), properties, comment);
+                this.sensor = EncoderSensor.make(MotorTachoMode.get(sensorType.getSensorMode()), factory.getActorPort(port), properties, comment);
                 break;
             case BlocklyConstants.KEY_PRESSED:
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
@@ -90,8 +90,13 @@ public class GetSampleSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link GetSampleSensor}
      */
-    public static <V> GetSampleSensor<V> make(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GetSampleSensor<V>(sensorType, port, properties, comment);
+    public static <V> GetSampleSensor<V> make(
+        GetSampleType sensorType,
+        String port,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        IRobotFactory factory) {
+        return new GetSampleSensor<V>(sensorType, port, properties, comment, factory);
     }
 
     /**
@@ -136,7 +141,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
         String portName = helper.extractField(fields, GetSampleType.get(modeName).getPortTypeName());
-        return GetSampleSensor.make(GetSampleType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block));
+        return GetSampleSensor
+            .make(GetSampleType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
     }
 
     @Override

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.factory.IActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
@@ -172,8 +172,8 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        ActorPort leftMotorPort = this.brickConfiguration.getLeftMotorPort();
-        ActorPort rightMotorPort = this.brickConfiguration.getRightMotorPort();
+        IActorPort leftMotorPort = this.brickConfiguration.getLeftMotorPort();
+        IActorPort rightMotorPort = this.brickConfiguration.getRightMotorPort();
         if ( leftMotorPort == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
             this.errorCount++;

@@ -14,9 +14,10 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.shared.action.ActorPort;
-import de.fhg.iais.roberta.shared.action.DriveDirection;
-import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.factory.IActorPort;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
+import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
@@ -28,6 +29,12 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * Generates a BrickConfiguration object.
  */
 public class Jaxb2Ev3ConfigurationTransformer {
+    IRobotFactory factory;
+
+    public Jaxb2Ev3ConfigurationTransformer(IRobotFactory factory) {
+        this.factory = factory;
+    }
+
     public Configuration transform(BlockSet blockSet) {
         List<Instance> instances = blockSet.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
@@ -61,8 +68,8 @@ public class Jaxb2Ev3ConfigurationTransformer {
             }
         }
         {
-            Map<ActorPort, Actor> actors = conf.getActors();
-            for ( ActorPort port : actors.keySet() ) {
+            Map<IActorPort, Actor> actors = conf.getActors();
+            for ( IActorPort port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.getXmlName());
@@ -102,7 +109,7 @@ public class Jaxb2Ev3ConfigurationTransformer {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
                 List<Pair<SensorPort, Sensor>> sensors = new ArrayList<Pair<SensorPort, Sensor>>();
-                List<Pair<ActorPort, Actor>> actors = new ArrayList<Pair<ActorPort, Actor>>();
+                List<Pair<IActorPort, Actor>> actors = new ArrayList<Pair<IActorPort, Actor>>();
                 List<Field> fields = extractFields(block, (short) 2);
                 double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 double trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
@@ -116,7 +123,7 @@ public class Jaxb2Ev3ConfigurationTransformer {
         }
     }
 
-    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, Sensor>> sensors, List<Pair<ActorPort, Actor>> actors) {
+    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 // Extract sensor
@@ -129,11 +136,11 @@ public class Jaxb2Ev3ConfigurationTransformer {
                         fields = extractFields(value.getBlock(), (short) 2);
                         actors.add(
                             Pair.of(
-                                ActorPort.get(value.getName()),
+                                this.factory.getActorPort(value.getName()),
                                 new Actor(
                                     ActorType.get(value.getBlock().getType()),
                                     extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    DriveDirection.get(extractField(fields, "MOTOR_REVERSE", 1)),
+                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
                                     MotorSide.NONE)));
 
                         break;
@@ -142,12 +149,12 @@ public class Jaxb2Ev3ConfigurationTransformer {
                         fields = extractFields(value.getBlock(), (short) 3);
                         actors.add(
                             Pair.of(
-                                ActorPort.get(value.getName()),
+                                this.factory.getActorPort(value.getName()),
                                 new Actor(
                                     ActorType.get(value.getBlock().getType()),
                                     extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    DriveDirection.get(extractField(fields, "MOTOR_REVERSE", 1)),
-                                    MotorSide.get(extractField(fields, "MOTOR_DRIVE", 2)))));
+                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
+                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 2)))));
                         break;
                     default:
                         throw new DbcException("Invalide motor type!");

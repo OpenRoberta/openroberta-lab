@@ -6,11 +6,13 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 
 public class Ev3ConfigurationTest {
+    RobotModeFactory robotModeFactory = new RobotModeFactory();
 
     @Test
     public void testRoundtrip() throws Exception {
@@ -33,7 +35,8 @@ public class Ev3ConfigurationTest {
                 + "actorport{A:middlemotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(this.robotModeFactory);
         Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
@@ -47,7 +50,7 @@ public class Ev3ConfigurationTest {
                 + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(this.robotModeFactory);
         Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
@@ -61,7 +64,7 @@ public class Ev3ConfigurationTest {
                 + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration3.xml");
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(this.robotModeFactory);
         Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
@@ -76,7 +79,7 @@ public class Ev3ConfigurationTest {
      * 5. from xmlActual generate a BrickConfiguration bc3 and check it against bc1 and bc2.<br>
      */
     private void testRoundtrip(String baseName) throws Exception {
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(this.robotModeFactory);
         // 1.
         String xmlExpected = resourceAsString(baseName + ".xml");
         BlockSet bs1 = JaxbHelper.xml2BlockSet(xmlExpected);
@@ -86,7 +89,7 @@ public class Ev3ConfigurationTest {
         String text = bc1.generateText("craesy");
         assertEq(textExpected, text);
         // 3.
-        Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text).getVal();
+        Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text, this.robotModeFactory).getVal();
         Assert.assertEquals(bc1, bc2);
         // 4.
         BlockSet bs2 = transformer.transformInverse(bc2);
@@ -111,10 +114,10 @@ public class Ev3ConfigurationTest {
      */
     private void testText2Text(String baseName, String name) throws Exception {
         String text1 = resourceAsString(baseName + ".conf"); // 1.
-        Configuration bc1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1).getVal(); // 2.
+        Configuration bc1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1, this.robotModeFactory).getVal(); // 2.
         String text2 = bc1.generateText(name); // 3.
         assertEq(text1, text2); // 4.
-        Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1).getVal();
+        Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text1, this.robotModeFactory).getVal();
         Assert.assertEquals(bc1, bc2);
     }
 

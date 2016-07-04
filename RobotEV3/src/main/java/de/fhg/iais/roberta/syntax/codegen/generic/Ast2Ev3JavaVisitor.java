@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.factory.IActorPort;
 import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.action.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.UltrasonicSensorMode;
@@ -119,6 +119,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
+@SuppressWarnings("rawtypes")
 public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
@@ -247,7 +248,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         throw new IllegalArgumentException("unhandled type");
     }
 
-    private static String getEnumCode(@SuppressWarnings("rawtypes") Enum value) {
+    private static String getEnumCode(Enum value) {
         return value.getClass().getSimpleName() + "." + value;
     }
 
@@ -609,7 +610,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ");");
+        this.sb.append("hal.ledOn(" + getEnumCode((Enum) lightAction.getColor()) + ", " + getEnumCode((Enum) lightAction.getBlinkMode()) + ");");
         return null;
     }
 
@@ -636,7 +637,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(" + getEnumCode(showPictureAction.getPicture()) + ", ");
+        this.sb.append("hal.drawPicture(" + getEnumCode((Enum) showPictureAction.getPicture()) + ", ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);
@@ -682,10 +683,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         } else {
             methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
         }
-        this.sb.append(methodName + getEnumCode(motorOnAction.getPort()) + ", ");
+        this.sb.append(methodName + getEnumCode((Enum) motorOnAction.getPort()) + ", ");
         motorOnAction.getParam().getSpeed().visit(this);
         if ( duration ) {
-            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
+            this.sb.append(", " + getEnumCode((Enum) motorOnAction.getDurationMode()));
             this.sb.append(", ");
             motorOnAction.getDurationValue().visit(this);
         }
@@ -697,7 +698,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        this.sb.append(methodName + getEnumCode(motorSetPowerAction.getPort()) + ", ");
+        this.sb.append(methodName + getEnumCode((Enum) motorSetPowerAction.getPort()) + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(");");
         return null;
@@ -707,7 +708,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
         String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        this.sb.append(methodName + getEnumCode(motorGetPowerAction.getPort()) + ")");
+        this.sb.append(methodName + getEnumCode((Enum) motorGetPowerAction.getPort()) + ")");
         return null;
     }
 
@@ -715,7 +716,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-        this.sb.append(methodName + getEnumCode(motorStopAction.getPort()) + ", " + getEnumCode(motorStopAction.getMode()) + ");");
+        this.sb.append(methodName + getEnumCode((Enum) motorStopAction.getPort()) + ", " + getEnumCode((Enum) motorStopAction.getMode()) + ");");
         return null;
     }
 
@@ -724,7 +725,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
         this.sb.append(methodName);
-        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
+        this.sb.append(getEnumCode((Enum) driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -739,7 +740,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         boolean isDuration = turnAction.getParam().getDuration() != null;
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : "Regulated") + "(";
         this.sb.append(methodName);
-        this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
+        this.sb.append(getEnumCode((Enum) turnAction.getDirection()) + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -794,14 +795,14 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        ActorPort encoderMotorPort = encoderSensor.getMotor();
+        IActorPort encoderMotorPort = encoderSensor.getMotor();
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
-            this.sb.append(methodName + getEnumCode(encoderMotorPort) + ");");
+            this.sb.append(methodName + getEnumCode((Enum) encoderMotorPort) + ");");
         } else {
             String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-            this.sb.append(methodName + getEnumCode(encoderMotorPort) + ", " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append(methodName + getEnumCode((Enum) encoderMotorPort) + ", " + getEnumCode(encoderSensor.getMode()) + ")");
         }
         return null;
     }
@@ -1566,10 +1567,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void appendActors(StringBuilder sb) {
-        for ( Map.Entry<ActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
+        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             sb.append(INDENT).append(INDENT).append(INDENT);
             sb.append("    .addActor(");
-            sb.append(getEnumCode(entry.getKey())).append(", ");
+            sb.append(getEnumCode((Enum) entry.getKey())).append(", ");
             sb.append(generateRegenerateActor(entry.getValue()));
             sb.append(")\n");
         }
@@ -1596,7 +1597,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
         sb.append("new Actor(").append(getActorTypeCode(actor.getName()));
         sb.append(", ").append(actor.isRegulated());
-        sb.append(", ").append(getEnumCode(actor.getRotationDirection())).append(", ").append(getEnumCode(actor.getMotorSide())).append(")");
+        sb.append(", ").append(getEnumCode((Enum) actor.getRotationDirection())).append(", ").append(getEnumCode((Enum) actor.getMotorSide())).append(")");
         return sb.toString();
     }
 

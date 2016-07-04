@@ -62,10 +62,8 @@ public class BluetoothConnectAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> bluetoothConnectAddress = helper.extractValue(values, new ExprParam(BlocklyConstants.ADDRESS, String.class));
-        return BluetoothConnectAction.make(
-            helper.convertPhraseToExpr(bluetoothConnectAddress),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return BluetoothConnectAction
+            .make(helper.convertPhraseToExpr(bluetoothConnectAddress), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

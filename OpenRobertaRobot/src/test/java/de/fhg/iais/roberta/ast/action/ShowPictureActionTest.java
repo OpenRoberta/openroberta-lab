@@ -19,7 +19,7 @@ public class ShowPictureActionTest {
     public void getPicture() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowPicture.xml");
         ShowPictureAction<Void> spa = (ShowPictureAction<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("EYESOPEN", spa.getPicture().name());
+        Assert.assertEquals("EYESOPEN", spa.getPicture().toString());
     }
 
     @Test

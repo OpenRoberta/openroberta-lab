@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.components;
 import java.util.Arrays;
 import java.util.Locale;
 
-import de.fhg.iais.roberta.shared.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum ActorType {
@@ -18,29 +17,6 @@ public enum ActorType {
 
     public String blocklyName() {
         return this.values[0];
-    }
-
-    private boolean attributesMatchAttributes(String... attributes) {
-        for ( String attribute : attributes ) {
-            attribute = attribute.toUpperCase();
-            if ( Arrays.binarySearch(this.values, attribute) >= 0 ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param attributes which direction should contain
-     * @return {@link DriveDirection} which contains given attributes
-     */
-    public static ActorType attributesMatch(String... attributes) {
-        for ( ActorType driveDirection : ActorType.values() ) {
-            if ( driveDirection.attributesMatchAttributes(attributes) ) {
-                return driveDirection;
-            }
-        }
-        throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
     }
 
     /**

@@ -1,0 +1,19 @@
+package de.fhg.iais.roberta.generic.factory.action;
+
+import de.fhg.iais.roberta.factory.IBrickLedColor;
+
+public enum BrickLedColor implements IBrickLedColor {
+    GREEN(), ORANGE(), RED();
+
+    private final String[] values;
+
+    private BrickLedColor(String... values) {
+        this.values = values;
+    }
+
+    @Override
+    public String[] getValues() {
+        return this.values;
+    }
+
+}

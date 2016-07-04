@@ -5,8 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.shared.action.DriveDirection;
-import de.fhg.iais.roberta.shared.action.MotorMoveMode;
+import de.fhg.iais.roberta.factory.IDriveDirection;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,10 +31,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class DriveAction<V> extends Action<V> {
 
-    private final DriveDirection direction;
+    private final IDriveDirection direction;
     private final MotionParam<V> param;
 
-    private DriveAction(DriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private DriveAction(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.DRIVE_ACTION, properties, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -52,14 +52,14 @@ public class DriveAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DriveAction}
      */
-    private static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> DriveAction<V> make(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DriveAction<V>(direction, param, properties, comment);
     }
 
     /**
      * @return {@link DriveDirection} in which the robot will drive
      */
-    public DriveDirection getDirection() {
+    public IDriveDirection getDirection() {
         return this.direction;
     }
 
@@ -93,7 +93,7 @@ public class DriveAction<V> extends Action<V> {
         List<Value> values;
         MotionParam<V> mp;
         Phrase<V> left;
-
+        IRobotFactory factory = helper.getModeFactory();
         fields = helper.extractFields(block, (short) 1);
         mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
 
@@ -101,14 +101,14 @@ public class DriveAction<V> extends Action<V> {
             values = helper.extractValues(block, (short) 2);
             left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
-            MotorDuration<V> md = new MotorDuration<V>(MotorMoveMode.DISTANCE, helper.convertPhraseToExpr(right));
+            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(right));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         } else {
             values = helper.extractValues(block, (short) 1);
             left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).build();
         }
-        return DriveAction.make(DriveDirection.get(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return DriveAction.make(factory.getDriveDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -118,14 +118,14 @@ public class DriveAction<V> extends Action<V> {
 
         if ( getProperty().getBlockType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR) ) {
             JaxbTransformerHelper
-                .addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection() == DriveDirection.FOREWARD ? getDirection().name() : "BACKWARDS");
+                .addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString() == "FOREWARD" ? getDirection().toString() : "BACKWARDS");
         } else {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().name());
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
         }
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
 
         if ( getParam().getDuration() != null ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().name(), getParam().getDuration().getValue());
+            JaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().toString(), getParam().getDuration().getValue());
         }
         return jaxbDestination;
     }

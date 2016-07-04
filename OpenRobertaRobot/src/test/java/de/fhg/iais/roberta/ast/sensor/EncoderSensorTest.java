@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.shared.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.testutil.Helper;

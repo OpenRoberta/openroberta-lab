@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.factory.IActorPort;
 import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.action.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.shared.sensor.SensorPort;
@@ -113,6 +113,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable Python code representation of a phrase to a StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
+@SuppressWarnings("rawtypes")
 public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
@@ -603,7 +604,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ")");
+        this.sb.append("hal.ledOn(" + getEnumCode((Enum) lightAction.getColor()) + ", " + getEnumCode((Enum) lightAction.getBlinkMode()) + ")");
         return null;
     }
 
@@ -630,7 +631,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(" + getEnumCode(showPictureAction.getPicture()) + ", ");
+        this.sb.append("hal.drawPicture(" + getEnumCode((Enum) showPictureAction.getPicture()) + ", ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);
@@ -679,7 +680,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
         motorOnAction.getParam().getSpeed().visit(this);
         if ( duration ) {
-            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
+            this.sb.append(", " + getEnumCode((Enum) motorOnAction.getDurationMode()));
             this.sb.append(", ");
             motorOnAction.getDurationValue().visit(this);
         }
@@ -707,7 +708,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(')');
+        this.sb
+            .append("hal.stopMotor('")
+            .append(motorStopAction.getPort().toString())
+            .append("', ")
+            .append(getEnumCode((Enum) motorStopAction.getMode()))
+            .append(')');
         return null;
     }
 
@@ -718,7 +724,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(methodName);
         this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
         this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
+        this.sb.append(getEnumCode((Enum) driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -736,7 +742,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(methodName);
         this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
         this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
+        this.sb.append(getEnumCode((Enum) turnAction.getDirection()) + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -1457,10 +1463,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private void appendActors(StringBuilder sb) {
         sb.append("    'actors': {\n");
-        for ( Map.Entry<ActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
+        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             Actor actor = entry.getValue();
             if ( actor != null ) {
-                ActorPort port = entry.getKey();
+                IActorPort port = entry.getKey();
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
@@ -1502,7 +1508,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     //    return type.getClass().getSimpleName() + "." + type.getTypeName();
     //}
 
-    private static String generateRegenerateActor(Actor actor, ActorPort port) {
+    private static String generateRegenerateActor(Actor actor, IActorPort port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;
@@ -1519,8 +1525,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
         sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
         sb.append(", ").append(actor.isRegulated() ? "'on'" : "'off'");
-        sb.append(", ").append(getEnumCode(actor.getRotationDirection()));
-        sb.append(", ").append(getEnumCode(actor.getMotorSide()));
+        sb.append(", ").append(getEnumCode((Enum) actor.getRotationDirection()));
+        sb.append(", ").append(getEnumCode((Enum) actor.getMotorSide()));
         sb.append(")");
         return sb.toString();
     }

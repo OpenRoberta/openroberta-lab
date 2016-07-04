@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.syntax.codegen.generic;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
 import de.fhg.iais.roberta.shared.IndexLocation;
-import de.fhg.iais.roberta.shared.action.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.BlockType;

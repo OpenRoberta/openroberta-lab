@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.ev3.factory.Ev3ModeFactory;
 import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
@@ -205,7 +206,7 @@ public class Administration {
         //            USER_ID INTEGER not null,
         //            URL_POSTFIX varchar(255),
         //            CREATED timestamp not null,
-        //            
+        //
         //            primary key (ID),
         //            foreign key (USER_ID) references USER(ID) ON DELETE CASCADE
         //        );
@@ -293,7 +294,8 @@ public class Administration {
 
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        Ev3ModeFactory modeFactory = new Ev3ModeFactory();
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(modeFactory);
         transformer.transform(program);
         BlockSet blockSet = astToJaxb(transformer.getTree());
         String newXml = jaxbToXml(blockSet);

@@ -27,9 +27,10 @@ import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.Con
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.MotorSpecContext;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.SdeclContext;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.SizesContext;
-import de.fhg.iais.roberta.shared.action.ActorPort;
-import de.fhg.iais.roberta.shared.action.DriveDirection;
-import de.fhg.iais.roberta.shared.action.MotorSide;
+import de.fhg.iais.roberta.factory.IActorPort;
+import de.fhg.iais.roberta.factory.IDriveDirection;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Option;
@@ -38,7 +39,8 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
     private static final Logger LOG = LoggerFactory.getLogger(Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.class);
 
     private final Configuration.Builder builder = new Configuration.Builder();
-    private ActorPort nextActorToAttach = null;
+    private IRobotFactory factory;
+    private IActorPort nextActorToAttach = null;
     private String parseErrorMessage = null;
 
     /**
@@ -46,8 +48,8 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
      * <br>
      * Factory method
      */
-    public static Option<Configuration> startWalkForVisiting(String stmt) {
-        Ev3ConfigurationParseTree2Ev3ConfigurationVisitor visitor = new Ev3ConfigurationParseTree2Ev3ConfigurationVisitor();
+    public static Option<Configuration> startWalkForVisiting(String stmt, IRobotFactory factory) {
+        Ev3ConfigurationParseTree2Ev3ConfigurationVisitor visitor = new Ev3ConfigurationParseTree2Ev3ConfigurationVisitor(factory);
         visitor.parseAndVisit(stmt);
         return visitor.result();
     }
@@ -60,7 +62,8 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
         }
     }
 
-    private Ev3ConfigurationParseTree2Ev3ConfigurationVisitor() {
+    private Ev3ConfigurationParseTree2Ev3ConfigurationVisitor(IRobotFactory factory) {
+        this.factory = factory;
         // intentionally
     }
 
@@ -129,7 +132,7 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
 
     @Override
     public Void visitAdecl(AdeclContext ctx) {
-        this.nextActorToAttach = ActorPort.get(ctx.ACTORPORT().getText());
+        this.nextActorToAttach = this.factory.getActorPort(ctx.ACTORPORT().getText());
         return visitChildren(ctx);
     }
 
@@ -143,12 +146,12 @@ public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3Config
         }
         MotorSpecContext motorSpec = ctx.motorSpec();
         boolean regulated = "regulated".equalsIgnoreCase(motorSpec.REGULATION().getText());
-        DriveDirection direction;
-        if ( "forward".equalsIgnoreCase(motorSpec.ROTATION().getText()) ) {
-            direction = DriveDirection.FOREWARD;
-        } else {
-            direction = DriveDirection.BACKWARD;
-        }
+        IDriveDirection direction = this.factory.getDriveDirection(motorSpec.ROTATION().getText());
+        //        if ( "forward".equalsIgnoreCase(motorSpec.ROTATION().getText()) ) {
+        //            direction = this.factory.getDriveDirection("forward");
+        //        } else {
+        //            direction = this.factory.getDriveDirection("backward");
+        //        }
         TerminalNode leftOrRight = motorSpec.LEFTORRIGHT();
         MotorSide motorSide;
         if ( leftOrRight == null ) {
