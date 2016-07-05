@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.factory.action.IMotorSide;
 import de.fhg.iais.roberta.factory.action.IMotorStopMode;
 import de.fhg.iais.roberta.factory.action.IShowPicture;
 import de.fhg.iais.roberta.factory.action.ITurnDirection;
+import de.fhg.iais.roberta.factory.action.generic.BlinkMode;
 import de.fhg.iais.roberta.factory.sensor.IBrickKey;
 import de.fhg.iais.roberta.factory.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.factory.sensor.IGyroSensorMode;
@@ -19,7 +20,6 @@ import de.fhg.iais.roberta.factory.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.factory.sensor.ISensorPort;
 import de.fhg.iais.roberta.factory.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.factory.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.generic.factory.action.BlinkMode;
 
 public interface IRobotFactory {
     /**

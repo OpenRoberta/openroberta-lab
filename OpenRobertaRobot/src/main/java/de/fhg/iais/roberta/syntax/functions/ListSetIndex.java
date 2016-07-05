@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IIndexLocation;
 import de.fhg.iais.roberta.factory.IListElementOperations;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.generic.factory.IndexLocation;
+import de.fhg.iais.roberta.factory.generic.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

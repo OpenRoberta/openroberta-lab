@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.factory.sensor.ISensorPort;
-import de.fhg.iais.roberta.generic.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.factory.sensor.generic.GyroSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

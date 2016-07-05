@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.factory.sensor.ISensorPort;
-import de.fhg.iais.roberta.generic.factory.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.factory.sensor.generic.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.factory.action.generic.ActorPort;
+import de.fhg.iais.roberta.factory.action.generic.MotorSide;
 import de.fhg.iais.roberta.factory.sensor.ISensorPort;
-import de.fhg.iais.roberta.generic.factory.action.ActorPort;
-import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;

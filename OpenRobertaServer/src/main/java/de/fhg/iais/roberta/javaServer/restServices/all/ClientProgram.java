@@ -48,7 +48,7 @@ import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.codegen.generic.Ast2Ev3JavaScriptVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.ProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;

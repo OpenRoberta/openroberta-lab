@@ -24,11 +24,11 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
-import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
-import de.fhg.iais.roberta.generic.factory.action.ActorPort;
-import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
-import de.fhg.iais.roberta.generic.factory.action.MotorSide;
-import de.fhg.iais.roberta.generic.factory.sensor.SensorPort;
+import de.fhg.iais.roberta.factory.action.generic.ActorPort;
+import de.fhg.iais.roberta.factory.action.generic.DriveDirection;
+import de.fhg.iais.roberta.factory.action.generic.MotorSide;
+import de.fhg.iais.roberta.factory.generic.RobotModeFactory;
+import de.fhg.iais.roberta.factory.sensor.generic.SensorPort;
 import de.fhg.iais.roberta.transformer.generic.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.util.Option;
 

@@ -30,8 +30,8 @@ import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.Siz
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.action.IActorPort;
 import de.fhg.iais.roberta.factory.action.IDriveDirection;
+import de.fhg.iais.roberta.factory.action.generic.MotorSide;
 import de.fhg.iais.roberta.factory.sensor.ISensorPort;
-import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Option;
 

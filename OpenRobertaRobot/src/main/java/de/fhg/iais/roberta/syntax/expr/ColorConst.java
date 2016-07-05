@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IPickColor;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.generic.factory.PickColor;
+import de.fhg.iais.roberta.factory.generic.PickColor;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

@@ -14,7 +14,7 @@ public abstract class Expr<V> extends Phrase<V> {
 
     /**
      * create a mutable expression of the given {@link BlockType}
-     * 
+     *
      * @param kind the kind of the expression,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
@@ -25,14 +25,14 @@ public abstract class Expr<V> extends Phrase<V> {
 
     /**
      * get the precedence of the expression
-     * 
+     *
      * @return the precedence
      */
     abstract public int getPrecedence();
 
     /**
      * get the association of the expression
-     * 
+     *
      * @return the association
      */
     abstract public Assoc getAssoc();

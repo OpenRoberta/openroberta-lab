@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.components;
 import java.util.Arrays;
 import java.util.Locale;
 
-import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
+import de.fhg.iais.roberta.factory.action.generic.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum SensorType {
