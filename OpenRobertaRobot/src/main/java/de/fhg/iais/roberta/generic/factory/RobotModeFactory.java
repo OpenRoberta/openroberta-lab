@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.factory.IIndexLocation;
+import de.fhg.iais.roberta.factory.IListElementOperations;
+import de.fhg.iais.roberta.factory.IPickColor;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.action.IActorPort;
 import de.fhg.iais.roberta.factory.action.IBlinkMode;
@@ -42,6 +44,91 @@ import de.fhg.iais.roberta.generic.factory.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactory implements IRobotFactory {
+
+    @Override
+    public IIndexLocation getIndexLocation(String indexLocation) {
+        if ( indexLocation == null || indexLocation.isEmpty() ) {
+            throw new DbcException("Invalid Index Location: " + indexLocation);
+        }
+        String sUpper = indexLocation.trim().toUpperCase(Locale.GERMAN);
+        for ( IndexLocation po : IndexLocation.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Index Location: " + indexLocation);
+    }
+
+    @Override
+    public List<IIndexLocation> getIndexLocations() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IListElementOperations getListElementOpertaion(String operation) {
+        if ( operation == null || operation.isEmpty() ) {
+            throw new DbcException("Invalid List Operation: " + operation);
+        }
+        String sUpper = operation.trim().toUpperCase(Locale.GERMAN);
+        for ( ListElementOperations po : ListElementOperations.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid List Operation: " + operation);
+    }
+
+    @Override
+    public List<IListElementOperations> getListElementOpertaions() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IPickColor getPickColor(String color) {
+        if ( color == null || color.isEmpty() ) {
+            throw new DbcException("Invalid Color: " + color);
+        }
+        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
+        for ( PickColor po : PickColor.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Color: " + color);
+    }
+
+    @Override
+    public IPickColor getPickColor(int colorId) {
+        for ( PickColor sp : PickColor.values() ) {
+            if ( sp.getColorID() == colorId ) {
+                return sp;
+            }
+        }
+        throw new DbcException("Invalid color: " + colorId);
+    }
+
+    @Override
+    public List<IPickColor> getPickColor() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public IBlinkMode getBlinkMode(String mode) {
@@ -306,7 +393,7 @@ public class RobotModeFactory implements IRobotFactory {
                 return sp;
             }
             for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
                     return sp;
                 }
             }
@@ -431,7 +518,7 @@ public class RobotModeFactory implements IRobotFactory {
                 return ultra;
             }
             for ( String value : ultra.getValues() ) {
-                if ( sUpper.equals(value) ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
                     return ultra;
                 }
             }
@@ -469,30 +556,4 @@ public class RobotModeFactory implements IRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
-    public IIndexLocation getIndexLocation(String indexLocation) {
-        if ( indexLocation == null || indexLocation.isEmpty() ) {
-            throw new DbcException("Invalid Index Location: " + indexLocation);
-        }
-        String sUpper = indexLocation.trim().toUpperCase(Locale.GERMAN);
-        for ( IndexLocation po : IndexLocation.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid Index Location: " + indexLocation);
-    }
-
-    @Override
-    public List<IIndexLocation> getIndexLocations() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

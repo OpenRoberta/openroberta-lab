@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.ev3.factory.Ev3ModeFactory;
+import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
 import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
@@ -294,7 +294,7 @@ public class Administration {
 
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
-        Ev3ModeFactory modeFactory = new Ev3ModeFactory();
+        RobotModeFactory modeFactory = new RobotModeFactory();
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(modeFactory);
         transformer.transform(program);
         BlockSet blockSet = astToJaxb(transformer.getTree());

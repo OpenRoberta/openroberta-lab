@@ -2,11 +2,11 @@ package de.fhg.iais.roberta.syntax.codegen.generic;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
-import de.fhg.iais.roberta.ev3.factory.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.ev3.factory.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.ev3.factory.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.generic.factory.IndexLocation;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.generic.factory.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.generic.factory.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -696,14 +696,14 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         this.sb.append("createGetSubList({list: ");
         getSubFunct.getParam().get(0).visit(this);
         this.sb.append(", where1: CONST.");
-        IndexLocation where1 = IndexLocation.get(getSubFunct.getStrParam().get(0));
+        IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(where1);
         if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
             this.sb.append(", at1: ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", where2: CONST.");
-        IndexLocation where2 = IndexLocation.get(getSubFunct.getStrParam().get(1));
+        IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(where2);
         if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
             this.sb.append(", at2: ");

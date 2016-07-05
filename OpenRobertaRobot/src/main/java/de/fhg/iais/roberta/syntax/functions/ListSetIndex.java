@@ -7,9 +7,9 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IIndexLocation;
+import de.fhg.iais.roberta.factory.IListElementOperations;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.generic.factory.IndexLocation;
-import de.fhg.iais.roberta.generic.factory.ListElementOperations;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,12 +31,12 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * The enumeration {@link IndexLocation} contains all allowed functions.
  */
 public class ListSetIndex<V> extends Function<V> {
-    private final ListElementOperations mode;
+    private final IListElementOperations mode;
     private final IIndexLocation location;
 
     private final List<Expr<V>> param;
 
-    private ListSetIndex(ListElementOperations mode, IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ListSetIndex(IListElementOperations mode, IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.LIST_SET_INDEX, properties, comment);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
@@ -56,7 +56,7 @@ public class ListSetIndex<V> extends Function<V> {
      * @return read only object of class {@link ListSetIndex}
      */
     public static <V> ListSetIndex<V> make(
-        ListElementOperations mode,
+        IListElementOperations mode,
         IIndexLocation name,
         List<Expr<V>> param,
         BlocklyBlockProperties properties,
@@ -78,7 +78,7 @@ public class ListSetIndex<V> extends Function<V> {
         return this.param;
     }
 
-    public ListElementOperations getElementOperation() {
+    public IListElementOperations getElementOperation() {
         return this.mode;
     }
 
@@ -122,7 +122,7 @@ public class ListSetIndex<V> extends Function<V> {
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return ListSetIndex.make(
-            ListElementOperations.get(op),
+            factory.getListElementOpertaion(op),
             factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE)),
             params,
             helper.extractBlockProperties(block),
@@ -136,7 +136,7 @@ public class ListSetIndex<V> extends Function<V> {
 
         Mutation mutation = new Mutation();
         mutation.setAt(false);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getElementOperation().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getElementOperation().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
         if ( getParam().size() > 2 ) {

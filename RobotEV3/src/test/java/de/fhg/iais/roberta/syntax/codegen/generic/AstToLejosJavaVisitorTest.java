@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
-import de.fhg.iais.roberta.ev3.factory.action.DriveDirection;
-import de.fhg.iais.roberta.ev3.factory.sensor.SensorPort;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
+import de.fhg.iais.roberta.generic.factory.sensor.SensorPort;
 import de.fhg.iais.roberta.testutil.ev3.Helper;
 
 public class AstToLejosJavaVisitorTest {
@@ -124,7 +124,7 @@ public class AstToLejosJavaVisitorTest {
             + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-            + "        } else if ( Pickcolor.RED == hal.getColorSensorColour(SensorPort.S3) ) {\n"
+            + "        } else if ( PickColor.RED == hal.getColorSensorColour(SensorPort.S3) ) {\n"
             + "        if ( TRUE ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(ShowPicture.EYESOPEN, 0, 0);\n\n"
@@ -333,8 +333,8 @@ public class AstToLejosJavaVisitorTest {
             + "        ArrayList<Float>item4=BlocklyMethods.createListWithNumber(1,2,3);"
             + "        ArrayList<String>item5=BlocklyMethods.createListWithString(\"a\",\"b\");"
             + "        ArrayList<Boolean>item6=BlocklyMethods.createListWithBoolean(true,false);"
-            + "        ArrayList<Pickcolor>item7=BlocklyMethods.createListWithColour(Pickcolor.RED,Pickcolor.BLACK,Pickcolor.NONE);"
-            + "        Pickcoloritem8=Pickcolor.NONE;"
+            + "        ArrayList<PickColor>item7=BlocklyMethods.createListWithColour(PickColor.RED,PickColor.BLACK,PickColor.NONE);"
+            + "        PickColoritem8=PickColor.NONE;"
             + "    public void run() throwsException {\n"
 
             + SUFFIX
@@ -468,9 +468,9 @@ public class AstToLejosJavaVisitorTest {
             + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
             + "    }\n\n"
-            + "    private Pickcolor test() {\n"
+            + "    private PickColor test() {\n"
             + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
-            + "        return Pickcolor.NONE;\n"
+            + "        return PickColor.NONE;\n"
             + "    }"
             + "}\n";
 
@@ -490,10 +490,10 @@ public class AstToLejosJavaVisitorTest {
             + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
             + "    }\n\n"
-            + "    private Pickcolor test() {\n"
-            + "        if (true) return Pickcolor.RED;\n"
+            + "    private PickColor test() {\n"
+            + "        if (true) return PickColor.RED;\n"
             + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
-            + "        return Pickcolor.NONE;\n"
+            + "        return PickColor.NONE;\n"
             + "    }"
             + "}\n";
 
@@ -545,9 +545,9 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
+            + "ArrayList<PickColor>variablenName=BlocklyMethods.createListWithColour(PickColor.NONE,PickColor.RED,PickColor.BLUE);\n"
             + "    public void run() throwsException {\n"
-            + "        for (PickcolorvariablenName2 : variablenName) {\n"
+            + "        for (PickColorvariablenName2 : variablenName) {\n"
             + "            hal.drawText(String.valueOf(variablenName2),0,0);\n"
             + "        }\n"
             + "    }\n"

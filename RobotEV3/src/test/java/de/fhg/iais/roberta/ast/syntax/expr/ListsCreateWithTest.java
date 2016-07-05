@@ -35,7 +35,7 @@ public class ListsCreateWithTest {
 
     @Test
     public void Test4() throws Exception {
-        String a = "BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BROWN)";
+        String a = "BlocklyMethods.createListWithColour(PickColor.NONE,PickColor.RED,PickColor.BROWN)";
 
         Helper.assertCodeIsOk(a, "/syntax/lists/lists_create_with4.xml");
     }

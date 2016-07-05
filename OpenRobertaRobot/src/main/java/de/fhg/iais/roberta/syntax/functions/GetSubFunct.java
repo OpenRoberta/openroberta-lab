@@ -6,6 +6,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.factory.IMode;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -29,9 +31,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class GetSubFunct<V> extends Function<V> {
     private final FunctionNames functName;
     private final List<Expr<V>> param;
-    private final List<String> strParam;
+    private final List<IMode> strParam;
 
-    private GetSubFunct(FunctionNames name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private GetSubFunct(FunctionNames name, List<IMode> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.GET_SUB_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null && strParam != null);
         this.functName = name;
@@ -52,7 +54,7 @@ public class GetSubFunct<V> extends Function<V> {
      */
     public static <V> GetSubFunct<V> make(
         FunctionNames name,
-        List<String> strParam,
+        List<IMode> strParam,
         List<Expr<V>> param,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
@@ -76,7 +78,7 @@ public class GetSubFunct<V> extends Function<V> {
     /**
      * @return list of string parameters
      */
-    public List<String> getStrParam() {
+    public List<IMode> getStrParam() {
         return this.strParam;
     }
 
@@ -108,10 +110,11 @@ public class GetSubFunct<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
-        List<String> strParams = new ArrayList<String>();
-        strParams.add(helper.extractField(fields, BlocklyConstants.WHERE1));
-        strParams.add(helper.extractField(fields, BlocklyConstants.WHERE2));
+        List<IMode> strParams = new ArrayList<IMode>();
+        strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE1)));
+        strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE2)));
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.LIST_, String.class));
         if ( block.getMutation().isAt1() ) {
@@ -132,18 +135,18 @@ public class GetSubFunct<V> extends Function<V> {
 
         mutation.setAt1(false);
         mutation.setAt2(false);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE1, getStrParam().get(0));
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE2, getStrParam().get(1));
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE1, getStrParam().get(0).toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE2, getStrParam().get(1).toString());
         if ( getFunctName() == FunctionNames.GET_SUBLIST ) {
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
         } else {
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.STRING, getParam().get(0));
         }
-        if ( getStrParam().get(0).equals("FROM_START") || getStrParam().get(0).equals("FROM_END") ) {
+        if ( getStrParam().get(0).toString().equals("FROM_START") || getStrParam().get(0).toString().equals("FROM_END") ) {
             mutation.setAt1(true);
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT1, getParam().get(1));
         }
-        if ( getStrParam().get(1).equals("FROM_START") || getStrParam().get(1).equals("FROM_END") ) {
+        if ( getStrParam().get(1).toString().equals("FROM_START") || getStrParam().get(1).toString().equals("FROM_END") ) {
             mutation.setAt2(true);
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT2, getParam().get(getParam().size() - 1));
         }

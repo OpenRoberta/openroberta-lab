@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
-import de.fhg.iais.roberta.ev3.factory.action.DriveDirection;
-import de.fhg.iais.roberta.ev3.factory.sensor.SensorPort;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
+import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
+import de.fhg.iais.roberta.generic.factory.sensor.SensorPort;
 import de.fhg.iais.roberta.testutil.ev3.Helper;
 
 public class AstToEv3PythonVisitorTest {

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.ev3.factory.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.ev3.factory.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.ev3.factory.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.generic.factory.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.generic.factory.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.generic.factory.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;

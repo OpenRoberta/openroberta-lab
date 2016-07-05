@@ -19,9 +19,8 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.ev3.factory.Ev3ModeFactory;
-import de.fhg.iais.roberta.ev3.factory.action.ActorPort;
 import de.fhg.iais.roberta.generic.factory.RobotModeFactory;
+import de.fhg.iais.roberta.generic.factory.action.ActorPort;
 import de.fhg.iais.roberta.generic.factory.action.DriveDirection;
 import de.fhg.iais.roberta.generic.factory.action.MotorSide;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
@@ -112,7 +111,7 @@ public class Helper {
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         //TODO: change the static ev3modeFactory
-        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        RobotModeFactory ev3ModeFactory = new RobotModeFactory();
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
         transformer.transform(project);
         return transformer;
@@ -128,7 +127,7 @@ public class Helper {
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         //TODO: change the static ev3modeFactory
-        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        RobotModeFactory ev3ModeFactory = new RobotModeFactory();
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
         transformer.transform(project);
         return transformer;
@@ -155,7 +154,7 @@ public class Helper {
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         //TODO: change the static ev3modeFactory
-        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        RobotModeFactory ev3ModeFactory = new RobotModeFactory();
         Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
 
         transformer.transform(project);
@@ -251,7 +250,7 @@ public class Helper {
     public static void assertXMLtransformation(String xml) throws Exception {
         BlockSet program = JaxbHelper.xml2BlockSet(xml);
         //TODO: change the static ev3modeFactory
-        Ev3ModeFactory ev3ModeFactory = new Ev3ModeFactory();
+        RobotModeFactory ev3ModeFactory = new RobotModeFactory();
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(ev3ModeFactory);
         transformer.transform(program);
 
