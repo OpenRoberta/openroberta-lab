@@ -1,8 +1,17 @@
 package de.fhg.iais.roberta.persistence.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
+    private static final Logger LOG = LoggerFactory.getLogger(HttpSessionState.class);
     public final static int NO_USER = -1;
 
     private int userId = HttpSessionState.NO_USER;
@@ -14,12 +23,14 @@ public class HttpSessionState {
     private String configuration;
     private String toolboxName;
     private String toolbox;
+    private final RobotCommunicator robotCommunicator;
 
-    public HttpSessionState() {
+    public HttpSessionState(RobotCommunicator robotCommunicator) {
+        this.robotCommunicator = robotCommunicator;
     }
 
-    public static HttpSessionState init() {
-        return new HttpSessionState();
+    public static HttpSessionState init(RobotCommunicator robotCommunicator) {
+        return new HttpSessionState(robotCommunicator);
     }
 
     public int getUserId() {
@@ -96,5 +107,30 @@ public class HttpSessionState {
     public void setToolboxNameAndToolbox(String toolboxName, String toolbox) {
         this.toolboxName = toolboxName;
         this.toolbox = toolbox;
+    }
+
+    public IRobotFactory getRobotFactory() {
+        try {
+            Constructor<?> constructur =
+                this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
+
+            if ( this.robotId == 42 ) {
+                constructur =
+                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
+
+            } else if ( this.robotId == 43 ) {
+                constructur =
+                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.nxt.NxtFactory").getDeclaredConstructor(RobotCommunicator.class);
+            } else {
+                LOG.error("Invalide Robot Id" + this.robotId + "!. Returning EV3 factory.");
+            }
+            IRobotFactory factory = (IRobotFactory) constructur.newInstance(this.robotCommunicator);
+
+            return factory;
+        } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | SecurityException
+            | IllegalArgumentException | InvocationTargetException e ) {
+            LOG.error("Robot Factory Not Found!. Check the robot configuration property. System will crash!");
+            return null;
+        }
     }
 }

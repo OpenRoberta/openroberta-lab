@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -32,10 +32,10 @@ import de.fhg.iais.roberta.util.Util1;
 public class ClientConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(ClientConfiguration.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientConfiguration(Ev3Communicator brickCommunicator) {
+    public ClientConfiguration(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 

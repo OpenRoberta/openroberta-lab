@@ -7,15 +7,16 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MathConst.Const;
 
 public class JavaVisitorTest {
-    private static final Configuration brickConfiguration = new Configuration.Builder().build();
+    private static final Configuration brickConfiguration = new EV3Configuration.Builder().build();
     private static final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
 
     @Test

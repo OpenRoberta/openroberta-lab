@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 /**
  * REST service for downloading user program
@@ -23,10 +23,10 @@ import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
 public class RobotSensorLogging {
     private static final Logger LOG = LoggerFactory.getLogger(RobotSensorLogging.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public RobotSensorLogging(Ev3Communicator brickCommunicator) {
+    public RobotSensorLogging(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 
@@ -35,7 +35,7 @@ public class RobotSensorLogging {
     @Produces(MediaType.TEXT_PLAIN)
     public Response handle(JSONObject requestEntity) {
         String token = (String) requestEntity.remove("token");
-        Ev3CommunicationData state = this.brickCommunicator.getState(token);
+        RobotCommunicationData state = this.brickCommunicator.getState(token);
         state.setSensorValues(requestEntity);
         LOG.info(requestEntity.toString());
         return Response.ok().build();

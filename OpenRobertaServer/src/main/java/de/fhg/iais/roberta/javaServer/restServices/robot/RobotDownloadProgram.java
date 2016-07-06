@@ -19,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -31,11 +31,11 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class RobotDownloadProgram { // TODO(ensonic): rename to Ev3DownloadCode
     private static final Logger LOG = LoggerFactory.getLogger(RobotDownloadProgram.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
     private final String pathToCrosscompilerBaseDir;
 
     @Inject
-    public RobotDownloadProgram(Ev3Communicator brickCommunicator, @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir) {
+    public RobotDownloadProgram(RobotCommunicator brickCommunicator, @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir) {
         this.brickCommunicator = brickCommunicator;
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
     }
@@ -48,7 +48,7 @@ public class RobotDownloadProgram { // TODO(ensonic): rename to Ev3DownloadCode
         try {
             String token = requestEntity.getString("token");
             LOG.info("/download - request for token " + token);
-            Ev3CommunicationData state = this.brickCommunicator.getState(token);
+            RobotCommunicationData state = this.brickCommunicator.getState(token);
             String programName = state.getProgramName();
             String fileName, filePath;
             if ( state.getFirmwareName().equals("lejos") ) {

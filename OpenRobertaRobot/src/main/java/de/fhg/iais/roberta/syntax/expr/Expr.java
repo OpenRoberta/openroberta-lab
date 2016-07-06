@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
  * the top class of all expressions. There are two ways for a client to find out which kind of expression an {@link #Expr}-object is:<br>
@@ -36,5 +37,7 @@ public abstract class Expr<V> extends Phrase<V> {
      * @return the association
      */
     abstract public Assoc getAssoc();
+
+    abstract public BlocklyType getVarType();
 
 }

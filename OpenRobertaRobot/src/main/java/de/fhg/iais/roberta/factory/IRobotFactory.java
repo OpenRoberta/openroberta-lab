@@ -2,24 +2,28 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 
-import de.fhg.iais.roberta.factory.action.IActorPort;
-import de.fhg.iais.roberta.factory.action.IBlinkMode;
-import de.fhg.iais.roberta.factory.action.IBrickLedColor;
-import de.fhg.iais.roberta.factory.action.IDriveDirection;
-import de.fhg.iais.roberta.factory.action.IMotorMoveMode;
-import de.fhg.iais.roberta.factory.action.IMotorSide;
-import de.fhg.iais.roberta.factory.action.IMotorStopMode;
-import de.fhg.iais.roberta.factory.action.IShowPicture;
-import de.fhg.iais.roberta.factory.action.ITurnDirection;
-import de.fhg.iais.roberta.factory.action.generic.BlinkMode;
-import de.fhg.iais.roberta.factory.sensor.IBrickKey;
-import de.fhg.iais.roberta.factory.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.factory.sensor.IGyroSensorMode;
-import de.fhg.iais.roberta.factory.sensor.IInfraredSensorMode;
-import de.fhg.iais.roberta.factory.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.factory.sensor.ISensorPort;
-import de.fhg.iais.roberta.factory.sensor.ITimerSensorMode;
-import de.fhg.iais.roberta.factory.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
+import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
+import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
+import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
+import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
+import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
+import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
+import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
+import de.fhg.iais.roberta.inter.mode.general.IPickColor;
+import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
+import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 
 public interface IRobotFactory {
     /**
@@ -214,9 +218,9 @@ public interface IRobotFactory {
      * @param name of the infrared sensor mode
      * @return the infrared sensor mode from the enum {@link IInfraredSensorMode}
      */
-    public IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode);
+    IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode);
 
-    public List<IInfraredSensorMode> getInfraredSensorModes();
+    List<IInfraredSensorMode> getInfraredSensorModes();
 
     /**
      * Get a timer sensor mode from {@link ITimerSensorMode} given string parameter. It is possible for one timer sensor mode to have multiple string
@@ -226,9 +230,9 @@ public interface IRobotFactory {
      * @param name of the timer sensor mode
      * @return the timer sensor mode from the enum {@link ITimerSensorMode}
      */
-    public ITimerSensorMode getTimerSensorMode(String timerSensroMode);
+    ITimerSensorMode getTimerSensorMode(String timerSensroMode);
 
-    public List<ITimerSensorMode> getTimerSensorModes();
+    List<ITimerSensorMode> getTimerSensorModes();
 
     /**
      * Get a motor tacho sensor mode from {@link IMotorTachoMode} given string parameter. It is possible for one motor tacho sensor mode to have multiple string
@@ -238,9 +242,9 @@ public interface IRobotFactory {
      * @param name of the motor tacho sensor mode
      * @return the motor tacho sensor mode from the enum {@link IMotorTachoMode}
      */
-    public IMotorTachoMode getMotorTachoMode(String motorTachoMode);
+    IMotorTachoMode getMotorTachoMode(String motorTachoMode);
 
-    public List<IMotorTachoMode> getMotorTachoModes();
+    List<IMotorTachoMode> getMotorTachoModes();
 
     /**
      * Get a ultrasonic sensor mode from {@link IUltrasonicSensorMode} given string parameter. It is possible for one ultrasonic sensor mode to have multiple
@@ -251,9 +255,22 @@ public interface IRobotFactory {
      * @param name of the ultrasonic sensor mode
      * @return the ultrasonic sensor mode from the enum {@link IUltrasonicSensorMode}
      */
-    public IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode);
+    IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode);
 
-    public List<IUltrasonicSensorMode> getUltrasonicSensorModes();
+    List<IUltrasonicSensorMode> getUltrasonicSensorModes();
+
+    /**
+     * Get a touch sensor mode from {@link ITouchSensorMode} given string parameter. It is possible for one touch sensor mode to have multiple
+     * string
+     * mappings.
+     * Throws exception if the touch sensor mode does not exists.
+     *
+     * @param name of the touch sensor mode
+     * @return the touch sensor mode from the enum {@link ITouchSensorMode}
+     */
+    ITouchSensorMode getTouchSensorMode(String mode);
+
+    List<ITouchSensorMode> getTouchSensorModes();
 
     /**
      * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple
@@ -263,8 +280,10 @@ public interface IRobotFactory {
      * @param name of the sensor port
      * @return the sensor port from the enum {@link ISensorPort}
      */
-    public ISensorPort getSensorPort(String port);
+    ISensorPort getSensorPort(String port);
 
-    public List<ISensorPort> getSensorPorts();
+    List<ISensorPort> getSensorPorts();
+
+    ICompilerWorkflow getCompilerWorkflow();
 
 }

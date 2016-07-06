@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.ev3.Helper;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class AstToLejosJavaScriptVisitorTest {
 

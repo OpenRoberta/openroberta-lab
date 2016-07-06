@@ -21,9 +21,7 @@ import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotSensorLogging;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
@@ -48,8 +46,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(ClientPing.class);
 
         bind(SessionFactoryWrapper.class).in(Singleton.class);
-        bind(Ev3Communicator.class).in(Singleton.class);
-        bind(ICompilerWorkflow.class).to(Ev3CompilerWorkflow.class);
+        bind(RobotCommunicator.class).in(Singleton.class);
         bind(MailManagement.class).in(Singleton.class);
 
         bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");

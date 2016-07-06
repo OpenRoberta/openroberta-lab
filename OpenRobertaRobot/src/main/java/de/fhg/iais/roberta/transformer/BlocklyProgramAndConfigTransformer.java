@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
@@ -63,7 +64,7 @@ public class BlocklyProgramAndConfigTransformer {
      * @param configurationText as XML
      * @return
      */
-    public static BlocklyProgramAndConfigTransformer transform(String programText, String configurationText) {
+    public static BlocklyProgramAndConfigTransformer transform(IRobotFactory factory, String programText, String configurationText) {
         Key errorMessage = null;
         if ( programText == null || programText.trim().equals("") ) {
             errorMessage = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
@@ -73,14 +74,14 @@ public class BlocklyProgramAndConfigTransformer {
 
         Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
         try {
-            programTransformer = JaxbHelper.generateProgramTransformer(programText);
+            programTransformer = JaxbHelper.generateProgramTransformer(factory, programText);
         } catch ( Exception e ) {
             LOG.error("Transformer failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
         }
         Configuration brickConfiguration = null;
         try {
-            brickConfiguration = JaxbHelper.generateConfiguration(configurationText);
+            brickConfiguration = factory.getCompilerWorkflow().generateConfiguration(factory, configurationText);
         } catch ( Exception e ) {
             LOG.error("Generation of the configuration failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;

@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.factory.action.IDriveDirection;
-import de.fhg.iais.roberta.factory.action.IMotorSide;
+import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
+import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class Actor {

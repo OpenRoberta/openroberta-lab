@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

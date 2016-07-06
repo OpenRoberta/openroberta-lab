@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -33,11 +33,11 @@ import de.fhg.iais.roberta.util.Util1;
 public class ClientUser {
     private static final Logger LOG = LoggerFactory.getLogger(ClientUser.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
     private final MailManagement mailManagement;
 
     @Inject
-    public ClientUser(Ev3Communicator brickCommunicator, MailManagement mailManagement) {
+    public ClientUser(RobotCommunicator brickCommunicator, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
         this.mailManagement = mailManagement;
     }

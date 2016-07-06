@@ -11,24 +11,29 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.syntax.codegen.nxt.Ast2Ev3JavaVisitor;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.codegen.nxt.Ast2NxcVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
+import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class NxtCompilerWorkflow implements ICompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(NxtCompilerWorkflow.class);
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
     public final String pathToCrosscompilerBaseDir;
     public final String crossCompilerResourcesDir;
     public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
     public NxtCompilerWorkflow(
-        Ev3Communicator brickCommunicator,
+        RobotCommunicator brickCommunicator,
         @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
         @Named("robot.crossCompilerResources.dir") String crossCompilerResourcesDir, //
         @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
@@ -57,7 +62,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = Ast2NxcVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
@@ -90,13 +95,13 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
     @Override
-    public String generateSourceCode(String token, String programName, String programText, String configurationText) {
-        BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText) {
+        BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;
         }
 
-        return Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return Ast2NxcVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
@@ -151,4 +156,17 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
         }
     }
 
+    /**
+     * return the brick configuration for given XML configuration text.
+     *
+     * @param blocklyXml the configuration XML as String
+     * @return brick configuration
+     * @throws Exception
+     */
+    @Override
+    public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(factory);
+        return transformer.transform(project);
+    }
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IIndexLocation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

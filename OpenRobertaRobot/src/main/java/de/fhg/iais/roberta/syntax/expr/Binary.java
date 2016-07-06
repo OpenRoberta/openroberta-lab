@@ -99,6 +99,11 @@ public final class Binary<V> extends Expr<V> {
     }
 
     @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.CAPTURED_TYPE;
+    }
+
+    @Override
     public String toString() {
         return "Binary [" + this.op + ", " + this.left + ", " + this.right + "]";
     }

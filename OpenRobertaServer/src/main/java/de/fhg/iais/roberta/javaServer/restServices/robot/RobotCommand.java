@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 
 @Path("/pushcmd")
@@ -33,12 +33,12 @@ public class RobotCommand {
     private static final String CMD_REPEAT = "repeat";
     private static final String CMD_ABORT = "abort";
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
     //    @Context
     //    private HttpServletRequest servletRequest;
 
     @Inject
-    public RobotCommand(Ev3Communicator brickCommunicator) {
+    public RobotCommand(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 
@@ -92,7 +92,7 @@ public class RobotCommand {
             case CMD_REGISTER:
                 LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
                 // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
-                Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
+                RobotCommunicationData state = new RobotCommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response).build();

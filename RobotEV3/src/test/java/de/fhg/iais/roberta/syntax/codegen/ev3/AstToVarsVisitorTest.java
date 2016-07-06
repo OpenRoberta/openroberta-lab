@@ -10,8 +10,8 @@ import java.util.Set;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.codegen.ev3.AstToVarsVisitor;
-import de.fhg.iais.roberta.testutil.ev3.Helper;
+import de.fhg.iais.roberta.syntax.codegen.AstToVarsVisitor;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class AstToVarsVisitorTest {
     @Test

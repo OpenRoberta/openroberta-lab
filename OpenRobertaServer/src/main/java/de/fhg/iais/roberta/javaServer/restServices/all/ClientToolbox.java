@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.persistence.bo.Toolbox;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -31,10 +31,10 @@ import de.fhg.iais.roberta.util.Util1;
 public class ClientToolbox {
     private static final Logger LOG = LoggerFactory.getLogger(ClientToolbox.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientToolbox(Ev3Communicator brickCommunicator) {
+    public ClientToolbox(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 

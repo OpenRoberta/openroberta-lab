@@ -19,10 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.generic.RobotModeFactory;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.transformer.generic.Jaxb2Ev3ConfigurationTransformer;
 
 public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
@@ -95,26 +93,12 @@ public class JaxbHelper {
      * @return jaxb the transformer
      * @throws Exception
      */
-    public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
+    public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        //TODO: change the static robotModeFactory
-        RobotModeFactory robotModeFactory = new RobotModeFactory();
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
+
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
     }
 
-    /**
-     * return the brick configuration for given XML configuration text.
-     *
-     * @param blocklyXml the configuration XML as String
-     * @return brick configuration
-     * @throws Exception
-     */
-    public static Configuration generateConfiguration(String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        RobotModeFactory robotModeFactory = new RobotModeFactory();
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(robotModeFactory);
-        return transformer.transform(project);
-    }
 }

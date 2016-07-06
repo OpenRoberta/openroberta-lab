@@ -70,6 +70,11 @@ public class Var<V> extends Expr<V> {
     }
 
     @Override
+    public BlocklyType getVarType() {
+        return this.typeVar;
+    }
+
+    @Override
     public String toString() {
         return "Var [" + this.name + "]";
     }

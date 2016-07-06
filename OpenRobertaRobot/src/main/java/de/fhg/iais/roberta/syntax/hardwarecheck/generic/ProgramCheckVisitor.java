@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
@@ -128,7 +128,7 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        if ( this.brickConfiguration.getActorOnPort(encoderSensor.getMotor()) == null ) {
+        if ( this.brickConfiguration.getActorOnPort(encoderSensor.getMotorPort()) == null ) {
             encoderSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }

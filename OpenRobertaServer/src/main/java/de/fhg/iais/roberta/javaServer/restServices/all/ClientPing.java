@@ -20,7 +20,7 @@ import com.google.inject.name.Named;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Util;
@@ -34,10 +34,10 @@ public class ClientPing {
     private static final AtomicInteger pingCounterForLogging = new AtomicInteger(0);
 
     private final String version;
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientPing(@Named("version") String version, Ev3Communicator brickCommunicator) {
+    public ClientPing(@Named("version") String version, RobotCommunicator brickCommunicator) {
         this.version = version;
         this.brickCommunicator = brickCommunicator;
     }

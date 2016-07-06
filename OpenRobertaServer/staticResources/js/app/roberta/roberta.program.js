@@ -315,6 +315,7 @@ define(
              * Show program code
              */
             function showCode() {
+<<<<<<< 2e968ea17fd479c713ef3090114530b1f3a8e9b7
                 //if (userState.robot === 'ev3') {
                     LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
                     var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -349,6 +350,41 @@ define(
                         console.log(prettyPrintOne(result.javaSource, null, true));
                     });
                // }
+=======
+
+                LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
+                var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+                var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+                var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
+
+                PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+                    ROBERTA_ROBOT.setState(result);
+                    if ($(window).width() < 768) {
+                        width = '0';
+                    } else {
+                        width = '30%';
+                    }
+                    $('#blocklyDiv').animate({
+                        width : width
+                    }, {
+                        duration : 750,
+                        step : function() {
+                            $(window).resize();
+                            Blockly.svgResize(blocklyWorkspace);
+                        },
+                        done : function() {
+                            Blockly.svgResize(blocklyWorkspace);
+                        }
+                    });
+                    $('#codeContent').addClass('codeActive');
+                    $('#codeDiv').addClass('codeActive');
+                    $('.nav > li > ul > .robotType').addClass('disabled');
+                    $(".code").removeClass('hide');
+                    $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
+                    userState.programSource = result.javaSource
+                });
+
+>>>>>>> #127 Dinamically loading of the compiler workflow and factory method
             }
             exports.showCode = showCode;
 
@@ -404,9 +440,9 @@ define(
                     MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
                     return;
                 } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {
-                    $('#buttonCancelFirmwareUpdate').css('display', 'none');
-                    $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-                    return;
+//                    $('#buttonCancelFirmwareUpdate').css('display', 'none');
+//                    $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+//                    return;
                 }
                 LOG.info('run ' + userState.program + 'on brick' + ' signed in: ' + userState.id);
                 var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -509,8 +545,9 @@ define(
                         blocklyWorkspace.clear();
                     } else {
                         $('#blocklyDiv').html('');
-                        if (blocklyWorkspace)
+                        if (blocklyWorkspace) {
                             blocklyWorkspace.dispose();
+                        }
                         blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
                             path : '/blockly/',
                             toolbox : toolbox.data,

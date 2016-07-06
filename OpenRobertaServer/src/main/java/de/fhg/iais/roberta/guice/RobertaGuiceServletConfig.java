@@ -31,7 +31,6 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
                 String packages = "" //
                     + "de.fhg.iais.roberta.javaServer.restServices.all,"
                     + "de.fhg.iais.roberta.javaServer.restServices.robot,"
-                    + "de.fhg.iais.roberta.javaServer.restServices.ev3,"
                     + "de.fhg.iais.roberta.javaServer.provider";
                 initParams.put("com.sun.jersey.config.property.packages", packages);
                 serve("/*").with(GuiceContainer.class, initParams);

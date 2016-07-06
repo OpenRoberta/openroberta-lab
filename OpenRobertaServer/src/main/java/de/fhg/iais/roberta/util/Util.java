@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData.State;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
@@ -54,14 +54,14 @@ public class Util {
      * @param httpSessionState needed to access the token
      * @param brickCommunicator needed to access the robot's state
      */
-    public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, Ev3Communicator brickCommunicator) {
+    public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, RobotCommunicator brickCommunicator) {
         try {
             response.put("serverTime", new Date());
             response.put("server.version", Util.openRobertaVersion);
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
-                    Ev3CommunicationData state = brickCommunicator.getState(token);
+                    RobotCommunicationData state = brickCommunicator.getState(token);
                     if ( state != null ) {
                         response.put("robot.wait", state.getRobotConnectionTime());
                         response.put("robot.battery", state.getBattery());

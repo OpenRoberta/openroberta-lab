@@ -32,8 +32,7 @@ import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
@@ -68,14 +67,12 @@ public class RoundTripTest {
 
     private static SessionFactoryWrapper sessionFactoryWrapper;
     private static DbSetup memoryDbSetup;
-    private static Ev3Communicator brickCommunicator;
+    private static RobotCommunicator brickCommunicator;
 
     private static String buildXml;
     private static String connectionUrl;
     private static String crosscompilerBasedir;
     private static String crossCompilerResourcesDir;
-
-    private static Ev3CompilerWorkflow compilerWorkflow;
 
     private static ClientUser restUser;
     private static ClientProgram restProgram;
@@ -187,12 +184,12 @@ public class RoundTripTest {
         nativeSession = sessionFactoryWrapper.getNativeSession();
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
-        brickCommunicator = new Ev3Communicator();
-        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, crossCompilerResourcesDir, buildXml);
-        restUser = new ClientUser(brickCommunicator, null);
-        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
+        brickCommunicator = new RobotCommunicator();
 
-        s1 = HttpSessionState.init();
+        restUser = new ClientUser(brickCommunicator, null);
+        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator);
+
+        s1 = HttpSessionState.init(brickCommunicator);
     }
 
     private static void setUpDatabase() throws Exception {

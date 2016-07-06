@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.expr;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -59,5 +60,10 @@ public final class ActionExpr<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         return getAction().astToBlock();
+    }
+
+    @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.CAPTURED_TYPE;
     }
 }

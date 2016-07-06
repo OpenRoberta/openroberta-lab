@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -68,6 +69,11 @@ public class MathPowerFunct<V> extends Expr<V> {
     @Override
     public String toString() {
         return "MathPowerFunct [" + this.functName + ", " + this.param + "]";
+    }
+
+    @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.NOTHING;
     }
 
     @Override

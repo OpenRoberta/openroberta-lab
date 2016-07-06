@@ -7,6 +7,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -58,6 +59,11 @@ public class ExprList<V> extends Expr<V> {
     }
 
     @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.NOTHING;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -81,4 +87,5 @@ public class ExprList<V> extends Expr<V> {
     public Block astToBlock() {
         return null;
     }
+
 }

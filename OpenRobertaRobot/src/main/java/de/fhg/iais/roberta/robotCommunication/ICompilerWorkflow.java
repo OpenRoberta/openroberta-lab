@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.robotCommunication;
 
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.Key;
 
@@ -30,12 +32,22 @@ public interface ICompilerWorkflow {
      * - generate source code in the right language for the robot<br>
      * - and return it
      *
+     * @param iRobotFactory
      * @param token the credential the end user (at the terminal) and the brick have both agreed to use
      * @param programName name of the program
      * @param programText source of the program
      * @param configurationText the hardware configuration source that describes characteristic data of the robot
      * @return the generated source code; null in case of an error
      */
-    String generateSourceCode(String token, String programName, String programText, String configurationText);
+    String generateSourceCode(IRobotFactory iRobotFactory, String token, String programName, String programText, String configurationText);
+
+    /**
+     * return the brick configuration for given XML configuration text.
+     *
+     * @param blocklyXml the configuration XML as String
+     * @return brick configuration
+     * @throws Exception
+     */
+    Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;
 
 }

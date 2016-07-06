@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.action;
 
-import de.fhg.iais.roberta.factory.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;

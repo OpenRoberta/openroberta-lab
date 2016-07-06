@@ -30,8 +30,7 @@ import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Util1;
@@ -47,14 +46,12 @@ public class PerformanceUserInteractionTest {
 
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
-    private Ev3Communicator brickCommunicator;
+    private RobotCommunicator brickCommunicator;
 
     private String buildXml;
     private String connectionUrl;
     private String crosscompilerBasedir;
     private String crossCompilerResourcesDir;
-
-    private Ev3CompilerWorkflow compilerWorkflow;
 
     private ClientUser restUser;
     private ClientProgram restProgram;
@@ -76,10 +73,10 @@ public class PerformanceUserInteractionTest {
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
         this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
         this.memoryDbSetup.runDefaultRobertaSetup();
-        this.brickCommunicator = new Ev3Communicator();
-        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.crossCompilerResourcesDir, this.buildXml);
+        this.brickCommunicator = new RobotCommunicator();
+
         this.restUser = new ClientUser(this.brickCommunicator, null);
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
         this.downloadJar = new RobotDownloadProgram(this.brickCommunicator, this.crosscompilerBasedir);
         this.brickCommand = new RobotCommand(this.brickCommunicator);
@@ -142,7 +139,7 @@ public class PerformanceUserInteractionTest {
         PerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.init();
+        HttpSessionState s = HttpSessionState.init(this.brickCommunicator);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success

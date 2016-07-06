@@ -7,13 +7,14 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.factory.action.generic.ActorPort;
-import de.fhg.iais.roberta.factory.action.generic.DriveDirection;
-import de.fhg.iais.roberta.factory.action.generic.MotorSide;
-import de.fhg.iais.roberta.factory.sensor.generic.SensorPort;
-import de.fhg.iais.roberta.testutil.ev3.Helper;
+import de.fhg.iais.roberta.mode.action.ActorPort;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MotorSide;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class AstToLejosJavaVisitorTest {
 
@@ -25,7 +26,7 @@ public class AstToLejosJavaVisitorTest {
         + "package generated.main;\n\n"
         + "import de.fhg.iais.roberta.runtime.*;\n"
         + "import de.fhg.iais.roberta.runtime.ev3.*;\n\n"
-        + "import de.fhg.iais.roberta.factory.*;\n"
+        + "import de.fhg.iais.roberta.factory.generic.*;\n"
         + "import de.fhg.iais.roberta.factory.action.generic.*;\n"
         + "import de.fhg.iais.roberta.factory.sensor.generic.*;\n\n"
         + "import de.fhg.iais.roberta.components.*;\n"
@@ -65,7 +66,7 @@ public class AstToLejosJavaVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        Configuration.Builder builder = new Configuration.Builder();
+        Configuration.Builder builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
         builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,

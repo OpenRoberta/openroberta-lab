@@ -21,8 +21,7 @@ import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util1;
@@ -69,8 +68,7 @@ public class RestInterfaceTest {
     private String crosscompilerBasedir;
     private String crossCompilerResourcesDir;
 
-    private Ev3Communicator brickCommunicator;
-    private Ev3CompilerWorkflow compilerWorkflow;
+    private RobotCommunicator brickCommunicator;
 
     private ClientUser restUser;
     private ClientProgram restProgram;
@@ -87,8 +85,8 @@ public class RestInterfaceTest {
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
         this.crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
 
-        this.brickCommunicator = new Ev3Communicator();
-        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.crossCompilerResourcesDir, this.buildXml);
+        this.brickCommunicator = new RobotCommunicator();
+
         this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
         this.downloadJar = new RobotDownloadProgram(this.brickCommunicator, this.crosscompilerBasedir);
@@ -98,9 +96,9 @@ public class RestInterfaceTest {
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
-        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
-        this.sPid = HttpSessionState.init();
-        this.sMinscha = HttpSessionState.init();
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
+        this.sPid = HttpSessionState.init(this.brickCommunicator);
+        this.sMinscha = HttpSessionState.init(this.brickCommunicator);
     }
 
     @Test

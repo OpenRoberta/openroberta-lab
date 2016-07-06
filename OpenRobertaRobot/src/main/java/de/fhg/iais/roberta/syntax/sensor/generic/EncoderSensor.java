@@ -5,10 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.factory.action.IActorPort;
-import de.fhg.iais.roberta.factory.action.generic.ActorPort;
-import de.fhg.iais.roberta.factory.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.factory.sensor.generic.MotorTachoMode;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -66,7 +64,7 @@ public class EncoderSensor<V> extends Sensor<V> {
     /**
      * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      */
-    public IActorPort getMotor() {
+    public IActorPort getMotorPort() {
         return this.motor;
     }
 
@@ -107,7 +105,7 @@ public class EncoderSensor<V> extends Sensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        String fieldValue = getMotor().toString();
+        String fieldValue = getMotorPort().toString();
         if ( !getMode().toString().equals("RESET") ) {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
         }

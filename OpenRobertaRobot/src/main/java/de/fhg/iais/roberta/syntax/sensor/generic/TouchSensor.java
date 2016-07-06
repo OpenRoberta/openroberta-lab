@@ -5,9 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.factory.sensor.ISensorPort;
-import de.fhg.iais.roberta.factory.sensor.ITouchSensorMode;
-import de.fhg.iais.roberta.factory.sensor.generic.TouchSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,9 +30,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class TouchSensor<V> extends BaseSensor<V> {
     private final ITouchSensorMode mode;
 
-    private TouchSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private TouchSensor(ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockType.TOUCH_SENSING, properties, comment);
-        this.mode = TouchSensorMode.TOUCH;
+        this.mode = mode;
         setReadOnly();
     }
 
@@ -46,8 +45,8 @@ public class TouchSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link TouchSensor}
      */
-    public static <V> TouchSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new TouchSensor<V>(port, properties, comment);
+    public static <V> TouchSensor<V> make(ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new TouchSensor<V>(mode, port, properties, comment);
     }
 
     /**
@@ -78,7 +77,8 @@ public class TouchSensor<V> extends BaseSensor<V> {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        return TouchSensor.make(factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return TouchSensor
+            .make(factory.getTouchSensorMode("TOUCH"), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

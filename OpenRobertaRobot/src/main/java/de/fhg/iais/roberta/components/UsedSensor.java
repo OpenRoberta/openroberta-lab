@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.factory.IMode;
-import de.fhg.iais.roberta.factory.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 /**
  * Stores information for port, type and the mode of used sensor in a blockly program.

@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Injector;
 
-import de.fhg.iais.roberta.robotCommunication.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 @WebSocket
 public class Ev3SensorLoggingWS {
@@ -43,8 +43,8 @@ public class Ev3SensorLoggingWS {
         JSONObject request = new JSONObject(requestString);
         String token = (String) request.remove("token");
         LOG.info("@OnWebSocketMessage: " + token + " " + request);
-        Ev3Communicator communicator = guiceInjector.getInstance(Ev3Communicator.class);
-        Ev3CommunicationData state = communicator.getState(token);
+        RobotCommunicator communicator = guiceInjector.getInstance(RobotCommunicator.class);
+        RobotCommunicationData state = communicator.getState(token);
         state.setSensorValues(request);
     }
 

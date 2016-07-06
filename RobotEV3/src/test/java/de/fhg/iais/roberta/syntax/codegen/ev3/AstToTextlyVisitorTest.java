@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.ev3.Helper;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class AstToTextlyVisitorTest {
 

@@ -44,7 +44,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.sensorType = sensorType;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                this.sensor = TouchSensor.make(factory.getSensorPort(port), properties, comment);
+                this.sensor = TouchSensor.make(factory.getTouchSensorMode("TOUCH"), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.ULTRASONIC:
                 this.sensor =

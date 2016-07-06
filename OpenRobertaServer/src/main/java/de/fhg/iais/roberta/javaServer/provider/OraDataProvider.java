@@ -20,6 +20,7 @@ import com.sun.jersey.spi.inject.InjectableProvider;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
@@ -37,6 +38,9 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
 
     @Context
     private HttpServletRequest servletRequest;
+
+    @Inject
+    private RobotCommunicator robotCommunicator;
 
     @Inject
     private SessionFactoryWrapper sessionFactoryWrapper;
@@ -63,6 +67,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
 
     private Injectable<HttpSessionState> getInjectableHttpSessionState() {
         return new Injectable<HttpSessionState>() {
+
             @Override
             public HttpSessionState getValue() {
                 HttpSession httpSession = OraDataProvider.this.servletRequest.getSession(true);
@@ -70,7 +75,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                 if ( httpSessionState == null ) {
                     long sessionNumber = SESSION_COUNTER.incrementAndGet();
                     LOG.info("session #" + sessionNumber + " created");
-                    httpSessionState = HttpSessionState.init();
+                    httpSessionState = HttpSessionState.init(OraDataProvider.this.robotCommunicator);
                     httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
                 }
                 return httpSessionState;

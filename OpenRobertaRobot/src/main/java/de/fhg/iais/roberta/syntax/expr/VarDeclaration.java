@@ -122,6 +122,11 @@ public class VarDeclaration<V> extends Expr<V> {
     }
 
     @Override
+    public BlocklyType getVarType() {
+        return this.typeVar;
+    }
+
+    @Override
     public String toString() {
         return "VarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
     }
