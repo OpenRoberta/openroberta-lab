@@ -1552,7 +1552,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      */
     public String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
-        sb.append(" brickConfiguration = new Configuration.Builder()\n");
+        sb.append(" brickConfiguration = new EV3Configuration.Builder()\n");
         sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
         sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
         appendActors(sb);

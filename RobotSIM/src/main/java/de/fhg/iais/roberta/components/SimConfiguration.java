@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class EV3Configuration extends Configuration {
+public class SimConfiguration extends Configuration {
 
-    public EV3Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
+    public SimConfiguration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super(actors, sensors, wheelDiameterCM, trackWidthCM);
 
     }
@@ -187,7 +187,7 @@ public class EV3Configuration extends Configuration {
 
         @Override
         public Configuration build() {
-            return new EV3Configuration(this.actorMapping, this.sensorMapping, this.wheelDiameter, this.trackWidth);
+            return new SimConfiguration(this.actorMapping, this.sensorMapping, this.wheelDiameter, this.trackWidth);
         }
 
         @Override

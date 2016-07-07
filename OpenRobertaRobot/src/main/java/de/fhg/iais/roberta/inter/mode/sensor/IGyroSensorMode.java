@@ -8,8 +8,5 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  * @author kcvejoski
  */
 public interface IGyroSensorMode extends IMode {
-    /**
-     * @return array of values alternative to the enumeration value.
-     */
-    public String[] getValues();
+
 }

@@ -6,10 +6,6 @@ package de.fhg.iais.roberta.inter.mode.general;
  * @author kcvejoski
  */
 public interface IPickColor extends IMode {
-    /**
-     * @return array of values alternative to the enumeration value.
-     */
-    public String[] getValues();
 
     /**
      * @return a user defined id associated to every color

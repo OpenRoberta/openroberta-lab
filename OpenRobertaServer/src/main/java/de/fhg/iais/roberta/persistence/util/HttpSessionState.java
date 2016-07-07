@@ -126,16 +126,16 @@ public class HttpSessionState {
             if ( this.robotId == 42 ) {
                 constructur =
                     this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
+                IRobotFactory factory = (IRobotFactory) constructur.newInstance(this.robotCommunicator);
+                return factory;
 
             } else if ( this.robotId == 43 ) {
-                constructur =
-                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.NxtFactory").getDeclaredConstructor(RobotCommunicator.class);
+                return (IRobotFactory) this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.NxtFactory").newInstance();
             } else {
                 LOG.error("Invalide Robot Id" + this.robotId + "!. Returning EV3 factory.");
+                return null;
             }
-            IRobotFactory factory = (IRobotFactory) constructur.newInstance(this.robotCommunicator);
 
-            return factory;
         } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | SecurityException
             | IllegalArgumentException | InvocationTargetException e ) {
             LOG.error("Robot Factory Not Found!. Check the robot configuration property. System will crash!");

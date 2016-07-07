@@ -10,22 +10,16 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
  *
  * @author kcvejoski
  */
-@SuppressWarnings("rawtypes")
+
 public class UsedSensor {
     private final ISensorPort port;
     private final SensorType sensor;
-    private final Enum mode;
-
-    public UsedSensor(ISensorPort port, SensorType sensor, Enum mode) {
-        this.port = port;
-        this.sensor = sensor;
-        this.mode = mode;
-    }
+    private final IMode mode;
 
     public UsedSensor(ISensorPort port, SensorType sensor, IMode mode) {
         this.port = port;
         this.sensor = sensor;
-        this.mode = (Enum) mode;
+        this.mode = mode;
     }
 
     /**
@@ -45,7 +39,7 @@ public class UsedSensor {
     /**
      * @return the mode
      */
-    public Enum getMode() {
+    public IMode getMode() {
         return this.mode;
     }
 

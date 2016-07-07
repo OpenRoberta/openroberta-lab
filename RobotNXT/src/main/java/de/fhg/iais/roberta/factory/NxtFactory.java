@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
-import de.fhg.iais.roberta.factory.RobotModeFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -32,8 +31,6 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.NxtCompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -41,14 +38,9 @@ public class NxtFactory extends RobotModeFactory {
 
     private NxtCompilerWorkflow compilerWorkflow;
 
-    public NxtFactory(RobotCommunicator robotCommunicator) {
+    public NxtFactory() {
         Properties nxtProperties = Util1.loadProperties("classpath:NXT.properties");
-        this.compilerWorkflow =
-            new NxtCompilerWorkflow(
-                robotCommunicator,
-                nxtProperties.getProperty("crosscompiler.basedir"),
-                nxtProperties.getProperty("robot.crossCompilerResources.dir"),
-                nxtProperties.getProperty("crosscompiler.build.xml"));
+        this.compilerWorkflow = new NxtCompilerWorkflow(nxtProperties.getProperty("crosscompiler.basedir"), nxtProperties.getProperty("robot.resources.dir"));
     }
 
     @Override

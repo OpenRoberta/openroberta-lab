@@ -8,5 +8,5 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  * @author kcvejoski
  */
 public interface IBrickKey extends IMode {
-    public String[] getValues();
+
 }

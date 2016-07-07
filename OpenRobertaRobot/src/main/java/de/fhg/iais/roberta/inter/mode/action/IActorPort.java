@@ -8,10 +8,6 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  * @author kcvejoski
  */
 public interface IActorPort extends IMode {
-    /**
-     * @return array of values alternative to the enumeration value.
-     */
-    public String[] getValues();
 
     /**
      * @return the name used in the Blockly XML representation.

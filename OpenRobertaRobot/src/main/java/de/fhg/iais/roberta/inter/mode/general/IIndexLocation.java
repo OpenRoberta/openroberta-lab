@@ -10,8 +10,4 @@ import java.util.ArrayList;
  */
 public interface IIndexLocation extends IMode {
 
-    /**
-     * @return array of values alternative to the enumeration value.
-     */
-    public String[] getValues();
 }

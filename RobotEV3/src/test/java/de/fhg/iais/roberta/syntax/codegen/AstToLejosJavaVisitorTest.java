@@ -38,7 +38,7 @@ public class AstToLejosJavaVisitorTest {
         + "import lejos.remote.nxt.NXTConnection;\n\n";
 
     private static final String BRICK_CONFIGURATION = "" //
-        + "    brickConfiguration = new Configuration.Builder()\n"
+        + "    brickConfiguration = new EV3Configuration.Builder()\n"
         + "    .setWheelDiameter(5.6)\n"
         + "    .setTrackWidth(17.0)\n"
         + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))\n"

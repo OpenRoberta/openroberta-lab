@@ -6,10 +6,6 @@ package de.fhg.iais.roberta.inter.mode.general;
  * @author kcvejoski
  */
 public interface IListElementOperations extends IMode {
-    /**
-     * @return array of values alternative to the enumeration value.
-     */
-    public String[] getValues();
 
     /**
      * @return true if the operation does not return value

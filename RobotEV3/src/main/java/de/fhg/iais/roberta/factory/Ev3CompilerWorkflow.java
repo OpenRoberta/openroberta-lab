@@ -10,8 +10,6 @@ import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
@@ -55,7 +53,6 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
         }
     }
 
-    @Inject
     public Ev3CompilerWorkflow(
         RobotCommunicator brickCommunicator,
         String pathToCrosscompilerBaseDir,

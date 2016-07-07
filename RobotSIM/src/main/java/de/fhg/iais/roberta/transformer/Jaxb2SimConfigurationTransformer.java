@@ -12,9 +12,9 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.SimConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -118,7 +118,7 @@ public class Jaxb2SimConfigurationTransformer {
                 List<Value> values = extractValues(block, (short) 8);
                 extractHardwareComponent(values, sensors, actors);
 
-                return new EV3Configuration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
+                return new SimConfiguration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }

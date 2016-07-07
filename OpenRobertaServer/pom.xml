@@ -110,13 +110,7 @@
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
-						<configuration>
-							<excludes>
-								<exclude>de.fhg.iais.roberta:EV3Menu:jar:</exclude>
-								<exclude>de.fhg.iais.roberta:ev3classes:jar:</exclude>
-								<exclude>de.fhg.iais.roberta:dbusjava:jar:</exclude>
-								<exclude>org.lejos:jna:jar:</exclude>
-							</excludes>
+						<configuration>							
 							<includeScope>compile</includeScope>
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
@@ -140,106 +134,6 @@
 								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copyUpdateResources</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3embedded.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>EV3Menu</artifactId>
-									<version>${ev3embedded.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.java-websocket</groupId>
-									<artifactId>Java-WebSocket</artifactId>
-									<version>${ev3.websocket.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/updateResources</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copyCrossCompilerResources</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3embedded.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
-									<artifactId>ev3classes</artifactId>
-									<version>${ev3classes.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
-									<artifactId>dbusjava</artifactId>
-									<version>${dbusjava.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.lejos</groupId>
-									<artifactId>jna</artifactId>
-									<version>${jna.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.java-websocket</groupId>
-									<artifactId>Java-WebSocket</artifactId>
-									<version>${ev3.websocket.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}/crossCompilerResources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>

@@ -315,43 +315,8 @@ define(
              * Show program code
              */
             function showCode() {
-<<<<<<< 2e968ea17fd479c713ef3090114530b1f3a8e9b7
+
                 //if (userState.robot === 'ev3') {
-                    LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
-                    var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-                    var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-                    var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
-
-                    PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-                        ROBERTA_ROBOT.setState(result);
-                        if ($(window).width() < 768) {
-                            width = '0';
-                        } else {
-                            width = '30%';
-                        }
-                        $('#blocklyDiv').animate({
-                            width : width
-                        }, {
-                            duration : 750,
-                            step : function() {
-                                $(window).resize();
-                                Blockly.svgResize(blocklyWorkspace);
-                            },
-                            done : function() {
-                                Blockly.svgResize(blocklyWorkspace);
-                            }
-                        });
-                        $('#blocklyDiv').addClass('codeActive');
-                        $('#codeDiv').addClass('codeActive');
-                        $('.nav > li > ul > .robotType').addClass('disabled');
-                        $(".code").removeClass('hide');
-                        $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
-                        userState.programSource = result.javaSource
-                        console.log(prettyPrintOne(result.javaSource, null, true));
-                    });
-               // }
-=======
-
                 LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
                 var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
                 var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
@@ -376,15 +341,16 @@ define(
                             Blockly.svgResize(blocklyWorkspace);
                         }
                     });
-                    $('#codeContent').addClass('codeActive');
+                    $('#blocklyDiv').addClass('codeActive');
                     $('#codeDiv').addClass('codeActive');
                     $('.nav > li > ul > .robotType').addClass('disabled');
                     $(".code").removeClass('hide');
                     $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
                     userState.programSource = result.javaSource
+                    console.log(prettyPrintOne(result.javaSource, null, true));
                 });
+                // }
 
->>>>>>> #127 Dinamically loading of the compiler workflow and factory method
             }
             exports.showCode = showCode;
 

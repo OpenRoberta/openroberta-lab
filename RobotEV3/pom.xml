@@ -13,15 +13,28 @@
 	</parent>
 	<artifactId>RobotEV3</artifactId>
 	<name>RobotEV3</name>
-	<description>the robot related part of the OpenRoberta application</description>
+	<description>the plugin for the EV3 robot</description>
+	<properties>
+		<dbusjava.version>0.9.0-beta</dbusjava.version>
+		<jna.version>3.2.7</jna.version>
+		<ev3classes.version>0.9.0-beta</ev3classes.version>
+		<ev3.websocket.version>1.3.0</ev3.websocket.version>
+		<ev3runtime.version>2.0</ev3runtime.version>
+	</properties>
 	<dependencies>
-<!-- 		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
-			<artifactId>EV3Runtime</artifactId>
-		</dependency> -->
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaRobot</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>EV3Menu</artifactId>
+			<version>${ev3runtime.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>EV3Runtime</artifactId>
+			<version>${ev3runtime.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
@@ -50,6 +63,115 @@
 	</dependencies>
 	<build>
 		<plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.9</version>
+				<executions>	
+					
+					<execution>
+						<id>copyUpdateResources</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Runtime</artifactId>
+									<version>${ev3runtime.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Menu</artifactId>
+									<version>${ev3runtime.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.java-websocket</groupId>
+									<artifactId>Java-WebSocket</artifactId>
+									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/updateResources</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copyCrossCompilerResources</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Runtime</artifactId>
+									<version>${ev3runtime.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.roberta</groupId>
+									<artifactId>ev3classes</artifactId>
+									<version>${ev3classes.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.roberta</groupId>
+									<artifactId>dbusjava</artifactId>
+									<version>${dbusjava.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.lejos</groupId>
+									<artifactId>jna</artifactId>
+									<version>${jna.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.java-websocket</groupId>
+									<artifactId>Java-WebSocket</artifactId>
+									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/crossCompilerResources</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.robotCommunication;
+package de.fhg.iais.roberta.factory;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
@@ -8,15 +8,10 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
@@ -26,22 +21,14 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class NxtCompilerWorkflow implements ICompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(NxtCompilerWorkflow.class);
-    private final RobotCommunicator brickCommunicator;
-    public final String pathToCrosscompilerBaseDir;
-    public final String crossCompilerResourcesDir;
-    public final String pathToCrossCompilerBuildXMLResource;
 
-    @Inject
-    public NxtCompilerWorkflow(
-        RobotCommunicator brickCommunicator,
-        @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
-        @Named("robot.crossCompilerResources.dir") String crossCompilerResourcesDir, //
-        @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
-    {
-        this.brickCommunicator = brickCommunicator;
+    public final String pathToCrosscompilerBaseDir;
+    public final String robotCompilerResourcesDir;
+
+    public NxtCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.crossCompilerResourcesDir = crossCompilerResourcesDir;
-        this.pathToCrossCompilerBuildXMLResource = pathToCrossCompilerBuildXMLResource;
+        this.robotCompilerResourcesDir = robotCompilerResourcesDir;
+
     }
 
     /**
@@ -124,14 +111,14 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
         // TODO: change the compiler based on the os type
-        String scriptName = "../OpenRobertaServer/src/main/resources/nbc";
+        String scriptName = this.robotCompilerResourcesDir + "/nbc";
 
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
                 this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
                 "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
-                "-I=./src/main/resources/hal.h"
+                "-I=" + this.robotCompilerResourcesDir + "/hal.h"
 
             });
             procBuilder.redirectInput(Redirect.INHERIT);
