@@ -67,6 +67,7 @@
 	<modules>
 		<module>../Resources</module>
 		<module>../OpenRobertaRobot</module>
+		<module>../RobotSIM</module>
 		<module>../RobotEV3</module>
 		<module>../RobotNXT</module>
 		<module>../OpenRobertaServer</module>

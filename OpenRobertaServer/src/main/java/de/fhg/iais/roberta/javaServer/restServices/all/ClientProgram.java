@@ -30,6 +30,7 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
@@ -235,50 +236,43 @@ public class ClientProgram {
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
-                    if ( robot.getName().equals("ev3") ) {
-                        ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                        messageKey = httpSessionState.getRobotFactory().getCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
-                        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                            wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                        } else {
-                            if ( messageKey != null ) {
-                                LOG.info(messageKey.toString());
-                            }
-                            LOG.info("download command for the ev3 skipped, Keep going with push requests");
-                        }
+                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                    messageKey = httpSessionState.getRobotFactory().getCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
+                    if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {
-                        ClientProgram.LOG.info("Waiting for new robot systems");
+                        if ( messageKey != null ) {
+                            LOG.info(messageKey.toString());
+                        }
+                        LOG.info("download command for the ev3 skipped, Keep going with push requests");
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 
             } else if ( cmd.equals("runPsim") ) {
                 Key messageKey = null;
-                RobotDao robotDao = new RobotDao(dbSession);
-                Robot robot = robotDao.get(robotId);
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
+                IRobotFactory factory = httpSessionState.getSimulationFactory();
                 boolean wasRobotWaiting = false;
 
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
-                    BlocklyProgramAndConfigTransformer.transform(httpSessionState.getRobotFactory(), programText, configurationText);
+                    BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 SimulationProgramCheckVisitor programChecker = new SimulationProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
-                    if ( robot.getName().equals("ev3") ) {
-                        ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                        String javaScriptCode = "";//Ast2Ev3JavaScriptVisitor.generate(programAndConfigTransformer.getTransformedProgram());
-                        ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
-                        response.put("javaScriptProgram", javaScriptCode);
-                        wasRobotWaiting = true;
-                        messageKey = Key.COMPILERWORKFLOW_SUCCESS;
-                    } else {
-                        ClientProgram.LOG.info("Waiting for new robot systems");
-                    }
+                    ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
+                    String javaScriptCode = factory.getCompilerWorkflow().generateSourceCode(factory, token, programName, programText, configurationText);
+
+                    ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                    response.put("javaScriptProgram", javaScriptCode);
+                    wasRobotWaiting = true;
+                    messageKey = Key.COMPILERWORKFLOW_SUCCESS;
+
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 

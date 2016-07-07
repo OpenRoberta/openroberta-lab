@@ -16,75 +16,31 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.EV3Configuration;
-import de.fhg.iais.roberta.factory.EV3Factory;
+import de.fhg.iais.roberta.factory.SimFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
-import de.fhg.iais.roberta.syntax.codegen.AstToEv3TextlyVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2JavaScriptVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2SimConfigurationTransformer;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    /**
-     * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code fragment as string
-     * @throws Exception
-     */
-    public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        Configuration brickConfiguration =
-            new EV3Configuration.Builder()
-                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .build();
-        String javaCode = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
-        // System.out.println(javaCode); // only needed for EXTREME debugging
-        // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
-        // System.out.println(textlyCode); // only needed for EXTREME debugging
-        return javaCode;
-    }
 
     /**
-     * Generate java code as string from a given program . Prepend and append wrappings.
+     * Generate java script code as string from a given program .
      *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code as string
      * @throws Exception
      */
-    public static String generateString(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
+    public static String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
-        // System.out.println(code); // only needed for EXTREME debugging
-        return code;
-    }
-
-    /**
-     * Generate python code as string from a given program . Prepend and append wrappings.
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public static String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3PythonVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+        String code = Ast2JavaScriptVisitor.generate(transformer.getTree());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -98,23 +54,9 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
-        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(robotModeFactory);
+        SimFactory robotModeFactory = new SimFactory();
+        Jaxb2SimConfigurationTransformer transformer = new Jaxb2SimConfigurationTransformer(robotModeFactory);
         return transformer.transform(project);
-    }
-
-    /**
-     * Generate textly code as string from a given program . Prepend and append wrappings.
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public static String generateString(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = AstToEv3TextlyVisitor.generate("Test", transformer.getTree(), true);
-        // System.out.println(code); // only needed for EXTREME debugging
-        return code;
     }
 
     /**
@@ -126,7 +68,7 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
+        SimFactory robotModeFactory = new SimFactory();
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
@@ -141,7 +83,7 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
+        SimFactory robotModeFactory = new SimFactory();
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
@@ -167,7 +109,7 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
+        SimFactory robotModeFactory = new SimFactory();
         Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>(robotModeFactory);
         transformer.transform(project);
         ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
@@ -250,18 +192,6 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(arg1, arg2);
         Assert.assertTrue(diff.identical());
-    }
-
-    /**
-     * Assert that Java code generated from Blockly XML program is correct.<br>
-     * All white space are ignored!
-     *
-     * @param correctJavaCode correct java code
-     * @param fileName of the program we want to generate java code
-     * @throws Exception
-     */
-    public static void assertCodeIsOk(String correctJavaCode, String fileName) throws Exception {
-        Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), Helper.generateStringWithoutWrapping(fileName).replaceAll("\\s+", ""));
     }
 
     public static String jaxbToXml(BlockSet blockSet) throws JAXBException {

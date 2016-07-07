@@ -109,18 +109,27 @@ public class HttpSessionState {
         this.toolbox = toolbox;
     }
 
+    public IRobotFactory getSimulationFactory() {
+        try {
+            return (IRobotFactory) this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.SimFactory").newInstance();
+        } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | SecurityException | IllegalArgumentException e ) {
+            LOG.error("Simulation Factory Not Found!. Check the robot configuration property. System will crash!", e);
+            return null;
+        }
+    }
+
     public IRobotFactory getRobotFactory() {
         try {
             Constructor<?> constructur =
-                this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
+                this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
 
             if ( this.robotId == 42 ) {
                 constructur =
-                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
+                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
 
             } else if ( this.robotId == 43 ) {
                 constructur =
-                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.nxt.NxtFactory").getDeclaredConstructor(RobotCommunicator.class);
+                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.NxtFactory").getDeclaredConstructor(RobotCommunicator.class);
             } else {
                 LOG.error("Invalide Robot Id" + this.robotId + "!. Returning EV3 factory.");
             }

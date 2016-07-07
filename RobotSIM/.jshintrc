@@ -1,0 +1,9 @@
+{
+  "undef": true,
+  "jquery" : true,
+  "browser" : true,
+  "globals": { "LOG": false,
+               "COMM": false,
+               "WRAP": false,
+               "DBC": false }
+}
