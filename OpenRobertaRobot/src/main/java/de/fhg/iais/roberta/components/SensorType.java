@@ -7,7 +7,13 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum SensorType {
-    COLOR( "robBrick_colour" ), TOUCH( "robBrick_touch" ), ULTRASONIC( "robBrick_ultrasonic" ), INFRARED( "robBrick_infrared" ), GYRO( "robBrick_gyro" );
+    COLOR( "robBrick_colour" ),
+    TOUCH( "robBrick_touch" ),
+    ULTRASONIC( "robBrick_ultrasonic" ),
+    INFRARED( "robBrick_infrared" ),
+    GYRO( "robBrick_gyro" ),
+    SOUND( "robBrick_sound" ),
+    LIGHT( "robBrick_light" );
 
     private final String[] values;
 

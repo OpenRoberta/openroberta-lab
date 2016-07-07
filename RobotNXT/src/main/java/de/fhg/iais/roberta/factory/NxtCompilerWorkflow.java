@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
@@ -49,7 +50,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2NxcVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = Ast2NxcVisitor.generate(programName, (NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
@@ -88,7 +89,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2NxcVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return Ast2NxcVisitor.generate(programName, (NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
