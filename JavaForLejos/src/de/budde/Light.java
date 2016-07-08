@@ -4,12 +4,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.mode.action.BlinkMode;
+import de.fhg.iais.roberta.mode.action.BrickLedColor;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.runtime.ev3.Hal;
-import de.fhg.iais.roberta.shared.action.BlinkMode;
-import de.fhg.iais.roberta.shared.action.BrickLedColor;
-import de.fhg.iais.roberta.shared.sensor.SensorPort;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
@@ -23,7 +24,7 @@ public class Light {
     public static void main(String[] args) {
         try {
             brickConfiguration =
-                new Configuration.Builder().setWheelDiameter(5.6).setTrackWidth(18.0).addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).build();
+                new EV3Configuration.Builder().setWheelDiameter(5.6).setTrackWidth(18.0).addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).build();
             new Light().run();
         } catch ( Exception e ) {
             TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();

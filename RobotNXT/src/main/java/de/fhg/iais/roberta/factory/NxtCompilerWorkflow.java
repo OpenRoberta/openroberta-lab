@@ -52,7 +52,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2NxcVisitor.generate(programName, (NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
-        //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
+        //NxtCompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".nxc");
         } catch ( Exception e ) {
