@@ -55,7 +55,7 @@ public class Helper {
                 .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
                 .build();
-        final String javaCode = Ast2NxcVisitor.generate("Test", (NxtConfiguration) brickConfiguration, transformer.getTree(), false);
+        final String javaCode = Ast2NxcVisitor.generate((NxtConfiguration) brickConfiguration, transformer.getTree(), false);
         // System.out.println(javaCode); // only needed for EXTREME debugging
         // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
         // System.out.println(textlyCode); // only needed for EXTREME debugging
@@ -71,7 +71,7 @@ public class Helper {
      */
     public static String generateString(String pathToProgramXml, NxtConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = Ast2NxcVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+        final String code = Ast2NxcVisitor.generate(brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

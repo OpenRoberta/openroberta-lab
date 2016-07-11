@@ -147,9 +147,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
+    public static String generate(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
-        Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
@@ -168,7 +167,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
                 phrase.visit(astVisitor);
             }
-
         }
         generateSuffix(withWrapping, astVisitor);
     }
@@ -254,13 +252,15 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     //nxc can't cast "(float)", it does it automatically
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
+        this.sb.append(numConst.getValue());
+        /*
         if ( isInteger(numConst.getValue()) ) {
             this.sb.append(numConst.getValue());
         } else {
             this.sb.append("(");
             this.sb.append(numConst.getValue());
             this.sb.append(")");
-        }
+        }*/
         return null;
     }
 
@@ -299,7 +299,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //so far NXT has only light sensor, no colors
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         this.sb.append(getEnumCode(colorConst.getValue()));
@@ -579,16 +578,19 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: ask if that would be fine
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                this.sb.append("SetVolume(");
+                this.sb.append("byte NXTNormVolume = ");
                 volumeAction.getVolume().visit(this);
-                this.sb.append(");");
+                this.sb.append(" * 4 / 100; ");
+                nlIndent();
+                this.sb.append("SetVolume( NXTNormVolume );");
                 break;
             case GET:
-                this.sb.append("Volume()");
+                this.sb.append("Volume() * 100 / 4");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -1123,7 +1125,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     // TODO: change getEnumCode(brickSensor.getKey()), so it would return the following:
-    // BTNEXIT, BTNRIGHT, BTNLEFT, BTNCENTER
+    // BTNRIGHT, BTNLEFT, BTNCENTER
     // Also, BTNEXIT doesn't work like a button, it always exits the program no matter which
     // action is assigned to it. Seems that it works well only with enhanced firmware.
     @Override
@@ -1156,12 +1158,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
@@ -1199,7 +1201,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         /*final String Port = getEnumCode(gyroSensor.getPort());
         final String methodName = "SetSensorGyro";
         this.sb.append(methodName + "(IN_");
-        
+
         switch ( gyroSensor.getMode() ) {
             case ANGLE:
                 this.sb.append(Port + (",") + ("ANGLE"));
@@ -1225,7 +1227,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         final String methodName = "SetSensorInfrared";
         this.sb.append(methodName + "(IN_");
         switch ( infraredSensor.getMode() ) {
-
+        
             case DISTANCE:
                 this.sb.append(Port + (",") + ("DISTANCE"));
                 this.sb.append(")" + (";"));
@@ -1411,11 +1413,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         String methodName = "ArrayLen( ";
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            methodName = "IsEmpty(";
+            methodName = "ArrIsEmpty( ";
         }
         this.sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
         //this.sb.append(methodName);
         //lengthOfIsEmptyFunct.getParam().get(0).visit(this);
         //this.sb.append(")");
@@ -1957,10 +1959,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         //add sensors:
         for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
-            this.sb.append("SetSensor(IN_");
+            this.sb.append("SetSensor( IN_");
             switch ( entry.getValue().getName() ) {
                 case COLOR:
-                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
+                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL );");
                     //this.sb.append("SetSensor(IN_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
                     break;
                 // TODO: add the color sensor
@@ -1968,14 +1970,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 // this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_LIGHT);");
                 //break;
                 case TOUCH:
-                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_TOUCH);");
+                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_TOUCH );");
                     break;
                 case ULTRASONIC:
-                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_LOWSPEED);");
+                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_LOWSPEED );");
                     break;
                 //replace with sound
                 case SOUND:
-                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_SOUND);");
+                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_SOUND );");
                     break;
                 default:
                     break;
@@ -1986,7 +1988,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         nlIndent();
         this.sb.append("long timer1;");
         nlIndent();
-        this.sb.append("SetTimerValue(timer1);");
+        this.sb.append("SetTimerValue( timer1 );");
     }
 
     /**
