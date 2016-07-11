@@ -1157,12 +1157,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-        
+
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-        
+
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
@@ -1226,7 +1226,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         final String methodName = "SetSensorInfrared";
         this.sb.append(methodName + "(IN_");
         switch ( infraredSensor.getMode() ) {
-        
+
             case DISTANCE:
                 this.sb.append(Port + (",") + ("DISTANCE"));
                 this.sb.append(")" + (";"));
@@ -1917,17 +1917,15 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                     this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL );");
                     //this.sb.append("SetSensor(IN_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
                     break;
-                // TODO: add the color sensor
-                // case "LIGHT":
-                // this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_LIGHT);");
-                //break;
+                case LIGHT:
+                    this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_LIGHT );");
+                    break;
                 case TOUCH:
                     this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_TOUCH );");
                     break;
                 case ULTRASONIC:
                     this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_LOWSPEED );");
                     break;
-                //replace with sound
                 case SOUND:
                     this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_SOUND );");
                     break;
