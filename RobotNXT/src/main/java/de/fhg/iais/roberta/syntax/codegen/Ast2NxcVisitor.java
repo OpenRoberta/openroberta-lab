@@ -130,6 +130,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     /**
      * initialize the Java code generator visitor.
      *
+     * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
@@ -1124,7 +1125,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     // TODO: change getEnumCode(brickSensor.getKey()), so it would return the following:
-    // BTNEXIT, BTNRIGHT, BTNLEFT, BTNCENTER
+    // BTNRIGHT, BTNLEFT, BTNCENTER
     // Also, BTNEXIT doesn't work like a button, it always exits the program no matter which
     // action is assigned to it. Seems that it works well only with enhanced firmware.
     @Override
@@ -1157,12 +1158,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
@@ -1200,7 +1201,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         /*final String Port = getEnumCode(gyroSensor.getPort());
         final String methodName = "SetSensorGyro";
         this.sb.append(methodName + "(IN_");
-        
+
         switch ( gyroSensor.getMode() ) {
             case ANGLE:
                 this.sb.append(Port + (",") + ("ANGLE"));
@@ -1226,7 +1227,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         final String methodName = "SetSensorInfrared";
         this.sb.append(methodName + "(IN_");
         switch ( infraredSensor.getMode() ) {
-
+        
             case DISTANCE:
                 this.sb.append(Port + (",") + ("DISTANCE"));
                 this.sb.append(")" + (";"));
@@ -1273,6 +1274,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
+        //this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
+        //incrIndentation();
+        //if ( mainTask.getDebug().equals("TRUE") ) {
+        //    this.sb.append(INDENT).append(INDENT).append("hal.startLogging();");
+        //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
+        //}
         return null;
     }
 
@@ -1317,6 +1324,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: Delete.
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         /*this.sb.append("BlocklyMethods.listsGetSubList( ");
@@ -1346,41 +1354,61 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        //final BlocklyType typeArr = indexOfFunct.getParam().get(0).getVarType();
-        String methodName = null;
+        final BlocklyType typeArr = indexOfFunct.getParam().get(0).getVarType();
         if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
-            switch ( indexOfFunct.getParam().get(0).getVarType() ) {
+            switch ( typeArr ) {
                 case ARRAY_NUMBER:
-                    methodName = "ArrFindLastNum(";
+                    this.sb.append("ArrFindLastNum(");
+                    indexOfFunct.getParam().get(0).visit(this);
+                    this.sb.append(", ");
+                    indexOfFunct.getParam().get(1).visit(this);
+                    this.sb.append(")");
                     break;
                 case ARRAY_STRING:
-                    methodName = "ArrFindLastStr(";
+                    this.sb.append("ArrFindLastStr(");
+                    indexOfFunct.getParam().get(0).visit(this);
+                    this.sb.append(", ");
+                    indexOfFunct.getParam().get(1).visit(this);
+                    this.sb.append(")");
                     break;
                 case ARRAY_BOOLEAN:
-                    methodName = "ArrFindLastBool(";
+                    this.sb.append("ArrFindLastBool(");
+                    indexOfFunct.getParam().get(0).visit(this);
+                    this.sb.append(", ");
+                    indexOfFunct.getParam().get(1).visit(this);
+                    this.sb.append(")");
                     break;
             }
+
         } else {
-            switch ( indexOfFunct.getParam().get(0).getVarType() ) {
+            switch ( typeArr ) {
                 case ARRAY_NUMBER:
-                    methodName = "ArrFindFirstNum(";
+                    this.sb.append("ArrFindFirstNum(");
+                    indexOfFunct.getParam().get(0).visit(this);
+                    this.sb.append(", ");
+                    indexOfFunct.getParam().get(1).visit(this);
+                    this.sb.append(")");
                     break;
                 case ARRAY_STRING:
-                    methodName = "ArrFindFirstStr(";
+                    this.sb.append("ArrFindFirstStr(");
+                    indexOfFunct.getParam().get(0).visit(this);
+                    this.sb.append(", ");
+                    indexOfFunct.getParam().get(1).visit(this);
+                    this.sb.append(")");
                     break;
                 case ARRAY_BOOLEAN:
-                    methodName = "ArrFindFirstBool(";
+                    this.sb.append("ArrFindFirstBool(");
+                    indexOfFunct.getParam().get(0).visit(this);
+                    this.sb.append(", ");
+                    indexOfFunct.getParam().get(1).visit(this);
+                    this.sb.append(")");
                     break;
             }
         }
-        this.sb.append(methodName);
-        indexOfFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        indexOfFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
         return null;
     }
 
+    //TODO: fix
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         String methodName = "ArrayLen( ";
@@ -1410,6 +1438,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: Delete.
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         /*this.sb.append("BlocklyMethods.createListWithItem(");
@@ -1420,24 +1449,42 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: Delete.
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        /*this.sb.append("BlocklyMethods.listsIndex(");
         listGetIndex.getParam().get(0).visit(this);
-        this.sb.append("[");
-        listGetIndex.getParam().get(1).visit(this);
-        this.sb.append("]");
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listGetIndex.getLocation()));
+        if ( listGetIndex.getParam().size() == 2 ) {
+            this.sb.append(", ");
+            listGetIndex.getParam().get(1).visit(this);
+        }
+        this.sb.append(")");
+        if ( listGetIndex.getElementOperation().isStatment() ) {
+            this.sb.append(";");
+        }*/
         return null;
     }
 
+    //TODO: Delete
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        /*this.sb.append("BlocklyMethods.listsIndex(");
         listSetIndex.getParam().get(0).visit(this);
-        this.sb.append("[");
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
+        this.sb.append(", ");
         listSetIndex.getParam().get(1).visit(this);
-        this.sb.append("]");
-        this.sb.append(" = ");
-        listSetIndex.getParam().get(2).visit(this);
-        this.sb.append(";");
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listSetIndex.getLocation()));
+        if ( listSetIndex.getParam().size() == 3 ) {
+            this.sb.append(", ");
+            listSetIndex.getParam().get(2).visit(this);
+        }
+        this.sb.append(");");*/
         return null;
     }
 
@@ -1633,6 +1680,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: Delete
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         //smthToString(textJoinFunct.getParam());
@@ -1654,9 +1702,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
         this.sb.append("\n").append(INDENT).append(getBlocklyTypeCode(methodReturn.getReturnType()));
-        this.sb.append(" " + methodReturn.getMethodName() + "( ");
+        this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
-        this.sb.append(" ) {");
+        this.sb.append(") {");
         methodReturn.getBody().visit(this);
         this.nlIndent();
         this.sb.append("return ");
@@ -1667,9 +1715,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        this.sb.append("if ( ");
+        this.sb.append("if (");
         methodIfReturn.getCondition().visit(this);
-        this.sb.append(" ) ");
+        this.sb.append(") ");
         this.sb.append("return ");
         methodIfReturn.getReturnValue().visit(this);
         return null;
@@ -1684,16 +1732,16 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "( ");
+        this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
         }
         return null;
     }
 
-    // TODO: fix calling
+    // TODO: fix blocks
     // the function is in hal.h
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
@@ -1746,7 +1794,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //not needed
+    // not needed for nxt. Use a block that calls BTCheck(int conn) function instead
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         /*this.sb.append("int connection = ;");
@@ -1820,9 +1868,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("( ");
+            sb.append("(");
             unary.getExpr().visit(this);
-            sb.append(" )");
+            sb.append(")");
         } else {
             unary.getExpr().visit(this);
         }
