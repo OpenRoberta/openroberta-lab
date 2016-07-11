@@ -39,17 +39,18 @@ Get a coffee! Might take a couple of minutes.
 
 A successful build looks like:
 
-    [INFO] ---------------------------------------
+
+    [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
-    [INFO] RobertaParent ..................SUCCESS
-    [INFO] Resources ......................SUCCESS
-    [INFO] OpenRobertaShared ..............SUCCESS
-    [INFO] OpenRobertaRuntime .............SUCCESS
-    [INFO] EV3Menu ........................SUCCESS
-    [INFO] OpenRobertaRobot ...............SUCCESS
-    [INFO] OpenRobertaServer ..............SUCCESS
-    [INFO] OpenRobertaUSB .................SUCCESS
-    [INFO] ---------------------------------------
+    [INFO] 
+    [INFO] RobertaParent ...................................... SUCCESS [  1.083 s]
+    [INFO] Resources .......................................... SUCCESS [  0.032 s]
+    [INFO] OpenRobertaRobot ................................... SUCCESS [ 15.718 s]
+    [INFO] RobotSIM ........................................... SUCCESS [  3.240 s]
+    [INFO] RobotEV3 ........................................... SUCCESS [ 12.599 s]
+    [INFO] RobotNXT ........................................... SUCCESS [ 13.902 s]
+    [INFO] OpenRobertaServer .................................. SUCCESS [ 46.404 s]
+    [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
 
 #### Step 2a: Starting your own server instance using a unix-like shell (on either lin* or win*).
