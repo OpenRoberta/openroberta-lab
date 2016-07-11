@@ -16,13 +16,13 @@ define([ 'exports', 'util', 'rest.user' ], function(exports, UTIL, USER) {
         exports.name = '';
 
         exports.program = 'NEPOprog';
-        exports.programSaved = false;
+        exports.programSaved = true;
         exports.programShared = false;
         exports.programTimestamp = '';
         exports.programSource = '';
 
         exports.configuration = 'EV3basis';
-        exports.configurationSaved = false;
+        exports.configurationSaved = true;
 
         exports.toolbox = 'beginner';
         exports.token = '1A2B3C4D';

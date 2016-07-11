@@ -222,9 +222,9 @@ Blockly.Blocks['robActions_motorDiff_curve'] = {
     init : function() {
         this.setColour(Blockly.CAT_ACTION_RGB);
         var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARD' ] ]);
-        this.appendValueInput('POWER_LEFT').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+        this.appendValueInput('POWER_LEFT').appendField(Blockly.Msg.MOTOR_STEER).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).appendField(Blockly.Msg.MOTOR_LEFT).setCheck(
                 'Number');
-        this.appendValueInput('POWER_RIGHT').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+        this.appendValueInput('POWER_RIGHT').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_SPEED).appendField(Blockly.Msg.MOTOR_RIGHT).setCheck(
                 'Number');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
@@ -236,9 +236,9 @@ Blockly.Blocks['robActions_motorDiff_curve_for'] = {
     init : function() {
         this.setColour(Blockly.CAT_ACTION_RGB);
         var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARDS' ] ]);
-        this.appendValueInput('POWER_LEFT').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+        this.appendValueInput('POWER_LEFT').appendField(Blockly.Msg.MOTOR_STEER).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).appendField(Blockly.Msg.MOTOR_LEFT).setCheck(
                 'Number');
-         this.appendValueInput('POWER_RIGHT').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
+         this.appendValueInput('POWER_RIGHT').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_SPEED).appendField(Blockly.Msg.MOTOR_RIGHT).setCheck(
                 'Number');
         this.appendValueInput('DISTANCE').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.MOTOR_DISTANCE).setCheck('Number');
         this.setPreviousStatement(true);

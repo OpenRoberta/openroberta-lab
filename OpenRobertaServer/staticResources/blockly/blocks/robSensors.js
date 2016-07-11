@@ -118,7 +118,7 @@ Blockly.Blocks['robSensors_getSample'] = {
         var motorPort;
         if (this.workspace.device === 'nxt') {
             key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ],
-                    [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ], [ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ] ]);
+                    [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ] ]);
             motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ], [ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ] ]);
         } else {
             key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
@@ -165,10 +165,10 @@ Blockly.Blocks['robSensors_getSample'] = {
                 this.appendValue_('NUM_REV', 50);
                 sensorPort.setValue('2');
                 this.setOutput(true, 'Number');
-            } else if (this.sensorType_ == 'LIGHT_AMBIENTLIGHT'|| this.sensorType_ == 'LIGHT_LIGHT') {
+            } else if (this.sensorType_ == 'LIGHT_AMBIENTLIGHT' || this.sensorType_ == 'LIGHT_LIGHT') {
                 this.appendValue_('NUM', 50);
                 sensorPort.setValue('3');
-                this.setOutput(true, 'Number');               
+                this.setOutput(true, 'Number');
             } else if (this.sensorType_ == 'GYRO_ANGLE' || this.sensorType_ == 'GYRO_RATE') {
                 this.appendValue_('NUM_REV', 90);
                 sensorPort.setValue('2');
@@ -273,10 +273,15 @@ Blockly.Blocks['robSensors_key_isPressed'] = {
 
     init : function() {
         this.setColour(Blockly.CAT_SENSOR_RGB);
-        // this.setInputsInline(true);
-        var key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
-                [ Blockly.Msg.SENSOR_KEY_DOWN, 'DOWN' ], [ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ], [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
-                [ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ], [ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
+        var key;
+        if (this.workspace.device === 'nxt') {
+            key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ],
+                    [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ] ]);
+        } else {
+            key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
+                    [ Blockly.Msg.SENSOR_KEY_DOWN, 'DOWN' ], [ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ], [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
+                    [ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ], [ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
+        }
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_KEY).appendField(key, 'KEY').appendField(Blockly.Msg.SENSOR_IS_PRESSED);
         this.setOutput(true, 'Boolean');
         this.setTooltip(Blockly.Msg.KEY_ISPRESSED_TOOLTIP);
@@ -610,6 +615,26 @@ Blockly.Blocks['robSensors_light_getSample'] = {
                 'SENSORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.LIGHT_GETSAMPLE_TOOLTIP);
+        this.sensorMode_ = 'COLOUR';
+    }
+};
+
+Blockly.Blocks['robSensors_battery_voltage'] = {
+    /**
+     * Get the voltage of the robot's batteries in mV?
+     * 
+     * @constructs robSensors_battery_voltage
+     * @this.Blockly.Block
+     * @returns immediately
+     * @returns {Number}
+     * @memberof Block
+     */
+
+    init : function() {
+        this.setColour(Blockly.CAT_SENSOR_RGB);
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(Blockly.Msg.SENSOR_BATTERY);
+        this.setOutput(true, 'Number');
+        this.setTooltip(Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP);
         this.sensorMode_ = 'COLOUR';
     }
 };

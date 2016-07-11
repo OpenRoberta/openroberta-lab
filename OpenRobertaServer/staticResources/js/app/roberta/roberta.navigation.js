@@ -87,13 +87,15 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         }
     }
     exports.activateProgConfigMenu = activateProgConfigMenu;
-
+    
     /**
      * Switch robot
      */
 
     function switchRobot(robot, opt_continue) {
         if (robot === userState.robot) {
+            $('#head-navi-icon-robot').removeClass('typcn-Roberta');
+            $('#head-navi-icon-robot').addClass('typcn-' + robot);
             return;
         }
         var further = opt_continue || false;
@@ -102,8 +104,9 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 if (result.rc === "ok") {
                     $('.robotType').removeClass('disabled');
                     $('.' + robot).addClass('disabled');
-                    $('#iconDisplayRobotState').removeClass('typcn-' + userState.robot);
-                    $('#iconDisplayRobotState').addClass('typcn-' + robot);
+                    $('#head-navi-icon-robot').removeClass('typcn-Roberta');
+                    $('#head-navi-icon-robot').removeClass('typcn-' + userState.robot);
+                    $('#head-navi-icon-robot').addClass('typcn-' + robot);
                     userState.robot = robot;
                     ROBERTA_PROGRAM.getBlocklyWorkspace().setDevice(robot);
                     BRICKLY.getBricklyWorkspace().setDevice(robot);
@@ -126,6 +129,49 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             }
         }
     }
+
+    /**
+     * Switch robot
+     */
+
+    function switchRobot(robot, opt_continue) {
+        if (robot === userState.robot) {
+            $('#head-navi-icon-robot').removeClass('typcn-Roberta');
+            $('#head-navi-icon-robot').addClass('typcn-' + robot);
+            return;
+        }
+        var further = opt_continue || false;
+        if (further || (userState.programSaved && userState.configurationSaved)) {
+            ROBOT.setRobot(robot, function(result) {
+                if (result.rc === "ok") {
+                    $('.robotType').removeClass('disabled');
+                    $('.' + robot).addClass('disabled');
+                    $('#head-navi-icon-robot').removeClass('typcn-Roberta');
+                    $('#head-navi-icon-robot').removeClass('typcn-' + userState.robot);
+                    $('#head-navi-icon-robot').addClass('typcn-' + robot);
+                    userState.robot = robot;
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().setDevice(robot);
+                    BRICKLY.getBricklyWorkspace().setDevice(robot);
+                    ROBERTA_ROBOT.setState(result);
+                    ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
+                    BRICKLY.loadToolboxAndConfiguration();
+                    ROBERTA_PROGRAM.newProgram(true);
+                    ROBERTA_BRICK_CONFIGURATION.newConfiguration(true);
+                } else {
+                    alert('Robot not available');
+                }
+            });
+        } else {
+            $('#confirmContinue').data('type', 'switchRobot');
+            $('#confirmContinue').data('robot', robot);
+            if (userState.id === -1) {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+            } else {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+            }
+        }
+    }
+    exports.switchRobot = switchRobot;
 
     /**
      * Deactivate program and config menu.
@@ -216,11 +262,11 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         $('#head-navigation-robot').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
-            if (domId === 'menu-ev3') { // Submenu 'Robot'             
+            if (domId === 'menu-ev3') {
                 switchRobot('ev3');
-            } else if (domId === 'menu-nxt') { // Submenu 'Robot'
+            } else if (domId === 'menu-nxt') {
                 switchRobot('nxt');
-            } else if (domId === 'menu-bayduino') { // Submenu 'Robot'
+            } else if (domId === 'menu-bayduino') {
                 switchRobot('bayduino');
             } else if (domId === 'menuConnect') { // Submenu 'Robot'
                 $('#buttonCancelFirmwareUpdate').css('display', 'inline');
@@ -239,7 +285,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             } else if (domId === 'menuFaq') { // Submenu 'Help'
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
             } else if (domId === 'menuShowRelease') { // Submenu 'Help'
-                if ($.cookie("OpenRoberta_hideStartUp")) {
+                if ($.cookie("OpenRoberta_" + userState.version)) {
                     $('#checkbox_id').prop('checked', true);
                 }
                 $("#show-startup-message").modal("show");
@@ -270,6 +316,22 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             }
             return false;
         }, 'user clicked');
+
+//        $('.menu-ev3').onWrap('click', function(event) {
+//            event.preventDefault();
+//            switchRobot('ev3');
+//            return;
+//        }, 'switch to EV3 clicked');
+//        $('.menu-nxt').onWrap('click', function(event) {
+//            event.preventDefault();
+//            switchRobot('nxt');
+//            return;
+//        }, 'switch to NXT clicked');
+//        $('.menu-bayduino').onWrap('click', function(event) {
+//            event.preventDefault();
+//            switchRobot('bayduino');
+//            return;
+//        }, 'switch to BAYDUINO clicked');
 
         $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // head-navigation-sim-controle
@@ -474,24 +536,48 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
 
         }, 'codeBack clicked');
-        $('#show-startup-message').on('hidden.bs.modal', function() {
+        
+        $('#popup-sim, #popup-bayduino, #popup-nxt, #popup-ev3').onWrap('click', function(event) {
+            var choosenRobotType = event.target.parentElement.dataset.type
+            if (choosenRobotType) {
+                switchRobot(choosenRobotType, true);
+            }
             if ($('#checkbox_id').is(':checked')) {
-                $.cookie("OpenRoberta_hideStartUp", true, {
+                $.cookie("OpenRoberta_" + userState.version, choosenRobotType, {
                     expires : 99,
                     secure : true,
                     domain : ''
                 });
                 // check if it is really stored: chrome issue
-                if (!$.cookie("OpenRoberta_hideStartUp")) {
-                    $.cookie("OpenRoberta_hideStartUp", true, {
+                if (!$.cookie("OpenRoberta_" + userState.version)) {
+                    $.cookie("OpenRoberta_" + userState.version, choosenRobotType, {
                         expires : 99,
                         domain : ''
                     });
                 }
             } else {
-                $.removeCookie("OpenRoberta_hideStartUp");
+                $.removeCookie("OpenRoberta_" + userState.version);
             }
-        });
+        }, 'hallo');
+//        $('#show-startup-message').on('hidden.bs.modal', function(event) {
+//            console.log(event.target.parentElement.dataset.type);
+//            if ($('#checkbox_id').is(':checked')) {
+//                $.cookie("OpenRoberta_hideStartUp", true, {
+//                    expires : 99,
+//                    secure : true,
+//                    domain : ''
+//                });
+//                // check if it is really stored: chrome issue
+//                if (!$.cookie("OpenRoberta_hideStartUp")) {
+//                    $.cookie("OpenRoberta_hideStartUp", true, {
+//                        expires : 99,
+//                        domain : ''
+//                    });
+//                }
+//            } else {
+//                $.removeCookie("OpenRoberta_hideStartUp");
+//            }
+//        });
         $('#moreReleases').onWrap('click', function(event) {
             $('#oldReleases').show({
                 start : function() {
@@ -523,6 +609,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 console.log('Confirmation with unknown data type clicked');
             }
         }, 'continue new program clicked');
+
         $('#takeATour').onWrap('click', function(event) {
             ROBERTA_TOUR.start('welcome');
         }, 'take a tour clicked');

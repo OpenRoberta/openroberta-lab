@@ -5,30 +5,42 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
      * Initialize language switching
      */
     function initializeLanguages() {
+        var ready = new $.Deferred();
         var language;
         if (navigator.language.indexOf("de") > -1) {
-            language = 'DE';
-            $('#chosenLanguage').text('DE');
+            language = 'de';
         } else if (navigator.language.indexOf("fi") > -1) {
-            language = 'FI';
-            $('#chosenLanguage').text('FI');
+            language = 'fi';
         } else if (navigator.language.indexOf("da") > -1) {
-            language = 'DA';
-            $('#chosenLanguage').text('DA');
+            language = 'da';
         } else if (navigator.language.indexOf("es") > -1) {
-            language = 'ES';
-            $('#chosenLanguage').text('ES');
+            language = 'es';
         } else {
-            language = 'EN';
-            $('#chosenLanguage').text('EN');
+            language = 'en';
         }
-
-        $('#language').on('click', '.dropdown-menu li a', function() {
-            var chosenLanguage = $(this).text();
-            $('#chosenLanguage').text(chosenLanguage);
-            switchLanguage(chosenLanguage, false);
+        if (language === 'de') {
+            $('.EN').css('display', 'none');
+            $('.DE').css('display', 'inline');
+        } else {
+            $('.DE').css('display', 'none');
+            $('.EN').css('display', 'inline');
+        }
+        $('#language li a[lang=' + language + ']').parent().addClass('disabled');
+        userState.language = language;
+        var url = 'blockly/msg/js/' + language + '.js';
+        $.getScript(url, function(data) {
+            translate();
+            ready.resolve();
         });
-        return language;
+
+        $('#language').on('click', 'li a', function() {
+            var language = $(this).attr('lang');
+            $('#language li a').parent().removeClass('disabled');
+            $(this).parent().addClass('disabled');
+            switchLanguage(language, false);
+        });
+
+        return ready.promise();
     }
 
     exports.initializeLanguages = initializeLanguages;
@@ -41,20 +53,20 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
      * @param {forceSwitch}
      *            force the language setting
      */
-    function switchLanguage(langCode, forceSwitch) {
-        if (forceSwitch || userState.language != langCode) {
+    function switchLanguage(language, forceSwitch) {
+        if (forceSwitch || userState.language != language) {
+            userState.language = language.toUpperCase();
             var langs = [ 'DE', 'EN', 'FI', 'DA', 'ES' ];
-            if (langs.indexOf(langCode) < 0) {
+            if (langs.indexOf(language) < 0) {
                 langCode = "EN";
             }
-
+            //TODO if we need this anymore?
             for (i = 0; i < langs.length; i++) {
                 $('.' + langs[i] + '').css('display', 'none');
             }
             $('.' + langCode + '').css('display', 'inline');
 
-            userState.language = langCode;
-            var url = 'blockly/msg/js/' + langCode.toLowerCase() + '.js';
+            var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
             var future = $.getScript(url);
             future.then(function(newLanguageScript) {
                 switchLanguageInBlockly();
@@ -86,7 +98,7 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
     /**
      * Translate the web page
      */
-    function translate(jsdata) {
+    function translate() {
         $("[lkey]").each(function(index) {
             var lkey = $(this).attr('lkey');
             var key = lkey.replace("Blockly.Msg.", "");
@@ -94,46 +106,6 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
             if (value == undefined) {
                 console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
             }
-//           if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
-//                $('#loginLabel').text(value);
-//                $(this).html(value);
-//            } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
-//                $(this).html(value);
-//            } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
-//                $('#hideStartupMessage').text(value);
-//            } else if (lkey === 'Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE') {
-//                $('#popupTextStartupMessage').html(value);
-//            } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
-//                $('#show-message h3').text(value);
-//                $('#show-startup-message h3').text(value);
-//            } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
-//                $('.cancelPopup').attr('value', value);
-//                $('.backButton').attr('value', value);
-//            } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_PASSWORD') {
-//                $('#showChangeUserPassword').attr('value', value);
-//            } else if (lkey === 'Blockly.Msg.POPUP_ABOUT_JOIN') {
-//                $('#about-join').html(value);
-//            } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
-//                $('.buttonLoad').attr('value', value);
-//            } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
-//                $('.buttonDelete').attr('value', value);
-//            } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
-//                $('.buttonShare').attr('value', value);
-//                $('#show-relations h2').text(value);
-//            } else if (lkey === 'Blockly.Msg.BUTTON_REFRESH') {
-//                $('.buttonRefresh').attr('value', value);
-//            } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
-//                $('#clearLog').attr('value', value);
-//            } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
-//                $('#show-robot-info h3').text(value);
-//                $(this).html(value);
-//            } else if (lkey === 'Blockly.Msg.MENU_STATE_INFO') {
-//                $('#show-state-info h3').text(value);
-//                $(this).html(value);
-//            } else if (lkey === 'Blockly.Msg.MENU_ABOUT') {
-//                $('#show-about h3').text(value);
-//                $(this).html(value);
-//            } else 
             if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
                 $('#head-navi-tooltip-program').attr('data-original-title', value).tooltip('fixTitle');
                 $('#head-navi-tooltip-configuration').attr('data-original-title', value).tooltip('fixTitle');
@@ -143,6 +115,8 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
                 $('#head-navi-tooltip-help').attr('data-original-title', value).tooltip('fixTitle');
             } else if (lkey === 'Blockly.Msg.MENU_USER_TOOLTIP') {
                 $('#head-navi-tooltip-user').attr('data-original-title', value).tooltip('fixTitle');
+            } else if (lkey === 'Blockly.Msg.MENU_LANGUAGE_TOOLTIP') {
+                $('#head-navi-tooltip-language').attr('data-original-title', value).tooltip('fixTitle');
             } else if (lkey === 'Blockly.Msg.MENU_USER_STATE_TOOLTIP') {
                 $('#iconDisplayLogin').attr('data-original-title', value).tooltip('fixTitle');
             } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP') {

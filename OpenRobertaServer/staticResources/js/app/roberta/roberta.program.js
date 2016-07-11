@@ -349,8 +349,6 @@ define(
                     userState.programSource = result.javaSource
                     console.log(prettyPrintOne(result.javaSource, null, true));
                 });
-                // }
-
             }
             exports.showCode = showCode;
 
@@ -405,10 +403,10 @@ define(
                 } else if (userState.robotState === 'busy') {
                     MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
                     return;
-                } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {
-//                    $('#buttonCancelFirmwareUpdate').css('display', 'none');
-//                    $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-//                    return;
+                } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {                    
+                    $('#buttonCancelFirmwareUpdate').css('display', 'none');
+                    $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+                    return;
                 }
                 LOG.info('run ' + userState.program + 'on brick' + ' signed in: ' + userState.id);
                 var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -416,8 +414,6 @@ define(
                 var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
 
                 PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-                    //PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-                    // console.log(result.javaSource);
                     ROBERTA_ROBOT.setState(result);
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
@@ -440,8 +436,6 @@ define(
                 var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
 
                 PROGRAM.runInSim(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-                    //TODO return empty sim program with rc = true and var stmt0 = createDebugAction(); var pp = [stmt0]; eg
-//            if (result.rc == "ok" && result.javaScriptProgram != "var pp = [") {
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
                         blocklyWorkspace.robControls.setSimStart(false);
@@ -480,7 +474,9 @@ define(
                                     }
                                     blocklyWorkspace.robControls.toogleSim();
                                     Blockly.svgResize(blocklyWorkspace);
-                                    ROBERTA_TOUR.getInstance().trigger('SimLoaded');
+                                    if (ROBERTA_TOUR.getInstance()) {
+                                        ROBERTA_TOUR.getInstance().trigger('SimLoaded');
+                                    }
                                     setTimeout(function() {
                                         SIM.setPause(false);
                                     }, 1000);

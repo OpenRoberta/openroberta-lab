@@ -323,6 +323,19 @@ Blockly.Workspace.getById = function(id) {
   return Blockly.Workspace.WorkspaceDB_[id] || null;
 };
 
+/**
+ * Find the block on this workspace with the specified ID.
+ * @param {string} id ID of block to find.
+ * @return {Blockly.Block} The sought after block or null if not found.
+ */
+Blockly.Workspace.prototype.setDevice = function(device) {
+  this.device = device;
+  if (this.toolbox_)
+      this.toolbox_.flyout_.workspace_.device = device;
+  if (this.flyout_)
+      this.flyout_.workspace_.device = device;
+};
+
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
 Blockly.Workspace.prototype['clearUndo'] =

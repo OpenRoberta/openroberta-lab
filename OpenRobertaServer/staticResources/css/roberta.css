@@ -295,33 +295,31 @@ body.blocklyMinimalBody  * {
 }
 
 .wait, .ok {
-	color: #afca04;
+	color: #F29400;
 }
 
 .error {
-	color: #bbb;
+	color: #333;
 }
 
-@
--webkit-keyframes blinker {from { color:#afca04;
-	
-}
-
-to {
+@-webkit-keyframes blinker {
+	from { 
+	color:#afca04;
+    }
+    to {
 	color: #e2001a;
+    }
 }
 
-}
-@
-keyframes  blinker {from { color:#afca04;
-	
-}
-
-to {
+@keyframes  blinker {
+	from { 
+	color:#afca04;	
+    }
+    to {
 	color: #e2001a;
+    }
 }
 
-}
 .busy {
 	-webkit-animation-name: blinker;
 	-webkit-animation-iteration-count: infinite;
@@ -826,7 +824,35 @@ table [data-toggle="collapse"].collapsed:after {
 	opacity: 1;
 }
 
-#takeATour:after { font-family: 'typicons'; content: " \e669"; }
+.robot-container {
+	  border: 2px solid;
+      border-radius: 4px;
+     border-color: #BACC1E;
+     width: 140px;
+     height: 88px;
+     display: inline-block;
+     margin: 20px;
+     padding: 13px 0;
+     text-align: center;
+     cursor: pointer;
+}
+
+#takeATour {
+	margin-top: 0;
+}
+
+.robot-label {
+  display: block;
+}
+
+.robot-icon {
+    vertical-align: middle;
+    font-size: 40px;
+}
+
+.typcn.robot-icon:before{
+    margin:0;
+}
 
 /***** END Overwrite Bootstrap-CSS *****/
 .atlwdg-trigger.atlwdg-RIGHT {

@@ -39,16 +39,19 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
                 variableDeclaration : true,
                 robControls : true
             });
+            
             bricklyWorkspace.addChangeListener(function(event) {
-                if (userState.configurationSaved == 'new') {
-                    userState.configurationSaved = true;
+                 console.log('conf');
+                            console.log(event);
+                if (event.type === 'ui' && userState.configurationSaved) {
+                    userState.configurationSaved = false;
                 } else {
-                    if (userState.id !== -1 && userState.configuration !== 'EV3basis') {
+                    if (!userState.configurationSaved && userState.id !== -1 && userState.configuration.indexOf('basis') >= 0) {
                         bricklyWorkspace.robControls.enable('saveProgram');
                         $('#menuSaveConfig').parent().removeClass('disabled');
                     }
-                    userState.configurationSaved = false;
                 }
+                console.log(userState.configurationSaved);
             });
             bricklyWorkspace.device = userState.robot;
             // Configurations can't be executed

@@ -204,11 +204,11 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             }
         }
         if (userState.accountName) {
-            $('#iconDisplayLogin').removeClass('error');
-            $('#iconDisplayLogin').addClass('ok');
+            $('#head-navi-icon-user').removeClass('error');
+            $('#head-navi-icon-user').addClass('ok');
         } else {
-            $('#iconDisplayLogin').removeClass('ok');
-            $('#iconDisplayLogin').addClass('error');
+            $('#head-navi-icon-user').removeClass('ok');
+            $('#head-navi-icon-user').addClass('error');
         }
         if (userState.robotState === 'wait') {
             $('#iconDisplayRobotState').removeClass('error');
@@ -221,39 +221,45 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').removeClass('error');
             $('#iconDisplayRobotState').addClass('busy');
-            ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
-
+            if (ROBERTA_PROGRAM.getBlocklyWorkspace()) {
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
+            }
         } else {
             $('#iconDisplayRobotState').removeClass('busy');
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').addClass('error');
-            ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
+            if (ROBERTA_PROGRAM.getBlocklyWorkspace()) {
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
+            }
         }
-
     }
     exports.setState = setState;
 
     /**
      * Init robot
      */
-    function initRobot() {
-        ROBOT.setRobot(userState.robot, function(result) {
-            UTIL.response(result);
-            if (result.rc === "ok") {
-                ROBERTA_BRICK_CONFIGURATION.setConfiguration("EV3basis");
-                ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
-                $('#blocklyDiv').removeClass('simBackground');
-                $('#menuEv3').parent().addClass('disabled');
-                $('#menuSim').parent().removeClass('disabled');
-                $('#menuConnect').parent().removeClass('disabled');
-                $('#iconDisplayRobotState').removeClass('typcn-Roberta');
-                $('#iconDisplayRobotState').addClass('typcn-ev3');
-                $('#menuShowCode').parent().removeClass('disabled');
-            }
-        });
+    function initRobot(result) {
+//        ROBOT.setRobot(userState.robot, function(result) {
+        UTIL.response(result);
+//            if (result.rc === "ok") {
+        $('.robotType').removeClass('disabled');
+        $('.' + userState.robot).addClass('disabled');
+        if (userState.robot != 'ev3') {
+            $('#head-navi-icon-robot').removeClass('typcn-Roberta');
+            $('#head-navi-icon-robot').addClass('typcn-' + userState.robot);
+        }
+        $('#blocklyDiv').removeClass('simBackground');
+        $('#menuEv3').parent().addClass('disabled');
+        $('#menuSim').parent().removeClass('disabled');
+        $('#menuConnect').parent().removeClass('disabled');
+        $('#iconDisplayRobotState').removeClass('typcn-Roberta');
+        $('#iconDisplayRobotState').addClass('typcn-ev3');
+        $('#menuShowCode').parent().removeClass('disabled');
     }
+//        });
+//    }
 
     exports.initRobot = initRobot;
 

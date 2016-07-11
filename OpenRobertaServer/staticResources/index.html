@@ -20,7 +20,9 @@ limitations under the License.
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
+<link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
 <!-- <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link> -->
+<link rel="stylesheet" type="text/css" href="/css/languages.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/typicons.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css" href="js/libs/code-prettify/prettify.css"></link>
@@ -106,12 +108,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								lkey="Blockly.Msg.MENU_ROBOT"></span>
 						</a>
 						<ul class="dropdown-menu">
+							<li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
+							<li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
+							<li class="divider"></li>
 							<li class="robotType ev3 disabled"><a href="#" id="menu-ev3" class="typcn typcn-ev3">EV3</a></li>
 							<li class="robotType nxt"><a href="#" id="menu-nxt" class="typcn typcn-nxt">NXT</a></li>
 							<li class="robotType bayduino"><a href="#" id="menu-bayduino" class="typcn typcn-bayduino">BAYDUINO</a></li>
-							<li class="divider"></li>
-							<li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
-							<li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
 						</ul></li>
 					<!-- Menu Help -->
 					<li class="dropdown" id="head-navigation-help"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-help"
@@ -144,6 +146,25 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li class="logout"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
 							<li class="logout"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
 						</ul></li>
+					<!-- Menu Languages -->
+					<li class="dropdown" id="head-navigation-language"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-program"
+							lkey="Blockly.Msg.MENU_LANGUAGE_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-program" class="head-navi-icons typcn typcn-world"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_LANGUAGE"></span>
+						</a>
+						<ul id="language" class="dropdown-menu" role="menu" aria-labelledby="chosenLanguage">
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="de"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="en"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="eu"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="it"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="fr"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="po"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="ru"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="tr"></a></li>
+						</ul></li>
 					<!-- Menu Navigation -->
 					<legend class="visible-xs"></legend>
 					<li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
@@ -166,41 +187,42 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						</ul></li>
 				</ul>
 			</div>
-			<div class="collapse navbar-collapse sim-nav" id="simButtonsCollapse">
-				<ul class="nav navbar-nav visible-xs">
-					<li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
-					<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
-					<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
-					<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
-					<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
-					<legend class="visible-xs"></legend>
-					<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-					<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
-				</ul>
-			</div>
+		</div>
+		<div class="collapse navbar-collapse sim-nav" id="simButtonsCollapse">
+			<ul class="nav navbar-nav visible-xs">
+				<li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
+				<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
+				<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
+				<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+				<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
+				<legend class="visible-xs"></legend>
+				<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+				<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+			</ul>
+		</div>
 		</div>
 		<!-- Roberta-Logo -->
 		<div class="logo">
 			<div id="imgLogo">
 				<img class="img-nepo" src="/css/svg/NEPO_Logo_RGB.svg" /> <img class="img-beta" src="/css/img/beta.png" />
 			</div>
-			<div id="states" class="hidden-xs">
+			<!-- <div id="states" class="hidden-xs">
 				<div href="#" id="iconDisplayLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_USER_STATE_TOOLTIP" rel="tooltip" data-original-title="" title=""></div>
 				<div href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta" lkey="Blockly.Msg.MENU_ROBOT_STATE_TOOLTIP" rel="tooltip" data-original-title=""
 					title=""></div>
 				<ul id="language" class="nav navbar-nav">
 					<li class="dropdown"><a href="#" data-toggle="dropdown" class=" dropdown-toggle">
-							<span id="chosenLanguage">DE</span> <b class="caret"></b>
+							<span id="chosenLanguage" class="lang-sm" lang="de"></span><span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu" aria-labelledby="chosenLanguage">
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">EN</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">DE</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">FI</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">DA</a></li>
-							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">ES</a></li>
+							<li><span role="menuitem" href="#" class="lang-lbl" lang="da"></span></li>
+							<li><span role="menuitem" href="#" class="lang-lbl" lang="de"></span></li>
+							<li><span role="menuitem" href="#" class="lang-lbl" lang="en"></span></li>
+							<li><span role="menuitem" href="#" class="lang-lbl" lang="es"></span></li>
+							<li><span role="menuitem" href="#" class="lang-lbl" lang="fi"></span></li>
 						</ul></li>
 				</ul>
-			</div>
+			</div> -->
 		</div>
 		<!-- Toasts -->
 		<div class="panel-body" id="toastContainer">
@@ -597,12 +619,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		</div>
 	</div>
 	<!-- New popup 4 Startup -->
-	<div id="show-startup-message" class="modal fade">
+	<div id="show-startup-message" class="modal fade" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div id="roberta"></div>
 				<div class="modal-header" style="background-color: #BACC1E; text-align: center; color: white">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<!-- <button style="color: white" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
 					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_STARTUP_TITLE">Welcome</h3>
 					<div class="connector">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="26px"
@@ -629,45 +651,42 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							</div>
 							<div class="clearer"></div>
 							<hr style="border: 1px dashed #afca04; margin-top: 10px" />
-							<div style="text-align: center">
-								<div class=" col-md-5">
-									<img class="EN FI DA ES" width="100%" alt="first program" src="css/img/startEN.png" style="display: inline;"><img class="DE" width="100%"
-										alt="erstes Programm" src="css/img/startDE.png" style="display: none;">
-									<div class="popupTitel">
-										<span class="bigNumber">1.</span><b class="DE"> Programmieren</b><b class="EN DA FI ES"> Program</b>
-									</div>
-								</div>
-								<div class=" col-md-2">
-									<img src="/css/svg/startButton.svg" />
-									<div class="popupTitel">
-										<span class="bigNumber">2.</span><b class="DE"> Starten</b><b class="EN FI DA ES"> Start</b>
-									</div>
-								</div>
-								<div class=" col-md-5">
-									<img src="/css/svg/simPlayGround.svg" />
-									<div class="popupTitel">
-										<span class="bigNumber">3.</span><b> Simulation</b>
-									</div>
-								</div>
-							</div>
-							<div class="clearer"></div>
-							<hr style="border: 1px dashed #afca04; margin-top: 10px" />
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer" style="text-align: center">
-					<button id="startupClose" type="button" data-dismiss="modal" class="btn" lkey="Blockly.Msg.BUTTON_START">Start</button>
-					<button type="button" class="btn hidden-xs" data-dismiss="modal" lkey="Blockly.Msg.POPUP_TOUR" id="takeATour">take a tour</button>
+					<div id="takeATour" class="robot-container" data-dismiss="modal"
+						style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat" />
+					<span href="#" id="menuSaveConfig" class='typcn typcn-media-play robot-icon'></span> <span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
 				</div>
-				<div class="modal-body left-inner-addon popup-checkbox">
-					<input type="checkbox" name="checkbox" id="checkbox_id" value="value">
-					<label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br /> <br /> <span
-						lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
-					<a href="http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1" target="_blank" class="DE" style="display: inline;">Details ansehen.</a>
-					<a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN FI ES DA" style="display: inline;">Show details.</a>
+				<div class="clearer"></div>
+				<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
+				<div class="clearer"></div>
+				<div id="popup-sim" class="robot-container" data-dismiss="modal" data-type="ev3">
+					<span href="#" class='typcn typcn-open robot-icon'></span><span class="robot-label">I don't have a robot!</span>
 				</div>
+				<div id="popup-ev3" class="robot-container" data-dismiss="modal" data-type="ev3">
+					<span href="#" class='typcn typcn-ev3 robot-icon'></span><span class="robot-label">Mindstorms EV3</span>
+				</div>
+				<div id="popup-nxt" class="robot-container" data-dismiss="modal" data-type="nxt">
+					<span href="#" class='typcn typcn-nxt robot-icon'></span><span class="
+						robot-label">Mindstorms NXT</span>
+				</div>
+				<div id="popup-bayduino" class="robot-container" data-dismiss="modal" data-type="bayduino">
+					<span href="#" class='typcn typcn-bayduino robot-icon'></span><span class="robot-label">BAYDUINO</span>
+				</div>
+				<!-- <button id="startupClose" type="button" data-dismiss="modal" class="btn" lkey="Blockly.Msg.BUTTON_START">Start</button> -->
+				<!-- <button type="button" class="btn hidden-xs" data-dismiss="modal" lkey="Blockly.Msg.POPUP_TOUR" id="takeATour">take a tour</button> -->
+			</div>
+			<div class="modal-body left-inner-addon popup-checkbox">
+				<input type="checkbox" name="checkbox" id="checkbox_id" value="value"/>
+				<label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br /> <br /> <span
+					lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
+				<a href="http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1" target="_blank" class="DE" style="display: inline;">Details ansehen.</a>
+				<a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN FI ES DA" style="display: inline;">Show details.</a>
 			</div>
 		</div>
+	</div>
 	</div>
 	<!-- Popup release -->
 	<div id="show-release" class="modal fade">
@@ -693,8 +712,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					       <h3 id="#headShare" class="modal-title">Share</h3>
-            
+					<h3 id="#headShare" class="modal-title">Share</h3>
 				</div>
 				<!-- <form id="share-program-form"> -->
 				<div class="modal-body">

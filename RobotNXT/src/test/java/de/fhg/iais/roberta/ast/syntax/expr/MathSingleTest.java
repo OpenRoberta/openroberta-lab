@@ -14,7 +14,7 @@ public class MathSingleTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a = "SetVolume(sqrt(0));";
+        final String a = "byteNXTNormVolume=sqrt(0)*4/100;SetVolume(NXTNormVolume);";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_single1.xml");
     }

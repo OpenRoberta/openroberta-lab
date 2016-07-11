@@ -1,10 +1,21 @@
 define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollto', 'enjoyHint', 'blocks-msg' ],
         function(exports, COMM, MSG, LOG, Blockly, $) {
 
-            var enjoyhint_instance = new EnjoyHint({});
-            ;
+            var enjoyhint_instance;
 
             function start(tour) {
+                var ja = true;
+                enjoyhint_instance = new EnjoyHint({
+                    onSkip : function() {
+                        $("#show-startup-message").modal("show");
+                    },
+                    onEnd : function() {
+                        if (ja) {
+                            $("#show-startup-message").modal("show");
+                            ja = false;
+                        }
+                    }
+                });
                 var enjoyhint_script_steps = [ {} ];
                 switch (tour) {
                 case 'welcome':
@@ -24,6 +35,10 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
                     if (enjoyhint_script_steps[i].nextButton && enjoyhint_script_steps[i].nextButton.text) {
                         var b = Blockly.Msg[enjoyhint_script_steps[i].nextButton.text];
                         enjoyhint_script_steps[i].nextButton.text = b;
+                    }
+                    if (enjoyhint_script_steps[i].skipButton && enjoyhint_script_steps[i].skipButton.text) {
+                        var c = Blockly.Msg[enjoyhint_script_steps[i].skipButton.text];
+                        enjoyhint_script_steps[i].skipButton.text = c;
                     }
                 }
                 enjoyhint_instance.set(enjoyhint_script_steps);
@@ -148,6 +163,12 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
                 'description' : 'TOUR1_DESCRIPTION13',
                 'showSkip' : false,
                 'showNext' : false,
+                onBeforeStart : function() {
+                    var blocks = Blockly.getMainWorkspace().getTopBlocks();
+                    if (!blocks[0].getNextBlock()) {
+                        enjoyhint_instance.setCurrentStepBack();
+                    }
+                }
             }, {
                 'event_type' : 'next',
                 'selector' : '#simDiv',
