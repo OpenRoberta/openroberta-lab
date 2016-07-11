@@ -556,7 +556,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("Wait( 15 );");
+        this.sb.append("Wait(15);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -612,14 +612,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("PlayFile( " + playFileAction.getFileName() + " );");
+        this.sb.append("PlayFile(" + playFileAction.getFileName() + ");");
         return null;
     }
 
     @Override
 
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("GraphicOut( ");
+        this.sb.append("GraphicOut(");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);
@@ -640,7 +640,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
         }
 
-        this.sb.append(" );");
+        this.sb.append(");");
         return null;
     }
 
@@ -684,11 +684,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("PlayTone( ");
+        this.sb.append("PlayTone(");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
-        this.sb.append(" );");
+        this.sb.append(");");
         return null;
     }
 
@@ -1180,16 +1180,16 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         ActorPort encoderMotorPort = (ActorPort) encoderSensor.getMotorPort();
         switch ( (MotorTachoMode) encoderSensor.getMode() ) {
             case RESET:
-                this.sb.append("ResetTachoCount( OUT_" + encoderMotorPort + " );");
+                this.sb.append("ResetTachoCount(OUT_" + encoderMotorPort + ");");
                 break;
             case ROTATION:
-                this.sb.append("NumberOfRotations( OUT_" + encoderMotorPort + " )");
+                this.sb.append("NumberOfRotations(OUT_" + encoderMotorPort + ")");
                 break;
             case DEGREE:
-                this.sb.append("MotorTachoCount( OUT_" + encoderMotorPort + " )");
+                this.sb.append("MotorTachoCount(OUT_" + encoderMotorPort + ")");
                 break;
             case DISTANCE:
-                this.sb.append("MotorDistance( OUT_" + encoderMotorPort + ", WHEELDIAMETER )");
+                this.sb.append("MotorDistance(OUT_" + encoderMotorPort + ", WHEELDIAMETER)");
                 break;
         }
         return null;
@@ -1245,11 +1245,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("GetTimerValue( timer" + timerSensor.getTimer() + " )");
+                this.sb.append("GetTimerValue(timer" + timerSensor.getTimer() + ")");
                 break;
             case RESET:
                 //this.sb.append("ResetTimerValue(" + timerSensor.getTimer() + ");");
-                this.sb.append("ResetTimerValue( timer" + timerSensor.getTimer() + " );");
+                this.sb.append("ResetTimerValue(timer" + timerSensor.getTimer() + ");");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -1259,14 +1259,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("Sensor( IN_" + touchSensor.getPort().getPortNumber());
-        this.sb.append(" )");
+        this.sb.append("Sensor(IN_" + touchSensor.getPort().getPortNumber());
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("SensorUS( IN_" + ultrasonicSensor.getPort().getPortNumber() + " )");
+        this.sb.append("SensorUS(IN_" + ultrasonicSensor.getPort().getPortNumber() + ")");
         return null;
     }
 
@@ -1351,25 +1351,25 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
             switch ( indexOfFunct.getParam().get(0).getVarType() ) {
                 case ARRAY_NUMBER:
-                    methodName = "ArrFindLastNum( ";
+                    methodName = "ArrFindLastNum(";
                     break;
                 case ARRAY_STRING:
-                    methodName = "ArrFindLastStr( ";
+                    methodName = "ArrFindLastStr(";
                     break;
                 case ARRAY_BOOLEAN:
-                    methodName = "ArrFindLastBool( ";
+                    methodName = "ArrFindLastBool(";
                     break;
             }
         } else {
             switch ( indexOfFunct.getParam().get(0).getVarType() ) {
                 case ARRAY_NUMBER:
-                    methodName = "ArrFindFirstNum( ";
+                    methodName = "ArrFindFirstNum(";
                     break;
                 case ARRAY_STRING:
-                    methodName = "ArrFindFirstStr( ";
+                    methodName = "ArrFindFirstStr(";
                     break;
                 case ARRAY_BOOLEAN:
-                    methodName = "ArrFindFirstBool( ";
+                    methodName = "ArrFindFirstBool(";
                     break;
             }
         }
@@ -1377,7 +1377,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
@@ -1564,72 +1564,72 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("sqrt( ");
+                this.sb.append("sqrt(");
                 break;
             case ABS:
-                this.sb.append("abs( ");
+                this.sb.append("abs(");
                 break;
             //Taylor Series converge only when value is less than one. Larger values are calculated
             //using a table.
             case LN:
-                this.sb.append("MathLn( ");
+                this.sb.append("MathLn(");
                 break;
             case LOG10:
-                this.sb.append("MathLog( ");
+                this.sb.append("MathLog(");
                 break;
             case EXP:
-                this.sb.append("MathPow( E, ");
+                this.sb.append("MathPow(E, ");
                 break;
             case POW10:
-                this.sb.append("MathPow( 10, ");
+                this.sb.append("MathPow(10, ");
                 break;
             //the 3 functions below accept degrees
             case SIN:
-                this.sb.append("MathSin( ");
+                this.sb.append("MathSin(");
                 break;
             case COS:
-                this.sb.append("MathCos( ");
+                this.sb.append("MathCos(");
                 break;
             case TAN:
-                this.sb.append("MathTan( ");
+                this.sb.append("MathTan(");
                 break;
             case ASIN:
-                this.sb.append("MathAsin( ");
+                this.sb.append("MathAsin(");
                 break;
             //Taylor Series converge only when value is less than one. Larger values are calculated
             //using a table.
             case ATAN:
-                this.sb.append("MathAtan( ");
+                this.sb.append("MathAtan(");
                 break;
             case ACOS:
-                this.sb.append("MathAcos( ");
+                this.sb.append("MathAcos(");
                 break;
             case ROUND:
-                this.sb.append("MathRound( ");
+                this.sb.append("MathRound(");
                 break;
             case ROUNDUP:
-                this.sb.append("MathRoundUp( ");
+                this.sb.append("MathRoundUp(");
                 break;
             //check why there are double brackets
             case ROUNDDOWN:
-                this.sb.append("MathFloor(  ");
+                this.sb.append("MathFloor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
 
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("MathPow( ");
+        this.sb.append("MathPow(");
         mathPowerFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
@@ -1643,9 +1643,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
         this.sb.append("\n").append(INDENT).append("void ");
-        this.sb.append(methodVoid.getMethodName() + "( ");
+        this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
-        this.sb.append(" ) {");
+        this.sb.append(") {");
         methodVoid.getBody().visit(this);
         this.sb.append("\n").append(INDENT).append("}");
         return null;
@@ -1697,20 +1697,20 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     // the function is in hal.h
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("BluetoothGetNumber( ");
+        this.sb.append("BluetoothGetNumber(");
         //TODO: add these block options:
         //this.sb.append("BluetoothGetString(");
         //this.sb.append("BluetoothGetBoolean(");
         // the function accepts inbox address (int)
         bluetoothReadAction.getConnection().visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
     // not needed for nxt. Use a block that calls BTCheck(int conn) function instead
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        this.sb.append("BTCheck( ");
+        this.sb.append("BTCheck(");
 
         /*this.sb.append("hal.establishConnectionTo(");
         if ( bluetoothConnectAction.get_address().getKind() != BlockType.STRING_CONST ) {
@@ -1720,7 +1720,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         } else {
             bluetoothConnectAction.get_address().visit(this);
         }*/
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
@@ -1728,7 +1728,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     //TODO: coding conventions!
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("SendRemoteNumber( ");
+        this.sb.append("SendRemoteNumber(");
         //TODO: add these block options: output variable (string, boolean or number. Need to create an enumeration), connection (int, 1-3 for master, always
         // 0 for slave), outbox address (int)
         //this.sb.append("SendRemoteString(");
@@ -1742,7 +1742,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         //}
         //this.sb.append(", ");
         //bluetoothSendAction.getConnection().visit(this);
-        this.sb.append(" );");
+        this.sb.append(");");
         return null;
     }
 
