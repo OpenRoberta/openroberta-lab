@@ -72,6 +72,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -614,6 +616,18 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitShadowExpr(ShadowExpr<T> shadowExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitLightSensor(LightSensor<T> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitSoundSensor(SoundSensor<T> lightSensor) {
         // TODO Auto-generated method stub
         return null;
     }

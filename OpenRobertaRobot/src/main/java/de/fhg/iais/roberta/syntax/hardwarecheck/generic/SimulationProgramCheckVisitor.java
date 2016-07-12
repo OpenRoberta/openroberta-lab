@@ -11,6 +11,8 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionActio
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
@@ -102,5 +104,17 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
                     break;
             }
         }
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
