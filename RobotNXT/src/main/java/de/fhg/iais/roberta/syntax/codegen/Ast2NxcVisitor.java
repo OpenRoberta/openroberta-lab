@@ -92,6 +92,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -219,6 +221,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 return "string";
             case VOID:
                 return "void";
+            /*case COLOR:
+                return "int";*/
             //in nxt code examples this connection is given as a simple integer
             case CONNECTION:
                 return "int";
@@ -1157,12 +1161,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
@@ -1200,7 +1204,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         /*final String Port = getEnumCode(gyroSensor.getPort());
         final String methodName = "SetSensorGyro";
         this.sb.append(methodName + "(IN_");
-
+        
         switch ( gyroSensor.getMode() ) {
             case ANGLE:
                 this.sb.append(Port + (",") + ("ANGLE"));
@@ -1226,7 +1230,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         final String methodName = "SetSensorInfrared";
         this.sb.append(methodName + "(IN_");
         switch ( infraredSensor.getMode() ) {
-
+        
             case DISTANCE:
                 this.sb.append(Port + (",") + ("DISTANCE"));
                 this.sb.append(")" + (";"));
@@ -2026,6 +2030,18 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         } catch ( final NumberFormatException e ) {
             return false;
         }
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

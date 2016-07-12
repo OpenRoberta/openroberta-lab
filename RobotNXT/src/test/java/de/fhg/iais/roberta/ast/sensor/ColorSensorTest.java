@@ -32,9 +32,6 @@ public class ColorSensorTest {
         final ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
         Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
-        Assert.assertEquals(ColorSensorMode.RED, cs1.getMode());
-        Assert.assertEquals(ColorSensorMode.RGB, cs2.getMode());
-        Assert.assertEquals(ColorSensorMode.AMBIENTLIGHT, cs3.getMode());
     }
 
     @Test

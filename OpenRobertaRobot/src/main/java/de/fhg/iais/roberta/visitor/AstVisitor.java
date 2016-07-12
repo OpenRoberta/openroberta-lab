@@ -68,6 +68,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -384,6 +386,20 @@ public interface AstVisitor<V> {
      * @param colorSensor to be visited
      */
     public V visitColorSensor(ColorSensor<V> colorSensor);
+
+    /**
+     * visit a {@link LightSensor}.
+     *
+     * @param colorSensor to be visited
+     */
+    public V visitLightSensor(LightSensor<V> lightSensor);
+
+    /**
+     * visit a {@link SoundSensor}.
+     *
+     * @param colorSensor to be visited
+     */
+    public V visitSoundSensor(SoundSensor<V> lightSensor);
 
     /**
      * visit a {@link EncoderSensor}.

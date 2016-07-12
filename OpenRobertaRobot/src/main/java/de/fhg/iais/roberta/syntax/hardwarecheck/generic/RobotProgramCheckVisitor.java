@@ -4,6 +4,8 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
@@ -55,5 +57,17 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
                     break;
             }
         }
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
