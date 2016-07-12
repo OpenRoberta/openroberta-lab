@@ -97,8 +97,8 @@ public class RestInterfaceTest {
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
-        this.sPid = HttpSessionState.init(this.brickCommunicator);
-        this.sMinscha = HttpSessionState.init(this.brickCommunicator);
+        this.sPid = HttpSessionState.init(this.brickCommunicator, null);
+        this.sMinscha = HttpSessionState.init(this.brickCommunicator, null);
     }
 
     @Test

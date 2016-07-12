@@ -50,12 +50,12 @@ public class ConfigurationProcessor extends AbstractProcessor {
      *
      * @param configurationName the name of the configuration
      * @param ownerId the owner of the configuration
-     * @param robotId
+     * @param robotName
      * @param configurationText the new configuration text
      * @param mayExist TODO
      * @param mayExist true, if an existing configuration may be changed; false if a configuration may be stored only, if it does not exist in the database
      */
-    public void updateConfiguration(String configurationName, int ownerId, int robotId, String configurationText, boolean mayExist) {
+    public void updateConfiguration(String configurationName, int ownerId, String robotName, String configurationText, boolean mayExist) {
         if ( !Util1.isValidJavaIdentifier(configurationName) ) {
             setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return;
@@ -66,7 +66,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             User owner = userDao.get(ownerId);
-            Robot robot = robotDao.get(robotId);
+            Robot robot = robotDao.get(this.httpSessionState.getRobotId());
             boolean success = configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist);
             if ( success ) {
                 setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.guice;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -7,8 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientPing;
@@ -26,9 +29,13 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
     private final Properties openRobertaProperties;
+    private final Map<String, IRobotFactory> robotPluginMap;
+    private final RobotCommunicator robotCommunicator;
 
-    public RobertaGuiceModule(Properties openRobertaProperties) {
+    public RobertaGuiceModule(Properties openRobertaProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator) {
         this.openRobertaProperties = openRobertaProperties;
+        this.robotPluginMap = robotPluginMap;
+        this.robotCommunicator = robotCommunicator;
     }
 
     @Override
@@ -46,9 +53,11 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(ClientPing.class);
 
         bind(SessionFactoryWrapper.class).in(Singleton.class);
-        bind(RobotCommunicator.class).in(Singleton.class);
+        bind(RobotCommunicator.class).toInstance(this.robotCommunicator);
         bind(MailManagement.class).in(Singleton.class);
 
+        bind(new TypeLiteral<Map<String, IRobotFactory>>() {
+        }).annotatedWith(Names.named("robotPluginMap")).toInstance(robotPluginMap);
         bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");
 
         try {

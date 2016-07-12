@@ -31,16 +31,19 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class NxtFactory extends RobotModeFactory {
+public class NxtFactory extends AbstractRobotFactory {
 
     private NxtCompilerWorkflow compilerWorkflow;
+    private final int robotId;
 
-    public NxtFactory() {
+    public NxtFactory(RobotCommunicator unusedForNxt, Integer robotId) {
         Properties nxtProperties = Util1.loadProperties("classpath:NXT.properties");
         this.compilerWorkflow = new NxtCompilerWorkflow(nxtProperties.getProperty("crosscompiler.basedir"), nxtProperties.getProperty("robot.resources.dir"));
+        this.robotId = robotId;
     }
 
     @Override
@@ -374,4 +377,8 @@ public class NxtFactory extends RobotModeFactory {
         return this.compilerWorkflow;
     }
 
+    @Override
+    public int getRobotId() {
+        return this.robotId;
+    }
 }

@@ -189,7 +189,7 @@ public class RoundTripTest {
         restUser = new ClientUser(brickCommunicator, null);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator);
 
-        s1 = HttpSessionState.init(brickCommunicator);
+        s1 = HttpSessionState.init(brickCommunicator, null);
     }
 
     private static void setUpDatabase() throws Exception {

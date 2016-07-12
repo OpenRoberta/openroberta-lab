@@ -44,7 +44,7 @@ public class ClientToolbox {
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         AliveData.rememberClientCall();
         new ClientLogger().log(LOG, fullRequest);
-        final int robotId = httpSessionState.getRobotId();
+        final String robotName = httpSessionState.getRobotName();
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -63,7 +63,7 @@ public class ClientToolbox {
                         userId = user.getId();
                     }
                 }
-                Toolbox toolbox = tp.getToolbox(toolboxName, userId, robotId);
+                Toolbox toolbox = tp.getToolbox(toolboxName, userId, httpSessionState.getRobotId());
                 if ( toolbox != null ) {
                     response.put("data", toolbox.getToolboxText());
                 }

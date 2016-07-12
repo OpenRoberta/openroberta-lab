@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public abstract class RobotModeFactory implements IRobotFactory {
+public abstract class AbstractRobotFactory implements IRobotFactory {
 
     @Override
     public IIndexLocation getIndexLocation(String indexLocation) {

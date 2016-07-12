@@ -139,7 +139,7 @@ public class PerformanceUserInteractionTest {
         PerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.init(this.brickCommunicator);
+        HttpSessionState s = HttpSessionState.init(this.brickCommunicator, null);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success

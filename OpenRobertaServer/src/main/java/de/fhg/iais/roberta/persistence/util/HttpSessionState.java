@@ -1,7 +1,8 @@
 package de.fhg.iais.roberta.persistence.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ public class HttpSessionState {
     public final static int NO_USER = -1;
 
     private int userId = HttpSessionState.NO_USER;
-    private int robotId = 42;
+    private String robotName;
     private String token = "1Q2W3E4R";
     private String programName;
     private String program;
@@ -24,13 +25,15 @@ public class HttpSessionState {
     private String toolboxName;
     private String toolbox;
     private final RobotCommunicator robotCommunicator;
+    private Map<String, IRobotFactory> robotPluginMap;
 
-    public HttpSessionState(RobotCommunicator robotCommunicator) {
+    public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
         this.robotCommunicator = robotCommunicator;
+        this.robotPluginMap = robotPluginMap;
     }
 
-    public static HttpSessionState init(RobotCommunicator robotCommunicator) {
-        return new HttpSessionState(robotCommunicator);
+    public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
+        return new HttpSessionState(robotCommunicator, robotPluginMap);
     }
 
     public int getUserId() {
@@ -52,13 +55,13 @@ public class HttpSessionState {
         this.configuration = null;
     }
 
-    public int getRobotId() {
-        return this.robotId;
+    public String getRobotName() {
+        return this.robotName;
     }
 
-    public void setRobotId(int robotId) {
-        Assert.notNull(robotId);
-        this.robotId = robotId;
+    public void setRobotName(String robotName) {
+        Assert.notNull(robotName);
+        this.robotName = robotName;
     }
 
     public String getToken() {
@@ -118,28 +121,33 @@ public class HttpSessionState {
         }
     }
 
+    public Collection<String> getAllRobotsPluggedIn() {
+        return Collections.unmodifiableSet(robotPluginMap.keySet());
+    }
+
     public IRobotFactory getRobotFactory() {
-        try {
-            Constructor<?> constructur =
-                this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
-
-            if ( this.robotId == 42 ) {
-                constructur =
-                    this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory").getDeclaredConstructor(RobotCommunicator.class);
-                IRobotFactory factory = (IRobotFactory) constructur.newInstance(this.robotCommunicator);
-                return factory;
-
-            } else if ( this.robotId == 43 ) {
-                return (IRobotFactory) this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.NxtFactory").newInstance();
-            } else {
-                LOG.error("Invalide Robot Id" + this.robotId + "!. Returning EV3 factory.");
-                return null;
-            }
-
-        } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | SecurityException
-            | IllegalArgumentException | InvocationTargetException e ) {
-            LOG.error("Robot Factory Not Found!. Check the robot configuration property. System will crash!");
-            return null;
+        IRobotFactory robotFactory = robotPluginMap.get(this.robotName);
+        if ( robotFactory == null ) {
+            LOG.error("robot factory for robot \"" + this.robotName + "\" not found. Fallback is \"ev3\"");
+            robotFactory = robotPluginMap.get("ev3");
         }
+        return robotFactory;
+    }
+
+    /**
+     * temporary fix until DB is updated
+     *
+     * @return the temporary robot id
+     */
+    public int getRobotId() {
+        if ( robotPluginMap == null ) {
+            return 42;
+        }
+        IRobotFactory robotFactory = robotPluginMap.get(this.robotName);
+        if ( robotFactory == null ) {
+            LOG.error("robot factory for robot \"" + this.robotName + "\" not found. Fallback is \"ev3\"");
+            robotFactory = robotPluginMap.get("ev3");
+        }
+        return robotFactory.getRobotId();
     }
 }

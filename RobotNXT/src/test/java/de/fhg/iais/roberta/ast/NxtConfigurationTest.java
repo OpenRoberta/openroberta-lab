@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.transformer.NxtConfigurationParseTree2NxtConfigurationVisitor;
 
 public class NxtConfigurationTest {
-    NxtFactory factory = new NxtFactory();
+    NxtFactory factory = new NxtFactory(null, 0);
 
     @Test
     public void testRoundtrip() throws Exception {

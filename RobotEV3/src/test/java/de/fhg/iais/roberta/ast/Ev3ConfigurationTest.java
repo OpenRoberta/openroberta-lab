@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.Ev3ConfigurationParseTree2Ev3Configuratio
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 
 public class Ev3ConfigurationTest {
-    EV3Factory robotModeFactory = new EV3Factory(null);
+    EV3Factory robotModeFactory = new EV3Factory(null, 0);
 
     @Test
     public void testRoundtrip() throws Exception {

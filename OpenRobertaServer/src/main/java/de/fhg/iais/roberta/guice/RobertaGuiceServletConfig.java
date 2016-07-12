@@ -10,21 +10,29 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+
 public class RobertaGuiceServletConfig extends GuiceServletContextListener {
     private Injector injector;
     private final Properties openRobertaProperties;
+    private final Map<String, IRobotFactory> robotPluginMap;
+    private final RobotCommunicator robotCommunicator;
 
-    public RobertaGuiceServletConfig(Properties openRobertaProperties) {
+    public RobertaGuiceServletConfig(Properties openRobertaProperties, Map<String, IRobotFactory> robotPluginMap, RobotCommunicator robotCommunicator) {
         this.openRobertaProperties = openRobertaProperties;
+        this.robotPluginMap = robotPluginMap;
+        this.robotCommunicator = robotCommunicator;
     }
 
     @Override
     protected Injector getInjector() {
+
         JerseyServletModule jerseyServletModule = new JerseyServletModule() {
             @Override
             protected void configureServlets() {
                 // configure at least one JAX-RS resource or the server won't start.
-                install(new RobertaGuiceModule(RobertaGuiceServletConfig.this.openRobertaProperties));
+                install(new RobertaGuiceModule(openRobertaProperties, robotPluginMap, robotCommunicator));
                 Map<String, String> initParams = new HashMap<String, String>();
                 // initParams.put("com.sun.jersey.config.feature.Trace", "true");
                 initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");

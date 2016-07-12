@@ -53,7 +53,7 @@ public class ActionTest {
     @Test
     public void blockException() throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet("/ast/actions/action_Exception.xml");
-        NxtFactory factory = new NxtFactory();
+        NxtFactory factory = new NxtFactory(null, 0);
         Jaxb2BlocklyProgramTransformer<?> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         try {
             transformer.transform(project);

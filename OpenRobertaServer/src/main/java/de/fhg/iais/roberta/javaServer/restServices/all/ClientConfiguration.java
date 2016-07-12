@@ -46,7 +46,7 @@ public class ClientConfiguration {
         AliveData.rememberClientCall();
         new ClientLogger().log(ClientConfiguration.LOG, fullRequest);
         int userId = httpSessionState.getUserId();
-        final int robotId = httpSessionState.getRobotId();
+        final String robotName = httpSessionState.getRobotName();
         UserProcessor up = new UserProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -58,13 +58,13 @@ public class ClientConfiguration {
             if ( cmd.equals("saveC") ) {
                 String configurationName = request.getString("name");
                 String configurationXml = request.getString("configuration");
-                cp.updateConfiguration(configurationName, userId, robotId, configurationXml, true);
+                cp.updateConfiguration(configurationName, userId, robotName, configurationXml, true);
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("saveAsC") ) {
                 String configurationName = request.getString("name");
                 String configurationXml = request.getString("configuration");
-                cp.updateConfiguration(configurationName, userId, robotId, configurationXml, false);
+                cp.updateConfiguration(configurationName, userId, robotName, configurationXml, false);
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadC") ) {
@@ -76,7 +76,7 @@ public class ClientConfiguration {
                         userId = user.getId();
                     }
                 }
-                Configuration configuration = cp.getConfiguration(configurationName, userId, robotId);
+                Configuration configuration = cp.getConfiguration(configurationName, userId, httpSessionState.getRobotId());
                 if ( configuration != null ) {
                     response.put("data", configuration.getConfigurationText());
                 }
@@ -84,7 +84,7 @@ public class ClientConfiguration {
 
             } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {
                 String configurationName = request.getString("name");
-                cp.deleteByName(configurationName, userId, robotId);
+                cp.deleteByName(configurationName, userId, httpSessionState.getRobotId());
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {

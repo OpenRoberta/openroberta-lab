@@ -35,10 +35,11 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class EV3Factory extends RobotModeFactory {
-    private Ev3CompilerWorkflow compilerWorkflow;
+public class EV3Factory extends AbstractRobotFactory {
+    private final Ev3CompilerWorkflow compilerWorkflow;
+    private final int robotId;
 
-    public EV3Factory(RobotCommunicator robotCommunicator) {
+    public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
         Properties ev3properties = Util1.loadProperties("classpath:EV3.properties");
         this.compilerWorkflow =
             new Ev3CompilerWorkflow(
@@ -46,6 +47,7 @@ public class EV3Factory extends RobotModeFactory {
                 ev3properties.getProperty("crosscompiler.basedir"),
                 ev3properties.getProperty("robot.crossCompilerResources.dir"),
                 ev3properties.getProperty("crosscompiler.build.xml"));
+        this.robotId = robotId;
     }
 
     @Override
@@ -377,6 +379,11 @@ public class EV3Factory extends RobotModeFactory {
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
         return this.compilerWorkflow;
+    }
+
+    @Override
+    public int getRobotId() {
+        return this.robotId;
     }
 
 }

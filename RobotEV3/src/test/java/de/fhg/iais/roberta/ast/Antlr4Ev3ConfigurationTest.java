@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.transformer.Ev3ConfigurationParseTree2Ev3Configuratio
 import de.fhg.iais.roberta.util.Option;
 
 public class Antlr4Ev3ConfigurationTest {
-    EV3Factory robotModeFactory = new EV3Factory(null);
+    EV3Factory robotModeFactory = new EV3Factory(null, 0);
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
 

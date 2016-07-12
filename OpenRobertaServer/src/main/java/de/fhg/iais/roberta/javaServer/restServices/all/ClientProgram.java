@@ -80,6 +80,7 @@ public class ClientProgram {
         AliveData.rememberClientCall();
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
+        final String robotName = httpSessionState.getRobotName();
         final int robotId = httpSessionState.getRobotId();
 
         JSONObject response = new JSONObject();

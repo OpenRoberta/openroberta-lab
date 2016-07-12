@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -30,13 +31,18 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class SimFactory extends RobotModeFactory {
-    private SimCompilerWorkflow compilerWorkflow;
+public class SimFactory extends AbstractRobotFactory {
+    private final SimCompilerWorkflow compilerWorkflow;
+    private final int robotId;
 
-    public SimFactory() {
+    public SimFactory(RobotCommunicator unusedForSim, Integer robotId) {
+        Properties nxtProperties = Util1.loadProperties("classpath:SIM.properties");
         this.compilerWorkflow = new SimCompilerWorkflow();
+        this.robotId = robotId;
     }
 
     @Override
@@ -368,6 +374,11 @@ public class SimFactory extends RobotModeFactory {
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
         return this.compilerWorkflow;
+    }
+
+    @Override
+    public int getRobotId() {
+        return this.robotId;
     }
 
 }

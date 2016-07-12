@@ -14,8 +14,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
-import de.fhg.iais.roberta.persistence.bo.Robot;
-import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -74,11 +72,9 @@ public class ClientAdmin {
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robotName = request.getString("robot");
-                RobotDao robotDao = new RobotDao(dbSession);
-                Robot robot = robotDao.loadRobot(robotName);
-                if ( robot != null ) {
+                if ( robotName != null && httpSessionState.getAllRobotsPluggedIn().contains(robotName) ) {
                     Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
-                    if ( httpSessionState.getRobotId() != robot.getId() ) {
+                    if ( httpSessionState.getRobotName() != robotName ) {
                         // disconnect previous robot
                         // TODO consider keeping it so that we can switch between robot and simulation
                         //      see: https://github.com/OpenRoberta/robertalab/issues/43
@@ -89,15 +85,14 @@ public class ClientAdmin {
                         } else {
                             httpSessionState.setToken("123");
                         }
-                        httpSessionState.setRobotId(robot.getId());
-                        response.put("robotId", robot.getId());
-                        response.put("robotName", robot.getName());
-                        LOG.info("set Robot: robot {} with id {}", robot.getName(), robot.getId());
+                        httpSessionState.setRobotName(robotName);
+                        response.put("robotName", robotName);
+                        LOG.info("set robot to {}", robotName);
                     } else {
-                        LOG.info("set Robot: robot {} with id {} already set", robot.getName(), robot.getId());
+                        LOG.info("set Robot: robot {} was already set", robotName);
                     }
                 } else {
-                    LOG.error("Invalid command: " + cmd + " " + robotName);
+                    LOG.error("Invalid command: " + cmd + " setting robot name to " + robotName);
                     Util.addErrorInfo(response, Key.COMMAND_INVALID);
                 }
             } else {
