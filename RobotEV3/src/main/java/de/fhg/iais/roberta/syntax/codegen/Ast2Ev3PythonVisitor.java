@@ -88,6 +88,8 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -226,6 +228,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private static String getEnumCode(IMode value) {
         return "'" + value.toString().toLowerCase() + "'";
+    }
+    
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void>  sensor) {
+        return null;
+    }
+    
+    @Override
+    public Void visitLightSensor(LightSensor<Void>  sensor) {
+        return null;
     }
 
     @Override

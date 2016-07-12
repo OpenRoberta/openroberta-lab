@@ -94,6 +94,7 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -101,6 +102,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -401,6 +403,16 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> sensor){
+        return null;
+    }
+    
+    @Override
+    public Void visitLightSensor(LightSensor<Void>  sensor) {
+        return null;
+    }
+    
     @Override
     public Void visitActionExpr(ActionExpr<Void> actionExpr) {
         actionExpr.getAction().visit(this);
