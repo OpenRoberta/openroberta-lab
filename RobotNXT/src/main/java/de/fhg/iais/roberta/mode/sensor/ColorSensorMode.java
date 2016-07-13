@@ -3,16 +3,17 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 
 public enum ColorSensorMode implements IColorSensorMode {
+    //TODO: after block is fixed, delete RED, RGB and AMBIENTLIGHT
     COLOUR( "getColorSensorColour", "ColorID" ),
     RED( "getColorSensorRed", "Red" ),
     RGB( "getColorSensorRgb", "RGB" ),
     AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
 
     private final String[] values;
-    private final String halJavaMethodName;
+    //private final String halJavaMethodName;
 
     private ColorSensorMode(String halJavaMethodName, String... values) {
-        this.halJavaMethodName = halJavaMethodName;
+        //this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }
 

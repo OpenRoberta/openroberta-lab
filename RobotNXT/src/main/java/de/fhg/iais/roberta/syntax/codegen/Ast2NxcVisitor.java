@@ -202,8 +202,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case T:
                 return "";
             case ARRAY:
-                //return "List";
-                // there is no just "list", only certain types of the arrays
                 return "int";
             case ARRAY_NUMBER:
                 return "float";
@@ -221,9 +219,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 return "string";
             case VOID:
                 return "void";
-            /*case COLOR:
-                return "int";*/
-            //in nxt code examples this connection is given as a simple integer
+            case COLOR:
+                return "int";
             case CONNECTION:
                 return "int";
         }
@@ -560,7 +557,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("Wait(15);");
+        this.sb.append("Wait( 15 );");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -569,9 +566,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("Wait(");
+        this.sb.append("Wait( ");
         waitTimeStmt.getTime().visit(this);
-        this.sb.append(");");
+        this.sb.append(" );");
         return null;
     }
 
@@ -581,7 +578,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: ask if that would be fine
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
@@ -614,9 +610,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //won't be used
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("PlayFile(" + playFileAction.getFileName() + ");");
+        this.sb.append("PlayFile( " + playFileAction.getFileName() + " );");
         return null;
     }
 
@@ -688,11 +685,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("PlayTone(");
+        this.sb.append("PlayTone( ");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
-        this.sb.append(");");
+        this.sb.append(" );");
         return null;
     }
 
@@ -1152,8 +1149,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         final String Port = getEnumCode(colorSensor.getPort());
-        this.sb.append("Sensor(IN_");
-        colorSensor.getPort().getPortNumber();
+        this.sb.append("Sensor( IN_");
+        this.sb.append(colorSensor.getPort().getPortNumber());
+        //colorSensor.getPort().getPortNumber();
         //this.brickConfiguration.getSensors().entrySet();
 
         //TODO: move to the part where sensors are being called
@@ -1175,7 +1173,19 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
         }*/
-        this.sb.append(")");
+        this.sb.append(" )");
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 
@@ -1447,13 +1457,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("Constrain(");
+        this.sb.append("Constrain( ");
         mathConstrainFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
         return null;
     }
 
@@ -1461,44 +1471,44 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                this.sb.append("(");
+                this.sb.append("( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2 == 0)");
+                this.sb.append(" % 2 == 0 )");
                 break;
             case ODD:
-                this.sb.append("(");
+                this.sb.append("( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2 == 1)");
+                this.sb.append(" % 2 == 1 )");
                 break;
             case PRIME:
-                this.sb.append("MathPrime(");
+                this.sb.append("MathPrime( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" )");
                 break;
             // % in nxc doesn't leave a a fractional residual, e.g. 5.2%1 = 0, so it is not possible to cheack the wholeness by "%1", that is why
             //an additional function is used
             case WHOLE:
-                this.sb.append("MathIsWhole(");
+                this.sb.append("MathIsWhole( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" )");
                 break;
             case POSITIVE:
-                this.sb.append("(");
+                this.sb.append("( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" > 0)");
+                this.sb.append(" > 0 )");
                 break;
             case NEGATIVE:
-                this.sb.append("(");
+                this.sb.append("( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" < 0)");
+                this.sb.append(" < 0 )");
                 break;
             //it would work only for whole numbers, however, I think that it makes sense to talk about being divisible only for the whole numbers
             case DIVISIBLE_BY:
-                this.sb.append("(");
+                this.sb.append("( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(" % ");
                 mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(" == 0)");
+                this.sb.append(" == 0 )");
                 break;
             default:
                 break;
@@ -1510,27 +1520,27 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
-                this.sb.append("ArrSum(");
+                this.sb.append("ArrSum( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MIN:
-                this.sb.append("ArrMin(");
+                this.sb.append("ArrMin( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MAX:
-                this.sb.append("ArrMax(");
+                this.sb.append("ArrMax( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case AVERAGE:
-                this.sb.append("ArrMean(");
+                this.sb.append("ArrMean( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MEDIAN:
-                this.sb.append("ArrMedian(");
+                this.sb.append("ArrMedian( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case STD_DEV:
-                this.sb.append("ArrStandardDeviatioin(");
+                this.sb.append("ArrStandardDeviatioin( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case RANDOM:
@@ -1538,13 +1548,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MODE:
-                this.sb.append("ArrMode(");
+                this.sb.append("ArrMode( ");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             default:
                 break;
         }
-        this.sb.append(")");
+        this.sb.append(" )");
         return null;
     }
 
@@ -1556,11 +1566,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("RandomIntegerInRange(");
+        this.sb.append("RandomIntegerInRange( ");
         mathRandomIntFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
         return null;
     }
 
@@ -1568,72 +1578,72 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("sqrt(");
+                this.sb.append("sqrt( ");
                 break;
             case ABS:
-                this.sb.append("abs(");
+                this.sb.append("abs( ");
                 break;
             //Taylor Series converge only when value is less than one. Larger values are calculated
             //using a table.
             case LN:
-                this.sb.append("MathLn(");
+                this.sb.append("MathLn( ");
                 break;
             case LOG10:
-                this.sb.append("MathLog(");
+                this.sb.append("MathLog( ");
                 break;
             case EXP:
-                this.sb.append("MathPow(E, ");
+                this.sb.append("MathPow( E, ");
                 break;
             case POW10:
-                this.sb.append("MathPow(10, ");
+                this.sb.append("MathPow( 10, ");
                 break;
             //the 3 functions below accept degrees
             case SIN:
-                this.sb.append("MathSin(");
+                this.sb.append("MathSin( ");
                 break;
             case COS:
-                this.sb.append("MathCos(");
+                this.sb.append("MathCos( ");
                 break;
             case TAN:
-                this.sb.append("MathTan(");
+                this.sb.append("MathTan( ");
                 break;
             case ASIN:
-                this.sb.append("MathAsin(");
+                this.sb.append("MathAsin( ");
                 break;
             //Taylor Series converge only when value is less than one. Larger values are calculated
             //using a table.
             case ATAN:
-                this.sb.append("MathAtan(");
+                this.sb.append("MathAtan( ");
                 break;
             case ACOS:
-                this.sb.append("MathAcos(");
+                this.sb.append("MathAcos( ");
                 break;
             case ROUND:
-                this.sb.append("MathRound(");
+                this.sb.append("MathRound( ");
                 break;
             case ROUNDUP:
-                this.sb.append("MathRoundUp(");
+                this.sb.append("MathRoundUp( ");
                 break;
             //check why there are double brackets
             case ROUNDDOWN:
-                this.sb.append("MathFloor(");
+                this.sb.append("MathFloor( ");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
 
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("MathPow(");
+        this.sb.append("MathPow( ");
         mathPowerFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
         return null;
     }
 
@@ -1729,7 +1739,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     // the function is built-in
-    //TODO: coding conventions!
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         this.sb.append("SendRemoteNumber(");
@@ -1750,12 +1759,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //not needed
+    //TODO: add SysCommBTOn
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        /*this.sb.append("int connection = ;");
-        //get the numer
-        this.sb.append("BTCheck(connection);");*/
         return null;
     }
 
@@ -2030,18 +2036,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         } catch ( final NumberFormatException e ) {
             return false;
         }
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
