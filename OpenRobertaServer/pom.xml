@@ -132,6 +132,27 @@
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>RobotEV3</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>RobotNXT</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>RobotSIM</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
 							</artifactItems>
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
