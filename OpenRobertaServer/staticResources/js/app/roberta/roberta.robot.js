@@ -43,7 +43,8 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h3').text(Blockly.Msg["MENU_CONNECT"]);
             $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
-            $('#singleModalInput').addClass('capitalLetters');
+            // we put the last token back to allow easy reconnect
+            $('#singleModalInput').addClass('capitalLetters').val(userState.token);
         }, function() {
             setToken($('#singleModalInput').val().toUpperCase());
         }, function() {

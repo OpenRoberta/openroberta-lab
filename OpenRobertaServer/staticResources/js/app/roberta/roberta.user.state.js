@@ -25,7 +25,7 @@ define([ 'exports', 'util', 'rest.user' ], function(exports, UTIL, USER) {
         exports.configurationSaved = true;
 
         exports.toolbox = 'beginner';
-        exports.token = '1A2B3C4D';
+        exports.token = '';
         exports.doPing = true;
 
         exports.robotName = '';
