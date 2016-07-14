@@ -113,12 +113,11 @@ public class HttpSessionState {
     }
 
     public IRobotFactory getSimulationFactory() {
-        try {
-            return (IRobotFactory) this.getClass().getClassLoader().loadClass("de.fhg.iais.roberta.factory.SimFactory").newInstance();
-        } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException | SecurityException | IllegalArgumentException e ) {
-            LOG.error("Simulation Factory Not Found!. Check the robot configuration property. System will crash!", e);
-            return null;
+        IRobotFactory robotFactory = robotPluginMap.get("oraSim");
+        if ( robotFactory == null ) {
+            LOG.error("robot factory for simulation not found. This is a severe error. Simluation wil not work.");
         }
+        return robotFactory;
     }
 
     public Collection<String> getAllRobotsPluggedIn() {

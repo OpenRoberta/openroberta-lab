@@ -10,8 +10,8 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
- * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link RobotCommunicationData} for
- * further explanations.<br>
+ * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link RobotCommunicationData} for further
+ * explanations.<br>
  * <br>
  * The class <b>must</b> be used as a singleton. Use <b>GUICE</b> to enforce that.
  *
@@ -36,8 +36,7 @@ public class RobotCommunicator {
     }
 
     /**
-     * check the new registration ticket.
-     * only used by brickWantsTokenToBeApproved(), extracted for testing
+     * check the new registration ticket. only used by brickWantsTokenToBeApproved(), extracted for testing
      *
      * @throws assertions for various types of issues
      * @return true if the ticket has been accepted
@@ -63,7 +62,7 @@ public class RobotCommunicator {
 
     public boolean brickWantsTokenToBeApproved(RobotCommunicationData registration) {
         addNewRegistration(registration);
-        return registration.brickTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
+        return registration.robotTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
     /**
@@ -79,10 +78,10 @@ public class RobotCommunicator {
         if ( state != null ) {
             state.setBattery(batteryvoltage);
             state.setNepoExitValue(nepoExitValue);
-            state.brickHasSentAPushRequest();
+            state.robotHasSentAPushRequest();
             return state.getCommand();
         } else {
-            LOG.error("a push request from a brick arrived, but no matching state was found in the server - we provoke a server error");
+            LOG.error("a push request from a robot arrived, but no matching state was found in the server - we provoke a server error");
             return null;
         }
     }
@@ -94,7 +93,7 @@ public class RobotCommunicator {
             return false;
         } else {
             // todo: version check!
-            state.userApprovedTheBrickToken();
+            state.userApprovedTheRobotToken();
             LOG.info("token " + token + " is approved by a user.");
             return true;
         }
@@ -139,7 +138,7 @@ public class RobotCommunicator {
                 // OK
             }
             for ( RobotCommunicationData state : this.allStates.values() ) {
-                if ( state.getState() == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
+                if ( state.getState() == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
                     state.terminatePushAndRequestNextPush();
                 }
             }

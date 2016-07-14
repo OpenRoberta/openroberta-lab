@@ -82,7 +82,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2ConfigurationEmpty() throws Exception {
-        Builder expected = new EV3Configuration.Builder();
+        Builder<EV3Configuration.Builder> expected = new EV3Configuration.Builder();
         expected.setWheelDiameter(5.0).setTrackWidth(2.5);
         Configuration actual =
             Ev3ConfigurationParseTree2Ev3ConfigurationVisitor
@@ -94,7 +94,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration1Sensor() throws Exception {
-        Builder expectedBuilder = new EV3Configuration.Builder();
+        Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
         expectedBuilder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH));
         EV3Configuration expected = (EV3Configuration) expectedBuilder.build();
@@ -111,7 +111,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration2Sensors() throws Exception {
-        Builder expectedBuilder = new EV3Configuration.Builder();
+        Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
         expectedBuilder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH));
         expectedBuilder.addSensor(SensorPort.S4, new Sensor(SensorType.INFRARED));
@@ -125,7 +125,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration1Actor() throws Exception {
-        Builder expectedBuilder = new EV3Configuration.Builder();
+        Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
         expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE));
         EV3Configuration expected = (EV3Configuration) expectedBuilder.build();
@@ -143,7 +143,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2Configuration3Actors() throws Exception {
-        Builder expectedBuilder = new EV3Configuration.Builder();
+        Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
         expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE));
         expectedBuilder.addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.BACKWARD, MotorSide.LEFT));
@@ -164,7 +164,7 @@ public class Antlr4Ev3ConfigurationTest {
 
     @Test
     public void testParseTree2ConfigurationStandardConfiguration() throws Exception {
-        Builder expectedBuilder = new EV3Configuration.Builder();
+        Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder
             .setWheelDiameter(5.6)
             .setTrackWidth(13.5)

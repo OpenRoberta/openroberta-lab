@@ -7,11 +7,11 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.util.Clock;
 
 /**
- * This class is responsible for the synchronisation between the one browser client and one brick. The synchronisation is based on a agreed upon token.
- * This token is stored redundantly in objects of this class.<br>
- * As no push technology to the robot is available, the robot issues a push request command, the thread acting upon this request is frozen and waits
- * until the user has issued a command in the browser (in most cases a run) or a timer expires . This unfreezes the thread and the responses tells the
- * robot what to do. E.g. if a run command has been issued, the already generated jar is requested to be downloaded to the robot.<br>
+ * This class is responsible for the synchronisation between the one browser client and one robot. The synchronisation is based on a agreed upon token. This
+ * token is stored redundantly in objects of this class.<br>
+ * As no push technology to the robot is available, the robot issues a push request command, the thread acting upon this request is frozen and waits until the
+ * user has issued a command in the browser (in most cases a run) or a timer expires . This unfreezes the thread and the responses tells the robot what to do.
+ * E.g. if a run command has been issued, the already generated jar is requested to be downloaded to the robot.<br>
  * <br>
  * TODO: This implementation is resource intensive as it freezes an expensive resource, namely a thread. It should be replaced later by async technology.
  *
@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.util.Clock;
 public class RobotCommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(RobotCommunicationData.class);
     private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 300000;
-    private static final int WAIT_FOR_A_BRICK_PUSH_COMMAND = 1000;
+    private static final int WAIT_FOR_A_ROBOT_PUSH_COMMAND = 1000;
 
     private final String token;
     private final String robotIdentificator;
@@ -62,11 +62,11 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a thread, which is triggered by a BRICK request. This method blocks until the user has approved the brick token or a timeout occurs.
+     * method called from a thread, which is triggered by a robot request. This method blocks until the user has approved the robot token or a timeout occurs.
      *
      * @return true, if user approved the token; false otherwise
      */
-    public synchronized boolean brickTokenAgreementRequest() {
+    public synchronized boolean robotTokenAgreementRequest() {
         LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " starts waiting for the client to approve the token");
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
         this.timerStartedByLastRequest = Clock.start();
@@ -79,7 +79,7 @@ public class RobotCommunicationData {
                 // try again
             }
         }
-        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_BRICK ) {
+        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT ) {
             LOG.info("Robot [" + this.robotIdentificator + "] token " + this.token + " approval terminated SUCCESSFULLY.");
             return true;
         } else if ( this.state == State.GARBAGE ) {
@@ -105,13 +105,13 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a server thread. This method terminates immediately and wakes up the thread, which runs on behalf of a token approval request
-     * from the robot.
+     * method called from a server thread. This method terminates immediately and wakes up the thread, which runs on behalf of a token approval request from the
+     * robot.
      */
-    public synchronized void userApprovedTheBrickToken() {
+    public synchronized void userApprovedTheRobotToken() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
             LOG.info("user approved the token. The approval request was scheduled " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
-            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+            this.state = State.WAIT_FOR_PUSH_CMD_FROM_ROBOT;
             this.timerStartedByLastRequest = Clock.start();
             this.timerStartedByTokenApproval = Clock.start();
             notifyAll();
@@ -122,30 +122,30 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a thread, which is triggered by a BRICK push command request. This method blocks until either the server issues a push command or
-     * a timer thread triggers a timeout.
+     * method called from a thread, which is triggered by a ROBOT push command request. This method blocks until either the server issues a push command or a
+     * timer thread triggers a timeout.
      *
      * @return true, if user approved the token; false otherwise
      */
-    public synchronized void brickHasSentAPushRequest() {
+    public synchronized void robotHasSentAPushRequest() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
             LOG.error(
-                "Brick has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
+                "Robot has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
                     + "Waiting started "
                     + this.timerStartedByLastRequest.elapsedSecFormatted()
                     + " ago. ");
         } else {
-            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_BRICK && this.state != State.BRICK_IS_BUSY ) {
+            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && this.state != State.ROBOT_IS_BUSY ) {
                 LOG.error(
-                    "Brick has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
+                    "Robot has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
                         + this.state
                         + ". The state setting request was scheduled "
                         + this.timerStartedByLastRequest.elapsedSecFormatted()
                         + " ago. ");
             }
-            this.state = State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
+            this.state = State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER;
             this.timerStartedByLastRequest = Clock.start();
-            while ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+            while ( this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
                 try {
                     wait();
                 } catch ( InterruptedException e ) {
@@ -153,13 +153,12 @@ public class RobotCommunicationData {
                 }
             }
         }
-        LOG.debug("BRICK push request terminated.");
+        LOG.debug("ROBOT push request terminated.");
     }
 
     /**
-     * this object is outdated. This method is called to abort an eventually pending request from a robot should be aborted.
-     * The notifyAll is for that. This object will be removed from
-     * the map holding all valid robot-server connection. The state is set to GARBAGE to express that.
+     * this object is outdated. This method is called to abort an eventually pending request from a robot should be aborted. The notifyAll is for that. This
+     * object will be removed from the map holding all valid robot-server connection. The state is set to GARBAGE to express that.
      */
     public synchronized void abortPush() {
         this.state = State.GARBAGE;
@@ -167,12 +166,12 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a timer thread. This method terminates immediately an wakes up a waiting thread, which runs on behalf of a push command from the
-     * brick.
+     * method called from a timer thread. This method terminates immediately and wakes up a waiting thread, which runs on behalf of a push command from the
+     * robot.
      */
     public synchronized void terminatePushAndRequestNextPush() {
-        if ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
-            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+        if ( this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
+            this.state = State.WAIT_FOR_PUSH_CMD_FROM_ROBOT;
             this.command = "repeat";
             this.timerStartedByLastRequest = Clock.start();
             notifyAll();
@@ -180,13 +179,13 @@ public class RobotCommunicationData {
     }
 
     /**
-     * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
-     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
+     * method called from a server thread. This method terminates immediately (if the robot waits for a push command) or after 1 sec (if we expect a push
+     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the robot.
      *
      * @return true, if the robot was waiting for a "run" command, false otherwise
      */
     public synchronized boolean runButtonPressed(String programName) {
-        if ( !isBrickWaitingForPushCommand() ) {
+        if ( !isRobotWaitingForPushCommand() ) {
             LOG.error("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
         } else {
@@ -195,7 +194,7 @@ public class RobotCommunicationData {
             this.command = "download";
             this.programName = programName;
             this.timerStartedByLastRequest = Clock.start();
-            this.state = State.BRICK_IS_BUSY;
+            this.state = State.ROBOT_IS_BUSY;
             notifyAll();
             return true;
         }
@@ -208,7 +207,7 @@ public class RobotCommunicationData {
      * @return the state of the brick
      */
     public synchronized boolean firmwareUpdate() {
-        if ( !isBrickWaitingForPushCommand() ) {
+        if ( !isRobotWaitingForPushCommand() ) {
             LOG.error("UPDATE button pressed, but brick is not waiting. Bad luck!");
             return false;
         } else {
@@ -222,15 +221,15 @@ public class RobotCommunicationData {
         }
     }
 
-    private boolean isBrickWaitingForPushCommand() {
-        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_BRICK ) {
+    private boolean isRobotWaitingForPushCommand() {
+        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT ) {
             try {
-                Thread.sleep(WAIT_FOR_A_BRICK_PUSH_COMMAND);
+                Thread.sleep(WAIT_FOR_A_ROBOT_PUSH_COMMAND);
             } catch ( InterruptedException e ) {
                 // ok
             }
         }
-        return this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
+        return this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER;
     }
 
     public String getToken() {
@@ -288,7 +287,7 @@ public class RobotCommunicationData {
     public String getFirmwareName() {
         return this.firmwarename;
     }
-    
+
     public String getFirmwareVersion() {
         return this.firmwareversion;
     }
@@ -305,6 +304,6 @@ public class RobotCommunicationData {
      * the states of communication between the brick and the browser client.
      */
     public enum State {
-        WAIT_FOR_TOKENAPPROVAL_FROM_USER, WAIT_FOR_PUSH_CMD_FROM_BRICK, BRICK_WAITING_FOR_PUSH_FROM_SERVER, BRICK_IS_BUSY, GARBAGE;
+        WAIT_FOR_TOKENAPPROVAL_FROM_USER, WAIT_FOR_PUSH_CMD_FROM_ROBOT, ROBOT_WAITING_FOR_PUSH_FROM_SERVER, ROBOT_IS_BUSY, GARBAGE;
     }
 }
