@@ -5,7 +5,7 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
 
     /**
      * Set token
-     * 
+     *
      * @param {token}
      *            Token value to be set
      */
@@ -113,6 +113,9 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
      * Handle firmware conflict between server and robot
      */
     function handleFirmwareConflict() {
+        if (userState.robotFWName != "lejos") {
+            return false;
+        }
         var regex = '(.+\..+)\..+'; // get x.y from version x.y.z
         var mainversionServer = userState.serverVersion.match(regex)[1];
         var mainversionRobot = userState.robotVersion.match(regex)[1];
@@ -142,7 +145,7 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
                 userState.robotState = 'disconnected';
                 userState.robotName = '';
             } else {
-                MSG.displayInformation(result, "", result.message, userState.robotFirmware);
+                MSG.displayInformation(result, "", result.message, userState.robotFWName);
             }
         });
     }
@@ -150,7 +153,7 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'ro
 
     /**
      * Set robot state
-     * 
+     *
      * @param {result}
      *            result of server call
      */
