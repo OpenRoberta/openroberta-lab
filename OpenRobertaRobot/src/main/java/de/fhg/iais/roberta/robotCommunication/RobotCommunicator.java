@@ -44,22 +44,22 @@ public class RobotCommunicator {
      */
     public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
         String token = newRobotCommunicationData.getToken();
-        String robotIdentificator = newRobotCommunicationData.getRobotIdentificator();
-        Assert.isTrue(token != null && robotIdentificator != null);
+        String newIdentificator = newRobotCommunicationData.getRobotIdentificator();
+        Assert.isTrue(token != null && newIdentificator != null);
         RobotCommunicationData existingRobotCommunicationData = this.allStates.get(token);
         if ( existingRobotCommunicationData != null ) {
-            String existingIpAddr = existingRobotCommunicationData.getRobotIdentificator();
-            String newIpAddr = newRobotCommunicationData.getRobotIdentificator();
-            if ( existingIpAddr == null || newIpAddr == null || !existingIpAddr.equals(newIpAddr) ) {
+            String existingIdentificator = existingRobotCommunicationData.getRobotIdentificator();
+            if ( existingIdentificator == null
+                || !existingIdentificator.equals(newIdentificator)
+                || existingIdentificator.equals("usb")
+                || existingIdentificator.equals("unknown") ) {
                 throw new DbcException("token already used. New token required");
             }
         }
         for ( String storedToken : this.allStates.keySet() ) {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
-            if ( robotIdentificator.equals(storedState.getRobotIdentificator())
-                && !robotIdentificator.equals("usb")
-                && !robotIdentificator.equals("unknown") ) {
-                LOG.error("Token approval request for robot [" + robotIdentificator + "], but an old request is pending. Old request aborted.");
+            if ( newIdentificator.equals(storedState.getRobotIdentificator()) && !newIdentificator.equals("usb") && !newIdentificator.equals("unknown") ) {
+                LOG.error("Token approval request for robot [" + newIdentificator + "], but an old request is pending. Old request aborted.");
                 storedState.abortPush(); // notifyAll() executed
                 this.allStates.remove(storedToken);
             }
