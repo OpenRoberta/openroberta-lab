@@ -59,6 +59,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -75,6 +76,7 @@ import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
  */
 public enum BlockType {
     COLOR_SENSING( Category.SENSOR, ColorSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_COLOUR_GET_SAMPLE ),
+    LIGHT_SENSING( Category.SENSOR, LightSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_LIGHT_GET_SAMPLE ),
     TOUCH_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED ),
     ULTRASONIC_SENSING(
         Category.SENSOR,

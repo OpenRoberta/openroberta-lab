@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
@@ -191,6 +192,10 @@ public interface IRobotFactory {
 
     List<IColorSensorMode> getColorSensorModes();
 
+    ILightSensorMode getLightSensorMode(String lightSensorMode);
+
+    List<ILightSensorMode> getLightSensorModes();
+
     /**
      * Get a gyro sensor mode from {@link IGyroSensorMode} given string parameter. It is possible for one gyro sensor mode to have multiple string mappings.
      * Throws exception if the gyro sensor mode does not exists.
@@ -270,14 +275,14 @@ public interface IRobotFactory {
 
     /**
      * Get the compiler workflow object for this robot.
-     * 
+     *
      * @return
      */
     ICompilerWorkflow getCompilerWorkflow();
 
     /**
      * Get the robot id for this robot. <b>this is a temporaray fix as long as the robot&configuration objects are not removed from the database</b>
-     * 
+     *
      * @return
      */
     int getRobotId();

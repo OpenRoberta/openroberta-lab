@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -25,15 +25,15 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * tree).
  * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
- * The client must provide the {@link SensorPort} and {@link ColorSensorMode}. See enum {@link ColorSensorMode} for all possible modes of the sensor.<br>
+ * The client must provide the {@link SensorPort} and {@link LightSensorMode}. See enum {@link LightSensorMode} for all possible modes of the sensor.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(ColorSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(LightSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class LightSensor<V> extends BaseSensor<V> {
-    private final IColorSensorMode mode;
+    private final ILightSensorMode mode;
 
-    private LightSensor(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockType.COLOR_SENSING, properties, comment);
+    private LightSensor(ILightSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(port, BlockType.LIGHT_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
         setReadOnly();
@@ -42,26 +42,26 @@ public class LightSensor<V> extends BaseSensor<V> {
     /**
      * Create object of the class {@link LightSensor}.
      *
-     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link ColorSensorMode} for all possible modes that the sensor have,
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link LightSensorMode} for all possible modes that the sensor have,
      * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link LightSensor}
      */
-    static <V> LightSensor<V> make(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> LightSensor<V> make(ILightSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightSensor<V>(mode, port, properties, comment);
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have
+     * @return get the mode of sensor. See enum {@link LightSensorMode} for all possible modes that the sensor have
      */
-    public IColorSensorMode getMode() {
+    public ILightSensorMode getMode() {
         return this.mode;
     }
 
     @Override
     public String toString() {
-        return "ColorSensor [mode=" + this.mode + ", port=" + this.getPort() + "]";
+        return "LightSensor [mode=" + this.mode + ", port=" + this.getPort() + "]";
     }
 
     @Override
@@ -82,7 +82,7 @@ public class LightSensor<V> extends BaseSensor<V> {
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
         return LightSensor
-            .make(factory.getColorSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(factory.getLightSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

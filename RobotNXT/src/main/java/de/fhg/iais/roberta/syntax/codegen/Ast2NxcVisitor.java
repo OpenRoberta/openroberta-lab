@@ -1138,47 +1138,38 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // TODO: change getEnumCode(brickSensor.getKey()), so it would return the following:
-    // BTNEXIT, BTNRIGHT, BTNLEFT, BTNCENTER
-    // Also, BTNEXIT doesn't work like a button, it always exits the program no matter which
-    // action is assigned to it. Seems that it works well only with enhanced firmware.
+    // TODO: change blocks so it would return the following:  BTNRIGHT, BTNLEFT, BTNCENTER
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        switch ( brickSensor.getMode() ) {
-            case IS_PRESSED:
-                this.sb.append("ButtonPressed(" + getEnumCode(brickSensor.getKey()) + ", false)");
-                break;
-            //Not needed
-            //case WAIT_FOR_PRESS_AND_RELEASE:
-            //    this.sb.append("IsPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
-            //    break;
-            default:
-                throw new DbcException("Invalide mode for BrickSensor!");
-        }
+        this.sb.append("ButtonPressed(" + brickSensor.getKey() + ", false)");
         return null;
     }
 
-    //TODO: add visit light sensor
-
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        final String Port = getEnumCode(colorSensor.getPort());
         this.sb.append("Sensor( IN_");
         this.sb.append(colorSensor.getPort().getPortNumber());
+        this.sb.append(" )");
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        //final String Port = getEnumCode(colorSensor.getPort());
         //colorSensor.getPort().getPortNumber();
         //this.brickConfiguration.getSensors().entrySet();
-
         //TODO: move to the part where sensors are being called
-        /*switch ( colorSensor.getMode() ) {
+
+        /* switch ( lightSensor.getMode() ) {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-
+        
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
@@ -1187,13 +1178,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
         }*/
-        this.sb.append(" )");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -1225,47 +1209,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override // no gyrosensor
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        /*final String Port = getEnumCode(gyroSensor.getPort());
-        final String methodName = "SetSensorGyro";
-        this.sb.append(methodName + "(IN_");
-
-        switch ( gyroSensor.getMode() ) {
-            case ANGLE:
-                this.sb.append(Port + (",") + ("ANGLE"));
-                this.sb.append(")" + (";"));
-                break;
-            case RATE:
-                this.sb.append(Port + (",") + ("RATE"));
-                this.sb.append(")" + (";"));
-                break;
-            case RESET:
-                this.sb.append(Port + (",") + ("RESET"));
-                this.sb.append(")" + (";"));
-                break;
-            default:
-                throw new DbcException("Invalid GyroSensorMode");
-        }*/
         return null;
     }
 
     @Override // no infrared sensor
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        /*final String Port = getEnumCode(infraredSensor.getPort());
-        final String methodName = "SetSensorInfrared";
-        this.sb.append(methodName + "(IN_");
-        switch ( infraredSensor.getMode() ) {
-
-            case DISTANCE:
-                this.sb.append(Port + (",") + ("DISTANCE"));
-                this.sb.append(")" + (";"));
-                break;
-            case SEEK:
-                this.sb.append(Port + (",") + ("SEEK"));
-                this.sb.append(")" + (";"));
-                break;
-            default:
-                throw new DbcException("Invalid Infrared Sensor Mode!");
-        }*/
         return null;
     }
 
@@ -1725,13 +1673,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     // the function is in hal.h
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("BluetoothGetNumber(");
+        this.sb.append("BluetoothGetNumber( ");
         //TODO: add these block options:
-        //this.sb.append("BluetoothGetString(");
-        //this.sb.append("BluetoothGetBoolean(");
+        //this.sb.append("BluetoothGetString( ");
+        //this.sb.append("BluetoothGetBoolean( ");
         // the function accepts inbox address (int)
         bluetoothReadAction.getConnection().visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
         return null;
     }
 
@@ -1993,7 +1941,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
     */
 
-    //TODO: may be add color srnsor using this check
     /* NXT can run the sensors quite fast, so this check is unnecessary. The sensors are already added above.
      private static void appendOptional(StringBuilder sb, String type, @SuppressWarnings("rawtypes") Enum port, HardwareComponent hardwareComponent) {
         if ( hardwareComponent != null ) {
