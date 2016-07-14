@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link RobotCommunicationData} for further
@@ -41,11 +42,18 @@ public class RobotCommunicator {
      * @throws assertions for various types of issues
      * @return true if the ticket has been accepted
      */
-    public boolean addNewRegistration(RobotCommunicationData registration) {
-        String token = registration.getToken();
-        String robotIdentificator = registration.getRobotIdentificator();
+    public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
+        String token = newRobotCommunicationData.getToken();
+        String robotIdentificator = newRobotCommunicationData.getRobotIdentificator();
         Assert.isTrue(token != null && robotIdentificator != null);
-        Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
+        RobotCommunicationData existingRobotCommunicationData = this.allStates.get(token);
+        if ( existingRobotCommunicationData != null ) {
+            String existingIpAddr = existingRobotCommunicationData.getRobotIdentificator();
+            String newIpAddr = newRobotCommunicationData.getRobotIdentificator();
+            if ( existingIpAddr == null || newIpAddr == null || !existingIpAddr.equals(newIpAddr) ) {
+                throw new DbcException("token already used. New token required");
+            }
+        }
         for ( String storedToken : this.allStates.keySet() ) {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
             if ( robotIdentificator.equals(storedState.getRobotIdentificator())
@@ -56,7 +64,7 @@ public class RobotCommunicator {
                 this.allStates.remove(storedToken);
             }
         }
-        this.allStates.put(token, registration);
+        this.allStates.put(token, newRobotCommunicationData);
         return true;
     }
 
