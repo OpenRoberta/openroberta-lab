@@ -55,7 +55,7 @@ A successful build looks like:
 #### Step 2a: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
     cd .. # return to the root folder
-    ./ora.sh --start # start the server using default properties
+    ./ora.sh --start-server # start the server using default properties
 
 You can also run `./ora.sh --help` for more options.
 
