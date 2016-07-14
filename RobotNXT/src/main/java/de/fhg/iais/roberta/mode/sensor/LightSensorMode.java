@@ -1,15 +1,13 @@
 package de.fhg.iais.roberta.mode.sensor;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 
-public enum LightSensorMode implements IColorSensorMode {
-    LIGHT( "light", "getSample" ), AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
+public enum LightSensorMode implements ILightSensorMode {
+    RED( "light", "getSample" ), AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
 
     private final String[] values;
-    private final String halJavaMethodName;
 
-    private LightSensorMode(String halJavaMethodName, String... values) {
-        this.halJavaMethodName = halJavaMethodName;
+    private LightSensorMode(String... values) {
         this.values = values;
     }
 
@@ -19,11 +17,6 @@ public enum LightSensorMode implements IColorSensorMode {
     public String getLejosModeName() {
         return this.values[0];
     }
-
-    //    @Override
-    //    public String getHalJavaMethod() {
-    //        return this.halJavaMethodName;
-    //    }
 
     @Override
     public String[] getValues() {

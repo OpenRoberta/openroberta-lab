@@ -97,6 +97,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSORS_ENCODER_RESET = "robSensors_encoder_reset";
     public static final String ROB_SENSORS_TIMER_RESET = "robSensors_timer_reset";
     public static final String ROB_SENSOR_COLOUR_GET_SAMPLE = "robSensors_colour_getSample";
+    public static final String ROB_SENSOR_LIGHT_GET_SAMPLE = "robSensors_light_getSample";
     public static final String ROB_SENSOR_TOUCH_IS_PRESSED = "robSensors_touch_isPressed";
     public static final String ROB_SENSOR_ULTRASONIC_GET_SAMPLE = "robSensors_ultrasonic_getSample";
     public static final String ROB_SENSOR_INFRARED_GET_SAMPLE = "robSensors_infrared_getSample";
@@ -226,6 +227,7 @@ public final class BlocklyConstants {
     public static final String SIM_TOUCH_IS_PRESSED = "sim_touch_isPressed";
     public static final String SIM_ULTRASONIC_GET_SAMPLE = "sim_ultrasonic_getSample";
     public static final String SIM_COLOUR_GET_SAMPLE = "sim_colour_getSample";
+    public static final String SIM_LIGHT_GET_SAMPLE = "sim_light_getSample";
 
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
