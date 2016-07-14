@@ -28,13 +28,13 @@ public class RobotCommunicatorTest {
     public void testRegisterTwiceWithSameIp() throws Exception {
         RobotCommunicator robotCommunicator = new RobotCommunicator();
         robotCommunicator.addNewRegistration(goodRegistration1);
-        robotCommunicator.addNewRegistration(goodRegistration1);
+        Assert.assertTrue(robotCommunicator.addNewRegistration(goodRegistration1));
     }
 
-    @Test(expected = DbcException.class)
+    @Test
     public void testCantRegisterTwice() throws Exception {
         RobotCommunicator robotCommunicator = new RobotCommunicator();
         robotCommunicator.addNewRegistration(goodRegistration1);
-        robotCommunicator.addNewRegistration(goodRegistration2);
+        Assert.assertFalse(robotCommunicator.addNewRegistration(goodRegistration2));
     }
 }

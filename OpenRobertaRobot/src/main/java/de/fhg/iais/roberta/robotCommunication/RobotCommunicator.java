@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link RobotCommunicationData} for further
@@ -53,7 +52,8 @@ public class RobotCommunicator {
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
                 || existingIdentificator.equals("unknown") ) {
-                throw new DbcException("token already used. New token required");
+                LOG.info("token already used. New token required");
+                return false;
             }
         }
         for ( String storedToken : this.allStates.keySet() ) {
@@ -69,7 +69,9 @@ public class RobotCommunicator {
     }
 
     public boolean brickWantsTokenToBeApproved(RobotCommunicationData registration) {
-        addNewRegistration(registration);
+        if(!addNewRegistration(registration)) {
+          return false;
+        }
         return registration.robotTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
