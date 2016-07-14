@@ -645,41 +645,55 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // TODO: fix boolean, numbers and arrays
+    // TODO: delete arrays, fix variables and sensors
     @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction)
-
-    {
-        this.sb.append("TextOut(");
-        showTextAction.getX().visit(this);
-        this.sb.append(", LCD_LINE");
-        showTextAction.getY().visit(this);
-        this.sb.append(",");
-
-        if ( showTextAction.getMsg().getKind() == BlockType.STRING_CONST ) {
-
-            showTextAction.getMsg().visit(this);
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        switch ( showTextAction.getMsg().getKind() ) {
+            case STRING_CONST:
+                this.sb.append("TextOut( ");
+                showTextAction.getX().visit(this);
+                this.sb.append(", LCD_LINE");
+                showTextAction.getY().visit(this);
+                this.sb.append(", ");
+                showTextAction.getMsg().visit(this);
+                break;
+            case COLOR_CONST:
+            case NUM_CONST:
+                this.sb.append("NumOut( ");
+                showTextAction.getX().visit(this);
+                this.sb.append(", LCD_LINE");
+                showTextAction.getY().visit(this);
+                this.sb.append(", ");
+                showTextAction.getMsg().visit(this);
+                break;
+            case BOOL_CONST:
+                this.sb.append("TextOut( ");
+                showTextAction.getX().visit(this);
+                this.sb.append(", LCD_LINE");
+                showTextAction.getY().visit(this);
+                this.sb.append(", ");
+                this.sb.append("\"");
+                showTextAction.getMsg().visit(this);
+                this.sb.append("\"");
+                break;
+            case VAR:
+                this.sb.append("TextOut( ");
+                showTextAction.getX().visit(this);
+                this.sb.append(", LCD_LINE");
+                showTextAction.getY().visit(this);
+                this.sb.append(",");
+                showTextAction.getMsg().visit(this);
+                break;
+            default:
+                this.sb.append("NumOut( ");
+                showTextAction.getX().visit(this);
+                this.sb.append(", LCD_LINE");
+                showTextAction.getY().visit(this);
+                this.sb.append(", ");
+                showTextAction.getMsg().visit(this);
+                break;
         }
-        if ( showTextAction.getMsg().getKind() == BlockType.BOOL_CONST ) {
-            this.sb.append("\"");
-            showTextAction.getMsg().visit(this);
-            this.sb.append("\"");
-
-        }
-
-        if ( showTextAction.getMsg().getKind() == BlockType.NUM_CONST ) {
-            this.sb.append("NumToStr(");
-
-            showTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        }
-        //   if ( showTextAction.getMsg().getKind() == BlockType.MATH_ON_LIST_FUNCT ) {
-        //       this.sb.append("NumToStr(");
-
-        //    showTextAction.getMsg().visit(this);
-        //    this.sb.append(")");
-        //  }
-        this.sb.append(");");
+        this.sb.append(" );");
         return null;
     }
 
@@ -1159,12 +1173,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-        
+
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-        
+
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
@@ -1214,7 +1228,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         /*final String Port = getEnumCode(gyroSensor.getPort());
         final String methodName = "SetSensorGyro";
         this.sb.append(methodName + "(IN_");
-        
+
         switch ( gyroSensor.getMode() ) {
             case ANGLE:
                 this.sb.append(Port + (",") + ("ANGLE"));
@@ -1240,7 +1254,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         final String methodName = "SetSensorInfrared";
         this.sb.append(methodName + "(IN_");
         switch ( infraredSensor.getMode() ) {
-        
+
             case DISTANCE:
                 this.sb.append(Port + (",") + ("DISTANCE"));
                 this.sb.append(")" + (";"));
