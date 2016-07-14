@@ -1,4 +1,4 @@
-define([ 'exports', 'jquery' ], function(exports, $) {
+define([ 'exports', 'jquery', 'bootstrap-table' ], function(exports, $) {
 
     // switches for logging:
     var logToLog = true; // log to HTML-list with id #log
@@ -92,21 +92,22 @@ define([ 'exports', 'jquery' ], function(exports, $) {
     var logToggle = 'log0'; // for alternating css-classes
 
     /**
-     * IMPLEMENTATION OF logging to a HTML-list with id #log.
-     * expect: HTML-list with id #log
-     * expect: css-classes 'log0' and 'log1' and 'lERR'
+     * IMPLEMENTATION OF logging to a HTML-list with id #log. expect: HTML-list
+     * with id #log expect: css-classes 'log0' and 'log1' and 'lERR'
      */
     function logLog(obj, marker) {
-        logToggle = (logToggle === 'log0') ? 'log1' : 'log0';
-        var css = (marker === markerERROR) ? 'lERR' : logToggle;
-        var li = $('<li class="' + css + '"></li>"');
         if (typeof obj === 'object') {
             obj = JSON.stringify(obj);
         }
-        li.text(marker + obj);
-        var $log = $('#log');
-        $log.prepend(li);
-        $log.scrollTop(1);
+        var data = $('#logTable').bootstrapTable('getData');
+        $('#logTable').bootstrapTable('insertRow', {
+            index : 0,
+            row : {
+                0 : data.length + 1,
+                1 : marker,
+                2 : obj,
+            }
+        });
     }
 
     /**

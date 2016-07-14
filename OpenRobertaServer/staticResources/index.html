@@ -20,8 +20,7 @@ limitations under the License.
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
-<link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
-<!-- <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link> -->
+<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/languages.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/typicons.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
@@ -105,16 +104,14 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<!--   Menu Robot -->
 					<li class="dropdown" id="head-navigation-robot"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-robot"
 							lkey="Blockly.Msg.MENU_ROBOT_TOOLTIP" rel="tooltip" data-original-title="" title="">
-							<span id="head-navi-icon-robot" class="head-navi-icons typcn typcn-Roberta"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+							<span id="head-navi-icon-robot" class="head-navi-icons typcn typcn-open"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
 								lkey="Blockly.Msg.MENU_ROBOT"></span>
 						</a>
-						<ul class="dropdown-menu">
+						<ul id="navigation-robot" class="dropdown-menu">
+							<li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
+							<li class="divider"></li>
 							<li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
 							<li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
-							<li class="divider"></li>
-							<li class="robotType ev3 disabled"><a href="#" id="menu-ev3" class="typcn typcn-ev3">EV3</a></li>
-							<li class="robotType nxt"><a href="#" id="menu-nxt" class="typcn typcn-nxt">NXT</a></li>
-							<li class="robotType bayduino"><a href="#" id="menu-bayduino" class="typcn typcn-bayduino">BAYDUINO</a></li>
 						</ul></li>
 					<!-- Menu Help -->
 					<li class="dropdown" id="head-navigation-help"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-help"
@@ -167,7 +164,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="tr"></a></li>
 						</ul></li>
 					<!-- Menu Navigation -->
-					<legend class="visible-xs"></legend>
+					<li class="divider visible-xs"></li>
 					<li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
 					<li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
 					<!--  only if simulation is active -->
@@ -196,7 +193,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
 				<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
 				<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
-				<legend class="visible-xs"></legend>
+				<li class="divider visible-xs"></li>
 				<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
 				<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
 			</ul>
@@ -282,7 +279,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		<div id="progList" class="tab-pane fade">
 			<!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
  -->
-			<div id="toolbar">
+			<div id="progListToolbar">
 				<button id="backProgList" class="btn">
 					<i class="typcn typcn-arrow-left"></i>
 				</button>
@@ -291,26 +288,24 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</table>
 		</div>
 		<div id="confList" class="tab-pane fade">
-			<h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2>
-			<table id="configurationNameTable" class="tableSize table table-striped table-hover">
-				<tr>
-					<td></td>
-				</tr>
-			</table>
-			<div class="navbar navbar-fixed-bottom">
-				<input class="btn buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-				<input class="btn buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-				<input class="btn backButton" id="backConfiguration" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+			<!-- <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2> -->
+			<div id="confListToolbar">
+				<button id="backProgList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
 			</div>
+			<table id="confNameTable">
+			</table>
 		</div>
 		<div id="logList" class="tab-pane fade">
-			<h2>Logging</h2>
-			<ol id="log" class="log" reversed>
-			</ol>
-			<div class="navbar navbar-fixed-bottom">
-				<input id="clearLog" class="btn" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren"></input>
-				<input id="backLogging" class="btn backButton" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"></input>
+			<!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>-->
+			<div id="logListToolbar">
+				<button id="backLogList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
 			</div>
+			<table id="logTable">
+			</table>
 		</div>
 		<div id="bricklyDiv" class="tab-pane fade"></div>
 	</div>
@@ -681,7 +676,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<!-- <button type="button" class="btn hidden-xs" data-dismiss="modal" lkey="Blockly.Msg.POPUP_TOUR" id="takeATour">take a tour</button> -->
 			</div>
 			<div class="modal-body left-inner-addon popup-checkbox">
-				<input type="checkbox" name="checkbox" id="checkbox_id" value="value"/>
+				<input type="checkbox" name="checkbox" id="checkbox_id" value="value" />
 				<label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br /> <br /> <span
 					lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
 				<a href="http://www.iais.fraunhofer.de/index.php?id=4515&amp;L=1" target="_blank" class="DE" style="display: inline;">Details ansehen.</a>

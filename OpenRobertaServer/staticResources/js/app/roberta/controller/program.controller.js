@@ -1,7 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'rest.program', 'roberta.program.sharing',
-        'roberta.user', 'roberta.robot', 'roberta.brick-configuration', 'roberta.navigation', 'roberta.tour', 'blocks', 'prettify', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, guiStateController, PROGRAM, ROBERTA_PROGRAM_SHARING, ROBERTA_USER,
-        ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, ROBERTA_NAVIGATION, ROBERTA_TOUR, Blockly, Prettify, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'rest.program', 'roberta.tour', 'blocks', 'jquery',
+        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, guiStateController, PROGRAM, ROBERTA_TOUR, Blockly, $) {
 
     var $formSingleModal;
 
@@ -10,18 +8,22 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      * Inject Blockly with initial toolbox
      */
     function init() {
-        var ready = initView();
-        ready.then(initEvents);
+        var view = initView();
+        var ready = view.then(function() {
+            initEvents();
+            initProgramForms();
+        });
         LOG.info('init program view');
+        return ready;
     }
     exports.init = init;
 
-    function initView(ready) {
+    function initView() {
         var ready = COMM.json("/toolbox", {
             "cmd" : "loadT",
             "name" : guiStateController.getProgramToolboxLevel(),
             "owner" : " "
-        }, function(toolbox, ready) {
+        }, function(toolbox) {
             UTIL.response(toolbox);
             if (toolbox.rc === 'ok') {
                 guiStateController.setProgramToolbox(toolbox.data);
@@ -43,13 +45,30 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     robControls : true
                 });
                 blocklyWorkspace.device = guiStateController.getRobot();
+                initProgramEnvironment();
+            } else {
+                MSG.displayInformation(toolbox, "", toolbox.message, "");
             }
-            initProgramEnvironment();
         });
         return ready;
     }
 
     function initEvents() {
+        $('#tabProgram').onWrap('shown.bs.tab', function() {
+            guiStateController.setView('tabProgram');
+            showConfiguration(guiStateController.getConfXML());
+            $('#head-navigation-program-edit').css('display', 'inline');
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#menuTabProgram').parent().addClass('disabled');
+            $('#menuTabConfiguration').parent().removeClass('disabled');
+        }, 'tabProgram clicked');
+
+        $('#tabProgram').on('hide.bs.tab', function(e) {
+            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            var xml = Blockly.Xml.domToText(dom);
+            guiStateController.setConfXML(xml);
+        });
+
         var moveCounter = 0;
         blocklyWorkspace.addChangeListener(function(event) {
             if (event.type !== 'create' && guiStateController.isProgramSaved() && moveCounter >= 1) {
@@ -113,26 +132,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         blocklyWorkspace.clear();
         Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
     }
-
-    /**
-     * Display programs in a table
-     * 
-     * @param {result}
-     *            result object of server call
-     */
-    function showPrograms(result) {
-        UTIL.response(result);
-        if (result.rc === 'ok') {
-            var $table = $('#programNameTable').dataTable();
-            $table.fnClearTable();
-            if (result.programNames.length > 0) {
-                $table.fnAddData(result.programNames);
-            }
-            ROBERTA_ROBOT.setState(result);
-        }
-    }
-
-    exports.showPrograms = showPrograms;
 
     /**
      * Load the program that was selected in program list

@@ -1,14 +1,16 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks', 'roberta.brick-configuration' ], function(exports, LOG, UTIL, COMM, MSG,
-        userState, Blockly, ROBERTA_BRICK_CONFIGURATION) {
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'roberta.brick-configuration' ], function(exports, LOG, UTIL, COMM, MSG,
+        guiStateController, Blockly, ROBERTA_BRICK_CONFIGURATION) {
 
     var bricklyWorkspace;
 
     function init() {
-        COMM.json("/toolbox", {
-            "cmd" : "loadT",
-            "name" : userState.robot,
-            "owner" : " "
-        }, injectBrickly);
+        var view = initView();
+        var ready = view.then(function() {
+            initEvents();
+            //        initProgramForms();
+        });
+        LOG.info('init configuration view');
+        return ready;
     }
 
     exports.init = init;
@@ -19,93 +21,95 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
      * @param {response}
      *            toolbox
      */
-    function injectBrickly(toolbox) {
-        UTIL.response(toolbox);
-        if (toolbox.rc === 'ok') {
-            bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
-                path : '/blockly/',
-                toolbox : toolbox.data,
-                trashcan : true,
-                scrollbars : true,
-                zoom : {
-                    controls : true,
-                    wheel : true,
-                    startScale : 1.0,
-                    maxScale : 4,
-                    minScale : .25,
-                    scaleSpeed : 1.1
-                },
-                checkInTask : [ '-Brick' ],
-                variableDeclaration : true,
-                robControls : true
-            });
-            
-            bricklyWorkspace.addChangeListener(function(event) {
-                 console.log('conf');
-                            console.log(event);
-                if (event.type === 'ui' && userState.configurationSaved) {
-                    userState.configurationSaved = false;
-                } else {
-                    if (!userState.configurationSaved && userState.id !== -1 && userState.configuration.indexOf('basis') >= 0) {
-                        bricklyWorkspace.robControls.enable('saveProgram');
-                        $('#menuSaveConfig').parent().removeClass('disabled');
-                    }
-                }
-                console.log(userState.configurationSaved);
-            });
-            bricklyWorkspace.device = userState.robot;
-            // Configurations can't be executed
-            bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
-            bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
-
-            Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
-                LOG.info('saveProgram from blockly button');
-                ROBERTA_BRICK_CONFIGURATION.save();
-            });
-            bricklyWorkspace.robControls.disable('saveProgram');
+    function initView() {
+        var ready = COMM.json("/toolbox", {
+            "cmd" : "loadT",
+            "name" : guiStateController.getGuiRobot(),
+            "owner" : " "
+        }, function(toolbox) {
+            UTIL.response(toolbox);
+            if (toolbox.rc === 'ok') {
+                guiStateController.setConfToolbox(toolbox.data);
+                bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
+                    path : '/blockly/',
+                    toolbox : toolbox.data,
+                    trashcan : true,
+                    scrollbars : true,
+                    zoom : {
+                        controls : true,
+                        wheel : true,
+                        startScale : 1.0,
+                        maxScale : 4,
+                        minScale : .25,
+                        scaleSpeed : 1.1
+                    },
+                    checkInTask : [ '-Brick' ],
+                    variableDeclaration : true,
+                    robControls : true
+                });
+                bricklyWorkspace.device = guiStateController.getRobot();
+            } else {
+                MSG.displayInformation(toolbox, "", toolbox.message, "");
+            }
+        });
+        ready.then(function() {
             initConfigurationEnvironment();
-        } else {
-            MSG.displayInformation(toolbox, "", toolbox.message, "");
-        }
+        });
+        return ready;
     }
 
-    function initConfigurationEnvironment(opt_configuration) {
-        // TODO solve this when blockly can have more instances
-        if (!opt_configuration || !opt_configuration.data) {
-            COMM.json("/conf", {
-                "cmd" : "loadC",
-                "name" : userState.robot,
-                "owner" : " "
-            }, initConfigurationEnvironment);
-        } else {
-            if (opt_configuration.rc === 'ok') {
-                if (bricklyWorkspace) {
-                    bricklyWorkspace.clear();
-                    if ($(window).width() < 768) {
-                        x = $(window).width() / 50;
-                        y = 25;
-                    } else {
-                        x = $(window).width() / 5;
-                        y = 50;
-                    }
-                    var xml = Blockly.Xml.textToDom(opt_configuration.data);
-                    Blockly.Xml.domToWorkspace(bricklyWorkspace, xml);
-                    var block = bricklyWorkspace.getBlockById(2);
-                    if (block) {
-                        var coord = block.getRelativeToSurfaceXY()
-                        block.moveBy(x-coord.x, y-coord.y);
-                    }
-                    $('#menuSaveConfig').parent().addClass('disabled');
-                    bricklyWorkspace.robControls.disable('saveProgram');
-                    userState.configurationSaved = 'new';
-                }
-                userState.bricklyReady = true;
-                Blockly.svgResize(bricklyWorkspace);
+    function initEvents() {
+
+        $('#tabConfiguration').onWrap('shown.bs.tab', function(e) {
+            guiStateController.setView('tabConfiguration');
+            showConfiguration(guiStateController.getConfXML());
+            Blockly.hideChaff(true);
+            bricklyWorkspace.markFocused();
+            bricklyWorkspace.setVisible(true);
+            Blockly.svgResize(bricklyWorkspace);
+        }, 'tabConfiguration clicked');
+
+        $('#tabConfiguration').on('hide.bs.tab', function(e) {
+            var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var xml = Blockly.Xml.domToText(dom);
+            guiStateController.setConfXML(xml);
+        });
+
+        var moveCounter = 0;
+        bricklyWorkspace.addChangeListener(function(event) {
+            if (event.type !== 'create' && guiStateController.isProgramSaved() && moveCounter >= 1) {
+                moveCounter = 0;
+                guiStateController.setProgramSaved(false);
+            } else if (event.type !== 'create') {
+                moveCounter++;
+            }
+        });
+
+        // Configurations can't be executed
+        bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
+        bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
+
+        Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
+            LOG.info('saveProgram from blockly button');
+            ROBERTA_BRICK_CONFIGURATION.save();
+        });
+        bricklyWorkspace.robControls.disable('saveProgram');
+    }
+
+    function initConfigurationEnvironment() {
+        COMM.json("/conf", {
+            "cmd" : "loadC",
+            "name" : guiStateController.getGuiRobot(),
+            "owner" : " "
+        }, function(toolbox) {
+            if (toolbox.rc === 'ok' && bricklyWorkspace) {
+                guiStateController.setConfXML(toolbox.data);
             } else {
                 MSG.displayInformation(configuration, "", configuration.message, "");
             }
-        }
+        });
     }
+
     exports.initConfigurationEnvironment = initConfigurationEnvironment;
 
     /**
@@ -116,83 +120,39 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blo
      * @param {data}
      *            data of server call
      */
-    function showConfiguration(data, load) {
+    function showConfiguration(data) {
         var xml = Blockly.Xml.textToDom(data);
-        if (load) {
-            bricklyWorkspace.clear();
-        }
+        bricklyWorkspace.clear();
         Blockly.Xml.domToWorkspace(bricklyWorkspace, xml);
+        if ($(window).width() < 768) {
+            x = $(window).width() / 50;
+            y = 25;
+        } else {
+            x = $(window).width() / 5;
+            y = 50;
+        }
+        var block = bricklyWorkspace.getBlockById(2);
+        if (block) {
+            var coord = block.getRelativeToSurfaceXY()
+            block.moveBy(x - coord.x, y - coord.y);
+        }
+
     }
     exports.showConfiguration = showConfiguration;
-
-    /**
-     * Show toolbox
-     * 
-     * @param {result}
-     *            result of server call
-     */
-    function showToolbox(result) {
-        UTIL.response(result);
-        if (result.rc === 'ok') {
-            bricklyWorkspace.updateToolbox(result.data);
-        }
-    }
-
-    function checkProgram() {
-        // TODO do we need this here?
-    }
-
-    /**
-     * Switch brickly to another language
-     */
-    function switchLanguageInBrickly() {
-        if (userState.robot !== 'oraSim') {
-            var configurationBlocks = null;
-            if (bricklyWorkspace !== null && bricklyWorkspace !== undefined) {
-                var xmlConfiguration = Blockly.Xml.workspaceToDom(bricklyWorkspace);
-                if (xmlConfiguration.childNodes.length != 0) {
-                    configurationBlocks = Blockly.Xml.domToText(xmlConfiguration);
-                }
-
-                exports.loadToolboxAndConfiguration({
-                    "rc" : "ok",
-                    "data" : configurationBlocks
-                });
-                userState.bricklyTranslated = true;
-            }
-        }
-    }
-
-    exports.switchLanguageInBrickly = switchLanguageInBrickly;
-
-    function loadToolboxAndConfiguration(opt_configurationBlocks) {
-        COMM.json("/toolbox", {
-            "cmd" : "loadT",
-            "name" : userState.robot,
-            "owner" : " "
-        }, function(toolbox) {
-            showToolbox(toolbox);
-            initConfigurationEnvironment(opt_configurationBlocks);
-        });
-    }
-
-    exports.loadToolboxAndConfiguration = loadToolboxAndConfiguration;
-
-    function loadToolbox() {
-        COMM.json("/toolbox", {
-            "cmd" : "loadT",
-            "name" : userState.robot,
-            "owner" : " "
-        }, function(toolbox) {
-            showToolbox(toolbox);
-        });
-    }
-
-    exports.loadToolbox = loadToolbox;
 
     function getBricklyWorkspace() {
         return bricklyWorkspace;
     }
 
     exports.getBricklyWorkspace = getBricklyWorkspace;
+
+    function reloadView() {
+        var toolbox = guiStateController.getConfToolbox();
+        var program = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        Blockly.hideChaff();
+        bricklyWorkspace.updateToolbox(toolbox);
+        bricklyWorkspace.clear();
+        Blockly.Xml.domToWorkspace(bricklyWorkspace, program);
+    }
+    exports.reloadView = reloadView;
 });

@@ -4,6 +4,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'rest.program',
     function init() {
         initView();
         initEvents();
+        LOG.info('init program sharing view');
     }
     exports.init = init;
 

@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.program', 'roberta.program', 'roberta.program.sharing', 'blocks-msg', 'jquery',
-        'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, PROGLIST_MODEL, PROGRAM, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.program', 'program.controller', 'roberta.program.sharing', 'blocks-msg', 'jquery',
+        'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, PROGLIST_MODEL, PROGRAM, programController, programController_SHARING, Blockly, $) {
 
     /**
      * Initialize table of programs
@@ -8,6 +8,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
 
         initProgList();
         initProgListEvents();
+        LOG.info('init program list view');
     }
     exports.init = init;
 
@@ -16,7 +17,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
         $('#programNameTable').bootstrapTable({
             height : UTIL.calcDataTableHeight(),
             pageList : '[ 10, 25, All ]',
-            toolbar : '#toolbar',
+            toolbar : '#progListToolbar',
             showRefresh : 'true',
             showPaginationSwitch : 'true',
             pagination : 'true',
@@ -95,7 +96,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
         }, "refresh program list clicked");
 
         $('#programNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
-            ROBERTA_PROGRAM.loadFromListing(row);
+            programController.loadFromListing(row);
             //$('#blocklyDiv').trigger('load', [ row ]);
         }, "Load program from listing double clicked");
 
@@ -206,7 +207,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
             return false;
         },
         'click .load' : function(e, value, row, index) {
-            ROBERTA_PROGRAM.loadFromListing(row);
+            programController.loadFromListing(row);
         }
     };
 

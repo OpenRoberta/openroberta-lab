@@ -1032,7 +1032,7 @@ background-color
 
 
 }
-#progList table thead, #confList table thead, #show-relations table thead
+#progList table thead, #confList table thead, #show-relations table thead, #logList table thead
 	{
 	text-transform: uppercase;
 	background-color: #898989;

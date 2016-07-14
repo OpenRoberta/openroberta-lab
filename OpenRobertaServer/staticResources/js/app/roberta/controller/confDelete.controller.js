@@ -4,7 +4,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'rest.program',
     function init() {
 //        initView();
         initEvents();
-        LOG.info('init program delete');
+        LOG.info('init configuration delete');
     }
     exports.init = init;
 
