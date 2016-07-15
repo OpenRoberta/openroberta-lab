@@ -7,9 +7,21 @@
  * @namespace SIM
  */
 
-define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulation.robot.math', 'simulation.robot.roberta', 'simulation.robot.rescue',
-        'simulation.scene', 'simulation.program.eval', 'simulation.math', 'roberta.program', 'robertaLogic.constants', 'simulation.program.builder' ],
-        function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot, RescueRobot, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER) {
+define([ 'exports',
+         'simulation.robot.simple',
+         'simulation.robot.draw',
+         'simulation.robot.math',
+         'simulation.robot.roberta',
+         'simulation.robot.rescue',
+         'simulation.scene',
+         'simulation.program.eval',
+         'simulation.math',
+         'roberta.program',
+         'robertaLogic.constants',
+         'simulation.program.builder' ],
+        function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot,
+                 RescueRobot, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM,
+                 CONST, BUILDER) {
 
             var programEval = new ProgramEval();
 
@@ -54,7 +66,10 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             function setBackground(num) {
                 window.removeEventListener("resize", resizeAll);
                 setPause(true);
-                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
+                ROBERTA_PROGRAM
+                  .getBlocklyWorkspace()
+                  .robControls
+                  .setSimStart(true);
                 if (num === 0) {
                     currentBackground += 1;
                     if (currentBackground > 5) {
@@ -78,7 +93,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 robot.debug = debug;
                 setObstacle();
                 setRuler();
-                scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
+                scene = new Scene(img[currentBackground], layers, robot,
+                                  obstacle, ruler);
                 resizeAll();
                 scene.updateBackgrounds();
                 scene.drawObjects();
@@ -105,6 +121,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             exports.getDt = getDt;
 
             var pause;
+
             function setPause(value) {
                 if (!value && !ready) {
                     setTimeout(function() {
@@ -114,12 +131,21 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                     if (value) {
                         $('.simForward').removeClass('typcn-media-pause');
                         $('.simForward').addClass('typcn-media-play');
-                        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
+                        ROBERTA_PROGRAM
+                          .getBlocklyWorkspace()
+                          .robControls
+                          .setSimForward(true);
                     } else {
                         $('.simForward').removeClass('typcn-media-play');
                         $('.simForward').addClass('typcn-media-pause');
-                        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(false);
-                        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(false);
+                        ROBERTA_PROGRAM
+                          .getBlocklyWorkspace()
+                          .robControls
+                          .setSimForward(false);
+                        ROBERTA_PROGRAM
+                          .getBlocklyWorkspace()
+                          .robControls
+                          .setSimStart(false);
                     }
                     pause = value;
                 }
@@ -349,7 +375,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 startY = (parseInt(Y - offsetY, 10)) / scale;
                 var dx = startX - robot.mouse.rx;
                 var dy = startY - robot.mouse.ry;
-                isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
+                isDownrobot = (dx * dx + dy * dy <
+                               robot.mouse.r * robot.mouse.r);
                 isDownObstacle = (startX > obstacle.x &&
                                   startX < obstacle.x + obstacle.w &&
                                   startY > obstacle.y &&
@@ -435,16 +462,19 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                     scale = 1;
                     if ($(window).width() < 768) {// extra small devices
                         scale = 0.5
-                    } else if ($(window).width() < 1024) {// medium and large devices     
+                    } else if ($(window).width() < 1024) {
+                        // medium and large devices     
                         scale = 0.7;
-                    } else if ($(window).width() < 1280) {// medium and large devices     
+                    } else if ($(window).width() < 1280) {
+                        // medium and large devices     
                         scale = 0.8;
-                    } else if ($(window).width() >= 1920) {// medium and large devices     
+                    } else if ($(window).width() >= 1920) {
+                        // medium and large devices     
                         scale = 1.5;
                     }
                     ground.w = scene.playground.w / scale;
                     ground.h = scene.playground.h / scale;
-                    // MAXDIAG = Math.sqrt(SIMATH.sqr(ground.w) + SIMATH.sqr(ground.h));
+// MAXDIAG = Math.sqrt(SIMATH.sqr(ground.w) + SIMATH.sqr(ground.h));
 //            if (oldScale != scale) {
                     scene.updateBackgrounds();
                     scene.drawObjects();
@@ -505,7 +535,8 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             function initScene() {
 
                 layers = createLayers();
-                scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
+                scene = new Scene(img[currentBackground], layers, robot,
+                                  obstacle, ruler);
                 scene.updateBackgrounds();
                 scene.drawObjects();
                 scene.drawRuler();
@@ -518,20 +549,25 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             }
 
             function createLayers() {
-                $('<canvas id ="unitBackgroundLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                        document.getElementById("uniDiv"));
+                $('<canvas id ="unitBackgroundLayer" width=' + CONST.MAX_WIDTH
+                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                      document.getElementById("uniDiv"));
                 var uniCanvas = document.getElementById("unitBackgroundLayer");
-                $('<canvas id ="backgroundLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                        document.getElementById("backgroundDiv"));
+                $('<canvas id ="backgroundLayer" width=' + CONST.MAX_WIDTH
+                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                      document.getElementById("backgroundDiv"));
                 var backCanvas = document.getElementById("backgroundLayer");
-                $('<canvas id ="objectLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                        document.getElementById("objectDiv"));
+                $('<canvas id ="objectLayer" width=' + CONST.MAX_WIDTH
+                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                      document.getElementById("objectDiv"));
                 var objectCanvas = document.getElementById("objectLayer");
-                $('<canvas id ="rulerLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                        document.getElementById("rulerDiv"));
+                $('<canvas id ="rulerLayer" width=' + CONST.MAX_WIDTH
+                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                      document.getElementById("rulerDiv"));
                 var rulerCanvas = document.getElementById("rulerLayer");
-                $('<canvas id ="robotLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                        document.getElementById("robotDiv"));
+                $('<canvas id ="robotLayer" width=' + CONST.MAX_WIDTH
+                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                      document.getElementById("robotDiv"));
                 var robotCanvas = document.getElementById("robotLayer");
                 return [ uniCanvas.getContext("2d"),
                          backCanvas.getContext("2d"),
@@ -597,8 +633,11 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
     var lastTime = 0;
     var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+        window.requestAnimationFrame = window[
+            vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (
+            window[vendors[x] + 'CancelAnimationFrame'] ||
+            window[vendors[x] + 'CancelRequestAnimationFrame']);
     }
 
     if (!window.requestAnimationFrame) {
