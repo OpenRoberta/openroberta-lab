@@ -9,14 +9,16 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * 
      * @constructor
      */
-    function Scene(backgroundImg, layers, robot, obstacle) {
+    function Scene(backgroundImg, layers, robot, obstacle, ruler) {
         this.backgroundImg = backgroundImg;
         this.robot = robot;
         this.obstacle = obstacle;
-        this.uCtx = layers[0];
-        this.bCtx = layers[1];
-        this.oCtx = layers[2];
-        this.rCtx = layers[3];
+        this.ruler = ruler;
+        this.uCtx = layers[0]; // ? context
+        this.bCtx = layers[1]; // background context
+        this.oCtx = layers[2]; // object context
+        this.rCtx = layers[3]; // robot context
+        this.mCtx = layers[4]; // ruler == *m*easurement context
         this.playground = {
             x : 0,
             y : 0,
@@ -43,8 +45,25 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         }
     };
 
+    Scene.prototype.drawRuler = function() {
+        this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20,
+          this.ruler.wOld + 40, this.ruler.hOld + 40);
+        this.ruler.xOld = this.ruler.x;
+        this.ruler.yOld = this.ruler.y;
+        this.ruler.wOld = this.ruler.w;
+        this.ruler.hOld = this.ruler.h;
+        this.mCtx.restore();
+        this.mCtx.save();
+        this.mCtx.scale(SIM.getScale(), SIM.getScale());
+        if (this.ruler.img) {
+            this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y,
+                                this.ruler.w, this.ruler.h);
+        }
+    };
+
     Scene.prototype.drawObjects = function() {
-        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
+        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20,
+          this.obstacle.wOld + 40, this.obstacle.hOld + 40);
         this.obstacle.xOld = this.obstacle.x;
         this.obstacle.yOld = this.obstacle.y;
         this.obstacle.wOld = this.obstacle.w;

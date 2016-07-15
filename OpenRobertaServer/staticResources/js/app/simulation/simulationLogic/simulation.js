@@ -21,15 +21,29 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             var offsetY;
             var isDownrobot = false;
             var isDownObstacle = false;
+            var isDownRuler = false;
             var startX;
             var startY;
             var scale = 1;
-            var imgSrc = [ "/js/app/simulation/simBackgrounds/baustelle-02.svg", "/js/app/simulation/simBackgrounds/simpleBackground.svg",
-                    "/js/app/simulation/simBackgrounds/drawBackground.svg", "/js/app/simulation/simBackgrounds/robertaBackground.svg",
-                    "/js/app/simulation/simBackgrounds/rescueBackground.svg", "/js/app/simulation/simBackgrounds/mathBackground.svg" ]; //TODO combine to one image for better performance
-            var imgSrcIE = [ "/js/app/simulation/simBackgrounds/baustelle-02.svg", "/js/app/simulation/simBackgrounds/simpleBackground.png",
-                    "/js/app/simulation/simBackgrounds/drawBackground.png", "/js/app/simulation/simBackgrounds/robertaBackground.png",
-                    "/js/app/simulation/simBackgrounds/rescueBackground.png", "/js/app/simulation/simBackgrounds/mathBackground.png" ];
+            // Note: The ruler is currently only used for the scene with
+            // robertaBackground.svg.
+            var imgSrc = [ 
+              "/js/app/simulation/simBackgrounds/baustelle-02.svg",
+              "/js/app/simulation/simBackgrounds/simpleBackground.svg",
+              "/js/app/simulation/simBackgrounds/drawBackground.svg",
+              "/js/app/simulation/simBackgrounds/robertaBackground.svg",
+              "/js/app/simulation/simBackgrounds/rescueBackground.svg",
+              "/js/app/simulation/simBackgrounds/mathBackground.svg",
+              "/js/app/simulation/simBackgrounds/ruler.svg" ];
+              //TODO combine to one image for better performance
+            var imgSrcIE = [
+              "/js/app/simulation/simBackgrounds/baustelle-02.svg",
+              "/js/app/simulation/simBackgrounds/simpleBackground.png",
+              "/js/app/simulation/simBackgrounds/drawBackground.png",
+              "/js/app/simulation/simBackgrounds/robertaBackground.png",
+              "/js/app/simulation/simBackgrounds/rescueBackground.png",
+              "/js/app/simulation/simBackgrounds/mathBackground.png",
+              "/js/app/simulation/simBackgrounds/ruler.svg" ];
             var img;
             var timerStep = 0;
             var ready;
@@ -63,10 +77,12 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 }
                 robot.debug = debug;
                 setObstacle();
-                scene = new Scene(img[currentBackground], layers, robot, obstacle);
+                setRuler();
+                scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
                 resizeAll();
                 scene.updateBackgrounds();
                 scene.drawObjects();
+                scene.drawRuler();
                 reloadProgram();
                 window.addEventListener("resize", resizeAll);
                 return currentBackground;
@@ -168,6 +184,19 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 wOld : 0,
                 hOld : 0
             };
+
+            var ruler = {
+                x : 0,
+                y : 0,
+                xOld : 0,
+                yOld : 0,
+                w : 0,
+                h : 0,
+                wOld : 0,
+                hOld : 0
+            }
+            // Note: The ruler is not considered an obstacle. The robot will
+            // simply drive over it.
             exports.obstacleList = [ ground, obstacle ];
 
 // render stuff
@@ -187,6 +216,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                     canceled = false;
                     isDownrobot = false;
                     isDownObstacle = false;
+                    isDownRuler = false;
                     stepCounter = 0;
                     pause = true;
                     info = false;
@@ -292,6 +322,25 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 }
             }
 
+            function setRuler() {
+              if (currentBackground == 3) {
+                  ruler.x = 430;
+                  ruler.y = 380;
+                  ruler.w = 300;
+                  ruler.h = 30;
+                  ruler.img = img[6];
+                  ruler.color = null;
+              } else {
+                  // All other scenes currently don't have a movable ruler.
+                  ruler.x = 0;
+                  ruler.y = 0;
+                  ruler.w = 0;
+                  ruler.h = 0;
+                  ruler.img = null;
+                  ruler.color = null;
+              }
+            }
+
             function handleMouseDown(e) {
                 e.preventDefault();
                 var X = e.clientX || e.originalEvent.touches[0].pageX;
@@ -301,13 +350,20 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 var dx = startX - robot.mouse.rx;
                 var dy = startY - robot.mouse.ry;
                 isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
-                isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
+                isDownObstacle = (startX > obstacle.x &&
+                                  startX < obstacle.x + obstacle.w &&
+                                  startY > obstacle.y &&
+                                  startY < obstacle.y + obstacle.h);
+                isDownRuler = (startX > ruler.x &&
+                               startX < ruler.x + ruler.w &&
+                               startY > ruler.y &&
+                               startY < ruler.y + ruler.h);
                 e.stopPropagation();
             }
 
             function handleMouseUp(e) {
                 e.preventDefault();
-                if (!isDownrobot && !isDownObstacle) {
+                if (!isDownrobot && !isDownObstacle && !isDownRuler) {
                     if (startX < ground.w / 2) {
                         robot.pose.theta += SIMATH.toRadians(-5);
                     } else {
@@ -320,6 +376,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 }
                 isDownrobot = false;
                 isDownObstacle = false;
+                isDownRuler = false;
                 e.stopPropagation();
             }
 
@@ -327,12 +384,13 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 e.preventDefault();
                 isDownrobot = false;
                 isDownObstacle = false;
+                isDownRuler = false;
                 e.stopPropagation();
             }
 
             function handleMouseMove(e) {
                 e.preventDefault();
-                if (!isDownrobot && !isDownObstacle) {
+                if (!isDownrobot && !isDownObstacle && !isDownRuler) {
                     return;
                 }
                 $("#robotLayer").css('cursor', 'pointer');
@@ -354,10 +412,14 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                     robot.pose.y += dy;
                     robot.mouse.rx += dx;
                     robot.mouse.ry += dy;
-                } else {
+                } else if (isDownObstacle) {
                     obstacle.x += dx;
                     obstacle.y += dy;
                     scene.drawObjects();
+                } else { // isDownRuler
+                    ruler.x += dx;
+                    ruler.y += dy;
+                    scene.drawRuler();
                 }
                 e.stopPropagation();
             }
@@ -386,6 +448,7 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
 //            if (oldScale != scale) {
                     scene.updateBackgrounds();
                     scene.drawObjects();
+                    scene.drawRuler();
 //            }
                 }
             }
@@ -442,9 +505,10 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
             function initScene() {
 
                 layers = createLayers();
-                scene = new Scene(img[currentBackground], layers, robot, obstacle);
+                scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
                 scene.updateBackgrounds();
                 scene.drawObjects();
+                scene.drawRuler();
                 scene.drawRobot();
                 addMouseEvents();
                 ready = true;
@@ -463,10 +527,17 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                 $('<canvas id ="objectLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
                         document.getElementById("objectDiv"));
                 var objectCanvas = document.getElementById("objectLayer");
+                $('<canvas id ="rulerLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                        document.getElementById("rulerDiv"));
+                var rulerCanvas = document.getElementById("rulerLayer");
                 $('<canvas id ="robotLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
                         document.getElementById("robotDiv"));
                 var robotCanvas = document.getElementById("robotLayer");
-                return [ uniCanvas.getContext("2d"), backCanvas.getContext("2d"), objectCanvas.getContext("2d"), robotCanvas.getContext("2d") ];
+                return [ uniCanvas.getContext("2d"),
+                         backCanvas.getContext("2d"),
+                         objectCanvas.getContext("2d"),
+                         robotCanvas.getContext("2d"),
+                         rulerCanvas.getContext("2d") ];
             }
             function destroyLayers() {
                 var layer = document.getElementById("backgroundLayer");
@@ -482,6 +553,10 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
                     layer.removeChild(myNode.firstChild);
                 }
                 layer = document.getElementById("robotLayer");
+                while (layer.firstChild) {
+                    layer.removeChild(myNode.firstChild);
+                }
+                layer = document.getElementById("rulerLayer");
                 while (layer.firstChild) {
                     layer.removeChild(myNode.firstChild);
                 }
