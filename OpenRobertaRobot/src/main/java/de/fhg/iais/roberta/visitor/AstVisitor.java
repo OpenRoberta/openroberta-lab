@@ -399,7 +399,7 @@ public interface AstVisitor<V> {
      *
      * @param colorSensor to be visited
      */
-    public V visitSoundSensor(SoundSensor<V> lightSensor);
+    public V visitSoundSensor(SoundSensor<V> soundSensor);
 
     /**
      * visit a {@link EncoderSensor}.

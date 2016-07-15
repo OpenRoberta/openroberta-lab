@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
@@ -29,6 +30,7 @@ import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
@@ -220,6 +222,31 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public List<ILightSensorMode> getLightSensorModes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
+        if ( soundSensorMode == null || soundSensorMode.isEmpty() ) {
+            throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
+        }
+        String sUpper = soundSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( SoundSensorMode sp : SoundSensorMode.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
+    }
+
+    @Override
+    public List<ISoundSensorMode> getSoundSensorModes() {
         // TODO Auto-generated method stub
         return null;
     }

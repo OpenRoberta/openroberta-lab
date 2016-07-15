@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.mode.sensor;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 
-public enum SoundSensorMode implements IGyroSensorMode {
-    RATE( "getGyroSensorRate", "Rate" ), ANGLE( "getGyroSensorAngle", "Angle" ), RESET( "resetGyroSensor" );
+public enum SoundSensorMode implements ISoundSensorMode {
+    SOUND( "sound", "getSample" );
 
-    private final String[] values;
     private final String halJavaMethodName;
+    private final String[] values;
 
     private SoundSensorMode(String halJavaMethodName, String... values) {
         this.halJavaMethodName = halJavaMethodName;

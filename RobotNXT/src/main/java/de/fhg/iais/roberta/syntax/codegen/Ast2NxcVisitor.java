@@ -1164,13 +1164,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: add modes
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         //final String Port = getEnumCode(lightSensor.getPort());
         this.sb.append("Sensor( IN_");
         this.sb.append(lightSensor.getPort().getPortNumber());
         this.sb.append(" )");
-        //this.brickConfiguration.getSensors().entrySet();
         /*switch ( getEnumCode(lightSensor.getMode()) ) {
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
@@ -1188,8 +1188,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        this.sb.append("Sensor( IN_");
+        this.sb.append(soundSensor.getPort().getPortNumber());
+        this.sb.append(" )");
         return null;
     }
 
@@ -1230,7 +1232,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 this.sb.append("GetTimerValue( timer" + timerSensor.getTimer() + " )");
                 break;
             case RESET:
-                //this.sb.append("ResetTimerValue(" + timerSensor.getTimer() + ");");
                 this.sb.append("ResetTimerValue( timer" + timerSensor.getTimer() + " );");
                 break;
             default:

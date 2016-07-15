@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
@@ -197,6 +198,10 @@ public interface IRobotFactory {
     ILightSensorMode getLightSensorMode(String lightrSensorMode);
 
     List<ILightSensorMode> getLightSensorModes();
+
+    ISoundSensorMode getSoundSensorMode(String soundSensorMode);
+
+    List<ISoundSensorMode> getSoundSensorModes();
 
     /**
      * Get a gyro sensor mode from {@link IGyroSensorMode} given string parameter. It is possible for one gyro sensor mode to have multiple string mappings.
