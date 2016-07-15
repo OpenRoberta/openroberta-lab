@@ -1163,13 +1163,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         this.sb.append(", ");
         switch ( getEnumCode(colorSensor.getMode()) ) {
             case "ColorSensorMode.COLOUR":
-                this.sb.append("COLOR");
+                this.sb.append("\"COLOR\"");
                 break;
             case "ColorSensorMode.AMBIENTLIGHT":
-                this.sb.append("AMBIENTLIGHT");
+                this.sb.append("\"AMBIENTLIGHT\"");
                 break;
             case "ColorSensorMode.RED":
-                this.sb.append("LIGHT");
+                this.sb.append("\"LIGHT\"");
                 break;
             /*default:
                 throw new DbcException("Invalide mode for Color Sensor!");*/
@@ -1178,25 +1178,23 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: add modes
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         //final String Port = getEnumCode(lightSensor.getPort());
-        this.sb.append("Sensor( IN_");
+        this.sb.append("SensorLight( IN_");
         this.sb.append(lightSensor.getPort().getPortNumber());
-        this.sb.append(" )");
-        /*switch ( getEnumCode(lightSensor.getMode()) ) {
-            case RED:
-                this.sb.append("IN_TYPE_COLORRED");
-                this.sb.append(")" + (";"));
+        this.sb.append(", ");
+        switch ( getEnumCode(lightSensor.getMode()) ) {
+            case "LightSensorMode.RED":
+                this.sb.append("\"LIGHT\"");
                 break;
-            case AMBIENTLIGHT:
-                this.sb.append("IN_TYPE_COLORRGB");
-                this.sb.append(")" + (";"));
+            case "LightSensorMode.AMBIENTLIGHT":
+                this.sb.append("\"AMBIENTLIGHT\"");
                 break;
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
-        }*/
+        }
+        this.sb.append(" )");
         return null;
     }
 

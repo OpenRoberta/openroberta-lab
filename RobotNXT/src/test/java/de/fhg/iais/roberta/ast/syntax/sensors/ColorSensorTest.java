@@ -8,7 +8,7 @@ public class ColorSensorTest {
 
     @Test
     public void setColor() throws Exception {
-        final String a = "\nSensorColor(IN_3,COLOR)SensorColor(IN_1,LIGHT)SensorColor(IN_2,)SensorColor(IN_4,AMBIENTLIGHT)";
+        final String a = "\nSensorColor(IN_3,\"COLOR\")SensorColor(IN_1,\"LIGHT\")SensorColor(IN_2,)SensorColor(IN_4,\"AMBIENTLIGHT\")";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setColor.xml");
     }
