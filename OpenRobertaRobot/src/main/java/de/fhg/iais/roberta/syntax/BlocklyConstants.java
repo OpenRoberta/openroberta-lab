@@ -215,7 +215,7 @@ public final class BlocklyConstants {
     public static final String TIME = "TIME";
     public static final String COLOR = "color";
     public static final String LIGHT = "light";
-    public static final String SOUND = "sound";
+    public static final String SOUND = "SOUND";
 
     public static final String ROB_BRICK_GYRO = "robBrick_gyro";
     public static final String ROB_BRICK_INFRARED = "robBrick_infrared";

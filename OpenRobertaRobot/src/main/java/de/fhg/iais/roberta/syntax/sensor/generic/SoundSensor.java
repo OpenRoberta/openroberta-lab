@@ -5,8 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -15,52 +15,50 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class represents the <b>robSensors_gyro_getMode</b>, <b>robSensors_gyro_getSample</b> and <b>robSensors_gyro_setMode</b> blocks from Blockly into
+ * This class represents the <b>robSensors_colour_getMode</b>, <b>robSensors_colour_getSample</b> and <b>robSensors_colour_setMode</b> blocks from Blockly into
  * the AST (abstract syntax
  * tree).
  * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
- * The client must provide the {@link SensorPort} and {@link GyroSensorMode}. See enum {@link GyroSensorMode} for all possible modes of the sensor.<br>
+ * The client must provide the {@link SensorPort} and {@link LightSensorMode}. See enum {@link LightSensorMode} for all possible modes of the sensor.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(GyroSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(LightSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class SoundSensor<V> extends BaseSensor<V> {
-    private final IGyroSensorMode mode;
+    private final ISoundSensorMode mode;
 
-    private SoundSensor(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockType.GYRO_SENSING, properties, comment);
-        Assert.isTrue(mode != null && port != null);
+    private SoundSensor(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(port, BlockType.SOUND_SENSING, properties, comment);
         this.mode = mode;
         setReadOnly();
     }
 
     /**
-     * Create object of the class {@link SoundSensor}.
+     * Create object of the class {@link TouchSensor}.
      *
-     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link GyroSensorMode} for all possible modes that the sensor have,
-     * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
+     * @param port on which the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible ports that the sensor can be
+     *        connected,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link SoundSensor}
+     * @return read only object of {@link TouchSensor}
      */
-    static <V> SoundSensor<V> make(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> SoundSensor<V> make(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SoundSensor<V>(mode, port, properties, comment);
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link GyroSensorMode} for all possible modes that the sensor have.
+     * @return the mode
      */
-    public IGyroSensorMode getMode() {
+    public ISoundSensorMode getMode() {
         return this.mode;
     }
 
     @Override
     public String toString() {
-        return "GyroSensor [mode=" + this.mode + ", port=" + getPort() + "]";
+        return "TouchSensor [port=" + getPort() + "]";
     }
 
     @Override
@@ -77,17 +75,10 @@ public class SoundSensor<V> extends BaseSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
-            List<Field> fields = helper.extractFields(block, (short) 1);
-            String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-            return SoundSensor
-                .make(factory.getGyroSensorMode("RESET"), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
         return SoundSensor
-            .make(factory.getGyroSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(factory.getSoundSensorMode("SOUND"), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -96,10 +87,8 @@ public class SoundSensor<V> extends BaseSensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getPort().getPortNumber();
-        if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("RATE") ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
-        }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+
         return jaxbDestination;
     }
 }

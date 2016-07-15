@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
@@ -394,4 +395,15 @@ public class SimFactory extends AbstractRobotFactory {
         return null;
     }
 
+    @Override
+    public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ISoundSensorMode> getSoundSensorModes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
