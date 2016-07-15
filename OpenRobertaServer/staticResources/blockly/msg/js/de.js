@@ -608,13 +608,11 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_EMAIL_SEND = "Jetzt abschicken";
 Blockly.Msg.POPUP_NAME = "Name";
 Blockly.Msg.POPUP_NEW_PASSWORD = "Neues Passwort";
-Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Entwickle ein Programm für den Roboter <strong>und</strong> für den simulierten Roboter</li><li>Exportiere und importiere dein Programm lokal</li><li>Neues blockly, jetzt schneller und mit Zoomfunktion.</li></ul>";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Altes Passwort";
 Blockly.Msg.POPUP_PASSWORD = "Passwort";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "Passwort zurücksetzen ...";
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Dein Programm konnte auf dem Roboter nicht ausgeführt werden!";
 Blockly.Msg.POPUP_REGISTER_USER = "Jetzt registrieren";
-Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2<ul class='NonIcon' style='font-size:small'><li>Zeitzonenproblem beim Speichern eines Programmes behoben</li></ul>Version beta 1.3.1<ul class='NonIcon' style='font-size:small'><li>Jetzt auch auf Spanisch!</li><li>Weitere kleinere Fehler behoben</li></ul>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Batteriespannung";
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";
@@ -632,6 +630,7 @@ Blockly.Msg.POPUP_STARTUP_COOKIES = "Wir verwenden Cookies, um Inhalte und Anzei
 Blockly.Msg.POPUP_STARTUP_HELP = "Brauchst du Hilfe?";
 Blockly.Msg.POPUP_STARTUP_HIDE = "Okay, dieses Fenster beim nächsten Start nicht mehr anzeigen und meine Auswahl merken.";
 Blockly.Msg.POPUP_STARTUP_NEW = "Was ist neu?";
+Blockly.Msg.POPUP_STARTUP_START = "Wähle dein System!";
 Blockly.Msg.POPUP_STARTUP_TITLE = "Willkommen";
 Blockly.Msg.POPUP_TOUR = "take a tour";  // untranslated
 Blockly.Msg.POPUP_USERNAME = "Benutzername";
