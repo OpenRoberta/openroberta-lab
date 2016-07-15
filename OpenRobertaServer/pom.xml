@@ -232,14 +232,110 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.4.1</version>
+				<executions>
+					<execution>
+						<id>enforce-debug-or-release-profile-is-active</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireActiveProfile>
+									<profiles>debug,release</profiles>
+									<all>false</all>
+								</requireActiveProfile>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
+			<resource>
+				<directory>staticResources</directory>
+				<targetPath>staticResources</targetPath>
+			</resource>
 		</resources>
 	</build>
+	<profiles>
+		<profile>
+			<id>debug</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<!-- Clean out compressed files that may have been added by a release
+							 build. -->
+					<plugin>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<id>remove-stale-generated-files</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+								<configuration>
+									<filesets>
+										<fileset>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>**/*.gz</include>
+											</includes>
+											<followSymlinks>false</followSymlinks>
+										</fileset>
+									</filesets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<!-- Compress javascript and css files with gzip. -->
+					<plugin>
+						<groupId>net.alchim31.maven</groupId>
+						<artifactId>yuicompressor-maven-plugin</artifactId>
+						<version>1.5.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>compress</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<nosuffix>true</nosuffix>
+							<!--
+								Disable javascript compression - just use this plugin for gzip.
+								If we want to use javascript compression we should execute this
+								plugin twice, so we can exclude already-compressed files from
+								the JS-compression but not from gzip-compression.
+							-->
+							<nocompress>true</nocompress>
+							<force>true</force>
+							<gzip>true</gzip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<!-- mvn site creates html test reports and code documentation -->
 	<reporting>
 		<plugins>

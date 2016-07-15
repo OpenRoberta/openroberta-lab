@@ -149,8 +149,7 @@ function _exportApplication {
   else
     echo "no database setup"
   fi
-  echo "copying generic resources"
-  cp -r OpenRobertaServer/staticResources "$exportpath"
+  echo "copying OpenRobertaServer JARs"
   mkdir "${exportpath}/resources"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
 

@@ -14,11 +14,11 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.slf4j.Logger;
@@ -133,40 +133,40 @@ public class ServerStarter {
         versionedHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         versionedHttpHandler.addServlet(DefaultServlet.class, "/*");
 
-        // REST API without prefix - deprecated
-        ServletContextHandler deprecatedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        deprecatedHttpHandler.setContextPath("/*");
-        deprecatedHttpHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
+        // REST API without prefix (deprecated) and static resources
+        ServletContextHandler rootHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        rootHandler.setContextPath("/*");
+        rootHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
 
-        deprecatedHttpHandler.addEventListener(robertaGuiceServletConfig);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/alive/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/admin/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/conf/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/ping/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/program/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/user/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/hello/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/download/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/update/*", null);
-        deprecatedHttpHandler.addServlet(DefaultServlet.class, "/*");
+        rootHandler.addEventListener(robertaGuiceServletConfig);
+        rootHandler.addFilter(GuiceFilter.class, "/alive/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/admin/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/conf/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/ping/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/program/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/user/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/hello/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/download/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/update/*", null);
+        ServletHolder staticResourceServlet =
+                rootHandler.addServlet(DefaultServlet.class, "/*");
+
+        staticResourceServlet.setInitParameter("gzip", "true");
+        staticResourceServlet.setInitParameter("resourceBase",
+                ServerStarter.class.getResource("/staticResources").toExternalForm());
 
         // websockets with /ws/<version>/ prefix
         ServletContextHandler wsHandler = new ServletContextHandler();
         wsHandler.setContextPath("/ws");
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
-        ResourceHandler staticResourceHandler = new ResourceHandler();
-        staticResourceHandler.setDirectoriesListed(true);
-        staticResourceHandler.setResourceBase("staticResources");
-
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
-            staticResourceHandler,
             versionedHttpHandler,
             wsHandler,
-            deprecatedHttpHandler
+            rootHandler
         });
         server.setHandler(handlers);
 
