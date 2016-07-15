@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
@@ -379,6 +380,18 @@ public class SimFactory extends AbstractRobotFactory {
     @Override
     public int getRobotId() {
         return this.robotId;
+    }
+
+    @Override
+    public ILightSensorMode getLightSensorMode(String lightrSensorMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorMode> getLightSensorModes() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
