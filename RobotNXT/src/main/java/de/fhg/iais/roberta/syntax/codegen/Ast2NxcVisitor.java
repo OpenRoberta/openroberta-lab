@@ -1138,10 +1138,21 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // TODO: change blocks so it would return the following:  BTNRIGHT, BTNLEFT, BTNCENTER
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("ButtonPressed(" + brickSensor.getKey() + ", false)");
+        String button = null;
+        switch ( getEnumCode(brickSensor.getKey()) ) {
+            case "BrickKey.ENTER":
+                button = "BTNCENTER";
+                break;
+            case "BrickKey.LEFT":
+                button = "BTNLEFT";
+                break;
+            case "BrickKey.RIGHT":
+                button = "BTNRIGHT";
+                break;
+        }
+        this.sb.append("ButtonPressed( " + button + ", false )");
         return null;
     }
 
@@ -1164,12 +1175,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOUR:
                 this.sb.append("IN_TYPE_COLORCOLOUR");
                 this.sb.append(")" + (";"));
-        
+
                 break;
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-        
+
                 break;
             case RGB:
                 this.sb.append("IN_TYPE_COLORRGB");
