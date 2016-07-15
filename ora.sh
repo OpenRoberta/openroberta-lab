@@ -159,7 +159,7 @@ function _exportApplication {
   mkdir "${exportpath}/updateResources"
   mkdir "${exportpath}/crossCompilerResources"
   echo "EV3 specific: copying resources"
-  cp RobotEv3/crosscompiler-ev3-build.xml "${exportpath}"
+  cp RobotEV3/crosscompiler-ev3-build.xml "${exportpath}"
   cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
   cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
   cp ora.sh "$exportpath"
