@@ -4,8 +4,9 @@ ip='0.0.0.0' # The ip default. For servers, 0.0.0.0 means "all IPv4 addresses on
 port='1999'  # the port default.
 lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
 oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openroberta.properties). BE CAREFUL !!!
-databaseurl='jdbc:hsqldb:hsql://localhost/oradb' # server mode for the database. This setting should be used for production.
+#databaseurl='jdbc:hsqldb:hsql://localhost/oradb'# server mode for the database. This setting should be used for production.
                                                  # embedded would be, e.g. jdbc:hsqldb:file:db/openroberta-db
+databaseurl='jdbc:hsqldb:file:db/openroberta-db' # BUT: actually THIS is used for production, too.
 
 scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -148,19 +149,19 @@ function _exportApplication {
   else
     echo "no database setup"
   fi
-  echo "copying the web resources"
-  webresources="OpenRobertaServer/staticResources"
-  cp -r "$webresources" "$exportpath"
-  echo 'creating directories for user programs and resources'
-  mkdir "${exportpath}/userProjects"
+  echo "copying generic resources"
+  cp -r OpenRobertaServer/staticResources "$exportpath"
   mkdir "${exportpath}/resources"
-  mkdir "${exportpath}/crossCompilerResources"
-  mkdir "${exportpath}/updateResources"
-  echo "copying resources"
-  cp OpenRobertaRuntime/crosscompiler-ev3-build.xml "${exportpath}"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
-  cp OpenRobertaServer/target/updateResources/*.jar "$exportpath/updateResources"
-  cp OpenRobertaServer/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
+
+  echo 'EV3 specific: creating directories for user programs and resources'
+  mkdir "${exportpath}/userProjects"
+  mkdir "${exportpath}/updateResources"
+  mkdir "${exportpath}/crossCompilerResources"
+  echo "EV3 specific: copying resources"
+  cp RobotEv3/crosscompiler-ev3-build.xml "${exportpath}"
+  cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
+  cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
   cp ora.sh "$exportpath"
 # -------------- begin of a here document -------------------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
@@ -169,12 +170,18 @@ validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
 hibernate.connection.url = ${databaseurl}
 
-crosscompiler.basedir = userProjects/
-crosscompiler.build.xml = crosscompiler-ev3-build.xml
-robot.updateResources.dir = updateResources
-robot.crossCompilerResources.dir = crossCompilerResources
-robot.type.list = ev3,oraSim
+robot.type.list = ev3,nxt,oraSim
 robot.type.default = ev3
+
+robot.plugin.1.name = ev3
+robot.plugin.1.id = 42
+robot.plugin.1.factory = de.fhg.iais.roberta.factory.EV3Factory
+robot.plugin.2.name = nxt
+robot.plugin.2.id = 43
+robot.plugin.2.factory = de.fhg.iais.roberta.factory.NxtFactory
+robot.plugin.3.name = oraSim
+robot.plugin.3.id = 99
+robot.plugin.3.factory = de.fhg.iais.roberta.factory.SimFactory
 .eof
 # -------------- end of a here document ---------------------------------------------------------------
 }
