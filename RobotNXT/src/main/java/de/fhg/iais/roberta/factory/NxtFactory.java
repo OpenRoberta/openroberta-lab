@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -194,6 +195,31 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public List<IColorSensorMode> getColorSensorModes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
+        if ( lightSensorMode == null || lightSensorMode.isEmpty() ) {
+            throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
+        }
+        String sUpper = lightSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( LightSensorMode sp : LightSensorMode.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
+    }
+
+    @Override
+    public List<ILightSensorMode> getLightSensorModes() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -381,18 +407,6 @@ public class NxtFactory extends AbstractRobotFactory {
     @Override
     public int getRobotId() {
         return this.robotId;
-    }
-
-    @Override
-    public ILightSensorMode getLightSensorMode(String lightrSensorMode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
