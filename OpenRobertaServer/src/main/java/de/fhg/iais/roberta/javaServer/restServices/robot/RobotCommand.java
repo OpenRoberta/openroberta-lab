@@ -34,8 +34,6 @@ public class RobotCommand {
     private static final String CMD_ABORT = "abort";
 
     private final RobotCommunicator brickCommunicator;
-    //    @Context
-    //    private HttpServletRequest servletRequest;
 
     @Inject
     public RobotCommand(RobotCommunicator brickCommunicator) {
@@ -92,7 +90,8 @@ public class RobotCommand {
             case CMD_REGISTER:
                 LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
                 // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
-                RobotCommunicationData state = new RobotCommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
+                RobotCommunicationData state =
+                    new RobotCommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response).build();

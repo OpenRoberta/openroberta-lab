@@ -131,13 +131,7 @@ public class RobotCommunicator {
     }
 
     public RobotCommunicationData getState(String token) {
-        RobotCommunicationData state = this.allStates.get(token);
-        //        if ( state == null ) {
-        //            LOG.error("a communication state for token " + token + " is created. THIS IS A TEMPORARY FIX"); // TODO: make brick comm more robust
-        //            state = new BrickCommunicationData(token, "robot-id-generated-" + new Date().getTime(), "robot-name-generated", null);
-        //            this.allStates.put(token, state);
-        //        }
-        return state;
+        return this.allStates.get(token);
     }
 
     private void pushTimerRunner() {

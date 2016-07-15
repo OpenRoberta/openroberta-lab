@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 
+import com.google.inject.AbstractModule;
+
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -279,6 +281,14 @@ public interface IRobotFactory {
      * @return
      */
     ICompilerWorkflow getCompilerWorkflow();
+
+    /**
+     * Get the guice module for this robot. This is used to add bindings to guice. It should not be used often.<br>
+     * Example: the /download REST resource needs access to the directory, in which binaries are stored (EV3 lejos robot)
+     *
+     * @return the guice module for this robot or <code>null</code>, if this robot doesn't need to inject resources
+     */
+    AbstractModule getGuiceModule();
 
     /**
      * Get the robot id for this robot. <b>this is a temporaray fix as long as the robot&configuration objects are not removed from the database</b>

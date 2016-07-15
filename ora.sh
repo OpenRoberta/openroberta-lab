@@ -182,6 +182,12 @@ robot.plugin.2.factory = de.fhg.iais.roberta.factory.NxtFactory
 robot.plugin.3.name = oraSim
 robot.plugin.3.id = 99
 robot.plugin.3.factory = de.fhg.iais.roberta.factory.SimFactory
+
+# this is a temporary fix for EV3 resources. They can't be put into EV3.properties because they need to be modified for --export
+crosscompiler.basedir    = userProjects/
+crosscompiler.build.xml  = crosscompiler-ev3-build.xml
+robot.crossCompilerResources.dir = crossCompilerResources
+robot.updateResources.dir = updateResources
 .eof
 # -------------- end of a here document ---------------------------------------------------------------
 }

@@ -82,7 +82,9 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        Language lang = Language.fromCommunicationData(this.brickCommunicator.getState(token));
+        RobotCommunicationData communicationData;
+        communicationData = this.brickCommunicator.getState(token);
+        Language lang = Language.fromCommunicationData(communicationData);
         String sourceCode = generateProgram(lang, programName, data);
 
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging

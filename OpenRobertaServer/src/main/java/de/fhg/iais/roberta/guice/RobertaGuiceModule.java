@@ -63,7 +63,7 @@ public class RobertaGuiceModule extends AbstractModule {
         try {
             Names.bindProperties(binder(), this.openRobertaProperties);
         } catch ( Exception e ) {
-            LOG.error("Could not load properties", e);
+            LOG.error("Could not bind global properties to guice", e);
         }
     }
 }

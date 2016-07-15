@@ -29,7 +29,6 @@ import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.guice.RobertaGuiceModule;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
@@ -185,7 +184,7 @@ public class ServerStarter {
     /**
      * detect all robot plugins (at least EV3, NXT and SIM), that may be used with this server. Uses the declarations from the openroberta.properties file.
      * Autodetection would be great ... .
-     * 
+     *
      * @param robotCommunicator
      * @param injector
      * @return the mapping from robot names to the factory, that supplies all robot-specific data
@@ -212,7 +211,7 @@ public class ServerStarter {
             } else {
                 try {
                     @SuppressWarnings("unchecked")
-                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) RobertaGuiceModule.class.getClassLoader().loadClass(pluginFactory);
+                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
                     Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class, Integer.class);
                     robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator, Integer.parseInt(pluginId)));
                 } catch ( Exception e ) {

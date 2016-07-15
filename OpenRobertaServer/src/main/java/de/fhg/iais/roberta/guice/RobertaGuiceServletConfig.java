@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -27,12 +28,18 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
 
     @Override
     protected Injector getInjector() {
-
         JerseyServletModule jerseyServletModule = new JerseyServletModule() {
             @Override
             protected void configureServlets() {
                 // configure at least one JAX-RS resource or the server won't start.
                 install(new RobertaGuiceModule(openRobertaProperties, robotPluginMap, robotCommunicator));
+                // look for guice modules from robot plugins
+                for ( IRobotFactory robotFactory : robotPluginMap.values() ) {
+                    AbstractModule guiceModule = robotFactory.getGuiceModule();
+                    if ( guiceModule != null ) {
+                        install(guiceModule);
+                    }
+                }
                 Map<String, String> initParams = new HashMap<String, String>();
                 // initParams.put("com.sun.jersey.config.feature.Trace", "true");
                 initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");

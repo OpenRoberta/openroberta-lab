@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.factory;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.inject.AbstractModule;
+
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
@@ -231,6 +233,11 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     @Override
     public List<IDriveDirection> getDriveDirections() {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public AbstractModule getGuiceModule() {
         return null;
     }
 

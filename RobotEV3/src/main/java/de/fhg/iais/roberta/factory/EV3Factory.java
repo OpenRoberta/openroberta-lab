@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import com.google.inject.AbstractModule;
+
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -38,10 +40,11 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class EV3Factory extends AbstractRobotFactory {
     private final Ev3CompilerWorkflow compilerWorkflow;
+    private final Properties ev3properties;
     private final int robotId;
 
     public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
-        Properties ev3properties = Util1.loadProperties("classpath:EV3.properties");
+        ev3properties = Util1.loadProperties("classpath:EV3.properties");
         this.compilerWorkflow =
             new Ev3CompilerWorkflow(
                 robotCommunicator,
@@ -392,6 +395,11 @@ public class EV3Factory extends AbstractRobotFactory {
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
         return this.compilerWorkflow;
+    }
+
+    @Override
+    public AbstractModule getGuiceModule() {
+        return new Ev3GuiceModule(ev3properties);
     }
 
     @Override
