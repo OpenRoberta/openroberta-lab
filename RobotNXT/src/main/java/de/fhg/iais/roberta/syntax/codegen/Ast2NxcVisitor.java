@@ -1158,8 +1158,22 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("Sensor( IN_");
+        this.sb.append("SensorColor( IN_");
         this.sb.append(colorSensor.getPort().getPortNumber());
+        this.sb.append(", ");
+        switch ( getEnumCode(colorSensor.getMode()) ) {
+            case "ColorSensorMode.COLOUR":
+                this.sb.append("COLOR");
+                break;
+            case "ColorSensorMode.AMBIENTLIGHT":
+                this.sb.append("AMBIENTLIGHT");
+                break;
+            case "ColorSensorMode.RED":
+                this.sb.append("LIGHT");
+                break;
+            /*default:
+                throw new DbcException("Invalide mode for Color Sensor!");*/
+        }
         this.sb.append(" )");
         return null;
     }
@@ -1182,8 +1196,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 break;
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
-        }
-        this.sb.append(")" + (";"));*/
+        }*/
         return null;
     }
 
