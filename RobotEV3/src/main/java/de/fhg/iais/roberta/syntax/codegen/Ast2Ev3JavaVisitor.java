@@ -407,12 +407,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitSoundSensor(SoundSensor<Void> sensor){
         return null;
     }
-    
+
     @Override
     public Void visitLightSensor(LightSensor<Void>  sensor) {
         return null;
     }
-    
+
     @Override
     public Void visitActionExpr(ActionExpr<Void> actionExpr) {
         actionExpr.getAction().visit(this);
@@ -1597,7 +1597,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            arrayOfSensors += usedSensor.generateRegenerate();
+            arrayOfSensors += generateRegenerateUsedSensor(usedSensor);
             arrayOfSensors += ", ";
         }
 
@@ -1606,6 +1606,18 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
         }
         sb.append(");");
+        return sb.toString();
+    }
+
+    private String generateRegenerateUsedSensor(UsedSensor usedSensor) {
+        StringBuilder sb = new StringBuilder();
+        SensorType sensor = usedSensor.getSensorType();
+        IMode mode = usedSensor.getMode();
+
+        sb.append("new UsedSensor(");
+        sb.append("SensorPort." + usedSensor.getPort().toString()).append(", ");
+        sb.append(sensor.getClass().getSimpleName() + "." + sensor.name()).append(", ");
+        sb.append(mode.getClass().getSimpleName() + "." + mode.toString()).append(")");
         return sb.toString();
     }
 

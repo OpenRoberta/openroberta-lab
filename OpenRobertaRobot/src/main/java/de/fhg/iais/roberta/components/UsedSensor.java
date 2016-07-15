@@ -43,18 +43,6 @@ public class UsedSensor {
         return this.mode;
     }
 
-    /**
-     * @return valid Java code for generating blockly program
-     */
-    public String generateRegenerate() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("new UsedSensor(");
-        sb.append("SensorPort." + this.port.toString()).append(", ");
-        sb.append(this.sensor.getClass().getSimpleName() + "." + this.sensor.name()).append(", ");
-        sb.append(this.mode.getClass().getSimpleName() + "." + this.mode.toString()).append(")");
-        return sb.toString();
-    }
-
     @Override
     public String toString() {
         return "UsedSensor [" + this.port + ", " + this.sensor + ", " + this.mode + "]";
