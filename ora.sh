@@ -3,7 +3,7 @@
 ip='0.0.0.0' # The ip default. For servers, 0.0.0.0 means "all IPv4 addresses on the local machine". (see: https://en.wikipedia.org/wiki/0.0.0.0)
 port='1999'  # the port default.
 lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
-oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openroberta.properties). BE CAREFUL !!!
+oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openRoberta.properties). BE CAREFUL !!!
 #databaseurl='jdbc:hsqldb:hsql://localhost/oradb'# server mode for the database. This setting should be used for production.
                                                  # embedded would be, e.g. jdbc:hsqldb:file:db/openroberta-db
 databaseurl='jdbc:hsqldb:file:db/openroberta-db' # BUT: actually THIS is used for production, too.
@@ -273,15 +273,15 @@ case "$cmd" in
                     if [[ "$propfile" != '' ]] # property file given explicitly
                     then
                        propfile="file:$propfile"
-                       echo "starting the server using supplied openroberta.properties from $propFile"
+                       echo "starting the server using supplied openRoberta.properties from $propFile"
                     else
                        if [ -d OpenRobertaServer ]
                        then
-                         echo "starting the server from a git repository. Using openroberta.properties from the classpath"
+                         echo "starting the server from a git repository. Using openRoberta.properties from the classpath"
                        else
                          echo "starting the server from a installation directory (probably created by an --export command)"
-                         echo "Using file \"openroberta.properties\" from the base directory"
-                         propfile="file:openroberta.properties"
+                         echo "Using file \"openRoberta.properties\" from the base directory"
+                         propfile="file:openRoberta.properties"
                        fi
                     fi
                     _startServerFn ;;
