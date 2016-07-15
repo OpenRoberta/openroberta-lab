@@ -37,12 +37,14 @@ public class AstToEv3PythonVisitorTest {
         + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
         + "    },\n"
         + "    'sensors': {\n"
-        + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n"
-        + "        '2':Hal.makeUltrasonicSensor(ev3dev.INPUT_2),\n"
         + "    },\n"
         + "}\n"
-        + "_usedSensors = Set([])\n"
-        + "hal = Hal(_brickConfiguration, _usedSensors)\n\n";
+        + "hal = Hal(_brickConfiguration)\n\n";
+
+    private static final String CFG_TOUCH_SENSOR = "" //
+        + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n";
+    private static final String CFG_ULTRASOUND_SENSOR = "" //
+        + "        '1':Hal.makeUltrasonicSensor(ev3dev.INPUT_2),\n";
 
     private static final String MAIN_METHOD = "" //
         + "def main():\n"
@@ -100,7 +102,7 @@ public class AstToEv3PythonVisitorTest {
     public void testCondition1() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals("", CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    if hal.isPressed('1'):\n"
             + "        hal.ledOn('green', 'on')\n"
@@ -122,7 +124,7 @@ public class AstToEv3PythonVisitorTest {
     public void testCondition2() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals("", CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    if hal.isPressed('1'):\n"
             + "        hal.ledOn('green', 'on')\n"
@@ -144,7 +146,7 @@ public class AstToEv3PythonVisitorTest {
     public void testCondition3() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals("", CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    if 5 < hal.getRegulatedMotorSpeed('B'):\n"
             + "        hal.turnOnRegulatedMotor('B', 30)\n"
@@ -386,7 +388,7 @@ public class AstToEv3PythonVisitorTest {
     public void testMethodReturn3() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals("", CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    hal.drawText(str(macheEtwas(hal.getColorSensorColour('3'))), 0, 0)\n"
             + "    \n"
@@ -663,6 +665,22 @@ public class AstToEv3PythonVisitorTest {
     }
 
     // TODO: add tests for files from "/syntax/text/*.xml"
+
+    private String make_globals(String motors, String sensors) {
+        return String.format("" //
+        + "_brickConfiguration = {\n"
+        + "    'wheel-diameter': 5.6,\n"
+        + "    'track-width': 17.0,\n"
+        + "    'actors': {\n"
+        + "        'A':Hal.makeMediumMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
+        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
+        + "    },\n"
+        + "    'sensors': {\n%s"
+        + "    },\n"
+        + "}\n"
+        + "hal = Hal(_brickConfiguration)\n\n",
+        sensors);
+    }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = Helper.generatePython(fileName, brickConfiguration);

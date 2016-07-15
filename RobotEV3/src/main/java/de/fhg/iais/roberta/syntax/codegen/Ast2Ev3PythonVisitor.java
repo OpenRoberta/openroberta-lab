@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -82,6 +82,7 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
@@ -126,7 +127,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private final Configuration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
-    private final Set<SensorType> usedSensors;
+    private final Set<UsedSensor> usedSensors;
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
 
@@ -138,7 +139,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<SensorType> usedSensors, int indentation) {
+    Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -161,7 +162,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<SensorType> usedSensors = null;// = UsedSensorsCheckVisitor.check(phrasesSet);//TODO checking for used sensors is not needed since ev3dev is much faster than lejos
+        Set<UsedSensor> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
         Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(programName, brickConfiguration, usedSensors, 0);
         astVisitor.generatePrefix(withWrapping);
 
@@ -229,12 +230,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private static String getEnumCode(IMode value) {
         return "'" + value.toString().toLowerCase() + "'";
     }
-    
+
     @Override
     public Void visitSoundSensor(SoundSensor<Void>  sensor) {
         return null;
     }
-    
+
     @Override
     public Void visitLightSensor(LightSensor<Void>  sensor) {
         return null;
@@ -1433,10 +1434,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("from ev3dev import ev3 as ev3dev\n");
         this.sb.append("import math\n\n");
 
+        // FIXME: lejos uses this to stop programs
         this.sb.append("TRUE = True\n");
         this.sb.append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append(generateRegenerateUsedSensors()).append("\n");
-        this.sb.append("hal = Hal(_brickConfiguration, _usedSensors)\n");
+        this.sb.append("hal = Hal(_brickConfiguration)\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1486,12 +1487,21 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         sb.append("    },\n");
     }
 
+    private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
+      for ( UsedSensor usedSensor : this.usedSensors ) {
+        if (port == usedSensor.getPort() && sensor.getName() == usedSensor.getSensorType()) {
+            return true;
+        }
+      }
+      return false;
+    }
+
     private void appendSensors(StringBuilder sb) {
         sb.append("    'sensors': {\n");
         for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             Sensor sensor = entry.getValue();
-            if ( sensor != null ) {
-                ISensorPort port = entry.getKey();
+            ISensorPort port = entry.getKey();
+            if (sensor != null && isSensorUsed(sensor, port)) {
                 sb.append("        '").append(port.getPortNumber()).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
@@ -1499,25 +1509,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         sb.append("    },\n");
     }
-
-    private String generateRegenerateUsedSensors() {
-        StringBuilder sb = new StringBuilder();
-        //String arrayOfSensors = "";
-        // FIXME: what is this used for?
-        //        for ( EV3Sensors usedSensor : this.usedSensors ) {
-        //            arrayOfSensors += "'" + getHardwareComponentTypeCode(usedSensor) + "',";
-        //        }
-        sb.append("_usedSensors = Set([");
-        //        if ( this.usedSensors.size() > 0 ) {
-        //            sb.append(arrayOfSensors.substring(0, arrayOfSensors.length() - 1));
-        //        }
-        sb.append("])");
-        return sb.toString();
-    }
-
-    //private static String getHardwareComponentTypeCode(HardwareComponentType type) {
-    //    return type.getClass().getSimpleName() + "." + type.getTypeName();
-    //}
 
     private static String generateRegenerateActor(Actor actor, IActorPort port) {
         StringBuilder sb = new StringBuilder();
