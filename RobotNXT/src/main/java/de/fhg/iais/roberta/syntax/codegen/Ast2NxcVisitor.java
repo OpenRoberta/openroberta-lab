@@ -1166,29 +1166,24 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        //final String Port = getEnumCode(colorSensor.getPort());
-        //colorSensor.getPort().getPortNumber();
+        //final String Port = getEnumCode(lightSensor.getPort());
+        this.sb.append("Sensor( IN_");
+        this.sb.append(lightSensor.getPort().getPortNumber());
+        this.sb.append(" )");
         //this.brickConfiguration.getSensors().entrySet();
-        //TODO: move to the part where sensors are being called
-
-        /* switch ( lightSensor.getMode() ) {
-            case COLOUR:
-                this.sb.append("IN_TYPE_COLORCOLOUR");
-                this.sb.append(")" + (";"));
-
-                break;
+        /*switch ( getEnumCode(lightSensor.getMode()) ) {
             case RED:
                 this.sb.append("IN_TYPE_COLORRED");
                 this.sb.append(")" + (";"));
-
                 break;
-            case RGB:
+            case AMBIENTLIGHT:
                 this.sb.append("IN_TYPE_COLORRGB");
                 this.sb.append(")" + (";"));
                 break;
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
-        }*/
+        }
+        this.sb.append(")" + (";"));*/
         return null;
     }
 
@@ -1203,16 +1198,16 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         ActorPort encoderMotorPort = (ActorPort) encoderSensor.getMotorPort();
         switch ( (MotorTachoMode) encoderSensor.getMode() ) {
             case RESET:
-                this.sb.append("ResetTachoCount(OUT_" + encoderMotorPort + ");");
+                this.sb.append("ResetTachoCount( OUT_" + encoderMotorPort + " );");
                 break;
             case ROTATION:
-                this.sb.append("NumberOfRotations(OUT_" + encoderMotorPort + ")");
+                this.sb.append("NumberOfRotations( OUT_" + encoderMotorPort + " )");
                 break;
             case DEGREE:
-                this.sb.append("MotorTachoCount(OUT_" + encoderMotorPort + ")");
+                this.sb.append("MotorTachoCount( OUT_" + encoderMotorPort + " )");
                 break;
             case DISTANCE:
-                this.sb.append("MotorDistance(OUT_" + encoderMotorPort + ", WHEELDIAMETER)");
+                this.sb.append("MotorDistance( OUT_" + encoderMotorPort + ", WHEELDIAMETER )");
                 break;
         }
         return null;
@@ -1232,11 +1227,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("GetTimerValue(timer" + timerSensor.getTimer() + ")");
+                this.sb.append("GetTimerValue( timer" + timerSensor.getTimer() + " )");
                 break;
             case RESET:
                 //this.sb.append("ResetTimerValue(" + timerSensor.getTimer() + ");");
-                this.sb.append("ResetTimerValue(timer" + timerSensor.getTimer() + ");");
+                this.sb.append("ResetTimerValue( timer" + timerSensor.getTimer() + " );");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -1246,14 +1241,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("Sensor(IN_" + touchSensor.getPort().getPortNumber());
-        this.sb.append(")");
+        this.sb.append("Sensor( IN_" + touchSensor.getPort().getPortNumber());
+        this.sb.append(" )");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("SensorUS(IN_" + ultrasonicSensor.getPort().getPortNumber() + ")");
+        this.sb.append("SensorUS( IN_" + ultrasonicSensor.getPort().getPortNumber() + " )");
         return null;
     }
 

@@ -98,6 +98,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSORS_TIMER_RESET = "robSensors_timer_reset";
     public static final String ROB_SENSOR_COLOUR_GET_SAMPLE = "robSensors_colour_getSample";
     public static final String ROB_SENSOR_LIGHT_GET_SAMPLE = "robSensors_light_getSample";
+    public static final String ROB_SENSOR_SOUND_GET_SAMPLE = "robSensors_sound_getSample";
     public static final String ROB_SENSOR_TOUCH_IS_PRESSED = "robSensors_touch_isPressed";
     public static final String ROB_SENSOR_ULTRASONIC_GET_SAMPLE = "robSensors_ultrasonic_getSample";
     public static final String ROB_SENSOR_INFRARED_GET_SAMPLE = "robSensors_infrared_getSample";
@@ -213,12 +214,16 @@ public final class BlocklyConstants {
     public static final String GYRO = "GYRO";
     public static final String TIME = "TIME";
     public static final String COLOR = "color";
+    public static final String LIGHT = "light";
+    public static final String SOUND = "sound";
 
     public static final String ROB_BRICK_GYRO = "robBrick_gyro";
     public static final String ROB_BRICK_INFRARED = "robBrick_infrared";
     public static final String ROB_BRICK_ULTRASONIC = "robBrick_ultrasonic";
     public static final String ROB_BRICK_TOUCH = "robBrick_touch";
     public static final String ROB_BRICK_COLOUR = "robBrick_colour";
+    public static final String ROB_BRICK_LIGHT = "robBrick_light";
+    public static final String ROB_BRICK_SOUND = "robBrick_sound";
 
     public static final String SIM_LED_ON = "sim_LED_on";
     public static final String SIM_LED_OFF = "sim_LED_off";
@@ -228,6 +233,7 @@ public final class BlocklyConstants {
     public static final String SIM_ULTRASONIC_GET_SAMPLE = "sim_ultrasonic_getSample";
     public static final String SIM_COLOUR_GET_SAMPLE = "sim_colour_getSample";
     public static final String SIM_LIGHT_GET_SAMPLE = "sim_light_getSample";
+    public static final String SIM_SOUND_GET_SAMPLE = "sim_sound_getSample";
 
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
