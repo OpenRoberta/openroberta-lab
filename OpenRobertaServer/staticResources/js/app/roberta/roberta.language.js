@@ -2,6 +2,24 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
         ROBERTA_TOOLBOX, userState, ROBERTA_PROGRAM, ROBERTA_USER, BRICKLY) {
 
     /**
+     * $.getScript() will append a timestamped query parameter to the url to
+     * prevent caching. The cache control should be handled using http-headers.
+     * see https://api.jquery.com/jquery.getscript/#caching-requests
+     */
+    function getCachedScript(url, options) {
+        // Allow user to set any option except for dataType, cache, and url
+        options = $.extend(options || {}, {
+            dataType : "script",
+            cache : true,
+            url : url
+        });
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        return jQuery.ajax(options);
+    }
+
+    /**
      * Initialize language switching
      */
     function initializeLanguages() {
@@ -28,7 +46,7 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
         $('#language li a[lang=' + language + ']').parent().addClass('disabled');
         userState.language = language;
         var url = 'blockly/msg/js/' + language + '.js';
-        $.getScript(url, function(data) {
+        getCachedScript(url).done(function(data) {
             translate();
             ready.resolve();
         });
