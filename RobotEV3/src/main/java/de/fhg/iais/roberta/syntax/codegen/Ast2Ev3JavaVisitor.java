@@ -94,15 +94,15 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -404,12 +404,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> sensor){
+    public Void visitSoundSensor(SoundSensor<Void> sensor) {
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void>  sensor) {
+    public Void visitLightSensor(LightSensor<Void> sensor) {
         return null;
     }
 
@@ -1611,7 +1611,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     private String generateRegenerateUsedSensor(UsedSensor usedSensor) {
         StringBuilder sb = new StringBuilder();
-        SensorType sensor = usedSensor.getSensorType();
+        SensorType sensor = usedSensor.getType();
         IMode mode = usedSensor.getMode();
 
         sb.append("new UsedSensor(");
@@ -1632,7 +1632,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     private static String generateRegenerateSensor(Sensor sensor) {
         StringBuilder sb = new StringBuilder();
-        sb.append("new Sensor(").append(getSensorTypeCode(sensor.getName()));
+        sb.append("new Sensor(").append(getSensorTypeCode(sensor.getType()));
         sb.append(")");
         return sb.toString();
     }

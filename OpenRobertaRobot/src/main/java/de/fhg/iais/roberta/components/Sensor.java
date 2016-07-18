@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.components;
 
 public class Sensor {
 
-    private SensorType name;
+    private final SensorType type;
 
     /**
      * Creates hardware component of type {@link Category#SENSOR} that will be attached to the brick configuration.
@@ -10,28 +10,24 @@ public class Sensor {
      *
      * @param componentType of the sensor
      */
-    public Sensor(SensorType sensorType) {
-        this.setName(sensorType);
+    public Sensor(SensorType type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
-        return "Sensor [" + getName() + "]";
+        return "Sensor [" + getType() + "]";
     }
 
-    public SensorType getName() {
-        return this.name;
-    }
-
-    public void setName(SensorType name) {
-        this.name = name;
+    public SensorType getType() {
+        return this.type;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
         return result;
     }
 
@@ -47,11 +43,11 @@ public class Sensor {
             return false;
         }
         Sensor other = (Sensor) obj;
-        if ( this.name == null ) {
-            if ( other.getName() != null ) {
+        if ( this.type == null ) {
+            if ( other.getType() != null ) {
                 return false;
             }
-        } else if ( !this.name.equals(other.getName()) ) {
+        } else if ( !this.type.equals(other.getType()) ) {
             return false;
         }
         return true;

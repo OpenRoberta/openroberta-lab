@@ -64,7 +64,7 @@ public class Jaxb2SimConfigurationTransformer {
                 hardwareComponent.setName(port.toString());
                 Block sensorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(sensorBlock);
-                sensorBlock.setType(sensor.getName().blocklyName());
+                sensorBlock.setType(sensor.getType().blocklyName());
                 values.add(hardwareComponent);
             }
         }

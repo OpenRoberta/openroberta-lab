@@ -1902,7 +1902,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
             this.sb.append("SetSensor( IN_");
-            switch ( entry.getValue().getName() ) {
+            switch ( entry.getValue().getType() ) {
                 case COLOR:
                     this.sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL );");
                     //this.sb.append("SetSensor(IN_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");

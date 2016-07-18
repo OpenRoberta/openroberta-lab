@@ -89,12 +89,12 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -232,12 +232,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void>  sensor) {
+    public Void visitSoundSensor(SoundSensor<Void> sensor) {
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void>  sensor) {
+    public Void visitLightSensor(LightSensor<Void> sensor) {
         return null;
     }
 
@@ -1488,12 +1488,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
-      for ( UsedSensor usedSensor : this.usedSensors ) {
-        if (port == usedSensor.getPort() && sensor.getName() == usedSensor.getSensorType()) {
-            return true;
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            if ( port == usedSensor.getPort() && sensor.getType() == usedSensor.getType() ) {
+                return true;
+            }
         }
-      }
-      return false;
+        return false;
     }
 
     private void appendSensors(StringBuilder sb) {
@@ -1501,7 +1501,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             Sensor sensor = entry.getValue();
             ISensorPort port = entry.getKey();
-            if (sensor != null && isSensorUsed(sensor, port)) {
+            if ( sensor != null && isSensorUsed(sensor, port) ) {
                 sb.append("        '").append(port.getPortNumber()).append("':");
                 sb.append(generateRegenerateSensor(sensor, port));
                 sb.append(",\n");
@@ -1539,7 +1539,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         String name = null;
         // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
         // ['ColorSensor', 'GyroSensor', 'I2cSensor', 'InfraredSensor', 'LightSensor', 'SoundSensor', 'TouchSensor', 'UltrasonicSensor']
-        switch ( sensor.getName() ) {
+        switch ( sensor.getType() ) {
             case COLOR:
                 name = "ColorSensor";
                 break;
@@ -1556,7 +1556,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 name = "UltrasonicSensor";
                 break;
             default:
-                throw new IllegalArgumentException("no mapping for " + sensor.getName() + "to ev3dev-lang-python");
+                throw new IllegalArgumentException("no mapping for " + sensor.getType() + "to ev3dev-lang-python");
         }
         sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();

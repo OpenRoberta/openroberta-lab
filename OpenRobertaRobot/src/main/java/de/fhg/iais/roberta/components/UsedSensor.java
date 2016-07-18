@@ -13,12 +13,12 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public class UsedSensor {
     private final ISensorPort port;
-    private final SensorType sensor;
+    private final SensorType type;
     private final IMode mode;
 
-    public UsedSensor(ISensorPort port, SensorType sensor, IMode mode) {
+    public UsedSensor(ISensorPort port, SensorType type, IMode mode) {
         this.port = port;
-        this.sensor = sensor;
+        this.type = type;
         this.mode = mode;
     }
 
@@ -32,8 +32,8 @@ public class UsedSensor {
     /**
      * @return the sensorType
      */
-    public SensorType getSensorType() {
-        return this.sensor;
+    public SensorType getType() {
+        return this.type;
     }
 
     /**
@@ -45,7 +45,7 @@ public class UsedSensor {
 
     @Override
     public String toString() {
-        return "UsedSensor [" + this.port + ", " + this.sensor + ", " + this.mode + "]";
+        return "UsedSensor [" + this.port + ", " + this.type + ", " + this.mode + "]";
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UsedSensor {
         int result = 1;
         result = prime * result + this.port.hashCode();
         result = prime * result + (this.mode == null ? 0 : this.mode.hashCode());
-        result = prime * result + this.sensor.hashCode();
+        result = prime * result + this.type.hashCode();
         return result;
     }
 
@@ -70,7 +70,7 @@ public class UsedSensor {
             return false;
         }
         UsedSensor other = (UsedSensor) obj;
-        if ( this.sensor != other.sensor ) {
+        if ( this.type != other.type ) {
             return false;
         }
         if ( this.port == null ) {

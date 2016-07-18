@@ -23,31 +23,31 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
         } else {
             switch ( sensor.getKind() ) {
                 case COLOR_SENSING:
-                    if ( usedSensor.getName() != SensorType.COLOR ) {
+                    if ( usedSensor.getType() != SensorType.COLOR ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case TOUCH_SENSING:
-                    if ( usedSensor.getName() != SensorType.TOUCH ) {
+                    if ( usedSensor.getType() != SensorType.TOUCH ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case ULTRASONIC_SENSING:
-                    if ( usedSensor.getName() != SensorType.ULTRASONIC ) {
+                    if ( usedSensor.getType() != SensorType.ULTRASONIC ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case INFRARED_SENSING:
-                    if ( usedSensor.getName() != SensorType.INFRARED ) {
+                    if ( usedSensor.getType() != SensorType.INFRARED ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case GYRO_SENSING:
-                    if ( usedSensor.getName() != SensorType.GYRO ) {
+                    if ( usedSensor.getType() != SensorType.GYRO ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }

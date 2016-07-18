@@ -57,7 +57,7 @@ public class SimConfiguration extends Configuration {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
                 sb.append("    ").append(port.getPortNumber()).append(": ");
-                String sensor = this.sensors.get(port).getName().toString();
+                String sensor = this.sensors.get(port).getType().toString();
                 sb.append(sensor.toLowerCase()).append(";\n");
             }
             sb.append("  }\n");

@@ -76,27 +76,27 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
         } else {
             switch ( sensor.getKind() ) {
                 case COLOR_SENSING:
-                    if ( usedSensor.getName() != SensorType.COLOR ) {
+                    if ( usedSensor.getType() != SensorType.COLOR ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case TOUCH_SENSING:
-                    if ( usedSensor.getName() != SensorType.TOUCH ) {
+                    if ( usedSensor.getType() != SensorType.TOUCH ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case ULTRASONIC_SENSING:
-                    if ( usedSensor.getName() != SensorType.ULTRASONIC ) {
+                    if ( usedSensor.getType() != SensorType.ULTRASONIC ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
                 case INFRARED_SENSING:
-                    if ( usedSensor.getName() != SensorType.INFRARED ) {
+                    if ( usedSensor.getType() != SensorType.INFRARED ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
                     }
                     break;
                 case GYRO_SENSING:
-                    if ( usedSensor.getName() != SensorType.GYRO ) {
+                    if ( usedSensor.getType() != SensorType.GYRO ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
