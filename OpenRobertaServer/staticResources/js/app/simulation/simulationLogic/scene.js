@@ -2,21 +2,27 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.constants' ], function(SIM, SIMATH, UTIL, CONSTANTS) {
+define([ 'simulation.simulation',
+         'simulation.math',
+         'util',
+         'robertaLogic.constants' ],
+         function(SIM, SIMATH, UTIL, CONSTANTS) {
 
     /**
      * Creates a new Scene.
      * 
      * @constructor
      */
-    function Scene(backgroundImg, layers, robot, obstacle) {
+    function Scene(backgroundImg, layers, robot, obstacle, ruler) {
         this.backgroundImg = backgroundImg;
         this.robot = robot;
         this.obstacle = obstacle;
-        this.uCtx = layers[0];
-        this.bCtx = layers[1];
-        this.oCtx = layers[2];
-        this.rCtx = layers[3];
+        this.ruler = ruler;
+        this.uCtx = layers[0]; // ? context
+        this.bCtx = layers[1]; // background context
+        this.oCtx = layers[2]; // object context
+        this.rCtx = layers[3]; // robot context
+        this.mCtx = layers[4]; // ruler == *m*easurement context
         this.playground = {
             x : 0,
             y : 0,
@@ -43,8 +49,25 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         }
     };
 
+    Scene.prototype.drawRuler = function() {
+        this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20,
+          this.ruler.wOld + 40, this.ruler.hOld + 40);
+        this.ruler.xOld = this.ruler.x;
+        this.ruler.yOld = this.ruler.y;
+        this.ruler.wOld = this.ruler.w;
+        this.ruler.hOld = this.ruler.h;
+        this.mCtx.restore();
+        this.mCtx.save();
+        this.mCtx.scale(SIM.getScale(), SIM.getScale());
+        if (this.ruler.img) {
+            this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y,
+                                this.ruler.w, this.ruler.h);
+        }
+    };
+
     Scene.prototype.drawObjects = function() {
-        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
+        this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20,
+          this.obstacle.wOld + 40, this.obstacle.hOld + 40);
         this.obstacle.xOld = this.obstacle.x;
         this.obstacle.yOld = this.obstacle.y;
         this.obstacle.wOld = this.obstacle.w;
@@ -53,12 +76,15 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.oCtx.save();
         this.oCtx.scale(SIM.getScale(), SIM.getScale());
         if (this.obstacle.img) {
-            this.oCtx.drawImage(this.obstacle.img, this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
+            this.oCtx.drawImage(
+                this.obstacle.img, this.obstacle.x, this.obstacle.y,
+                this.obstacle.w, this.obstacle.h);
         } else if (this.obstacle.color) {
             this.oCtx.fillStyle = this.obstacle.color;
             this.oCtx.shadowBlur = 5;
             this.oCtx.shadowColor = "black";
-            this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
+            this.oCtx.fillRect(this.obstacle.x, this.obstacle.y,
+                               this.obstacle.w, this.obstacle.h);
 //            this.oCtx.beginPath();
 //            this.oCtx.strokeStyle = "black";     
 //            this.oCtx.lineWidth = "1";
@@ -84,8 +110,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.rCtx.font = "10px Arial";
             var x, y;
             if (SIM.getBackground() === 5) {
-                x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
-                y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
+                x = UTIL.round(
+                    (this.robot.pose.x + this.robot.pose.transX) / 3, 1);
+                y = UTIL.round(
+                    (-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
                 this.rCtx.fillStyle = "#ffffff";
 
             } else {
@@ -106,22 +134,40 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.rCtx.fillText(UTIL.round(y, 0), endValue, line);
             line += 15;
             this.rCtx.fillText("Robot θ", endLabel, line);
-            this.rCtx.fillText(UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0), endValue, line);
+            this.rCtx.fillText(
+                UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0),
+                endValue,
+                line);
             line += 25;
             this.rCtx.fillText("Motor left", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0), endValue, line);
+            this.rCtx.fillText(
+                UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0),
+                endValue,
+                line);
             line += 15;
             this.rCtx.fillText("Motor right", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0), endValue, line);
+            this.rCtx.fillText(
+                UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0),
+                endValue,
+                line);
             line += 15;
             this.rCtx.fillText("Touch Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
+            this.rCtx.fillText(
+                UTIL.round(this.robot.touchSensor.value, 0),
+                endValue,
+                line);
             line += 15;
             this.rCtx.fillText("Light Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.colorSensor.lightValue, 0), endValue, line);
+            this.rCtx.fillText(
+                UTIL.round(this.robot.colorSensor.lightValue, 0),
+                endValue,
+                line);
             line += 15;
             this.rCtx.fillText("Ultra Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
+            this.rCtx.fillText(
+                UTIL.round(this.robot.ultraSensor.distance / 3.0, 0),
+                endValue,
+                line);
             line += 15;
             this.rCtx.fillText("Color Sensor", endLabel, line);
             this.rCtx.beginPath();
@@ -133,7 +179,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
         this.rCtx.translate(this.robot.pose.x, this.robot.pose.y);
-        this.rCtx.rotate(SIMATH.toRadians(SIMATH.toDegree(this.robot.pose.theta) - 90));
+        this.rCtx.rotate(
+            SIMATH.toRadians(SIMATH.toDegree(this.robot.pose.theta) - 90));
         this.rCtx.scale(1, -1);
         //axis
         this.rCtx.lineWidth = "2.5";
@@ -144,14 +191,21 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.stroke();
         //back wheel
         this.rCtx.fillStyle = this.robot.wheelBack.color;
-        this.rCtx.fillRect(this.robot.wheelBack.x, this.robot.wheelBack.y, this.robot.wheelBack.w, this.robot.wheelBack.h);
+        this.rCtx.fillRect(this.robot.wheelBack.x, this.robot.wheelBack.y,
+                           this.robot.wheelBack.w, this.robot.wheelBack.h);
         //this.robot
         this.rCtx.shadowBlur = 0;
         this.rCtx.shadowOffsetX = 0;
         this.rCtx.fillStyle = this.robot.touchSensor.color;
-        this.rCtx.fillRect(this.robot.frontRight.x + 12.5, this.robot.frontRight.y, 20, 10);
+        this.rCtx.fillRect(
+            this.robot.frontRight.x + 12.5,
+            this.robot.frontRight.y,
+            20,
+            10);
         this.rCtx.fillStyle = this.robot.led.color;
-        var grd = this.rCtx.createRadialGradient(this.robot.led.x, this.robot.led.y, 1, this.robot.led.x, this.robot.led.y, 15);
+        var grd = this.rCtx.createRadialGradient(
+            this.robot.led.x, this.robot.led.y, 1,
+            this.robot.led.x, this.robot.led.y, 15);
         grd.addColorStop(0, this.robot.led.color);
         grd.addColorStop(0.5, this.robot.geom.color);
         this.rCtx.shadowBlur = 5;
@@ -159,15 +213,34 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.fillStyle = grd;
         this.rCtx.beginPath();
         this.rCtx.moveTo(this.robot.geom.x + 2.5, this.robot.geom.y);
-        this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w - 2.5, this.robot.geom.y);
-        this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y, this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + 2.5);
-        this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h - 2.5);
-        this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x + this.robot.geom.w - 2.5,
-                this.robot.geom.y + this.robot.geom.h);
-        this.rCtx.lineTo(this.robot.geom.x + 2.5, this.robot.geom.y + this.robot.geom.h);
-        this.rCtx.quadraticCurveTo(this.robot.geom.x, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x, this.robot.geom.y + this.robot.geom.h - 2.5);
+        this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w - 2.5,
+                         this.robot.geom.y);
+        this.rCtx.quadraticCurveTo(
+            this.robot.geom.x + this.robot.geom.w,
+            this.robot.geom.y,
+            this.robot.geom.x + this.robot.geom.w,
+            this.robot.geom.y + 2.5);
+        this.rCtx.lineTo(
+            this.robot.geom.x + this.robot.geom.w,
+            this.robot.geom.y + this.robot.geom.h - 2.5);
+        this.rCtx.quadraticCurveTo(
+            this.robot.geom.x + this.robot.geom.w,
+            this.robot.geom.y + this.robot.geom.h,
+            this.robot.geom.x + this.robot.geom.w - 2.5,
+            this.robot.geom.y + this.robot.geom.h);
+        this.rCtx.lineTo(this.robot.geom.x + 2.5,
+                         this.robot.geom.y + this.robot.geom.h);
+        this.rCtx.quadraticCurveTo(
+            this.robot.geom.x,
+            this.robot.geom.y + this.robot.geom.h,
+            this.robot.geom.x,
+            this.robot.geom.y + this.robot.geom.h - 2.5);
         this.rCtx.lineTo(this.robot.geom.x, this.robot.geom.y + 2.5);
-        this.rCtx.quadraticCurveTo(this.robot.geom.x, this.robot.geom.y, this.robot.geom.x + 2.5, this.robot.geom.y);
+        this.rCtx.quadraticCurveTo(
+            this.robot.geom.x,
+            this.robot.geom.y,
+            this.robot.geom.x + 2.5,
+            this.robot.geom.y);
         this.rCtx.closePath();
         this.rCtx.fill();
 
@@ -176,10 +249,14 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.shadowOffsetX = 2;
         if (this.robot.touchSensor.value === 1) {
             this.rCtx.fillStyle = 'red';
-            this.rCtx.fillRect(this.robot.frontRight.x, this.robot.frontRight.y, this.robot.frontLeft.x - this.robot.frontRight.x, 3.5);
+            this.rCtx.fillRect(
+                this.robot.frontRight.x, this.robot.frontRight.y,
+                this.robot.frontLeft.x - this.robot.frontRight.x, 3.5);
         } else {
             this.rCtx.fillStyle = this.robot.touchSensor.color;
-            this.rCtx.fillRect(this.robot.frontRight.x, this.robot.frontRight.y, this.robot.frontLeft.x - this.robot.frontRight.x, 3.5);
+            this.rCtx.fillRect(
+                this.robot.frontRight.x, this.robot.frontRight.y,
+                this.robot.frontLeft.x - this.robot.frontRight.x, 3.5);
         }
         this.rCtx.shadowBlur = 0;
         this.rCtx.shadowOffsetX = 0;
@@ -190,9 +267,13 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.fill();
         //wheels
         this.rCtx.fillStyle = this.robot.wheelLeft.color;
-        this.rCtx.fillRect(this.robot.wheelLeft.x, this.robot.wheelLeft.y, this.robot.wheelLeft.w, this.robot.wheelLeft.h);
+        this.rCtx.fillRect(
+            this.robot.wheelLeft.x, this.robot.wheelLeft.y,
+            this.robot.wheelLeft.w, this.robot.wheelLeft.h);
         this.rCtx.fillStyle = this.robot.wheelRight.color;
-        this.rCtx.fillRect(this.robot.wheelRight.x, this.robot.wheelRight.y, this.robot.wheelRight.w, this.robot.wheelRight.h);
+        this.rCtx.fillRect(
+            this.robot.wheelRight.x, this.robot.wheelRight.y,
+            this.robot.wheelRight.w, this.robot.wheelRight.h);
         this.rCtx.lineWidth = "0.5";
         //color   
         this.rCtx.beginPath();
@@ -213,8 +294,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.lineWidth = "0.5";
         this.rCtx.strokeStyle = "#555555";
         for (var i = 0; i < this.robot.ultraSensor.u.length; i++) {
-            this.rCtx.moveTo(this.robot.ultraSensor.rx, this.robot.ultraSensor.ry);
-            this.rCtx.lineTo(this.robot.ultraSensor.u[i].x, this.robot.ultraSensor.u[i].y);
+            this.rCtx.moveTo(this.robot.ultraSensor.rx,
+                             this.robot.ultraSensor.ry);
+            this.rCtx.lineTo(this.robot.ultraSensor.u[i].x,
+                             this.robot.ultraSensor.u[i].y);
         }
         this.rCtx.stroke();
         this.rCtx.beginPath();
@@ -254,7 +337,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.robot.backRight.bumped = false;
 
             for (var i = 0; i < SIM.obstacleList.length; i++) {
-                var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
+                var obstacleLines = SIMATH.getLinesFromRect(
+                    SIM.obstacleList[i]);
                 for (var k = 0; k < obstacleLines.length; k++) {
                     var interPoint = SIMATH.getIntersectionPoint({
                         x1 : this.robot.frontLeft.rx,
@@ -263,7 +347,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                         y2 : this.robot.frontRight.ry
                     }, obstacleLines[k]);
                     if (interPoint) {
-                        if (Math.abs(this.robot.frontLeft.rx - interPoint.x) < Math.abs(this.robot.frontRight.rx - interPoint.x)) {
+                        if (Math.abs(this.robot.frontLeft.rx - interPoint.x) <
+                            Math.abs(this.robot.frontRight.rx - interPoint.x)) {
                             this.robot.frontLeft.bumped = true;
                         } else {
                             this.robot.frontRight.bumped = true;
@@ -280,8 +365,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                             x : obstacleLines[k].x2,
                             y : obstacleLines[k].y2
                         });
-                        if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
-                                * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
+                        if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) +
+                                SIMATH.sqr(this.robot.touchSensor.ry - p.y) <
+                                SIM.getDt() *
+                                Math.max(Math.abs(this.robot.right),
+                            Math.abs(this.robot.left))) {
                             this.robot.frontLeft.bumped = true;
                             this.robot.frontRight.bumped = true;
                             this.robot.touchSensor.value = 1;
@@ -293,7 +381,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                                 y2 : this.robot.backRight.ry
                             }, obstacleLines[k]);
                             if (interPoint) {
-                                if (Math.abs(this.robot.backLeft.rx - interPoint.x) < Math.abs(this.robot.backRight.rx - interPoint.x)) {
+                                if (Math.abs(
+                                      this.robot.backLeft.rx - interPoint.x) <
+                                    Math.abs(
+                                      this.robot.backRight.rx - interPoint.x)) {
                                     this.robot.backLeft.bumped = true;
                                 } else {
                                     this.robot.backRight.bumped = true;
@@ -309,8 +400,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                                     x : obstacleLines[k].x2,
                                     y : obstacleLines[k].y2
                                 });
-                                if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt()
-                                        * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
+                                if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) +
+                                    SIMATH.sqr(this.robot.backMiddle.ry - p.y) <
+                                    SIM.getDt() *
+                                        Math.max(Math.abs(this.robot.right),
+                                    Math.abs(this.robot.left))) {
                                     this.robot.backLeft.bumped = true;
                                     this.robot.backRight.bumped = true;
                                 }
@@ -330,7 +424,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var r = 0;
             var g = 0
             var b = 0;
-            var colors = this.uCtx.getImageData(Math.round(this.robot.colorSensor.rx - 3), Math.round(this.robot.colorSensor.ry - 3), 6, 6);
+            var colors = this.uCtx.getImageData(
+                Math.round(this.robot.colorSensor.rx - 3),
+                Math.round(this.robot.colorSensor.ry - 3), 
+                6, 
+                6);
             //var colors = uCtx.getImageData(Math.round(this.robot.colorSensor.rx - 4), Math.round(this.robot.colorSensor.ry - 4), 8, 8);
             var out = [ 0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140 ]; // outside the circle
             // var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
@@ -352,28 +450,40 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var blue = b / num;
             if (this.robot.colorSensor) {
                 values.color = {};
-                this.robot.colorSensor.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
+                this.robot.colorSensor.colorValue = SIMATH
+                    .getColor(SIMATH.rgbToHsv(red, green, blue));
                 values.color.colorValue = this.robot.colorSensor.colorValue;
-                if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.NONE) {
+                if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.NONE) {
                     this.robot.colorSensor.color = 'grey';
-                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BLACK) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.BLACK) {
                     this.robot.colorSensor.color = 'black';
-                } else if (this.robot.colorSensor.colorValue == CONSTANTS.COLOR_ENUM.WHITE) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.WHITE) {
                     this.robot.colorSensor.color = 'white';
-                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.YELLOW) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.YELLOW) {
                     this.robot.colorSensor.color = 'yellow';
-                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BROWN) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.BROWN) {
                     this.robot.colorSensor.color = 'brown';
-                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.RED) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.RED) {
                     this.robot.colorSensor.color = 'red';
-                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BLUE) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.BLUE) {
                     this.robot.colorSensor.color = 'blue';
-                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.GREEN) {
+                } else if (this.robot.colorSensor.colorValue ===
+                        CONSTANTS.COLOR_ENUM.GREEN) {
                     this.robot.colorSensor.color = 'lime';
                 }
-                this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
+                this.robot.colorSensor.lightValue = (
+                    (red + green + blue) / 3 / 2.55);
                 values.color.red = this.robot.colorSensor.lightValue;
-                values.color.rgb = [ UTIL.round(red / 2.55, 0), UTIL.round(green / 2.55, 0), UTIL.round(blue / 2.55, 0) ];
+                values.color.rgb = [ UTIL.round(red / 2.55, 0),
+                                     UTIL.round(green / 2.55, 0),
+                                     UTIL.round(blue / 2.55, 0) ];
                 values.color.ambientlight = 0;
             }
         }
@@ -384,45 +494,70 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var u3 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta),
-                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta)
+                x2 : this.robot.ultraSensor.rx +
+                         CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta),
+                y2 : this.robot.ultraSensor.ry +
+                         CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta)
             }
             var u1 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta - Math.PI / 8),
-                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta - Math.PI / 8)
+                x2 : this.robot.ultraSensor.rx + 
+                         CONSTANTS.MAXDIAG * Math.cos(
+                             this.robot.pose.theta - Math.PI / 8),
+                y2 : this.robot.ultraSensor.ry + 
+                         CONSTANTS.MAXDIAG * Math.sin(
+                             this.robot.pose.theta - Math.PI / 8)
             }
             var u2 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta - Math.PI / 16),
-                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta - Math.PI / 16)
+                x2 : this.robot.ultraSensor.rx + 
+                         CONSTANTS.MAXDIAG * Math.cos(
+                             this.robot.pose.theta - Math.PI / 16),
+                y2 : this.robot.ultraSensor.ry + 
+                         CONSTANTS.MAXDIAG * Math.sin(
+                             this.robot.pose.theta - Math.PI / 16)
             }
             var u5 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta + Math.PI / 8),
-                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta + Math.PI / 8)
+                x2 : this.robot.ultraSensor.rx + 
+                         CONSTANTS.MAXDIAG * Math.cos(
+                             this.robot.pose.theta + Math.PI / 8),
+                y2 : this.robot.ultraSensor.ry + 
+                         CONSTANTS.MAXDIAG * Math.sin(
+                             this.robot.pose.theta + Math.PI / 8)
             }
             var u4 = {
                 x1 : this.robot.ultraSensor.rx,
                 y1 : this.robot.ultraSensor.ry,
-                x2 : this.robot.ultraSensor.rx + CONSTANTS.MAXDIAG * Math.cos(this.robot.pose.theta + Math.PI / 16),
-                y2 : this.robot.ultraSensor.ry + CONSTANTS.MAXDIAG * Math.sin(this.robot.pose.theta + Math.PI / 16)
+                x2 : this.robot.ultraSensor.rx + 
+                         CONSTANTS.MAXDIAG * Math.cos(
+                             this.robot.pose.theta + Math.PI / 16),
+                y2 : this.robot.ultraSensor.ry + 
+                         CONSTANTS.MAXDIAG * Math.sin(
+                             this.robot.pose.theta + Math.PI / 16)
             }
 
             var uA = new Array(u1, u2, u3, u4, u5);
             this.robot.ultraSensor.distance = CONSTANTS.MAXDIAG;
             for (var i = 0; i < SIM.obstacleList.length; i++) {
-                var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
-                var uDis = [ CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG ];
+                var obstacleLines = (
+                    SIMATH.getLinesFromRect(SIM.obstacleList[i]));
+                var uDis = [ CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG,
+                             CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG,
+                             CONSTANTS.MAXDIAG ];
                 for (var k = 0; k < obstacleLines.length; k++) {
                     for (var j = 0; j < uA.length; j++) {
-                        var interPoint = SIMATH.getIntersectionPoint(uA[j], obstacleLines[k]);
+                        var interPoint = SIMATH.getIntersectionPoint(
+                            uA[j], obstacleLines[k]);
                         if (interPoint) {
-                            var dis = Math.sqrt((interPoint.x - this.robot.ultraSensor.rx) * (interPoint.x - this.robot.ultraSensor.rx)
-                                    + (interPoint.y - this.robot.ultraSensor.ry) * (interPoint.y - this.robot.ultraSensor.ry));
+                            var dis = Math.sqrt(
+                                (interPoint.x - this.robot.ultraSensor.rx) *
+                                (interPoint.x - this.robot.ultraSensor.rx) +
+                                (interPoint.y - this.robot.ultraSensor.ry) *
+                                (interPoint.y - this.robot.ultraSensor.ry));
                             if (dis < this.robot.ultraSensor.distance) {
                                 this.robot.ultraSensor.distance = dis;
                                 this.robot.ultraSensor.cx = interPoint.x;
@@ -473,7 +608,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         if (this.robot.gyroSensor) {
             values.gyro = {};
             values.gyro.angle = SIMATH.toDegree(this.robot.pose.theta);
-            values.gyro.rate = SIM.getDt() * SIMATH.toDegree(this.robot.pose.thetaDiff);
+            values.gyro.rate = SIM.getDt() * SIMATH.toDegree(
+                this.robot.pose.thetaDiff);
         }
         if (this.robot.buttons) {
             values.buttons = {};
@@ -481,7 +617,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var i = 0
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
-                values.buttons.any = values.buttons.any || this.robot.buttons[key];
+                values.buttons.any = (
+                    values.buttons.any || this.robot.buttons[key]);
             }
         }
         if (this.robot.webAudio) {
