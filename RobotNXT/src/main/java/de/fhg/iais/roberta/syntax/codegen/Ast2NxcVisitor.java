@@ -645,7 +645,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // TODO: delete arrays, fix variables and sensors
+    // TODO: delete arrays
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         switch ( showTextAction.getMsg().getKind() ) {
@@ -657,32 +657,42 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 this.sb.append(", ");
                 showTextAction.getMsg().visit(this);
                 break;
-            case COLOR_CONST:
-            case NUM_CONST:
-                this.sb.append("NumOut( ");
-                showTextAction.getX().visit(this);
-                this.sb.append(", LCD_LINE");
-                showTextAction.getY().visit(this);
-                this.sb.append(", ");
-                showTextAction.getMsg().visit(this);
-                break;
+            case TOUCH_SENSING:
             case BOOL_CONST:
-                this.sb.append("TextOut( ");
+            	this.sb.append("BoolOut( ");
                 showTextAction.getX().visit(this);
                 this.sb.append(", LCD_LINE");
                 showTextAction.getY().visit(this);
                 this.sb.append(", ");
-                this.sb.append("\"");
                 showTextAction.getMsg().visit(this);
-                this.sb.append("\"");
                 break;
             case VAR:
-                this.sb.append("TextOut( ");
-                showTextAction.getX().visit(this);
-                this.sb.append(", LCD_LINE");
-                showTextAction.getY().visit(this);
-                this.sb.append(",");
-                showTextAction.getMsg().visit(this);
+                switch (showTextAction.getMsg().getVarType()){
+                case STRING:
+                	this.sb.append("TextOut( ");
+                    showTextAction.getX().visit(this);
+                    this.sb.append(", LCD_LINE");
+                    showTextAction.getY().visit(this);
+                    this.sb.append(",");
+                    showTextAction.getMsg().visit(this);  
+                    break;
+                case BOOLEAN:
+                	this.sb.append("BoolOut( ");
+                    showTextAction.getX().visit(this);
+                    this.sb.append(", LCD_LINE");
+                    showTextAction.getY().visit(this);
+                    this.sb.append(", ");
+                    showTextAction.getMsg().visit(this);
+                    break;
+                default:
+                	this.sb.append("NumOut( ");
+                    showTextAction.getX().visit(this);
+                    this.sb.append(", LCD_LINE");
+                    showTextAction.getY().visit(this);
+                    this.sb.append(", ");
+                    showTextAction.getMsg().visit(this);
+                    break;
+                }              
                 break;
             default:
                 this.sb.append("NumOut( ");
@@ -1345,25 +1355,25 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
             switch ( indexOfFunct.getParam().get(0).getVarType() ) {
                 case ARRAY_NUMBER:
-                    methodName = "ArrFindLastNum(";
+                    methodName = "ArrFindLastNum( ";
                     break;
                 case ARRAY_STRING:
-                    methodName = "ArrFindLastStr(";
+                    methodName = "ArrFindLastStr( ";
                     break;
                 case ARRAY_BOOLEAN:
-                    methodName = "ArrFindLastBool(";
+                    methodName = "ArrFindLastBool( ";
                     break;
             }
         } else {
             switch ( indexOfFunct.getParam().get(0).getVarType() ) {
                 case ARRAY_NUMBER:
-                    methodName = "ArrFindFirstNum(";
+                    methodName = "ArrFindFirstNum( ";
                     break;
                 case ARRAY_STRING:
-                    methodName = "ArrFindFirstStr(";
+                    methodName = "ArrFindFirstStr( ";
                     break;
                 case ARRAY_BOOLEAN:
-                    methodName = "ArrFindFirstBool(";
+                    methodName = "ArrFindFirstBool( ";
                     break;
             }
         }
@@ -1371,7 +1381,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        this.sb.append(" )");
         return null;
     }
 
