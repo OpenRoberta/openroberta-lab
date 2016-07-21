@@ -272,7 +272,7 @@ public class AstToLejosJavaVisitorTest {
         final String a = "" //
             + MAIN_METHOD
 
-            + "       RotateMotorPID(OUT_A,30,360.0*1,20,40,100);"
+            + "       RotateMotor(OUT_B, 30, 360 * 1);"
             + "        macheEtwas(10, 10);"
 
             + "   void macheEtwas(float x, float x2) {\n"

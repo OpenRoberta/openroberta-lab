@@ -720,97 +720,28 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        String speedSign = "";
-        String methodName = "";
-        String p = ""; //proportional factor
-        String i = ""; // integral factor ,PID constants
-        String d = ""; // derivative factor
-        boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection();
-        if ( this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD ) {
-            ;
-
-            {
-
-                speedSign = "-";
-            }
-
-        }
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-                methodName = "RotateMotorPID";
+        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+        if ( isDuration ) {
+            this.sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", ");
+            motorOnAction.getParam().getSpeed().visit(this);
+            if ( motorOnAction.getDurationMode() == MotorMoveMode.ROTATIONS ) {
+                this.sb.append(", 360 * ");
             } else {
-                methodName = "OnReg";
+                this.sb.append(", ");
             }
+            motorOnAction.getParam().getDuration().getValue().visit(this);
         } else {
-            if ( isDuration ) {
-                methodName = "RotateMotor";
-
-            } else { // without duration Unreg
-                methodName = "OnUnReg";
-            }
-
-        }
-
-        this.sb.append(methodName + "(OUT_");
-
-        if ( this.brickConfiguration.getLeftMotorPort() == ActorPort.B ) {
-            ;
-
-            {
-                // this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-            }
-        } else {
-            this.sb.append(this.brickConfiguration.getLeftMotorPort());
-        }
-
-        this.sb.append("," + speedSign);
-        motorOnAction.getParam().getSpeed().visit(this);
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-                this.sb.append("," + p + i + d);
-            }
-        } else {
-            if ( isDuration ) {
-                this.sb.append(",");
-            }
-        }
-        {
             if ( isRegulatedDrive ) {
-                if ( isDuration ) {
-
-                    if ( motorOnAction.getParam().getDuration().getType() == MotorMoveMode.ROTATIONS ) {
-
-                        this.sb.append("360.0*");
-                        motorOnAction.getParam().getDuration().getValue().visit(this);
-                        p = "20";
-                        i = "40";
-                        d = "100";
-                        this.sb.append("," + p + "," + i + "," + d);
-
-                    }
-
-                    this.sb.append(");");
-                    return null;
-                }
-                this.sb.append(",OUT_REGMODE_SPEED" + ");");
-
-                return null;
-            }
-
-            else {
-                if ( isDuration ) {
-                    this.sb.append("360.0*");
-                    motorOnAction.getParam().getDuration().getValue().visit(this);
-
-                }
-
-                this.sb.append(");");
-                return null;
+                this.sb.append("OnFwdReg(OUT_" + motorOnAction.getPort() + ", ");
+                motorOnAction.getParam().getSpeed().visit(this);
+                this.sb.append(", OUT_REGMODE_SPEED");
+            } else {
+                this.sb.append("OnFwd(OUT_" + motorOnAction.getPort() + ", ");
+                motorOnAction.getParam().getSpeed().visit(this);
             }
         }
-
+        this.sb.append(");");
+        return null;
     }
 
     @Override
@@ -839,7 +770,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        final boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
         final String methodName = "MotorPower";
         this.sb.append(methodName + "(OUT_" + motorGetPowerAction.getPort());
         this.sb.append(");");
@@ -895,7 +825,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
         }
         if ( reverse ) {
-            this.sb.append(", -1 * ");
+            this.sb.append(", (-1) * ");
         } else {
             this.sb.append(", ");
         }
@@ -915,121 +845,43 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override // TURN ACTIONS
 
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-
         final boolean isDuration = turnAction.getParam().getDuration() != null;
+        final boolean reverse =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
         String methodName = "";
-        String speedSign = "";
-        String turnpct = "";
-        boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-
-        this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection();
-        if ( this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD ) {
-            ;
-
-            {
-
-                speedSign = "-";
-            }
-
-        }
-
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-                methodName = "RotateMotorEx";
-
-                if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-                    speedSign = "-";
-
-                }
-            } else {
-                methodName = "OnFwdSync";
-                turnpct = "100";
-
-                if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-                    methodName = "OnRevSync";
-                    speedSign = "-";
-                    turnpct = "-100";
-
-                }
-
-            }
+        int turnpct = 100;
+        if ( isDuration ) {
+            methodName = "RotateMotorEx";
         } else {
-            if ( isDuration ) {
-                methodName = "RotateMotor";
-
-                if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-                    speedSign = "-";
-
-                }
-            } else {
-                methodName = "OnFwd";
-
-                if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-                    methodName = "OnRev";
-                    speedSign = "-";
-
-                }
-
-            }
-
+            methodName = "OnFwdSync";
         }
-
         this.sb.append(methodName + "(OUT_");
-        if ( this.brickConfiguration.getLeftMotorPort() == ActorPort.C ) {
-            ;
-
-            {
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-            }
-        }
-
-        else {
+        if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
+            turnpct *= -1;
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
             this.sb.append(this.brickConfiguration.getRightMotorPort());
-
+        } else {
+            this.sb.append(this.brickConfiguration.getRightMotorPort());
+            this.sb.append(this.brickConfiguration.getLeftMotorPort());
         }
-
-        this.sb.append("," + speedSign);
+        if ( reverse ) {
+            this.sb.append(", (-1) * ");
+        } else {
+            this.sb.append(", ");
+        }
         turnAction.getParam().getSpeed().visit(this);
-
-        if ( isRegulatedDrive ) {
-            //  if ( isDuration ) {
-            this.sb.append("," + turnpct);
-
-        } else if ( isDuration ) {
-            this.sb.append(",");
+        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+            turnpct *= -1;
         }
-
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-
-                if ( turnAction.getParam().getDuration().getType() == MotorMoveMode.DEGREE ) {
-
-                    this.sb.append("360.0*");
-                    turnAction.getParam().getDuration().getValue().visit(this);
-
-                    this.sb.append("," + turnpct);
-                    if ( turnpct == this.left ) {
-                        this.sb.append("-100");
-                    } else {
-                        this.sb.append("100");
-                    }
-                    this.sb.append("," + turnpct + "true" + ",true");
-                }
-            }
+        this.sb.append(", ");
+        if ( isDuration ) {
+            this.sb.append("(");
+            turnAction.getParam().getDuration().getValue().visit(this);
+            this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true");
+        } else {
+            this.sb.append(turnpct);
         }
-
-        else {
-            if ( isDuration ) {
-                this.sb.append("360.0*");
-                turnAction.getParam().getDuration().getValue().visit(this);
-            }
-
-            this.sb.append(");");
-            return null;
-        }
-
         this.sb.append(");");
         return null;
     }
@@ -1042,23 +894,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             methodName = "OffEx";
         } else {
             methodName = "Off";
-
         }
-
         this.sb.append(methodName + "(OUT_");
-        if ( this.brickConfiguration.getLeftMotorPort() == ActorPort.C ) {
-            ;
-
-            {
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-            }
-        }
-
-        else {
+        if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
             this.sb.append(this.brickConfiguration.getRightMotorPort());
-
+        } else {
+            this.sb.append(this.brickConfiguration.getRightMotorPort());
+            this.sb.append(this.brickConfiguration.getLeftMotorPort());
         }
         this.sb.append(");");
         return null;
