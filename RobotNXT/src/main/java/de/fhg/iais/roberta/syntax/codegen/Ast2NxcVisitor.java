@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
+import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.ShowPicture;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -778,28 +779,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-
-        String methodName = "";
-        boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        if ( isRegulatedDrive ) {
-            methodName = "OffEx";
+        if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
+            this.sb.append("Float(OUT_" + motorStopAction.getPort());
         } else {
-            methodName = "Off";
-
+            this.sb.append("Off(OUT_" + motorStopAction.getPort());
         }
-
-        this.sb.append(methodName + "(OUT_");
-        if ( this.brickConfiguration.getLeftMotorPort() == ActorPort.C ) {
-            ;
-
-            {
-                // this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-            }
-        } else {
-            this.sb.append(this.brickConfiguration.getLeftMotorPort());
-        }
-
         this.sb.append(");");
         return null;
     }
@@ -888,14 +872,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        String methodName = "";
-        boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        if ( isRegulatedDrive ) {
-            methodName = "OffEx";
-        } else {
-            methodName = "Off";
-        }
-        this.sb.append(methodName + "(OUT_");
+        this.sb.append("Off(OUT_");
         if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
             this.sb.append(this.brickConfiguration.getRightMotorPort());
