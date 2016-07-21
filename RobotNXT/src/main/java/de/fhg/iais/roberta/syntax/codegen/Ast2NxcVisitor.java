@@ -659,7 +659,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 break;
             case TOUCH_SENSING:
             case BOOL_CONST:
-            	this.sb.append("BoolOut( ");
+                this.sb.append("BoolOut( ");
                 showTextAction.getX().visit(this);
                 this.sb.append(", LCD_LINE");
                 showTextAction.getY().visit(this);
@@ -667,32 +667,32 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 showTextAction.getMsg().visit(this);
                 break;
             case VAR:
-                switch (showTextAction.getMsg().getVarType()){
-                case STRING:
-                	this.sb.append("TextOut( ");
-                    showTextAction.getX().visit(this);
-                    this.sb.append(", LCD_LINE");
-                    showTextAction.getY().visit(this);
-                    this.sb.append(",");
-                    showTextAction.getMsg().visit(this);  
-                    break;
-                case BOOLEAN:
-                	this.sb.append("BoolOut( ");
-                    showTextAction.getX().visit(this);
-                    this.sb.append(", LCD_LINE");
-                    showTextAction.getY().visit(this);
-                    this.sb.append(", ");
-                    showTextAction.getMsg().visit(this);
-                    break;
-                default:
-                	this.sb.append("NumOut( ");
-                    showTextAction.getX().visit(this);
-                    this.sb.append(", LCD_LINE");
-                    showTextAction.getY().visit(this);
-                    this.sb.append(", ");
-                    showTextAction.getMsg().visit(this);
-                    break;
-                }              
+                switch ( showTextAction.getMsg().getVarType() ) {
+                    case STRING:
+                        this.sb.append("TextOut( ");
+                        showTextAction.getX().visit(this);
+                        this.sb.append(", LCD_LINE");
+                        showTextAction.getY().visit(this);
+                        this.sb.append(",");
+                        showTextAction.getMsg().visit(this);
+                        break;
+                    case BOOLEAN:
+                        this.sb.append("BoolOut( ");
+                        showTextAction.getX().visit(this);
+                        this.sb.append(", LCD_LINE");
+                        showTextAction.getY().visit(this);
+                        this.sb.append(", ");
+                        showTextAction.getMsg().visit(this);
+                        break;
+                    default:
+                        this.sb.append("NumOut( ");
+                        showTextAction.getX().visit(this);
+                        this.sb.append(", LCD_LINE");
+                        showTextAction.getY().visit(this);
+                        this.sb.append(", ");
+                        showTextAction.getMsg().visit(this);
+                        break;
+                }
                 break;
             default:
                 this.sb.append("NumOut( ");
@@ -877,123 +877,39 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isDuration = driveAction.getParam().getDuration() != null;
+        final boolean reverse =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
         String methodName = "";
-        String speedSign = "";
-        String turnpct = ""; //turn ratio
-        boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection();
-        if ( this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD ) {
-            ;
-
-            {
-
-                speedSign = "-";
-            }
-
-        }
-
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-                methodName = "RotateMotorEx";
-                if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
-                    speedSign = "-";
-                }
-
-            }
-
-            else {
-                methodName = "OnFwdReg";
-                if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
-                    methodName = "OnRevReg";
-                    speedSign = "-";
-
-                }
-
-            }
-
+        if ( isDuration ) {
+            methodName = "RotateMotorEx";
         } else {
-            if ( isDuration ) {
-                methodName = "RotateMotor";
-                if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
-                    speedSign = "-";
-                }
-            } else {
-                methodName = "OnFwd";
-                if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
-                    methodName = "OnRev";
-
-                }
-
-            }
-
+            methodName = "OnFwdReg";
         }
-
         this.sb.append(methodName + "(OUT_");
-        if ( this.brickConfiguration.getLeftMotorPort() == ActorPort.C ) {
-            ;
-
-            {
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-            }
-        }
-
-        else {
+        if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
             this.sb.append(this.brickConfiguration.getRightMotorPort());
-
-        }
-
-        this.sb.append("," + speedSign);
-        driveAction.getParam().getSpeed().visit(this);
-
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-                this.sb.append("," + turnpct);
-            }
-        } else if ( isDuration ) {
-            this.sb.append(",");
-        }
-        if ( isRegulatedDrive ) {
-            if ( isDuration ) {
-
-                if ( driveAction.getParam().getDuration().getType() == MotorMoveMode.DISTANCE ) {
-
-                    appendCalculateDistance(driveAction);
-                    //    this.sb.append(",");
-
-                    turnpct = "0";
-
-                    //   this.sb.append(",");
-                    this.sb.append("," + turnpct + ",true" + ",true");
-                    this.sb.append(");");
-                    this.sb.append("float" + " " + " Angle =   20* 360 / (PI * WHEELDIAMETER);");
-
-                }
-
-                //  this.sb.append(");");
-                return null;
-            }
-            this.sb.append(", OUT_REGMODE_SYNC" + ");");
-
-            return null;
         } else {
-
-            if ( isDuration ) {
-                appendCalculateDistance(driveAction);
-            }
-        } //else {
-
-        //}
-
+            this.sb.append(this.brickConfiguration.getRightMotorPort());
+            this.sb.append(this.brickConfiguration.getLeftMotorPort());
+        }
+        if ( reverse ) {
+            this.sb.append(", -1 * ");
+        } else {
+            this.sb.append(", ");
+        }
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(", ");
+        if ( isDuration ) {
+            this.sb.append("(");
+            driveAction.getParam().getDuration().getValue().visit(this);
+            this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true");
+        } else {
+            this.sb.append("OUT_REGMODE_SYNC");
+        }
         this.sb.append(");");
         return null;
-    }
-
-    private void appendCalculateDistance(DriveAction<Void> driveAction) {
-        double angleRate = 360.0 / (this.brickConfiguration.getTrackWidthCM() * this.brickConfiguration.getWheelDiameterCM());
-        this.sb.append(angleRate + "*");
-        driveAction.getParam().getDuration().getValue().visit(this);
     }
 
     @Override // TURN ACTIONS
