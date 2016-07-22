@@ -122,13 +122,13 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class TimeVisit implements AstVisitor<Void> {
+public class UsedResourceVisitor implements AstVisitor<Void> {
 	
 	 private Set<FunctionNames> functionWasMet = new HashSet<>();
 
 	    public static Set<FunctionNames> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
 	        Assert.isTrue(phrasesSet.size() >= 1);
-	        TimeVisit checkVisitor = new TimeVisit();
+	        UsedResourceVisitor checkVisitor = new UsedResourceVisitor();
 	        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
 	            for ( Phrase<Void> phrase : phrases ) {
 	                phrase.visit(checkVisitor);
