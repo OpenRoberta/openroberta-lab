@@ -1,4 +1,4 @@
-define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.user-state', 'roberta.robot', 'roberta.navigation', 'roberta.brickly', 'jquery' ],
+define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.user-state', 'roberta.robot', 'roberta.navigation', 'configuration.controller', 'jquery' ],
         function(exports, MSG, LOG, UTIL, CONFIGURATION, userState, ROBERTA_ROBOT, ROBERTA_NAVIGATION, BRICKLY, $) {
 
             var $formSingleModal;

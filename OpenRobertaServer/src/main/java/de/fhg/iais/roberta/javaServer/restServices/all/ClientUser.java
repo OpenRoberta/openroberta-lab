@@ -57,7 +57,6 @@ public class ClientUser {
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
-
             if ( cmd.equals("clear") ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
@@ -73,11 +72,13 @@ public class ClientUser {
                 if ( user != null ) {
                     int id = user.getId();
                     String account = user.getAccount();
+                    String name = user.getUserName();
                     httpSessionState.setUserClearDataKeepTokenAndRobotId(id);
                     user.setLastLogin();
                     response.put("userId", id);
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
+                    response.put("userName", name);
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }

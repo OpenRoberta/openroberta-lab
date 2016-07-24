@@ -39,7 +39,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - robot type
      */
     function setRobot(robot, successFn) {
-        COMM.json("/admin", {
+        return COMM.json("/admin", {
             "cmd" : "setRobot",
             "robot" : robot
         }, successFn, "set robot '" + robot + "'");

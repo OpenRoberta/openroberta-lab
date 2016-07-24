@@ -1,6 +1,6 @@
 define([ 'require', 'exports', 'progList.controller', 'progDelete.controller', 'progShare.controller', 'simulation.simulation', 'roberta.language',
         'roberta.navigation', 'log', 'util', 'comm', 'roberta.brick-configuration', 'roberta.program', 'roberta.program.sharing', 'roberta.user-state',
-        'roberta.user', 'roberta.robot', 'rest.robot','roberta.brickly', 'blocks', 'blocks-msg', 'enjoyHint', 'jquery', 'jquery-cookie', 'jquery-ui', 'datatables' ],
+        'roberta.user', 'roberta.robot', 'rest.robot','configuration.controller', 'blocks', 'blocks-msg', 'enjoyHint', 'jquery', 'jquery-cookie', 'jquery-ui', 'datatables' ],
         function(require, exports, PROGLIST_CONTROLLER, PROGDELETE_CONTROLLER, PROGSHARE_CONTROLLER, SIM, LANGUAGE, ROBERTA_NAVIGATION, LOG, UTIL, COMM,
                 ROBERTA_BRICK_CONFIGURATION, ROBERTA_PROGRAM, ROBERTA_PROGRAM_SHARING, userState, ROBERTA_USER, ROBERTA_ROBOT, ROBOT, BRICKLY, Blockly, Blockly,
                 EnjoyHint, $) {

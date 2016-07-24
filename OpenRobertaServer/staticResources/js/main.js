@@ -17,7 +17,7 @@ require.config({
 
         'roberta.roberta' : '../app/roberta/roberta',
         'roberta.user-state' : '../app/roberta/roberta.user.state',
-        'roberta.brickly' : '../app/roberta/brickly',
+        //'roberta.brickly' : '../app/roberta/brickly',
         'roberta.user' : '../app/roberta/roberta.user',
         'roberta.toolbox' : '../app/roberta/roberta.toolbox',
         'roberta.robot' : '../app/roberta/roberta.robot',
@@ -40,6 +40,7 @@ require.config({
         'menu.controller' : '../app/roberta/controller/menu.controller',
         'robot.controller' : '../app/roberta/controller/robot.controller',
         'program.controller' : '../app/roberta/controller/program.controller',
+        'configuration.controller' : '../app/roberta/controller/configuration.controller',
         'progList.model' : '../app/roberta/models/progList.model',
         'confList.model' : '../app/roberta/models/confList.model',
         'guiState.model' : '../app/roberta/models/guiState.model',
@@ -99,44 +100,40 @@ require.config({
     }
 });
 
-require([ 'require', 'wrap', 'jquery', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller', 'progDelete.controller',
-        'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller', 'roberta.brickly', 'language.controller' ],
-        function(require) {
+require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
+        'progDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
+        'configuration.controller', 'language.controller' ], function(require) {
 
-            $ = require('jquery');
-            WRAP = require('wrap');
-            COMM = require('comm');
-            guiStateController = require('guiState.controller');
-            progListController = require('progList.controller');
-            confListController = require('confList.controller');
-            progDeleteController = require('progDelete.controller');
-            confDeleteController = require('progDelete.controller');
-            progShareController = require('progShare.controller');
-            logListController = require('logList.controller');
-            menuController = require('menu.controller');
-            userController = require('user.controller');
-            robotController = require('robot.controller');
-            programController = require('program.controller');
-            BRICKLY = require('roberta.brickly');
-            languageController = require('language.controller');
+    $ = require('jquery', 'jquery-cookie');
+    WRAP = require('wrap');
+    COMM = require('comm');
+    guiStateController = require('guiState.controller');
+    progListController = require('progList.controller');
+    confListController = require('confList.controller');
+    progDeleteController = require('progDelete.controller');
+    confDeleteController = require('progDelete.controller');
+    progShareController = require('progShare.controller');
+    logListController = require('logList.controller');
+    menuController = require('menu.controller');
+    userController = require('user.controller');
+    robotController = require('robot.controller');
+    programController = require('program.controller');
+    configurationController = require('configuration.controller');
+    languageController = require('language.controller');
 
-            $(document).ready(WRAP.fn3(init, 'page init'));
-        });
+    $(document).ready(WRAP.fn3(init, 'page init'));
+});
 
 /**
  * Initializations
  */
 function init() {
     COMM.setErrorFn(handleServerErrors);
-    var language = languageController.init();
-    language.then(function(language) {
-        var result = {
-            rc : 'ok',
-            serverVersion : '1.4.0',
-            serverDefaultRobot : 'ev3',
-            serverRobots : [ 'ev3', 'bayduino', 'nxt' ]
-        };
-        guiStateController.init(result, language);
+    $.when(languageController.init()).then(function(language) {
+        return guiStateController.init(language);
+    }).then(function() {
+        return robotController.init();
+    }).then(function() {
         progListController.init();
         progDeleteController.init();
         confListController.init();
@@ -145,38 +142,16 @@ function init() {
         logListController.init();
         menuController.init();
         userController.initUserForms();
-        robotController.init();
-        var program = programController.init();
-        var configuration = BRICKLY.init();
-        $.when(program, configuration).then(function() {
-            $(".pace").fadeOut(0, function() {
-                $(".cover").fadeOut(0);
-            });
+        configurationController.init();
+        programController.init();
+        $(".pace").fadeOut(1000, function() {
+            $(".cover").fadeOut(500);
+            if (guiStateController.noCookie()) {
+                $("#show-startup-message").modal("show");
+            }
         });
-
     });
 
-//    COMM.json("/toolbox", {
-//        "cmd" : "loadT",
-//        "name" : 'beginner',
-//        "owner" : " "
-//    }, function(result) {
-//        ROBERTA_PROGRAM.injectBlockly(result);
-//        var language = LANGUAGE.initializeLanguages();
-//        LANGUAGE.switchLanguage(language, true);
-//        BRICKLY.init();
-//        $(".pace").fadeOut(1000, function() {
-//            $(".cover").fadeOut(500);
-////            if (!$.cookie("OpenRoberta_hideStartUp")) {
-////                $("#show-startup-message").modal("show");
-////            }
-//        });
-//    });
-//
-//    $('#menuTabProgram').parent().addClass('disabled');
-//    $('#tabProgram').addClass('tabClicked');
-//    $('#head-navigation-configuration-edit').css('display', 'none');
-//
 //    // Workaround to set the focus on input fields with attribute 'autofocus'
 //    $('.modal').on('shown.bs.modal', function() {
 //        $(this).find('[autofocus]').focus();
@@ -193,10 +168,7 @@ function init() {
 ////            }
 //        //       }
 //    });
-//
-//    $('[rel="tooltip"]').tooltip({
-//        placement : "right"
-//    });
+
 //
 //    UTIL.checkVisibility(function() {
 //        var visible = UTIL.checkVisibility();

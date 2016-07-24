@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', 'program.controller', 'roberta.user', 'roberta.brickly' ], function(exports, LOG,
-        $, ROBERTA_TOOLBOX, guiStateController, programController, ROBERTA_USER, BRICKLY) {
+define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', 'program.controller', 'configuration.controller', 'roberta.user' ], function(
+        exports, LOG, $, ROBERTA_TOOLBOX, guiStateController, programController, configurationController, ROBERTA_USER) {
 
     /**
      * Initialize language switching
@@ -58,7 +58,7 @@ define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', '
         var future = $.getScript(url);
         future.then(function() {
             programController.reloadView();
-            BRICKLY.reloadView();
+            configurationController.reloadView();
             //ROBERTA_USER.initValidationMessages();
         });
         LOG.info('language switched to ' + language);

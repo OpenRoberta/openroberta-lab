@@ -20,7 +20,6 @@ limitations under the License.
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
-<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/languages.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/typicons.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
@@ -73,19 +72,20 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
 							<li><a href="#" id="menuRunSim" class="typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
 							<li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-							<li class="logout"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
+							<li class="logout login"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
 							<li><a href="#" id="menuListExamples" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG_EXAMPLES">Beispielprogramme ...</a></li>
-							<li class="login logout"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-							<li class="logout"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
+							<li class="logout login"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+							<li class="logout login"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
 							<li class=""><a href="#" id="menuShowCode" class="typcn typcn-code" lkey="Blockly.Msg.MENU_SHOW_CODE">show code</a></li>
 							<li class=""><a href="#" id="menuExportProg" class="typcn typcn-download" lkey="Blockly.Msg.MENU_EXPORT_PROG">export program</a></li>
 							<li class=""><a href="#" id="menuImportProg" class="typcn typcn-upload" lkey="Blockly.Msg.MENU_IMPORT_PROG">import program ...</a></li>
 							<li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
 							<li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
 							<li class="divider"></li>
-							<li class="disabled"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
+							<li class="level beginner"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
 									Anfänger</a></li>
-							<li><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
+							<li class="level experts"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox
+									Experte</a></li>
 						</ul></li>
 					<!-- Menu Configuration -->
 					<li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
@@ -126,7 +126,6 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a href="#" id="menuEV3conf" class="menuEV3conf typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_EV3">EV3 vorbereiten</a></li>
 							<li><a href="#" id="menuProgramming" class="menuProgramming typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_PROGRAMMING">Programmieren</a></li>
 							<li><a href="#" id="menuFaq" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
-							<li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
 							<li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">Über Open Roberta Lab</a></li>
 							<li><a href="#" id="menuShowRelease" class="typcn typcn-refresh" lkey="Blockly.Msg.MENU_SHOW_AGAIN">Starthinweis anzeigen</a></li>
 							<li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
@@ -143,6 +142,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<!-- <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li> -->
 							<li class="logout"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
 							<li class="logout"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
+							<li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
 						</ul></li>
 					<!-- Menu Languages -->
 					<li class="dropdown" id="head-navigation-language"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-program"
@@ -659,10 +659,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<div class="clearer"></div>
 				<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
 				<div class="clearer"></div>
-				<div id="popup-sim" class="robot-container" data-dismiss="modal" data-type="ev3">
+				<div id="popup-sim" href="#" class="robot-container" data-dismiss="modal" data-type="ev3">
 					<span href="#" class='typcn typcn-open robot-icon'></span><span class="robot-label">I don't have a robot!</span>
 				</div>
-				<div id="popup-ev3" class="robot-container" data-dismiss="modal" data-type="ev3">
+				<!-- 				<div id="popup-ev3" class="robot-container" data-dismiss="modal" data-type="ev3">
 					<span href="#" class='typcn typcn-ev3 robot-icon'></span><span class="robot-label">Mindstorms EV3</span>
 				</div>
 				<div id="popup-nxt" class="robot-container" data-dismiss="modal" data-type="nxt">
@@ -671,7 +671,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				</div>
 				<div id="popup-bayduino" class="robot-container" data-dismiss="modal" data-type="bayduino">
 					<span href="#" class='typcn typcn-bayduino robot-icon'></span><span class="robot-label">BAYDUINO</span>
-				</div>
+				</div> -->
 				<!-- <button id="startupClose" type="button" data-dismiss="modal" class="btn" lkey="Blockly.Msg.BUTTON_START">Start</button> -->
 				<!-- <button type="button" class="btn hidden-xs" data-dismiss="modal" lkey="Blockly.Msg.POPUP_TOUR" id="takeATour">take a tour</button> -->
 			</div>

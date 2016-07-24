@@ -8,65 +8,53 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      * Inject Blockly with initial toolbox
      */
     function init() {
-        var view = initView();
-        var ready = view.then(function() {
-            initEvents();
-            initProgramForms();
-        });
+        initView();
+        initEvents();
+        initProgramForms();
         LOG.info('init program view');
-        return ready;
     }
     exports.init = init;
 
     function initView() {
-        var ready = COMM.json("/toolbox", {
-            "cmd" : "loadT",
-            "name" : guiStateController.getProgramToolboxLevel(),
-            "owner" : " "
-        }, function(toolbox) {
-            UTIL.response(toolbox);
-            if (toolbox.rc === 'ok') {
-                guiStateController.setProgramToolbox(toolbox.data);
-                blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
-                    path : '/blockly/',
-                    toolbox : toolbox.data,
-                    trashcan : true,
-                    scrollbars : true,
-                    zoom : {
-                        controls : true,
-                        wheel : true,
-                        startScale : 1.0,
-                        maxScale : 4,
-                        minScale : .25,
-                        scaleSpeed : 1.1
-                    },
-                    checkInTask : [ 'start', '_def', 'event' ],
-                    variableDeclaration : true,
-                    robControls : true
-                });
-                blocklyWorkspace.device = guiStateController.getRobot();
-                initProgramEnvironment();
-            } else {
-                MSG.displayInformation(toolbox, "", toolbox.message, "");
-            }
+        var toolbox = guiStateController.getProgramToolbox();
+        blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
+            path : '/blockly/',
+            toolbox : toolbox,
+            trashcan : true,
+            scrollbars : true,
+            zoom : {
+                controls : true,
+                wheel : true,
+                startScale : 1.0,
+                maxScale : 4,
+                minScale : .25,
+                scaleSpeed : 1.1
+            },
+            checkInTask : [ 'start', '_def', 'event' ],
+            variableDeclaration : true,
+            robControls : true
         });
-        return ready;
+        blocklyWorkspace.device = guiStateController.getRobot();
+        guiStateController.setBlocklyWorkspace(blocklyWorkspace);
+        initProgramEnvironment();
     }
 
     function initEvents() {
         $('#tabProgram').onWrap('shown.bs.tab', function() {
             guiStateController.setView('tabProgram');
-            showConfiguration(guiStateController.getConfXML());
+            blocklyWorkspace.markFocused();
+            blocklyWorkspace.setVisible(true);
             $('#head-navigation-program-edit').css('display', 'inline');
             $('#head-navigation-configuration-edit').css('display', 'none');
             $('#menuTabProgram').parent().addClass('disabled');
             $('#menuTabConfiguration').parent().removeClass('disabled');
+            reloadProgram();
         }, 'tabProgram clicked');
 
         $('#tabProgram').on('hide.bs.tab', function(e) {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
-            guiStateController.setConfXML(xml);
+            guiStateController.setProgramXML(xml);
         });
 
         var moveCounter = 0;
@@ -85,7 +73,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      * Save program to server
      */
     function saveToServer() {
-        if (userState.program) {
+        if (guiStateController.program) {
             var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlText = Blockly.Xml.domToText(xml);
             $('.modal').modal('hide'); // close all opened popups
@@ -245,6 +233,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     exports.showSaveAsModal = showSaveAsModal;
 
     function initProgramEnvironment() {
+        blocklyWorkspace.clear();
+        Blockly.hideChaff();
+        Blockly.svgResize(blocklyWorkspace);
         var x, y;
         if ($(window).width() < 768) {
             x = $(window).width() / 50;
@@ -253,12 +244,17 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             x = $(window).width() / 5;
             y = 50;
         }
-        var id = 1;
-        var program = "<block_set xmlns='http://www.w3.org/1999/xhtml'><instance x='" + x + "' y='" + y
-                + "'><block type='robControls_start'><field name='DEBUG'>TRUE</field></block></instance></block_set>";
-        var xml = Blockly.Xml.textToDom(program);
-        blocklyWorkspace.clear();
-        Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
+        var program = guiStateController.getProgramProg();
+        var dom = Blockly.Xml.textToDom(program);
+        Blockly.Xml.domToWorkspace(blocklyWorkspace, dom);
+        var blocks = blocklyWorkspace.getTopBlocks(true);
+        if (blocks[0]) {
+            var coord = blocks[0].getRelativeToSurfaceXY();
+            blocks[0].moveBy(x - coord.x, y - coord.y);
+        }
+        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xml = Blockly.Xml.domToText(dom);
+        guiStateController.setProgramXML(xml);
     }
     exports.initProgramEnvironment = initProgramEnvironment;
 
@@ -541,15 +537,42 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             return false;
         });
         blocklyWorkspace.robControls.disable('saveProgram');
+        blocklyWorkspace.robControls.disable('runOnBrick');
+    }
+
+    function reloadProgram() {
+        blocklyWorkspace.clear();
+        Blockly.hideChaff();
+        Blockly.svgResize(blocklyWorkspace);
+        var program = guiStateController.getProgramXML();
+        var dom = Blockly.Xml.textToDom(program);
+        Blockly.Xml.domToWorkspace(blocklyWorkspace, dom);
     }
 
     function reloadView() {
+        if (isVisible()) {
+            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            var xml = Blockly.Xml.domToText(dom);
+            blocklyWorkspace.clear();
+            dom = Blockly.Xml.textToDom(xml);
+            Blockly.Xml.domToWorkspace(blocklyWorkspace, dom);
+        }
         var toolbox = guiStateController.getProgramToolbox();
-        var program = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        Blockly.hideChaff();
         blocklyWorkspace.updateToolbox(toolbox);
-        blocklyWorkspace.clear();
-        Blockly.Xml.domToWorkspace(blocklyWorkspace, program);
     }
+
     exports.reloadView = reloadView;
+
+    function resetView() {
+        blocklyWorkspace.device = guiStateController.getRobot();
+        initProgramEnvironment();
+        var toolbox = guiStateController.getProgramToolbox();
+        blocklyWorkspace.updateToolbox(toolbox);
+        blocklyWorkspace.device = guiStateController.getRobot();
+    }
+    exports.resetView = resetView;
+
+    function isVisible() {
+        return guiStateController.getView() == 'tabProgram';
+    }
 });

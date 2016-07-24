@@ -1,5 +1,5 @@
 define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 'rest.configuration', 'roberta.toolbox', 'roberta.robot', 'roberta.user',
-        'roberta.brick-configuration', 'roberta.user-state', 'roberta.program', 'roberta.brickly', 'enjoyHint', 'roberta.tour', 'simulation.simulation',
+        'roberta.brick-configuration', 'roberta.user-state', 'roberta.program', 'configuration.controller', 'enjoyHint', 'roberta.tour', 'simulation.simulation',
         'jquery', 'blocks', 'jquery-ui' ], function(exports, UTIL, MSG, COMM, ROBOT, PROGRAM, CONFIGURATION, ROBERTA_TOOLBOX, ROBERTA_ROBOT, ROBERTA_USER,
         ROBERTA_BRICK_CONFIGURATION, userState, ROBERTA_PROGRAM, BRICKLY, EnjoyHint, ROBERTA_TOUR, SIM, $, Blockly) {
 

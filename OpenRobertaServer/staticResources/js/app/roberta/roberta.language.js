@@ -1,4 +1,4 @@
-define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.program', 'roberta.user', 'roberta.brickly' ], function(exports, $,
+define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.program', 'roberta.user', 'configuration.controller' ], function(exports, $,
         ROBERTA_TOOLBOX, userState, ROBERTA_PROGRAM, ROBERTA_USER, BRICKLY) {
 
     /**

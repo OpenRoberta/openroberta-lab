@@ -1,18 +1,5 @@
-define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'guiState.controller', 'roberta.program', 'roberta.brick-configuration', 'jquery',
-        'blocks', 'blocks-msg' ], function(exports, LOG, MSG, UTIL, USER, guiState, guiStateController, ROBERTA_PROGRAM, ROBERTA_BRICK_CONFIGURATION, $, Blockly) {
-
-//    var $ = require('jquery');
-//    var Blockly = require('blocks', 'blocks-msg');
-
-//    var ROBERTA_NAVIGATION = require('roberta.navigation');
-//    var ROBERTA_ROBOT = require('roberta.robot');
-//    var ROBERTA_PROGRAM = require('roberta.program');
-//    var guiState = require('roberta.user-state');
-//
-//    var MSG = require('message');
-//    var UTIL = require('util');
-//
-//    var USER = require('rest.user');
+define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller', 'jquery', 'blocks', 'blocks-msg' ], function(exports, LOG, MSG, UTIL, USER,
+        guiStateController, $, Blockly) {
 
     var $divForms;
     var $formLogin;
@@ -33,7 +20,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
             USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(),
                     function(result) {
                         if (result.rc === "ok") {
-                            ROBERTA_ROBOT.setState(result);
                             $('#loginAccountName').val($("#registerAccountName").val());
                             $('#loginPassword').val($('#registerPass').val());
                             login();
@@ -49,9 +35,13 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
     function updateUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.updateUserToServer(guiState.user.accountName, $('#registerUserName').val(), $("#registerUserEmail").val(), function(result) {
+            USER.updateUserToServer(guiStateController.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), function(result) {
                 if (result.rc === "ok") {
-                    ROBERTA_ROBOT.setState(result);
+                    USER.getUserFromServer(guiStateController.getUserAccountName(), function(result) {
+                        if (result.rc === "ok") {
+                            guiStateController.setLogin(result);
+                        }
+                    });
                 }
                 MSG.displayInformation(result, "", result.message);
             });
@@ -74,7 +64,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
                     MSG.displayInformation(result, "", result.message);
                 });
             } else {
-                USER.updateUserPasswordToServer(guiState.user.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
+                USER.updateUserPasswordToServer(guiStateController.getUserAccountName(), $('#passOld').val(), $("#passNew").val(), function(result) {
                     if (result.rc === "ok") {
                         $("#change-user-password").modal('hide');
                     }
@@ -89,13 +79,12 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
      * Get user from server
      */
     function getUserFromServer() {
-        USER.getUserFromServer(guiState.user.accountName, function(result) {
+        USER.getUserFromServer(guiStateController.getUserAccountName(), function(result) {
             if (result.rc === "ok") {
                 $("#registerAccountName").val(result.userAccountName);
                 $("#registerUserEmail").val(result.userEmail);
                 $("#registerUserName").val(result.userName);
             }
-
         });
     }
 
@@ -107,9 +96,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
         if ($formLogin.valid()) {
             USER.login($("#loginAccountName").val(), $('#loginPassword').val(), function(result) {
                 if (result.rc === "ok") {
-                    guiStateController.setUser(result);
+                    guiStateController.setLogin(result);
                 }
-                MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, guiState.user.name);
+                MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, guiStateController.getUserName());
             });
         }
     }
@@ -121,17 +110,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
         USER.logout(function(result) {
             UTIL.response(result);
             if (result.rc === "ok") {
-                guiState.user.initUserState();
-                setProgram(guiState.user.program);
-                ROBERTA_BRICK_CONFIGURATION.setConfiguration(guiState.user.configuration);
-                $('#programNameSave :not(btn)').val('');
-                $('#configurationNameSave :not(btn)').val('');
-//                ROBERTA_NAVIGATION.setHeadNavigationMenuState('logout');
-//                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable("saveProgram");
-//                ROBERTA_ROBOT.setState(result);
-                $('#tabProgram').click();
-                MSG.displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
+                guiStateController.setLogout();
             }
+            MSG.displayInformation(result, "MESSAGE_USER_LOGOUT", result.message, guiStateController.getUserName());
         });
     }
 
@@ -157,11 +138,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
     function deleteUserOnServer() {
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
-            USER.deleteUserOnServer(guiState.user.accountName, $('#singleModalInput').val(), function(result) {
+            USER.deleteUserOnServer(guiStateController.getUserAccountName(), $('#singleModalInput').val(), function(result) {
                 if (result.rc === "ok") {
                     logout();
                 }
-                MSG.displayInformation(result, "MESSAGE_USER_DELETED", result.message, guiState.user.name);
+                MSG.displayInformation(result, "MESSAGE_USER_DELETED", result.message, guiStateController.getUserName());
             });
         }
     }
@@ -525,15 +506,15 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
      * Show user info
      */
     function showUserInfo() {
-        $("#loggedIn").text(guiState.user.name);
-        if (guiState.user.id != -1) {
+        $("#loggedIn").text(guiStateController.getUserName());
+        if (guiStateController.isUserLoggedIn()) {
             $("#popup_username").text(Blockly.Msg["POPUP_USERNAME"] + ": ");
         } else {
             $("#popup_username").text(Blockly.Msg["POPUP_USERNAME_LOGOFF"]);
         }
-        $("#programName").text(guiState.user.program);
-        $("#configurationName").text(guiState.user.configuration);
-        if (guiState.user.toolbox === 'beginner') {
+        $("#programName").text(guiStateController.getProgramName());
+        $("#configurationName").text(guiStateController.getConfigurationName());
+        if (guiStateController.getProgramToolboxLevel() === 'beginner') {
             $("#toolbox").text(Blockly.Msg["MENU_BEGINNER"]);
         } else {
             $("#toolbox").text(Blockly.Msg["MENU_EXPERT"]);
@@ -548,36 +529,10 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.model', 'g
     }
     exports.showResetPassword = showResetPassword;
 
-    /**
-     * Set program name
-     * 
-     * @param {name}
-     *            Name to be set
-     */
-    function setProgram(result, opt_owner) {
-        if (result) {
-            guiState.user.program = result.name;
-            guiState.user.programSaved = result.programSaved;
-            guiState.user.programShared = result.programShared;
-            guiState.user.programTimestamp = result.lastChanged;
-            var name = result.name;
-            if (opt_owner) {
-                if (guiState.user.programShared == 'WRITE') {
-                    name += ' (<span class="typcn typcn-pencil progName"></span>' + opt_owner + ')';
-                } else {
-                    name += ' (<span class="typcn typcn-eye progName"></span>' + opt_owner + ')';
-                }
-            }
-            $('#tabProgramName').html(name);
-        }
-    }
-    exports.setProgram = setProgram;
-
     function initValidationMessages() {
         validateLoginUser();
         validateRegisterUser();
         validateLostPassword();
     }
-
     exports.initValidationMessages = initValidationMessages;
 });

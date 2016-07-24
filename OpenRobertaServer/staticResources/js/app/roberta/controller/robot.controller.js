@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'guiState.model', 'roberta.toolbox', 'rest.robot', 'roberta.program', 'jquery',
-        'jquery-validate' ], function(exports, UTIL, LOG, MSG, ROBERTA_BRICK_CONFIGURATION, guiState, ROBERTA_TOOLBOX, ROBOT, ROBERTA_PROGRAM, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot', 'program.controller', 'configuration.controller', 'jquery',
+        'jquery-validate' ], function(exports, UTIL, LOG, MSG, guiStateController, ROBOT, programController, configurationController, $) {
 
     var $formSingleModal;
 
@@ -8,9 +8,16 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'gu
      */
     function init() {
 
-        initRobot();
-        initRobotForms();
-        LOG.info('init robot forms');
+        var a = $.Deferred();
+        $.when(ROBOT.setRobot(guiStateController.getRobot(), function(result) {
+            if (result.rc == 'ok')
+                guiStateController.setRobot(guiStateController.getRobot(), result, true);
+        })).then(function() {
+            initRobotForms;
+            LOG.info('init robot forms');
+            a.resolve();
+        });
+        return a;
     }
     exports.init = init;
 
@@ -159,11 +166,36 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'gu
     exports.updateFirmware = updateFirmware;
 
     /**
-     * Init robot
+     * Switch robot
      */
-    function initRobot() {
+    function switchRobot(robot, opt_continue) {
+        if (robot === guiStateController.getRobot) {
+            return;
+        }
+        var further = opt_continue || false;
+        if (further || (guiStateController.isProgramSaved() && guiStateController.isConfSaved)) {
+            ROBOT.setRobot(robot, function(result) {
+                if (result.rc === "ok") {
+                    guiStateController.setRobot(robot, result);
+                    programController.resetView();
+                    configurationController.resetView();
+                } else {
+                    alert('Robot not available');
+                }
+            });
+        } else {
+            $('#confirmContinue').data('type', 'switchRobot');
+            $('#confirmContinue').data('robot', robot);
+            if (guiStateController.isUserLoggedIn) {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+            } else {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+            }
+        }
+    }
+    exports.switchRobot = switchRobot;
 
-        //ROBERTA_NAVIGATION.initNavigation();
+    //ROBERTA_NAVIGATION.initNavigation();
 //        ROBOT.setRobot(guiState.robot, function(result) {
 //            UTIL.response(result);
 //            if (result.rc === "ok") {
@@ -177,6 +209,4 @@ define([ 'exports', 'util', 'log', 'message', 'roberta.brick-configuration', 'gu
 //                $('#iconDisplayRobotState').addClass('typcn-ev3');
 //                $('#menuShowCode').parent().removeClass('disabled');
 //            }
-//        });
-    }
 });

@@ -1,22 +1,20 @@
-define([ 'exports' ], function(exports) {
+define([ 'exports', 'util', 'comm' ], function(exports, UTIL, COMM) {
 
     /**
      * Initialize gui state object
      */
     function init() {
+
         exports.server = {};
-        exports.server.version = '';
-        exports.server.robots = [];
-        exports.server.defaultRobot = [];
-        exports.server.time = '';
         exports.server.doPing = true;
 
-        // available views - program, programList, conf, confList, log
         exports.gui = {};
         exports.gui.view = '';
         exports.gui.prevView = '';
         exports.gui.language = '';
         exports.gui.robot = '';
+        exports.gui.blocklyWorkspace = '';
+        exports.gui.bricklyWorkspace = '';
 
         exports.user = {};
         exports.user.id = -1;
@@ -33,11 +31,11 @@ define([ 'exports' ], function(exports) {
         exports.program.toolbox.level = '';
         exports.program.toolbox.xml = '';
 
-        exports.conf = {};
-        exports.conf.name = '';
-        exports.conf.saved = true;
-        exports.conf.timestamp = '';
-        exports.conf.xml = '';
+        exports.configuration = {};
+        exports.configuration.name = '';
+        exports.configuration.saved = true;
+        exports.configuration.timestamp = '';
+        exports.configuration.xml = '';
 
         exports.toolbox = '';
 
@@ -51,7 +49,15 @@ define([ 'exports' ], function(exports) {
         exports.robot.sensorValues = '';
         exports.robot.nepoExitValue = 0;
         exports.robot.time = -1;
-
+        return COMM.json("/admin", {
+            "cmd" : "init"
+        }, function(result) {
+            if (result.rc === 'ok') {
+                $.extend(exports.server, result.server);
+                exports.server.version = result["server.version"];
+                exports.server.time = result.serverTime;
+            }
+        }, 'init gui state model');
     }
     exports.init = init;
 });
