@@ -23,7 +23,6 @@ public class AstToEv3PythonVisitorTest {
         + "from __future__ import absolute_import\n"
         + "from roberta.ev3 import Hal\n"
         + "from roberta.BlocklyMethods import BlocklyMethods\n"
-        + "from sets import Set\n"
         + "from ev3dev import ev3 as ev3dev\n"
         + "import math\n\n"
         + "TRUE = True\n";
@@ -668,18 +667,17 @@ public class AstToEv3PythonVisitorTest {
 
     private String make_globals(String motors, String sensors) {
         return String.format("" //
-        + "_brickConfiguration = {\n"
-        + "    'wheel-diameter': 5.6,\n"
-        + "    'track-width': 17.0,\n"
-        + "    'actors': {\n"
-        + "        'A':Hal.makeMediumMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
-        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
-        + "    },\n"
-        + "    'sensors': {\n%s"
-        + "    },\n"
-        + "}\n"
-        + "hal = Hal(_brickConfiguration)\n\n",
-        sensors);
+            + "_brickConfiguration = {\n"
+            + "    'wheel-diameter': 5.6,\n"
+            + "    'track-width': 17.0,\n"
+            + "    'actors': {\n"
+            + "        'A':Hal.makeMediumMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
+            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
+            + "    },\n"
+            + "    'sensors': {\n%s"
+            + "    },\n"
+            + "}\n"
+            + "hal = Hal(_brickConfiguration)\n\n", sensors);
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

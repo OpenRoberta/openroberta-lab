@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * REST service for downloading user program
  */
 @Path("/download")
-public class RobotDownloadProgram { // TODO(ensonic): rename to Ev3DownloadCode
+public class RobotDownloadProgram {
     private static final Logger LOG = LoggerFactory.getLogger(RobotDownloadProgram.class);
 
     private final RobotCommunicator brickCommunicator;
@@ -59,22 +59,20 @@ public class RobotDownloadProgram { // TODO(ensonic): rename to Ev3DownloadCode
                 filePath = this.pathToCrosscompilerBaseDir + token + "/src";
             }
 
-            File jarDir = new File(filePath);
-            String message = "unknown";
-            if ( jarDir.isDirectory() ) {
-                File jarFile = new File(jarDir, fileName);
-                if ( jarFile.isFile() ) {
-                    ResponseBuilder response = Response.ok(new FileInputStream(jarFile), MediaType.APPLICATION_OCTET_STREAM);
+            File resultDir = new File(filePath);
+            if ( resultDir.isDirectory() ) {
+                File resultFile = new File(resultDir, fileName);
+                if ( resultFile.isFile() ) {
+                    ResponseBuilder response = Response.ok(new FileInputStream(resultFile), MediaType.APPLICATION_OCTET_STREAM);
                     response.header("Content-Disposition", "attachment; filename=" + fileName);
                     response.header("Filename", fileName);
                     return response.build();
                 } else {
-                    message = "jar to upload to robot not found";
+                    LOG.error("upload error: file '" + resultFile.getName() + "' to upload to robot not found.");
                 }
             } else {
-                message = "directory containg jar to upload to robot not found";
+                LOG.error("upload error: directory '" + resultDir.getName() + "' containing file to upload to robot not found.");
             }
-            LOG.error("jar could not be uploaded to robot: " + message);
             return Response.serverError().build();
         } catch ( Exception e ) {
             LOG.error("exception caught and rethrown", e);
