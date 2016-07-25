@@ -903,6 +903,32 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        //final String Port = getEnumCode(lightSensor.getPort());
+        sb.append("SensorLight( IN_");
+        sb.append(lightSensor.getPort().getPortNumber());
+        sb.append(", ");
+        switch ( getEnumCode(lightSensor.getMode()) ) {
+            case "LightSensorMode.RED":
+                sb.append("\"LIGHT\"");
+                break;
+            case "LightSensorMode.AMBIENTLIGHT":
+                sb.append("\"AMBIENTLIGHT\"");
+                break;
+            default:
+                throw new DbcException("Invalide mode for Color Sensor!");
+        }
+        sb.append(" )");
+        return null;
+    }
+
+    @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String button = null;
         switch ( getEnumCode(brickSensor.getKey()) ) {
@@ -937,26 +963,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 break;
             /*default:
                 throw new DbcException("Invalide mode for Color Sensor!");*/
-        }
-        sb.append(" )");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        //final String Port = getEnumCode(lightSensor.getPort());
-        sb.append("SensorLight( IN_");
-        sb.append(lightSensor.getPort().getPortNumber());
-        sb.append(", ");
-        switch ( getEnumCode(lightSensor.getMode()) ) {
-            case "LightSensorMode.RED":
-                sb.append("\"LIGHT\"");
-                break;
-            case "LightSensorMode.AMBIENTLIGHT":
-                sb.append("\"AMBIENTLIGHT\"");
-                break;
-            default:
-                throw new DbcException("Invalide mode for Color Sensor!");
         }
         sb.append(" )");
         return null;
@@ -1779,12 +1785,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         } catch ( final NumberFormatException e ) {
             return false;
         }
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }
