@@ -97,6 +97,14 @@ public interface IRobotFactory {
     List<IBrickLedColor> getBrickLedColors();
 
     /**
+     * Get a {@link ILightSensorMode} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the
+     * mode does not exists.
+     */
+    ILightSensorMode getLightColor(String mode);
+
+    List<ILightSensorMode> getLightColors();
+
+    /**
      * Get a {@link IShowPicture} enumeration given string parameter. It is possible for one picture to have multiple string mappings. Throws exception if the
      * mode does not exists.
      *

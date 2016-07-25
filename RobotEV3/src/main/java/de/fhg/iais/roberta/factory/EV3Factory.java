@@ -15,9 +15,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
@@ -46,7 +46,7 @@ public class EV3Factory extends AbstractRobotFactory {
 
     public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
         ev3properties = Util1.loadProperties("classpath:EV3.properties");
-        this.compilerWorkflow =
+        compilerWorkflow =
             new Ev3CompilerWorkflow(
                 robotCommunicator,
                 ev3properties.getProperty("crosscompiler.basedir"),
@@ -217,7 +217,7 @@ public class EV3Factory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
     @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
         // TODO Auto-generated method stub
@@ -229,7 +229,6 @@ public class EV3Factory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
-
 
     @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
@@ -408,7 +407,7 @@ public class EV3Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
@@ -418,7 +417,19 @@ public class EV3Factory extends AbstractRobotFactory {
 
     @Override
     public int getRobotId() {
-        return this.robotId;
+        return robotId;
+    }
+
+    @Override
+    public ILightSensorMode getLightColor(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorMode> getLightColors() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -406,4 +406,16 @@ public class SimFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public ILightSensorMode getLightColor(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorMode> getLightColors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

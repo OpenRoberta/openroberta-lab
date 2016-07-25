@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionActio
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -150,15 +151,15 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @return the number of <b>errors</b> detected during this type check visit
      */
     public int getErrorCount() {
-        if ( this.infos == null ) {
-            this.infos = InfoCollector.collectInfos(this.phrase);
-            for ( NepoInfo info : this.infos ) {
+        if ( infos == null ) {
+            infos = InfoCollector.collectInfos(phrase);
+            for ( NepoInfo info : infos ) {
                 if ( info.getSeverity() == Severity.ERROR ) {
-                    this.errorCount++;
+                    errorCount++;
                 }
             }
         }
-        return this.errorCount;
+        return errorCount;
     }
 
     /**
@@ -168,7 +169,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      */
     public List<NepoInfo> getInfos() {
         getErrorCount(); // for the side effect
-        return this.infos;
+        return infos;
     }
 
     /**
@@ -177,7 +178,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @return the resulting type.May be <code>null</code> if type errors occurred
      */
     public BlocklyType getResultType() {
-        return this.resultType;
+        return resultType;
     }
 
     @Override
@@ -451,10 +452,10 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     private void checkFor(Phrase<BlocklyType> phrase, boolean condition, String message) {
         if ( !condition ) {
-            if ( this.errorCount >= this.ERROR_LIMIT_FOR_TYPECHECK ) {
-                throw new RuntimeException("aborting typecheck. More than " + this.ERROR_LIMIT_FOR_TYPECHECK + " found.");
+            if ( errorCount >= ERROR_LIMIT_FOR_TYPECHECK ) {
+                throw new RuntimeException("aborting typecheck. More than " + ERROR_LIMIT_FOR_TYPECHECK + " found.");
             } else {
-                this.errorCount++;
+                errorCount++;
                 NepoInfo error = NepoInfo.error(message);
                 phrase.addInfo(error);
             }
@@ -679,6 +680,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitSoundSensor(SoundSensor<BlocklyType> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitLightSensorAction(LightSensorAction<BlocklyType> lightSensorAction) {
         // TODO Auto-generated method stub
         return null;
     }

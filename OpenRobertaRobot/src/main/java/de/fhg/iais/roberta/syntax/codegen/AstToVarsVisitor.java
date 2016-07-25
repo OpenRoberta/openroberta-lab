@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
@@ -91,14 +92,14 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
     @Override
     public Void visitVar(Var<Void> var) {
         String varName = var.getValue();
-        this.allVars.add(varName);
+        allVars.add(varName);
         return null;
     }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
         String numName = numConst.getValue();
-        this.allVars.add(numName);
+        allVars.add(numName);
         return null;
     }
 
@@ -320,6 +321,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         // TODO Auto-generated method stub
         return null;
     }

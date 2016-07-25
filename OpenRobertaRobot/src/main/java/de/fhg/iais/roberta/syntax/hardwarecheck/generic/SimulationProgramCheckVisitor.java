@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
@@ -66,7 +67,7 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     protected void checkSensorPort(BaseSensor<Void> sensor) {
-        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
+        Sensor usedSensor = brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind() == BlockType.INFRARED_SENSING ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
@@ -114,6 +115,12 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         // TODO Auto-generated method stub
         return null;
     }

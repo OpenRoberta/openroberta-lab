@@ -50,6 +50,8 @@ public final class BlocklyConstants {
     public static final String SENSORPORT = "SENSORPORT";
     public static final String SWITCH_BLINK = "SWITCH_BLINK";
     public static final String SWITCH_COLOR = "SWITCH_COLOR";
+    //TODO: fix after playground works
+    public static final String SWITCH_SENSOR_COLOR = "SWITCH_SENSOR_COLOR";
     public static final String VOLUME = "VOLUME";
     public static final String FILE = "FILE";
     public static final String DURATION = "DURATION";
@@ -164,6 +166,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_DISPLAY_PICTURE = "robActions_display_picture";
     public static final String ROB_ACTIONS_PLAY_TONE = "robActions_play_tone";
     public static final String ROB_ACTIONS_BRICK_LIGHT_ON = "robActions_brickLight_on";
+    public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON = "robActions_sensorLight_on";
     public static final String ROB_ACTIONS_DISPLAY_CLEAR = "robActions_display_clear";
     public static final String ROB_ACTIONS_MOTOR_ON_FOR = "robActions_motor_on_for";
     public static final String ROB_ACTIONS_MOTOR_GET_POWER = "robActions_motor_getPower";

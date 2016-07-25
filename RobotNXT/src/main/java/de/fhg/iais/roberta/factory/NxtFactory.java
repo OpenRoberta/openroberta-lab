@@ -46,7 +46,7 @@ public class NxtFactory extends AbstractRobotFactory {
 
     public NxtFactory(RobotCommunicator unusedForNxt, Integer robotId) {
         Properties nxtProperties = Util1.loadProperties("classpath:NXT.properties");
-        this.compilerWorkflow = new NxtCompilerWorkflow(nxtProperties.getProperty("crosscompiler.basedir"), nxtProperties.getProperty("robot.resources.dir"));
+        compilerWorkflow = new NxtCompilerWorkflow(nxtProperties.getProperty("crosscompiler.basedir"), nxtProperties.getProperty("robot.resources.dir"));
         this.robotId = robotId;
     }
 
@@ -428,12 +428,24 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
     public int getRobotId() {
-        return this.robotId;
+        return robotId;
+    }
+
+    @Override
+    public ILightSensorMode getLightColor(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorMode> getLightColors() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

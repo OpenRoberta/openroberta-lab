@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionActio
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -127,8 +128,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
-
-    private String left;
 
     /**
      * initialize the Java code generator visitor.
@@ -1780,6 +1779,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         } catch ( final NumberFormatException e ) {
             return false;
         }
+    }
+
+    @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
