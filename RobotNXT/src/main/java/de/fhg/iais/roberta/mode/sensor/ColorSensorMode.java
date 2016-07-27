@@ -21,7 +21,7 @@ public enum ColorSensorMode implements IColorSensorMode {
      * @return name that Lejos is using for this mode
      */
     public String getLejosModeName() {
-        return this.values[0];
+        return values[0];
     }
 
     //    @Override
@@ -31,7 +31,7 @@ public enum ColorSensorMode implements IColorSensorMode {
 
     @Override
     public String[] getValues() {
-        return this.values;
+        return values;
     }
 
 }

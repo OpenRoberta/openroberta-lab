@@ -5,6 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -28,7 +29,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class LightSensorAction<V> extends Action<V> {
     private final ILightSensorMode light;
 
-    private LightSensorAction(ILightSensorMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LightSensorAction(IActorPort port, ILightSensorMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.LIGHT_SENSOR_ACTION, properties, comment);
         Assert.isTrue(light != null);
         this.light = light;
@@ -39,14 +40,15 @@ public class LightSensorAction<V> extends Action<V> {
      * Creates instance of {@link LightSensorAction}. This instance is read only and
      * can not be modified.
      *
+     * @param iActorPort
      * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor}; must be <b>not</b> null,
      * @param blinkMode type of the blinking; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link LightSensorAction}
      */
-    private static <V> LightSensorAction<V> make(ILightSensorMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightSensorAction<V>(light, properties, comment);
+    private static <V> LightSensorAction<V> make(IActorPort port, ILightSensorMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LightSensorAction<V>(port, light, properties, comment);
     }
 
     /**
@@ -78,10 +80,21 @@ public class LightSensorAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        String port;
+        List<Field> fields;
+        String light;
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String light = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
-        return LightSensorAction.make(factory.getLightColor(light), helper.extractBlockProperties(block), helper.extractComment(block));
+        if ( block.getType().equals(BlocklyConstants.SENSOR_LIGHT_ON) ) {
+            fields = helper.extractFields(block, (short) 1);
+            port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+            light = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
+        } else {
+            fields = helper.extractFields(block, (short) 2);
+            port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+            light = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
+        }
+        return LightSensorAction
+            .make(factory.getActorPort(port), factory.getLightColor(light), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

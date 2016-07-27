@@ -167,6 +167,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_PLAY_TONE = "robActions_play_tone";
     public static final String ROB_ACTIONS_BRICK_LIGHT_ON = "robActions_brickLight_on";
     public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON = "robActions_sensorLight_on";
+    public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF = "robActions_sensorLight_off";
     public static final String ROB_ACTIONS_DISPLAY_CLEAR = "robActions_display_clear";
     public static final String ROB_ACTIONS_MOTOR_ON_FOR = "robActions_motor_on_for";
     public static final String ROB_ACTIONS_MOTOR_GET_POWER = "robActions_motor_getPower";
@@ -230,6 +231,8 @@ public final class BlocklyConstants {
 
     public static final String SIM_LED_ON = "sim_LED_on";
     public static final String SIM_LED_OFF = "sim_LED_off";
+    public static final String SENSOR_LIGHT_ON = "sensorLight_on";
+    public static final String SENSOR_LIGHT_OFF = "sensorLight_off";
 
     public static final String SIM_GET_SAMPLE = "sim_getSample";
     public static final String SIM_TOUCH_IS_PRESSED = "sim_touch_isPressed";
