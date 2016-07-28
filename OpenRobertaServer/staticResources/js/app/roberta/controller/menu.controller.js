@@ -1,11 +1,24 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
-        'configuration.controller', 'enjoyHint', 'roberta.tour', 'simulation.simulation', 'jquery', 'blocks', 'jquery-ui' ], function(exports, LOG, UTIL, MSG,
-        COMM, robotController, userController, guiStateController, programController, configurationController, EnjoyHint, ROBERTA_TOUR, SIM, $, Blockly) {
+        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
+        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
         initMenu();
         initMenuEvents();
+        /**
+         * Regularly ping the server to keep status information up-to-date
+         */
+        function pingServer() {
+            if (GUISTATE_C.doPing()) {
+                COMM.ping(function(result) {
+                    GUISTATE_C.setState(result);
+                });
+            }
+        }
+        var ping = setInterval(function() {
+            pingServer();
+        }, 3000);
         LOG.info('init menu view');
     }
 
@@ -13,7 +26,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
     function initMenu() {
         var proto = $('.robotType');
-        var robots = guiStateController.getRobots();
+        var robots = GUISTATE_C.getRobots();
         for ( var robot in robots) {
             var clone = proto.clone();
             $("#navigation-robot>.divider").before(clone);
@@ -36,7 +49,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $(clone).addClass('popup-robot');
         }
 
-        guiStateController.setInitialState();
+        GUISTATE_C.setInitialState();
 
 //        $('#backLogging').onWrap('click', function() {
 //            activateProgConfigMenu();
@@ -66,6 +79,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             placement : "right"
         });
 
+        $('.modal').on('shown.bs.modal', function() {
+            $(this).find('[autofocus]').focus();
+        });
+
         $('#navbarCollapse').collapse({
             'toggle' : false
         });
@@ -89,13 +106,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             var domId = event.target.id;
             if (domId === 'menuRunProg') {
-                programController.runOnBrick();
+                PROGRAM_C.runOnBrick();
             } else if (domId === 'menuRunSim') {
-                programController.runInSim();
+                PROGRAM_C.runInSim();
             } else if (domId === 'menuCheckProg') {
-                programController.checkProgram();
+                PROGRAM_C.checkProgram();
             } else if (domId === 'menuNewProg') {
-                programController.newProgram();
+                PROGRAM_C.newProgram();
             } else if (domId === 'menuListProg') {
                 $('#tabProgList').data('type', 'userProgram');
                 $('#tabProgList').click();
@@ -103,22 +120,19 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 $('#tabProgList').data('type', 'exampleProgram');
                 $('#tabProgList').click();
             } else if (domId === 'menuSaveProg') {
-                programController.save();
+                PROGRAM_C.saveToServer();
             } else if (domId === 'menuSaveAsProg') {
-                programController.showSaveAsModal();
+                PROGRAM_C.showSaveAsModal();
             } else if (domId === 'menuShowCode') {
-                programController.showCode();
+                PROGRAM_C.showCode();
             } else if (domId === 'menuImportProg') {
-                programController.importXml();
+                PROGRAM_C.importXml();
             } else if (domId === 'menuExportProg') {
-                var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-                var xmlText = Blockly.Xml.domToText(xml);
-                UTIL.download(guiState.program.name + ".xml", xmlText);
-                MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", guiState.program.name);
+                PROGRAM_C.exportXml();
             } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
-                ROBERTA_TOOLBOX.loadToolbox('beginner');
+                PROGRAM_C.loadToolbox('beginner');
             } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
-                ROBERTA_TOOLBOX.loadToolbox('expert');
+                PROGRAM_C.loadToolbox('expert');
             }
         }, 'program edit clicked');
 
@@ -129,13 +143,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
                 MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
             } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
-                ROBERTA_BRICK_CONFIGURATION.newConfiguration();
+                CONFIGURATION_C.newConfiguration();
             } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
                 $('#tabConfList').click();
             } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
-                ROBERTA_BRICK_CONFIGURATION.save();
+                CONFIGURATION_C.saveToServer();
             } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
-                ROBERTA_BRICK_CONFIGURATION.showSaveAsModal();
+                CONFIGURATION_C.showSaveAsModal();
             }
         }, 'configuration edit clicked');
 
@@ -144,15 +158,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $('.modal').modal('hide');
             var choosenRobotType = event.target.parentElement.dataset.type;
             if (choosenRobotType) {
-                robotController.switchRobot(choosenRobotType);
+                ROBOT_C.switchRobot(choosenRobotType);
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
                     $('#buttonCancelFirmwareUpdate').css('display', 'inline');
                     $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
-                    ROBERTA_ROBOT.showSetTokenModal();
+                    ROBOT_C.showSetTokenModal();
                 } else if (domId === 'menuRobotInfo') {
-                    ROBERTA_ROBOT.showRobotInfo();
+                    ROBOT_C.showRobotInfo();
                 }
             }
         }, 'robot clicked');
@@ -165,7 +179,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             } else if (domId === 'menuFaq') { // Submenu 'Help'
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
             } else if (domId === 'menuShowRelease') { // Submenu 'Help'
-                if ($.cookie("OpenRoberta_" + guiStateController.getServerVersion())) {
+                if ($.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
                     $('#checkbox_id').prop('checked', true);
                 }
                 $("#show-startup-message").modal("show");
@@ -181,17 +195,17 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
             if (domId === 'menuLogin') { // Submenu 'Login'
-                userController.showLoginForm();
+                USER_C.showLoginForm();
             } else if (domId === 'menuLogout') { // Submenu 'Login'
-                userController.logout();
+                USER_C.logout();
             } else if (domId === 'menuNewUser') { // Submenu 'Login'
                 $("#register-user").modal('show');
             } else if (domId === 'menuChangeUser') { // Submenu 'Login'
-                userController.showUserDataForm();
+                USER_C.showUserDataForm();
             } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
-                userController.showDeleteUserModal();
+                USER_C.showDeleteUserModal();
             } else if (domId === 'menuStateInfo') { // Submenu 'Help'
-                userController.showUserInfo();
+                USER_C.showUserInfo();
             }
             return false;
         }, 'user clicked');
@@ -234,24 +248,24 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $('#menuShowCode').parent().removeClass('disabled');
             $("#simButtonsCollapse").collapse('hide');
             $('.blocklyToolboxDiv').css('display', 'inherit');
-            Blockly.svgResize(programController.getBlocklyWorkspace());
-            programController.getBlocklyWorkspace().robControls.toogleSim();
+            Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
+            PROGRAM_C.getBlocklyWorkspace().robControls.toogleSim();
             $('#blocklyDiv').animate({
                 width : '100%'
             }, {
                 duration : 750,
                 step : function() {
                     $(window).resize();
-                    Blockly.svgResize(programController.getBlocklyWorkspace());
+                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 },
                 done : function() {
                     $("#simRobotModal").modal("hide");
                     $('#simDiv').removeClass('simActive');
                     $('#menuSim').parent().addClass('disabled');
                     $('.nav > li > ul > .robotType').removeClass('disabled');
-                    $('.' + guiState.robot).addClass('disabled');
+                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                     $(window).resize();
-                    Blockly.svgResize(programController.getBlocklyWorkspace());
+                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 }
             });
         }, 'simBack clicked');
@@ -329,7 +343,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'head navigation menu item clicked');
 
         $('#simRobotModal').removeClass("modal-backdrop");
-        $('#simRobotModal').draggable();
+        // $('#simRobotModal').draggable();
         //  $('#simRobotModal').resizable();
         $('.simScene').onWrap('click', function(event) {
             SIM.setBackground(0);
@@ -361,47 +375,47 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $(".code").addClass('hide');
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $('.blocklyToolboxDiv').css('display', 'inherit');
-            Blockly.svgResize(programController.getBlocklyWorkspace());
+            Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
             $('#blocklyDiv').animate({
                 width : '100%'
             }, {
                 duration : 750,
                 step : function() {
                     $(window).resize();
-                    Blockly.svgResize(programController.getBlocklyWorkspace());
+                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 },
                 done : function() {
                     $('#codeDiv').removeClass('codeActive');
                     $('.nav > li > ul > .robotType').removeClass('disabled');
-                    $('.' + guiState.robot).addClass('disabled');
+                    //$('.' + guiState.robot).addClass('disabled');
                     $(window).resize();
-                    Blockly.svgResize(programController.getBlocklyWorkspace());
+                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 }
             });
-            Blockly.svgResize(programController.getBlocklyWorkspace());
+            Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
 
         }, 'codeBack clicked');
 
         $('.popup-robot').onWrap('click', function(event) {
             var choosenRobotType = event.target.parentElement.dataset.type || event.target.dataset.type;
             if (choosenRobotType) {
-                robotController.switchRobot(choosenRobotType, true);
+                ROBOT_C.switchRobot(choosenRobotType, true);
             }
             if ($('#checkbox_id').is(':checked')) {
-                $.cookie("OpenRoberta_" + guiStateController.getServerVersion(), choosenRobotType, {
+                $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
                     expires : 99,
                     secure : true,
                     domain : ''
                 });
                 // check if it is really stored: chrome issue
-                if (!$.cookie("OpenRoberta_" + guiStateController.getServerVersion())) {
-                    $.cookie("OpenRoberta_" + guiStateController.getServerVersion(), choosenRobotType, {
+                if (!$.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
+                    $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
                         expires : 99,
                         domain : ''
                     });
                 }
             } else {
-                $.removeCookie("OpenRoberta_" + guiStateController.getServerVersion());
+                $.removeCookie("OpenRoberta_" + GUISTATE_C.getServerVersion());
             }
         }, 'hallo');
 
@@ -414,11 +428,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'show more releases clicked');
 
         $('#codeDownload').onWrap('click', function(event) {
-            // TODO get the programming language type from robot table in the database.
-            var extension = guiState.robotFWName === "ev3dev" ? ".py" : ".java";
-            var filename = guiState.program.name + extension;
-            UTIL.download(filename, guiState.program.nameSource);
-            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", guiState.program.name);
+            // TODO get the programming language type from server.
+            var extension = GUISTATE_C.getRobotFWName() === "ev3dev" ? ".py" : ".java";
+            var filename = GUISTATE_C.getProgramName() + extension;
+            UTIL.download(filename, GUISTATE_C.getProgramSource());
+            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
         }, 'codeDownload clicked');
 
         $('.newRelease').onWrap('click', function(event) {
@@ -427,17 +441,17 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('#confirmContinue').onWrap('click', function(event) {
             if ($('#confirmContinue').data('type') === 'program') {
-                programController.newProgram(true);
+                PROGRAM_C.newProgram(true);
             } else if ($('#confirmContinue').data('type') === 'configuration') {
-                ROBERTA_BRICK_CONFIGURATION.newConfiguration(true);
+                CONFIGURATION_C.newConfiguration(true);
             } else if ($('#confirmContinue').data('type') === 'switchRobot') {
-                robotController.switchRobot($('#confirmContinue').data('robot'), true);
+                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true);
             } else {
                 console.log('Confirmation with unknown data type clicked');
             }
         }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {
-            ROBERTA_TOUR.start('welcome');
+            TOUR_C.start('welcome');
         }, 'take a tour clicked');
 
         // init popup events
@@ -456,64 +470,19 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $('#passOld').val(target[1]);
             $('#resetPassLink').val(target[1]);
             $('#show-startup-message').modal('hide');
-            userController.showResetPassword();
+            USER_C.showResetPassword();
         }
-    }
 
-    /**
-     * Switch to Blockly tab
-     */
-    function switchToBlockly() {
-        Blockly.hideChaff(true);
-        var workspace = programController.getBlocklyWorkspace();
-        workspace.markFocused();
-        workspace.setVisible(true);
-        Blockly.svgResize(workspace);
-        bricklyActive = false;
+        $(window).on('beforeunload', function(e) {
+            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
+                if (GUISTATE_C.isUserLoggedIn()) {
+                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
+                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+                } else {
+                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
+                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
+                }
+            }
+        });
     }
-    exports.switchToBlockly = switchToBlockly;
-
-    /**
-     * Activate program and config menu when in frames that hides
-     * blockly/brickly.
-     */
-    function activateProgConfigMenu() {
-        $('#head-navigation-program-edit > ul > li').removeClass('disabled');
-        $('#head-navigation-configuration-edit > ul > li').removeClass('disabled');
-        setHeadNavigationMenuState(guiState.user.id === -1 ? 'logout' : 'login');
-        if (!guiState.program.saved && guiState.user.id === -1 && guiState.program.name !== 'NEPOprog') {
-            $('#menuSaveProg').parent().removeClass('login');
-            $('#menuSaveProg').parent().removeClass('disabled');
-            programController.getBlocklyWorkspace().robControls.enable('saveProgram');
-        }
-        if (!guiState.conf.saved && guiState.user.id === -1 && guiState.configuration != 'EV3basis') {
-            $('#menuSaveConfig').parent().removeClass('login');
-            $('#menuSaveConfig').parent().removeClass('disabled');
-            configurationController.getBricklyWorkspace().robControls.enable('saveProgram');
-        }
-        if (!$(".sim").hasClass('hide')) {
-            $('#menuShowCode').parent().addClass('disabled');
-        }
-    }
-    exports.activateProgConfigMenu = activateProgConfigMenu;
-
-    function beforeActivateProgList() {
-        if ($('#tabProgList').data('type') === 'userProgram') {
-            $("#deleteFromListing").show();
-            $("#shareFromListing").show();
-            $("#refreshListing").show();
-            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
-        } else {
-            $("#deleteFromListing").hide();
-            $("#shareFromListing").hide();
-            $("#refreshListing").hide();
-            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
-        }
-    }
-    exports.beforeActivateProgList = beforeActivateProgList;
-
-    function beforeActivateConfList() {
-        CONFIGURATION.refreshList(ROBERTA_BRICK_CONFIGURATION.showConfigurations);
-    }
-    exports.beforeActivateConfList = beforeActivateConfList;
 });

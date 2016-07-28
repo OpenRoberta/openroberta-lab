@@ -1,4 +1,4 @@
-define([ 'exports', 'util', 'comm' ], function(exports, UTIL, COMM) {
+define([ 'exports', 'comm' ], function(exports, COMM) {
 
     /**
      * Initialize gui state object
@@ -6,7 +6,7 @@ define([ 'exports', 'util', 'comm' ], function(exports, UTIL, COMM) {
     function init() {
 
         exports.server = {};
-        exports.server.doPing = true;
+        exports.server.ping = true;
 
         exports.gui = {};
         exports.gui.view = '';
@@ -15,6 +15,16 @@ define([ 'exports', 'util', 'comm' ], function(exports, UTIL, COMM) {
         exports.gui.robot = '';
         exports.gui.blocklyWorkspace = '';
         exports.gui.bricklyWorkspace = '';
+        exports.gui.program = {};
+        exports.gui.program.toolbox = {};
+        exports.gui.program.toolbox.a = '';
+        exports.gui.program.prog = {};
+        exports.gui.program = {};
+        exports.gui.program.toolbox = {};
+        exports.gui.program.prog = {};
+        exports.gui.configuration = {}
+        exports.gui.configuration.toolbox = '';
+        exports.gui.configuration.conf = '';
 
         exports.user = {};
         exports.user.id = -1;
@@ -26,6 +36,7 @@ define([ 'exports', 'util', 'comm' ], function(exports, UTIL, COMM) {
         exports.program.saved = true;
         exports.program.shared = true;
         exports.program.timestamp = '';
+        exports.program.source = '';
         exports.program.xml = '';
         exports.program.toolbox = {};
         exports.program.toolbox.level = '';

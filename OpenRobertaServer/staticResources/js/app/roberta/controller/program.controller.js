@@ -1,14 +1,17 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'rest.program', 'roberta.tour', 'blocks', 'jquery',
-        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, guiStateController, PROGRAM, ROBERTA_TOUR, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'prettify', 'robot.controller',
+        'tour.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, Prettify,
+        ROBOT_C, TOUR_C, Blockly, $) {
 
     var $formSingleModal;
 
     var blocklyWorkspace;
+    var listenToBlocklyEvents = true;
     /**
      * Inject Blockly with initial toolbox
      */
     function init() {
         initView();
+        initProgramEnvironment();
         initEvents();
         initProgramForms();
         LOG.info('init program view');
@@ -16,7 +19,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     exports.init = init;
 
     function initView() {
-        var toolbox = guiStateController.getProgramToolbox();
+        var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
             path : '/blockly/',
             toolbox : toolbox,
@@ -34,60 +37,52 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             variableDeclaration : true,
             robControls : true
         });
-        blocklyWorkspace.device = guiStateController.getRobot();
-        guiStateController.setBlocklyWorkspace(blocklyWorkspace);
-        initProgramEnvironment();
+        blocklyWorkspace.device = GUISTATE_C.getRobot();
+        GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
+        blocklyWorkspace.robControls.disable('saveProgram');
     }
 
     function initEvents() {
-        $('#tabProgram').onWrap('shown.bs.tab', function() {
-            guiStateController.setView('tabProgram');
+
+        $('#tabProgram').on('show.bs.tab', function(e) {
+            GUISTATE_C.setView('tabProgram');
             blocklyWorkspace.markFocused();
+        });
+
+        $('#tabProgram').onWrap('shown.bs.tab', function(e) {
             blocklyWorkspace.setVisible(true);
-            $('#head-navigation-program-edit').css('display', 'inline');
-            $('#head-navigation-configuration-edit').css('display', 'none');
-            $('#menuTabProgram').parent().addClass('disabled');
-            $('#menuTabConfiguration').parent().removeClass('disabled');
             reloadProgram();
         }, 'tabProgram clicked');
 
         $('#tabProgram').on('hide.bs.tab', function(e) {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
-            guiStateController.setProgramXML(xml);
-        });
-
-        var moveCounter = 0;
-        blocklyWorkspace.addChangeListener(function(event) {
-            if (event.type !== 'create' && guiStateController.isProgramSaved() && moveCounter >= 1) {
-                moveCounter = 0;
-                guiStateController.setProgramSaved(false);
-            } else if (event.type !== 'create') {
-                moveCounter++;
-            }
+            GUISTATE_C.setProgramXML(xml);
         });
         bindControl();
+        blocklyWorkspace.addChangeListener(function(event) {
+            if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
+                GUISTATE_C.setProgramSaved(false);
+            }
+        });
     }
 
     /**
      * Save program to server
      */
     function saveToServer() {
-        if (guiStateController.program) {
-            var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            var xmlText = Blockly.Xml.domToText(xml);
-            $('.modal').modal('hide'); // close all opened popups
-            PROGRAM.saveProgramToServer(userState.program, userState.programShared ? true : false, userState.programTimestamp, xmlText, function(result) {
-                if (result.rc === 'ok') {
-                    $('#menuSaveProg').parent().addClass('disabled');
-                    blocklyWorkspace.robControls.disable('saveProgram');
-                    userState.programSaved = true;
-                    LOG.info('save program ' + userState.program + ' login: ' + userState.id);
-                    userState.programTimestamp = result.lastChanged;
-                }
-                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
-            });
-        }
+        $('.modal').modal('hide'); // close all opened popups       
+        var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlText = Blockly.Xml.domToText(xml);
+        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(), xmlText, function(
+                result) {
+            if (result.rc === 'ok') {
+                GUISTATE_C.setProgramTimestamp(result.lastChanged);
+                GUISTATE_C.setProgramSaved(true);
+                LOG.info('save program ' + GUISTATE_C.getProgramName());
+            }
+            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, GUISTATE_C.getProgramName());
+        });
     }
     exports.saveToServer = saveToServer;
 
@@ -97,28 +92,21 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     function saveAsProgramToServer() {
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
+            $('.modal').modal('hide'); // close all opened popups
             var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlText = Blockly.Xml.domToText(xml);
             var progName = $('#singleModalInput').val().trim();
-            LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
-            PROGRAM.saveAsProgramToServer(progName, userState.programTimestamp, xmlText, function(result) {
+            LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
+            PROGRAM.saveAsProgramToServer(progName, GUISTATE_C.getProgramTimestamp(), xmlText, function(result) {
                 UTIL.response(result);
                 if (result.rc === 'ok') {
-                    ROBERTA_USER.setProgram(progName);
-                    $('#menuSaveProg').parent().addClass('disabled');
-                    blocklyWorkspace.robControls.disable('saveProgram');
-                    userState.programSaved = true;
-                    userState.programTimestamp = result.lastChanged;
-                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
+                    result.name = progName;
+                    result.programShared = false;
+                    GUISTATE_C.setProgram(result);
+                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
                 }
             });
         }
-    }
-
-    function refreshBlocklyProgram(result) {
-        var xml = Blockly.Xml.textToDom(result.data);
-        blocklyWorkspace.clear();
-        Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
     }
 
     /**
@@ -126,11 +114,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      */
     function loadFromListing(program) {
         var right = 'none';
-        LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
+        LOG.info('loadFromList ' + program[0]);
         PROGRAM.loadProgramFromListing(program[0], program[1], function(result) {
             if (result.rc === 'ok') {
                 result.programShared = false;
-                var alien = program[1] === userState.accountName ? null : program[1];
+                var alien = program[1] === GUISTATE_C.getUserAccountName() ? null : program[1];
                 if (alien) {
                     result.programShared = 'READ';
                 }
@@ -139,10 +127,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     result.programShared = right;
                 }
                 result.name = program[0];
-                result.programSaved = true;
-                $('#tabProgram').one('shown.bs.tab', function() {
-                    showProgram(result, alien);
-                });
+                GUISTATE_C.setProgram(result, alien);
+                GUISTATE_C.setProgramXML(result.data);
                 $('#tabProgram').trigger('click');
             }
             MSG.displayInformation(result, "", result.message);
@@ -155,49 +141,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
             start();
         });
-
-        // load program
-        $('#loadFromListing').onWrap('click', function() {
-            ROBERTA_NAVIGATION.activateProgConfigMenu();
-            loadFromListing();
-        }, 'load blocks from program list');
-
-        // delete program
-//        $('#doDeleteProgram').onWrap('click', function() {
-//            deleteFromListing();
-//            //  $('.modal').modal('hide'); // close all opened popups
-//        }, 'delete program');
-
-        // Refresh list of programs
-        $('#refreshListing').onWrap('click', function() {
-            PROGRAM.refreshList(showPrograms);
-        }, 'refresh list of programs');
-
-        // Refresh expamle list of programs
-        $('#refreshExamplesListing').onWrap('click', function() {
-            PROGRAM.refreshExamplesList(showPrograms);
-        }, 'refresh list of programs');
-
-        // confirm program deletion
-        $('#deleteFromListing').onWrap('click', function() {
-            var $programRow = $('#programNameTable .selected');
-            if ($programRow.length > 0) {
-                var names = '';
-                for (var i = 0; i < $programRow.length; i++) {
-                    names += ($programRow[i].children[0].textContent + '</br>');
-                }
-                $('#confirmDeleteProgramName').html(names);
-                $("#confirmDeleteProgram").modal("show");
-            }
-        }, 'Ask for confirmation to delete programs');
-
     }
     exports.initProgramForms = initProgramForms;
-
-    function save() {
-        saveToServer();
-    }
-    exports.save = save;
 
     function showSaveAsModal() {
         $.validator.addMethod("regex", function(value, element, regexp) {
@@ -233,9 +178,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     exports.showSaveAsModal = showSaveAsModal;
 
     function initProgramEnvironment() {
-        blocklyWorkspace.clear();
-        Blockly.hideChaff();
-        Blockly.svgResize(blocklyWorkspace);
         var x, y;
         if ($(window).width() < 768) {
             x = $(window).width() / 50;
@@ -244,17 +186,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             x = $(window).width() / 5;
             y = 50;
         }
-        var program = guiStateController.getProgramProg();
-        var dom = Blockly.Xml.textToDom(program);
-        Blockly.Xml.domToWorkspace(blocklyWorkspace, dom);
+        var program = GUISTATE_C.getProgramProg();
+        programToBlocklyWorkspace(program);
+
         var blocks = blocklyWorkspace.getTopBlocks(true);
         if (blocks[0]) {
             var coord = blocks[0].getRelativeToSurfaceXY();
             blocks[0].moveBy(x - coord.x, y - coord.y);
         }
-        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xml = Blockly.Xml.domToText(dom);
-        guiStateController.setProgramXML(xml);
     }
     exports.initProgramEnvironment = initProgramEnvironment;
 
@@ -263,23 +202,20 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      */
     function newProgram(opt_further) {
         var further = opt_further || false;
-        if (further || userState.programSaved) {
+        if (further || GUISTATE_C.isProgramSaved()) {
             var result = {};
+            result.rc = 'ok';
             result.name = "NEPOprog"
-            result.programSaved = 'new';
             result.programShared = false;
             result.lastChanged = '';
-            ROBERTA_USER.setProgram(result);
+            GUISTATE_C.setProgram(result);
             initProgramEnvironment();
-            //$('#tabProgram').click();
-            $('#menuSaveProg').parent().addClass('disabled');
-            blocklyWorkspace.robControls.disable('saveProgram');
         } else {
             $('#confirmContinue').data('type', 'program');
-            if (userState.id === -1) {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
-            } else {
+            if (GUISTATE_C.isUserLoggedIn()) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+            } else {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
             }
         }
     }
@@ -287,49 +223,42 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
 
     function showProgram(result, alien) {
         if (result.rc === 'ok') {
-            ROBERTA_USER.setProgram(result, alien);
-            var xml = Blockly.Xml.textToDom(result.data);
-            blocklyWorkspace.clear();
-            Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
-
-            $('#menuSaveProg').parent().addClass('disabled');
-            blocklyWorkspace.robControls.disable('saveProgram');
-
-            LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
+            programToBlocklyWorkspace(result.data);
+            GUISTATE_C.setProgram(result, alien);
+            LOG.info('show program ' + GUISTATE_C.getProgramName());
         }
     }
 
     exports.showProgram = showProgram;
 
-    /**
-     * Check program
-     */
-    function checkProgram() {
-        LOG.info('check ' + userState.program + ' signed in: ' + userState.id);
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
-        MSG.displayMessage("MESSAGE_EDIT_CHECK", "TOAST", userState.program);
-        PROGRAM.checkProgramCompatibility(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            refreshBlocklyProgram(result);
-            MSG.displayInformation(result, "", result.message, "");
-        });
-    }
-    exports.checkProgram = checkProgram;
+// TODO is this still supported by the server?
+//    /**
+//     * Check program
+//     */
+//    function checkProgram() {
+//        LOG.info('check ' + GUISTATE_C.getProgramName());
+//        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+//        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+//        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
+//        MSG.displayMessage("MESSAGE_EDIT_CHECK", "TOAST", GUISTATE_C.getProgramName());
+//        PROGRAM.checkProgramCompatibility(GUISTATE_C.getProgramName(), userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+//            refreshBlocklyProgram(result);
+//            MSG.displayInformation(result, "", result.message, "");
+//        });
+//    }
+//    exports.checkProgram = checkProgram;
 
     /**
      * Show program code
      */
     function showCode() {
 
-        //if (userState.robot === 'ev3') {
-        LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
+        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlProgram = Blockly.Xml.domToText(dom);
+        var xmlConfiguration = GUISTATE_C.getConfigurationXML();
 
-        PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            ROBERTA_ROBOT.setState(result);
+        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlProgram, xmlConfiguration, function(result) {
+            GUISTATE_C.setState(result);
             if ($(window).width() < 768) {
                 width = '0';
             } else {
@@ -352,9 +281,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             $('.nav > li > ul > .robotType').addClass('disabled');
             $(".code").removeClass('hide');
             $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
-            userState.programSource = result.javaSource
-            console.log(prettyPrintOne(result.javaSource, null, true));
+            // TODO change javaSource to source on server
+            GUISTATE_C.setProgramSource(result.javaSource);
+            //console.log(prettyPrintOne(result.javaSource, null, true));
         });
+        LOG.info('show code ' + GUISTATE_C.getProgramName());
+
     }
     exports.showCode = showCode;
 
@@ -363,8 +295,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      * disk.
      */
     function importXml() {
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlProgramSave = Blockly.Xml.domToText(xmlProgram);
+        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xml = Blockly.Xml.domToText(dom);
         var input = $(document.createElement('input'));
         input.attr("type", "file");
         input.attr("accept", ".xml");
@@ -377,15 +309,15 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 var name = UTIL.getBasename(file.name);
                 PROGRAM.loadProgramFromXML(name, event.target.result, function(result) {
                     if (result.rc == "ok") {
-                        // on server side we only test case insensitiv block names, displaying xml can still fail:
+                        // on server side we only test case insensitive block names, displaying xml can still fail:
                         try {
                             result.programSaved = false;
                             result.programShared = false;
                             result.programTimestamp = '';
                             showProgram(result);
                         } catch (e) {
-                            result.data = xmlProgramSave;
-                            result.name = userState.program;
+                            result.data = xml;
+                            result.name = GUISTATE_C.getProgramName();
                             showProgram(result);
                             result.rc = "error";
                             MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, result.name);
@@ -400,33 +332,44 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     exports.importXml = importXml;
 
     /**
+     * Create a file from the blocks and download it.
+     */
+    function exportXml() {
+        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xml = Blockly.Xml.domToText(dom);
+        UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
+        MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
+    }
+    exports.exportXml = exportXml;
+
+    /**
      * Start the program on the brick
      */
     function runOnBrick() {
-        if (userState.robotState === '' || userState.robotState === 'disconnected') {
+        if (!GUISTATE_C.isRobotConnected()) {
             MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
             return;
-        } else if (userState.robotState === 'busy') {
+        } else if (GUISTATE_C.robotState === 'busy') {
             MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
             return;
-        } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {
-            $('#buttonCancelFirmwareUpdate').css('display', 'none');
-            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-            return;
+//        } else if (ROBOT_C.handleFirmwareConflict()) {
+//            $('#buttonCancelFirmwareUpdate').css('display', 'none');
+//            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+//            return;
         }
-        LOG.info('run ' + userState.program + 'on brick' + ' signed in: ' + userState.id);
+        LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
+        var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
 
-        PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            ROBERTA_ROBOT.setState(result);
+        PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+            GUISTATE_C.setState(result);
             if (result.rc == "ok") {
-                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
             } else {
                 MSG.displayInformation(result, "", result.message, "");
             }
-            refreshBlocklyProgram(result);
+            reloadProgram(result);
         });
     }
     exports.runOnBrick = runOnBrick;
@@ -435,17 +378,18 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      * Start the program in the simulation.
      */
     function runInSim() {
-        LOG.info('run ' + userState.program + 'in simulation' + ' signed in: ' + userState.id);
+        LOG.info('run ' + GUISTATE_C.getProgramName() + 'in simulation');
         Blockly.hideChaff();
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
+        var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
+        GUISTATE_C.setConfigurationXML(xmlTextConfiguration);
 
-        PROGRAM.runInSim(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
             if (result.rc == "ok") {
-                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                 blocklyWorkspace.robControls.setSimStart(false);
-                refreshBlocklyProgram(result);
+                reloadProgram(result);
 
                 if ($(".sim").hasClass('hide')) {
                     SIM.init(result.javaScriptProgram, true);
@@ -480,8 +424,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             }
                             blocklyWorkspace.robControls.toogleSim();
                             Blockly.svgResize(blocklyWorkspace);
-                            if (ROBERTA_TOUR.getInstance()) {
-                                ROBERTA_TOUR.getInstance().trigger('SimLoaded');
+                            if (TOUR_C.getInstance()) {
+                                TOUR_C.getInstance().trigger('SimLoaded');
                             }
                             setTimeout(function() {
                                 SIM.setPause(false);
@@ -497,7 +441,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             } else {
                 MSG.displayInformation(result, "", result.message, "");
             }
-            refreshBlocklyProgram(result);
         });
     }
     exports.runInSim = runInSim;
@@ -540,39 +483,60 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         blocklyWorkspace.robControls.disable('runOnBrick');
     }
 
-    function reloadProgram() {
-        blocklyWorkspace.clear();
-        Blockly.hideChaff();
-        Blockly.svgResize(blocklyWorkspace);
-        var program = guiStateController.getProgramXML();
-        var dom = Blockly.Xml.textToDom(program);
-        Blockly.Xml.domToWorkspace(blocklyWorkspace, dom);
+    function reloadProgram(opt_result) {
+        if (opt_result) {
+            program = opt_result.data;
+        } else {
+            program = GUISTATE_C.getProgramXML();
+        }
+        programToBlocklyWorkspace(program);
     }
 
     function reloadView() {
         if (isVisible()) {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
-            blocklyWorkspace.clear();
-            dom = Blockly.Xml.textToDom(xml);
-            Blockly.Xml.domToWorkspace(blocklyWorkspace, dom);
+            programToBlocklyWorkspace(xml);
         }
-        var toolbox = guiStateController.getProgramToolbox();
+        var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
     }
 
     exports.reloadView = reloadView;
 
     function resetView() {
-        blocklyWorkspace.device = guiStateController.getRobot();
+        blocklyWorkspace.device = GUISTATE_C.getRobot();
         initProgramEnvironment();
-        var toolbox = guiStateController.getProgramToolbox();
+        var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
-        blocklyWorkspace.device = guiStateController.getRobot();
+        blocklyWorkspace.device = GUISTATE_C.getRobot();
     }
     exports.resetView = resetView;
 
+    function loadToolbox(level) {
+        Blockly.hideChaff();
+        GUISTATE_C.setProgramToolboxLevel(level);
+        var xml = GUISTATE_C.getToolbox(level);
+        if (xml) {
+            blocklyWorkspace.updateToolbox(xml);
+        }
+    }
+    exports.loadToolbox = loadToolbox;
+
     function isVisible() {
-        return guiStateController.getView() == 'tabProgram';
+        return GUISTATE_C.getView() == 'tabProgram';
+    }
+
+    function programToBlocklyWorkspace(xml) {
+        // removing changelistener in blockly doesn't work, so no other way
+        listenToBlocklyEvents = false;
+        Blockly.hideChaff();
+        blocklyWorkspace.clear();
+        Blockly.svgResize(blocklyWorkspace);
+        var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
+        Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
+        setTimeout(function() {
+            listenToBlocklyEvents = true;
+        }, 500);
     }
 });

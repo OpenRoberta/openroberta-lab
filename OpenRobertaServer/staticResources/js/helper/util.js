@@ -1,10 +1,11 @@
-define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui', 'jquery-validate', 'datatables', 'bootstrap' ],
-		function(exports, userState, MSG, LOG, $) {
+define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ], function(exports, MSG, LOG, $) {
     /**
      * Set cookie
      * 
-     * @param {key} Key of the cookie
-     * @param {value} Value of the cookie
+     * @param {key}
+     *            Key of the cookie
+     * @param {value}
+     *            Value of the cookie
      */
     function setCookie(key, value) {
         var expires = new Date();
@@ -16,7 +17,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Get cookie
      * 
-     * @param {key} Key of the cookie to read
+     * @param {key}
+     *            Key of the cookie to read
      */
     function getCookie(key) {
         var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
@@ -27,7 +29,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Format date
      * 
-     * @param {date} date from server to be formatted
+     * @param {date}
+     *            date from server to be formatted
      */
     function formatDate(dateLong) {
         if (dateLong) {
@@ -36,7 +39,7 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
                     + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
         } else {
-        	return "";        	
+            return "";
         }
     }
     exports.formatDate = formatDate;
@@ -44,7 +47,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Convert date into numeric value
      * 
-     * @param {d} date in the form 'dd.mm.yyyy, hh:mm:ss'
+     * @param {d}
+     *            date in the form 'dd.mm.yyyy, hh:mm:ss'
      */
     function parseDate(d) {
         if (d) {
@@ -67,7 +71,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Format result of server call for logging
      * 
-     * @param {result} Result-object from server call
+     * @param {result}
+     *            Result-object from server call
      */
     function formatResultLog(result) {
         var str = "{";
@@ -119,34 +124,6 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     }
     exports.calcDataTableHeight = calcDataTableHeight;
 
-    function cacheBlocks(workspace) {
-        userState.programBlocksSaved = null;
-        userState.programBlocks = null;
-        if (Blockly.mainWorkspace !== null) {
-            var xmlProgram = Blockly.Xml.workspaceToDom(workspace);
-            userState.programBlocksSaved = Blockly.Xml.domToText(xmlProgram);
-            var blocks = workspace.getTopBlocks();
-            for (var i = 0; i < blocks.length; i++) {
-                if (blocks[i].type == "robControls_start") {
-                    var pos = blocks[i].getRelativeToSurfaceXY();
-                    blocks[i].moveBy(25 - pos.x, 25 - pos.y);
-                    break;
-                }
-            }
-            xmlProgram = Blockly.Xml.workspaceToDom(workspace);
-            userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
-            var blocks = workspace.getTopBlocks();
-            for (var i = 0; i < blocks.length; i++) {
-                if (blocks[i].type == "robControls_start") {
-                    var pos = blocks[i].getRelativeToSurfaceXY();
-                    blocks[i].moveBy(25 - pos.x, 25 - pos.y);
-                    break;
-                }
-            }
-        }
-    }
-    exports.cacheBlocks = cacheBlocks;
-
     function checkVisibility() {
         var stateKey, eventKey, keys = {
             hidden : "visibilitychange",
@@ -196,8 +173,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
         $("#single-modal").modal('show');
     }
     exports.showSingleModal = showSingleModal;
-    
-     /**
+
+    /**
      * Helper to show the information on top of the share modal.
      * 
      */
@@ -217,7 +194,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Handle result of server call
      * 
-     * @param {result} Result-object from server call
+     * @param {result}
+     *            Result-object from server call
      */
     function response(result) {
         LOG.info('result from server: ' + formatResultLog(result));
@@ -230,8 +208,10 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Rounds a number to required decimal
      * 
-     * @param value {Number} - to be rounded
-     * @param decimals {Number} - number of decimals after rounding
+     * @param value
+     *            {Number} - to be rounded
+     * @param decimals
+     *            {Number} - number of decimals after rounding
      * @return {Number} rounded number
      * 
      */
@@ -243,7 +223,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Get the sign of the number.
      * 
-     * @param x {Number} -
+     * @param x
+     *            {Number} -
      * @return {Number} - 1 if it is positive number o/w return -1
      */
     function sgn(x) {
@@ -254,7 +235,8 @@ define([ 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui
     /**
      * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
      * 
-     * @param path {String} - path
+     * @param path
+     *            {String} - path
      */
     function getBasename(path) {
         var base = new String(path).substring(path.lastIndexOf('/') + 1);

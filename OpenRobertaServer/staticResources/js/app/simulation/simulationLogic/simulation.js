@@ -7,21 +7,9 @@
  * @namespace SIM
  */
 
-define([ 'exports',
-         'simulation.robot.simple',
-         'simulation.robot.draw',
-         'simulation.robot.math',
-         'simulation.robot.roberta',
-         'simulation.robot.rescue',
-         'simulation.scene',
-         'simulation.program.eval',
-         'simulation.math',
-         'roberta.program',
-         'robertaLogic.constants',
-         'simulation.program.builder' ],
-        function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot,
-                 RescueRobot, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM,
-                 CONST, BUILDER) {
+define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulation.robot.math', 'simulation.robot.roberta', 'simulation.robot.rescue',
+        'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants', 'simulation.program.builder' ],
+        function(exports, SimpleRobot, DrawRobot, MathRobot, RobertaRobot, RescueRobot, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER) {
 
             var programEval = new ProgramEval();
 
@@ -39,23 +27,15 @@ define([ 'exports',
             var scale = 1;
             // Note: The ruler is currently only used for the scene with
             // robertaBackground.svg.
-            var imgSrc = [ 
-              "/js/app/simulation/simBackgrounds/baustelle-02.svg",
-              "/js/app/simulation/simBackgrounds/simpleBackground.svg",
-              "/js/app/simulation/simBackgrounds/drawBackground.svg",
-              "/js/app/simulation/simBackgrounds/robertaBackground.svg",
-              "/js/app/simulation/simBackgrounds/rescueBackground.svg",
-              "/js/app/simulation/simBackgrounds/mathBackground.svg",
-              "/js/app/simulation/simBackgrounds/ruler.svg" ];
-              //TODO combine to one image for better performance
-            var imgSrcIE = [
-              "/js/app/simulation/simBackgrounds/baustelle-02.svg",
-              "/js/app/simulation/simBackgrounds/simpleBackground.png",
-              "/js/app/simulation/simBackgrounds/drawBackground.png",
-              "/js/app/simulation/simBackgrounds/robertaBackground.png",
-              "/js/app/simulation/simBackgrounds/rescueBackground.png",
-              "/js/app/simulation/simBackgrounds/mathBackground.png",
-              "/js/app/simulation/simBackgrounds/ruler.svg" ];
+            var imgSrc = [ "/js/app/simulation/simBackgrounds/baustelle-02.svg", "/js/app/simulation/simBackgrounds/simpleBackground.svg",
+                    "/js/app/simulation/simBackgrounds/drawBackground.svg", "/js/app/simulation/simBackgrounds/robertaBackground.svg",
+                    "/js/app/simulation/simBackgrounds/rescueBackground.svg", "/js/app/simulation/simBackgrounds/mathBackground.svg",
+                    "/js/app/simulation/simBackgrounds/ruler.svg" ];
+            //TODO combine to one image for better performance
+            var imgSrcIE = [ "/js/app/simulation/simBackgrounds/baustelle-02.svg", "/js/app/simulation/simBackgrounds/simpleBackground.png",
+                    "/js/app/simulation/simBackgrounds/drawBackground.png", "/js/app/simulation/simBackgrounds/robertaBackground.png",
+                    "/js/app/simulation/simBackgrounds/rescueBackground.png", "/js/app/simulation/simBackgrounds/mathBackground.png",
+                    "/js/app/simulation/simBackgrounds/ruler.svg" ];
             var img;
             var timerStep = 0;
             var ready;
@@ -66,10 +46,7 @@ define([ 'exports',
             function setBackground(num) {
                 window.removeEventListener("resize", resizeAll);
                 setPause(true);
-                ROBERTA_PROGRAM
-                  .getBlocklyWorkspace()
-                  .robControls
-                  .setSimStart(true);
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
                 if (num === 0) {
                     currentBackground += 1;
                     if (currentBackground > 5) {
@@ -93,8 +70,7 @@ define([ 'exports',
                 robot.debug = debug;
                 setObstacle();
                 setRuler();
-                scene = new Scene(img[currentBackground], layers, robot,
-                                  obstacle, ruler);
+                scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
                 resizeAll();
                 scene.updateBackgrounds();
                 scene.drawObjects();
@@ -131,21 +107,12 @@ define([ 'exports',
                     if (value) {
                         $('.simForward').removeClass('typcn-media-pause');
                         $('.simForward').addClass('typcn-media-play');
-                        ROBERTA_PROGRAM
-                          .getBlocklyWorkspace()
-                          .robControls
-                          .setSimForward(true);
+                        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
                     } else {
                         $('.simForward').removeClass('typcn-media-play');
                         $('.simForward').addClass('typcn-media-pause');
-                        ROBERTA_PROGRAM
-                          .getBlocklyWorkspace()
-                          .robControls
-                          .setSimForward(false);
-                        ROBERTA_PROGRAM
-                          .getBlocklyWorkspace()
-                          .robControls
-                          .setSimStart(false);
+                        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(false);
+                        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(false);
                     }
                     pause = value;
                 }
@@ -349,22 +316,22 @@ define([ 'exports',
             }
 
             function setRuler() {
-              if (currentBackground == 3) {
-                  ruler.x = 430;
-                  ruler.y = 380;
-                  ruler.w = 300;
-                  ruler.h = 30;
-                  ruler.img = img[6];
-                  ruler.color = null;
-              } else {
-                  // All other scenes currently don't have a movable ruler.
-                  ruler.x = 0;
-                  ruler.y = 0;
-                  ruler.w = 0;
-                  ruler.h = 0;
-                  ruler.img = null;
-                  ruler.color = null;
-              }
+                if (currentBackground == 3) {
+                    ruler.x = 430;
+                    ruler.y = 380;
+                    ruler.w = 300;
+                    ruler.h = 30;
+                    ruler.img = img[6];
+                    ruler.color = null;
+                } else {
+                    // All other scenes currently don't have a movable ruler.
+                    ruler.x = 0;
+                    ruler.y = 0;
+                    ruler.w = 0;
+                    ruler.h = 0;
+                    ruler.img = null;
+                    ruler.color = null;
+                }
             }
 
             function handleMouseDown(e) {
@@ -375,16 +342,9 @@ define([ 'exports',
                 startY = (parseInt(Y - offsetY, 10)) / scale;
                 var dx = startX - robot.mouse.rx;
                 var dy = startY - robot.mouse.ry;
-                isDownrobot = (dx * dx + dy * dy <
-                               robot.mouse.r * robot.mouse.r);
-                isDownObstacle = (startX > obstacle.x &&
-                                  startX < obstacle.x + obstacle.w &&
-                                  startY > obstacle.y &&
-                                  startY < obstacle.y + obstacle.h);
-                isDownRuler = (startX > ruler.x &&
-                               startX < ruler.x + ruler.w &&
-                               startY > ruler.y &&
-                               startY < ruler.y + ruler.h);
+                isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
+                isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
+                isDownRuler = (startX > ruler.x && startX < ruler.x + ruler.w && startY > ruler.y && startY < ruler.y + ruler.h);
                 e.stopPropagation();
             }
 
@@ -535,8 +495,7 @@ define([ 'exports',
             function initScene() {
 
                 layers = createLayers();
-                scene = new Scene(img[currentBackground], layers, robot,
-                                  obstacle, ruler);
+                scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
                 scene.updateBackgrounds();
                 scene.drawObjects();
                 scene.drawRuler();
@@ -549,31 +508,23 @@ define([ 'exports',
             }
 
             function createLayers() {
-                $('<canvas id ="unitBackgroundLayer" width=' + CONST.MAX_WIDTH
-                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                      document.getElementById("uniDiv"));
+                $('<canvas id ="unitBackgroundLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                        document.getElementById("uniDiv"));
                 var uniCanvas = document.getElementById("unitBackgroundLayer");
-                $('<canvas id ="backgroundLayer" width=' + CONST.MAX_WIDTH
-                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                      document.getElementById("backgroundDiv"));
+                $('<canvas id ="backgroundLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                        document.getElementById("backgroundDiv"));
                 var backCanvas = document.getElementById("backgroundLayer");
-                $('<canvas id ="objectLayer" width=' + CONST.MAX_WIDTH
-                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                      document.getElementById("objectDiv"));
+                $('<canvas id ="objectLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                        document.getElementById("objectDiv"));
                 var objectCanvas = document.getElementById("objectLayer");
-                $('<canvas id ="rulerLayer" width=' + CONST.MAX_WIDTH
-                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                      document.getElementById("rulerDiv"));
+                $('<canvas id ="rulerLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                        document.getElementById("rulerDiv"));
                 var rulerCanvas = document.getElementById("rulerLayer");
-                $('<canvas id ="robotLayer" width=' + CONST.MAX_WIDTH
-                  + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
-                      document.getElementById("robotDiv"));
+                $('<canvas id ="robotLayer" width=' + CONST.MAX_WIDTH + ' height=' + CONST.MAX_HEIGHT + '></canvas>').appendTo(
+                        document.getElementById("robotDiv"));
                 var robotCanvas = document.getElementById("robotLayer");
-                return [ uniCanvas.getContext("2d"),
-                         backCanvas.getContext("2d"),
-                         objectCanvas.getContext("2d"),
-                         robotCanvas.getContext("2d"),
-                         rulerCanvas.getContext("2d") ];
+                return [ uniCanvas.getContext("2d"), backCanvas.getContext("2d"), objectCanvas.getContext("2d"), robotCanvas.getContext("2d"),
+                        rulerCanvas.getContext("2d") ];
             }
             function destroyLayers() {
                 var layer = document.getElementById("backgroundLayer");
@@ -633,11 +584,8 @@ define([ 'exports',
     var lastTime = 0;
     var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[
-            vendors[x] + 'RequestAnimationFrame'];
-        window.cancelAnimationFrame = (
-            window[vendors[x] + 'CancelAnimationFrame'] ||
-            window[vendors[x] + 'CancelRequestAnimationFrame']);
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame']);
     }
 
     if (!window.requestAnimationFrame) {

@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.program', 'program.controller', 'roberta.program.sharing', 'blocks-msg', 'jquery',
-        'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, PROGLIST_MODEL, PROGRAM, programController, programController_SHARING, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program.model', 'program.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(
+        require, exports, LOG, UTIL, COMM, PROGLIST, PROGRAM, PROGRAM_C, Blockly, $) {
 
     /**
      * Initialize table of programs
@@ -85,19 +85,26 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
                 height : UTIL.calcDataTableHeight()
             });
         });
+        $('#tabProgList').on('show.bs.tab', function(e) {
+            guiStateController.setView('tabProgList');
+            if ($('#tabProgList').data('type') === 'userProgram') {
+                PROGLIST.loadProgList(update);
+            } else {
+                PROGLIST.loadExampleList(update);
+            }
+        });
 
         $('.bootstrap-table').find('button[name="refresh"]').onWrap('click', function() {
             if ($('#tabProgList').data('type') === 'userProgram') {
-                PROGLIST_MODEL.loadProgList(update);
+                PROGLIST.loadProgList(update);
             } else {
-                PROGLIST_MODEL.loadExampleList(update);
+                PROGLIST.loadExampleList(update);
             }
             return false;
         }, "refresh program list clicked");
 
         $('#programNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
-            programController.loadFromListing(row);
-            //$('#blocklyDiv').trigger('load', [ row ]);
+            PROGRAM_C.loadFromListing(row);
         }, "Load program from listing double clicked");
 
         $('#programNameTable').onWrap('check-all.bs.table', function($element, rows) {
@@ -138,7 +145,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
         $('#backProgList').onWrap('click', function() {
             $('#tabProgram').trigger('click');
             return false;
-        }, "back to program");
+        }, "back to program view")
 
         $('#deleteSome').onWrap('click', function() {
             var programs = $('#programNameTable').bootstrapTable('getSelections', {});
@@ -149,7 +156,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
             }
             $('#confirmDeleteProgramName').html(names);
             $('#confirmDeleteProgram').one('hide.bs.modal', function(event) {
-                PROGLIST_MODEL.loadProgList(update);
+                PROGLIST.loadProgList(update);
             });
             $("#confirmDeleteProgram").data('programs', programs);
             $("#confirmDeleteProgram").modal("show");
@@ -165,15 +172,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
             if (result.rc === 'ok') {
                 $('#programNameTable').bootstrapTable({});
                 $('#programNameTable').bootstrapTable("load", result.programNames);
+                $('#programNameTable').bootstrapTable("showColumn", '2');
+                $('#programNameTable').bootstrapTable("showColumn", '3');
+                $('#programNameTable').bootstrapTable("showColumn", '5');
                 if ($('#tabProgList').data('type') === 'userProgram') {
-                    $('#programNameTable').bootstrapTable("showColumn", '2');
-                    $('#programNameTable').bootstrapTable("showColumn", '3');
-                    $('#programNameTable').bootstrapTable("showColumn", '5');
                     $('#deleteSome').show();
                 } else {
-                    $('#programNameTable').bootstrapTable("hideColumn", '2');
-                    $('#programNameTable').bootstrapTable("hideColumn", '3');
-                    $('#programNameTable').bootstrapTable("hideColumn", '5');
                     $('#deleteSome').hide();
                 }
             }
@@ -182,7 +186,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
 
     var eventsDeleteShareLoad = {
         'click .delete' : function(e, value, row, index) {
-            //var deleted = false;
             var selectedRows = [ row ];
             var names = '';
             for (var i = 0; i < selectedRows.length; i++) {
@@ -192,10 +195,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
             $('#confirmDeleteProgramName').html(names);
             $("#confirmDeleteProgram").data('programs', selectedRows);
             $('#confirmDeleteProgram').one('hidden.bs.modal', function(event) {
-//                if (deleted) {
-//                    $('#programNameTable').bootstrapTable('uncheckAll', {});
-//                    $('.selected').removeClass('selected');
-//                }
             });
             $("#confirmDeleteProgram").modal("show");
             return false;
@@ -207,7 +206,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'rest.pr
             return false;
         },
         'click .load' : function(e, value, row, index) {
-            programController.loadFromListing(row);
+            PROGRAM_C.loadFromListing(row);
         }
     };
 

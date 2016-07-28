@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', 'program.controller', 'configuration.controller', 'roberta.user' ], function(
-        exports, LOG, $, ROBERTA_TOOLBOX, guiStateController, programController, configurationController, ROBERTA_USER) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller' ], function(exports, LOG, $,
+        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C) {
 
     /**
      * Initialize language switching
@@ -27,7 +27,7 @@ define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', '
         }
         $('#language li a[lang=' + language + ']').parent().addClass('disabled');
         var url = 'blockly/msg/js/' + language + '.js';
-        $.getScript(url, function(data) {
+        getCachedScript(url).done(function(data) {
             translate();
             ready.resolve(language);
         });
@@ -49,17 +49,17 @@ define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', '
 
     function switchLanguage(language) {
 
-        if (guiStateController.getLanguage == language) {
+        if (GUISTATE_C.getLanguage == language) {
             return;
         }
-        guiStateController.setLanguage(language);
+        GUISTATE_C.setLanguage(language);
 
         var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
-        var future = $.getScript(url);
-        future.then(function() {
-            programController.reloadView();
-            configurationController.reloadView();
-            //ROBERTA_USER.initValidationMessages();
+        getCachedScript(url).done(function(data) {
+            translate();
+            PROGRAM_C.reloadView();
+            CONFIGURATION_C.reloadView();
+            USER_C.initValidationMessages();
         });
         LOG.info('language switched to ' + language);
     }
@@ -103,5 +103,23 @@ define([ 'exports', 'log', 'jquery', 'roberta.toolbox', 'guiState.controller', '
                 $(this).attr('value', value);
             }
         });
+    }
+
+    /**
+     * $.getScript() will append a timestamped query parameter to the url to
+     * prevent caching. The cache control should be handled using http-headers.
+     * see https://api.jquery.com/jquery.getscript/#caching-requests
+     */
+    function getCachedScript(url, options) {
+        // Allow user to set any option except for dataType, cache, and url
+        options = $.extend(options || {}, {
+            dataType : "script",
+            cache : true,
+            url : url
+        });
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        return jQuery.ajax(options);
     }
 });

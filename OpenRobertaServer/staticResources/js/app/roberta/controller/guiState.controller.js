@@ -1,57 +1,56 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], function(exports, UTIL, LOG, MSG, guiState, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, $) {
 
     /**
      * Init robot
      */
     function init(language) {
 
-        var a = $.Deferred();
-        $.when(guiState.init()).then(function() {
-            if ($.cookie("OpenRoberta_" + guiState.server.version)) {
-                guiState.gui.cookie = $.cookie("OpenRoberta_" + guiState.server.version);
+        var ready = $.Deferred();
+        $.when(GUISTATE.init()).then(function() {
+            if ($.cookie("OpenRoberta_" + GUISTATE.server.version)) {
+                GUISTATE.gui.cookie = $.cookie("OpenRoberta_" + GUISTATE.server.version);
             }
 
-            guiState.gui.view = 'tabProgram';
-            guiState.gui.prevView = 'tabProgram';
-            guiState.gui.language = language;
-            guiState.gui.robot = guiState.gui.cookie || guiState.server.defaultRobot;
+            GUISTATE.gui.view = 'tabProgram';
+            GUISTATE.gui.prevView = 'tabProgram';
+            GUISTATE.gui.language = language;
+            GUISTATE.gui.robot = GUISTATE.gui.cookie || GUISTATE.server.defaultRobot;
 
-            guiState.user.id = -1;
-            guiState.user.accountName = '';
-            guiState.user.name = '';
+            GUISTATE.user.id = -1;
+            GUISTATE.user.accountName = '';
+            GUISTATE.user.name = '';
 
-            guiState.program.name = 'NEPOprog';
-            guiState.program.shared = false;
-            guiState.program.toolbox.level = 'beginner';
+            GUISTATE.program.name = 'NEPOprog';
+            GUISTATE.program.shared = false;
+            GUISTATE.program.toolbox.level = 'beginner';
 
             LOG.info('init gui state');
-            a.resolve();
+            ready.resolve();
         });
-        return a;
+        return ready.promise();
     }
 
     exports.init = init;
 
     function setInitialState() {
         // Robot connected?
-        if (guiState.robot.time < 0) {
+        if (GUISTATE.robot.time < 0) {
             $('#menuRunProg').parent().addClass('disabled');
         }
-        // User logged in?
-        if (isUserLoggedIn) {
-            $('.logout').addClass('disabled');
-        }
+        // User not logged in?
+        $('.nav > li > ul > .login').addClass('disabled');
+        $('#head-navi-icon-user').addClass('error');
         // Toolbox?
         $('.level').removeClass('disabled');
-        $('.level.' + guiState.program.toolbox.level).addClass('disabled');
+        $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
         // View?
-        if (guiState.gui.view === 'tabProgram') {
+        if (GUISTATE.gui.view === 'tabProgram') {
             $('#head-navigation-configuration-edit').css('display', 'none');
-        } else if (guiState.gui.view === 'tabConfiguration') {
+        } else if (GUISTATE.gui.view === 'tabConfiguration') {
             $('#head-navigation-program-edit').css('display', 'none');
         }
         // Robot?
-        $('#menu-' + guiState.gui.robot).parent().addClass('disabled');
+        $('#menu-' + GUISTATE.gui.robot).parent().addClass('disabled');
     }
 
     exports.setInitialState = setInitialState;
@@ -62,128 +61,197 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
      * @param {result}
      *            result of server call
      */
+    function isProgramStandard() {
+        return GUISTATE.program.name == 'NEPOprog';
+    }
+    exports.isProgramStandard = isProgramStandard;
+
+    function isProgramWritable() {
+        if (GUISTATE.program.shared == 'READ') {
+            return false;
+        }
+        return true;
+    }
+    exports.isProgramWritable = isProgramWritable;
+
+    function isConfigurationStandard() {
+        return GUISTATE.configuration.name == getRobot().toUpperCase() + 'basis';
+    }
+    exports.isConfigurationStandard = isConfigurationStandard;
+
     function setState(result) {
         if (result['server.version']) {
-            guiState.server.version = result['server.version'];
+            GUISTATE.server.version = result['server.version'];
         }
         if (result['robot.version']) {
-            guiState.robot.version = result['robot.version'];
+            GUISTATE.robot.version = result['robot.version'];
         }
         if (result['robot.firmwareName'] != undefined) {
-            guiState.robot.fWName = result['robot.firmwareName'];
+            GUISTATE.robot.fWName = result['robot.firmwareName'];
         } else {
-            guiState.robot.fWName = '';
+            GUISTATE.robot.fWName = '';
         }
         if (result['robot.wait'] != undefined) {
-            guiState.robot.time = result['robot.wait'];
+            GUISTATE.robot.time = result['robot.wait'];
         } else {
-            guiState.robot.time = '';
+            GUISTATE.robot.time = -1;
         }
         if (result['robot.battery'] != undefined) {
-            guiState.robot.battery = result['robot.battery'];
+            GUISTATE.robot.battery = result['robot.battery'];
         } else {
-            guiState.robot.battery = '';
+            GUISTATE.robot.battery = '';
         }
         if (result['robot.name'] != undefined) {
-            guiState.robot.name = result['robot.name'];
+            GUISTATE.robot.name = result['robot.name'];
         } else {
-            guiState.robot.name = '';
+            GUISTATE.robot.name = '';
         }
         if (result['robot.state'] != undefined) {
-            guiState.robot.state = result['robot.state'];
+            GUISTATE.robot.state = result['robot.state'];
         } else {
-            guiState.robot.state = '';
+            GUISTATE.robot.state = '';
         }
         if (result['robot.sensorvalues'] != undefined) {
-            guiState.robot.sensorValues = result['robot.sensorvalues'];
+            GUISTATE.robot.sensorValues = result['robot.sensorvalues'];
         } else {
-            guiState.robot.sensorValues = '';
+            GUISTATE.robot.sensorValues = '';
         }
         if (result['robot.nepoexitvalue'] != undefined) {
             //TODO: For different robots we have different error messages
-            if (result['robot.nepoexitvalue'] !== guiState.robot.nepoExitValue) {
-                guiState.nepoExitValue = result['robot.nepoexitvalue'];
-                if (guiState.nepoExitValue !== 143 && guiState.robot.nepoExitValue !== 0) {
+            if (result['robot.nepoexitvalue'] !== GUISTATE.robot.nepoExitValue) {
+                GUISTATE.nepoExitValue = result['robot.nepoexitvalue'];
+                if (GUISTATE.nepoExitValue !== 143 && GUISTATE.robot.nepoExitValue !== 0) {
                     MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '')
                 }
             }
         }
-        if (guiState.user.accountName) {
+        if (GUISTATE.user.accountName) {
             $('#iconDisplayLogin').removeClass('error');
             $('#iconDisplayLogin').addClass('ok');
         } else {
             $('#iconDisplayLogin').removeClass('ok');
             $('#iconDisplayLogin').addClass('error');
         }
-        if (guiState.robot.state === 'wait') {
+        if (GUISTATE.robot.state === 'wait') {
             $('#iconDisplayRobotState').removeClass('error');
             $('#iconDisplayRobotState').removeClass('busy');
             $('#iconDisplayRobotState').addClass('wait');
-            //ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             $('#menuRunProg').parent().removeClass('disabled');
 
-        } else if (guiState.robot.state === 'busy') {
+        } else if (GUISTATE.robot.state === 'busy') {
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').removeClass('error');
             $('#iconDisplayRobotState').addClass('busy');
-            //ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
 
         } else {
             $('#iconDisplayRobotState').removeClass('busy');
             $('#iconDisplayRobotState').removeClass('wait');
             $('#iconDisplayRobotState').addClass('error');
-            //ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
         }
 
     }
     exports.setState = setState;
 
+    function getBlocklyWorkspace() {
+        return GUISTATE.gui.blocklyWorkspace;
+    }
+    exports.getBlocklyWorkspace = getBlocklyWorkspace;
+
     function setBlocklyWorkspace(workspace) {
-        guiState.blocklyWorkspace = workspace;
+        GUISTATE.gui.blocklyWorkspace = workspace;
     }
     exports.setBlocklyWorkspace = setBlocklyWorkspace;
 
+    function getBricklyWorkspace(workspace) {
+        return GUISTATE.gui.bricklyWorkspace;
+    }
+    exports.getBricklyWorkspace = getBricklyWorkspace;
+
     function setBricklyWorkspace(workspace) {
-        guiState.bricklyWorkspace = workspace;
+        GUISTATE.gui.bricklyWorkspace = workspace;
     }
     exports.setBricklyWorkspace = setBricklyWorkspace;
 
     function setRobot(robot, result, opt_init) {
-        guiState.gui.program = result.program;
-        guiState.program.saved = true;
-        guiState.configuration.saved = true;
-        guiState.gui.configuration = result.configuration;
+        GUISTATE.gui.program = result.program;
+        GUISTATE.gui.configuration = result.configuration;
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         if (!opt_init) {
             $('#head-navi-icon-robot').removeClass('typcn-open');
-            $('#head-navi-icon-robot').removeClass('typcn-' + guiState.gui.robot);
+            $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robot);
             $('#head-navi-icon-robot').addClass('typcn-' + robot);
+            setProgramSaved(true);
+            setConfigurationSaved(true);
         }
-        guiState.gui.robot = robot;
-        setConfigurationName(getRobot().toUpperCase() + 'brick');
+        GUISTATE.gui.robot = robot;
+        setConfigurationName(getRobot().toUpperCase() + 'basis');
         setProgramName('NEPOprog');
     }
 
     exports.setRobot = setRobot;
 
     function getRobot() {
-        return guiState.gui.robot;
+        return GUISTATE.gui.robot;
     }
     exports.getRobot = getRobot;
 
+    function isRobotConnected() {
+        return GUISTATE.robot.time > 0;
+    }
+    exports.isRobotConnected = isRobotConnected;
+
+    function isRobotDisconnected() {
+        return GUISTATE.robot.time = -1;
+    }
+    exports.isRobotDisconnected = isRobotDisconnected;
+
+    function getRobotTime() {
+        return GUISTATE.robot.time;
+    }
+    exports.getRobotTime = getRobotTime;
+
+    function getRobotName() {
+        return GUISTATE.robot.name;
+    }
+    exports.getRobotName = getRobotName;
+
+    function getRobotBattery() {
+        return GUISTATE.robot.battery;
+    }
+    exports.getRobotBattery = getRobotBattery;
+
+    function getRobotState() {
+        return GUISTATE.robot.state;
+    }
+    exports.getRobotState = getRobotState;
+
+    function getRobotVersion() {
+        return GUISTATE.robot.version;
+    }
+    exports.getRobotVersion = getRobotVersion;
+
     function setView(view) {
-        guiState.gui.prevView = guiState.gui.view;
-        guiState.gui.view = view;
+        GUISTATE.gui.prevView = GUISTATE.gui.view;
+        GUISTATE.gui.view = view;
         $('#head-navigation-program-edit > ul > li').removeClass('disabled');
         $('#head-navigation-configuration-edit > ul > li').removeClass('disabled');
-        $('.nav > li > ul > .login, .logout').removeClass('disabled');
-        if (isUserLoggedIn) {
-            $('.logout').addClass('disabled');
+        $('.nav > li > ul').removeClass('disabled');
+        $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
+        if (isUserLoggedIn()) {
+            $('.nav > li > ul > .logout').addClass('disabled');
+        } else {
+            $('.nav > li > ul > .login').addClass('disabled');
         }
-
+        if (!isRobotConnected()) {
+            $('#menuRunProg').parent().addClass('disabled');
+            getBlocklyWorkspace().robControls.disable('runOnBrick');
+        }
         if (view === 'tabConfiguration') {
             $('#head-navigation-program-edit').css('display', 'none');
             $('#head-navigation-configuration-edit').css('display', 'inline');
@@ -194,6 +262,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#head-navigation-program-edit').css('display', 'inline');
             $('#menuTabConfiguration').parent().removeClass('disabled');
             $('#menuTabProgram').parent().addClass('disabled');
+        } else if (view === 'tabProgList') {
+
+        } else if (view === 'tabConfList') {
+
         } else if (view === 'tabLogList' || view === 'tabConfList') {
             $('#head-navigation-program-edit > ul > li').addClass('disabled');
             $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
@@ -203,20 +275,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     exports.setView = setView;
 
     function getView() {
-        return guiState.gui.view;
+        return GUISTATE.gui.view;
     }
 
     exports.getView = getView;
 
     function getPrevView() {
-        return guiState.gui.prevView;
+        return GUISTATE.gui.prevView;
     }
 
     exports.getPrevView = getPrevView;
 
     function setLanguage(language) {
         $('#language li a[lang=' + language + ']').parent().addClass('disabled');
-        $('#language li a[lang=' + guiState.gui.language + ']').parent().removeClass('disabled');
+        $('#language li a[lang=' + GUISTATE.gui.language + ']').parent().removeClass('disabled');
         if (language === 'de') {
             $('.EN').css('display', 'none');
             $('.DE').css('display', 'inline');
@@ -224,212 +296,298 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('.DE').css('display', 'none');
             $('.EN').css('display', 'inline');
         }
-        guiState.gui.language = language;
+        GUISTATE.gui.language = language;
     }
     exports.setLanguage = setLanguage;
 
     function getLanguage() {
-        return guiState.gui.language;
+        return GUISTATE.gui.language;
     }
     exports.getLanguage = getLanguage;
 
     function isProgramSaved() {
-        return guiState.program.saved;
+        return GUISTATE.program.saved;
     }
     exports.isProgramSaved = isProgramSaved;
 
     function setProgramSaved(save) {
-        return guiState.program.saved = save;
+        if (save) {
+            $('#menuSaveProg').parent().removeClass('disabled');
+            $('#menuSaveProg').parent().addClass('disabled');
+            getBlocklyWorkspace().robControls.disable('saveProgram');
+
+        } else {
+            if (isUserLoggedIn() && !isProgramStandard() && GUISTATEController.isProgramWritable()) {
+                $('#menuSaveProg').parent().removeClass('disabled');
+                getBlocklyWorkspace().robControls.enable('saveProgram');
+            }
+        }
+        GUISTATE.program.saved = save;
     }
     exports.setProgramSaved = setProgramSaved;
 
-    function isConfSaved() {
-        return guiState.conf.saved;
+    function isConfigurationSaved() {
+        return GUISTATE.configuration.saved;
     }
-    exports.isConfSaved = isConfSaved;
+    exports.isConfigurationSaved = isConfigurationSaved;
 
-    function setConfSaved(save) {
-        return guiState.conf.saved = save;
+    function setConfigurationSaved(save) {
+        if (save) {
+            $('#menuSaveConfig').parent().removeClass('disabled');
+            $('#menuSaveConfig').parent().addClass('disabled');
+            getBricklyWorkspace().robControls.disable('saveProgram');
+
+        } else {
+            if (isUserLoggedIn() && !isConfigurationStandard()) {
+                $('#menuSaveConfig').parent().removeClass('disabled');
+                getBricklyWorkspace().robControls.enable('saveProgram');
+            }
+        }
+        GUISTATE.configuration.saved = save;
     }
-    exports.setConfSaved = setConfSaved;
+    exports.setConfigurationSaved = setConfigurationSaved;
 
     function getProgramShared() {
-        return guiState.program.shared;
+        return GUISTATE.program.shared;
     }
     exports.getProgramShared = getProgramShared;
 
+    function setProgramSource(source) {
+        GUISTATE.program.source = source;
+    }
+    exports.setProgramSource = setProgramSource;
+
+    function getProgramSource() {
+        return GUISTATE.program.source;
+    }
+    exports.getProgramSource = getProgramSource;
+
     function isUserLoggedIn() {
-        return guiState.user.id >= 0;
+        return GUISTATE.user.id >= 0;
     }
     exports.isUserLoggedIn = isUserLoggedIn;
 
+    function getProgramTimestamp() {
+        return GUISTATE.program.timestamp;
+    }
+    exports.getProgramTimestamp = getProgramTimestamp;
+
+    function setProgramTimestamp(timestamp) {
+        GUISTATE.program.timestamp = timestamp
+    }
+    exports.setProgramTimestamp = setProgramTimestamp;
+
     function getProgramName() {
-        return guiState.program.name;
+        return GUISTATE.program.name;
     }
     exports.getProgramName = getProgramName;
 
     function setProgramName(name) {
         $('#tabProgramName').html(name);
-        guiState.program.name = name;
+        GUISTATE.program.name = name;
     }
     exports.setProgramName = setProgramName;
 
     function getConfigurationName() {
-        return guiState.configuration.name;
+        return GUISTATE.configuration.name;
     }
     exports.getConfigurationName = getConfigurationName;
 
     function setConfigurationName(name) {
         $('#tabConfigurationName').html(name);
-        guiState.program.name = name;
+        GUISTATE.configuration.name = name;
     }
     exports.setConfigurationName = setConfigurationName;
 
     function setProgramToolboxLevel(level) {
-        guiState.program.toolbox.level = level;
+        $('.level').removeClass('disabled');
+        $('.level.' + level).addClass('disabled');
+        GUISTATE.program.toolbox.level = level;
     }
     exports.setProgramToolboxLevel = setProgramToolboxLevel;
 
     function getProgramToolboxLevel() {
-        return guiState.program.toolbox.level;
+        return GUISTATE.program.toolbox.level;
     }
     exports.getProgramToolboxLevel = getProgramToolboxLevel;
 
+    function getToolbox(level) {
+        return GUISTATE.gui.program.toolbox[level];
+    }
+    exports.getToolbox = getToolbox;
+
     function getConfToolbox() {
-        return guiState.conf.toolbox;
+        return GUISTATE.conf.toolbox;
     }
     exports.getConfToolbox = getConfToolbox;
 
     function getGuiRobot() {
-        return guiState.gui.robot;
+        return GUISTATE.gui.robot;
     }
     exports.getGuiRobot = getGuiRobot;
 
     function setGuiRobot(robot) {
-        guiState.gui.robot = robot;
+        GUISTATE.gui.robot = robot;
     }
     exports.setGuiRobot = getGuiRobot;
 
+    function getRobotFWName() {
+        return GUISTATE.robot.fWName;
+    }
+    exports.getRobotFWName = getRobotFWName;
+
+    function setRobotToken(token) {
+        GUISTATE.robot.token;
+    }
+    exports.setRobotToken = setRobotToken;
+
     function setConfigurationXML(xml) {
-        guiState.configuration.xml = xml;
+        GUISTATE.configuration.xml = xml;
     }
     exports.setConfigurationXML = setConfigurationXML;
 
     function getConfigurationXML() {
-        return guiState.configuration.xml;
+        return GUISTATE.configuration.xml;
     }
     exports.getConfigurationXML = getConfigurationXML;
 
     function setProgramXML(xml) {
-        guiState.program.xml = xml;
+        GUISTATE.program.xml = xml;
     }
     exports.setProgramXML = setProgramXML;
 
     function getProgramXML() {
-        return guiState.program.xml;
+        return GUISTATE.program.xml;
     }
     exports.getProgramXML = getProgramXML;
 
     function getRobots() {
-        return guiState.server.robots;
+        return GUISTATE.server.robots;
     }
     exports.getRobots = getRobots;
 
     function getProgramToolbox() {
-        return guiState.gui.program.toolbox[guiState.program.toolbox.level];
+        return GUISTATE.gui.program.toolbox[GUISTATE.program.toolbox.level];
     }
     exports.getProgramToolbox = getProgramToolbox;
 
     function getConfigurationToolbox() {
-        return guiState.gui.configuration.toolbox;
+        return GUISTATE.gui.configuration.toolbox;
     }
     exports.getConfigurationToolbox = getConfigurationToolbox;
 
     function getProgramProg() {
-        return guiState.gui.program.prog;
+        return GUISTATE.gui.program.prog;
     }
     exports.getProgramProg = getProgramProg;
 
     function getConfigurationConf() {
-        return guiState.gui.configuration.conf;
+        return GUISTATE.gui.configuration.conf;
     }
     exports.getConfigurationConf = getConfigurationConf;
 
     function noCookie() {
-        return !guiState.gui.cookie;
+        return !GUISTATE.gui.cookie;
     }
     exports.noCookie = noCookie;
 
     function getServerVersion() {
-        return guiState.server.version;
+        return GUISTATE.server.version;
     }
     exports.getServerVersion = getServerVersion;
 
     function getUserName() {
-        return guiState.user.name;
+        return GUISTATE.user.name;
     }
     exports.getUserName = getUserName;
 
     function getUserAccountName() {
-        return guiState.user.accountName;
+        return GUISTATE.user.accountName;
     }
     exports.getUserAccountName = getUserAccountName;
 
     function setLogin(result) {
         setState(result);
-        console.log(result);
-        guiState.user.accountName = result.userAccountName;
+        GUISTATE.user.accountName = result.userAccountName;
         if (result.userName === undefined || result.userName === '') {
-            guiState.user.name = result.userAccountName;
+            GUISTATE.user.name = result.userAccountName;
         } else {
-            guiState.user.name = result.userName;
+            GUISTATE.user.name = result.userName;
         }
-        guiState.user.id = result.userId;
+        GUISTATE.user.id = result.userId;
 
-        $('.nav > li > ul > .logout').removeClass('disabled');
-        $('.nav > li > ul > .login').addClass('disabled');
+        $('.nav > li > ul > .login, .logout').removeClass('disabled');
+        $('.nav > li > ul > .logout').addClass('disabled');
         $('#head-navi-icon-user').removeClass('error');
         $('#head-navi-icon-user').addClass('ok');
-        guiState.bricklyWorkspace.robControls.enable('saveProgram');
+        setProgramSaved(true);
+        setConfigurationSaved(true);
+
     }
     exports.setLogin = setLogin;
 
     function setLogout() {
-        guiState.user.id = -1;
-        guiState.user.accountName = '';
-        guiState.user.name = '';
+        GUISTATE.user.id = -1;
+        GUISTATE.user.accountName = '';
+        GUISTATE.user.name = '';
         setProgramName('NEPOprog');
-        guiState.program.shared = false;
-        $('.nav > li > ul > .logout').addClass('disabled');
-        $('.nav > li > ul > .login').removeClass('disabled');
+        GUISTATE.program.shared = false;
+        $('.nav > li > ul > .logout, .login').removeClass('disabled');
+        $('.nav > li > ul > .login').addClass('disabled');
         $('#head-navi-icon-user').removeClass('ok');
         $('#head-navi-icon-user').addClass('error');
-        guiState.bricklyWorkspace.robControls.disable('saveProgram');
+//        setProgramSaved(true);
+//        setConfigurationSaved(true);
+        if (GUISTATE.gui.view == 'tabProgList') {
+            $('#tabProgram').trigger('click');
+        } else if (GUISTATE.gui.view == 'tabConfList') {
+            $('#tabConfiguration').trigger('click');
+        }
     }
     exports.setLogout = setLogout;
 
-//        /**
-//     * Set program name
-//     * 
-//     * @param {name}
-//     *            Name to be set
-//     */
-//    function setProgram(result, opt_owner) {
-//        if (result) {
-//            guiState.user.program = result.name;
-//            guiState.user.programSaved = result.programSaved;
-//            guiState.user.programShared = result.programShared;
-//            guiState.user.programTimestamp = result.lastChanged;
-//            var name = result.name;
-//            if (opt_owner) {
-//                if (guiState.user.programShared == 'WRITE') {
-//                    name += ' (<span class="typcn typcn-pencil progName"></span>' + opt_owner + ')';
-//                } else {
-//                    name += ' (<span class="typcn typcn-eye progName"></span>' + opt_owner + ')';
-//                }
-//            }
-//            $('#tabProgramName').html(name);
-//        }
-//    }
-//    exports.setProgram = setProgram;
+    function setProgram(result, opt_owner) {
+        if (result) {
+            GUISTATE.program.name = result.name;
+            GUISTATE.program.shared = result.programShared;
+            GUISTATE.program.timestamp = result.lastChanged;
+            setProgramSaved(true);
+            var name = result.name;
+            if (opt_owner) {
+                if (GUISTATE.program.shared == 'WRITE') {
+                    name += ' (<span class="typcn typcn-pencil progName"></span>' + opt_owner + ')';
+                } else {
+                    name += ' (<span class="typcn typcn-eye progName"></span>' + opt_owner + ')';
+                }
+            }
+            $('#tabProgramName').html(name);
+        }
+    }
+    exports.setProgram = setProgram;
+
+    /**
+     * Set program name
+     * 
+     * @param {name}
+     *            Name to be set
+     */
+    function setConfiguration(result) {
+        if (result) {
+            GUISTATE.configuration.name = result.name;
+            GUISTATE.configuration.timestamp = result.lastChanged;
+            setConfigurationSaved(true);
+            $('#tabConfigurationName').html(result.name);
+        }
+    }
+    exports.setConfiguration = setConfiguration;
+
+    function setPing(ping) {
+        GUISTATE.server.ping = ping;
+    }
+    exports.setPing = setPing;
+
+    function doPing() {
+        return GUISTATE.server.ping;
+    }
+    exports.doPing = doPing;
 });

@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot', 'program.controller', 'configuration.controller', 'jquery',
-        'jquery-validate' ], function(exports, UTIL, LOG, MSG, guiStateController, ROBOT, programController, configurationController, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery',
+        'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
 
     var $formSingleModal;
 
@@ -8,16 +8,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
      */
     function init() {
 
-        var a = $.Deferred();
-        $.when(ROBOT.setRobot(guiStateController.getRobot(), function(result) {
+        var ready = $.Deferred();
+        $.when(ROBOT.setRobot(GUISTATE_C.getRobot(), function(result) {
             if (result.rc == 'ok')
-                guiStateController.setRobot(guiStateController.getRobot(), result, true);
+                GUISTATE_C.setRobot(GUISTATE_C.getRobot(), result, true);
         })).then(function() {
-            initRobotForms;
+            initRobotForms();
             LOG.info('init robot forms');
-            a.resolve();
+            ready.resolve();
         });
-        return a;
+        return ready.promise();
     }
     exports.init = init;
 
@@ -32,10 +32,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
         if ($formSingleModal.valid()) {
             ROBOT.setToken(token, function(result) {
                 if (result.rc === "ok") {
-                    guiState.robot.token = token;
+                    GUISTATE_C.setRobotToken(token);
                 }
-                MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, guiState.robot.name);
-                setState(result);
+                MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
+                GUISTATE_C.setState(result);
                 handleFirmwareConflict();
             });
         }
@@ -92,14 +92,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
      * Show robot info
      */
     function showRobotInfo() {
-        if (guiState.robot.time) {
-            $("#robotName").text(guiState.robot.name);
-            $("#robotSystem").text(guiState.robot.fWName);
-            if (guiState.robot.state === "wait") {
+        if (GUISTATE_C.isRobotConnected()) {
+            $("#robotName").text(GUISTATE_C.getRobotName());
+            $("#robotSystem").text(GUISTATE_C.getRobotFWName());
+            if (GUISTATE_C.getRobotState() === "wait") {
                 $("#robotStateWait").css('display', 'inline');
                 $("#robotStateDisconnected").css('display', 'none');
                 $("#robotStateBusy").css('display', 'none');
-            } else if (guiState.robot.state === "busy") {
+            } else if (GUISTATE_C.getRobotState() === "busy") {
                 $("#robotStateWait").css('display', 'none');
                 $("#robotStateDisconnected").css('display', 'none');
                 $("#robotStateBusy").css('display', 'inline');
@@ -108,12 +108,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
                 $("#robotStateDisconnected").css('display', 'inline');
                 $("#robotStateBusy").css('display', 'none');
             }
-            if (guiState.language == 'EN') {
-                $("#robotBattery").text(guiState.robot.battery + ' V');
+            if (GUISTATE_C.getLanguage() == 'EN') {
+                $("#robotBattery").text(GUISTATE_C.getRobotBattery() + ' V');
             } else {
-                $("#robotBattery").text(guiState.robot.battery.toString().replace(".", ",") + ' V');
+                $("#robotBattery").text(GUISTATE_C.getRobotBattery().toString().replace(".", ",") + ' V');
             }
-            var robotWait = parseInt(guiState.robot.time, 10);
+            var robotWait = parseInt(GUISTATE_C.getRobotTime(), 10);
             if (robotWait < 1000) {
                 $("#robotWait").text(robotWait + ' ms');
             } else {
@@ -131,16 +131,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
      */
     function handleFirmwareConflict() {
         var regex = '(.+\..+)\..+'; // get x.y from version x.y.z
-        var mainversionServer = guiState.server.version.match(regex)[1];
-        var mainversionRobot = guiState.robot.version.match(regex)[1];
+        var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
+        var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
         if (mainversionServer > mainversionRobot) {
-            LOG.info("The firmware version '" + guiState.server.version + "' on the server is newer than the firmware version '" + guiState.robot.version
-                    + "' on the robot");
+            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '"
+                    + GUISTATE_C.getRobotVersion() + "' on the robot");
             $("#confirmUpdateFirmware").modal('show');
             return true;
         } else if (mainversionServer < mainversionRobot) {
-            LOG.info("The firmware version '" + guiState.server.version + "' on the server is older than the firmware version '" + guiState.robot.version
-                    + "' on the robot");
+            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is older than the firmware version '"
+                    + GUISTATE_C.getRobotVersion() + "' on the robot");
             MSG.displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
             return true;
         }
@@ -153,13 +153,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
      */
     function updateFirmware() {
         ROBOT.updateFirmware(function(result) {
-            setState(result);
+            GUISTATE_C.setState(result);
             if (result.rc === "ok") {
                 MSG.displayMessage("MESSAGE_RESTART_ROBOT", "POPUP", "");
-                guiState.robot.state = 'disconnected';
-                guiState.robot.name = '';
+//                guiState.robot.state = 'disconnected';
+//                guiState.robot.name = '';
             } else {
-                MSG.displayInformation(result, "", result.message, guiState.robot.fWName);
+                MSG.displayInformation(result, "", result.message, GUISTATE_C.getRobotFWName());
             }
         });
     }
@@ -169,16 +169,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
      * Switch robot
      */
     function switchRobot(robot, opt_continue) {
-        if (robot === guiStateController.getRobot) {
+        if (robot === GUISTATE_C.getRobot) {
             return;
         }
         var further = opt_continue || false;
-        if (further || (guiStateController.isProgramSaved() && guiStateController.isConfSaved)) {
+        if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
             ROBOT.setRobot(robot, function(result) {
                 if (result.rc === "ok") {
-                    guiStateController.setRobot(robot, result);
-                    programController.resetView();
-                    configurationController.resetView();
+                    GUISTATE_C.setRobot(robot, result);
+                    PROGRAM_C.resetView();
+                    CONFIGURATION_C.resetView();
                 } else {
                     alert('Robot not available');
                 }
@@ -186,7 +186,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
         } else {
             $('#confirmContinue').data('type', 'switchRobot');
             $('#confirmContinue').data('robot', robot);
-            if (guiStateController.isUserLoggedIn) {
+            if (GUISTATE_C.isUserLoggedIn) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
             } else {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
@@ -194,19 +194,4 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'rest.robot
         }
     }
     exports.switchRobot = switchRobot;
-
-    //ROBERTA_NAVIGATION.initNavigation();
-//        ROBOT.setRobot(guiState.robot, function(result) {
-//            UTIL.response(result);
-//            if (result.rc === "ok") {
-//                ROBERTA_BRICK_CONFIGURATION.setConfiguration("EV3basis");
-//                ROBERTA_TOOLBOX.loadToolbox(guiState.toolbox);
-//                $('#blocklyDiv').removeClass('simBackground');
-//                $('#menuEv3').parent().addClass('disabled');
-//                $('#menuSim').parent().removeClass('disabled');
-//                $('#menuConnect').parent().removeClass('disabled');
-//                $('#iconDisplayRobotState').removeClass('typcn-Roberta');
-//                $('#iconDisplayRobotState').addClass('typcn-ev3');
-//                $('#menuShowCode').parent().removeClass('disabled');
-//            }
 });

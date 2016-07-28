@@ -1,5 +1,5 @@
 define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller', 'jquery', 'blocks', 'blocks-msg' ], function(exports, LOG, MSG, UTIL, USER,
-        guiStateController, $, Blockly) {
+        GUISTATE_C, $, Blockly) {
 
     var $divForms;
     var $formLogin;
@@ -17,15 +17,15 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function createUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(),
-                    function(result) {
-                        if (result.rc === "ok") {
-                            $('#loginAccountName').val($("#registerAccountName").val());
-                            $('#loginPassword').val($('#registerPass').val());
-                            login();
-                        }
-                        MSG.displayInformation(result, "", result.message);
-                    });
+            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(), function(
+                    result) {
+                if (result.rc === "ok") {
+                    $('#loginAccountName').val($("#registerAccountName").val());
+                    $('#loginPassword').val($('#registerPass').val());
+                    login();
+                }
+                MSG.displayInformation(result, "", result.message);
+            });
         }
     }
 
@@ -35,11 +35,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function updateUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.updateUserToServer(guiStateController.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), function(result) {
+            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), function(result) {
                 if (result.rc === "ok") {
-                    USER.getUserFromServer(guiStateController.getUserAccountName(), function(result) {
+                    USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
                         if (result.rc === "ok") {
-                            guiStateController.setLogin(result);
+                            GUISTATE_C.setLogin(result);
                         }
                     });
                 }
@@ -64,7 +64,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                     MSG.displayInformation(result, "", result.message);
                 });
             } else {
-                USER.updateUserPasswordToServer(guiStateController.getUserAccountName(), $('#passOld').val(), $("#passNew").val(), function(result) {
+                USER.updateUserPasswordToServer(GUISTATE_C.getUserAccountName(), $('#passOld').val(), $("#passNew").val(), function(result) {
                     if (result.rc === "ok") {
                         $("#change-user-password").modal('hide');
                     }
@@ -79,7 +79,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      * Get user from server
      */
     function getUserFromServer() {
-        USER.getUserFromServer(guiStateController.getUserAccountName(), function(result) {
+        USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
             if (result.rc === "ok") {
                 $("#registerAccountName").val(result.userAccountName);
                 $("#registerUserEmail").val(result.userEmail);
@@ -96,9 +96,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         if ($formLogin.valid()) {
             USER.login($("#loginAccountName").val(), $('#loginPassword').val(), function(result) {
                 if (result.rc === "ok") {
-                    guiStateController.setLogin(result);
+                    GUISTATE_C.setLogin(result);
                 }
-                MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, guiStateController.getUserName());
+                MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
             });
         }
     }
@@ -110,9 +110,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         USER.logout(function(result) {
             UTIL.response(result);
             if (result.rc === "ok") {
-                guiStateController.setLogout();
+                GUISTATE_C.setLogout();
             }
-            MSG.displayInformation(result, "MESSAGE_USER_LOGOUT", result.message, guiStateController.getUserName());
+            MSG.displayInformation(result, "MESSAGE_USER_LOGOUT", result.message, GUISTATE_C.getUserName());
         });
     }
 
@@ -138,11 +138,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function deleteUserOnServer() {
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
-            USER.deleteUserOnServer(guiStateController.getUserAccountName(), $('#singleModalInput').val(), function(result) {
+            USER.deleteUserOnServer(GUISTATE_C.getUserAccountName(), $('#singleModalInput').val(), function(result) {
                 if (result.rc === "ok") {
                     logout();
                 }
-                MSG.displayInformation(result, "MESSAGE_USER_DELETED", result.message, guiStateController.getUserName());
+                MSG.displayInformation(result, "MESSAGE_USER_DELETED", result.message, GUISTATE_C.getUserName());
             });
         }
     }
@@ -506,15 +506,15 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      * Show user info
      */
     function showUserInfo() {
-        $("#loggedIn").text(guiStateController.getUserName());
-        if (guiStateController.isUserLoggedIn()) {
+        $("#loggedIn").text(GUISTATE_C.getUserName());
+        if (GUISTATE_C.isUserLoggedIn()) {
             $("#popup_username").text(Blockly.Msg["POPUP_USERNAME"] + ": ");
         } else {
             $("#popup_username").text(Blockly.Msg["POPUP_USERNAME_LOGOFF"]);
         }
-        $("#programName").text(guiStateController.getProgramName());
-        $("#configurationName").text(guiStateController.getConfigurationName());
-        if (guiStateController.getProgramToolboxLevel() === 'beginner') {
+        $("#programName").text(GUISTATE_C.getProgramName());
+        $("#configurationName").text(GUISTATE_C.getConfigurationName());
+        if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
             $("#toolbox").text(Blockly.Msg["MENU_BEGINNER"]);
         } else {
             $("#toolbox").text(Blockly.Msg["MENU_EXPERT"]);

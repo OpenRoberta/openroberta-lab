@@ -49,7 +49,7 @@
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_after_opening_paren_in_for" value="do not insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_after_opening_paren_in_enum_constant" value="do not insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.alignment_for_multiple_fields" value="16"/>
-<setting id="org.eclipse.wst.jsdt.core.formatter.alignment_for_selector_in_method_invocation" value="16"/>
+<setting id="org.eclipse.wst.jsdt.core.formatter.alignment_for_selector_in_method_invocation" value="0"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_after_and_in_type_parameter" value="insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.comment.insert_new_line_for_parameter" value="insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_after_comma_in_for_inits" value="insert"/>
@@ -200,7 +200,7 @@
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_before_closing_paren_in_if" value="do not insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_before_opening_brace_in_switch" value="insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.comment.format_javadoc_comments" value="true"/>
-<setting id="org.eclipse.wst.jsdt.core.formatter.alignment_for_arguments_in_method_invocation" value="16"/>
+<setting id="org.eclipse.wst.jsdt.core.formatter.alignment_for_arguments_in_method_invocation" value="0"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_before_closing_angle_bracket_in_type_parameters" value="do not insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_after_colon_in_assert" value="insert"/>
 <setting id="org.eclipse.wst.jsdt.core.formatter.insert_space_after_comma_in_superinterfaces" value="insert"/>

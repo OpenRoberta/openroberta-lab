@@ -1,23 +1,4 @@
-define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.program', 'roberta.user', 'configuration.controller' ], function(exports, $,
-        ROBERTA_TOOLBOX, userState, ROBERTA_PROGRAM, ROBERTA_USER, BRICKLY) {
-
-    /**
-     * $.getScript() will append a timestamped query parameter to the url to
-     * prevent caching. The cache control should be handled using http-headers.
-     * see https://api.jquery.com/jquery.getscript/#caching-requests
-     */
-    function getCachedScript(url, options) {
-        // Allow user to set any option except for dataType, cache, and url
-        options = $.extend(options || {}, {
-            dataType : "script",
-            cache : true,
-            url : url
-        });
-
-        // Use $.ajax() since it is more flexible than $.getScript
-        // Return the jqXHR object so we can chain callbacks
-        return jQuery.ajax(options);
-    }
+define([ 'exports', 'jquery', guiState.controller ], function(exports, $, guiStateController) {
 
     /**
      * Initialize language switching
@@ -84,8 +65,8 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
         var future = $.getScript(url);
         future.then(function(newLanguageScript) {
             switchLanguageInBlockly();
-            BRICKLY.switchLanguageInBrickly();
-            ROBERTA_USER.initValidationMessages();
+//            BRICKLY.switchLanguageInBrickly();
+//            ROBERTA_USER.initValidationMessages();
         });
 
     }
@@ -103,9 +84,9 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
             programBlocks = Blockly.Xml.domToText(xmlProgram);
         }
         // translate programming tab
-        ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
-        ROBERTA_PROGRAM.updateRobControls();
-        ROBERTA_PROGRAM.initProgramEnvironment(programBlocks);
+//        ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
+//        ROBERTA_PROGRAM.updateRobControls();
+//        ROBERTA_PROGRAM.initProgramEnvironment(programBlocks);
     }
 
     /**
@@ -147,5 +128,23 @@ define([ 'exports', 'jquery', 'roberta.toolbox', 'roberta.user-state', 'roberta.
                 $(this).attr('value', value);
             }
         });
+    }
+
+    /**
+     * $.getScript() will append a timestamped query parameter to the url to
+     * prevent caching. The cache control should be handled using http-headers.
+     * see https://api.jquery.com/jquery.getscript/#caching-requests
+     */
+    function getCachedScript(url, options) {
+        // Allow user to set any option except for dataType, cache, and url
+        options = $.extend(options || {}, {
+            dataType : "script",
+            cache : true,
+            url : url
+        });
+
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        return jQuery.ajax(options);
     }
 });

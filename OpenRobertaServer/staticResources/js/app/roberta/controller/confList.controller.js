@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta.brick-configuration', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(
-        require, exports, LOG, UTIL, COMM, CONFLIST_MODEL, ROBERTA_CONF, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configuration.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require,
+        exports, LOG, UTIL, COMM, CONFLIST, CONFIGURATION, Blockly, $) {
 
     /**
      * Initialize table of configurations
@@ -14,70 +14,69 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta
 
     function initConfList() {
 
-        $('#confNameTable').bootstrapTable(
-                {
-                    height : UTIL.calcDataTableHeight(),
-                    pageList : '[ 10, 25, All ]',
-                    toolbar : '#confListToolbar',
-                    showRefresh : 'true',
-                    showPaginationSwitch : 'true',
-                    pagination : 'true',
-                    buttonsAlign : 'right',
-                    resizable : 'true',
-                    iconsPrefix : 'typcn',
-                    icons : {
-                        paginationSwitchDown : 'typcn-document-text',
-                        paginationSwitchUp : 'typcn-book',
-                        refresh : 'typcn-refresh',
+        $('#confNameTable').bootstrapTable({
+            height : UTIL.calcDataTableHeight(),
+            pageList : '[ 10, 25, All ]',
+            toolbar : '#confListToolbar',
+            showRefresh : 'true',
+            showPaginationSwitch : 'true',
+            pagination : 'true',
+            buttonsAlign : 'right',
+            resizable : 'true',
+            iconsPrefix : 'typcn',
+            icons : {
+                paginationSwitchDown : 'typcn-document-text',
+                paginationSwitchUp : 'typcn-book',
+                refresh : 'typcn-refresh',
+            },
+            columns : [
+                    {
+                        title : "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>Name der Configuration</span>",
+                        sortable : true,
+                        field : '0',
                     },
-                    columns : [
-                            {
-                                title : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>Name der Configuration</span>",
-                                sortable : true,
-                                field : '0',
-                            },
-                            {
-                                title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
-                                sortable : true,
-                                field : '1',
-                            },
-                            {
-                                title : "<span class='typcn typcn-flow-merge'></span>",
-                                field : '2',
-                                sortable : true,
-                                sorter : sortRelations,
-                                formatter : formatRelations,
-                                align : 'left',
-                                valign : 'middle',
-                            },
-                            {
-                                title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
-                                sortable : true,
-                                field : '3',
-                                formatter : UTIL.formatDate
-                            },
-                            {
-                                title : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
-                                sortable : true,
-                                field : '4',
-                                formatter : UTIL.formatDate
-                            },
-                            {
-                                field : '5',
-                                checkbox : true,
-                                valign : 'middle',
-                            },
-                            {
-                                field : '7',
-                                events : eventsDeleteShareLoad,
-                                title : '<a href="#" id="deleteSome" class="disabled" title="Delete selected configurations">'
-                                        + '<span class="typcn typcn-delete"></span></a>',
-                                align : 'left',
-                                valign : 'top',
-                                formatter : formatDeleteShareLoad,
-                                width : '89px',
-                            }, ]
-                });
+                    {
+                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
+                        sortable : true,
+                        field : '1',
+                    },
+                    {
+                        title : "<span class='typcn typcn-flow-merge'></span>",
+                        field : '2',
+                        sortable : true,
+                        sorter : sortRelations,
+                        formatter : formatRelations,
+                        align : 'left',
+                        valign : 'middle',
+                    },
+                    {
+                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
+                        sortable : true,
+                        field : '3',
+                        formatter : UTIL.formatDate
+                    },
+                    {
+                        title : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
+                        sortable : true,
+                        field : '4',
+                        formatter : UTIL.formatDate
+                    },
+                    {
+                        field : '5',
+                        checkbox : true,
+                        valign : 'middle',
+                    },
+                    {
+                        field : '7',
+                        events : eventsDeleteShareLoad,
+                        title : '<a href="#" id="deleteSome" class="disabled" title="Delete selected configurations">'
+                                + '<span class="typcn typcn-delete"></span></a>',
+                        align : 'left',
+                        valign : 'top',
+                        formatter : formatDeleteShareLoad,
+                        width : '89px',
+                    }, ]
+        });
         $('#confNameTable').bootstrapTable('togglePagination');
     }
 
@@ -88,18 +87,18 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta
                 height : UTIL.calcDataTableHeight()
             });
         });
+        $('#tabConfList').on('show.bs.tab', function(e) {
+            guiStateController.setView('tabConfList');
+            CONFLIST.loadConfList(update);
+        });
 
         $('#confList>.bootstrap-table').find('button[name="refresh"]').onWrap('click', function() {
-            if ($('#tabConfList').data('type') === 'userConf') {
-                CONFLIST_MODEL.loadConfList(update);
-            } else {
-                CONFLIST_MODEL.loadExampleList(update);
-            }
+            CONFLIST.loadConfList(update);
             return false;
         }, "refresh configuration list clicked");
 
         $('#confNameTable').onWrap('dbl-click-row.bs.table', function($element, row) {
-            ROBERTA_CONF.loadFromListing(row);
+            configurationController.loadFromListing(row);
             //$('#blocklyDiv').trigger('load', [ row ]);
         }, "Load configuration from listing double clicked");
 
@@ -141,7 +140,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta
         $('#backConfList').onWrap('click', function() {
             $('#tabConfiguration').trigger('click');
             return false;
-        }, "back to configuration");
+        }, "back to configuration view");
 
         $('#deleteSome').onWrap('click', function() {
             var configurations = $('#confNameTable').bootstrapTable('getSelections', {});
@@ -152,7 +151,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta
             }
             $('#confirmDeleteConfName').html(names);
             $('#confirmDeleteConf').one('hide.bs.modal', function(event) {
-                CONFLIST_MODEL.loadConfList(update);
+                CONFLIST.loadConfList(update);
             });
             $("#confirmDeleteConf").data('configurations', configurations);
             $("#confirmDeleteConf").modal("show");
@@ -167,16 +166,13 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta
             UTIL.response(result);
             if (result.rc === 'ok') {
                 $('#confNameTable').bootstrapTable({});
-                $('#confNameTable').bootstrapTable("load", result.confNames);
+                $('#confNameTable').bootstrapTable("load", result.configurationNames);
+                $('#confNameTable').bootstrapTable("hideColumn", '2');
+                $('#confNameTable').bootstrapTable("hideColumn", '3');
+                $('#confNameTable').bootstrapTable("hideColumn", '5');
                 if ($('#tabConfList').data('type') === 'userConf') {
-                    $('#confNameTable').bootstrapTable("showColumn", '2');
-                    $('#confNameTable').bootstrapTable("showColumn", '3');
-                    $('#confNameTable').bootstrapTable("showColumn", '5');
                     $('#deleteSome').show();
                 } else {
-                    $('#confNameTable').bootstrapTable("hideColumn", '2');
-                    $('#confNameTable').bootstrapTable("hideColumn", '3');
-                    $('#confNameTable').bootstrapTable("hideColumn", '5');
                     $('#deleteSome').hide();
                 }
             }
@@ -210,7 +206,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'roberta
             return false;
         },
         'click .load' : function(e, value, row, index) {
-            ROBERTA_CONF.loadFromListing(row);
+            configurationController.loadFromListing(row);
         }
     };
 

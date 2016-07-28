@@ -1,5 +1,5 @@
 define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'logList.model', 'jquery', 'bootstrap-table' ], function(require, exports, LOG,
-        UTIL, COMM, guiState, LOGLIST, $) {
+        UTIL, COMM, GUISTATE_C, LOGLIST, $) {
 
     /**
      * Initialize table of programs
@@ -48,8 +48,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
             } ]
         });
         $('#logTable').bootstrapTable('togglePagination');
-        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey',
-                'Blockly.Msg.BUTTON_EMPTY_LIST').attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST).tooltip('fixTitle');
+        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST').attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST).tooltip('fixTitle');
 //        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('rel', 'tooltip');
 //        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-placement', 'left');
 //        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST');
@@ -60,8 +59,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
 
     function initLogListEvents() {
 
-        $('#tabLogList').onWrap('shown.bs.tab', function() {
-            guiState.setView('tabLogList');
+        $('#tabLogList').onWrap('show.bs.tab', function() {
+            GUISTATE_C.setView('tabLogList');
         }, "log list activated");
 
         $(window).resize(function() {
@@ -76,7 +75,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
         }, "empty log list clicked");
 
         $('#backLogList').onWrap('click', function() {
-            $('#' + guiState.getPrevView()).trigger('click');
+            $('#' + GUISTATE_C.getPrevView()).trigger('click');
             return false;
         }, "back to previous view");
     }

@@ -9,21 +9,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     /**
      * Refresh program list
      */
-    function loadProgList(successFn) {
-        COMM.json("/program", {
-            "cmd" : "loadPN"
-        }, successFn, "load program list");
+    function loadConfList(successFn) {
+        COMM.json("/conf", {
+            "cmd" : "loadCN"
+        }, successFn, 'refresh configuration list');
     }
-    exports.loadProgList = loadProgList;
-
-    /**
-     * Refresh example list
-     */
-    function loadExampleList(successFn) {
-        COMM.json("/program", {
-            "cmd" : "loadEN"
-        }, successFn, "load example list");
-    }
-    exports.loadExampleList = loadExampleList;
+    exports.loadConfList = loadConfList;
 
 });
