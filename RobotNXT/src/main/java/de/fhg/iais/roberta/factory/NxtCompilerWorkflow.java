@@ -5,6 +5,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,12 +112,17 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
      */
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
-        // TODO: change the compiler based on the os type
-        String scriptName = this.robotCompilerResourcesDir + "/nbc";
+
+        String nbcCompilerFileName;
+        if (SystemUtils.IS_OS_WINDOWS) {
+            nbcCompilerFileName = "../RobotNXT/" + this.robotCompilerResourcesDir + "nbc.exe";
+        } else { // TODO add the compiler file for linux and check if this is running on mac too
+            nbcCompilerFileName = "../RobotNXT/" + this.robotCompilerResourcesDir + "nbc";
+        }
 
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                scriptName,
+                nbcCompilerFileName,
                 this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
                 "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
                 "-I=" + this.robotCompilerResourcesDir + "/hal.h"
