@@ -65,7 +65,7 @@ public class TextFunctions {
     public void concatenation() throws Exception {
         Helper.generateTransformerString("/syntax/functions/text_concat.xml");
 
-        String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
-        // Assert.assertEquals(a, transformer.toString());
+        //String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
+        //Assert.assertEquals(a, transformer.toString());
     }
 }

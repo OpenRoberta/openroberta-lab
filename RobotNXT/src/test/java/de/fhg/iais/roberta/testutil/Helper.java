@@ -46,7 +46,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        NxtFactory factory = new NxtFactory(null, 0);
+        //NxtFactory factory = new NxtFactory(null, 0);
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         Configuration brickConfiguration =
             new NxtConfiguration.Builder()
