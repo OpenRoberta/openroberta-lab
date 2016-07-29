@@ -1,10 +1,10 @@
 @font-face {
     font-family: 'typicons';
-    src:    url('fonts/typicons.eot?h2vscx');
-    src:    url('fonts/typicons.eot?h2vscx#iefix') format('embedded-opentype'),
-        url('fonts/typicons.ttf?h2vscx') format('truetype'),
-        url('fonts/typicons.woff?h2vscx') format('woff'),
-        url('fonts/typicons.svg?h2vscx#typicons') format('svg');
+    src:    url('fonts/typicons.eot?22xw6v');
+    src:    url('fonts/typicons.eot?22xw6v#iefix') format('embedded-opentype'),
+        url('fonts/typicons.ttf?22xw6v') format('truetype'),
+        url('fonts/typicons.woff?22xw6v') format('woff'),
+        url('fonts/typicons.svg?22xw6v#typicons') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -998,4 +998,9 @@
 .typcn-open:before {
     content: "\e90a";
 }
-
+.typcn-ardu:before {
+    content: "\e90b";
+}
+.typcn-microduino:before {
+    content: "\e90c";
+}
