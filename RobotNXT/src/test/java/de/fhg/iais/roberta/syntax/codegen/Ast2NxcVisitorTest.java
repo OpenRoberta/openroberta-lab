@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.testutil.Helper;
 
-public class AstToLejosJavaVisitorTest {
+public class Ast2NxcVisitorTest {
     //TODO: change diameter and trackwidth to changeable
     // when sensors are added to nxt, fix the sensors description here
 
