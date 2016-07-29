@@ -78,6 +78,13 @@ That's it!
 
 You can follow the test status on https://travis-ci.org/OpenRoberta/.
 
+Development happens in the 'develop# branch. Please sent PRs against that
+branch.
+
+    git clone git://github.com/OpenRoberta/robertalab.git
+    cd robertalab
+    git checkout -b develop origin/develop
+
 #### Blockly
 
 We are using Blockly as a submodule. The build of the blockly is only done in
