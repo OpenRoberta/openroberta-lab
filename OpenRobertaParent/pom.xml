@@ -64,6 +64,7 @@
 		<module>../RobotSIM</module>
 		<module>../RobotEV3</module>
 		<module>../RobotNXT</module>
+        <module>../RobotArdu</module>
 		<module>../OpenRobertaServer</module>
 	</modules>
 	<repositories>
@@ -112,6 +113,11 @@
 				<artifactId>RobotNXT</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotArdu</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>

@@ -78,11 +78,13 @@ public class ConfigurationProcessor extends AbstractProcessor {
         }
     }
 
-    public JSONArray getConfigurationInfo(int ownerId) {
+    public JSONArray getConfigurationInfo(int ownerId, int robotId) {
         UserDao userDao = new UserDao(this.dbSession);
         ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
         User owner = userDao.get(ownerId);
-        List<Configuration> programs = configurationDao.loadAll(owner);
+        RobotDao robotDao = new RobotDao(this.dbSession);
+        Robot robot = robotDao.get(robotId);
+        List<Configuration> programs = configurationDao.loadAll(owner, robot);
         JSONArray configurationInfos = new JSONArray();
         for ( Configuration program : programs ) {
             JSONArray configurationInfo = new JSONArray();

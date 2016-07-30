@@ -88,7 +88,7 @@ public class ClientConfiguration {
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray configurationInfo = cp.getConfigurationInfo(userId);
+                JSONArray configurationInfo = cp.getConfigurationInfo(userId, httpSessionState.getRobotId());
                 response.put("configurationNames", configurationInfo);
                 Util.addResultInfo(response, cp);
 

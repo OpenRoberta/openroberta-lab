@@ -29,7 +29,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         var robots = GUISTATE_C.getRobots();
         for ( var robot in robots) {
             var clone = proto.clone();
-            $("#navigation-robot>.divider").before(clone);
+            $("#navigation-robot>.anchor").before(clone);
             $(clone).find('.typcn').addClass('typcn-' + robot);
             $(clone).find('.typcn').text(robots[robot]);
             $(clone).find('.typcn').attr('id', 'menu-' + robot);
@@ -417,7 +417,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             } else {
                 $.removeCookie("OpenRoberta_" + GUISTATE_C.getServerVersion());
             }
-        }, 'hallo');
+        }, 'robot choosen in start popup');
 
         $('#moreReleases').onWrap('click', function(event) {
             $('#oldReleases').show({

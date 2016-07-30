@@ -97,9 +97,10 @@ public class ConfigurationDao extends AbstractDao<Program> {
      *
      * @return the list of all configurations, may be an empty list, but never null
      */
-    public List<Configuration> loadAll(User owner) {
-        Query hql = this.session.createQuery("from Configuration where owner=:owner");
+    public List<Configuration> loadAll(User owner, Robot robot) {
+        Query hql = this.session.createQuery("from Configuration where owner=:owner and robot=:robot");
         hql.setEntity("owner", owner);
+        hql.setEntity("robot", robot);
         @SuppressWarnings("unchecked")
         List<Configuration> il = hql.list();
         return Collections.unmodifiableList(il);

@@ -179,6 +179,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
                     GUISTATE_C.setRobot(robot, result);
                     PROGRAM_C.resetView();
                     CONFIGURATION_C.resetView();
+                    if (GUISTATE_C.getView() == 'tabConfList') {
+                        $('#confList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                    }
+                    if (GUISTATE_C.getView() == 'tabProgList') {
+                        $('#progList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                    }
                 } else {
                     alert('Robot not available');
                 }

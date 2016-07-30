@@ -317,9 +317,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             getBlocklyWorkspace().robControls.disable('saveProgram');
 
         } else {
-            if (isUserLoggedIn() && !isProgramStandard() && GUISTATEController.isProgramWritable()) {
+            if (isUserLoggedIn() && !isProgramStandard() && isProgramWritable()) {
                 $('#menuSaveProg').parent().removeClass('disabled');
                 getBlocklyWorkspace().robControls.enable('saveProgram');
+            } else {
+                $('#menuSaveProg').parent().addClass('disabled');
             }
         }
         GUISTATE.program.saved = save;
@@ -341,6 +343,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             if (isUserLoggedIn() && !isConfigurationStandard()) {
                 $('#menuSaveConfig').parent().removeClass('disabled');
                 getBricklyWorkspace().robControls.enable('saveProgram');
+            } else {
+                $('#menuSaveConfig').parent().addClass('disabled');
             }
         }
         GUISTATE.configuration.saved = save;
@@ -520,6 +524,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         $('.nav > li > ul > .logout').addClass('disabled');
         $('#head-navi-icon-user').removeClass('error');
         $('#head-navi-icon-user').addClass('ok');
+        $('#menuSaveProg').parent().addClass('disabled');
+        $('#menuSaveConfig').parent().addClass('disabled');
         setProgramSaved(true);
         setConfigurationSaved(true);
 

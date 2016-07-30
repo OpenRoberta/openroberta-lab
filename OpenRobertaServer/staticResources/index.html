@@ -25,11 +25,11 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css" href="js/libs/code-prettify/prettify.css"></link>
 <link href="/css/enjoyhint.css" rel="stylesheet">
-<!-- Make sure css files are loaded before js files -->
+	<!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico" type="image/vnd.microsoft.icon"></link>
-	<!-- enable linenumbers for all lines on highlighted source code -->
+<!-- enable linenumbers for all lines on highlighted source code -->
 <style>
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	list-style-type: decimal !important
@@ -84,8 +84,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li class="divider"></li>
 							<li class="level beginner"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
 									Anfänger</a></li>
-							<li class="level expert"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox
-									Experte</a></li>
+							<li class="level expert"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
 						</ul></li>
 					<!-- Menu Configuration -->
 					<li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
@@ -108,10 +107,11 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								lkey="Blockly.Msg.MENU_ROBOT"></span>
 						</a>
 						<ul id="navigation-robot" class="dropdown-menu">
-							<li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
-							<li class="divider"></li>
 							<li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
 							<li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
+							<li class="divider"></li>
+							<li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
+							<li class="hidden anchor"></li>
 						</ul></li>
 					<!-- Menu Help -->
 					<li class="dropdown" id="head-navigation-help"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-help"
@@ -154,7 +154,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="de"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="en"></a></li>
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>							
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="it"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="fr"></a></li>
