@@ -29,24 +29,6 @@ function _startServerFn {
   main='de.fhg.iais.roberta.main.ServerStarter'
   if [ -d OpenRobertaServer ]
   then
-    rm -rf OpenRobertaServer/db/
-    cp -r OpenRobertaServer/dbBase OpenRobertaServer/db
-    echo "RUNNING OPEN ROBERTA LAB FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
-    cd OpenRobertaServer
-    run="java -cp target/resources/\* ${main} --port ${port}"
-  else
-    echo "RUNNING OPEN ROBERTA LAB FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
-    run="java -cp resources/\* ${main} --properties ${propfile} --ip ${ip} --port ${port}"
-  fi
-  echo "executing: $run"
-  eval $run
-}
-
-function _startDevelopFn {
-  _checkJava
-  main='de.fhg.iais.roberta.main.ServerStarter'
-  if [ -d OpenRobertaServer ]
-  then
     echo "RUNNING OPEN ROBERTA LAB FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
     cd OpenRobertaServer
     run="java -cp target/resources/\* ${main} --port ${port}"
@@ -308,22 +290,6 @@ case "$cmd" in
                        fi
                     fi
                     _startServerFn ;;
---start-develop)    propfile="$1"
-                    if [[ "$propfile" != '' ]] # property file given explicitly
-                    then
-                       propfile="file:$propfile"
-                       echo "starting the server using supplied openRoberta.properties from $propFile"
-                    else
-                       if [ -d OpenRobertaServer ]
-                       then
-                         echo "starting the server from a git repository. Using openRoberta.properties from the classpath"
-                       else
-                         echo "starting the server from a installation directory (probably created by an --export command)"
-                         echo "Using file \"openRoberta.properties\" from the base directory"
-                         propfile="file:openRoberta.properties"
-                       fi
-                    fi
-                    _startDevelopFn ;;
 --start-db)         dbLocation="${1:-db/openroberta-db}"
                     dbName="${2:-oradb}"
                     _startDatabaseFn ;;

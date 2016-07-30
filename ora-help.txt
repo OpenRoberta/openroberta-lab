@@ -48,9 +48,7 @@ is 'hibernate.connection.url'. The syntax of this property is described in 'Open
 
 3.commands that make sense after a SUCCESSFUL mvn {clean} install (:-)
 
-  --start-server {PROPERTY-FILE}     copy dbBase to db, start of the server, optionally supply a property file (default: openRoberta.properties)
-                                     to be used after an --export of the application
-  --start-develop {PROPERTY-FILE}    start of the server, optionally supply a property file (default: openRoberta.properties)
+  --start-server {PROPERTY-FILE}     start of the server, optionally supply a property file (default: openRoberta.properties)
                                      to be used after an --export of the application
   --start-db {DB-DIR} {DB-NAME}      start a HSQLDB-server in a separate jvm. Only one database is made accessible.
                                      The database is found in directory {DB-DIR}, default is "db",
