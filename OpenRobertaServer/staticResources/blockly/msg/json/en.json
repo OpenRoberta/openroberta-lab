@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-07-29 08:31:04.180139",
+		"lastupdated": "2016-08-02 11:07:15.158191",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -441,7 +441,6 @@
 	"VARIABLES_TYPE_ARRAY_BOOLEAN": "List Boolean",
 	"VARIABLES_TYPE_ARRAY_COLOUR": "List Colour",
 	"VARIABLES_TYPE_ARRAY_CONNECTION": "List Connection",
-	"PROCEDURES_DEFNORETURN_PROCEDURE": "doSomething",
 	"PROCEDURES_VARIABLES_ERROR": "Error: This block may be used only within the '",
 	"PROCEDURES_VARIABLES_LOOP_ERROR": "Error: This block may be used only within a loop which declares ",
 	"PROCEDURES_TITLE": "' procedure",
@@ -463,7 +462,6 @@
 	"MOTOR_SIDE": "side",
 	"MOTOR_ROTATION_REVERSE": "direction of rotation",
 	"MOTOR_SPEED": "speed",
-	"MOTOR_DRIVE": "drive",
 	"MOTOR_DISTANCE": "distance cm",
 	"MOTOR_DEGREE": "degree",
 	"MOTOR_ROTATION": "rotation",
@@ -664,7 +662,6 @@
 	"POPUP_USERNAME": "Username",
 	"POPUP_USERNAME_LOGOFF": "You are not logged in.",
 	"POPUP_PASSWORD": "Password",
-	"POPUP_REPEAT_PASSWORD": "Repeat password",
 	"POPUP_NAME": "Name",
 	"POPUP_EMAIL": "E-Mail",
 	"POPUP_SHARE_WITH": "Share with ...",

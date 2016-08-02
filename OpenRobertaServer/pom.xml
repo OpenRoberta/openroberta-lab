@@ -110,7 +110,7 @@
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
-						<configuration>							
+						<configuration>
 							<includeScope>compile</includeScope>
 							<outputDirectory>${project.build.directory}/resources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
@@ -146,13 +146,13 @@
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.openroberta</groupId>
-                                    <artifactId>RobotArdu</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>RobotArdu</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
 									<artifactId>RobotSIM</artifactId>
@@ -281,8 +281,7 @@
 			</activation>
 			<build>
 				<plugins>
-					<!-- Clean out compressed files that may have been added by a release
-							 build. -->
+					<!-- Clean out compressed files that may have been added by a release build. -->
 					<plugin>
 						<artifactId>maven-clean-plugin</artifactId>
 						<version>3.0.0</version>
@@ -328,12 +327,8 @@
 						</executions>
 						<configuration>
 							<nosuffix>true</nosuffix>
-							<!--
-								Disable javascript compression - just use this plugin for gzip.
-								If we want to use javascript compression we should execute this
-								plugin twice, so we can exclude already-compressed files from
-								the JS-compression but not from gzip-compression.
-							-->
+							<!-- Disable javascript compression - just use this plugin for gzip. If we want to use javascript compression we should execute this plugin twice, so we can 
+								exclude already-compressed files from the JS-compression but not from gzip-compression. -->
 							<nocompress>true</nocompress>
 							<force>true</force>
 							<gzip>true</gzip>
