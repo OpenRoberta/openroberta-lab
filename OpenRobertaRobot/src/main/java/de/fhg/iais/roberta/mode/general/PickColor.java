@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.mode.general;
 
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * All colors that are legal.
@@ -44,5 +45,14 @@ public enum PickColor implements IPickColor {
     @Override
     public String[] getValues() {
         return this.values;
+    }
+
+    public static PickColor get(int id) {
+        for ( PickColor sp : PickColor.values() ) {
+            if ( sp.colorID == id ) {
+                return sp;
+            }
+        }
+        throw new DbcException("Invalid color: " + id);
     }
 }

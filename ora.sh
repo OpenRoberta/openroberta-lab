@@ -203,7 +203,7 @@ function _updateLejos {
   run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 OpenRobertaServer/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
-  run="echo ${serverurl} | ssh root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
+  run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
   runtime="OpenRobertaServer/target/updateResources/EV3Runtime.jar"
