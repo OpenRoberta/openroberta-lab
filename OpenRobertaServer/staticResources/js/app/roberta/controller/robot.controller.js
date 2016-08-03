@@ -23,7 +23,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
 
     /**
      * Set token
-     * 
+     *
      * @param {token}
      *            Token value to be set
      */
@@ -130,6 +130,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
      * Handle firmware conflict between server and robot
      */
     function handleFirmwareConflict() {
+        if (GUISTATE_C.getRobotFWName() != "lejos") {
+            return false;
+        }
         var regex = '(.+\..+)\..+'; // get x.y from version x.y.z
         var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
         var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
