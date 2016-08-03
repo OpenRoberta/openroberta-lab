@@ -902,6 +902,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         // TODO Auto-generated method stub
@@ -1588,7 +1589,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         }
     }
 
-    //TODO: ifStmt.getExpr().get(i) only gives true. Doesn't show body of the block. Old code? Fix.
     private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
             if ( i == 0 ) {
@@ -1606,7 +1606,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         }
     }
 
-    // TODO: is not being shown at all. Fix.
     private void generateCodeFromElse(IfStmt<Void> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
             nlIndent();
@@ -1777,14 +1776,5 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return type.getClass().getSimpleName() + "." + type.getTypeName();
     }
      */
-
-    private static boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( final NumberFormatException e ) {
-            return false;
-        }
-    }
 
 }

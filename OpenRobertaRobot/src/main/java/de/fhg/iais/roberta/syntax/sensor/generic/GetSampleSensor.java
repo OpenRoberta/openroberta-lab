@@ -68,6 +68,12 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.TIME:
                 this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
                 break;
+            case BlocklyConstants.SOUND:
+                this.sensor = SoundSensor.make(factory.getSoundSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                break;
+            case BlocklyConstants.LIGHT:
+                this.sensor = LightSensor.make(factory.getLightSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }

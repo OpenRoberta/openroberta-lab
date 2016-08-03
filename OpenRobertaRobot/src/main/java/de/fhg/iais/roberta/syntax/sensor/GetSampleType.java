@@ -20,7 +20,11 @@ public enum GetSampleType {
     KEYS_PRESSED( "KEY", "KEYS_PRESSED", "KEYS_PRESSED" ),
     GYRO_RATE( "SENSORPORT", "GYRO", "RATE" ),
     GYRO_ANGLE( "SENSORPORT", "GYRO", "ANGLE" ),
-    TIME( "SENSORNUM", "TIME", "TIME" );
+    TIME( "SENSORNUM", "TIME", "TIME" ),
+    SOUND( "SENSORPORT", "SOUND", "SOUND" ),
+    SOUND_SOUND( "SENSORPORT", "SOUND", "SOUND" ),
+    LIGHT_LIGHT( "SENSORPORT", "LIGHT", "LIGHT" ),
+    LIGHT_AMBIENTLIGHT( "SENSORPORT", "LIGHT", "AMBIENTLIGHT" );
 
     private final String portTypeName;
     private final String sensorType;
@@ -38,18 +42,18 @@ public enum GetSampleType {
      * @return type of the port
      */
     public String getPortTypeName() {
-        return this.portTypeName;
+        return portTypeName;
     }
 
     public String getSensorType() {
-        return this.sensorType;
+        return sensorType;
     }
 
     /**
      * @return the sensorMode
      */
     public String getSensorMode() {
-        return this.sensorMode;
+        return sensorMode;
     }
 
     /**
