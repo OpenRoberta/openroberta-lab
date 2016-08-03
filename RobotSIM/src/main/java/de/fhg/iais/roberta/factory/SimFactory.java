@@ -7,6 +7,7 @@ import java.util.Properties;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -43,7 +44,7 @@ public class SimFactory extends AbstractRobotFactory {
 
     public SimFactory(RobotCommunicator unusedForSim, Integer robotId) {
         Properties nxtProperties = Util1.loadProperties("classpath:SIM.properties");
-        this.compilerWorkflow = new SimCompilerWorkflow();
+        compilerWorkflow = new SimCompilerWorkflow();
         this.robotId = robotId;
     }
 
@@ -375,12 +376,12 @@ public class SimFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
     public int getRobotId() {
-        return this.robotId;
+        return robotId;
     }
 
     @Override
@@ -415,6 +416,18 @@ public class SimFactory extends AbstractRobotFactory {
 
     @Override
     public List<ILightSensorMode> getLightColors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ILightSensorActionMode getLightActionColor(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorActionMode> getLightActionColors() {
         // TODO Auto-generated method stub
         return null;
     }

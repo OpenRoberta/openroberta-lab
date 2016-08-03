@@ -5,8 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
+import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -27,11 +26,11 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * of blinking.
  */
 public class LightSensorAction<V> extends Action<V> {
-    private final ILightSensorMode light;
+    private final ILightSensorActionMode light;
 
-    private LightSensorAction(IActorPort port, ILightSensorMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LightSensorAction(ISensorPort port, ILightSensorActionMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.LIGHT_SENSOR_ACTION, properties, comment);
-        Assert.isTrue(light != null);
+        //Assert.isTrue(light != null);
         this.light = light;
         setReadOnly();
     }
@@ -47,14 +46,14 @@ public class LightSensorAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightSensorAction}
      */
-    private static <V> LightSensorAction<V> make(IActorPort port, ILightSensorMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> LightSensorAction<V> make(ISensorPort port, ILightSensorActionMode light, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightSensorAction<V>(port, light, properties, comment);
     }
 
     /**
      * @return {@link BrickLedColor} of the lights.
      */
-    public ILightSensorMode getLight() {
+    public ILightSensorActionMode getLight() {
         return light;
     }
 
@@ -89,12 +88,12 @@ public class LightSensorAction<V> extends Action<V> {
             port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             light = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
         } else {
-            fields = helper.extractFields(block, (short) 2);
+            fields = helper.extractFields(block, (short) 3);
             port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             light = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
         }
         return LightSensorAction
-            .make(factory.getActorPort(port), factory.getLightColor(light), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(factory.getSensorPort(port), factory.getLightActionColor(light), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

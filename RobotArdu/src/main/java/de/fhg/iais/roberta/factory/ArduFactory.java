@@ -7,6 +7,7 @@ import java.util.Properties;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -47,8 +48,7 @@ public class ArduFactory extends AbstractRobotFactory {
     public ArduFactory(RobotCommunicator unusedForArdu, Integer robotId) {
         System.out.println(robotId);
         Properties arduProperties = Util1.loadProperties("classpath:Ardu.properties");
-        this.compilerWorkflow =
-            new ArduCompilerWorkflow(arduProperties.getProperty("crosscompiler.basedir"), arduProperties.getProperty("robot.resources.dir"));
+        compilerWorkflow = new ArduCompilerWorkflow(arduProperties.getProperty("crosscompiler.basedir"), arduProperties.getProperty("robot.resources.dir"));
         this.robotId = robotId;
     }
 
@@ -430,12 +430,12 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
     public int getRobotId() {
-        return this.robotId;
+        return robotId;
     }
 
     @Override
@@ -446,6 +446,18 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public List<ILightSensorMode> getLightColors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ILightSensorActionMode getLightActionColor(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorActionMode> getLightActionColors() {
         // TODO Auto-generated method stub
         return null;
     }

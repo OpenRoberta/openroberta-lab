@@ -9,6 +9,7 @@ import com.google.inject.AbstractModule;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -45,14 +46,14 @@ public class EV3Factory extends AbstractRobotFactory {
     private final int robotId;
 
     public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
-        this.ev3properties = Util1.loadProperties("classpath:openRoberta.properties");
+        ev3properties = Util1.loadProperties("classpath:openRoberta.properties");
 
-        this.compilerWorkflow =
+        compilerWorkflow =
             new Ev3CompilerWorkflow(
                 robotCommunicator,
-                this.ev3properties.getProperty("crosscompiler.basedir"),
-                this.ev3properties.getProperty("robot.crossCompilerResources.dir"),
-                this.ev3properties.getProperty("crosscompiler.build.xml"));
+                ev3properties.getProperty("crosscompiler.basedir"),
+                ev3properties.getProperty("robot.crossCompilerResources.dir"),
+                ev3properties.getProperty("crosscompiler.build.xml"));
         this.robotId = robotId;
     }
 
@@ -408,17 +409,17 @@ public class EV3Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new Ev3GuiceModule(this.ev3properties);
+        return new Ev3GuiceModule(ev3properties);
     }
 
     @Override
     public int getRobotId() {
-        return this.robotId;
+        return robotId;
     }
 
     @Override
@@ -429,6 +430,18 @@ public class EV3Factory extends AbstractRobotFactory {
 
     @Override
     public List<ILightSensorMode> getLightColors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ILightSensorActionMode getLightActionColor(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<ILightSensorActionMode> getLightActionColors() {
         // TODO Auto-generated method stub
         return null;
     }

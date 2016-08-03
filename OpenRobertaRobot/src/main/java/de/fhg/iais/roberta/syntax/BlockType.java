@@ -154,8 +154,13 @@ public enum BlockType {
     SHOW_TEXT_ACTION( Category.ACTOR, ShowTextAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_TEXT ),
     SHOW_PICTURE_ACTION( Category.ACTOR, ShowPictureAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_PICTURE ),
     TONE_ACTION( Category.ACTOR, ToneAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_TONE ),
-    LIGHT_ACTION( Category.ACTOR, LightSensorAction.class, BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON ),
-    LIGHT_SENSOR_ACTION( Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON ),
+    LIGHT_SENSOR_ACTION(
+        Category.ACTOR,
+        LightSensorAction.class,
+        BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON,
+        BlocklyConstants.SENSOR_LIGHT_ON,
+        BlocklyConstants.SENSOR_LIGHT_OFF ),
+    LIGHT_ACTION( Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON ),
     CLEAR_DISPLAY_ACTION( Category.ACTOR, ClearDisplayAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_CLEAR ),
     MOTOR_ON_ACTION(
         Category.ACTOR,

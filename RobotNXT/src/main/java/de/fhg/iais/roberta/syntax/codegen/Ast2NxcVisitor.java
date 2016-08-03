@@ -768,7 +768,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
         final String methodName = "OnReg";
 
-        final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
+        //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + ",");
         motorSetPowerAction.getPower().visit(this);
 
@@ -905,7 +905,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     //TODO: implement
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
+        //sb.append(lightSensorAction.getProperty());
         return null;
     }
 
