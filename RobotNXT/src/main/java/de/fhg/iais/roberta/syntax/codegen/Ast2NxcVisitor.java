@@ -905,7 +905,19 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     //TODO: implement
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        //sb.append(lightSensorAction.getProperty());
+        //switch ( ) {
+        //case :
+        //sb.append("SetSensorColorRed( IN_");
+        //break;
+        //case :
+        //sb.append("SetSensorColorGreen( IN_");
+        //break;
+        //sb.append("SetSensorColorBlue ( IN_");
+        //case :
+        //break;
+        //}
+        //sb.append(lightSensor.getPort().getPortNumber());
+        //sb.append(" )");
         return null;
     }
 

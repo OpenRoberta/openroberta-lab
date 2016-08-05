@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 
 public enum LightSensorMode implements ILightSensorMode {
-    RED( "light", "getSample" ), AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
+    RED( "getLightSensorRed", "Red" ), AMBIENTLIGHT( "getLightSensorAmbient", "Ambient" );
 
     private final String[] values;
 
@@ -15,12 +15,12 @@ public enum LightSensorMode implements ILightSensorMode {
      * @return name that Lejos is using for this mode
      */
     public String getLejosModeName() {
-        return this.values[0];
+        return values[0];
     }
 
     @Override
     public String[] getValues() {
-        return this.values;
+        return values;
     }
 
 }

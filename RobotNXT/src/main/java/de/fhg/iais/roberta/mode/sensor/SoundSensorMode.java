@@ -5,11 +5,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 public enum SoundSensorMode implements ISoundSensorMode {
     SOUND( "sound", "getSample" );
 
-    private final String halJavaMethodName;
     private final String[] values;
 
-    private SoundSensorMode(String halJavaMethodName, String... values) {
-        this.halJavaMethodName = halJavaMethodName;
+    private SoundSensorMode(String... values) {
         this.values = values;
     }
 
@@ -17,17 +15,12 @@ public enum SoundSensorMode implements ISoundSensorMode {
      * @return name that Lejos is using for this mode
      */
     public String getLejosModeName() {
-        return this.values[0];
+        return values[0];
     }
-
-    //    @Override
-    //    public String getHalJavaMethod() {
-    //        return this.halJavaMethodName;
-    //    }
 
     @Override
     public String[] getValues() {
-        return this.values;
+        return values;
     }
 
 }
