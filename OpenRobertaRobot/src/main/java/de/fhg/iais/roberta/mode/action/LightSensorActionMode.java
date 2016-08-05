@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.action;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 
 public enum LightSensorActionMode implements ILightSensorActionMode {
-    RED( "RED" ), GREEN( "GREEN" ), BLUE( "BLUE" );
+    RED(), GREEN(), BLUE();
 
     private final String[] values;
 

@@ -28,9 +28,7 @@ public class SensorTest {
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [UltrasonicSensor [mode=DISTANCE, port=S4]]\n\n"
-                + "Var [item] := SensorExpr [InfraredSensor [mode=DISTANCE, port=S4]]\n\n"
                 + "Var [item] := SensorExpr [DrehSensor [mode=ROTATION, motor=A]]\n\n"
-                + "Var [item] := SensorExpr [GyroSensor [mode=ANGLE, port=S2]]\n\n"
                 + "Var [item] := SensorExpr [TimerSensor [mode=GET_SAMPLE, timer=1]]\n\n"
                 + "]]]";
 

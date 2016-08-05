@@ -1663,18 +1663,15 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         }
 
         this.addConstants();
-        //this.addFunctions();
 
         sb.append("task main(){");
 
-        //add sensors:
         for ( final Entry<ISensorPort, Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
             sb.append("SetSensor( IN_");
             switch ( entry.getValue().getType() ) {
                 case COLOR:
                     sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL );");
-                    //this.sb.append("SetSensor(IN_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
                     break;
                 case LIGHT:
                     sb.append(entry.getKey().getPortNumber() + ", SENSOR_LIGHT );");
