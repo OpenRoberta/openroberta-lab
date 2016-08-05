@@ -42,7 +42,7 @@ public class ColorConstTest {
     @Test
     public void test1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=41, y=101], \nif Binary [EQ, ColorConst [WHITE], SensorExpr [ColorSensor [mode=RGB, port=S3]]]\n"
+            "BlockAST [project=[[Location [x=41, y=101], \nif Binary [EQ, ColorConst [WHITE], SensorExpr [ColorSensor [mode=RED, port=S3]]]\n"
                 + ",then\n"
                 + "AktionStmt [DriveAction [FOREWARD, MotionParam [speed=NumConst [50], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]\n]]]";
 
@@ -62,11 +62,6 @@ public class ColorConstTest {
     @Test
     public void reverseTransformatin2() throws Exception {
         Helper.assertTransformationIsOk("/ast/colour/colour_const2.xml");
-    }
-
-    @Test
-    public void reverseTransformatin3() throws Exception {
-        Helper.assertTransformationIsOk("/ast/colour/colour_const3.xml");
     }
 
 }

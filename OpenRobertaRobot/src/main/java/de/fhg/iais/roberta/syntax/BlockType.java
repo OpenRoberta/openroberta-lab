@@ -158,8 +158,7 @@ public enum BlockType {
         Category.ACTOR,
         LightSensorAction.class,
         BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON,
-        BlocklyConstants.SENSOR_LIGHT_ON,
-        BlocklyConstants.SENSOR_LIGHT_OFF ),
+        BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF ),
     LIGHT_ACTION( Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON ),
     CLEAR_DISPLAY_ACTION( Category.ACTOR, ClearDisplayAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_CLEAR ),
     MOTOR_ON_ACTION(

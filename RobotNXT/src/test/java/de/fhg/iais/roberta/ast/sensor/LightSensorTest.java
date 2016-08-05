@@ -35,12 +35,10 @@ public class LightSensorTest {
         final ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
         final ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
         final ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
-        final ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
         Assert.assertEquals(SensorPort.S3, cs.getPort());
         Assert.assertEquals(SensorPort.S1, cs1.getPort());
-        Assert.assertEquals(SensorPort.S2, cs2.getPort());
-        Assert.assertEquals(SensorPort.S4, cs3.getPort());
+        Assert.assertEquals(SensorPort.S4, cs2.getPort());
     }
 
     @Test
