@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.action.LightSensorActionMode;
+import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;

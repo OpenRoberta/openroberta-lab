@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.action;
+package de.fhg.iais.roberta.mode.action.nxt;
 
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 
