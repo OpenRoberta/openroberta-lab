@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
@@ -23,18 +24,20 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
+import de.fhg.iais.roberta.mode.action.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.action.ShowPicture;
-import de.fhg.iais.roberta.mode.sensor.BrickKey;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.general.WorkingState;
+import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util1;
@@ -450,13 +453,51 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ILightSensorActionMode getLightActionColor(String mode) {
+    public ILightSensorActionMode getLightActionColor(String light) {
+        if ( light == null || light.isEmpty() ) {
+            throw new DbcException("Invalid Light Color Mode: " + light);
+        }
+        String sUpper = light.trim().toUpperCase(Locale.GERMAN);
+        for ( ILightSensorActionMode po : LightSensorActionMode.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Light Color Mode: " + light);
+    }
+
+    @Override
+    public List<ILightSensorActionMode> getLightActionColors() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public List<ILightSensorActionMode> getLightActionColors() {
+    public IWorkingState getWorkingState(String state) {
+        if ( state == null || state.isEmpty() ) {
+            throw new DbcException("Invalid Working State Mode: " + state);
+        }
+        String sUpper = state.trim().toUpperCase(Locale.GERMAN);
+        for ( IWorkingState po : WorkingState.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid  Working State Mode: " + state);
+    }
+
+    @Override
+    public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
         return null;
     }

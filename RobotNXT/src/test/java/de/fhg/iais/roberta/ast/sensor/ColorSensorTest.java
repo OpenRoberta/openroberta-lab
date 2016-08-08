@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -14,9 +14,9 @@ public class ColorSensorTest {
     @Test
     public void sensorSetColor() throws Exception {
         final String a =
-            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [mode=COLOUR, port=S3]], "
-                + "[Location [x=-13, y=147], ColorSensor [mode=RED, port=S1]], "
-                + "[Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=S4]]]]";
+            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [mode=COLOUR, port=IN_3]], "
+                + "[Location [x=-13, y=147], ColorSensor [mode=RED, port=IN_1]], "
+                + "[Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=IN_4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
     }
@@ -38,9 +38,9 @@ public class ColorSensorTest {
         final ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
         final ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
 
-        Assert.assertEquals(SensorPort.S3, cs.getPort());
-        Assert.assertEquals(SensorPort.S1, cs1.getPort());
-        Assert.assertEquals(SensorPort.S4, cs2.getPort());
+        Assert.assertEquals(SensorPort.IN_3, cs.getPort());
+        Assert.assertEquals(SensorPort.IN_1, cs1.getPort());
+        Assert.assertEquals(SensorPort.IN_4, cs2.getPort());
     }
 
     @Test

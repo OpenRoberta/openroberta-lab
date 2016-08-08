@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
+import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
@@ -458,6 +459,18 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public List<ILightSensorActionMode> getLightActionColors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IWorkingState getWorkingState(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
         return null;
     }

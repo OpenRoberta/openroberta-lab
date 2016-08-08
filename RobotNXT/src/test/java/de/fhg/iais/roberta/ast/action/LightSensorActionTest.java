@@ -1,0 +1,75 @@
+package de.fhg.iais.roberta.ast.action;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import de.fhg.iais.roberta.mode.action.LightSensorActionMode;
+import de.fhg.iais.roberta.mode.general.WorkingState;
+import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
+import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+
+public class LightSensorActionTest {
+
+    @Test
+    public void make() throws Exception {
+        String a =
+            "BlockAST [project=[[Location [x=137, y=188], LightSensorAction [RED, ON, IN_1], LightSensorAction [GREEN, ON, IN_2], LightSensorAction [BLUE, ON, IN_3], LightSensorAction [RED, OFF, IN_4]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_LightSensorAction.xml"));
+    }
+
+    @Test
+    public void getLight() throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_LightSensorAction.xml");
+        LightSensorAction<Void> la = (LightSensorAction<Void>) transformer.getTree().get(0).get(1);
+        Assert.assertEquals(LightSensorActionMode.RED, la.getLight());
+    }
+
+    @Test
+    public void getPort() throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_LightSensorAction.xml");
+
+        LightSensorAction<Void> cs = (LightSensorAction<Void>) transformer.getTree().get(0).get(1);
+        LightSensorAction<Void> cs1 = (LightSensorAction<Void>) transformer.getTree().get(0).get(2);
+        LightSensorAction<Void> cs2 = (LightSensorAction<Void>) transformer.getTree().get(0).get(3);
+        LightSensorAction<Void> cs3 = (LightSensorAction<Void>) transformer.getTree().get(0).get(4);
+
+        Assert.assertEquals(SensorPort.IN_1, cs.getPort());
+        Assert.assertEquals(SensorPort.IN_2, cs1.getPort());
+        Assert.assertEquals(SensorPort.IN_3, cs2.getPort());
+        Assert.assertEquals(SensorPort.IN_4, cs3.getPort());
+
+    }
+
+    @Test
+    public void getState() throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_LightSensorAction.xml");
+        LightSensorAction<Void> st = (LightSensorAction<Void>) transformer.getTree().get(0).get(1);
+        LightSensorAction<Void> st1 = (LightSensorAction<Void>) transformer.getTree().get(0).get(4);
+        Assert.assertEquals(WorkingState.ON, st.getState());
+        Assert.assertEquals(WorkingState.OFF, st1.getState());
+    }
+
+    /* @Test
+    public void invalideMode() throws Exception {
+        try {
+            @SuppressWarnings("unused")
+            VolumeAction<Void> va = VolumeAction.make(VolumeAction.Mode.valueOf("invalid"), null, null, null);
+            Assert.fail();
+        } catch ( Exception e ) {
+            Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode.invalid", e.getMessage());
+        }
+    }
+
+    @Test
+    public void getVolumeAction() throws Exception {
+        String a = "BlockAST [project=[[Location [x=-2, y=189], VolumeAction [GET, NullConst [null]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_GetVolume.xml"));
+    }*/
+
+    @Test
+    public void reverseTransformatin() throws Exception {
+        Helper.assertTransformationIsOk("/ast/actions/action_LightSensorAction.xml");
+    }
+}

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -46,7 +46,7 @@ public class BrickSensorTest {
     public void sensorBrick() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-96, y=73], \n"
-                + "if SensorExpr [TouchSensor [port=S1]]\n"
+                + "if SensorExpr [TouchSensor [port=IN_1]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [BrickSensor [key=ENTER, mode=IS_PRESSED]]\n\n"
                 + "]]]";

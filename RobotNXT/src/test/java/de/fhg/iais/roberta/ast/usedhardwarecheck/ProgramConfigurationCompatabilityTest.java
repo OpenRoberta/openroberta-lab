@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.UsedSensorsCheckVisitor;
@@ -29,7 +29,7 @@ public class ProgramConfigurationCompatabilityTest {
         builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
             new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
+        builder.addSensor(SensorPort.IN_1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.IN_2, new Sensor(SensorType.ULTRASONIC));
 
         Configuration brickConfiguration = builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");

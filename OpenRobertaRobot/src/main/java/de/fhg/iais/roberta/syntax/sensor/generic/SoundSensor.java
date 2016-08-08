@@ -37,13 +37,13 @@ public class SoundSensor<V> extends BaseSensor<V> {
     }
 
     /**
-     * Create object of the class {@link TouchSensor}.
+     * Create object of the class {@link SoundSensor}.
      *
      * @param port on which the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible ports that the sensor can be
      *        connected,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link TouchSensor}
+     * @return read only object of {@link SoundSensor}
      */
     public static <V> SoundSensor<V> make(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SoundSensor<V>(mode, port, properties, comment);
@@ -58,7 +58,7 @@ public class SoundSensor<V> extends BaseSensor<V> {
 
     @Override
     public String toString() {
-        return "TouchSensor [port=" + getPort() + "]";
+        return "SoundSensor [port=" + getPort() + "]";
     }
 
     @Override
