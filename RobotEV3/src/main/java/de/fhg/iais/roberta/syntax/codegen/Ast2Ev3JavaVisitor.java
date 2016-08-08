@@ -17,12 +17,12 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -1546,8 +1546,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.runtime.ev3.*;\n\n");
 
         this.sb.append("import de.fhg.iais.roberta.mode.general.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.mode.action.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.mode.sensor.*;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.mode.action.ev3.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.mode.sensor.ev3.*;\n\n");
 
         this.sb.append("import de.fhg.iais.roberta.components.*;\n");
 

@@ -10,10 +10,10 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class AstToLejosJavaVisitorTest {
@@ -27,8 +27,8 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.runtime.*;\n"
         + "import de.fhg.iais.roberta.runtime.ev3.*;\n\n"
         + "import de.fhg.iais.roberta.mode.general.*;\n"
-        + "import de.fhg.iais.roberta.mode.action.*;\n"
-        + "import de.fhg.iais.roberta.mode.sensor.*;\n\n"
+        + "import de.fhg.iais.roberta.mode.action.ev3.*;\n"
+        + "import de.fhg.iais.roberta.mode.sensor.ev3.*;\n\n"
         + "import de.fhg.iais.roberta.components.*;\n"
         + "import java.util.LinkedHashSet;\n"
         + "import java.util.Set;\n"
