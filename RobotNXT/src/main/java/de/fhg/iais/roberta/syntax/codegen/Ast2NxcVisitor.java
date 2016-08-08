@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.ShowPicture;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -668,36 +668,21 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: fix sensors
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         String methodName;
-        switch ( showTextAction.getMsg().getKind() ) {
-            case STRING_CONST:
+        switch ( showTextAction.getMsg().getVarType() ) {
+            case STRING:
                 methodName = "TextOut( ";
                 break;
-            case BOOL_CONST:
+            case BOOLEAN:
                 methodName = "BoolOut( ";
                 break;
-            case COLOR_CONST:
+            case COLOR:
                 methodName = "ColorOut( ";
                 break;
-            case VAR:
-                switch ( showTextAction.getMsg().getVarType() ) {
-                    case STRING:
-                        methodName = "TextOut( ";
-                        break;
-                    case BOOLEAN:
-                        methodName = "BoolOut( ";
-                        break;
-                    case COLOR:
-                        methodName = "ColorOut( ";
-                        break;
-                    default:
-                        methodName = "NumOut( ";
-                        break;
-                }
-                break;
-            case SENSOR_EXPR:
+            case NOTHING:
                 switch ( showTextAction.getMsg().getProperty().getBlockType() ) {
                     case "robSensors_key_isPressed":
                     case "robSensors_touch_isPressed":
@@ -710,10 +695,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                         methodName = "NumOut( ";
                         break;
                 }
-                break;
             default:
                 methodName = "NumOut( ";
                 break;
+
         }
 
         sb.append(methodName);
@@ -902,30 +887,33 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        //switch ( ) {
-        //case :
-        //sb.append("SetSensorColorRed( IN_");
-        //break;
-        //case :
-        //sb.append("SetSensorColorGreen( IN_");
-        //break;
-        //sb.append("SetSensorColorBlue ( IN_");
-        //case :
-        //break;
-        //}
-        //sb.append(lightSensor.getPort().getPortNumber());
-        //sb.append(" )");
+        if ( lightSensorAction.getState().toString() == "ON" ) {
+            switch ( lightSensorAction.getLight().toString() ) {
+                case "RED":
+                    sb.append("SetSensorColorRed( ");
+                    break;
+                case "GREEN":
+                    sb.append("SetSensorColorGreen( ");
+                    break;
+                case "BLUE":
+                    sb.append("SetSensorColorBlue ( ");
+                    break;
+            }
+        } else {
+            sb.append("SetSensorColorNone( ");
+        }
+        sb.append(lightSensorAction.getPort());
+        sb.append(" );");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         //final String Port = getEnumCode(lightSensor.getPort());
-        sb.append("SensorLight( IN_");
-        sb.append(lightSensor.getPort().getPortNumber());
+        sb.append("SensorLight( ");
+        sb.append(lightSensor.getPort());
         sb.append(", ");
         switch ( getEnumCode(lightSensor.getMode()) ) {
             case "LightSensorMode.RED":

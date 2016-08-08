@@ -10,7 +10,7 @@ public class MethodIfReturnTest {
     public void methodIfReturn1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMBER, x, EmptyExpr [defVal=class java.lang.Integer], false, false], "
-                + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [port=S1]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=class de.fhg.iais.roberta.syntax.expr.NullConst]]]]]";
+                + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [port=IN_1]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=class de.fhg.iais.roberta.syntax.expr.NullConst]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_if_return_1.xml"));
 
     }

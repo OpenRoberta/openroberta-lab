@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2NxcVisitorTest {
@@ -42,7 +42,7 @@ public class Ast2NxcVisitorTest {
         builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
             new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
+        builder.addSensor(SensorPort.IN_1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.IN_2, new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = (NxtConfiguration) builder.build();
     }
 

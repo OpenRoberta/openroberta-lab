@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
+import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
@@ -108,6 +109,10 @@ public interface IRobotFactory {
     ILightSensorActionMode getLightActionColor(String mode);
 
     List<ILightSensorActionMode> getLightActionColors();
+
+    IWorkingState getWorkingState(String mode);
+
+    List<IWorkingState> getWorkingStates();
 
     /**
      * Get a {@link IShowPicture} enumeration given string parameter. It is possible for one picture to have multiple string mappings. Throws exception if the

@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -14,7 +14,7 @@ public class UltraSonicSensorTest {
     @Test
     public void sensorSetUltrasonic() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [mode=DISTANCE, port=S4]], [Location [x=1, y=98], UltrasonicSensor [mode=PRESENCE, port=S2]]]]";
+            "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [mode=DISTANCE, port=IN_4]], [Location [x=1, y=98], UltrasonicSensor [mode=PRESENCE, port=IN_2]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
     }
@@ -37,8 +37,8 @@ public class UltraSonicSensorTest {
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(SensorPort.S4, cs.getPort());
-        Assert.assertEquals(SensorPort.S2, cs1.getPort());
+        Assert.assertEquals(SensorPort.IN_4, cs.getPort());
+        Assert.assertEquals(SensorPort.IN_2, cs1.getPort());
     }
 
     @Test

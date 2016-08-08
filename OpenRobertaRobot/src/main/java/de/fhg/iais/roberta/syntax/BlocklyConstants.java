@@ -50,8 +50,7 @@ public final class BlocklyConstants {
     public static final String SENSORPORT = "SENSORPORT";
     public static final String SWITCH_BLINK = "SWITCH_BLINK";
     public static final String SWITCH_COLOR = "SWITCH_COLOR";
-    //TODO: fix after playground works
-    public static final String SWITCH_SENSOR_COLOR = "SWITCH_SENSOR_COLOR";
+    public static final String SWITCH_STATE = "SWITCH_STATE";
     public static final String VOLUME = "VOLUME";
     public static final String FILE = "FILE";
     public static final String DURATION = "DURATION";
