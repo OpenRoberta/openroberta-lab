@@ -421,7 +421,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test29() throws Exception {
         String a =
             "var stmt0 = createVarDeclaration(CONST.NUMBER, \"variablenName\", createConstant(CONST.NUM_CONST, 0));\n"
-                + "var stmt1 = createMathChange(createVarReference(CONST.NUMBER, \"variablenName\"), createConstant(CONST.NUM_CONST, 1));\n"
+                + "var stmt1 = createMathChange(createVarReference(CONST.NUMBER, \"variablenName\"), createConstant(CONST.NUM_CONST, 1));"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/math/math_change.xml");

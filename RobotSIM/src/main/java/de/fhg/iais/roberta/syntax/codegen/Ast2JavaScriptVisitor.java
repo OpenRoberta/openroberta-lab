@@ -109,7 +109,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     private final StringBuilder sb = new StringBuilder();
     private int stmtsNumber = 0;
     private int methodsNumber = 0;
-    private ArrayList<Boolean> inStmt = new ArrayList<Boolean>();
+    private ArrayList<Boolean> inStmt = new ArrayList<>();
 
     private Ast2JavaScriptVisitor() {
 
@@ -207,7 +207,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         switch ( binary.getOp() ) {
             case MATH_CHANGE:
                 method = "createMathChange(";
-                end = createClosingBracket();
+                //                end = createClosingBracket();
                 break;
             case TEXT_APPEND:
                 method = "createTextAppend(";

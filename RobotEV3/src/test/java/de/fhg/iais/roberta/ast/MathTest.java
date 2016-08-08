@@ -160,8 +160,8 @@ public class MathTest {
     public void mathChange() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=182, y=34], MainTask [\n"
-                + "exprStmt VarDeclaration [NUMBER, variablenName, NumConst [0], false, true]], "
-                + "Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]]]]";
+                + "exprStmt VarDeclaration [NUMBER, variablenName, NumConst [0], false, true]], \n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_change.xml"));
     }
