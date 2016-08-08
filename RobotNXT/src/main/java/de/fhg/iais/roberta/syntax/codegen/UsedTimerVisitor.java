@@ -55,8 +55,8 @@ public class UsedTimerVisitor extends CheckVisitor {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        driveAction.getParam().getSpeed().visit(this);
-        driveAction.getParam().getDuration().getValue().visit(this);
+        //driveAction.getParam().getSpeed().visit(this);
+        //driveAction.getParam().getDuration().getValue().visit(this);
         return null;
     }
 

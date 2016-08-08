@@ -30,7 +30,7 @@ public class Ast2NxcVisitorTest {
         + "    SetSensor(IN_1,SENSOR_TOUCH);\n"
         // + "    SetSensor(IN_4, SENSOR_SOUND);\n"
         //+ "    SetSensor(IN_3, SENSOR_LIGHT);\n"
-        + "    SetSensor(IN_2,SENSOR_LOWSPEED);\n" + "long timer1;\n" + "SetTimerValue(timer1);";
+        + "    SetSensor(IN_2,SENSOR_LOWSPEED);\n";
 
     private static final String SUFFIX = "";
     private static NxtConfiguration brickConfiguration;

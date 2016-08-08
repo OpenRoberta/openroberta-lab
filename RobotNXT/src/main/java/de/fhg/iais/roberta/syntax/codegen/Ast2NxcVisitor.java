@@ -128,6 +128,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
+    private boolean timeSensorUsed;
 
     /**
      * initialize the Java code generator visitor.
@@ -136,9 +137,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public Ast2NxcVisitor(NxtConfiguration brickConfiguration, int indentation) {
+    public Ast2NxcVisitor(NxtConfiguration brickConfiguration, int indentation, boolean timeSensorUsed) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
+        this.timeSensorUsed = timeSensorUsed;
     }
 
     /**
@@ -153,7 +155,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0);
+        boolean timeSensorUsed = UsedTimerVisitor.check(phrasesSet);
+        final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
@@ -949,8 +952,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        sb.append("SensorColor( IN_");
-        sb.append(colorSensor.getPort().getPortNumber());
+        sb.append("SensorColor( ");
+        sb.append(colorSensor.getPort());
         sb.append(", ");
         switch ( getEnumCode(colorSensor.getMode()) ) {
             case "ColorSensorMode.COLOUR":
@@ -971,8 +974,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        sb.append("Sensor( IN_");
-        sb.append(soundSensor.getPort().getPortNumber());
+        sb.append("Sensor( ");
+        sb.append(soundSensor.getPort());
         sb.append(" )");
         return null;
     }
@@ -1024,14 +1027,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        sb.append("Sensor( IN_" + touchSensor.getPort().getPortNumber());
+        sb.append("Sensor( " + touchSensor.getPort());
         sb.append(" )");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        sb.append("SensorUS( IN_" + ultrasonicSensor.getPort().getPortNumber() + " )");
+        sb.append("SensorUS( " + ultrasonicSensor.getPort() + " )");
         return null;
     }
 
@@ -1668,33 +1671,35 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
         for ( final Entry<ISensorPort, Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
-            sb.append("SetSensor( IN_");
+            sb.append("SetSensor( ");
             switch ( entry.getValue().getType() ) {
                 case COLOR:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL );");
+                    sb.append(entry.getKey() + ", SENSOR_COLORFULL );");
                     break;
                 case LIGHT:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_LIGHT );");
+                    sb.append(entry.getKey() + ", SENSOR_LIGHT );");
                     break;
                 case TOUCH:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_TOUCH );");
+                    sb.append(entry.getKey() + ", SENSOR_TOUCH );");
                     break;
                 case ULTRASONIC:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_LOWSPEED );");
+                    sb.append(entry.getKey() + ", SENSOR_LOWSPEED );");
                     break;
                 case SOUND:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_SOUND );");
+                    sb.append(entry.getKey() + ", SENSOR_SOUND );");
                     break;
                 default:
                     break;
             }
         }
 
-        //TODO: hide it after the used block part is implemented
-        nlIndent();
-        sb.append("long timer1;");
-        nlIndent();
-        sb.append("SetTimerValue( timer1 );");
+        if ( timeSensorUsed ) {
+            nlIndent();
+            sb.append("long timer1;");
+            nlIndent();
+            sb.append("SetTimerValue( timer1 );");
+        }
+
     }
 
     /**
