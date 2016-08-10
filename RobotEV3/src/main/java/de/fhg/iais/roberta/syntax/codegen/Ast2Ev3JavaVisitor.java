@@ -527,6 +527,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             case UNTIL:
             case WHILE:
             case FOREVER:
+                /*
+                 *This ""if ( TRUE ) {" statement is needed because when we have code after the "while ( true ) "
+                 *statement is unreachable
+                 */
                 this.sb.append("if ( TRUE ) {");
                 incrIndentation();
                 nlIndent();
