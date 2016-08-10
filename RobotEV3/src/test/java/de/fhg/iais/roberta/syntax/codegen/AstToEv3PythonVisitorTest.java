@@ -24,8 +24,7 @@ public class AstToEv3PythonVisitorTest {
         + "from roberta.ev3 import Hal\n"
         + "from roberta.BlocklyMethods import BlocklyMethods\n"
         + "from ev3dev import ev3 as ev3dev\n"
-        + "import math\n\n"
-        + "TRUE = True\n";
+        + "import math\n\n";
 
     private static final String GLOBALS = "" //
         + "_brickConfiguration = {\n"
@@ -106,10 +105,9 @@ public class AstToEv3PythonVisitorTest {
             + "    if hal.isPressed('1'):\n"
             + "        hal.ledOn('green', 'on')\n"
             + "    elif 'red' == hal.getColorSensorColour('3'):\n"
-            + "        if TRUE:\n"
-            + "            while True:\n"
-            + "                hal.drawPicture('eyesopen', 0, 0)\n"
-            + "                hal.turnOnRegulatedMotor('B', 30)\n"
+            + "        while True:\n"
+            + "            hal.drawPicture('eyesopen', 0, 0)\n"
+            + "            hal.turnOnRegulatedMotor('B', 30)\n"
             + "    hal.playFile(1)\n"
             + "    hal.setVolume(50)\n"
             + "    for i in xrange(1, 10, 1):\n"
@@ -133,9 +131,8 @@ public class AstToEv3PythonVisitorTest {
             + "        elif 0 == hal.getUltraSonicSensorDistance('4'):\n"
             + "            hal.drawPicture('flowers', 15, 15)\n"
             + "        else:\n"
-            + "            if TRUE:\n"
-            + "                while not hal.isKeyPressed('up'):\n"
-            + "                    hal.turnOnRegulatedMotor('B', 30)\n\n"
+            + "            while not hal.isKeyPressed('up'):\n"
+            + "                hal.turnOnRegulatedMotor('B', 30)\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
@@ -155,10 +152,9 @@ public class AstToEv3PythonVisitorTest {
             + "        hal.ledOff()\n"
             + "    else:\n"
             + "        hal.resetGyroSensor('2')\n"
-            + "        if TRUE:\n"
-            + "            while hal.isPressed('1'):\n"
-            + "                hal.drawPicture('oldglasses', 0, 0)\n"
-            + "                hal.clearDisplay()\n"
+            + "        while hal.isPressed('1'):\n"
+            + "            hal.drawPicture('oldglasses', 0, 0)\n"
+            + "            hal.clearDisplay()\n"
             + "        hal.ledOn('green', 'on')\n\n"
             + MAIN_METHOD;
 
@@ -474,16 +470,14 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "if TRUE:\n"
-            + "    while 0 == 0:\n"
+            + "while 0 == 0:\n"
+            + "    print(\"123\")\n"
+            + "    print(\"123\")\n"
+            + "    while not (0 == 0):\n"
             + "        print(\"123\")\n"
             + "        print(\"123\")\n"
-            + "        if TRUE:\n"
-            + "            while not (0 == 0):\n"
-            + "                print(\"123\")\n"
-            + "                print(\"123\")\n"
-            + "                break\n"
-            + "        break\n\n"
+            + "        break\n"
+            + "    break\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
@@ -641,23 +635,17 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "if TRUE:\n"
-            + "    while True:\n"
-            + "        pass\n"
-            + "if TRUE:\n"
-            + "    while not (0 == 0):\n"
-            + "        pass\n"
-            + "if TRUE:\n"
-            + "    while not True:\n"
-            + "        pass\n"
-            + "if TRUE:\n"
+            + "while True:\n"
+            + "    pass\n"
+            + "while not (0 == 0):\n"
+            + "    pass\n"
+            + "while not True:\n"
+            + "    pass\n"
+            + "while not (15 == 20):\n"
+            + "    variablenName += 1\n"
+            + "while not True:\n"
             + "    while not (15 == 20):\n"
-            + "        variablenName += 1\n"
-            + "if TRUE:\n"
-            + "    while not True:\n"
-            + "        if TRUE:\n"
-            + "            while not (15 == 20):\n"
-            + "                variablenName += 1\n\n"
+            + "        variablenName += 1\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");

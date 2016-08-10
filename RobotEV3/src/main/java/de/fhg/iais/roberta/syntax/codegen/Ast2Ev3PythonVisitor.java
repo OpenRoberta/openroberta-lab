@@ -514,16 +514,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean additionalClosingScope = false;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
-                sb.append("if TRUE:");
-                incrIndentation();
-                nlIndent();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                additionalClosingScope = true;
                 break;
             case TIMES:
             case FOR:
@@ -553,9 +548,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             sb.append("break");
         }
         decrIndentation();
-        if ( additionalClosingScope ) {
-            decrIndentation();
-        }
         return null;
     }
 
@@ -582,15 +574,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        sb.append("if TRUE:");
-        incrIndentation();
-        nlIndent();
         sb.append("while True:");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
         sb.append("hal.waitFor(15)");
-        decrIndentation();
         decrIndentation();
         return null;
     }
@@ -1433,8 +1421,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         sb.append("from ev3dev import ev3 as ev3dev\n");
         sb.append("import math\n\n");
 
-        // FIXME: lejos uses this to stop programs
-        sb.append("TRUE = True\n");
         sb.append(generateRegenerateConfiguration()).append("\n");
         sb.append("hal = Hal(_brickConfiguration)\n");
     }
