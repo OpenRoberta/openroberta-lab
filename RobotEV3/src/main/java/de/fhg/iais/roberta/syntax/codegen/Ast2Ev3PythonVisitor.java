@@ -539,13 +539,19 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 break;
         }
         incrIndentation();
+        Mode mode = repeatStmt.getMode();
         if ( repeatStmt.getList().get().isEmpty() ) {
-            nlIndent();
-            sb.append("pass");
+            if (mode != Mode.WAIT) {
+              nlIndent();
+              sb.append("pass");
+            }
         } else {
             repeatStmt.getList().visit(this);
         }
-        appendBreakStmt(repeatStmt);
+        if ( mode == Mode.WAIT ) {
+            nlIndent();
+            sb.append("break");
+        }
         decrIndentation();
         if ( additionalClosingScope ) {
             decrIndentation();
@@ -1414,13 +1420,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         sb.append(", ");
         expressions.get().get(3).visit(this);
         sb.append("):");
-    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            nlIndent();
-            sb.append("break");
-        }
     }
 
     private void generatePrefix(boolean withWrapping) {
