@@ -55,14 +55,21 @@ public class UsedTimerVisitor extends CheckVisitor {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        //driveAction.getParam().getSpeed().visit(this);
-        //driveAction.getParam().getDuration().getValue().visit(this);
+        final boolean isDuration = driveAction.getParam().getDuration() != null;
+        if ( isDuration ) {
+            driveAction.getParam().getDuration().getValue().visit(this);
+        }
+        driveAction.getParam().getSpeed().visit(this);
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        // TODO Auto-generated method stub
+        final boolean isDuration = turnAction.getParam().getDuration() != null;
+        if ( isDuration ) {
+            turnAction.getParam().getDuration().getValue().visit(this);
+        }
+        turnAction.getParam().getSpeed().visit(this);
         return null;
     }
 
@@ -80,13 +87,18 @@ public class UsedTimerVisitor extends CheckVisitor {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        // TODO Auto-generated method stub
+        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
+        if ( isDuration ) {
+            motorOnAction.getDurationValue().visit(this);
+            motorOnAction.getParam().getDuration().getValue().visit(this);
+        }
+        motorOnAction.getParam().getSpeed().visit(this);
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        // TODO Auto-generated method stub
+        motorSetPowerAction.getPower().visit(this);
         return null;
     }
 

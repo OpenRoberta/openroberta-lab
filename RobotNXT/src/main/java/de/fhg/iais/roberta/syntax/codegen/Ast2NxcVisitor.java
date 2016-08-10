@@ -796,6 +796,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
+
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
