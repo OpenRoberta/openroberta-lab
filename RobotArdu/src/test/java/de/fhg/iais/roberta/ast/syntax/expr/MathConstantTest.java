@@ -8,7 +8,7 @@ public class MathConstantTest {
     @Test
     public void Test() throws Exception {
 
-        String a = "PIEGOLDEN_RATIOSQRT2SQRT1_2INFINITY";
+        String a = "PIM_EGOLDEN_RATIOM_SQRT2M_SQRT1_2INFINITY";
         //"Float.POSITIVE_INFINITY";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_constant.xml");

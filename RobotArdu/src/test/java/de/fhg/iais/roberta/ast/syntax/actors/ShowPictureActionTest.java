@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class ShowPictureActionTest {
     @Test
     public void drawPicture() throws Exception {
-        final String a = "\nGraphicOut(0, 0,\"EYESOPEN\");";
+        final String a = "\n";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_ShowPicture.xml");
     }

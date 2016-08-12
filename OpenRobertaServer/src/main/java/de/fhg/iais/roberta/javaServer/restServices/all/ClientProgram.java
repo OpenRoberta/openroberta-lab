@@ -20,6 +20,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -84,7 +85,7 @@ public class ClientProgram {
         final int robotId = httpSessionState.getRobotId();
 
         JSONObject response = new JSONObject();
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
+        DbSession dbSession = sessionFactoryWrapper.getSession();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
@@ -128,6 +129,8 @@ public class ClientProgram {
                         programName,
                         programText,
                         configurationText);
+
+                javaSource = StringEscapeUtils.escapeHtml3(javaSource);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( javaSource == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
@@ -240,7 +243,7 @@ public class ClientProgram {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
                     messageKey = httpSessionState.getRobotFactory().getCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                        wasRobotWaiting = brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {
                         if ( messageKey != null ) {
                             LOG.info(messageKey.toString());
@@ -292,7 +295,7 @@ public class ClientProgram {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        Util.addFrontendInfo(response, httpSessionState, brickCommunicator);
         return Response.ok(response).build();
     }
 

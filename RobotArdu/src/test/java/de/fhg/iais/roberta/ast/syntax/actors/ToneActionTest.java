@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class ToneActionTest {
     @Test
     public void playTone() throws Exception {
-        final String a = "PlayTone(300, 100);";
+        final String a = "tone(9,300, 100);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_PlaySound.xml");
     }
