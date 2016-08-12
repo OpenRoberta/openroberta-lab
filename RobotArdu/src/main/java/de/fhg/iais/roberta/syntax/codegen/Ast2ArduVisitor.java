@@ -288,6 +288,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: change thr colors
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String value;
@@ -565,11 +566,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        sb.append("while ( true ) {");
+        sb.append("while (true) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        sb.append("delay( 15 );");
+        sb.append("delay(15);");
         decrIndentation();
         nlIndent();
         sb.append("}");
@@ -578,9 +579,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        sb.append("delay( ");
+        sb.append("delay(");
         waitTimeStmt.getTime().visit(this);
-        sb.append(" );");
+        sb.append(");");
         return null;
     }
 
@@ -641,23 +642,22 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
         sb.append("one.lcd");
         showTextAction.getX().visit(this);
-        sb.append("( ");
+        sb.append("(");
         showTextAction.getMsg().visit(this);
-        sb.append(" );");
+        sb.append(");");
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        sb.append("tone( 9, ");
+        sb.append("tone(9, ");
         toneAction.getFrequency().visit(this);
         sb.append(", ");
         toneAction.getDuration().visit(this);
-        sb.append(" );");
+        sb.append(");");
         return null;
     }
 
-    //TODO: remove block "set motor port speed"
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
@@ -729,25 +729,32 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //replace move with move PID?
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = "";
-        methodName = "one.move";
+        String sign = "";
+        if ( isDuration ) {
+            methodName = "one.move";
+        } else {
+            methodName = "one.moveDist";
+        }
         sb.append(methodName + "( ");
         if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
-            sb.append(", (-1) * ");
-        } else {
-            sb.append(", ");
+            sign = "-";
         }
+        sb.append(sign);
         driveAction.getParam().getSpeed().visit(this);
         sb.append(", ");
+        sb.append(sign);
+        driveAction.getParam().getSpeed().visit(this);
+
         if ( isDuration ) {
-            sb.append("(");
+            sb.append(", ");
             driveAction.getParam().getDuration().getValue().visit(this);
-            sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true");
-        } else {
-            sb.append("OUT_REGMODE_SYNC");
+            sb.append(", ");
+            sb.append("WHEELDIAMETER");
         }
         sb.append(");");
         return null;
