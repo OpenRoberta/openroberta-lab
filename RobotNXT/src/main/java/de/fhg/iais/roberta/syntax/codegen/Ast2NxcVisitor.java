@@ -721,6 +721,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         sb.append(", ");
         toneAction.getDuration().visit(this);
         sb.append(" );");
+        nlIndent();
+        sb.append("Wait( ");
+        toneAction.getDuration().visit(this);
+        sb.append(" );");
         return null;
     }
 
@@ -798,9 +802,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitDriveAction(DriveAction<Void> driveAction) {
 
         final boolean isDuration = driveAction.getParam().getDuration() != null;
-        final boolean reverse =
-            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
         String methodName = "";
         if ( isDuration ) {
             methodName = "RotateMotorEx";
@@ -815,7 +816,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             sb.append(brickConfiguration.getRightMotorPort());
             sb.append(brickConfiguration.getLeftMotorPort());
         }
-        if ( reverse ) {
+        if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
             sb.append(", (-1) * ");
         } else {
             sb.append(", ");

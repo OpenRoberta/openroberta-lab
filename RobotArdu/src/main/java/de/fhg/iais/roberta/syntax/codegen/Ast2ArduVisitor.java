@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
-import de.fhg.iais.roberta.mode.action.arduino.ShowPicture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
@@ -187,7 +186,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
-    //TODO: check arrays
     private static String getBlocklyTypeCode(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -269,16 +267,16 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 sb.append("PI");
                 break;
             case E:
-                sb.append("E");
+                sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
                 sb.append("GOLDEN_RATIO");
                 break;
             case SQRT2:
-                sb.append("SQRT2");
+                sb.append("M_SQRT2");
                 break;
             case SQRT1_2:
-                sb.append("SQRT1_2");
+                sb.append("M_SQRT1_2");
                 break;
             // IEEE 754 floating point representation
             case INFINITY:
@@ -571,7 +569,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        sb.append("Wait( 15 );");
+        sb.append("delay( 15 );");
         decrIndentation();
         nlIndent();
         sb.append("}");
@@ -580,7 +578,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        sb.append("Wait( ");
+        sb.append("delay( ");
         waitTimeStmt.getTime().visit(this);
         sb.append(" );");
         return null;
@@ -588,10 +586,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        sb.append("ClearScreen();");
+        sb.append("one.lcdClear();");
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
@@ -611,14 +610,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //no such block for Ardu
+    //TODO: implement
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         return null;
 
     }
 
-    //no such block for Ardu
+    //TODO: implement
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
@@ -627,91 +626,22 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //won't be used
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        sb.append("PlayFile( " + playFileAction.getFileName() + " );");
         return null;
     }
 
+    //won't be used
     @Override
-
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        sb.append("GraphicOut(");
-        showPictureAction.getX().visit(this);
-        sb.append(", ");
-        showPictureAction.getY().visit(this);
-        sb.append(",");
-        if ( showPictureAction.getPicture() == ShowPicture.EYESOPEN ) {
-            sb.append("\"" + "EYESOPEN" + "\"");
-        } else {
-            if ( showPictureAction.getPicture() == ShowPicture.EYESCLOSED ) {
-                sb.append("\"" + "EYECLOSED" + "\"");
-            }
-            if ( showPictureAction.getPicture() == ShowPicture.FLOWERS ) {
-                sb.append("\"" + "FLOWERS" + "\"");
-            }
-
-            if ( showPictureAction.getPicture() == ShowPicture.OLDGLASSES ) {
-                sb.append("\"" + "OLDGLASSES" + "\"");
-            }
-
-        }
-
-        sb.append(");");
         return null;
     }
 
+    //TODO: add lcd2 to blocks
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        String methodName;
-        switch ( showTextAction.getMsg().getKind() ) {
-            case STRING_CONST:
-                methodName = "TextOut( ";
-                break;
-            case BOOL_CONST:
-                methodName = "BoolOut( ";
-                break;
-            case COLOR_CONST:
-                methodName = "ColorOut( ";
-                break;
-            case VAR:
-                switch ( showTextAction.getMsg().getVarType() ) {
-                    case STRING:
-                        methodName = "TextOut( ";
-                        break;
-                    case BOOLEAN:
-                        methodName = "BoolOut( ";
-                        break;
-                    case COLOR:
-                        methodName = "ColorOut( ";
-                        break;
-                    default:
-                        methodName = "NumOut( ";
-                        break;
-                }
-                break;
-            case SENSOR_EXPR:
-                switch ( showTextAction.getMsg().getProperty().getBlockType() ) {
-                    case "robSensors_key_isPressed":
-                    case "robSensors_touch_isPressed":
-                        methodName = "BoolOut( ";
-                        break;
-                    case "robSensors_colour_getSample":
-                        methodName = "ColorOut( ";
-                        break;
-                    default:
-                        methodName = "NumOut( ";
-                        break;
-                }
-                break;
-            default:
-                methodName = "NumOut( ";
-                break;
-        }
 
-        sb.append(methodName);
+        sb.append("one.lcd");
         showTextAction.getX().visit(this);
-        sb.append(", LCD_LINE");
-        showTextAction.getY().visit(this);
-        sb.append(", ");
+        sb.append("( ");
         showTextAction.getMsg().visit(this);
         sb.append(" );");
         return null;
@@ -719,7 +649,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        sb.append("PlayTone( ");
+        sb.append("tone( 9, ");
         toneAction.getFrequency().visit(this);
         sb.append(", ");
         toneAction.getDuration().visit(this);
@@ -802,24 +732,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isDuration = driveAction.getParam().getDuration() != null;
-        final boolean reverse =
-            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
         String methodName = "";
-        if ( isDuration ) {
-            methodName = "RotateMotorEx";
-        } else {
-            methodName = "OnFwdReg";
-        }
+        methodName = "one.move";
         sb.append(methodName + "( ");
-        if ( brickConfiguration.getLeftMotorPort().toString().charAt(0) < brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
-            sb.append(brickConfiguration.getLeftMotorPort());
-            sb.append(brickConfiguration.getRightMotorPort());
-        } else {
-            sb.append(brickConfiguration.getRightMotorPort());
-            sb.append(brickConfiguration.getLeftMotorPort());
-        }
-        if ( reverse ) {
+        if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
             sb.append(", (-1) * ");
         } else {
             sb.append(", ");
@@ -1658,14 +1574,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private void addConstants() {
         sb.append("#define WHEELDIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
         sb.append("#define TRACKWIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
+        sb.append("#include <math.h> \n");
         // Bot'n Roll ONE A library:
-        sb.append("#include &lt;BnrOneA.h&gt; \n");
-        // SPI communication library required by BnrOne.cpp"
-        sb.append("#include &lt;SPI.h&gt; \n");
-        // required by BnrRescue.cpp (for the additional sonar kit):
-        sb.append("#include &lt;Wire.h&gt; \n");
+        sb.append("#include <BnrOneA.h> \n");
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
-        sb.append("#include &lt;BnrRescue.h&gt; \n");
+        sb.append("#include <BnrRescue.h> \n");
+        // SPI communication library required by BnrOne.cpp"
+        sb.append("#include <SPI.h> \n");
+        // required by BnrRescue.cpp (for the additional sonar kit):
+        sb.append("#include <Wire.h> \n");
         // declaration of object variable to control the Bot'n Roll ONE A:
         sb.append("BnrOneA one; \n");
 

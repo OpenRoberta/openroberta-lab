@@ -188,7 +188,7 @@ public class Ast2NxcVisitorTest {
             + MAIN_METHOD
 
             + "        TextOut(0,LCD_LINE0,\"Hallo\");\n"
-            + "        PlayTone(300, 3000);\n"
+            + "        PlayTone(300, 3000);Wait(3000);\n"
             + SUFFIX
 
             + "}\n";
