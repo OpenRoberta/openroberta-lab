@@ -269,6 +269,7 @@ body.blocklyMinimalBody  * {
 	background-color: #fff;
 	visibility: visible;
 	position: relative;
+	overflow-y:auto;
 }
 
 #toastContainer {
