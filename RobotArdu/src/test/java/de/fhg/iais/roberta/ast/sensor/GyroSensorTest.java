@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.arduino.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;

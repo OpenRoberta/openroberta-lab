@@ -10,7 +10,9 @@ public enum SensorType {
     COLOR( "robBrick_colour" ),
     TOUCH( "robBrick_touch" ),
     ULTRASONIC( "robBrick_ultrasonic" ),
+    ULTRASONIC_HEAD(),
     INFRARED( "robBrick_infrared" ),
+    INFRARED_LINE(),
     GYRO( "robBrick_gyro" ),
     SOUND( "robBrick_sound" ),
     LIGHT( "robBrick_light" );
@@ -23,7 +25,7 @@ public enum SensorType {
     }
 
     public String blocklyName() {
-        return this.values[0];
+        return values[0];
     }
 
     /**

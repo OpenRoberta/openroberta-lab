@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.mode.sensor;
+package de.fhg.iais.roberta.mode.sensor.arduino;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 
-public enum GyroSensorMode implements IGyroSensorMode {
-    RATE( "getGyroSensorRate", "Rate" ), ANGLE( "getGyroSensorAngle", "Angle" ), RESET( "resetGyroSensor" );
+public enum InfraredSensorMode implements IInfraredSensorMode {
+    DISTANCE( "getInfraredSensorDistance", "Distance" ), SEEK( "getInfraredSensorSeek", "Seek" );
 
     private final String[] values;
     private final String halJavaMethodName;
 
-    private GyroSensorMode(String halJavaMethodName, String... values) {
+    private InfraredSensorMode(String halJavaMethodName, String... values) {
         this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }
