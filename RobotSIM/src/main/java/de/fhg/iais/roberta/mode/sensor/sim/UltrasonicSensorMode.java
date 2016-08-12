@@ -1,17 +1,14 @@
-package de.fhg.iais.roberta.mode.sensor;
+package de.fhg.iais.roberta.mode.sensor.sim;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 
-public enum ColorSensorMode implements IColorSensorMode {
-    COLOUR( "getColorSensorColour", "ColorID" ),
-    RED( "getColorSensorRed", "Red" ),
-    RGB( "getColorSensorRgb", "RGB" ),
-    AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
+public enum UltrasonicSensorMode implements IUltrasonicSensorMode {
+    DISTANCE( "getUltraSonicSensorDistance", "Distance" ), PRESENCE( "getUltraSonicSensorPresence", "Listen" );
 
     private final String[] values;
     private final String halJavaMethodName;
 
-    private ColorSensorMode(String halJavaMethodName, String... values) {
+    private UltrasonicSensorMode(String halJavaMethodName, String... values) {
         this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }

@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.mode.sensor;
+package de.fhg.iais.roberta.mode.sensor.sim;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 
-public enum UltrasonicSensorMode implements IUltrasonicSensorMode {
-    DISTANCE( "getUltraSonicSensorDistance", "Distance" ), PRESENCE( "getUltraSonicSensorPresence", "Listen" );
+public enum GyroSensorMode implements IGyroSensorMode {
+    RATE( "getGyroSensorRate", "Rate" ), ANGLE( "getGyroSensorAngle", "Angle" ), RESET( "resetGyroSensor" );
 
     private final String[] values;
     private final String halJavaMethodName;
 
-    private UltrasonicSensorMode(String halJavaMethodName, String... values) {
+    private GyroSensorMode(String halJavaMethodName, String... values) {
         this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }

@@ -524,23 +524,22 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         boolean additionalClosingBracket = false;
         switch ( repeatStmt.getMode() ) {
-            case UNTIL:
-            case WHILE:
             case FOREVER:
                 /*
-                 *This ""if ( TRUE ) {" statement is needed because when we have code after the "while ( true ) "
+                 *This ""if ( true ) {" statement is needed because when we have code after the "while ( true ) "
                  *statement is unreachable
                  */
-                this.sb.append("if ( TRUE ) {");
+                this.sb.append("if ( true ) {");
+                additionalClosingBracket = true;
                 incrIndentation();
                 nlIndent();
+            case UNTIL:
+            case WHILE:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                additionalClosingBracket = true;
                 break;
             case TIMES:
             case FOR:
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
-
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
@@ -1529,7 +1528,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         generateImports();
 
         this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
         this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 

@@ -1,14 +1,17 @@
-package de.fhg.iais.roberta.mode.sensor;
+package de.fhg.iais.roberta.mode.sensor.sim;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 
-public enum GyroSensorMode implements IGyroSensorMode {
-    RATE( "getGyroSensorRate", "Rate" ), ANGLE( "getGyroSensorAngle", "Angle" ), RESET( "resetGyroSensor" );
+public enum ColorSensorMode implements IColorSensorMode {
+    COLOUR( "getColorSensorColour", "ColorID" ),
+    RED( "getColorSensorRed", "Red" ),
+    RGB( "getColorSensorRgb", "RGB" ),
+    AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
 
     private final String[] values;
     private final String halJavaMethodName;
 
-    private GyroSensorMode(String halJavaMethodName, String... values) {
+    private ColorSensorMode(String halJavaMethodName, String... values) {
         this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }

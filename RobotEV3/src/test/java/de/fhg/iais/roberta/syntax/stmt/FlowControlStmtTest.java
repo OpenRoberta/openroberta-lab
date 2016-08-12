@@ -9,16 +9,16 @@ public class FlowControlStmtTest {
     @Test
     public void flowControlStmt() throws Exception {
         String a =
-            "\nif ( TRUE ) {\nwhile ( 0 == 0 ) {\n"
+            "while ( 0 == 0 ) {\n"
                 + "    System.out.println(\"123\");\n"
                 + "    System.out.println(\"123\");\n"
-                + "    if ( TRUE ) {\nwhile ( !(0 == 0) ) {\n"
+                + "    while ( !(0 == 0) ) {\n"
                 + "        System.out.println(\"123\");\n"
                 + "        System.out.println(\"123\");\n"
                 + "        break;\n"
-                + "    }}\n"
+                + "    }\n"
                 + "    break;\n"
-                + "}}";
+                + "}";
 
         Helper.assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
     }

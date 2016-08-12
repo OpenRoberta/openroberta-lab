@@ -2,11 +2,11 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.mode.action.ActorPort;
+import de.fhg.iais.roberta.mode.action.sim.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.sim.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.sim.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;

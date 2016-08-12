@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.sensor;
+package de.fhg.iais.roberta.mode.sensor.sim;
 
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 
