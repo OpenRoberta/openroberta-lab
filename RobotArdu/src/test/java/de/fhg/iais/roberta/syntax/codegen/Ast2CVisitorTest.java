@@ -9,15 +9,13 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2CVisitorTest {
-    //TODO: change diameter and trackwidth to changeable
-    // when sensors are added to nxt, fix the sensors description here
 
     private static final String MAIN_METHOD = ""
         + "#define WHEELDIAMETER 5.6\n"

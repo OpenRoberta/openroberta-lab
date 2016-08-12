@@ -10,15 +10,15 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.ShowPicture;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
+import de.fhg.iais.roberta.mode.action.arduino.ShowPicture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -123,7 +123,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 public class Ast2ArduVisitor implements AstVisitor<Void> {
-    public static final String INDENT = "  ";
+    public static final String INDENT = "    ";
 
     private final ArduConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
@@ -187,6 +187,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
+    //TODO: check arrays
     private static String getBlocklyTypeCode(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -249,18 +250,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return sb;
     }
 
-    //nxc can't cast "(float)", it does it automatically
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
         sb.append(numConst.getValue());
-        /*
-        if ( isInteger(numConst.getValue()) ) {
-            this.sb.append(numConst.getValue());
-        } else {
-            this.sb.append("(");
-            this.sb.append(numConst.getValue());
-            this.sb.append(")");
-        }*/
         return null;
     }
 
@@ -270,7 +262,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     };
 
-    //now all these constants (except for PI that was originally in nxc) are defined in hal.h
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
@@ -736,6 +727,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: remove block "set motor port speed"
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
@@ -763,6 +755,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: not needed
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
 
@@ -818,7 +811,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         } else {
             methodName = "OnFwdReg";
         }
-        sb.append(methodName + "(OUT_");
+        sb.append(methodName + "( ");
         if ( brickConfiguration.getLeftMotorPort().toString().charAt(0) < brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
             sb.append(brickConfiguration.getLeftMotorPort());
             sb.append(brickConfiguration.getRightMotorPort());
@@ -1665,8 +1658,18 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private void addConstants() {
         sb.append("#define WHEELDIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
         sb.append("#define TRACKWIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
-        sb.append("#include \"hal.h\" \n");
-        sb.append("#include \"NXCDefs.h\" \n");
+        // Bot'n Roll ONE A library:
+        sb.append("#include &lt;BnrOneA.h&gt; \n");
+        // SPI communication library required by BnrOne.cpp"
+        sb.append("#include &lt;SPI.h&gt; \n");
+        // required by BnrRescue.cpp (for the additional sonar kit):
+        sb.append("#include &lt;Wire.h&gt; \n");
+        //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
+        sb.append("#include &lt;BnrRescue.h&gt; \n");
+        // declaration of object variable to control the Bot'n Roll ONE A:
+        sb.append("BnrOneA one; \n");
+
+        sb.append("#define SSPIN  2 \n \n");
     }
 
     private void generatePrefix(boolean withWrapping) {
@@ -1676,114 +1679,56 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
         this.addConstants();
 
-        sb.append("task main(){");
+        sb.append("void setup() \n");
+        sb.append("{");
+        nlIndent();
+        //set baud rate to 57600bps for printing values at serial monitor:
+        sb.append("Serial.begin(57600);");
+        nlIndent();
+        // start the communication module:
+        sb.append("one.spiConnect(SSPIN);");
+        nlIndent();
+        // stop motors:
+        sb.append("one.stop(); \n");
+        sb.append("} \n \n");
+        sb.append("void loop() \n");
+        sb.append("{");
 
         for ( final Entry<ISensorPort, Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
-            nlIndent();
-            sb.append("SetSensor( IN_");
             switch ( entry.getValue().getType() ) {
+                //TODO: add infrared (basic and line following), compas (that also works like gyro),
+                // additional head sonar
                 case COLOR:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_COLORFULL );");
-                    break;
-                case LIGHT:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_LIGHT );");
-                    break;
-                case TOUCH:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_TOUCH );");
+                    nlIndent();
+                    sb.append("brm.setRgbStatus(ENABLE);");
                     break;
                 case ULTRASONIC:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_LOWSPEED );");
+                    nlIndent();
+                    sb.append("brm.setSonarStatus(ENABLE);");
                     break;
-                case SOUND:
-                    sb.append(entry.getKey().getPortNumber() + ", SENSOR_SOUND );");
+                //TODO: add a function for sonar
+                case ULTRASONIC_HEAD:
+                    nlIndent();
+                    sb.append("one.spiConnect(SSPIN);");
+                    //sonar setup:
+                    sb.append("pinMode(trigPin, OUTPUT);");
+                    sb.append("pinMode(echoPin, INPUT);");
+                    sb.append("pinMode(LEDPin,  OUTPUT);");
+                    break;
+                case INFRARED:
+                    nlIndent();
+                    sb.append("one.obstacleEmitters(ON);");
+                    break;
+                //case INFRARED_LINE:
+                //break;
+                case GYRO:
+                    nlIndent();
+                    sb.append("Wire.begin();");
+                    sb.append("one.spiConnect(SSPIN);");
                     break;
                 default:
                     break;
             }
         }
-
-        //TODO: hide it after the used block part is implemented
-        nlIndent();
-        sb.append("long timer1;");
-        nlIndent();
-        sb.append("SetTimerValue( timer1 );");
     }
-
-    /**
-     * @return Java code used in the code generation to regenerates the same brick configuration
-     */
-    /*
-    public String generateRegenerateConfiguration() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(" brickConfiguration = new Ev3Configuration.Builder()\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
-        appendActors(sb);
-        appendSensors(sb);
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
-        return sb.toString();
-    }
-    private void appendSensors(StringBuilder sb) {
-        for ( Map.Entry<SensorPort, EV3Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            sb.append(INDENT).append(INDENT).append(INDENT);
-            appendOptional(sb, "    .addSensor(", entry.getKey(), entry.getValue());
-        }
-    }
-    private void appendActors(StringBuilder sb) {
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            sb.append(INDENT).append(INDENT).append(INDENT);
-            appendOptional(sb, "    .addActor(", entry.getKey(), entry.getValue());
-        }
-    }
-    */
-
-    /* Ardu can run the sensors quite fast, so this check is unnecessary. The sensors are already added above.
-     private static void appendOptional(StringBuilder sb, String type, @SuppressWarnings("rawtypes") Enum port, HardwareComponent hardwareComponent) {
-        if ( hardwareComponent != null ) {
-            sb.append(type).append(getEnumCode(port)).append(", ");
-            if ( hardwareComponent.getCategory() == Category.SENSOR ) {
-                sb.append(generateRegenerateEV3Sensor(hardwareComponent));
-            } else {
-                sb.append(generateRegenerateEV3Actor(hardwareComponent));
-            }
-            sb.append(")\n");
-        }
-    }
-    private String generateRegenerateUsedSensors() {
-        StringBuilder sb = new StringBuilder();
-        String arrayOfSensors = "";
-        for ( UsedSensor usedSensor : this.usedSensors ) {
-            arrayOfSensors += usedSensor.generateRegenerate();
-            arrayOfSensors += ", ";
-        }
-        sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
-        if ( this.usedSensors.size() > 0 ) {
-            sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
-        }
-        sb.append(");");
-        return sb.toString();
-    }
-    */
-
-    /* There is no need in explicit instantiation of the motors and other actors, except for the sensors,
-     * in nxc
-     private static String generateRegenerateEV3Actor(HardwareComponent actor) {
-        StringBuilder sb = new StringBuilder();
-        EV3Actor ev3Actor = (EV3Actor) actor;
-        sb.append("new EV3Actor(").append(getHardwareComponentTypeCode(actor.getComponentType()));
-        sb.append(", ").append(ev3Actor.isRegulated());
-        sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection())).append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
-        return sb.toString();
-    }
-    private static String generateRegenerateEV3Sensor(HardwareComponent sensor) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("new EV3Sensor(").append(getHardwareComponentTypeCode(sensor.getComponentType()));
-        sb.append(")");
-        return sb.toString();
-    }
-    private static String getHardwareComponentTypeCode(HardwareComponentType type) {
-        return type.getClass().getSimpleName() + "." + type.getTypeName();
-    }
-     */
-
 }

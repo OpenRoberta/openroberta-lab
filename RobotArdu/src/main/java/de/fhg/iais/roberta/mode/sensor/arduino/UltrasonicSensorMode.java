@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.mode.sensor;
+package de.fhg.iais.roberta.mode.sensor.arduino;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 
-public enum InfraredSensorMode implements IInfraredSensorMode {
-    DISTANCE( "getInfraredSensorDistance", "Distance" ), SEEK( "getInfraredSensorSeek", "Seek" );
+public enum UltrasonicSensorMode implements IUltrasonicSensorMode {
+    DISTANCE( "getUltraSonicSensorDistance", "Distance" ), PRESENCE( "getUltraSonicSensorPresence", "Listen" );
 
     private final String[] values;
     private final String halJavaMethodName;
 
-    private InfraredSensorMode(String halJavaMethodName, String... values) {
+    private UltrasonicSensorMode(String halJavaMethodName, String... values) {
         this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }
