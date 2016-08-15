@@ -2,8 +2,10 @@ package de.fhg.iais.roberta.factory;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -96,6 +98,8 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
         Assert.isTrue(token != null && programName != null && sourceCode != null);
         File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
+        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/target/");
+        Files.createDirectories(path);
         ArduCompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
         FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
     }
@@ -114,21 +118,38 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         final StringBuilder sb = new StringBuilder();
         // TODO: change the compiler based on the os type
 
-        String scriptName = ArduCompilerWorkflow.class.getClassLoader().getResource("arduino-builder").getPath();
-        //        String scriptName = "../RobotArdu/" + this.robotCompilerResourcesDir + "arduino-builder";
-        System.out.println(ArduCompilerWorkflow.class.getResource("/hardware").getPath());
-        URL t = ArduCompilerWorkflow.class.getResource("/hardware");
+        String scriptName = "../RobotArdu/resources/arduino-builder";
+        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token);
+        Path base = Paths.get("");
+        System.out.println(base.resolve(path).toAbsolutePath().normalize().toString());
+
+        //        URL t = ArduCompilerWorkflow.class.getResource("/hardware");
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
-                "-hardware=" + ArduCompilerWorkflow.class.getResource("/hardware").getPath(),
-                "-tools=" + ArduCompilerWorkflow.class.getResource("/hardware/tools-builder").getPath(),
-                "-libraries=" + ArduCompilerWorkflow.class.getResource("/libraries").getPath(),
+                "-hardware=../RobotArdu/resources/hardware",
+                "-tools=../RobotArdu/resources/hardware/tools-builder",
+                "-libraries=../RobotArdu/resources/libraries",
                 "-fqbn=arduino:avr:uno",
                 "-prefs=compiler.path=/usr/bin/",
-                "-build-path=" + this.pathToCrosscompilerBaseDir + token + "/target/",
-                this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".ino"
+                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
             });
+            //        String scriptName = ArduCompilerWorkflow.class.getClassLoader().getResource("arduino-builder").getPath();
+            //        //        String scriptName = "../RobotArdu/" + this.robotCompilerResourcesDir + "arduino-builder";
+            //        System.out.println(ArduCompilerWorkflow.class.getResource("/hardware").getPath());
+            //        URL t = ArduCompilerWorkflow.class.getResource("/hardware");
+            //        try {
+            //            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
+            //                scriptName,
+            //                "-hardware=" + ArduCompilerWorkflow.class.getResource("/hardware").getPath(),
+            //                "-tools=" + ArduCompilerWorkflow.class.getResource("/hardware/tools-builder").getPath(),
+            //                "-libraries=" + ArduCompilerWorkflow.class.getResource("/libraries").getPath(),
+            //                "-fqbn=arduino:avr:uno",
+            //                "-prefs=compiler.path=/usr/bin/",
+            //                "-build-path=" + this.pathToCrosscompilerBaseDir + token + "/target/",
+            //                this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".ino"
+            //            });
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
             procBuilder.redirectError(Redirect.INHERIT);

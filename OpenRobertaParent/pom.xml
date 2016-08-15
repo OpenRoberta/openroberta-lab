@@ -413,6 +413,7 @@
 				<configuration>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</reporting>
 	<distributionManagement>
