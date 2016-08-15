@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.factory;
 
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
@@ -54,7 +55,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
 
         //NxtCompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
-            storeGeneratedProgram(token, programName, sourceCode, ".nxc");
+            storeGeneratedProgram(token, programName, sourceCode, ".ino");
         } catch ( Exception e ) {
             ArduCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
@@ -62,7 +63,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
 
         Key messageKey = runBuild(token, programName, "generated.main");
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            ArduCompilerWorkflow.LOG.info("rxc for program {} generated successfully", programName);
+            ArduCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
             ArduCompilerWorkflow.LOG.info(messageKey.toString());
         }
@@ -112,17 +113,22 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
         // TODO: change the compiler based on the os type
-        String scriptName = this.robotCompilerResourcesDir + "/nbc";
 
+        String scriptName = ArduCompilerWorkflow.class.getClassLoader().getResource("arduino-builder").getPath();
+        //        String scriptName = "../RobotArdu/" + this.robotCompilerResourcesDir + "arduino-builder";
+        System.out.println(ArduCompilerWorkflow.class.getResource("/hardware").getPath());
+        URL t = ArduCompilerWorkflow.class.getResource("/hardware");
         try {
-            ProcessBuilder procBuilder =
-                new ProcessBuilder(new String[] {
-                    scriptName,
-                    this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
-                    "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
-                    "-I=" + this.robotCompilerResourcesDir + "/hal.h"
-
-                });
+            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
+                scriptName,
+                "-hardware=" + ArduCompilerWorkflow.class.getResource("/hardware").getPath(),
+                "-tools=" + ArduCompilerWorkflow.class.getResource("/hardware/tools-builder").getPath(),
+                "-libraries=" + ArduCompilerWorkflow.class.getResource("/libraries").getPath(),
+                "-fqbn=arduino:avr:uno",
+                "-prefs=compiler.path=/usr/bin/",
+                "-build-path=" + this.pathToCrosscompilerBaseDir + token + "/target/",
+                this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".ino"
+            });
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
             procBuilder.redirectError(Redirect.INHERIT);
