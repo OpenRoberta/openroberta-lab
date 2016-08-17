@@ -783,7 +783,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         final String methodName = "MotorPower";
         sb.append(methodName + "(OUT_" + motorGetPowerAction.getPort());
-        sb.append(");");
+        sb.append(")");
         return null;
     }
 

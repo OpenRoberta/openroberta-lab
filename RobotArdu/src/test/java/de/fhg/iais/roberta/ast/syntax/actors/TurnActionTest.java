@@ -8,14 +8,14 @@ public class TurnActionTest {
 
     @Test
     public void turn() throws Exception {
-        final String a = "\nOnFwdSync(OUT_BC,50,-100);";
+        final String a = "\nspeedA=50;speedB=-50;one.movePID(speedA,speedB);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurn.xml");
     }
 
     @Test
     public void turnFor() throws Exception {
-        final String a = "\nRotateMotorEx(OUT_BC,50,(20*TRACKWIDTH/WHEELDIAMETER),-100,true,true);";
+        final String a = "\nspeedA=50;speedB=-50;RotateMotorExspeedA,speedB);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurnFor.xml");
     }
