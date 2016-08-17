@@ -91,6 +91,7 @@ public class ServerStarter {
     public ServerStarter(String propertyPath) {
         Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
         Properties tmpProperties = Util1.loadProperties(propertyPath);
+        Util1.setSystemDefaultProperty(propertyPath);
         this.properties = mergeProperties(mailProperties, tmpProperties);
     }
 
@@ -149,12 +150,10 @@ public class ServerStarter {
         rootHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
         rootHandler.addFilter(GuiceFilter.class, "/download/*", null);
         rootHandler.addFilter(GuiceFilter.class, "/update/*", null);
-        ServletHolder staticResourceServlet =
-                rootHandler.addServlet(DefaultServlet.class, "/*");
+        ServletHolder staticResourceServlet = rootHandler.addServlet(DefaultServlet.class, "/*");
 
         staticResourceServlet.setInitParameter("gzip", "true");
-        staticResourceServlet.setInitParameter("resourceBase",
-                ServerStarter.class.getResource("/staticResources").toExternalForm());
+        staticResourceServlet.setInitParameter("resourceBase", ServerStarter.class.getResource("/staticResources").toExternalForm());
 
         // websockets with /ws/<version>/ prefix
         ServletContextHandler wsHandler = new ServletContextHandler();
@@ -190,7 +189,7 @@ public class ServerStarter {
      * @return the mapping from robot names to the factory, that supplies all robot-specific data
      */
     private Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator) {
-        Set<String> pluginNumbers = new HashSet<String>();
+        Set<String> pluginNumbers = new HashSet<>();
         Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
         for ( String key : this.properties.stringPropertyNames() ) {
             Matcher keyMatcher = pluginPattern.matcher(key);
@@ -198,7 +197,7 @@ public class ServerStarter {
                 pluginNumbers.add(keyMatcher.group(1));
             }
         }
-        Map<String, IRobotFactory> robotPlugins = new HashMap<String, IRobotFactory>();
+        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         if ( robotCommunicator == null ) {
             LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
         }

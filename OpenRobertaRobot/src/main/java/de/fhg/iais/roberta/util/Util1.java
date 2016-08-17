@@ -39,6 +39,10 @@ public class Util1 {
         // no objects
     }
 
+    public static void setSystemDefaultProperty(String propertyURI) {
+        robertaProperties = loadProperties(propertyURI);
+    }
+
     /**
      * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. Is used in both production and test.<br>
      * If the URI-parameter is null, the classpath is searched for the default property file "openRoberta.properties".<br>
@@ -58,7 +62,6 @@ public class Util1 {
                 String filesystemPathName = propertyURI.substring(5);
                 Util1.LOG.info("properties from file system. Path: " + filesystemPathName);
                 properties.load(new FileReader(filesystemPathName));
-                robertaProperties = properties;
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
                 Util1.LOG.info("properties from classpath. Using the resource: " + classPathName);

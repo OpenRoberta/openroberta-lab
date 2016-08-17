@@ -161,8 +161,6 @@ function _exportApplication {
   cp RobotEV3/crosscompiler-ev3-build.xml "${exportpath}"
   cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
   cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
-  echo 'NXT specific: creating directories for user programs and resources'
-  mkdir "${exportpath}/resources"
   echo "NXT specific: copying resources"
   cp RobotNXT/resources/* "${exportpath}/resources"
   echo "Arduino specific: copying resources"
