@@ -713,12 +713,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        final String methodName = "MotorPower";
-        sb.append(methodName + "(OUT_" + motorGetPowerAction.getPort());
-        sb.append(");");
+        sb.append("speed" + motorGetPowerAction.getPort());
         return null;
     }
 
+    //TODO: this function can be implemented in a nice way only for two motors.
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
@@ -766,45 +765,32 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override // TURN ACTIONS
 
+    //TODO - also problems with encoder
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final boolean isDuration = turnAction.getParam().getDuration() != null;
-        final boolean reverse =
-            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
-        String methodName = "";
-        int turnpct = 100;
+        String methodName;
+        String sign1 = "";
+        String sign2 = "";
+        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+            sign1 = "-";
+        } else {
+            sign2 = "-";
+        }
+        sb.append("speedA = " + sign1);
+        turnAction.getParam().getSpeed().visit(this);
+        sb.append(";");
+        nlIndent();
+        sb.append("speedB = " + sign2);
+        turnAction.getParam().getSpeed().visit(this);
+        sb.append(";");
+        nlIndent();
         if ( isDuration ) {
             methodName = "RotateMotorEx";
         } else {
-            methodName = "OnFwdSync";
+            methodName = "one.movePID(";
         }
-        sb.append(methodName + "(OUT_");
-        if ( brickConfiguration.getLeftMotorPort().toString().charAt(0) < brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
-            turnpct *= -1;
-            sb.append(brickConfiguration.getLeftMotorPort());
-            sb.append(brickConfiguration.getRightMotorPort());
-        } else {
-            sb.append(brickConfiguration.getRightMotorPort());
-            sb.append(brickConfiguration.getLeftMotorPort());
-        }
-        if ( reverse ) {
-            sb.append(", (-1) * ");
-        } else {
-            sb.append(", ");
-        }
-        turnAction.getParam().getSpeed().visit(this);
-        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-            turnpct *= -1;
-        }
-        sb.append(", ");
-        if ( isDuration ) {
-            sb.append("(");
-            turnAction.getParam().getDuration().getValue().visit(this);
-            sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true");
-        } else {
-            sb.append(turnpct);
-        }
-        sb.append(");");
+        sb.append(methodName);
+        sb.append("speedA, speedB);");
         return null;
     }
 
@@ -1614,12 +1600,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         // stop motors:
         sb.append("one.stop();");
         nlIndent();
-        sb.append("int speedA = 0;");
-        nlIndent();
-        sb.append("int speedB = 0; \n");
+
         sb.append("} \n \n");
         sb.append("void loop() \n");
         sb.append("{");
+        nlIndent();
+        sb.append("int speedA = 0;");
+        nlIndent();
+        sb.append("int speedB = 0; \n");
 
         for ( final Entry<ISensorPort, Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
             switch ( entry.getValue().getType() ) {
