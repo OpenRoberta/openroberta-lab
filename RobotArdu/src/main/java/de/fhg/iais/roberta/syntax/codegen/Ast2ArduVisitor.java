@@ -591,7 +591,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
+    //TODO: implement. Perhaps- remove, since it is quite complicated for Arduino
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
@@ -660,25 +660,26 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        sb.append("speed" + motorOnAction.getPort() + " = ");
+        motorOnAction.getParam().getSpeed().visit(this);
+        sb.append(";");
+        nlIndent();
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
         final boolean isRegulatedDrive = brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).isRegulated();
         if ( isDuration ) {
-            sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", ");
-            motorOnAction.getParam().getSpeed().visit(this);
-            if ( motorOnAction.getDurationMode() == MotorMoveMode.ROTATIONS ) {
-                sb.append(", 360 * ");
-            } else {
-                sb.append(", ");
-            }
+            sb.append("one.moveMotorRotation(speedA, speedB, ");
             motorOnAction.getParam().getDuration().getValue().visit(this);
+            if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
+                sb.append("/2/PI");
+            }
         } else {
             if ( isRegulatedDrive ) {
-                sb.append("OnFwdReg(OUT_" + motorOnAction.getPort() + ", ");
-                motorOnAction.getParam().getSpeed().visit(this);
-                sb.append(", OUT_REGMODE_SPEED");
+                //there is no regulated drive function for the robot, the closest function if PID controlled
+                //movement. The coefficients are default, they seem to make movement of the robot
+                //much smoother.
+                sb.append("one.movePID(speedA, speedB");
             } else {
-                sb.append("OnFwd(OUT_" + motorOnAction.getPort() + ", ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                sb.append("one.move(speedA, speedB");
             }
         }
         sb.append(");");
@@ -732,9 +733,16 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //replace move with move PID?
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
+        sb.append("speedA = ");
+        driveAction.getParam().getSpeed().visit(this);
+        sb.append(";");
+        nlIndent();
+        sb.append("speedB = ");
+        driveAction.getParam().getSpeed().visit(this);
+        sb.append(";");
+        nlIndent();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = "";
-        String sign = "";
         if ( isDuration ) {
             methodName = "one.moveDist";
         } else {
@@ -744,7 +752,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
             sb.append("-");
         }
-        driveAction.getParam().getSpeed().visit(this);
+        sb.append("speedA");
 
         if ( isDuration ) {
             sb.append(", ");
@@ -1604,7 +1612,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append("one.spiConnect(SSPIN);");
         nlIndent();
         // stop motors:
-        sb.append("one.stop(); \n");
+        sb.append("one.stop();");
+        nlIndent();
+        sb.append("int speedA = 0;");
+        nlIndent();
+        sb.append("int speedB = 0; \n");
         sb.append("} \n \n");
         sb.append("void loop() \n");
         sb.append("{");

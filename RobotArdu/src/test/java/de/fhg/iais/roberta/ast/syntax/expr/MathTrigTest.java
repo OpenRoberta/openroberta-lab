@@ -14,7 +14,7 @@ public class MathTrigTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a = "if(0==MathSin(0)){one.moveStraight(MathAcos(0));}";
+        final String a = "if(0==MathSin(0)){speedA=MathAcos(0);speedB=MathAcos(0);one.moveStraight(speedA);}";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_trig1.xml");
     }
