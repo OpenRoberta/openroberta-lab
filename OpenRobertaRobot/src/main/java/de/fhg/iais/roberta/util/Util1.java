@@ -13,9 +13,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.util.dbc.DbcException;
+
 public class Util1 {
     private static final Logger LOG = LoggerFactory.getLogger(Util1.class);
     private static final String PROPERTY_DEFAULT_PATH = "openRoberta.properties";
+    private static Properties robertaProperties;
+    static {
+        robertaProperties = loadProperties(null);
+    }
     private static final String[] reservedWords = new String[] {
         //  @formatter:off
         "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "default", "do", "double", "else", "enum",
@@ -52,10 +58,12 @@ public class Util1 {
                 String filesystemPathName = propertyURI.substring(5);
                 Util1.LOG.info("properties from file system. Path: " + filesystemPathName);
                 properties.load(new FileReader(filesystemPathName));
+                robertaProperties = properties;
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
                 Util1.LOG.info("properties from classpath. Using the resource: " + classPathName);
                 properties.load(Util1.class.getClassLoader().getResourceAsStream(classPathName));
+                //                robertaProperties = properties;
             } else {
                 Util1.LOG.error("Could not load properties. Invalid URI: " + propertyURI);
                 return null;
@@ -112,5 +120,26 @@ public class Util1 {
 
     public static String formatDouble1digit(double d) {
         return String.format(Locale.UK, "%.1f", d);
+    }
+
+    public static int getRobotNumberFromProperty(String robotName) {
+        for ( int i = 1; i < 1000; i++ ) {
+            String value = robertaProperties.getProperty("robot.plugin." + i + ".name");
+            if ( value == null ) {
+                throw new DbcException("Robot with name: " + robotName + " not found!");
+            }
+            if ( value.equals(robotName) ) {
+                return i;
+            }
+        }
+        throw new DbcException("Only 999 robots supported!");
+    }
+
+    public static String getRobertaProperty(String propertyName) {
+        return robertaProperties.getProperty(propertyName);
+    }
+
+    public static Properties getRobertaProperties() {
+        return robertaProperties;
     }
 }

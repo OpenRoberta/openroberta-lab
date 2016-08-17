@@ -29,7 +29,7 @@ public class Ev3Update {
     private final String robotUpdateResourcesDir;
 
     @Inject
-    public Ev3Update(@Named("robot.updateResources.dir") String robotUpdateResourcesDir) {
+    public Ev3Update(@Named("robot.plugin.1.updateResources.dir") String robotUpdateResourcesDir) {
         this.robotUpdateResourcesDir = robotUpdateResourcesDir;
     }
 

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -49,8 +48,12 @@ public class NxtFactory extends AbstractRobotFactory {
     private final int robotId;
 
     public NxtFactory(RobotCommunicator unusedForNxt, Integer robotId) {
-        Properties nxtProperties = Util1.loadProperties("classpath:NXT.properties");
-        compilerWorkflow = new NxtCompilerWorkflow(nxtProperties.getProperty("crosscompiler.basedir"), nxtProperties.getProperty("robot.resources.dir"));
+
+        int robotPropertyNumber = Util1.getRobotNumberFromProperty("nxt");
+        this.compilerWorkflow =
+            new NxtCompilerWorkflow(
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
         this.robotId = robotId;
     }
 
@@ -432,12 +435,12 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return compilerWorkflow;
+        return this.compilerWorkflow;
     }
 
     @Override
     public int getRobotId() {
-        return robotId;
+        return this.robotId;
     }
 
     @Override

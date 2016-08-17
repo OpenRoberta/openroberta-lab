@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -32,15 +31,19 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
             @Override
             protected void configureServlets() {
                 // configure at least one JAX-RS resource or the server won't start.
-                install(new RobertaGuiceModule(openRobertaProperties, robotPluginMap, robotCommunicator));
+                install(
+                    new RobertaGuiceModule(
+                        RobertaGuiceServletConfig.this.openRobertaProperties,
+                        RobertaGuiceServletConfig.this.robotPluginMap,
+                        RobertaGuiceServletConfig.this.robotCommunicator));
                 // look for guice modules from robot plugins
-                for ( IRobotFactory robotFactory : robotPluginMap.values() ) {
-                    AbstractModule guiceModule = robotFactory.getGuiceModule();
-                    if ( guiceModule != null ) {
-                        install(guiceModule);
-                    }
-                }
-                Map<String, String> initParams = new HashMap<String, String>();
+                //                for ( IRobotFactory robotFactory : RobertaGuiceServletConfig.this.robotPluginMap.values() ) {
+                //                    AbstractModule guiceModule = robotFactory.getGuiceModule();
+                //                    if ( guiceModule != null ) {
+                //                        install(guiceModule);
+                //                    }
+                //                }
+                Map<String, String> initParams = new HashMap<>();
                 // initParams.put("com.sun.jersey.config.feature.Trace", "true");
                 initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
                 String packages = "" //

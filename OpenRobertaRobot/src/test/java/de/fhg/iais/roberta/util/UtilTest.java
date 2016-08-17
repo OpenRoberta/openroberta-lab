@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.fhg.iais.roberta.util.dbc.DbcException;
+
 public class UtilTest {
 
     @Test
@@ -33,5 +35,18 @@ public class UtilTest {
         assertEquals("15.6", Util1.formatDouble1digit(15.600005));
         assertEquals("-5.5", Util1.formatDouble1digit(-5.50006));
         assertEquals("15567.6", Util1.formatDouble1digit(15567.6005));
+    }
+
+    @Test
+    public void testGetRobotNumberFromProperty() {
+        assertEquals(1, Util1.getRobotNumberFromProperty("ev3"));
+        assertEquals(2, Util1.getRobotNumberFromProperty("nxt"));
+        assertEquals(3, Util1.getRobotNumberFromProperty("ardu"));
+        assertEquals(4, Util1.getRobotNumberFromProperty("oraSim"));
+    }
+
+    @Test(expected = DbcException.class)
+    public void testGetRobotNumberFromPropertyWrong() {
+        Util1.getRobotNumberFromProperty("ev31");
     }
 }

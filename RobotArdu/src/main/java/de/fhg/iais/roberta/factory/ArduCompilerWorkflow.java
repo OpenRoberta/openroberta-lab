@@ -121,9 +121,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         String scriptName = "../RobotArdu/resources/arduino-builder";
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token);
         Path base = Paths.get("");
-        System.out.println(base.resolve(path).toAbsolutePath().normalize().toString());
 
-        //        URL t = ArduCompilerWorkflow.class.getResource("/hardware");
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
@@ -135,21 +133,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
                 base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
             });
-            //        String scriptName = ArduCompilerWorkflow.class.getClassLoader().getResource("arduino-builder").getPath();
-            //        //        String scriptName = "../RobotArdu/" + this.robotCompilerResourcesDir + "arduino-builder";
-            //        System.out.println(ArduCompilerWorkflow.class.getResource("/hardware").getPath());
-            //        URL t = ArduCompilerWorkflow.class.getResource("/hardware");
-            //        try {
-            //            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-            //                scriptName,
-            //                "-hardware=" + ArduCompilerWorkflow.class.getResource("/hardware").getPath(),
-            //                "-tools=" + ArduCompilerWorkflow.class.getResource("/hardware/tools-builder").getPath(),
-            //                "-libraries=" + ArduCompilerWorkflow.class.getResource("/libraries").getPath(),
-            //                "-fqbn=arduino:avr:uno",
-            //                "-prefs=compiler.path=/usr/bin/",
-            //                "-build-path=" + this.pathToCrosscompilerBaseDir + token + "/target/",
-            //                this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".ino"
-            //            });
+
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
             procBuilder.redirectError(Redirect.INHERIT);

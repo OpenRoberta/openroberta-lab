@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 
@@ -43,18 +42,17 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class EV3Factory extends AbstractRobotFactory {
     private final Ev3CompilerWorkflow compilerWorkflow;
-    private Properties ev3properties;
     private final int robotId;
 
     public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
-        ev3properties = Util1.loadProperties("classpath:openRoberta.properties");
+        int robotPropertyNumber = Util1.getRobotNumberFromProperty("ev3");
 
-        compilerWorkflow =
+        this.compilerWorkflow =
             new Ev3CompilerWorkflow(
                 robotCommunicator,
-                ev3properties.getProperty("crosscompiler.basedir"),
-                ev3properties.getProperty("robot.crossCompilerResources.dir"),
-                ev3properties.getProperty("crosscompiler.build.xml"));
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
         this.robotId = robotId;
     }
 
@@ -410,17 +408,17 @@ public class EV3Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return compilerWorkflow;
+        return this.compilerWorkflow;
     }
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new Ev3GuiceModule(ev3properties);
+        return new Ev3GuiceModule(Util1.getRobertaProperties());
     }
 
     @Override
     public int getRobotId() {
-        return robotId;
+        return this.robotId;
     }
 
     @Override

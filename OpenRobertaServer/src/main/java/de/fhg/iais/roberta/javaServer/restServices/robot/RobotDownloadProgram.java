@@ -35,7 +35,7 @@ public class RobotDownloadProgram {
     private final String pathToCrosscompilerBaseDir;
 
     @Inject
-    public RobotDownloadProgram(RobotCommunicator brickCommunicator, @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir) {
+    public RobotDownloadProgram(RobotCommunicator brickCommunicator, @Named("robot.plugin.1.generated.programs.dir") String pathToCrosscompilerBaseDir) {
         this.brickCommunicator = brickCommunicator;
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
     }
@@ -50,27 +50,27 @@ public class RobotDownloadProgram {
             LOG.info("/download - request for token " + token);
             RobotCommunicationData state = this.brickCommunicator.getState(token);
             String programName = state.getProgramName();
-            
+
             String fileName = null;
             String filePath = null;
-            
+
             // FIXME as the number of supported robot system grows, we should think about a better solution here :-D
-            switch (state.getFirmwareName()) {
-              case "lejos":
-                fileName = programName + ".jar";
-                filePath = this.pathToCrosscompilerBaseDir + token + "/target";
-                break;
-              case "ev3dev":
-                fileName = programName + ".py";
-                filePath = this.pathToCrosscompilerBaseDir + token + "/src";
-                break;
-              case "NXT":
-                fileName = programName + ".rxe";
-                filePath = this.pathToCrosscompilerBaseDir + token;
-                break;
-              default:
-                LOG.error("unsupported firmware name " + state.getFirmwareName());
-                return Response.serverError().build();
+            switch ( state.getFirmwareName() ) {
+                case "lejos":
+                    fileName = programName + ".jar";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/target";
+                    break;
+                case "ev3dev":
+                    fileName = programName + ".py";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/src";
+                    break;
+                case "NXT":
+                    fileName = programName + ".rxe";
+                    filePath = this.pathToCrosscompilerBaseDir + token;
+                    break;
+                default:
+                    LOG.error("unsupported firmware name " + state.getFirmwareName());
+                    return Response.serverError().build();
             }
 
             File resultDir = new File(filePath);

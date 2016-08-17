@@ -161,7 +161,13 @@ function _exportApplication {
   cp RobotEV3/crosscompiler-ev3-build.xml "${exportpath}"
   cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
   cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
+  echo 'NXT specific: creating directories for user programs and resources'
+  mkdir "${exportpath}/resources"
+  echo "NXT specific: copying resources"
+  cp RobotNXT/resources/* "${exportpath}/resources"
+  echo "Arduino specific: copying resources"
   cp ora.sh "$exportpath"
+
 # -------------- begin of a here document -------------------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
 version = ${oraversion}
@@ -169,24 +175,32 @@ validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
 hibernate.connection.url = ${databaseurl}
 
-robot.type.list = ev3,nxt,oraSim
 robot.type.default = ev3
 
 robot.plugin.1.name = ev3
 robot.plugin.1.id = 42
 robot.plugin.1.factory = de.fhg.iais.roberta.factory.EV3Factory
+robot.plugin.1.generated.programs.dir  = userProjects/
+robot.plugin.1.generated.programs.build.xml  = crosscompiler-ev3-build.xml
+robot.plugin.1.compiler.resources.dir = crossCompilerResources
+robot.plugin.1.updateResources.dir = updateResources
+
 robot.plugin.2.name = nxt
 robot.plugin.2.id = 43
 robot.plugin.2.factory = de.fhg.iais.roberta.factory.NxtFactory
-robot.plugin.3.name = oraSim
-robot.plugin.3.id = 99
-robot.plugin.3.factory = de.fhg.iais.roberta.factory.SimFactory
+robot.plugin.2.generated.programs.dir  = userProjects/
+robot.plugin.2.compiler.resources.dir = resources
 
-# this is a temporary fix for EV3 resources. They can't be put into EV3.properties because they need to be modified for --export
-crosscompiler.basedir    = userProjects/
-crosscompiler.build.xml  = crosscompiler-ev3-build.xml
-robot.crossCompilerResources.dir = crossCompilerResources
-robot.updateResources.dir = updateResources
+robot.plugin.3.name = ardu
+robot.plugin.3.id = 44
+robot.plugin.3.factory = de.fhg.iais.roberta.factory.ArduFactory
+robot.plugin.3.generated.programs.dir  = userProjects/
+
+
+robot.plugin.4.name = oraSim
+robot.plugin.4.id = 99
+robot.plugin.4.factory = de.fhg.iais.roberta.factory.SimFactory
+	
 .eof
 # -------------- end of a here document ---------------------------------------------------------------
 }
