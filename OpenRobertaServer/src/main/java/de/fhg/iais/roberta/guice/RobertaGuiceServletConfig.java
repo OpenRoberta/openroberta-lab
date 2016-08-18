@@ -36,6 +36,7 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
                         RobertaGuiceServletConfig.this.openRobertaProperties,
                         RobertaGuiceServletConfig.this.robotPluginMap,
                         RobertaGuiceServletConfig.this.robotCommunicator));
+                //TODO: we have doubled the properties
                 // look for guice modules from robot plugins
                 //                for ( IRobotFactory robotFactory : RobertaGuiceServletConfig.this.robotPluginMap.values() ) {
                 //                    AbstractModule guiceModule = robotFactory.getGuiceModule();
