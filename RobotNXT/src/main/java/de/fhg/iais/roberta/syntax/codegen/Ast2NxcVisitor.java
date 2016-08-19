@@ -848,6 +848,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         final boolean reverse =
             brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
                 || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+
         String methodName = "";
         int turnpct = 100;
         if ( isDuration ) {
@@ -865,10 +866,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             sb.append(brickConfiguration.getLeftMotorPort());
         }
         if ( reverse ) {
-            sb.append(", (-1) * ");
-        } else {
-            sb.append(", ");
+            turnpct *= -1;
         }
+        sb.append(", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( turnAction.getDirection() == TurnDirection.LEFT ) {
             turnpct *= -1;
