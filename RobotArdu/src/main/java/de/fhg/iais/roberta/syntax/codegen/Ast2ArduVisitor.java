@@ -127,6 +127,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private final ArduConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
+    private boolean timeSensorUsed = false;
 
     /**
      * initialize the Java code generator visitor.
@@ -135,9 +136,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public Ast2ArduVisitor(ArduConfiguration brickConfiguration, int indentation) {
+
+    public Ast2ArduVisitor(ArduConfiguration brickConfiguration, int indentation, boolean timeSensorUsed) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
+        this.timeSensorUsed = timeSensorUsed;
     }
 
     /**
@@ -151,8 +154,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
+        boolean timeSensorUsed = UsedTimerVisitorArdu.check(phrasesSet);
 
-        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0);
+        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, withWrapping);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
@@ -658,29 +662,34 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: add reverse/forward to all drive and turn actions
+
+    //wait for Jose reply
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        sb.append("speed" + motorOnAction.getPort() + " = ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        sb.append(";");
-        nlIndent();
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
         final boolean isRegulatedDrive = brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).isRegulated();
+        String methodName;
         if ( isDuration ) {
-            sb.append("one.moveMotorRotation(speedA, speedB, ");
+            methodName = "one.moveMotorRotation(";
+            sb.append(methodName);
+            sb.append(motorOnAction.getPort());
+            sb.append(", ");
+            motorOnAction.getParam().getSpeed().visit(this);
+            sb.append(", ");
             motorOnAction.getParam().getDuration().getValue().visit(this);
             if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
                 sb.append("/2/PI");
             }
         } else {
-            if ( isRegulatedDrive ) {
-                //there is no regulated drive function for the robot, the closest function if PID controlled
-                //movement. The coefficients are default, they seem to make movement of the robot
-                //much smoother.
-                sb.append("one.movePID(speedA, speedB");
-            } else {
-                sb.append("one.move(speedA, speedB");
-            }
+            //there is no regulated drive function for the robot, the closest function if PID controlled
+            //movement. The coefficients are default, they seem to make movement of the robot
+            //much smoother.
+            methodName = isRegulatedDrive ? "one.move1mPID(" : "one.move1m(";
+            sb.append(methodName);
+            sb.append(motorOnAction.getPort());
+            sb.append(", ");
+            motorOnAction.getParam().getSpeed().visit(this);
         }
         sb.append(");");
         return null;
@@ -711,13 +720,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //wait for Jose reply
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        sb.append("speed" + motorGetPowerAction.getPort());
+        sb.append("" + motorGetPowerAction.getPort());
         return null;
     }
 
-    //TODO: this function can be implemented in a nice way only for two motors.
+    //TODO: so far this function can be implemented in a nice way only for two motors.
+    //wait for Jose reply
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
@@ -729,30 +740,21 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //replace move with move PID?
+    //wait for Jose reply to implement moveDist
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        sb.append("speedA = ");
-        driveAction.getParam().getSpeed().visit(this);
-        sb.append(";");
-        nlIndent();
-        sb.append("speedB = ");
-        driveAction.getParam().getSpeed().visit(this);
-        sb.append(";");
-        nlIndent();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = "";
         if ( isDuration ) {
-            methodName = "one.moveDist";
+            methodName = "one.moveDist(";
         } else {
-            methodName = "one.moveStraight";
+            methodName = "one.moveStraight(";
         }
-        sb.append(methodName + "(");
+        sb.append(methodName);
         if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
             sb.append("-");
         }
-        sb.append("speedA");
-
+        driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             sb.append(", ");
             driveAction.getParam().getDuration().getValue().visit(this);
@@ -763,9 +765,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //wait for Jose reply
     @Override // TURN ACTIONS
-
-    //TODO - also problems with encoder
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         String methodName;
@@ -776,11 +777,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         } else {
             sign2 = "-";
         }
-        sb.append("speedA = " + sign1);
-        turnAction.getParam().getSpeed().visit(this);
-        sb.append(";");
-        nlIndent();
-        sb.append("speedB = " + sign2);
+
         turnAction.getParam().getSpeed().visit(this);
         sb.append(";");
         nlIndent();
@@ -800,7 +797,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
+    //no light sensor
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         //switch ( ) {
@@ -819,41 +816,28 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //no light sensor
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        //final String Port = getEnumCode(lightSensor.getPort());
-        sb.append("SensorLight( IN_");
-        sb.append(lightSensor.getPort().getPortNumber());
-        sb.append(", ");
-        switch ( getEnumCode(lightSensor.getMode()) ) {
-            case "LightSensorMode.RED":
-                sb.append("\"LIGHT\"");
-                break;
-            case "LightSensorMode.AMBIENTLIGHT":
-                sb.append("\"AMBIENTLIGHT\"");
-                break;
-            default:
-                throw new DbcException("Invalide mode for Color Sensor!");
-        }
-        sb.append(" )");
         return null;
     }
 
+    //TODO: change block so it would just return a button value?
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String button = null;
         switch ( getEnumCode(brickSensor.getKey()) ) {
             case "BrickKey.ENTER":
-                button = "BTNCENTER";
+                button = "1";
                 break;
             case "BrickKey.LEFT":
-                button = "BTNLEFT";
+                button = "2";
                 break;
             case "BrickKey.RIGHT":
-                button = "BTNRIGHT";
+                button = "3";
                 break;
         }
-        sb.append("ButtonPressed( " + button + ", false )");
+        sb.append("one.readButton() == " + button);
         return null;
     }
 
@@ -907,24 +891,27 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    @Override // no gyrosensor
+    //TODO: here will be compass
+    @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         return null;
     }
 
-    @Override // no infrared sensor
+    //TODO: implement two of them (linefollowing and front)
+    @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         return null;
     }
 
+    //TODO: hide timer
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                sb.append("GetTimerValue( timer" + timerSensor.getTimer() + " )");
+                sb.append("T.ShowSeconds()");
                 break;
             case RESET:
-                sb.append("ResetTimerValue( timer" + timerSensor.getTimer() + " );");
+                sb.append("T.ResetTimer();");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -1566,6 +1553,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append("#define WHEELDIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
         sb.append("#define TRACKWIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
         sb.append("#include <math.h> \n");
+        sb.append("#include<CountUpDownTimer.h> \n");
         // Bot'n Roll ONE A library:
         sb.append("#include <BnrOneA.h> \n");
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
@@ -1577,7 +1565,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         sb.append("BnrOneA one; \n");
         sb.append("BnrRescue brm; \n");
-
+        sb.append("CountUpDownTimer T(UP, HIGH); \n");
         sb.append("#define SSPIN  2 \n \n");
     }
 
@@ -1592,23 +1580,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append("{");
         nlIndent();
         //set baud rate to 57600bps for printing values at serial monitor:
-        sb.append("Serial.begin(57600);");
+        sb.append("Serial.begin(9600);");
         nlIndent();
         // start the communication module:
         sb.append("one.spiConnect(SSPIN);");
         nlIndent();
         // stop motors:
         sb.append("one.stop();");
-        nlIndent();
-
-        sb.append("} \n \n");
-        sb.append("void loop() \n");
-        sb.append("{");
-        nlIndent();
-        sb.append("int speedA = 0;");
-        nlIndent();
-        sb.append("int speedB = 0; \n");
-
+        if ( timeSensorUsed ) {
+            nlIndent();
+            sb.append("T.StartTimer();");
+        }
         for ( final Entry<ISensorPort, Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
             switch ( entry.getValue().getType() ) {
                 //TODO: add infrared (basic and line following), compas (that also works like gyro),
@@ -1645,5 +1627,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                     break;
             }
         }
+        sb.append("\n");
+        sb.append("} \n");
+        sb.append("void loop() \n");
+        sb.append("{");
+        if ( timeSensorUsed ) {
+            nlIndent();
+            sb.append("T.Timer();");
+        }
     }
+
 }

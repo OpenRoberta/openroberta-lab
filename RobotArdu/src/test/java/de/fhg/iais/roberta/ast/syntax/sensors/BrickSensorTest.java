@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class BrickSensorTest {
     @Test
     public void isPressed() throws Exception {
-        String a = "\nButtonPressed(BTNCENTER,false)";
+        String a = "\none.readButton()==1";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
     }

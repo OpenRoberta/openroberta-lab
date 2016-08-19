@@ -8,14 +8,14 @@ public class MotorOnActionTest {
 
     @Test
     public void motorOn() throws Exception {
-        String a = "speedB=30;one.movePID(speedA,speedB);speedC=50;one.movePID(speedA,speedB);";
+        String a = "one.move1mPID(B,30);one.move1mPID(C,50);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorOn.xml");
     }
 
     @Test
     public void motorOnFor() throws Exception {
-        String a = "speedB=30;one.moveMotorRotation(speedA,speedB,1);";
+        String a = "one.moveMotorRotation(B,30,1);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorOnFor.xml");
     }
