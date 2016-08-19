@@ -730,10 +730,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        final boolean reverse = brickConfiguration.getActorOnPort(motorOnAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
         final boolean isRegulatedDrive = brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).isRegulated();
+        String sing = reverse ? "-" : "";
+        String methodNamePart = reverse ? "OnRev" : "OnFwd";
         if ( isDuration ) {
-            sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", ");
+            sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", " + sing);
             motorOnAction.getParam().getSpeed().visit(this);
             if ( motorOnAction.getDurationMode() == MotorMoveMode.ROTATIONS ) {
                 sb.append(", 360 * ");
@@ -742,12 +745,13 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             }
             motorOnAction.getParam().getDuration().getValue().visit(this);
         } else {
+
             if ( isRegulatedDrive ) {
-                sb.append("OnFwdReg(OUT_" + motorOnAction.getPort() + ", ");
+                sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", ");
                 motorOnAction.getParam().getSpeed().visit(this);
                 sb.append(", OUT_REGMODE_SPEED");
             } else {
-                sb.append("OnFwd(OUT_" + motorOnAction.getPort() + ", ");
+                sb.append(methodNamePart + "(OUT_" + motorOnAction.getPort() + ", ");
                 motorOnAction.getParam().getSpeed().visit(this);
             }
         }
@@ -757,13 +761,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-
+        final boolean reverse = brickConfiguration.getActorOnPort(motorSetPowerAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        String sing = reverse ? "-" : "";
         final String methodName = "OnReg";
-
         //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + ",");
+        sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + "," + sing);
         motorSetPowerAction.getPower().visit(this);
-
         sb.append(",OUT_REGMODE_SPEED");
         sb.append(");");
         return null;
@@ -802,6 +805,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitDriveAction(DriveAction<Void> driveAction) {
 
         final boolean isDuration = driveAction.getParam().getDuration() != null;
+        final boolean reverse =
+            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName = "";
         if ( isDuration ) {
             methodName = "RotateMotorEx";
@@ -816,7 +823,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             sb.append(brickConfiguration.getRightMotorPort());
             sb.append(brickConfiguration.getLeftMotorPort());
         }
-        if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
+        if ( (!reverse && localReverse) || (!localReverse && reverse) ) {
             sb.append(", (-1) * ");
         } else {
             sb.append(", ");
@@ -826,7 +833,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         if ( isDuration ) {
             sb.append("(");
             driveAction.getParam().getDuration().getValue().visit(this);
-            sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true");
+            sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, false, true");
         } else {
             sb.append("OUT_REGMODE_SYNC");
         }
