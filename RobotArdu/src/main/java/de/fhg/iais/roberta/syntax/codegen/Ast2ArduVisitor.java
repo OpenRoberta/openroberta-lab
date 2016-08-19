@@ -744,6 +744,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isDuration = driveAction.getParam().getDuration() != null;
+        final boolean reverse =
+            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName = "";
         if ( isDuration ) {
             methodName = "one.moveDist(";
@@ -751,7 +755,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             methodName = "one.moveStraight(";
         }
         sb.append(methodName);
-        if ( driveAction.getDirection() == DriveDirection.BACKWARD ) {
+        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
             sb.append("-");
         }
         driveAction.getParam().getSpeed().visit(this);
@@ -769,25 +773,32 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override // TURN ACTIONS
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final boolean isDuration = turnAction.getParam().getDuration() != null;
+        final boolean reverse =
+            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        final boolean turnRight = turnAction.getDirection() == TurnDirection.RIGHT;
+        final boolean turnLeft = turnAction.getDirection() == TurnDirection.LEFT;
         String methodName;
         String sign1 = "";
         String sign2 = "";
-        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+        if ( (turnRight && !reverse) || (turnLeft && reverse) ) {
             sign1 = "-";
         } else {
             sign2 = "-";
         }
 
-        turnAction.getParam().getSpeed().visit(this);
-        sb.append(";");
-        nlIndent();
         if ( isDuration ) {
-            methodName = "RotateMotorEx";
+            methodName = "";
         } else {
-            methodName = "one.movePID(";
+            methodName = "one.move(";
         }
         sb.append(methodName);
-        sb.append("speedA, speedB);");
+        sb.append(sign1);
+        turnAction.getParam().getSpeed().visit(this);
+        sb.append(",");
+        sb.append(sign2);
+        turnAction.getParam().getSpeed().visit(this);
+        sb.append(");");
         return null;
     }
 
