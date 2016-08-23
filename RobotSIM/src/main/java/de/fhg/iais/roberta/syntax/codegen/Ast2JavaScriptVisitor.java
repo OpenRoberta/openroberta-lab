@@ -2,6 +2,11 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
+import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.sim.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
@@ -110,14 +115,18 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     private int stmtsNumber = 0;
     private int methodsNumber = 0;
     private ArrayList<Boolean> inStmt = new ArrayList<>();
+    private Configuration brickConfiguration;
 
-    private Ast2JavaScriptVisitor() {
+    private Ast2JavaScriptVisitor(Configuration brickConfiguration) {
+        this.brickConfiguration = brickConfiguration;
 
     }
 
-    public static String generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(phrasesSet.size() >= 1);
-        Ast2JavaScriptVisitor astVisitor = new Ast2JavaScriptVisitor();
+        Assert.notNull(brickConfiguration);
+
+        Ast2JavaScriptVisitor astVisitor = new Ast2JavaScriptVisitor(brickConfiguration);
         generateCodeFromPhrases(phrasesSet, astVisitor);
         return astVisitor.sb.toString();
     }
@@ -396,32 +405,64 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        boolean isDuration = driveAction.getParam().getDuration() != null;
         String end = createClosingBracket();
         this.sb.append("createDriveAction(");
         driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(", CONST." + driveAction.getDirection());
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
+        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
+        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
+            driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
+        this.sb.append(", CONST." + driveDirection);
+        appenDriveDuration(driveAction);
         this.sb.append(end);
         return null;
     }
 
+    private DriveDirection getDriveDirection(boolean isReverse) {
+        if ( isReverse ) {
+            return DriveDirection.BACKWARD;
+        }
+        return DriveDirection.FOREWARD;
+    }
+
+    private void appenDriveDuration(DriveAction<Void> driveAction) {
+        boolean isDuration = driveAction.getParam().getDuration() != null;
+        if ( isDuration ) {
+            this.sb.append(", ");
+            driveAction.getParam().getDuration().getValue().visit(this);
+        }
+    }
+
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        boolean isDuration = turnAction.getParam().getDuration() != null;
         String end = createClosingBracket();
         this.sb.append("createTurnAction(");
         turnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", CONST." + turnAction.getDirection());
+        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        ITurnDirection turnDirection = turnAction.getDirection();
+        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
+            turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
+        }
+        this.sb.append(", CONST." + turnDirection);
+        appenTurnDuration(turnAction);
+        this.sb.append(end);
+        return null;
+    }
+
+    private TurnDirection getTurnDirection(boolean isReverse) {
+        if ( isReverse ) {
+            return TurnDirection.RIGHT;
+        }
+        return TurnDirection.LEFT;
+    }
+
+    private void appenTurnDuration(TurnAction<Void> turnAction) {
+        boolean isDuration = turnAction.getParam().getDuration() != null;
         if ( isDuration ) {
             this.sb.append(", ");
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        this.sb.append(end);
-        return null;
     }
 
     @Override

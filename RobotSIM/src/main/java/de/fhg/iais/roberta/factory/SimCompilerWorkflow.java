@@ -64,7 +64,7 @@ public class SimCompilerWorkflow implements ICompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
+        String sourceCode = Ast2JavaScriptVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
         SimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;

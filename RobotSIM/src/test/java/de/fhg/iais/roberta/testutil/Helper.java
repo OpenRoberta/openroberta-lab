@@ -16,9 +16,15 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.SimConfiguration;
 import de.fhg.iais.roberta.factory.SimFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MotorSide;
+import de.fhg.iais.roberta.mode.action.sim.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
@@ -40,7 +46,14 @@ public class Helper {
      */
     public static String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2JavaScriptVisitor.generate(transformer.getTree());
+        Configuration brickConfiguration =
+            new SimConfiguration.Builder()
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .build();
+        String code = Ast2JavaScriptVisitor.generate(brickConfiguration, transformer.getTree());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -110,7 +123,7 @@ public class Helper {
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         SimFactory robotModeFactory = new SimFactory(null, 0);
-        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>(robotModeFactory);
+        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;
