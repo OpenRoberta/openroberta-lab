@@ -13,7 +13,7 @@ public enum BlinkMode implements IBlinkMode {
 
     @Override
     public String[] getValues() {
-        return this.values;
+        return values;
     }
 
 }

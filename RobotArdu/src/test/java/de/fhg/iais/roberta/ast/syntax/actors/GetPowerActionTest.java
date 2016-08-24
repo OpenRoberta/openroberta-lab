@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class GetPowerActionTest {
     @Test
     public void getSpeed() throws Exception {
-        final String a = "\nB";
+        final String a = "\n";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorGetPower.xml");
     }

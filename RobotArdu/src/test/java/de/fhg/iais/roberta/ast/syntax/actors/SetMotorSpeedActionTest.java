@@ -8,7 +8,7 @@ public class SetMotorSpeedActionTest {
 
     @Test
     public void setMotorSpeed() throws Exception {
-        final String a = "OnReg(OUT_B,30,OUT_REGMODE_SPEED);";
+        final String a = "";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorSetPower.xml");
     }

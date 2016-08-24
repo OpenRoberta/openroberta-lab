@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
+import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
@@ -128,7 +129,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private final ArduConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
-    private boolean timeSensorUsed = false;
+    private boolean timeSensorUsed;
 
     /**
      * initialize the Java code generator visitor.
@@ -157,7 +158,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         Assert.isTrue(phrasesSet.size() >= 1);
         boolean timeSensorUsed = UsedTimerVisitorArdu.check(phrasesSet);
 
-        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, withWrapping);
+        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
@@ -293,7 +294,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: change thr colors
+    //TODO: decide on color mode- so far there is only raw RGB mode, no explicit colors
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String value;
@@ -601,14 +602,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                sb.append("byte ArduNormVolume = ");
-                volumeAction.getVolume().visit(this);
-                sb.append(" * 4 / 100; ");
-                nlIndent();
-                sb.append("SetVolume( ArduNormVolume );");
                 break;
             case GET:
-                sb.append("Volume() * 100 / 4");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -616,20 +611,28 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
+    //TODO: add block and test
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        switch ( (BlinkMode) lightAction.getBlinkMode() ) {
+            case ON:
+                sb.append("one.led(HIGH);");
+                break;
+            case OFF:
+                sb.append("one.led(LOW);");
+                break;
+        }
         return null;
 
     }
 
-    //TODO: implement
+    //TODO: no such block
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
 
-    //won't be used
+    //will be implemented much later
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
@@ -655,6 +658,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        //9 - sound port
         sb.append("tone(9, ");
         toneAction.getFrequency().visit(this);
         sb.append(", ");
@@ -665,7 +669,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     //TODO: add reverse/forward to all drive and turn actions
 
-    //wait for Jose reply
+    //TODO Not implemented. Wait for the function
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
@@ -696,52 +700,30 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: not needed
+    // not needed
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-
-        final String methodName = "OnReg";
-
-        //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + ",");
-        motorSetPowerAction.getPower().visit(this);
-
-        sb.append(",OUT_REGMODE_SPEED");
-        sb.append(");");
         return null;
     }
 
-    private String getPower() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private String getPort() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    //wait for Jose reply
+    //can't implement it without encoder
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        sb.append("" + motorGetPowerAction.getPort());
         return null;
     }
 
-    //TODO: so far this function can be implemented in a nice way only for two motors.
-    //wait for Jose reply
+    //TODO: so far this function can be implemented in a nice way only for two motors. Wait for
+    // a new function
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
-            sb.append("Float(OUT_" + motorStopAction.getPort());
+            sb.append("");
         } else {
-            sb.append("Off(OUT_" + motorStopAction.getPort());
+            sb.append("");
         }
-        sb.append(");");
         return null;
     }
 
-    //wait for Jose reply to implement moveDist
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isDuration = driveAction.getParam().getDuration() != null;
@@ -749,9 +731,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
                 || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
-        String methodName = "";
+        String methodName;
         if ( isDuration ) {
-            methodName = "one.moveDist(";
+            methodName = "one.moveTime(";
         } else {
             methodName = "one.moveStraight(";
         }
@@ -762,16 +744,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             sb.append(", ");
+            //here will be duration in seconds
             driveAction.getParam().getDuration().getValue().visit(this);
-            sb.append(", ");
-            sb.append("WHEELDIAMETER");
         }
         sb.append(");");
         return null;
     }
 
-    //wait for Jose reply
-    @Override // TURN ACTIONS
+    // TURN ACTIONS
+    @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         final boolean reverse =
@@ -909,7 +890,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement two of them (linefollowing and front)
+    //TODO: add block and test
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
@@ -1590,7 +1571,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         sb.append("BnrOneA one; \n");
         sb.append("BnrRescue brm; \n");
-        sb.append("CountUpDownTimer T(UP, HIGH); \n");
+        if ( timeSensorUsed ) {
+            sb.append("CountUpDownTimer T(UP, HIGH); \n");
+        }
         sb.append("#define SSPIN  2 \n \n");
     }
 

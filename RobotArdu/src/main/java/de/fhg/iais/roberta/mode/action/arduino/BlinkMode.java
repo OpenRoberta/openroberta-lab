@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.action.arduino;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 
 public enum BlinkMode implements IBlinkMode {
-    ON(), FLASH(), DOUBLE_FLASH();
+    ON(), OFF(), DOUBLE_FLASH();
 
     private final String[] values;
 
@@ -13,7 +13,7 @@ public enum BlinkMode implements IBlinkMode {
 
     @Override
     public String[] getValues() {
-        return this.values;
+        return values;
     }
 
 }

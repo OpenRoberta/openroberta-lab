@@ -14,7 +14,7 @@ public class MathSingleTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a = "byteArduNormVolume=sqrt(0)*4/100;SetVolume(ArduNormVolume);";
+        final String a = "";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_single1.xml");
     }

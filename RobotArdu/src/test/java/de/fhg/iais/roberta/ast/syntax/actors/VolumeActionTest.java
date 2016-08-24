@@ -7,14 +7,14 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class VolumeActionTest {
     @Test
     public void setVolume() throws Exception {
-        String a = "\nbyteArduNormVolume=50*4/100;SetVolume(ArduNormVolume);";
+        String a = "\n";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_SetVolume.xml");
     }
 
     @Test
     public void getVolume() throws Exception {
-        String a = "\nVolume()*100/4";
+        String a = "\n";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_GetVolume.xml");
     }
