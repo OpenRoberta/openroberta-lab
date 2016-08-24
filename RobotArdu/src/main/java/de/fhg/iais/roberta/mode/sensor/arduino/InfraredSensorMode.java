@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.arduino;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 
 public enum InfraredSensorMode implements IInfraredSensorMode {
-    DISTANCE( "getInfraredSensorDistance", "Distance" ), SEEK( "getInfraredSensorSeek", "Seek" );
+    OBSTACLE( "getInfraredSensorDistance", "Distance" ), SEEK( "getInfraredSensorSeek", "Seek" );
 
     private final String[] values;
     private final String halJavaMethodName;
@@ -17,7 +17,7 @@ public enum InfraredSensorMode implements IInfraredSensorMode {
      * @return name that Lejos is using for this mode
      */
     public String getLejosModeName() {
-        return this.values[0];
+        return values[0];
     }
 
     //    @Override
@@ -27,7 +27,7 @@ public enum InfraredSensorMode implements IInfraredSensorMode {
 
     @Override
     public String[] getValues() {
-        return this.values;
+        return values;
     }
 
 }

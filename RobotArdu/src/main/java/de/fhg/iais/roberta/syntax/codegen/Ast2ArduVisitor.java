@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -911,6 +912,19 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //TODO: implement two of them (linefollowing and front)
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
+            //TODO: that should be called not distance, but obstacle avoidance
+            case OBSTACLE:
+                //returns 0-3 (no obstacle, left, right, both)
+                sb.append("one.obstacleSensors();");
+                break;
+            case SEEK:
+                //returns value 0 or 1
+                sb.append("one.readIRSensors();");
+                break;
+            default:
+                throw new DbcException("Invalid Infrared Sensor Mode!");
+        }
         return null;
     }
 
