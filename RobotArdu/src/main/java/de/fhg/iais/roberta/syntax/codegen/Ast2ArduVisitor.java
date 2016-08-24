@@ -735,14 +735,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         if ( isDuration ) {
             methodName = "one.moveTime(";
         } else {
-            methodName = "one.moveStraight(";
+            methodName = "one.move(";
         }
         sb.append(methodName);
         if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
             sb.append("-");
         }
         driveAction.getParam().getSpeed().visit(this);
+        sb.append(", ");
+        driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
+
             sb.append(", ");
             //here will be duration in seconds
             driveAction.getParam().getDuration().getValue().visit(this);
@@ -770,7 +773,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
 
         if ( isDuration ) {
-            methodName = "";
+            methodName = "one.moveTime(";
         } else {
             methodName = "one.move(";
         }
@@ -780,7 +783,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append(",");
         sb.append(sign2);
         turnAction.getParam().getSpeed().visit(this);
+        if ( isDuration ) {
+            sb.append(", ");
+            turnAction.getParam().getDuration().getValue().visit(this);
+        }
         sb.append(");");
+
         return null;
     }
 
