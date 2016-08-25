@@ -133,6 +133,10 @@ public class HttpSessionState {
         return robotFactory;
     }
 
+    public IRobotFactory getRobotFactory(String robotName) {
+        return robotPluginMap.get(robotName);
+    }
+
     /**
      * temporary fix until DB is updated
      *

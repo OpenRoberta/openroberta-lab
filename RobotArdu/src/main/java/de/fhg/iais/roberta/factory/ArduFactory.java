@@ -45,10 +45,11 @@ public class ArduFactory extends AbstractRobotFactory {
 
     private ArduCompilerWorkflow compilerWorkflow;
     private final int robotId;
+    private final Properties arduProperties;
 
     public ArduFactory(RobotCommunicator unusedForArdu, Integer robotId) {
-        System.out.println(robotId);
-        Properties arduProperties = Util1.loadProperties("classpath:Ardu.properties");
+        // System.out.println(robotId);
+        arduProperties = Util1.loadProperties("classpath:Ardu.properties");
         compilerWorkflow = new ArduCompilerWorkflow(arduProperties.getProperty("crosscompiler.basedir"), arduProperties.getProperty("robot.resources.dir"));
         this.robotId = robotId;
     }
@@ -475,4 +476,38 @@ public class ArduFactory extends AbstractRobotFactory {
         return null;
     }
 
+    @Override
+    public String getProgramToolboxBeginner() {
+        return arduProperties.getProperty("robot.program.toolbox.beginner");
+    }
+
+    @Override
+    public String getProgramToolboxExpert() {
+        return arduProperties.getProperty("robot.program.toolbox.expert");
+    }
+
+    @Override
+    public String getProgramDefault() {
+        return arduProperties.getProperty("robot.program.default");
+    }
+
+    @Override
+    public String getConfigurationToolbox() {
+        return arduProperties.getProperty("robot.configuration.toolbox");
+    }
+
+    @Override
+    public String getConfigurationDefault() {
+        return arduProperties.getProperty("robot.configuration.default");
+    }
+
+    @Override
+    public String getRealName() {
+        return arduProperties.getProperty("robot.real.name");
+    }
+
+    @Override
+    public Boolean hasSim() {
+        return arduProperties.getProperty("robot.sim") != null ? true : false;
+    }
 }

@@ -190,6 +190,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             setConfigurationSaved(true);
         }
         GUISTATE.gui.robot = robot;
+        GUISTATE.gui.sim = result.sim;
         setConfigurationName(getRobot().toUpperCase() + 'basis');
         setProgramName('NEPOprog');
     }

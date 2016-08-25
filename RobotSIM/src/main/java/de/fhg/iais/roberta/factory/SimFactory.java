@@ -441,4 +441,46 @@ public class SimFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getProgramToolboxBeginner() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getProgramToolboxExpert() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getProgramDefault() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getConfigurationToolbox() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getConfigurationDefault() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getRealName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Boolean hasSim() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

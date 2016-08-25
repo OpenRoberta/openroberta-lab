@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 
@@ -43,9 +44,11 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class EV3Factory extends AbstractRobotFactory {
     private final Ev3CompilerWorkflow compilerWorkflow;
     private final int robotId;
+    private final Properties ev3Properties;
 
     public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("ev3");
+        this.ev3Properties = Util1.loadProperties("classpath:EV3.properties");
 
         this.compilerWorkflow =
             new Ev3CompilerWorkflow(
@@ -457,4 +460,38 @@ public class EV3Factory extends AbstractRobotFactory {
         return null;
     }
 
+    @Override
+    public String getProgramToolboxBeginner() {
+        return ev3Properties.getProperty("robot.program.toolbox.beginner");
+    }
+
+    @Override
+    public String getProgramToolboxExpert() {
+        return ev3Properties.getProperty("robot.program.toolbox.expert");
+    }
+
+    @Override
+    public String getProgramDefault() {
+        return ev3Properties.getProperty("robot.program.default");
+    }
+
+    @Override
+    public String getConfigurationToolbox() {
+        return ev3Properties.getProperty("robot.configuration.toolbox");
+    }
+
+    @Override
+    public String getConfigurationDefault() {
+        return ev3Properties.getProperty("robot.configuration.default");
+    }
+
+    @Override
+    public String getRealName() {
+        return ev3Properties.getProperty("robot.real.name");
+    }
+
+    @Override
+    public Boolean hasSim() {
+        return ev3Properties.getProperty("robot.sim") != null ? true : false;
+    }
 }

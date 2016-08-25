@@ -320,4 +320,18 @@ public interface IRobotFactory {
      */
     int getRobotId();
 
+    String getProgramToolboxBeginner();
+
+    String getProgramToolboxExpert();
+
+    String getProgramDefault();
+
+    String getConfigurationToolbox();
+
+    String getConfigurationDefault();
+
+    String getRealName();
+
+    Boolean hasSim();
+
 }

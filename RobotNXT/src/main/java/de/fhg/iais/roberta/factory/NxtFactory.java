@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.factory;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -46,6 +47,7 @@ public class NxtFactory extends AbstractRobotFactory {
 
     private NxtCompilerWorkflow compilerWorkflow;
     private final int robotId;
+    private final Properties nxtProperties;
 
     public NxtFactory(RobotCommunicator unusedForNxt, Integer robotId) {
 
@@ -55,6 +57,7 @@ public class NxtFactory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
         this.robotId = robotId;
+        this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
     }
 
     @Override
@@ -505,4 +508,38 @@ public class NxtFactory extends AbstractRobotFactory {
         return null;
     }
 
+    @Override
+    public String getProgramToolboxBeginner() {
+        return nxtProperties.getProperty("robot.program.toolbox.beginner");
+    }
+
+    @Override
+    public String getProgramToolboxExpert() {
+        return nxtProperties.getProperty("robot.program.toolbox.expert");
+    }
+
+    @Override
+    public String getProgramDefault() {
+        return nxtProperties.getProperty("robot.program.default");
+    }
+
+    @Override
+    public String getConfigurationToolbox() {
+        return nxtProperties.getProperty("robot.configuration.toolbox");
+    }
+
+    @Override
+    public String getConfigurationDefault() {
+        return nxtProperties.getProperty("robot.configuration.default");
+    }
+
+    @Override
+    public String getRealName() {
+        return nxtProperties.getProperty("robot.real.name");
+    }
+
+    @Override
+    public Boolean hasSim() {
+        return nxtProperties.getProperty("robot.sim") != null ? true : false;
+    }
 }
