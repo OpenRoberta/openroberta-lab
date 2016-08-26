@@ -903,13 +903,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             //TODO: that should be called not distance, but obstacle avoidance
-            case OBSTACLE:
+            case DISTANCE:
                 //returns 0-3 (no obstacle, left, right, both)
-                sb.append("one.obstacleSensors();");
+                sb.append("one.obstacleSensors()");
                 break;
             case SEEK:
                 //returns value 0 or 1
-                sb.append("one.readIRSensors();");
+                sb.append("one.readIRSensors()");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.arduino;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 
 public enum InfraredSensorMode implements IInfraredSensorMode {
-    OBSTACLE( "getInfraredSensorDistance", "Distance" ), SEEK( "getInfraredSensorSeek", "Seek" );
+    DISTANCE( "getInfraredSensorDistance", "Distance" ), SEEK( "getInfraredSensorSeek", "Seek" );
 
     private final String[] values;
     private final String halJavaMethodName;
