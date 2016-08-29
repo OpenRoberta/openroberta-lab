@@ -142,7 +142,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             scriptName = "../RobotArdu/resources/arduino-builder.exe";
             os = "windows";
-            compilerPath = "../RobotArdu/resources/os/" + os + "/tools/avr/bin/";
+            compilerPath = "C:/avr/bin/";
         }
 
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token);
