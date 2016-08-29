@@ -133,23 +133,23 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#iconDisplayLogin').addClass('error');
         }
         if (GUISTATE.robot.state === 'wait') {
-            $('#iconDisplayRobotState').removeClass('error');
-            $('#iconDisplayRobotState').removeClass('busy');
-            $('#iconDisplayRobotState').addClass('wait');
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').addClass('wait');
             GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             $('#menuRunProg').parent().removeClass('disabled');
 
         } else if (GUISTATE.robot.state === 'busy') {
-            $('#iconDisplayRobotState').removeClass('wait');
-            $('#iconDisplayRobotState').removeClass('error');
-            $('#iconDisplayRobotState').addClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').addClass('busy');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
 
         } else {
-            $('#iconDisplayRobotState').removeClass('busy');
-            $('#iconDisplayRobotState').removeClass('wait');
-            $('#iconDisplayRobotState').addClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            $('#head-navi-icon-robot').addClass('error');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
         }

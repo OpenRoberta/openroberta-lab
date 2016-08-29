@@ -33,10 +33,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             ROBOT.setToken(token, function(result) {
                 if (result.rc === "ok") {
                     GUISTATE_C.setRobotToken(token);
+                    MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
+                    handleFirmwareConflict();
+                } else {
+                    if (result.message === 'ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE') {
+                        $('.modal').modal('hide');
+                    }
                 }
-                MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
+                UTIL.response(result);
                 GUISTATE_C.setState(result);
-                handleFirmwareConflict();
             });
         }
     }

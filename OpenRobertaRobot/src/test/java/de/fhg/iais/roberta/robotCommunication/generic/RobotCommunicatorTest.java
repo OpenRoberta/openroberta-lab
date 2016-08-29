@@ -8,9 +8,9 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotCommunicatorTest {
-    static RobotCommunicationData badRegistration = new RobotCommunicationData(null, null, null, null, null, null, null);
-    static RobotCommunicationData goodRegistration1 = new RobotCommunicationData("12345678", "00:11:22:33:44:55", null, null, null, null, null);
-    static RobotCommunicationData goodRegistration2 = new RobotCommunicationData("12345678", "13:05:98:29:12:99", null, null, null, null, null);
+    static RobotCommunicationData badRegistration = new RobotCommunicationData(null, null, null, null, null, null, null, null);
+    static RobotCommunicationData goodRegistration1 = new RobotCommunicationData("12345678", null, "00:11:22:33:44:55", null, null, null, null, null);
+    static RobotCommunicationData goodRegistration2 = new RobotCommunicationData("12345678", null, "13:05:98:29:12:99", null, null, null, null, null);
 
     @Test
     public void testFirstCanRegister() throws Exception {

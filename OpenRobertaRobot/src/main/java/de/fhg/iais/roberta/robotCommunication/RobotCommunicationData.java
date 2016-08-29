@@ -23,6 +23,7 @@ public class RobotCommunicationData {
     private static final int WAIT_FOR_A_ROBOT_PUSH_COMMAND = 1000;
 
     private final String token;
+    private final String robot;
     private final String robotIdentificator;
     private final String robotName;
     private final String menuversion;
@@ -42,6 +43,7 @@ public class RobotCommunicationData {
 
     public RobotCommunicationData(
         String token,
+        String robot,
         String robotIdentificator,
         String robotName,
         String battery,
@@ -49,6 +51,7 @@ public class RobotCommunicationData {
         String firmwarename,
         String firmwareversion) {
         this.token = token;
+        this.robot = robot;
         this.robotIdentificator = robotIdentificator;
         this.robotName = robotName;
         this.battery = battery;
@@ -234,6 +237,10 @@ public class RobotCommunicationData {
 
     public String getToken() {
         return this.token;
+    }
+
+    public String getRobot() {
+        return this.robot;
     }
 
     public String getRobotIdentificator() {

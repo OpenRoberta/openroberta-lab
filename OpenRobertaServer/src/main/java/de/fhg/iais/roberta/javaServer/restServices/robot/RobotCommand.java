@@ -48,6 +48,7 @@ public class RobotCommand {
         String cmd = requestEntity.getString(CMD);
         String macaddr = null;
         String token = null;
+        String robot = null;
         String brickname = null;
         String batteryvoltage = null;
         String menuversion = null;
@@ -55,26 +56,48 @@ public class RobotCommand {
         String firmwareversion = null;
         int nepoExitValue = 0;
         try {
-            macaddr = requestEntity.getString("macaddr");
             token = requestEntity.getString("token");
-            brickname = requestEntity.getString("brickname");
-            batteryvoltage = requestEntity.getString("battery");
-            menuversion = requestEntity.getString("menuversion");
+            firmwarename = requestEntity.getString("firmwarename");
         } catch ( Exception e ) {
             LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
             return Response.serverError().build();
         }
+        // TODO: move robot to the requested properties for the next version
         try {
-            firmwarename = requestEntity.getString("firmwarename");
+            robot = requestEntity.getString("robot");
+        } catch ( Exception e ) {
+            robot = "ev3";
+        }
+        try {
+            macaddr = requestEntity.getString("macaddr");
+
+        } catch ( Exception e ) {
+            macaddr = "1234";
+        }
+        try {
+            brickname = requestEntity.getString("brickname");
+        } catch ( Exception e ) {
+            brickname = robot;
+        }
+        try {
+            batteryvoltage = requestEntity.getString("battery");
+        } catch ( Exception e ) {
+            batteryvoltage = "";
+        }
+        try {
+            menuversion = requestEntity.getString("menuversion");
+        } catch ( Exception e ) {
+            menuversion = "";
+        }
+        try {
             firmwareversion = requestEntity.getString("firmwareversion");
         } catch ( Exception e ) {
             try {
                 // legacy
                 firmwareversion = requestEntity.getString("lejosversion");
-                firmwarename = "leJOS";
+                // firmwarename = "leJOS";
             } catch ( Exception ee ) {
-                LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
-                return Response.serverError().build();
+                firmwareversion = "";
             }
         }
         try {
@@ -84,14 +107,14 @@ public class RobotCommand {
             // or the robot system does not support it (nxt)
             nepoExitValue = 0;
         }
-        // todo: validate version serverside
+        // TODO: validate version here!
         JSONObject response;
         switch ( cmd ) {
             case CMD_REGISTER:
                 LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
                 // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
                 RobotCommunicationData state =
-                    new RobotCommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
+                    new RobotCommunicationData(token, robot, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response).build();

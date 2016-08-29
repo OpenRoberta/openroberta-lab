@@ -69,8 +69,8 @@ public class RobotCommunicator {
     }
 
     public boolean brickWantsTokenToBeApproved(RobotCommunicationData registration) {
-        if(!addNewRegistration(registration)) {
-          return false;
+        if ( !addNewRegistration(registration) ) {
+            return false;
         }
         return registration.robotTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
@@ -96,16 +96,19 @@ public class RobotCommunicator {
         }
     }
 
-    public boolean aTokenAgreementWasSent(String token) {
+    public int aTokenAgreementWasSent(String token, String robot) {
         RobotCommunicationData state = this.allStates.get(token);
         if ( state == null ) {
-            LOG.info("token " + token + " is not waited for. Typing error of the user?");
-            return false;
+            LOG.info("token " + token + " is not waiting for. Typing error of the user?");
+            return -1;
+        } else if ( !state.getRobot().equals(robot) ) {
+            LOG.info("token " + token + " belongs to a robot of type " + state.getRobot() + ", client is set to " + robot);
+            return 0;
         } else {
             // todo: version check!
             state.userApprovedTheRobotToken();
             LOG.info("token " + token + " is approved by a user.");
-            return true;
+            return 1;
         }
     }
 

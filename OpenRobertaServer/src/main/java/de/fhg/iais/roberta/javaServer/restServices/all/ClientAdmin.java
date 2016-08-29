@@ -64,12 +64,15 @@ public class ClientAdmin {
                 Util.addSuccessInfo(response, Key.INIT_SUCCESS);
             } else if ( cmd.equals("setToken") ) {
                 String token = request.getString("token");
-                if ( this.brickCommunicator.aTokenAgreementWasSent(token) ) {
+                if ( this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName()) == 1 ) {
                     httpSessionState.setToken(token);
                     Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                     LOG.info("success: token " + token + " is registered in the session");
-                } else {
+                } else if ( this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName()) == -1 ) {
                     Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
+                    LOG.info("error: token " + token + " not registered in the session");
+                } else if ( this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName()) == 0 ) {
+                    Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
                     LOG.info("error: token " + token + " not registered in the session");
                 }
             } else if ( cmd.equals("updateFirmware") ) {

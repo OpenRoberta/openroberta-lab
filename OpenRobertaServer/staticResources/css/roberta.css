@@ -319,7 +319,7 @@ body.blocklyMinimalBody  * {
 
 @keyframes  blinker {
 	from { 
-	color:#afca04;	
+	color: #F29400;	
     }
     to {
 	color: #e2001a;
