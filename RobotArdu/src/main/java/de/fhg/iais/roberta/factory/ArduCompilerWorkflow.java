@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,24 +39,35 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     /**
      * - load the program from the database<br>
      * - generate the AST<br>
-     * - typecheck the AST, execute sanity checks, check a matching brick configuration<br>
+     * - typecheck the AST, execute sanity checks, check a matching brick
+     * configuration<br>
      * - generate Java code<br>
      * - store the code in a token-specific (thus user-specific) directory<br>
-     * - compile the code and generate a jar in the token-specific directory (use a ant script, will be replaced later)<br>
-     * <b>Note:</b> the jar is prepared for upload, but not uploaded from here. After a handshake with the brick (the brick has to tell, that it is ready) the
-     * jar is uploaded to the brick from another thread and then started on the brick
+     * - compile the code and generate a jar in the token-specific directory
+     * (use a ant script, will be replaced later)<br>
+     * <b>Note:</b> the jar is prepared for upload, but not uploaded from here.
+     * After a handshake with the brick (the brick has to tell, that it is
+     * ready) the jar is uploaded to the brick from another thread and then
+     * started on the brick
      *
-     * @param token the credential the end user (at the terminal) and the brick have both agreed to use
-     * @param programName name of the program
-     * @param programText source of the program
-     * @param configurationText the hardware configuration source that describes characteristic data of the robot
+     * @param token
+     *        the credential the end user (at the terminal) and the brick
+     *        have both agreed to use
+     * @param programName
+     *        name of the program
+     * @param programText
+     *        source of the program
+     * @param configurationText
+     *        the hardware configuration source that describes
+     *        characteristic data of the robot
      * @return a message key in case of an error; null otherwise
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2ArduVisitor.generate((ArduConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
-        //NxtCompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
+        // NxtCompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); //
+        // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
         } catch ( Exception e ) {
@@ -75,14 +87,21 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     /**
      * - take the program given<br>
      * - generate the AST<br>
-     * - typecheck the AST, execute sanity checks, check a matching brick configuration<br>
+     * - typecheck the AST, execute sanity checks, check a matching brick
+     * configuration<br>
      * - generate source code in the right language for the robot<br>
      * - and return it
      *
-     * @param token the credential the end user (at the terminal) and the brick have both agreed to use
-     * @param programName name of the program
-     * @param programText source of the program
-     * @param configurationText the hardware configuration source that describes characteristic data of the robot
+     * @param token
+     *        the credential the end user (at the terminal) and the brick
+     *        have both agreed to use
+     * @param programName
+     *        name of the program
+     * @param programText
+     *        source of the program
+     * @param configurationText
+     *        the hardware configuration source that describes
+     *        characteristic data of the robot
      * @return the generated source code; null in case of an error
      */
     @Override
@@ -116,9 +135,16 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
      */
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
-        // TODO: change the compiler based on the os type
-
+        //TODO: add the resources paths in a property file
         String scriptName = "../RobotArdu/resources/arduino-builder";
+        String compilerPath = "/usr/bin/";
+        String os = "linux";
+        if ( SystemUtils.IS_OS_WINDOWS ) {
+            scriptName = "../RobotArdu/resources/arduino-builder.exe";
+            os = "windows";
+            compilerPath = "../RobotArdu/resources/os/" + os + "/tools/avr/bin/";
+        }
+
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token);
         Path base = Paths.get("");
 
@@ -126,10 +152,10 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
                 "-hardware=../RobotArdu/resources/hardware",
-                "-tools=../RobotArdu/resources/hardware/tools-builder",
+                "-tools=../RobotArdu/resources/os/" + os + "/tools-builder",
                 "-libraries=../RobotArdu/resources/libraries",
                 "-fqbn=arduino:avr:uno",
-                "-prefs=compiler.path=/usr/bin/",
+                "-prefs=compiler.path=" + compilerPath,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
                 base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
             });
@@ -159,7 +185,8 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     /**
      * return the brick configuration for given XML configuration text.
      *
-     * @param blocklyXml the configuration XML as String
+     * @param blocklyXml
+     *        the configuration XML as String
      * @return brick configuration
      * @throws Exception
      */

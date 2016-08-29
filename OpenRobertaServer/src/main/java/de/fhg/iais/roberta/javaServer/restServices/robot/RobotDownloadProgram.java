@@ -68,6 +68,10 @@ public class RobotDownloadProgram {
                     fileName = programName + ".rxe";
                     filePath = this.pathToCrosscompilerBaseDir + token;
                     break;
+                case "Arduino":
+                    fileName = programName + ".ino.hex";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/target";
+                    break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
                     return Response.serverError().build();
