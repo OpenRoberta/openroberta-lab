@@ -212,15 +212,15 @@ function _createemptydb {
 }
 
 function _updateLejos {
-  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 OpenRobertaServer/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
   run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="OpenRobertaServer/target/updateResources/EV3Runtime.jar"
-  json='OpenRobertaServer/target/updateResources/json.jar'
-  websocket='OpenRobertaServer/target/updateResources/Java-WebSocket.jar'
+  runtime="RobotEV3/target/updateResources/EV3Runtime.jar"
+  json='RobotEV3/target/updateResources/json.jar'
+  websocket='RobotEV3/target/updateResources/Java-WebSocket.jar'
   run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run

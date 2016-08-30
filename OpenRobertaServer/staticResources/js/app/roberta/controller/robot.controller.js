@@ -33,6 +33,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             ROBOT.setToken(token, function(result) {
                 if (result.rc === "ok") {
                     GUISTATE_C.setRobotToken(token);
+                    GUISTATE_C.setState(result);
                     MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
                     handleFirmwareConflict();
                 } else {
@@ -41,7 +42,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
                     }
                 }
                 UTIL.response(result);
-                GUISTATE_C.setState(result);
             });
         }
     }

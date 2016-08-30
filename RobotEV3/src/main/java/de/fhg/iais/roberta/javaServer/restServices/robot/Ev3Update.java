@@ -39,16 +39,17 @@ public class Ev3Update {
     public Response getRuntime() throws FileNotFoundException {
         AliveData.rememberRobotCall();
         LOG.info("/update/runtime called");
-        File jar = new File(this.robotUpdateResourcesDir + "/OpenRobertaRuntime.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/EV3Runtime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
-        response.header("Content-Disposition", "attachment; filename=OpenRobertaRuntime.jar");
-        response.header("Filename", "OpenRobertaRuntime.jar");
+        response.header("Content-Disposition", "attachment; filename=EV3Runtime.jar");
+        response.header("Filename", "EV3Runtime.jar");
         return response.build();
     }
 
     @GET
     @Path("/shared")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Deprecated
     public Response getShared() throws FileNotFoundException {
         AliveData.rememberRobotCall();
         LOG.info("/update/shared called");
