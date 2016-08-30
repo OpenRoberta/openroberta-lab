@@ -164,6 +164,13 @@ public class RepeatStmtTest {
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml").replaceAll("\\s+", ""));
     }
 
+    @Test
+    public void loopForeverArdu() throws Exception {
+        String a = "BlockAST[project=[[Location[x=9,y=91],(repeat[FOREVER_ARDU,BoolConst[true]])]]]";
+
+        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateTransformerString("/syntax/stmt/loop_forever_ardu.xml").replaceAll("\\s+", ""));
+    }
+
     @Test(expected = DbcException.class)
     public void invalid() {
         RepeatStmt.Mode.get("");
@@ -252,6 +259,11 @@ public class RepeatStmtTest {
     @Test
     public void reverseTransformationForLoopForever() throws Exception {
         Helper.assertTransformationIsOk("/ast/control/repeat_stmt_loopForever.xml");
+    }
+
+    @Test
+    public void reverseTransformationForeverArdu() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/loop_forever_ardu.xml");
     }
 
 }

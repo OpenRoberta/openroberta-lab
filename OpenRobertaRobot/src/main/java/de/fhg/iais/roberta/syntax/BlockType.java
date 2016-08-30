@@ -132,6 +132,7 @@ public enum BlockType {
         Category.STMT,
         RepeatStmt.class,
         BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER,
+        BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER_ARDU,
         BlocklyConstants.CONTROLS_WHILE_UNTIL,
         BlocklyConstants.CONTROLS_FOR,
         BlocklyConstants.ROB_CONTROLS_FOR,
@@ -180,7 +181,7 @@ public enum BlockType {
         BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_RESET,
         BlocklyConstants.SIM_LED_OFF ),
     STOP_ACTION( Category.ACTOR, MotorDriveStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_STOP ),
-    MAIN_TASK( Category.TASK, MainTask.class, BlocklyConstants.ROB_CONTROLS_START ),
+    MAIN_TASK( Category.TASK, MainTask.class, BlocklyConstants.ROB_CONTROLS_START, BlocklyConstants.ROB_CONTROLS_START_ARDU ),
     ACTIVITY_TASK( Category.TASK, ActivityTask.class, BlocklyConstants.ROB_CONTROLS_ACTIVITY ),
     LOCATION( Category.TASK, null ),
     TEXT_INDEX_OF_FUNCT( Category.FUNCTION, IndexOfFunct.class, BlocklyConstants.LISTS_INDEX_OF, BlocklyConstants.ROB_LISTS_INDEX_OF ),
@@ -224,27 +225,27 @@ public enum BlockType {
     private BlockType(Category category, Class<?> astClass, String... values) {
         this.category = category;
         this.astClass = astClass;
-        blocklyNames = values;
+        this.blocklyNames = values;
     }
 
     /**
      * @return category in which {@link BlockType} belongs.
      */
     public Category getCategory() {
-        return category;
+        return this.category;
     }
 
     /**
      * @return the astClass
      */
     public Class<?> getAstClass() {
-        return astClass;
+        return this.astClass;
     }
 
     /**
      * @return the blocklyNames
      */
     public String[] getBlocklyNames() {
-        return blocklyNames;
+        return this.blocklyNames;
     }
 }

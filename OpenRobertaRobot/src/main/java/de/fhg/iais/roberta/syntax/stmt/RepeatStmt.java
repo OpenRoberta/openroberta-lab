@@ -200,6 +200,9 @@ public class RepeatStmt<V> extends Stmt<V> {
                     exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class));
                 }
                 return helper.extractRepeatStatement(block, exprr, modee);
+            case BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER_ARDU:
+                exprr = BoolConst.make(true, helper.extractBlockProperties(block), helper.extractComment(block));
+                return helper.extractRepeatStatement(block, exprr, RepeatStmt.Mode.FOREVER_ARDU.toString());
             default:
                 exprr = BoolConst.make(true, helper.extractBlockProperties(block), helper.extractComment(block));
                 return helper.extractRepeatStatement(block, exprr, RepeatStmt.Mode.FOREVER.toString());
@@ -242,10 +245,8 @@ public class RepeatStmt<V> extends Stmt<V> {
 
             case FOR_EACH:
                 Binary<?> exprBinary = (Binary<?>) getExpr();
-                JaxbTransformerHelper.addField(
-                    jaxbDestination,
-                    BlocklyConstants.TYPE,
-                    ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
+                JaxbTransformerHelper
+                    .addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, exprBinary.getRight());
                 break;
@@ -264,7 +265,7 @@ public class RepeatStmt<V> extends Stmt<V> {
      * @author kcvejoski
      */
     public static enum Mode {
-        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER();
+        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER(), FOREVER_ARDU();
 
         private final String[] values;
 

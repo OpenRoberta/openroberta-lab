@@ -118,6 +118,7 @@ public final class BlocklyConstants {
     public static final String ROB_CONTROLS_IF = "robControls_if";
     public static final String ROB_CONTROLS_IF_ELSE = "robControls_ifElse";
     public static final String ROB_CONTROLS_LOOP_FOREVER = "robControls_loopForever";
+    public static final String ROB_CONTROLS_LOOP_FOREVER_ARDU = "robControls_loopForever_ardu";
     public static final String CONTROLS_WHILE_UNTIL = "controls_whileUntil";
     public static final String CONTROLS_FOR = "controls_for";
     public static final String ROB_CONTROLS_FOR = "robControls_for";
@@ -178,6 +179,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_MOTOR_DIFF_STOP = "robActions_motorDiff_stop";
 
     public static final String ROB_CONTROLS_START = "robControls_start";
+    public static final String ROB_CONTROLS_START_ARDU = "robControls_start_ardu";
     public static final String ROB_CONTROLS_ACTIVITY = "robControls_activity";
 
     public static final String LISTS_CREATE_EMPTY = "lists_create_empty";
@@ -243,4 +245,5 @@ public final class BlocklyConstants {
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
     public static final String SIM_MOTOR_STOP = "sim_motor_stop";
+
 }
