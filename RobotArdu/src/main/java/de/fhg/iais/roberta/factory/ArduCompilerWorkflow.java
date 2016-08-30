@@ -116,8 +116,8 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
         Assert.isTrue(token != null && programName != null && sourceCode != null);
-        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/target/");
+        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src/" + programName + ext);
+        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target/");
         Files.createDirectories(path);
         ArduCompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
         FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
@@ -145,7 +145,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
             compilerPath = "C:/avr/bin/";
         }
 
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token);
+        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
         try {

@@ -70,7 +70,7 @@ public class RobotDownloadProgram {
                     break;
                 case "Arduino":
                     fileName = programName + ".ino.hex";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/target";
+                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());
