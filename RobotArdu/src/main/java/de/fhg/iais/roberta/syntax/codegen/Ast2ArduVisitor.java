@@ -593,7 +593,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        sb.append("one.lcdClear();");
+        sb.append("rob.lcdClear();");
         return null;
     }
 
@@ -732,17 +732,20 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
+        String sign = "";
         if ( isDuration ) {
-            methodName = "one.moveTime(";
+            methodName = "rob.moveTime(";
         } else {
             methodName = "one.move(";
         }
         sb.append(methodName);
         if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
-            sb.append("-");
+            sign = "-";
         }
+        sb.append(sign);
         driveAction.getParam().getSpeed().visit(this);
         sb.append(", ");
+        sb.append(sign);
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
 
@@ -773,7 +776,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
 
         if ( isDuration ) {
-            methodName = "one.moveTime(";
+            methodName = "rob.moveTime(";
         } else {
             methodName = "one.move(";
         }
@@ -1572,6 +1575,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append("#include <BnrOneA.h> \n");
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
         sb.append("#include <BnrRescue.h> \n");
+        //additional Roberta functions:
+        sb.append("#include <RobertaFunctions.h> \n");
         // SPI communication library required by BnrOne.cpp"
         sb.append("#include <SPI.h> \n");
         // required by BnrRescue.cpp (for the additional sonar kit):
@@ -1579,6 +1584,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         sb.append("BnrOneA one; \n");
         sb.append("BnrRescue brm; \n");
+        sb.append("RobertaFunctions rob; \n");
         if ( timeSensorUsed ) {
             sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
@@ -1635,10 +1641,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 //case INFRARED_LINE:
                 //break;
                 case GYRO:
-                    nlIndent();
+                    /*nlIndent();
                     sb.append("Wire.begin();");
+                    nlIndent();
                     sb.append("one.spiConnect(SSPIN);");
-                    break;
+                    break;*/
                 default:
                     break;
             }
