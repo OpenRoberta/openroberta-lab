@@ -50,14 +50,23 @@ public class Ev3Update {
     @Path("/shared")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Deprecated
+    /**
+     * After restructuring our projects we do not have any more the OpenRobertaShared library
+     * 
+     * @return
+     * @throws FileNotFoundException
+     */
     public Response getShared() throws FileNotFoundException {
+        // old versions of the menu will require the OpenRobertaShared.jar
+        // since we do not have any more we pass the EV3Runtime twice
         AliveData.rememberRobotCall();
         LOG.info("/update/shared called");
-        File jar = new File(this.robotUpdateResourcesDir + "/OpenRobertaShared.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/EV3Runtime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
-        response.header("Content-Disposition", "attachment; filename=OpenRobertaShared.jar");
-        response.header("Filename", "OpenRobertaShared.jar");
+        response.header("Content-Disposition", "attachment; filename=EV3Runtime.jar");
+        response.header("Filename", "EV3Runtime.jar");
         return response.build();
+
     }
 
     @GET
