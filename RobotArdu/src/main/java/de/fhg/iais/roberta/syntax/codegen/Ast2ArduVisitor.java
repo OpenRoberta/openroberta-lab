@@ -945,7 +945,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        sb.append("distances[" + ultrasonicSensor.getPort().getPortNumber() + "]");
+        Integer port = Integer.parseInt(ultrasonicSensor.getPort().getPortNumber()) - 1;
+        sb.append("rob.ultrasonicDistance(" + port.toString() + ")");
         return null;
     }
 
@@ -1570,7 +1571,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append("#define WHEELDIAMETER " + brickConfiguration.getWheelDiameterCM() + "\n");
         sb.append("#define TRACKWIDTH " + brickConfiguration.getTrackWidthCM() + "\n");
         sb.append("#include <math.h> \n");
-        sb.append("#include<CountUpDownTimer.h> \n");
+        sb.append("#include <CountUpDownTimer.h> \n");
         // Bot'n Roll ONE A library:
         sb.append("#include <BnrOneA.h> \n");
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
@@ -1588,11 +1589,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         if ( timeSensorUsed ) {
             sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
-        sb.append("#define SSPIN  2 \n ");
+        sb.append("#define SSPIN  2 \n");
         sb.append("#define MODULE_ADDRESS 0x2C \n");
         sb.append("byte rgbL[3]={0,0,0}; \n");
         sb.append("byte rgbR[3]={0,0,0}; \n");
-        sb.append("byte distances[3]={0,0,0}; \n");
     }
 
     private void generatePrefix(boolean withWrapping) {
@@ -1666,9 +1666,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             nlIndent();
             sb.append("T.Timer();");
         }
-        nlIndent();
-        //TODO: hide it
-        sb.append("brm.readSonars(&distances[0],&distances[1],&distances[2]);");
+        //nlIndent();
+        //sb.append("brm.readRgbL(&rgbL[0],&rgbL[1],&rgbL[2]);");
+        //nlIndent();
+        //sb.append("brm.readRgbR(&rgbR[0],&rgbR[1],&rgbR[2]);");
     }
 
 }
