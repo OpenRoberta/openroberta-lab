@@ -37,7 +37,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             variableDeclaration : true,
             robControls : true
         });
-        blocklyWorkspace.device = GUISTATE_C.getRobot();
+        blocklyWorkspace.setDevice(GUISTATE_C.getRobot());
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
     }
@@ -505,11 +505,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     exports.reloadView = reloadView;
 
     function resetView() {
-        blocklyWorkspace.device = GUISTATE_C.getRobot();
+        blocklyWorkspace.setDevice(GUISTATE_C.getRobot());
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
-        blocklyWorkspace.device = GUISTATE_C.getRobot();
     }
     exports.resetView = resetView;
 

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-08-02 11:07:15.158191",
+		"lastupdated": "2016-08-30 13:42:19.671649",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -514,6 +514,7 @@
 	"SENSOR_INFRARED": "infrared sensor",
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
+	"SENSOR_COMPASS": "compass",
 	"SENSOR_SOUND": "sound sensor",
 	"SENSOR_LIGHT": "light sensor",
 	"SENSOR_BATTERY": "voltage in mV",
@@ -541,6 +542,7 @@
 	"START_PROGRAM_DEBUG": "show sensor data",
 	"MODE": "mode",
 	"MODE_DISTANCE": "distance",
+	"MODE_OBSTACLE": "obstacle",
 	"MODE_SOUND": "sound",
 	"MODE_PRESENCE": "presence",
 	"MODE_STATE": "state",

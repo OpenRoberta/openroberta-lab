@@ -154,7 +154,8 @@ function handleServerErrors() {
     })
     $('#show-message :button').hide();
     $('#show-message').on('hidden.bs.modal', function(e) {
-        $("#show-message").modal("show");
+       // $("#show-message").modal("show");
+        guiStateController.setPing(true);
     });
     $("#show-message").modal("show");
 }

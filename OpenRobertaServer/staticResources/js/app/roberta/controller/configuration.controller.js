@@ -42,7 +42,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             variableDeclaration : true,
             robControls : true
         });
-        bricklyWorkspace.device = guiStateController.getRobot();
+        bricklyWorkspace.setDevice(guiStateController.getRobot());
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
         bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
@@ -275,7 +275,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     exports.reloadView = reloadView;
 
     function resetView() {
-        bricklyWorkspace.device = guiStateController.getRobot();
+        bricklyWorkspace.setDevice(guiStateController.getRobot());
         initConfigurationEnvironment();
         var toolbox = guiStateController.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
