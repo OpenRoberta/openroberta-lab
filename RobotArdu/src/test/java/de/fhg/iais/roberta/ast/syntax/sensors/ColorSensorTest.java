@@ -8,7 +8,8 @@ public class ColorSensorTest {
 
     @Test
     public void setColor() throws Exception {
-        final String a = "\nSensorColor(IN_3,\"COLOR\")SensorColor(IN_1,\"LIGHT\")SensorColor(IN_2,)SensorColor(IN_4,\"AMBIENTLIGHT\")";
+        final String a =
+            "\n\"COLOR\")rob.colorSensorLight(colors,1){rob.colorSensorRGB(colors,1)[0],rob.colorSensorRGB(colors,1)[1],rob.colorSensorRGB(colors,1)[2]}))";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setColor.xml");
     }
