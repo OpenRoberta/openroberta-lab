@@ -649,7 +649,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
 
         sb.append("one.lcd");
-        showTextAction.getX().visit(this);
+        showTextAction.getY().visit(this);
         sb.append("(");
         showTextAction.getMsg().visit(this);
         sb.append(");");
@@ -945,7 +945,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        sb.append("SensorUS( IN_" + ultrasonicSensor.getPort().getPortNumber() + " )");
+        sb.append("distances[" + ultrasonicSensor.getPort().getPortNumber() + "]");
         return null;
     }
 
@@ -1588,7 +1588,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         if ( timeSensorUsed ) {
             sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
-        sb.append("#define SSPIN  2 \n \n");
+        sb.append("#define SSPIN  2 \n ");
+        sb.append("#define MODULE_ADDRESS 0x2C \n");
+        sb.append("byte rgbL[3]={0,0,0}; \n");
+        sb.append("byte rgbR[3]={0,0,0}; \n");
+        sb.append("byte distances[3]={0,0,0}; \n");
     }
 
     private void generatePrefix(boolean withWrapping) {
@@ -1606,6 +1610,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         nlIndent();
         // start the communication module:
         sb.append("one.spiConnect(SSPIN);");
+        nlIndent();
+        sb.append("brm.i2cConnect(MODULE_ADDRESS);");
+        nlIndent();
+        sb.append("brm.setModuleAddress(0x2C);");
         nlIndent();
         // stop motors:
         sb.append("one.stop();");
@@ -1658,6 +1666,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             nlIndent();
             sb.append("T.Timer();");
         }
+        nlIndent();
+        //TODO: hide it
+        sb.append("brm.readSonars(&distances[0],&distances[1],&distances[2]);");
     }
 
 }
