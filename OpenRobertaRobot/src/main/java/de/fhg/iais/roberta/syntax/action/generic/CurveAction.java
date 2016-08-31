@@ -89,7 +89,7 @@ public class CurveAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "DriveAction [" + this.direction + ", " + paramLeft + paramRight + "]";
+        return "CurveAction [" + this.direction + ", " + paramLeft + paramRight + "]";
     }
 
     @Override
