@@ -8,14 +8,14 @@ public class MotorTachoTest {
 
     @Test
     public void setMotorTacho() throws Exception {
-        final String a = "\nNumberOfRotations(OUT_A)" + "MotorTachoCount(OUT_D)";
+        final String a = "\n";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setEncoder.xml");
     }
 
     @Test
     public void resetMotorTacho() throws Exception {
-        final String a = "\nResetTachoCount(OUT_A);";
+        final String a = "\n";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_resetEncoder.xml");
     }

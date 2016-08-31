@@ -35,7 +35,7 @@ public class ListsCreateWithTest {
 
     @Test
     public void Test4() throws Exception {
-        String a = "{NULL,INPUT_REDCOLOR,NULL}";
+        String a = "{(String)\"NONE\",(String)\"RED\",(String)\"BROWN\"}";
 
         Helper.assertCodeIsOk(a, "/syntax/lists/lists_create_with4.xml");
     }

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class MathModuloTest {
     @Test
     public void Test() throws Exception {
-        String a = "floatvariablenName=1%0;";
+        String a = "doublevariablenName=1%0;";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_modulo.xml");
     }
