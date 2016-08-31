@@ -847,14 +847,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: add block and test
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        String port = infraredSensor.getPort().getPortNumber();
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            //TODO: that should be called not distance, but obstacle avoidance
-            case DISTANCE:
-                //returns 0-3 (no obstacle, left, right, both)
-                sb.append("one.obstacleSensors()");
+            case OBSTACLE:
+                sb.append("rob.infraredSensorObstacle(" + port + ")");
                 break;
             case SEEK:
                 //returns value 0 or 1
@@ -866,7 +864,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: hide timer
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
@@ -884,8 +881,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        sb.append("Sensor( IN_" + touchSensor.getPort().getPortNumber());
-        sb.append(" )");
         return null;
     }
 
