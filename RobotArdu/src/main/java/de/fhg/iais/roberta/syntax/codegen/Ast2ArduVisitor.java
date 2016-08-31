@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -570,13 +569,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement. Perhaps- remove, since it is quite complicated for Arduino
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         return null;
     }
 
-    //TODO: add block and test
+    //TODO: fix block and test
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         switch ( (BlinkMode) lightAction.getBlinkMode() ) {
@@ -939,68 +937,18 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        /*this.sb.append("BlocklyMethods.listsGetSubList( ");
-        getSubFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        final IndexLocation where1 = IndexLocation.get(getSubFunct.getStrParam().get(0));
-        this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
-            this.sb.append(", ");
-            getSubFunct.getParam().get(1).visit(this);
-        }
-        this.sb.append(", ");
-        final IndexLocation where2 = IndexLocation.get(getSubFunct.getStrParam().get(1));
-        this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
-            this.sb.append(", ");
-            if ( getSubFunct.getParam().size() == 3 ) {
-                getSubFunct.getParam().get(2).visit(this);
-            } else {
-                getSubFunct.getParam().get(1).visit(this);
-            }
-        }
-        this.sb.append(")");*/
         return null;
 
     }
 
+    //TODO: implement
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         //final BlocklyType typeArr = indexOfFunct.getParam().get(0).getVarType();
-        String methodName = null;
-        if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
-            switch ( indexOfFunct.getParam().get(0).getVarType() ) {
-                case ARRAY_NUMBER:
-                    methodName = "ArrFindLastNum( ";
-                    break;
-                case ARRAY_STRING:
-                    methodName = "ArrFindLastStr( ";
-                    break;
-                case ARRAY_BOOLEAN:
-                    methodName = "ArrFindLastBool( ";
-                    break;
-            }
-        } else {
-            switch ( indexOfFunct.getParam().get(0).getVarType() ) {
-                case ARRAY_NUMBER:
-                    methodName = "ArrFindFirstNum( ";
-                    break;
-                case ARRAY_STRING:
-                    methodName = "ArrFindFirstStr( ";
-                    break;
-                case ARRAY_BOOLEAN:
-                    methodName = "ArrFindFirstBool( ";
-                    break;
-            }
-        }
-        sb.append(methodName);
-        indexOfFunct.getParam().get(0).visit(this);
-        sb.append(", ");
-        indexOfFunct.getParam().get(1).visit(this);
-        sb.append(" )");
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         String methodName = "ArrayLen( ";
@@ -1010,15 +958,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
         sb.append(" )");
-        //this.sb.append(methodName);
-        //lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        //this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        //this.sb.append("");
         return null;
     }
 
@@ -1032,11 +976,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        /*this.sb.append("BlocklyMethods.createListWithItem(");
-        listRepeat.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        listRepeat.getParam().get(1).visit(this);
-        this.sb.append(")");*/
         return null;
     }
 
@@ -1061,6 +1000,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
         sb.append("Constrain( ");
@@ -1073,6 +1013,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: implement math functions
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
@@ -1122,6 +1063,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
@@ -1164,12 +1106,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
         sb.append("RandomFloat()");
         return null;
     }
 
+    //TODO: implement
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         sb.append("RandomIntegerInRange( ");
@@ -1184,79 +1128,72 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                sb.append("sqrt( ");
+                sb.append("sqrt(");
                 break;
             case ABS:
-                sb.append("abs( ");
+                sb.append("abs(");
                 break;
-            //Taylor Series converge only when value is less than one. Larger values are calculated
-            //using a table.
             case LN:
-                sb.append("MathLn( ");
+                sb.append("log(");
                 break;
             case LOG10:
-                sb.append("MathLog( ");
+                sb.append("log10(");
                 break;
             case EXP:
-                sb.append("MathPow( E, ");
+                sb.append("exp(");
                 break;
             case POW10:
-                sb.append("MathPow( 10, ");
+                sb.append("pow(10.0, ");
                 break;
-            //the 3 functions below accept degrees
             case SIN:
-                sb.append("MathSin( ");
+                sb.append("sin(PI / 180.0 * ");
                 break;
             case COS:
-                sb.append("MathCos( ");
+                sb.append("cos(PI / 180.0 * ");
                 break;
             case TAN:
-                sb.append("MathTan( ");
+                sb.append("tan(PI / 180.0 * ");
                 break;
             case ASIN:
-                sb.append("MathAsin( ");
+                sb.append("180.0 / PI * asin(");
                 break;
-            //Taylor Series converge only when value is less than one. Larger values are calculated
-            //using a table.
             case ATAN:
-                sb.append("MathAtan( ");
+                sb.append("180.0 / PI * atan(");
                 break;
             case ACOS:
-                sb.append("MathAcos( ");
+                sb.append("180.0 / PI * acos(");
                 break;
             case ROUND:
-                sb.append("MathRound( ");
+                sb.append("round(");
                 break;
             case ROUNDUP:
-                sb.append("MathRoundUp( ");
+                sb.append("ceil(");
                 break;
             //check why there are double brackets
             case ROUNDDOWN:
-                sb.append("MathFloor( ");
+                sb.append("floor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        sb.append(" )");
+        sb.append(")");
 
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        sb.append("MathPow( ");
+        sb.append("pow(");
         mathPowerFunct.getParam().get(0).visit(this);
         sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
-        sb.append(" )");
+        sb.append(")");
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        //smthToString(textJoinFunct.getParam());
-        //this.sb.append(")");
         return null;
     }
 
@@ -1287,9 +1224,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        sb.append("if ( ");
+        sb.append("if (");
         methodIfReturn.getCondition().visit(this);
-        sb.append(" ) ");
+        sb.append(") ");
         sb.append("return ");
         methodIfReturn.getReturnValue().visit(this);
         return null;
@@ -1304,68 +1241,30 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        sb.append(methodCall.getMethodName() + "( ");
+        sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
-        sb.append(" )");
+        sb.append(")");
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             sb.append(";");
         }
         return null;
     }
 
-    // TODO: fix calling
-    // the function is in hal.h
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        sb.append("BluetoothGetNumber( ");
-        //TODO: add these block options:
-        //this.sb.append("BluetoothGetString( ");
-        //this.sb.append("BluetoothGetBoolean( ");
-        // the function accepts inbox address (int)
-        bluetoothReadAction.getConnection().visit(this);
-        sb.append(" )");
         return null;
     }
 
-    // not needed for Ardu. Use a block that calls BTCheck(int conn) function instead
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        sb.append("BTCheck(");
-
-        /*this.sb.append("hal.establishConnectionTo(");
-        if ( bluetoothConnectAction.get_address().getKind() != BlockType.STRING_CONST ) {
-            this.sb.append("String.valueOf(");
-            bluetoothConnectAction.get_address().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothConnectAction.get_address().visit(this);
-        }*/
-        sb.append(")");
         return null;
     }
 
-    // the function is built-in
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        sb.append("SendRemoteNumber(");
-        //TODO: add these block options: output variable (string, boolean or number. Need to create an enumeration), connection (int, 1-3 for master, always
-        // 0 for slave), outbox address (int)
-        //this.sb.append("SendRemoteString(");
-        //this.sb.append("SendRemoteBool(");
-        // the function accepts the following: inbox address
-
-        //if ( bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
-        //    String.valueOf(bluetoothSendAction.getMsg().visit(this));
-        //} else {
-        //    bluetoothSendAction.getMsg().visit(this);
-        //}
-        //this.sb.append(", ");
-        //bluetoothSendAction.getConnection().visit(this);
-        sb.append(");");
         return null;
     }
 
-    //TODO: add SysCommBTOn
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         return null;
@@ -1428,17 +1327,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             // parentheses are omitted
             expr.visit(this);
         } else {
-            sb.append("(" + whitespace());
+            sb.append("(");
             expr.visit(this);
-            sb.append(whitespace() + ")");
+            sb.append(")");
         }
     }
 
     private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("( ");
+            sb.append("(");
             unary.getExpr().visit(this);
-            sb.append(" )");
+            sb.append(")");
         } else {
             unary.getExpr().visit(this);
         }
@@ -1474,13 +1373,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        sb.append(stmtType + whitespace() + "(" + whitespace());
+        sb.append(stmtType + whitespace() + "(");
         expr.visit(this);
-        sb.append(whitespace() + ")" + whitespace() + "{");
+        sb.append(")" + whitespace() + "{");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
+        sb.append(stmtType + whitespace() + "(" + "float" + whitespace());
         final ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
         sb.append(whitespace() + "=" + whitespace());
@@ -1495,7 +1394,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append(whitespace());
         sb.append("+=" + whitespace());
         expressions.get().get(3).visit(this);
-        sb.append(whitespace() + ")" + whitespace() + "{");
+        sb.append(")" + whitespace() + "{");
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
@@ -1532,7 +1431,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         sb.append("#define SSPIN  2 \n");
         sb.append("#define MODULE_ADDRESS 0x2C \n");
         sb.append("byte colorsLeft[3]={0,0,0}; \n");
-        sb.append("byte colorsRight[3]={0,0,0}; \n");
+        sb.append("byte colorsRight[3]={0,0,0}; \n \n");
     }
 
     private void generatePrefix(boolean withWrapping) {
