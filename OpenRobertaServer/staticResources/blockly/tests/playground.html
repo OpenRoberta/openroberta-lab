@@ -194,7 +194,7 @@ function spaghetti(n) {
 
 function toggleDevice() {
   if (device ==='ev3')
-      device = 'nxt';
+      device = 'ardu';
       else
           device = 'ev3';
   workspace.setDevice(device);  
@@ -345,7 +345,7 @@ h1 {
                     </block>
                 </value>
             </block>
-            <block type='robActions_motorDiff_steer'>
+            <block type='robActions_motorDiff_curve'>
                 <value name='POWER_LEFT'>
                     <block type='math_number'>
                         <field name='NUM'>20</field>
@@ -357,7 +357,7 @@ h1 {
                     </block>
                 </value>
             </block>
-            <block type='robActions_motorDiff_steer_for'>
+            <block type='robActions_motorDiff_curve_for'>
                 <value name='POWER_LEFT'>
                     <block type='math_number'>
                         <field name='NUM'>20</field>
@@ -447,13 +447,10 @@ h1 {
         <block type='sim_touch_isPressed'>
         </block>
         <block type='robSensors_ultrasonic_getSample'>
-            <field name='SENSORPORT'>4</field> 
-        </block>
+         </block>
         <block type='robSensors_colour_getSample'>
-            <field name='SENSORPORT'>3</field> 
-        </block>
+         </block>
         <block type='robSensors_infrared_getSample'>
-            <field name='SENSORPORT'>4</field> 
         </block>
         <block type='robSensors_encoder_reset'>
         </block>
@@ -466,6 +463,8 @@ h1 {
         </block>
         <block type='robSensors_gyro_getSample'>
             <field name='SENSORPORT'>2</field> 
+        </block>
+        <block type='robSensors_compass_getSample'>
         </block>
         <block type='robSensors_timer_getSample'>
         </block>
