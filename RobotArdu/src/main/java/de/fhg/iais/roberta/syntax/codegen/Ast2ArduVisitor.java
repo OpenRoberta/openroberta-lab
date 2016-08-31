@@ -879,6 +879,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        this.sb.append("rob.readBearing()");
         return null;
     }
 
@@ -1486,7 +1487,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("void setup() \n");
         this.sb.append("{");
         nlIndent();
-        //set baud rate to 57600bps for printing values at serial monitor:
+        this.sb.append("Wire.begin();");
+        nlIndent();
+        //set baud rate to 9600 for printing values at serial monitor:
         this.sb.append("Serial.begin(9600);");
         nlIndent();
         // start the communication module:

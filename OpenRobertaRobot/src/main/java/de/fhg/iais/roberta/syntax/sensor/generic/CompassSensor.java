@@ -1,11 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,13 +21,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class CompassSensor<V> extends Sensor<V> {
-    private final ICompassSensorMode mode;
-    private final int compass;
 
-    private CompassSensor(ICompassSensorMode mode, int compass, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private CompassSensor(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.COMPASS_SENSING, properties, comment);
-        this.compass = compass;
-        this.mode = mode;
         setReadOnly();
     }
 
@@ -45,8 +36,8 @@ public class CompassSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link CompassSensor}
      */
-    public static <V> CompassSensor<V> make(ICompassSensorMode mode, int compass, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new CompassSensor<V>(mode, compass, properties, comment);
+    public static <V> CompassSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new CompassSensor<V>(properties, comment);
     }
 
     /**
@@ -55,15 +46,7 @@ public class CompassSensor<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return "CompassSensor [compassValue=" + this.compass + "]";
-    }
-
-    public ICompassSensorMode getMode() {
-        return this.mode;
-    }
-
-    public int getCompass() {
-        return this.compass;
+        return "CompassSensor []";
     }
 
     @Override
@@ -79,18 +62,14 @@ public class CompassSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 0);
-        return CompassSensor.make(null, (Integer) null, helper.extractBlockProperties(block), helper.extractComment(block));
+
+        return CompassSensor.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = String.valueOf(getCompass());
-        JaxbTransformerHelper.addField(jaxbDestination, null, fieldValue);
-
         return jaxbDestination;
     }
 }
