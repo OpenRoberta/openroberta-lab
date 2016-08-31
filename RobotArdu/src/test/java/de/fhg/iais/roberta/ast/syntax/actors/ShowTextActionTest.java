@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class ShowTextActionTest {
     @Test
     public void clearDisplay() throws Exception {
-        final String a = "\none.lcd0(\"Hallo\");";
+        final String a = "\none.lcd1(\"Hallo\");";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_ShowText.xml");
 
