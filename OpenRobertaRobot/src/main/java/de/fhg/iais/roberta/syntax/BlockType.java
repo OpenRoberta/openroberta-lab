@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
@@ -152,6 +153,7 @@ public enum BlockType {
     WAIT_TIME( Category.STMT, WaitTimeStmt.class, BlocklyConstants.ROB_CONTROLS_WAIT_TIME ),
     TURN_ACTION( Category.ACTOR, TurnAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN_FOR ),
     DRIVE_ACTION( Category.ACTOR, DriveAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR ),
+    CURVE_ACTION( Category.ACTOR, CurveAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE_FOR ),
     SHOW_TEXT_ACTION( Category.ACTOR, ShowTextAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_TEXT ),
     SHOW_PICTURE_ACTION( Category.ACTOR, ShowPictureAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_PICTURE ),
     TONE_ACTION( Category.ACTOR, ToneAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_TONE ),
@@ -225,27 +227,27 @@ public enum BlockType {
     private BlockType(Category category, Class<?> astClass, String... values) {
         this.category = category;
         this.astClass = astClass;
-        this.blocklyNames = values;
+        blocklyNames = values;
     }
 
     /**
      * @return category in which {@link BlockType} belongs.
      */
     public Category getCategory() {
-        return this.category;
+        return category;
     }
 
     /**
      * @return the astClass
      */
     public Class<?> getAstClass() {
-        return this.astClass;
+        return astClass;
     }
 
     /**
      * @return the blocklyNames
      */
     public String[] getBlocklyNames() {
-        return this.blocklyNames;
+        return blocklyNames;
     }
 }

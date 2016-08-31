@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
@@ -718,6 +719,39 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             sb.append(", ");
             //here will be duration in seconds
             driveAction.getParam().getDuration().getValue().visit(this);
+        }
+        sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
+        final boolean reverse =
+            brickConfiguration.getActorOnPort(brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || brickConfiguration.getActorOnPort(brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        final boolean localReverse = curveAction.getDirection() == DriveDirection.BACKWARD;
+        String methodName;
+        String sign = "";
+        if ( isDuration ) {
+            methodName = "rob.moveTime(";
+        } else {
+            methodName = "one.move(";
+        }
+        sb.append(methodName);
+        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
+            sign = "-";
+        }
+        sb.append(sign);
+        curveAction.getParamLeft().getSpeed().visit(this);
+        sb.append(", ");
+        sb.append(sign);
+        curveAction.getParamRight().getSpeed().visit(this);
+        if ( isDuration ) {
+
+            sb.append(", ");
+            //here will be duration in seconds
+            curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
         sb.append(");");
         return null;

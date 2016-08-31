@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -74,6 +75,12 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> driveAction) {
         // TODO Auto-generated method stub
         return null;
     }
