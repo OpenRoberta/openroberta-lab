@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
@@ -68,7 +69,7 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     protected void checkSensorPort(BaseSensor<Void> sensor) {
-        Sensor usedSensor = brickConfiguration.getSensorOnPort(sensor.getPort());
+        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind() == BlockType.INFRARED_SENSING ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
@@ -128,6 +129,12 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }

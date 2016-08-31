@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -45,12 +46,12 @@ public class UsedTimerVisitor extends CheckVisitor {
     }
 
     public boolean isUsed() {
-        return isUsed;
+        return this.isUsed;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        isUsed = true;
+        this.isUsed = true;
         return null;
     }
 
@@ -165,6 +166,12 @@ public class UsedTimerVisitor extends CheckVisitor {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }

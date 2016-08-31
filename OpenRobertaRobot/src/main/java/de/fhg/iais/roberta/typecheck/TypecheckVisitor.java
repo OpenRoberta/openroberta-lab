@@ -74,6 +74,7 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -152,15 +153,15 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @return the number of <b>errors</b> detected during this type check visit
      */
     public int getErrorCount() {
-        if ( infos == null ) {
-            infos = InfoCollector.collectInfos(phrase);
-            for ( NepoInfo info : infos ) {
+        if ( this.infos == null ) {
+            this.infos = InfoCollector.collectInfos(this.phrase);
+            for ( NepoInfo info : this.infos ) {
                 if ( info.getSeverity() == Severity.ERROR ) {
-                    errorCount++;
+                    this.errorCount++;
                 }
             }
         }
-        return errorCount;
+        return this.errorCount;
     }
 
     /**
@@ -170,7 +171,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      */
     public List<NepoInfo> getInfos() {
         getErrorCount(); // for the side effect
-        return infos;
+        return this.infos;
     }
 
     /**
@@ -179,7 +180,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @return the resulting type.May be <code>null</code> if type errors occurred
      */
     public BlocklyType getResultType() {
-        return resultType;
+        return this.resultType;
     }
 
     @Override
@@ -453,10 +454,10 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     private void checkFor(Phrase<BlocklyType> phrase, boolean condition, String message) {
         if ( !condition ) {
-            if ( errorCount >= ERROR_LIMIT_FOR_TYPECHECK ) {
-                throw new RuntimeException("aborting typecheck. More than " + ERROR_LIMIT_FOR_TYPECHECK + " found.");
+            if ( this.errorCount >= this.ERROR_LIMIT_FOR_TYPECHECK ) {
+                throw new RuntimeException("aborting typecheck. More than " + this.ERROR_LIMIT_FOR_TYPECHECK + " found.");
             } else {
-                errorCount++;
+                this.errorCount++;
                 NepoInfo error = NepoInfo.error(message);
                 phrase.addInfo(error);
             }
@@ -693,6 +694,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitCurveAction(CurveAction<BlocklyType> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitCompassSensor(CompassSensor<BlocklyType> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -82,6 +82,7 @@ public enum BlockType {
     LIGHT_SENSING( Category.SENSOR, LightSensor.class, BlocklyConstants.ROB_SENSOR_LIGHT_GET_SAMPLE, BlocklyConstants.SIM_LIGHT_GET_SAMPLE ),
     SOUND_SENSING( Category.SENSOR, SoundSensor.class, BlocklyConstants.ROB_SENSOR_SOUND_GET_SAMPLE, BlocklyConstants.SIM_SOUND_GET_SAMPLE ),
     TOUCH_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED ),
+    COMPASS_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_COMPASS_GET_SAMPLE ),
     ULTRASONIC_SENSING(
         Category.SENSOR,
         UltrasonicSensor.class,
@@ -227,27 +228,27 @@ public enum BlockType {
     private BlockType(Category category, Class<?> astClass, String... values) {
         this.category = category;
         this.astClass = astClass;
-        blocklyNames = values;
+        this.blocklyNames = values;
     }
 
     /**
      * @return category in which {@link BlockType} belongs.
      */
     public Category getCategory() {
-        return category;
+        return this.category;
     }
 
     /**
      * @return the astClass
      */
     public Class<?> getAstClass() {
-        return astClass;
+        return this.astClass;
     }
 
     /**
      * @return the blocklyNames
      */
     public String[] getBlocklyNames() {
-        return blocklyNames;
+        return this.blocklyNames;
     }
 }

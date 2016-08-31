@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -93,14 +94,14 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
     @Override
     public Void visitVar(Var<Void> var) {
         String varName = var.getValue();
-        allVars.add(varName);
+        this.allVars.add(varName);
         return null;
     }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
         String numName = numConst.getValue();
-        allVars.add(numName);
+        this.allVars.add(numName);
         return null;
     }
 
@@ -334,6 +335,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }

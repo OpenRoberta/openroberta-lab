@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -53,7 +54,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
     }
 
     private Set<UsedSensor> getUsedSensors() {
-        return usedSensors;
+        return this.usedSensors;
     }
 
     @Override
@@ -106,7 +107,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        usedSensors.add(new UsedSensor(colorSensor.getPort(), SensorType.COLOR, colorSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(colorSensor.getPort(), SensorType.COLOR, colorSensor.getMode()));
         return null;
     }
 
@@ -117,26 +118,26 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        usedSensors.add(new UsedSensor(infraredSensor.getPort(), SensorType.INFRARED, infraredSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SensorType.INFRARED, infraredSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         UsedSensor usedSensor = new UsedSensor(touchSensor.getPort(), SensorType.TOUCH, touchSensor.getMode());
-        usedSensors.add(usedSensor);
+        this.usedSensors.add(usedSensor);
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), SensorType.ULTRASONIC, ultrasonicSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), SensorType.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
@@ -160,6 +161,12 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }

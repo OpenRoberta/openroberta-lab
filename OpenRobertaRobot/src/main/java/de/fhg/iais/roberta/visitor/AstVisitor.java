@@ -66,6 +66,7 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -688,4 +689,6 @@ public interface AstVisitor<V> {
     public V visitStmtExpr(StmtExpr<V> stmtExpr);
 
     public V visitShadowExpr(ShadowExpr<V> shadowExpr);
+
+    public V visitCompassSensor(CompassSensor<V> compassSensor);
 }

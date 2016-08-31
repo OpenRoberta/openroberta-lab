@@ -96,6 +96,7 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -267,7 +268,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      * @return indentation value of the visitor.
      */
     public int getIndentation() {
-        return indentation;
+        return this.indentation;
     }
 
     /**
@@ -276,24 +277,24 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      * @return (current state of) the string builder
      */
     public StringBuilder getSb() {
-        return sb;
+        return this.sb;
     }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
         if ( isInteger(numConst.getValue()) ) {
-            sb.append(numConst.getValue());
+            this.sb.append(numConst.getValue());
         } else {
-            sb.append("((float) ");
-            sb.append(numConst.getValue());
-            sb.append(")");
+            this.sb.append("((float) ");
+            this.sb.append(numConst.getValue());
+            this.sb.append(")");
         }
         return null;
     }
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        sb.append(boolConst.isValue());
+        this.sb.append(boolConst.isValue());
         return null;
     };
 
@@ -301,22 +302,22 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                sb.append("BlocklyMethods.PI");
+                this.sb.append("BlocklyMethods.PI");
                 break;
             case E:
-                sb.append("BlocklyMethods.E");
+                this.sb.append("BlocklyMethods.E");
                 break;
             case GOLDEN_RATIO:
-                sb.append("BlocklyMethods.GOLDEN_RATIO");
+                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
                 break;
             case SQRT2:
-                sb.append("BlocklyMethods.sqrt(2)");
+                this.sb.append("BlocklyMethods.sqrt(2)");
                 break;
             case SQRT1_2:
-                sb.append("BlocklyMethods.sqrt(1.0/2.0)");
+                this.sb.append("BlocklyMethods.sqrt(1.0/2.0)");
                 break;
             case INFINITY:
-                sb.append("Float.POSITIVE_INFINITY");
+                this.sb.append("Float.POSITIVE_INFINITY");
                 break;
             default:
                 break;
@@ -326,34 +327,34 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        sb.append(getEnumCode(colorConst.getValue()));
+        this.sb.append(getEnumCode(colorConst.getValue()));
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
-        sb.append("null");
+        this.sb.append("null");
         return null;
     }
 
     @Override
     public Void visitVar(Var<Void> var) {
-        sb.append(var.getValue());
+        this.sb.append(var.getValue());
         return null;
     }
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
-        sb.append(var.getName());
+        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
+        this.sb.append(var.getName());
         if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
-            sb.append(" = ");
+            this.sb.append(" = ");
             if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
                 ExprList<Void> list = (ExprList<Void>) var.getValue();
                 if ( list.get().size() == 2 ) {
@@ -371,11 +372,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitUnary(Unary<Void> unary) {
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, sb);
-            sb.append(unary.getOp().getOpSymbol());
+            generateExprCode(unary, this.sb);
+            this.sb.append(unary.getOp().getOpSymbol());
         } else {
-            sb.append(unary.getOp().getOpSymbol());
-            generateExprCode(unary, sb);
+            this.sb.append(unary.getOp().getOpSymbol());
+            generateExprCode(unary, this.sb);
         }
         return null;
     }
@@ -387,19 +388,19 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             generateCodeForStringEqualityOp(binary);
             return null;
         }
-        generateSubExpr(sb, false, binary.getLeft(), binary);
-        sb.append(whitespace() + op.getOpSymbol() + whitespace());
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(whitespace() + op.getOpSymbol() + whitespace());
         switch ( op ) {
             case TEXT_APPEND:
                 generateCodeToStringCastOnExpr(binary);
                 break;
             case DIVIDE:
-                sb.append("((float) ");
-                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
-                sb.append(")");
+                this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
                 break;
             default:
-                generateSubExpr(sb, parenthesesCheck(binary), binary.getRight(), binary);
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
                 break;
         }
         return null;
@@ -437,20 +438,20 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
-                sb.append("\"\"");
+                this.sb.append("\"\"");
                 break;
             case "java.lang.Boolean":
-                sb.append("true");
+                this.sb.append("true");
                 break;
             case "java.lang.Integer":
-                sb.append("0");
+                this.sb.append("0");
                 break;
             case "java.util.ArrayList":
                 break;
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
                 break;
             default:
-                sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
         }
         return null;
@@ -474,7 +475,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
                 if ( first ) {
                     first = false;
                 } else {
-                    sb.append(", ");
+                    this.sb.append(", ");
                 }
                 expr.visit(this);
             }
@@ -491,16 +492,16 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
         assignStmt.getName().visit(this);
-        sb.append(" = ");
+        this.sb.append(" = ");
         assignStmt.getExpr().visit(this);
-        sb.append(";");
+        this.sb.append(";");
         return null;
     }
 
     @Override
     public Void visitExprStmt(ExprStmt<Void> exprStmt) {
         exprStmt.getExpr().visit(this);
-        sb.append(";");
+        this.sb.append(";");
         return null;
     }
 
@@ -530,7 +531,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
                  *This ""if ( true ) {" statement is needed because when we have code after the "while ( true ) "
                  *statement is unreachable
                  */
-                sb.append("if ( true ) {");
+                this.sb.append("if ( true ) {");
                 additionalClosingBracket = true;
                 incrIndentation();
                 nlIndent();
@@ -556,11 +557,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         appendBreakStmt(repeatStmt);
         decrIndentation();
         nlIndent();
-        sb.append("}");
+        this.sb.append("}");
         if ( additionalClosingBracket ) {
             decrIndentation();
             nlIndent();
-            sb.append("}");
+            this.sb.append("}");
         }
         return null;
     }
@@ -573,7 +574,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
         return null;
     }
 
@@ -588,28 +589,28 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        sb.append("while ( true ) {");
+        this.sb.append("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        sb.append("hal.waitFor(15);");
+        this.sb.append("hal.waitFor(15);");
         decrIndentation();
         nlIndent();
-        sb.append("}");
+        this.sb.append("}");
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        sb.append("hal.waitFor(");
+        this.sb.append("hal.waitFor(");
         waitTimeStmt.getTime().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        sb.append("hal.clearDisplay();");
+        this.sb.append("hal.clearDisplay();");
         return null;
     }
 
@@ -617,12 +618,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                sb.append("hal.setVolume(");
+                this.sb.append("hal.setVolume(");
                 volumeAction.getVolume().visit(this);
-                sb.append(");");
+                this.sb.append(");");
                 break;
             case GET:
-                sb.append("hal.getVolume()");
+                this.sb.append("hal.getVolume()");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -632,7 +633,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ");");
+        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ");");
         return null;
     }
 
@@ -640,10 +641,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
-                sb.append("hal.ledOff();");
+                this.sb.append("hal.ledOff();");
                 break;
             case RESET:
-                sb.append("hal.resetLED();");
+                this.sb.append("hal.resetLED();");
                 break;
             default:
                 throw new DbcException("Invalid LED status mode!");
@@ -653,92 +654,92 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        sb.append("hal.playFile(" + playFileAction.getFileName() + ");");
+        this.sb.append("hal.playFile(" + playFileAction.getFileName() + ");");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        sb.append("hal.drawPicture(" + getEnumCode(showPictureAction.getPicture()) + ", ");
+        this.sb.append("hal.drawPicture(" + getEnumCode(showPictureAction.getPicture()) + ", ");
         showPictureAction.getX().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         showPictureAction.getY().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        sb.append("hal.drawText(");
+        this.sb.append("hal.drawText(");
         if ( showTextAction.getMsg().getKind() != BlockType.STRING_CONST ) {
-            sb.append("String.valueOf(");
+            this.sb.append("String.valueOf(");
             showTextAction.getMsg().visit(this);
-            sb.append(")");
+            this.sb.append(")");
         } else {
             showTextAction.getMsg().visit(this);
         }
-        sb.append(", ");
+        this.sb.append(", ");
         showTextAction.getX().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         showTextAction.getY().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        sb.append("hal.playTone(");
+        this.sb.append("hal.playTone(");
         toneAction.getFrequency().visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         toneAction.getDuration().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String methodName;
-        boolean isRegulated = brickConfiguration.isMotorRegulated(motorOnAction.getPort());
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
         boolean duration = motorOnAction.getParam().getDuration() != null;
         if ( duration ) {
             methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
         } else {
             methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
         }
-        sb.append(methodName + getEnumCode(motorOnAction.getPort()) + ", ");
+        this.sb.append(methodName + getEnumCode(motorOnAction.getPort()) + ", ");
         motorOnAction.getParam().getSpeed().visit(this);
         if ( duration ) {
-            sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-            sb.append(", ");
+            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
+            this.sb.append(", ");
             motorOnAction.getDurationValue().visit(this);
         }
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        sb.append(methodName + getEnumCode(motorSetPowerAction.getPort()) + ", ");
+        this.sb.append(methodName + getEnumCode(motorSetPowerAction.getPort()) + ", ");
         motorSetPowerAction.getPower().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
         String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        sb.append(methodName + getEnumCode(motorGetPowerAction.getPort()) + ")");
+        this.sb.append(methodName + getEnumCode(motorGetPowerAction.getPort()) + ")");
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        boolean isRegulated = brickConfiguration.isMotorRegulated(motorStopAction.getPort());
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-        sb.append(methodName + getEnumCode(motorStopAction.getPort()) + ", " + getEnumCode(motorStopAction.getMode()) + ");");
+        this.sb.append(methodName + getEnumCode(motorStopAction.getPort()) + ", " + getEnumCode(motorStopAction.getMode()) + ");");
         return null;
     }
 
@@ -746,14 +747,14 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-        sb.append(methodName);
-        sb.append(getEnumCode(driveAction.getDirection()) + ", ");
+        this.sb.append(methodName);
+        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
-            sb.append(", ");
+            this.sb.append(", ");
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
@@ -761,20 +762,20 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : "Regulated") + "(";
-        sb.append(methodName);
-        sb.append(getEnumCode(turnAction.getDirection()) + ", ");
+        this.sb.append(methodName);
+        this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
-            sb.append(", ");
+            this.sb.append(", ");
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        sb.append("hal.stopRegulatedDrive();");
+        this.sb.append("hal.stopRegulatedDrive();");
         return null;
     }
 
@@ -782,10 +783,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                sb.append("hal.isPressed(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isPressed(" + getEnumCode(brickSensor.getKey()) + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                sb.append("hal.isPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
@@ -798,16 +799,16 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         String colorSensorPort = getEnumCode(colorSensor.getPort());
         switch ( (ColorSensorMode) colorSensor.getMode() ) {
             case AMBIENTLIGHT:
-                sb.append("hal.getColorSensorAmbient(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorAmbient(" + colorSensorPort + ")");
                 break;
             case COLOUR:
-                sb.append("hal.getColorSensorColour(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorColour(" + colorSensorPort + ")");
                 break;
             case RED:
-                sb.append("hal.getColorSensorRed(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorRed(" + colorSensorPort + ")");
                 break;
             case RGB:
-                sb.append("hal.getColorSensorRgb(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorRgb(" + colorSensorPort + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
@@ -818,13 +819,13 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         IActorPort encoderMotorPort = encoderSensor.getMotorPort();
-        boolean isRegulated = brickConfiguration.isMotorRegulated(encoderMotorPort);
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
-            sb.append(methodName + getEnumCode(encoderMotorPort) + ");");
+            this.sb.append(methodName + getEnumCode(encoderMotorPort) + ");");
         } else {
             String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-            sb.append(methodName + getEnumCode(encoderMotorPort) + ", " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append(methodName + getEnumCode(encoderMotorPort) + ", " + getEnumCode(encoderSensor.getMode()) + ")");
         }
         return null;
     }
@@ -834,13 +835,13 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         String gyroSensorPort = getEnumCode(gyroSensor.getPort());
         switch ( (GyroSensorMode) gyroSensor.getMode() ) {
             case ANGLE:
-                sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
+                this.sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
                 break;
             case RATE:
-                sb.append("hal.getGyroSensorRate(" + gyroSensorPort + ")");
+                this.sb.append("hal.getGyroSensorRate(" + gyroSensorPort + ")");
                 break;
             case RESET:
-                sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
+                this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
                 break;
             default:
                 throw new DbcException("Invalid GyroSensorMode");
@@ -853,10 +854,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         String infraredSensorPort = getEnumCode(infraredSensor.getPort());
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case DISTANCE:
-                sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
+                this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
                 break;
             case SEEK:
-                sb.append("hal.getInfraredSensorSeek(" + infraredSensorPort + ")");
+                this.sb.append("hal.getInfraredSensorSeek(" + infraredSensorPort + ")");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
@@ -868,10 +869,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
+                this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
                 break;
             case RESET:
-                sb.append("hal.resetTimer(" + timerSensor.getTimer() + ");");
+                this.sb.append("hal.resetTimer(" + timerSensor.getTimer() + ");");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -881,7 +882,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        sb.append("hal.isPressed(" + getEnumCode(touchSensor.getPort()) + ")");
+        this.sb.append("hal.isPressed(" + getEnumCode(touchSensor.getPort()) + ")");
         return null;
     }
 
@@ -889,9 +890,9 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String ultrasonicSensorPort = getEnumCode(ultrasonicSensor.getPort());
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
-            sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
+            this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
         } else {
-            sb.append("hal.getUltraSonicSensorPresence(" + ultrasonicSensorPort + ")");
+            this.sb.append("hal.getUltraSonicSensorPresence(" + ultrasonicSensorPort + ")");
         }
         return null;
     }
@@ -899,11 +900,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
+        this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
         if ( mainTask.getDebug().equals("TRUE") ) {
-            sb.append(INDENT).append(INDENT).append("hal.startLogging();");
+            this.sb.append(INDENT).append(INDENT).append("hal.startLogging();");
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
         }
         return null;
@@ -933,16 +934,16 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        sb.append("System.out.println(");
+        this.sb.append("System.out.println(");
         textPrintFunct.getParam().get(0).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         functionStmt.getFunction().visit(this);
-        sb.append(";");
+        this.sb.append(";");
         return null;
     }
 
@@ -954,27 +955,27 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        sb.append("BlocklyMethods.listsGetSubList( ");
+        this.sb.append("BlocklyMethods.listsGetSubList( ");
         getSubFunct.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
-        sb.append(getEnumCode(where1));
+        this.sb.append(getEnumCode(where1));
         if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
-            sb.append(", ");
+            this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
-        sb.append(", ");
+        this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
-        sb.append(getEnumCode(where2));
+        this.sb.append(getEnumCode(where2));
         if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
-            sb.append(", ");
+            this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
             } else {
                 getSubFunct.getParam().get(1).visit(this);
             }
         }
-        sb.append(")");
+        this.sb.append(")");
         return null;
 
     }
@@ -985,11 +986,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
             methodName = "BlocklyMethods.findLast( ";
         }
-        sb.append(methodName);
+        this.sb.append(methodName);
         indexOfFunct.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -999,15 +1000,15 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
             methodName = "BlocklyMethods.isEmpty( ";
         }
-        sb.append(methodName);
+        this.sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        sb.append(
+        this.sb.append(
             "new ArrayList<"
                 + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
                 + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
@@ -1017,68 +1018,68 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        sb.append("BlocklyMethods.createListWith" + listCreate.getTypeVar().getBlocklyName() + "(");
+        this.sb.append("BlocklyMethods.createListWith" + listCreate.getTypeVar().getBlocklyName() + "(");
         listCreate.getValue().visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        sb.append("BlocklyMethods.createListWithItem(");
+        this.sb.append("BlocklyMethods.createListWithItem(");
         listRepeat.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         listRepeat.getParam().get(1).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        sb.append("BlocklyMethods.listsIndex(");
+        this.sb.append("BlocklyMethods.listsIndex(");
         listGetIndex.getParam().get(0).visit(this);
-        sb.append(", ");
-        sb.append(getEnumCode(listGetIndex.getElementOperation()));
-        sb.append(", ");
-        sb.append(getEnumCode(listGetIndex.getLocation()));
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listGetIndex.getElementOperation()));
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listGetIndex.getLocation()));
         if ( listGetIndex.getParam().size() == 2 ) {
-            sb.append(", ");
+            this.sb.append(", ");
             listGetIndex.getParam().get(1).visit(this);
         }
-        sb.append(")");
+        this.sb.append(")");
         if ( listGetIndex.getElementOperation().isStatment() ) {
-            sb.append(";");
+            this.sb.append(";");
         }
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        sb.append("BlocklyMethods.listsIndex(");
+        this.sb.append("BlocklyMethods.listsIndex(");
         listSetIndex.getParam().get(0).visit(this);
-        sb.append(", ");
-        sb.append(getEnumCode(listSetIndex.getElementOperation()));
-        sb.append(", ");
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
+        this.sb.append(", ");
         listSetIndex.getParam().get(1).visit(this);
-        sb.append(", ");
-        sb.append(getEnumCode(listSetIndex.getLocation()));
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(listSetIndex.getLocation()));
         if ( listSetIndex.getParam().size() == 3 ) {
-            sb.append(", ");
+            this.sb.append(", ");
             listSetIndex.getParam().get(2).visit(this);
         }
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        sb.append("BlocklyMethods.clamp(");
+        this.sb.append("BlocklyMethods.clamp(");
         mathConstrainFunct.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         mathConstrainFunct.getParam().get(2).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
@@ -1086,41 +1087,41 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                sb.append("BlocklyMethods.isEven(");
+                this.sb.append("BlocklyMethods.isEven(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             case ODD:
-                sb.append("BlocklyMethods.isOdd(");
+                this.sb.append("BlocklyMethods.isOdd(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             case PRIME:
-                sb.append("BlocklyMethods.isPrime(");
+                this.sb.append("BlocklyMethods.isPrime(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             case WHOLE:
-                sb.append("BlocklyMethods.isWhole(");
+                this.sb.append("BlocklyMethods.isWhole(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             case POSITIVE:
-                sb.append("BlocklyMethods.isPositive(");
+                this.sb.append("BlocklyMethods.isPositive(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             case NEGATIVE:
-                sb.append("BlocklyMethods.isNegative(");
+                this.sb.append("BlocklyMethods.isNegative(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             case DIVISIBLE_BY:
-                sb.append("BlocklyMethods.isDivisibleBy(");
+                this.sb.append("BlocklyMethods.isDivisibleBy(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                sb.append(", ");
+                this.sb.append(", ");
                 mathNumPropFunct.getParam().get(1).visit(this);
-                sb.append(")");
+                this.sb.append(")");
                 break;
             default:
                 break;
@@ -1132,167 +1133,167 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
-                sb.append("BlocklyMethods.sumOnList(");
+                this.sb.append("BlocklyMethods.sumOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MIN:
-                sb.append("BlocklyMethods.minOnList(");
+                this.sb.append("BlocklyMethods.minOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MAX:
-                sb.append("BlocklyMethods.maxOnList(");
+                this.sb.append("BlocklyMethods.maxOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case AVERAGE:
-                sb.append("BlocklyMethods.averageOnList(");
+                this.sb.append("BlocklyMethods.averageOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MEDIAN:
-                sb.append("BlocklyMethods.medianOnList(");
+                this.sb.append("BlocklyMethods.medianOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case STD_DEV:
-                sb.append("BlocklyMethods.standardDeviatioin(");
+                this.sb.append("BlocklyMethods.standardDeviatioin(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case RANDOM:
-                sb.append("BlocklyMethods.randOnList(");
+                this.sb.append("BlocklyMethods.randOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MODE:
-                sb.append("BlocklyMethods.modeOnList(");
+                this.sb.append("BlocklyMethods.modeOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             default:
                 break;
         }
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        sb.append("BlocklyMethods.randDouble()");
+        this.sb.append("BlocklyMethods.randDouble()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        sb.append("BlocklyMethods.randInt(");
+        this.sb.append("BlocklyMethods.randInt(");
         mathRandomIntFunct.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        sb.append("BlocklyMethods.");
+        this.sb.append("BlocklyMethods.");
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                sb.append("sqrt(");
+                this.sb.append("sqrt(");
                 break;
             case ABS:
-                sb.append("abs(");
+                this.sb.append("abs(");
                 break;
             case LN:
-                sb.append("log(");
+                this.sb.append("log(");
                 break;
             case LOG10:
-                sb.append("log10(");
+                this.sb.append("log10(");
                 break;
             case EXP:
-                sb.append("exp(");
+                this.sb.append("exp(");
                 break;
             case POW10:
-                sb.append("pow(10, ");
+                this.sb.append("pow(10, ");
                 break;
             case SIN:
-                sb.append("sin(");
+                this.sb.append("sin(");
                 break;
             case COS:
-                sb.append("cos(");
+                this.sb.append("cos(");
                 break;
             case TAN:
-                sb.append("tan(");
+                this.sb.append("tan(");
                 break;
             case ASIN:
-                sb.append("asin(");
+                this.sb.append("asin(");
                 break;
             case ATAN:
-                sb.append("atan(");
+                this.sb.append("atan(");
                 break;
             case ACOS:
-                sb.append("acos(");
+                this.sb.append("acos(");
                 break;
             case ROUND:
-                sb.append("round(");
+                this.sb.append("round(");
                 break;
             case ROUNDUP:
-                sb.append("ceil(");
+                this.sb.append("ceil(");
                 break;
             case ROUNDDOWN:
-                sb.append("floor(");
+                this.sb.append("floor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        sb.append(")");
+        this.sb.append(")");
 
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        sb.append("BlocklyMethods.pow(");
+        this.sb.append("BlocklyMethods.pow(");
         mathPowerFunct.getParam().get(0).visit(this);
-        sb.append(", ");
+        this.sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        sb.append("BlocklyMethods.textJoin(");
+        this.sb.append("BlocklyMethods.textJoin(");
         textJoinFunct.getParam().visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        sb.append("\n").append(INDENT).append("private void ");
-        sb.append(methodVoid.getMethodName() + "(");
+        this.sb.append("\n").append(INDENT).append("private void ");
+        this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
-        sb.append(") {");
+        this.sb.append(") {");
         methodVoid.getBody().visit(this);
-        sb.append("\n").append(INDENT).append("}");
+        this.sb.append("\n").append(INDENT).append("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        sb.append("\n").append(INDENT).append("private " + getBlocklyTypeCode(methodReturn.getReturnType()));
-        sb.append(" " + methodReturn.getMethodName() + "(");
+        this.sb.append("\n").append(INDENT).append("private " + getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
-        sb.append(") {");
+        this.sb.append(") {");
         methodReturn.getBody().visit(this);
         this.nlIndent();
-        sb.append("return ");
+        this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
-        sb.append(";\n").append(INDENT).append("}");
+        this.sb.append(";\n").append(INDENT).append("}");
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        sb.append("if (");
+        this.sb.append("if (");
         methodIfReturn.getCondition().visit(this);
-        sb.append(") ");
-        sb.append("return ");
+        this.sb.append(") ");
+        this.sb.append("return ");
         methodIfReturn.getReturnValue().visit(this);
         return null;
     }
@@ -1300,85 +1301,85 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        sb.append(";");
+        this.sb.append(";");
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        sb.append(methodCall.getMethodName() + "(");
+        this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
-        sb.append(")");
+        this.sb.append(")");
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            sb.append(";");
+            this.sb.append(";");
         }
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        sb.append("hal.readMessage(");
+        this.sb.append("hal.readMessage(");
         bluetoothReadAction.getConnection().visit(this);
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        sb.append("hal.establishConnectionTo(");
+        this.sb.append("hal.establishConnectionTo(");
         if ( bluetoothConnectAction.get_address().getKind() != BlockType.STRING_CONST ) {
-            sb.append("String.valueOf(");
+            this.sb.append("String.valueOf(");
             bluetoothConnectAction.get_address().visit(this);
-            sb.append(")");
+            this.sb.append(")");
         } else {
             bluetoothConnectAction.get_address().visit(this);
         }
-        sb.append(")");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        sb.append("hal.sendMessage(");
+        this.sb.append("hal.sendMessage(");
         if ( bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
-            sb.append("String.valueOf(");
+            this.sb.append("String.valueOf(");
             bluetoothSendAction.getMsg().visit(this);
-            sb.append(")");
+            this.sb.append(")");
         } else {
             bluetoothSendAction.getMsg().visit(this);
         }
-        sb.append(", ");
+        this.sb.append(", ");
         bluetoothSendAction.getConnection().visit(this);
-        sb.append(");");
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        sb.append("hal.waitForConnection()");
+        this.sb.append("hal.waitForConnection()");
         return null;
     }
 
     private void incrIndentation() {
-        indentation += 1;
+        this.indentation += 1;
     }
 
     private void decrIndentation() {
-        indentation -= 1;
+        this.indentation -= 1;
     }
 
     private void indent() {
-        if ( indentation <= 0 ) {
+        if ( this.indentation <= 0 ) {
             return;
         } else {
-            for ( int i = 0; i < indentation; i++ ) {
-                sb.append(INDENT);
+            for ( int i = 0; i < this.indentation; i++ ) {
+                this.sb.append(INDENT);
             }
         }
     }
 
     private void nlIndent() {
-        sb.append("\n");
+        this.sb.append("\n");
         indent();
     }
 
@@ -1433,11 +1434,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        sb.append("(" + whitespace());
+        this.sb.append("(" + whitespace());
         ifStmt.getExpr().get(0).visit(this);
-        sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        sb.append(whitespace() + ":" + whitespace());
+        this.sb.append(whitespace() + ":" + whitespace());
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
@@ -1453,7 +1454,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             decrIndentation();
             if ( i + 1 < ifStmt.getExpr().size() ) {
                 nlIndent();
-                sb.append("}").append(whitespace());
+                this.sb.append("}").append(whitespace());
             }
         }
     }
@@ -1461,36 +1462,36 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     private void generateCodeFromElse(IfStmt<Void> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
             nlIndent();
-            sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
+            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
             incrIndentation();
             ifStmt.getElseList().visit(this);
             decrIndentation();
         }
         nlIndent();
-        sb.append("}");
+        this.sb.append("}");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        sb.append(stmtType + whitespace() + "(" + whitespace());
+        this.sb.append(stmtType + whitespace() + "(" + whitespace());
         expr.visit(this);
-        sb.append(whitespace() + ")" + whitespace() + "{");
+        this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
+        this.sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
-        sb.append(whitespace() + "=" + whitespace());
+        this.sb.append(whitespace() + "=" + whitespace());
         expressions.get().get(1).visit(this);
-        sb.append(";" + whitespace());
+        this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
-        sb.append("<" + whitespace());
+        this.sb.append("<" + whitespace());
         expressions.get().get(2).visit(this);
-        sb.append(";" + whitespace());
+        this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
-        sb.append("+=" + whitespace());
+        this.sb.append("+=" + whitespace());
         expressions.get().get(3).visit(this);
-        sb.append(whitespace() + ")" + whitespace() + "{");
+        this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
     private boolean isEqualityOpOnStrings(Binary<Void> binary) {
@@ -1500,25 +1501,25 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void generateCodeToStringCastOnExpr(Binary<Void> binary) {
-        sb.append("String.valueOf(");
-        generateSubExpr(sb, false, binary.getRight(), binary);
-        sb.append(")");
+        this.sb.append("String.valueOf(");
+        generateSubExpr(this.sb, false, binary.getRight(), binary);
+        this.sb.append(")");
     }
 
     private void generateCodeForStringEqualityOp(Binary<Void> binary) {
         if ( binary.getOp() == Op.NEQ ) {
-            sb.append("!");
+            this.sb.append("!");
         }
-        generateSubExpr(sb, false, binary.getLeft(), binary);
-        sb.append(".equals(");
-        generateSubExpr(sb, false, binary.getRight(), binary);
-        sb.append(")");
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(".equals(");
+        generateSubExpr(this.sb, false, binary.getRight(), binary);
+        this.sb.append(")");
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         if ( repeatStmt.getMode() == Mode.WAIT ) {
             nlIndent();
-            sb.append("break;");
+            this.sb.append("break;");
         }
     }
 
@@ -1528,39 +1529,39 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         }
         generateImports();
 
-        sb.append("public class " + programName + " {\n");
-        sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
-        sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
+        this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
+        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
-        sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
-        sb.append(INDENT).append("public static void main(String[] args) {\n");
-        sb.append(INDENT).append(INDENT).append("try {\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(programName).append("().run();\n");
-        sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
-        sb.append(INDENT).append(INDENT).append("}\n");
-        sb.append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
+        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("}\n");
     }
 
     private void generateImports() {
-        sb.append("package generated.main;\n\n");
-        sb.append("import de.fhg.iais.roberta.runtime.*;\n");
-        sb.append("import de.fhg.iais.roberta.runtime.ev3.*;\n\n");
+        this.sb.append("package generated.main;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.runtime.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.runtime.ev3.*;\n\n");
 
-        sb.append("import de.fhg.iais.roberta.mode.general.*;\n");
-        sb.append("import de.fhg.iais.roberta.mode.action.ev3.*;\n");
-        sb.append("import de.fhg.iais.roberta.mode.sensor.ev3.*;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.mode.general.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.mode.action.ev3.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.mode.sensor.ev3.*;\n\n");
 
-        sb.append("import de.fhg.iais.roberta.components.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.components.*;\n");
 
-        sb.append("import java.util.LinkedHashSet;\n");
-        sb.append("import java.util.Set;\n");
-        sb.append("import java.util.List;\n");
-        sb.append("import java.util.ArrayList;\n");
-        sb.append("import java.util.Arrays;\n\n");
+        this.sb.append("import java.util.LinkedHashSet;\n");
+        this.sb.append("import java.util.Set;\n");
+        this.sb.append("import java.util.List;\n");
+        this.sb.append("import java.util.ArrayList;\n");
+        this.sb.append("import java.util.Arrays;\n\n");
 
-        sb.append("import lejos.remote.nxt.NXTConnection;\n\n");
+        this.sb.append("import lejos.remote.nxt.NXTConnection;\n\n");
     }
 
     /**
@@ -1569,8 +1570,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
         sb.append(" brickConfiguration = new EV3Configuration.Builder()\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + brickConfiguration.getWheelDiameterCM() + ")\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + brickConfiguration.getTrackWidthCM() + ")\n");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
         appendActors(sb);
         appendSensors(sb);
         sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
@@ -1578,7 +1579,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void appendSensors(StringBuilder sb) {
-        for ( Map.Entry<ISensorPort, Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
+        for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             sb.append(INDENT).append(INDENT).append(INDENT);
             sb.append("    .addSensor(");
             sb.append(getEnumCode(entry.getKey())).append(", ");
@@ -1588,7 +1589,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private void appendActors(StringBuilder sb) {
-        for ( Map.Entry<IActorPort, Actor> entry : brickConfiguration.getActors().entrySet() ) {
+        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             sb.append(INDENT).append(INDENT).append(INDENT);
             sb.append("    .addActor(");
             sb.append(getEnumCode(entry.getKey())).append(", ");
@@ -1600,13 +1601,13 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     private String generateRegenerateUsedSensors() {
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
-        for ( UsedSensor usedSensor : usedSensors ) {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
             arrayOfSensors += generateRegenerateUsedSensor(usedSensor);
             arrayOfSensors += ", ";
         }
 
         sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
-        if ( usedSensors.size() > 0 ) {
+        if ( this.usedSensors.size() > 0 ) {
             sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
         }
         sb.append(");");
@@ -1666,6 +1667,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }
