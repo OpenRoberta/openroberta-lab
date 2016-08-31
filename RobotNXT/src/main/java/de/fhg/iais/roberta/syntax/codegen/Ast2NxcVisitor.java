@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
@@ -1709,6 +1710,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             sb.append("SetTimerValue( timer1 );");
         }
 
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**

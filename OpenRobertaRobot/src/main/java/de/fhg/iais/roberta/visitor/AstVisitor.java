@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
@@ -275,6 +276,8 @@ public interface AstVisitor<V> {
      * @param driveAction to be visited
      */
     public V visitDriveAction(DriveAction<V> driveAction);
+
+    public V visitCurveAction(CurveAction<V> driveAction);
 
     /**
      * visit a {@link TurnAction}.

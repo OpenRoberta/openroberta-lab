@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
@@ -158,6 +159,12 @@ public class UsedTimerVisitorArdu extends CheckVisitor {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> driveAction) {
         // TODO Auto-generated method stub
         return null;
     }

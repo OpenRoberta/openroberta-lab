@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
@@ -635,6 +636,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitLightSensorAction(LightSensorAction<T> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitCurveAction(CurveAction<T> driveAction) {
         // TODO Auto-generated method stub
         return null;
     }

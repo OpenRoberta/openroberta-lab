@@ -68,6 +68,8 @@ public final class BlocklyConstants {
     public static final String DIRECTION = "DIRECTION";
     public static final String VALUE = "VALUE";
     public static final String POWER = "POWER";
+    public static final String POWER_LEFT = "POWER_LEFT";
+    public static final String POWER_RIGHT = "POWER_RIGHT";
     public static final String MOTORPORT = "MOTORPORT";
     public static final String VAR = "VAR";
     public static final String TYPE = "TYPE";
@@ -173,6 +175,8 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_MOTOR_GET_POWER = "robActions_motor_getPower";
     public static final String ROB_ACTIONS_MOTOR_SET_POWER = "robActions_motor_setPower";
     public static final String ROB_ACTIONS_MOTOR_STOP = "robActions_motor_stop";
+    public static final String ROB_ACTIONS_MOTOR_DIFF_CURVE = "robActions_motorDiff_curve";
+    public static final String ROB_ACTIONS_MOTOR_DIFF_CURVE_FOR = "robActions_motorDiff_curve_for";
     public static final String ROB_ACTIONS_PLAY_FILE = "robActions_play_file";
     public static final String ROB_ACTIONS_PLAY_GET_VOLUME = "robActions_play_getVolume";
     public static final String ROB_ACTIONS_BRICK_LIGHT_RESET = "robActions_brickLight_reset";
