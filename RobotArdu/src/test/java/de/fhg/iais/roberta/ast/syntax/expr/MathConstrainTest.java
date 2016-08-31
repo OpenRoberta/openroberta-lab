@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class MathConstrainTest {
     @Test
     public void Test() throws Exception {
-        final String a = "Constrain(rob.ultrasonicDistance(3),1,100)";
+        final String a = "Constrain(rob.ultrasonicDistance(4),1,100)";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_constrain.xml");
     }

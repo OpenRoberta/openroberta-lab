@@ -855,8 +855,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 sb.append("rob.infraredSensorObstacle(" + port + ")");
                 break;
             case SEEK:
-                //returns value 0 or 1
-                sb.append("one.readIRSensors()");
+                sb.append("{one.readIRSensors()}");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
@@ -886,8 +885,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        Integer port = Integer.parseInt(ultrasonicSensor.getPort().getPortNumber()) - 1;
-        sb.append("rob.ultrasonicDistance(" + port.toString() + ")");
+        String port = ultrasonicSensor.getPort().getPortNumber();
+        sb.append("rob.ultrasonicDistance(" + port + ")");
         return null;
     }
 
