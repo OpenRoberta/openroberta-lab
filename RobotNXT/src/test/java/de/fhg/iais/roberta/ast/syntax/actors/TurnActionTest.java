@@ -15,7 +15,7 @@ public class TurnActionTest {
 
     @Test
     public void turnFor() throws Exception {
-        final String a = "\nRotateMotorEx(OUT_BC, 50, (20 * TRACKWIDTH / WHEELDIAMETER), -100, true, true);";
+        final String a = "\nRotateMotorEx(OUT_BC, 50, ( 20 * TRACKWIDTH / WHEELDIAMETER), -100, true, true );\nWait( 1 );";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurnFor.xml");
     }

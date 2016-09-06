@@ -655,7 +655,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     @Override
-
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         this.sb.append("GraphicOut(");
         showPictureAction.getX().visit(this);
@@ -824,7 +823,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             this.sb.append(this.brickConfiguration.getRightMotorPort());
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
         }
-        if ( (!reverse && localReverse) || (!localReverse && reverse) ) {
+        if ( !reverse && localReverse || !localReverse && reverse ) {
             this.sb.append(", (-1) * ");
         } else {
             this.sb.append(", ");
@@ -832,9 +831,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         driveAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         if ( isDuration ) {
-            this.sb.append("(");
+            this.sb.append("( ");
             driveAction.getParam().getDuration().getValue().visit(this);
-            this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, false, true");
+            this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true );");
+            this.nlIndent();
+            this.sb.append("Wait( 1 ");
         } else {
             this.sb.append("OUT_REGMODE_SYNC");
         }
@@ -842,8 +843,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    @Override // TURN ACTIONS
-
+    @Override
+    // TURN ACTIONS
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         final boolean reverse =
@@ -876,9 +877,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         }
         this.sb.append(", ");
         if ( isDuration ) {
-            this.sb.append("(");
+            this.sb.append("( ");
             turnAction.getParam().getDuration().getValue().visit(this);
-            this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true");
+            this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true );");
+            this.nlIndent();
+            this.sb.append("Wait( 1 ");
         } else {
             this.sb.append(turnpct);
         }
@@ -975,8 +978,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case "ColorSensorMode.RED":
                 this.sb.append("\"LIGHT\"");
                 break;
-            /*default:
-                throw new DbcException("Invalide mode for Color Sensor!");*/
+        /*default:
+            throw new DbcException("Invalide mode for Color Sensor!");*/
         }
         this.sb.append(" )");
         return null;
@@ -1010,12 +1013,14 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    @Override // no gyrosensor
+    @Override
+    // no gyrosensor
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         return null;
     }
 
-    @Override // no infrared sensor
+    @Override
+    // no infrared sensor
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         return null;
     }
