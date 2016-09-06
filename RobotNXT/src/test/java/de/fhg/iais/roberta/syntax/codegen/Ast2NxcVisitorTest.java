@@ -20,13 +20,13 @@ public class Ast2NxcVisitorTest {
     //TODO: change diameter and trackwidth to changeable
     // when sensors are added to nxt, fix the sensors description here
 
-    private static final String MAIN_METHOD = ""
+    private static final String IMPORTS_CONSTANTS = "" //
         + "#define WHEELDIAMETER 5.6\n"
-        + "#define TRACKWIDTH 17.0\n"
+        + "#define TRACKWIDTH 17.0\n\n"
         + "#include\"hal.h\""
-        + "#include\"NXCDefs.h\""
-
-        + "task main(){"
+        + "#include\"NXCDefs.h\"";
+    private static final String MAIN_METHOD = "" //
+        + "task main() {"
         + "    SetSensor(IN_1,SENSOR_TOUCH);\n"
         // + "    SetSensor(IN_4, SENSOR_SOUND);\n"
         //+ "    SetSensor(IN_3, SENSOR_LIGHT);\n"
@@ -50,7 +50,7 @@ public class Ast2NxcVisitorTest {
     public void test() throws Exception {
 
         final String a = "" //
-            //            + CONSTANTS
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "        TextOut(0,LCD_LINE3,\"Hallo\");\n"
             + SUFFIX
@@ -64,6 +64,7 @@ public class Ast2NxcVisitorTest {
     public void test1() throws Exception {
 
         final String a = ""
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
@@ -80,6 +81,7 @@ public class Ast2NxcVisitorTest {
     public void test2() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "        if (SENSOR_1) {\n"
@@ -108,7 +110,7 @@ public class Ast2NxcVisitorTest {
     public void test3() throws Exception {
 
         final String a = "" //
-
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "        if (SENSOR_1) {\n"
@@ -137,7 +139,7 @@ public class Ast2NxcVisitorTest {
     public void test4() throws Exception {
 
         final String a = "" //
-
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "        if ( 5 < MotorPower(OUT_B); ) {\n\n\n"
@@ -167,6 +169,7 @@ public class Ast2NxcVisitorTest {
     public void test5() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "          OnFwdReg(OUT_B,0,100);"
@@ -185,6 +188,7 @@ public class Ast2NxcVisitorTest {
     public void test6() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "        TextOut(0,LCD_LINE0,\"Hallo\");\n"
@@ -199,6 +203,7 @@ public class Ast2NxcVisitorTest {
     //ignore
     public void test7() throws Exception {
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
 
             + "          OnFwdReg(OUT_B,30,100);\n"
@@ -213,6 +218,7 @@ public class Ast2NxcVisitorTest {
     public void test8() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "        float item = 10;\n"
             + "        string item2 = \"TTTT\";\n"
@@ -232,6 +238,7 @@ public class Ast2NxcVisitorTest {
     public void test19() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "        float variablenName = 0;\n"
 
@@ -270,15 +277,14 @@ public class Ast2NxcVisitorTest {
     public void test10() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
+            + "void macheEtwas(float x, float x2) {\n"
+            + "     GraphicOut(x, x2,\"OLDGLASSES\");\n"
+            + "}"
             + MAIN_METHOD
-
             + "       RotateMotor(OUT_B, 30, 360 * 1);"
-            + "        macheEtwas(10, 10);"
-
-            + "   void macheEtwas(float x, float x2) {\n"
-            + "        GraphicOut(x, x2,\"OLDGLASSES\");\n"
-            + "    }"
-            + "}\n";
+            + "       macheEtwas(10, 10);"
+            + "}";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_1.xml");
     }
@@ -287,12 +293,13 @@ public class Ast2NxcVisitorTest {
     public void test11() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
+            + "    void test() {\n"
+            + "    }"
             + MAIN_METHOD
 
             + "        test();"
 
-            + "    void test() {\n"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
@@ -302,13 +309,14 @@ public class Ast2NxcVisitorTest {
     public void test12() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
+            + "     void test(bool x) {\n"
+            + "        if (x) return;"
+            + "    }"
             + MAIN_METHOD
 
             + "        test(true);"
 
-            + "     void test(bool x) {\n"
-            + "        if (x) return;"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_if_return_1.xml");
@@ -318,6 +326,13 @@ public class Ast2NxcVisitorTest {
     public void test13() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
+            + "     void test1(float x, float x2) {\n"
+            + "        TextOut(x,LCD_LINEx2,\"Hallo\");\n"
+            + "    }\n\n"
+            + "    void test2() {\n"
+            + "        if (variablenName2) return;"
+            + "    }"
             + MAIN_METHOD
             + "    float variablenName=0;\n"
             + "    bool variablenName2=true;\n"
@@ -325,12 +340,6 @@ public class Ast2NxcVisitorTest {
             + "        test1(0, 0);"
             + "        test2();"
 
-            + "     void test1(float x, float x2) {\n"
-            + "        TextOut(x,LCD_LINEx2,\"Hallo\");\n"
-            + "    }\n\n"
-            + "    void test2() {\n"
-            + "        if (variablenName2) return;"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
@@ -340,6 +349,7 @@ public class Ast2NxcVisitorTest {
     public void test14() throws Exception {
 
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "    string variablenName[]={\"a\",\"b\",\"c\"};\n"
 
@@ -393,6 +403,7 @@ public class Ast2NxcVisitorTest {
     public void test17() throws Exception {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "    string message=\"exit\";\n"
 
@@ -408,6 +419,7 @@ public class Ast2NxcVisitorTest {
     @Test
     public void test18() throws Exception {
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "    float item=0;\n"
             + "    string item2=\"cc\";\n"
@@ -420,6 +432,7 @@ public class Ast2NxcVisitorTest {
     @Ignore
     public void testStmtForEach() throws Exception {
         final String a = "" //
+            + IMPORTS_CONSTANTS
             + MAIN_METHOD
             + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
             + "    public void run() throwsException {\n"

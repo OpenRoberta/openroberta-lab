@@ -159,37 +159,45 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
         boolean timeSensorUsed = UsedTimerVisitor.check(phrasesSet);
         final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed);
-        astVisitor.generatePrefix(withWrapping);
+        astVisitor.generatePrefix(withWrapping, phrasesSet);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
 
         return astVisitor.sb.toString();
     }
 
+    private static void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
+        if ( withWrapping ) {
+            astVisitor.sb.append("\n}\n");
+        }
+    }
+
     private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NxcVisitor astVisitor) {
         boolean mainBlock = false;
-        for ( final ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( final Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                phrase.visit(astVisitor);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                    phrase.visit(astVisitor);
+                }
+                if ( mainBlock ) {
+                    generateSuffix(withWrapping, astVisitor);
+                    mainBlock = false;
+                }
             }
         }
-        generateSuffix(withWrapping, astVisitor);
     }
 
     private static boolean handleMainBlocks(Ast2NxcVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+        //        if ( phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
         } else if ( phrase.getKind() != BlockType.LOCATION ) {
             mainBlock = true;
         }
+        //        }
         return mainBlock;
-    }
-
-    private static void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
-        if ( withWrapping ) {
-            astVisitor.sb.append("\n}\n");
-        }
     }
 
     private static String getBlocklyTypeCode(BlocklyType type) {
@@ -228,8 +236,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 return "int";
             case CONNECTION:
                 return "int";
+            default:
+                throw new IllegalArgumentException("unhandled type");
         }
-        throw new IllegalArgumentException("unhandled type");
     }
 
     private static String getEnumCode(IMode value) {
@@ -774,16 +783,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    private String getPower() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private String getPort() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         final String methodName = "MotorPower";
@@ -1125,33 +1124,26 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        //final BlocklyType typeArr = indexOfFunct.getParam().get(0).getVarType();
-        String methodName = null;
+        BlocklyType arrayType = indexOfFunct.getParam().get(0).getVarType();
+        String methodName = "ArrFindFirst";
         if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
-            switch ( indexOfFunct.getParam().get(0).getVarType() ) {
-                case ARRAY_NUMBER:
-                    methodName = "ArrFindLastNum( ";
-                    break;
-                case ARRAY_STRING:
-                    methodName = "ArrFindLastStr( ";
-                    break;
-                case ARRAY_BOOLEAN:
-                    methodName = "ArrFindLastBool( ";
-                    break;
-            }
-        } else {
-            switch ( indexOfFunct.getParam().get(0).getVarType() ) {
-                case ARRAY_NUMBER:
-                    methodName = "ArrFindFirstNum( ";
-                    break;
-                case ARRAY_STRING:
-                    methodName = "ArrFindFirstStr( ";
-                    break;
-                case ARRAY_BOOLEAN:
-                    methodName = "ArrFindFirstBool( ";
-                    break;
-            }
+            methodName = "ArrFindLast";
         }
+
+        switch ( arrayType ) {
+            case ARRAY_NUMBER:
+                methodName += "Num( ";
+                break;
+            case ARRAY_STRING:
+                methodName += "Str( ";
+                break;
+            case ARRAY_BOOLEAN:
+                methodName += "Bool( ";
+                break;
+            default:
+                throw new DbcException("Invalid array type: " + arrayType);
+        }
+
         this.sb.append(methodName);
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1421,12 +1413,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append(INDENT).append("void ");
+        this.sb.append("\n").append("void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
         this.sb.append(") {");
         methodVoid.getBody().visit(this);
-        this.sb.append("\n").append(INDENT).append("}");
+        this.sb.append("\n").append("}");
         return null;
     }
 
@@ -1666,19 +1658,21 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     private void addConstants() {
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
-        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
+        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n\n");
         this.sb.append("#include \"hal.h\" \n");
         this.sb.append("#include \"NXCDefs.h\" \n");
     }
 
-    private void generatePrefix(boolean withWrapping) {
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         if ( !withWrapping ) {
             return;
         }
 
         this.addConstants();
 
-        this.sb.append("task main(){");
+        generateUserDefinedMethods(phrasesSet);
+
+        this.sb.append("\ntask main() {");
 
         for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
@@ -1711,6 +1705,22 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             this.sb.append("SetTimerValue( timer1 );");
         }
 
+    }
+
+    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        //TODO: too many nested loops and condition there must be a better way this to be done
+        if ( phrasesSet.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && phrase.getKind() != BlockType.METHOD_CALL;
+                    if ( isCreateMethodPhrase ) {
+                        phrase.visit(this);
+                        this.sb.append("\n");
+                    }
+
+                }
+            }
+        }
     }
 
     @Override
