@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.factory;
 import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -53,7 +55,6 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
-        //NxtCompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".nxc");
         } catch ( Exception e ) {
@@ -113,6 +114,9 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
 
+        Path path = Paths.get(this.robotCompilerResourcesDir);
+        Path base = Paths.get("");
+
         String nbcCompilerFileName = this.robotCompilerResourcesDir + "/windows/nbc.exe";
         if ( SystemUtils.IS_OS_LINUX ) {
             nbcCompilerFileName = this.robotCompilerResourcesDir + "/linux/nbc";
@@ -125,8 +129,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
                 nbcCompilerFileName,
                 this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
                 "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
-                "-I=" + this.robotCompilerResourcesDir + "/hal.h"
-
+                "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
             });
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
