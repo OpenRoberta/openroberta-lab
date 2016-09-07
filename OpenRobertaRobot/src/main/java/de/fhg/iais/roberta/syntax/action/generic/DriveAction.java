@@ -93,21 +93,21 @@ public class DriveAction<V> extends Action<V> {
         String mode;
         List<Value> values;
         MotionParam<V> mp;
-        Phrase<V> left;
+        Phrase<V> power;
         IRobotFactory factory = helper.getModeFactory();
         fields = helper.extractFields(block, (short) 1);
         mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
 
         if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON) ) {
             values = helper.extractValues(block, (short) 2);
-            left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-            Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(right));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
+            power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            Phrase<V> distance = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
+            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(distance));
+            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).duration(md).build();
         } else {
             values = helper.extractValues(block, (short) 1);
-            left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).build();
+            power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).build();
         }
         return DriveAction.make(factory.getDriveDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }

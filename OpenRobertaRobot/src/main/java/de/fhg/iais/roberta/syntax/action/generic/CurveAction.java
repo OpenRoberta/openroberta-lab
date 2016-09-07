@@ -66,7 +66,7 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> paramRight,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new CurveAction<V>(direction, paramLeft, paramRight, properties, comment);
+        return new CurveAction<>(direction, paramLeft, paramRight, properties, comment);
     }
 
     /**
@@ -80,16 +80,16 @@ public class CurveAction<V> extends Action<V> {
      * @return {@link MotionParam} for the motor (speed and distance in which the motors are set).
      */
     public MotionParam<V> getParamLeft() {
-        return paramLeft;
+        return this.paramLeft;
     }
 
     public MotionParam<V> getParamRight() {
-        return paramRight;
+        return this.paramRight;
     }
 
     @Override
     public String toString() {
-        return "CurveAction [" + this.direction + ", " + paramLeft + paramRight + "]";
+        return "CurveAction [" + this.direction + ", " + this.paramLeft + this.paramRight + "]";
     }
 
     @Override
@@ -119,7 +119,7 @@ public class CurveAction<V> extends Action<V> {
         if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE) ) {
             values = helper.extractValues(block, (short) 3);
             Phrase<V> dist = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(dist));
+            MotorDuration<V> md = new MotorDuration<>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(dist));
             left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, Integer.class));
             right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, Integer.class));
             mpLeft = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();

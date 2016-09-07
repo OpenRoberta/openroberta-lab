@@ -48,10 +48,14 @@ public class ArduFactory extends AbstractRobotFactory {
     private final Properties arduProperties;
 
     public ArduFactory(RobotCommunicator unusedForArdu, Integer robotId) {
-        // System.out.println(robotId);
-        arduProperties = Util1.loadProperties("classpath:Ardu.properties");
-        compilerWorkflow = new ArduCompilerWorkflow(arduProperties.getProperty("crosscompiler.basedir"), arduProperties.getProperty("robot.resources.dir"));
+        int robotPropertyNumber = Util1.getRobotNumberFromProperty("ardu");
+        this.compilerWorkflow =
+            new ArduCompilerWorkflow(
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.robotId = robotId;
+        this.arduProperties = Util1.loadProperties("classpath:NXT.properties");
     }
 
     @Override
@@ -432,12 +436,12 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
-        return compilerWorkflow;
+        return this.compilerWorkflow;
     }
 
     @Override
     public int getRobotId() {
-        return robotId;
+        return this.robotId;
     }
 
     @Override
@@ -478,36 +482,36 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return arduProperties.getProperty("robot.program.toolbox.beginner");
+        return this.arduProperties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return arduProperties.getProperty("robot.program.toolbox.expert");
+        return this.arduProperties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return arduProperties.getProperty("robot.program.default");
+        return this.arduProperties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return arduProperties.getProperty("robot.configuration.toolbox");
+        return this.arduProperties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return arduProperties.getProperty("robot.configuration.default");
+        return this.arduProperties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return arduProperties.getProperty("robot.real.name");
+        return this.arduProperties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return arduProperties.getProperty("robot.sim") != null ? true : false;
+        return this.arduProperties.getProperty("robot.sim") != null ? true : false;
     }
 }

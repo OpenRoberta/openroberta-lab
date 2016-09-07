@@ -29,10 +29,12 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
 
     public final String pathToCrosscompilerBaseDir;
     public final String robotCompilerResourcesDir;
+    public final String robotCompilerDir;
 
-    public ArduCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir) {
+    public ArduCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
+        this.robotCompilerDir = robotCompilerDir;
 
     }
 
@@ -66,8 +68,6 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2ArduVisitor.generate((ArduConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
-        // NxtCompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); //
-        // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
         } catch ( Exception e ) {
@@ -135,14 +135,16 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
      */
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
-        //TODO: add the resources paths in a property file
-        String scriptName = "../RobotArdu/resources/arduino-builder";
-        String compilerPath = "/usr/bin/";
+
+        String scriptName = this.robotCompilerResourcesDir + "linux/arduino-builder";
         String os = "linux";
+
         if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = "../RobotArdu/resources/arduino-builder.exe";
+            scriptName = this.robotCompilerResourcesDir + "windows/arduino-builder.exe";
             os = "windows";
-            compilerPath = "C:/avr/bin/";
+        } else if ( SystemUtils.IS_OS_MAC ) {
+            scriptName = this.robotCompilerResourcesDir + "osx/arduino-builder";
+            os = "osx";
         }
 
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
@@ -151,11 +153,11 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
-                "-hardware=../RobotArdu/resources/hardware",
-                "-tools=../RobotArdu/resources/os/" + os + "/tools-builder",
-                "-libraries=../RobotArdu/resources/libraries",
+                "-hardware=" + this.robotCompilerResourcesDir + "hardware",
+                "-tools=" + this.robotCompilerResourcesDir + os,
+                "-libraries=" + this.robotCompilerResourcesDir + "libraries",
                 "-fqbn=arduino:avr:uno",
-                "-prefs=compiler.path=" + compilerPath,
+                "-prefs=compiler.path=" + this.robotCompilerDir,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
                 base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
             });

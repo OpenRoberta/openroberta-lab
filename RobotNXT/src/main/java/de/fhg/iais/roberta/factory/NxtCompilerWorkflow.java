@@ -113,11 +113,11 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
 
-        String nbcCompilerFileName;
-        if ( SystemUtils.IS_OS_WINDOWS ) {
-            nbcCompilerFileName = this.robotCompilerResourcesDir + "/nbc.exe";
-        } else { // TODO add the compiler file for linux and check if this is running on mac too
-            nbcCompilerFileName = this.robotCompilerResourcesDir + "/nbc";
+        String nbcCompilerFileName = this.robotCompilerResourcesDir + "/windows/nbc.exe";
+        if ( SystemUtils.IS_OS_LINUX ) {
+            nbcCompilerFileName = this.robotCompilerResourcesDir + "/linux/nbc";
+        } else if ( SystemUtils.IS_OS_MAC ) {
+            nbcCompilerFileName = this.robotCompilerResourcesDir + "/osx/nbc";
         }
 
         try {
@@ -125,7 +125,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
                 nbcCompilerFileName,
                 this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
                 "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
-                "-I=" + this.robotCompilerResourcesDir + "/hal.h"//this.robotCompilerResourcesDir + "/hal.h"
+                "-I=" + this.robotCompilerResourcesDir + "/hal.h"
 
             });
             procBuilder.redirectInput(Redirect.INHERIT);
