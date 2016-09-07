@@ -55,7 +55,7 @@ public class ArduFactory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.robotId = robotId;
-        this.arduProperties = Util1.loadProperties("classpath:NXT.properties");
+        this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
     }
 
     @Override
