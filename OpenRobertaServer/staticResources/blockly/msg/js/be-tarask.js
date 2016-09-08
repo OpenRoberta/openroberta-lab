@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "чырвонага";
 Blockly.Msg.COLOUR_RGB_TITLE = "колер з";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Стварыць колер з абранымі прапорцыямі чырвонага, зялёнага і сіняга. Усе значэньні павінны быць ад 0 да 100.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

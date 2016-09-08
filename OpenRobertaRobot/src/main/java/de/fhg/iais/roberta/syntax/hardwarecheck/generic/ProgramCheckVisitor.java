@@ -2,25 +2,29 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
-import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -68,10 +72,14 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
         checkDiffDrive(driveAction);
         driveAction.getParam().getSpeed().visit(this);
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
+        visitMotorDuration(duration);
+        return null;
+    }
+
+    private void visitMotorDuration(MotorDuration<Void> duration) {
         if ( duration != null ) {
             duration.getValue().visit(this);
         }
-        return null;
     }
 
     @Override
@@ -79,9 +87,7 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
         checkDiffDrive(turnAction);
         turnAction.getParam().getSpeed().visit(this);
         MotorDuration<Void> duration = turnAction.getParam().getDuration();
-        if ( duration != null ) {
-            duration.getValue().visit(this);
-        }
+        visitMotorDuration(duration);
         return null;
     }
 
@@ -94,10 +100,8 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         checkMotorPort(motorOnAction);
-        Expr<Void> duration = motorOnAction.getDurationValue();
-        if ( duration != null ) {
-            duration.visit(this);
-        }
+        MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
+        visitMotorDuration(duration);
         return null;
     }
 
@@ -136,6 +140,18 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
     }
 
     @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> driveAction) {
+        checkDiffDrive(driveAction);
+        return null;
+    }
+
+    @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         checkSensorPort(gyroSensor);
         return null;
@@ -159,9 +175,25 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
         return null;
     }
 
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        checkSensorPort(lightSensor);
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        checkSensorPort(soundSensor);
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
     private void checkDiffDrive(Phrase<Void> driveAction) {
         checkLeftRightMotorPort(driveAction);
-
     }
 
     private void checkMotorPort(MoveAction<Void> action) {
@@ -172,20 +204,24 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        IActorPort leftMotorPort = this.brickConfiguration.getLeftMotorPort();
-        IActorPort rightMotorPort = this.brickConfiguration.getRightMotorPort();
-        if ( leftMotorPort == null ) {
+        Actor leftMotor = this.brickConfiguration.getLeftMotor();
+        Actor rightMotor = this.brickConfiguration.getRightMotor();
+        if ( leftMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
             this.errorCount++;
-        } else if ( !this.brickConfiguration.getActorOnPort(leftMotorPort).isRegulated() ) {
+        } else if ( !leftMotor.isRegulated() ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED"));
             this.errorCount++;
         }
-        if ( rightMotorPort == null ) {
+        if ( rightMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
             this.errorCount++;
-        } else if ( !this.brickConfiguration.getActorOnPort(rightMotorPort).isRegulated() ) {
+        } else if ( !rightMotor.isRegulated() ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED"));
+            this.errorCount++;
+        }
+        if ( leftMotor.getRotationDirection() != rightMotor.getRotationDirection() ) {
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
             this.errorCount++;
         }
     }

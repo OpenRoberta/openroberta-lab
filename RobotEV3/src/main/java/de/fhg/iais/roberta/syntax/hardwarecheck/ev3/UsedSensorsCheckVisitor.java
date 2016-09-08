@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
+package de.fhg.iais.roberta.syntax.hardwarecheck.ev3;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "rouge";
 Blockly.Msg.COLOUR_RGB_TITLE = "colorier avec";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Créer une couleur avec la quantité spécifiée de rouge, vert et bleu. Les valeurs doivent être comprises entre 0 et 100.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

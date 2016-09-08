@@ -118,6 +118,24 @@ public abstract class Configuration {
     }
 
     /**
+     * This method returns the left motor. If there is no left motor returns *null*
+     *
+     * @return left motor
+     */
+    public Actor getLeftMotor() {
+        throw new DbcException("Implement the method in the robot specific configuration class!");
+    }
+
+    /**
+     * This method returns the right motor. If there is no right motor returns *null*
+     *
+     * @return right motor
+     */
+    public Actor getRightMotor() {
+        throw new DbcException("Implement the method in the robot specific configuration class!");
+    }
+
+    /**
      * This method returns the port on which the right motor is connected. If there is no right motor connected throws and {@link DbcException} exception.
      *
      * @return port on which the left motor is connected
@@ -197,7 +215,7 @@ public abstract class Configuration {
             + "]";
     }
 
-    protected IActorPort getMotorOnSide(IMotorSide side) {
+    protected IActorPort getMotorPortOnSide(IMotorSide side) {
         Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
         for ( Map.Entry<IActorPort, Actor> entry : this.actors.entrySet() ) {
             if ( entry.getValue().getMotorSide() == side ) {

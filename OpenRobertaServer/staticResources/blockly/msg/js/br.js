@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "ruz";
 Blockly.Msg.COLOUR_RGB_TITLE = "liv gant";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Krouiñ ul liv gant ar c'hementad spisaet a ruz, a wer hag a c'hlas. Etre 0 ha 100 e tle bezañ an holl dalvoudoù.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

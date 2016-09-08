@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "சிகப்பு";
 Blockly.Msg.COLOUR_RGB_TITLE = "நிறத்துடன்";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "குறிப்பிட்ட அளவு சிவப்பு,பச்சை மற்றும் நீலம் சேர்த்து புது நிறம் உருவாக்கு. மதிப்புகள் 0 முதல் 100 வரை மட்டுமே இருக்க வேண்டும்.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

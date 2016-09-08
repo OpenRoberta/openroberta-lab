@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "kırmızı";
 Blockly.Msg.COLOUR_RGB_TITLE = "renk değerleri";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Kırmızı, yeşil ve mavinin belirtilen miktarıyla bir renk oluşturun.  Tüm değerler 0 ile 100 arasında olmalıdır.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

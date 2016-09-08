@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "ಕೆಂಪು ಬಣ್ಣೊ";
 Blockly.Msg.COLOUR_RGB_TITLE = "ಬಣ್ಣೊದೊಟ್ಟುಗೆ";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "ತೋಜಿಪಾಯಿನ ಕೆಂಪು, ಪಚ್ಚೆ ಬುಕ್ಕೊ ನೀಲಿ ಬಣ್ಣೊದ ಪ್ರಮಾಣೊನು ರಚಿಸಲೆ.  ಮಾಂತ ಮೌಲ್ಯೊಲು 0 ಬುಕ್ಕೊ 100 ನಡುಟೆ ಇಪ್ಪೊಡು.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

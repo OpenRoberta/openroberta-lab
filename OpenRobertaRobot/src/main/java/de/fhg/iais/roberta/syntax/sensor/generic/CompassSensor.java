@@ -37,7 +37,7 @@ public class CompassSensor<V> extends Sensor<V> {
      * @return read only object of {@link CompassSensor}
      */
     public static <V> CompassSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new CompassSensor<V>(properties, comment);
+        return new CompassSensor<>(properties, comment);
     }
 
     /**

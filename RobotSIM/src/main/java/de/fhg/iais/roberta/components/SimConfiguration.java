@@ -27,7 +27,7 @@ public class SimConfiguration extends Configuration {
      */
     @Override
     public IActorPort getLeftMotorPort() {
-        return getMotorOnSide(MotorSide.LEFT);
+        return getMotorPortOnSide(MotorSide.LEFT);
     }
 
     /**
@@ -37,7 +37,7 @@ public class SimConfiguration extends Configuration {
      */
     @Override
     public IActorPort getRightMotorPort() {
-        return getMotorOnSide(MotorSide.RIGHT);
+        return getMotorPortOnSide(MotorSide.RIGHT);
     }
 
     /**

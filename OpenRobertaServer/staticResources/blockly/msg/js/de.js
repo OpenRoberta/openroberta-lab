@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "rot";
 Blockly.Msg.COLOUR_RGB_TITLE = "Farbe mit";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Kreiere eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 100 liegen.";
 Blockly.Msg.COLOUR_TOOLTIP = "Block für den Farbsensor";
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "In der Roboterkonfiguration ist kein linker Motor angegeben!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Beim linken Motor ist die Regulierung ausgestellt!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "In der Roboterkonfiguration ist kein Motor an diesem Motorport angeschlossen!";

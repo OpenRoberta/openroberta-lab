@@ -27,7 +27,12 @@ public class ArduConfiguration extends Configuration {
      */
     @Override
     public IActorPort getLeftMotorPort() {
-        return getMotorOnSide(MotorSide.LEFT);
+        return getMotorPortOnSide(MotorSide.LEFT);
+    }
+
+    @Override
+    public Actor getLeftMotor() {
+        return getActorOnPort(getLeftMotorPort());
     }
 
     /**
@@ -37,7 +42,12 @@ public class ArduConfiguration extends Configuration {
      */
     @Override
     public IActorPort getRightMotorPort() {
-        return getMotorOnSide(MotorSide.RIGHT);
+        return getMotorPortOnSide(MotorSide.RIGHT);
+    }
+
+    @Override
+    public Actor getRightMotor() {
+        return getActorOnPort(getRightMotorPort());
     }
 
     /**

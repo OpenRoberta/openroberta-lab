@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "црвена";
 Blockly.Msg.COLOUR_RGB_TITLE = "боја со";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Создајте боја со укажаните износи на црвена, зелена и сина. Сите вредности мора да бидат помеѓу 0 и 100.";
 Blockly.Msg.COLOUR_TOOLTIP = "Represents EV3 colour sensor.";  // untranslated
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Left motor missing in the configuration!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor is missing on the given port!";  // untranslated

@@ -58,6 +58,7 @@ Blockly.Msg.COLOUR_RGB_RED = "rød";
 Blockly.Msg.COLOUR_RGB_TITLE = "farve med";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Lav en farve med den angivne mængde af rød, grøn og blå. Alle værdier skal være mellem 0 og 100.";
 Blockly.Msg.COLOUR_TOOLTIP = "Repræsenterer EV3 farvesensoren.";
+Blockly.Msg.CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION = "The direction of rotation of the left and right motor is different!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = "Venstre motor mangler i konfigurationen!";
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = "Left motor is not regulated!";  // untranslated
 Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = "Motor mangler på den angivne port!";
