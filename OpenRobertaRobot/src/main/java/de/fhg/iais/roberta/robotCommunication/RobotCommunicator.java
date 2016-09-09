@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
+import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -96,19 +97,19 @@ public class RobotCommunicator {
         }
     }
 
-    public int aTokenAgreementWasSent(String token, String robot) {
+    public Key aTokenAgreementWasSent(String token, String robot) {
         RobotCommunicationData state = this.allStates.get(token);
         if ( state == null ) {
             LOG.info("token " + token + " is not waiting for. Typing error of the user?");
-            return -1;
+            return Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING;
         } else if ( !state.getRobot().equals(robot) ) {
             LOG.info("token " + token + " belongs to a robot of type " + state.getRobot() + ", client is set to " + robot);
-            return 0;
+            return Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE;
         } else {
             // todo: version check!
             state.userApprovedTheRobotToken();
             LOG.info("token " + token + " is approved by a user.");
-            return 1;
+            return Key.TOKEN_SET_SUCCESS;
         }
     }
 

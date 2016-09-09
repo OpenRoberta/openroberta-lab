@@ -21,6 +21,7 @@ public class RobotCommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(RobotCommunicationData.class);
     private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 300000;
     private static final int WAIT_FOR_A_ROBOT_PUSH_COMMAND = 1000;
+    private static final int TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH = 10000;
 
     private final String token;
     private final String robot;
@@ -91,7 +92,7 @@ public class RobotCommunicationData {
                     + this.robotIdentificator
                     + "] token "
                     + this.token
-                    + " user canceled the first registration request and sends another one after "
+                    + " was disconnected. The request is aborted. Time elapsed: "
                     + this.timerStartedByLastRequest.elapsedMsecFormatted());
             return false;
         } else {
@@ -101,7 +102,7 @@ public class RobotCommunicationData {
                     + this.robotIdentificator
                     + "] token "
                     + this.token
-                    + " approval FAILED. Time elapsed: "
+                    + " approval FAILED. The robot is disconnected. Time elapsed: "
                     + this.timerStartedByLastRequest.elapsedMsecFormatted());
             return false;
         }
@@ -233,6 +234,15 @@ public class RobotCommunicationData {
             }
         }
         return this.state == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER;
+    }
+
+    /**
+     * return true, if the robot is probably disconnected. But the robot may reconnect in the future (if USB cable is plugged in, for instance)
+     *
+     * @return true, if the robot didn't send a push command within a reasonable long interval after being requested to do so
+     */
+    public boolean isRobotProbablyDisconnected() {
+        return state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && getElapsedMsecOfStartOfLastRequest() > TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH;
     }
 
     public String getToken() {

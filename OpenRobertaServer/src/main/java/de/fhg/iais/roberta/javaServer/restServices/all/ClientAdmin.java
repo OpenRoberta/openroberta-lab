@@ -64,16 +64,25 @@ public class ClientAdmin {
                 Util.addSuccessInfo(response, Key.INIT_SUCCESS);
             } else if ( cmd.equals("setToken") ) {
                 String token = request.getString("token");
-                if ( this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName()) == 1 ) {
-                    httpSessionState.setToken(token);
-                    Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
-                    LOG.info("success: token " + token + " is registered in the session");
-                } else if ( this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName()) == -1 ) {
-                    Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
-                    LOG.info("error: token " + token + " not registered in the session");
-                } else if ( this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName()) == 0 ) {
-                    Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
-                    LOG.info("error: token " + token + " not registered in the session");
+                Key tokenAgreement = this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName());
+                switch ( tokenAgreement ) {
+                    case TOKEN_SET_SUCCESS:
+                        httpSessionState.setToken(token);
+                        Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                        LOG.info("success: token " + token + " is registered in the session");
+                        break;
+                    case TOKEN_SET_ERROR_WRONG_ROBOTTYPE:
+                        Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE);
+                        LOG.info("error: token " + token + " not registered in the session, wrong robot type");
+                        break;
+                    case TOKEN_SET_ERROR_NO_ROBOT_WAITING:
+                        Util.addErrorInfo(response, Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING);
+                        LOG.info("error: token " + token + " not registered in the session");
+                        break;
+                    default:
+                        LOG.error("invalid response for token agreement: " + tokenAgreement);
+                        Util.addErrorInfo(response, Key.SERVER_ERROR);
+                        break;
                 }
             } else if ( cmd.equals("updateFirmware") ) {
                 // TODO: This should be moved to update server

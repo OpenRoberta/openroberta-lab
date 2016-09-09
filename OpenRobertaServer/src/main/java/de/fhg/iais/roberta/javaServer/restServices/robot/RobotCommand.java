@@ -46,15 +46,8 @@ public class RobotCommand {
     public Response handle(JSONObject requestEntity) throws JSONException, InterruptedException {
         AliveData.rememberRobotCall();
         String cmd = requestEntity.getString(CMD);
-        String macaddr = null;
         String token = null;
-        String robot = null;
-        String brickname = null;
-        String batteryvoltage = null;
-        String menuversion = null;
         String firmwarename = null;
-        String firmwareversion = null;
-        int nepoExitValue = 0;
         try {
             token = requestEntity.getString("token");
             firmwarename = requestEntity.getString("firmwarename");
@@ -63,50 +56,14 @@ public class RobotCommand {
             return Response.serverError().build();
         }
         // TODO: move robot to the requested properties for the next version
-        try {
-            robot = requestEntity.getString("robot");
-        } catch ( Exception e ) {
-            robot = "ev3";
-        }
-        try {
-            macaddr = requestEntity.getString("macaddr");
-
-        } catch ( Exception e ) {
-            macaddr = "1234";
-        }
-        try {
-            brickname = requestEntity.getString("brickname");
-        } catch ( Exception e ) {
-            brickname = robot;
-        }
-        try {
-            batteryvoltage = requestEntity.getString("battery");
-        } catch ( Exception e ) {
-            batteryvoltage = "";
-        }
-        try {
-            menuversion = requestEntity.getString("menuversion");
-        } catch ( Exception e ) {
-            menuversion = "";
-        }
-        try {
-            firmwareversion = requestEntity.getString("firmwareversion");
-        } catch ( Exception e ) {
-            try {
-                // legacy
-                firmwareversion = requestEntity.getString("lejosversion");
-                // firmwarename = "leJOS";
-            } catch ( Exception ee ) {
-                firmwareversion = "";
-            }
-        }
-        try {
-            nepoExitValue = requestEntity.getInt("nepoexitvalue");
-        } catch ( Exception e ) {
-            // no program was executed yet on the robot, field in requestEntity does not exist
-            // or the robot system does not support it (nxt)
-            nepoExitValue = 0;
-        }
+        String robot = requestEntity.optString("robot", "ev3");
+        String macaddr = requestEntity.optString("macaddr", "1234");
+        String brickname = requestEntity.optString("brickname", robot);
+        String batteryvoltage = requestEntity.optString("battery", "");
+        String menuversion = requestEntity.optString("menuversion", "");
+        String firmwareversion = requestEntity.optString("firmwareversion");
+        firmwareversion = firmwareversion == null ? requestEntity.optString("lejosversion", "") : firmwareversion;
+        int nepoExitValue = requestEntity.optInt("nepoexitvalue", 0);
         // TODO: validate version here!
         JSONObject response;
         switch ( cmd ) {

@@ -74,12 +74,7 @@ public class Util {
                         String infoAboutState;
                         if ( communicationState == State.ROBOT_IS_BUSY ) {
                             infoAboutState = "busy";
-                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
-                            infoAboutState = "disconnected";
-                            brickCommunicator.disconnect(token);
-                        } else if ( communicationState == State.ROBOT_WAITING_FOR_PUSH_FROM_SERVER ) {
-                            infoAboutState = "wait";
-                        } else if ( communicationState == State.GARBAGE ) {
+                        } else if ( state.isRobotProbablyDisconnected() || communicationState == State.GARBAGE ) {
                             infoAboutState = "disconnected";
                         } else {
                             infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
