@@ -442,7 +442,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     exports.getRobotFWName = getRobotFWName;
 
     function setRobotToken(token) {
-        GUISTATE.robot.token;
+        GUISTATE.robot.token = token;
     }
     exports.setRobotToken = setRobotToken;
 

@@ -450,6 +450,7 @@ define([ 'simulation.simulation',
             var blue = b / num;
             if (this.robot.colorSensor) {
                 values.color = {};
+                values.light = {};
                 this.robot.colorSensor.colorValue = SIMATH
                     .getColor(SIMATH.rgbToHsv(red, green, blue));
                 values.color.colorValue = this.robot.colorSensor.colorValue;
@@ -480,11 +481,15 @@ define([ 'simulation.simulation',
                 }
                 this.robot.colorSensor.lightValue = (
                     (red + green + blue) / 3 / 2.55);
+                
                 values.color.red = this.robot.colorSensor.lightValue;
                 values.color.rgb = [ UTIL.round(red / 2.55, 0),
                                      UTIL.round(green / 2.55, 0),
                                      UTIL.round(blue / 2.55, 0) ];
                 values.color.ambientlight = 0;
+                
+                values.light.red = this.robot.colorSensor.lightValue;
+                values.light.ambientlight = 0;
             }
         }
 

@@ -10,8 +10,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
 
         var ready = $.Deferred();
         $.when(ROBOT.setRobot(GUISTATE_C.getRobot(), function(result) {
-            if (result.rc == 'ok')
-                GUISTATE_C.setRobot(GUISTATE_C.getRobot(), result, true);
+            if (result.rc == 'ok'){GUISTATE_C.setRobot(GUISTATE_C.getRobot(), result, true);}
         })).then(function() {
             initRobotForms();
             LOG.info('init robot forms');
@@ -23,7 +22,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
 
     /**
      * Set token
-     *
+     * 
      * @param {token}
      *            Token value to be set
      */
@@ -138,7 +137,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         if (GUISTATE_C.getRobotFWName() != "lejos") {
             return false;
         }
-        var regex = '(.+\..+)\..+'; // get x.y from version x.y.z
+        var regex = '^([^\.]+\.[^\.]+)[\..+]*'; // get x.y from version x.y.z
         var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
         var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
         if (mainversionServer > mainversionRobot) {

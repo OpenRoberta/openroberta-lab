@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.mode.sensor.sim.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.sim.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.sim.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.sim.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.sim.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.sim.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.sim.TimerSensorMode;
@@ -273,6 +274,31 @@ public class SimFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public ILightSensorMode getLightSensorMode(String lightrSensorMode) {
+        if ( lightrSensorMode == null || lightrSensorMode.isEmpty() ) {
+            throw new DbcException("Invalid Light Sensor Mode: " + lightrSensorMode);
+        }
+        String sUpper = lightrSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( LightSensorMode sp : LightSensorMode.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Light Sensor Mode: " + lightrSensorMode);
+    }
+
+    @Override
+    public List<ILightSensorMode> getLightSensorModes() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
         if ( motorTachoMode == null || motorTachoMode.isEmpty() ) {
             throw new DbcException("Invalid Motor Tacho Mode: " + motorTachoMode);
@@ -380,18 +406,6 @@ public class SimFactory extends AbstractRobotFactory {
     @Override
     public int getRobotId() {
         return this.robotId;
-    }
-
-    @Override
-    public ILightSensorMode getLightSensorMode(String lightrSensorMode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

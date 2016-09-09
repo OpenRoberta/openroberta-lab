@@ -609,6 +609,12 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.sb.append("createGetSample(CONST.LIGHT, CONST." + lightSensor.getMode() + ")");
+        return null;
+    }
+
+    @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderMotor = (encoderSensor.getMotorPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString();
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
@@ -1152,12 +1158,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         if ( isInStmt() ) {
             this.sb.setLength(this.sb.length() - 2);
         }
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

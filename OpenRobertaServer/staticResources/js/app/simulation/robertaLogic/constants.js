@@ -371,6 +371,8 @@ define({
     VALUES : "values",
 
     INSERT : "insert",
+    
+    LIGHT : "light",
 
     COLOR_ENUM : {
         NONE : "NONE",
