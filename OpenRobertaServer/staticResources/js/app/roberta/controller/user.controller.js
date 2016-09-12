@@ -17,15 +17,15 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function createUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(), function(
-                    result) {
-                if (result.rc === "ok") {
-                    $('#loginAccountName').val($("#registerAccountName").val());
-                    $('#loginPassword').val($('#registerPass').val());
-                    login();
-                }
-                MSG.displayInformation(result, "", result.message);
-            });
+            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(),
+                    function(result) {
+                        if (result.rc === "ok") {
+                            $('#loginAccountName').val($("#registerAccountName").val());
+                            $('#loginPassword').val($('#registerPass').val());
+                            login();
+                        }
+                        MSG.displayInformation(result, "", result.message);
+                    });
         }
     }
 
@@ -415,7 +415,8 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     /**
      * Initialize the login modal
      */
-    function initUserForms() {
+    function init() {
+        USER.clear();
         $divForms = $('#div-login-forms');
         $formLogin = $('#login-form');
         $formLost = $('#lost-form');
@@ -435,7 +436,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         initUserPasswordChangeModal();
         LOG.info('init user forms');
     }
-    exports.initUserForms = initUserForms;
+    exports.init = init;
 
     function showUserDataForm() {
         getUserFromServer();

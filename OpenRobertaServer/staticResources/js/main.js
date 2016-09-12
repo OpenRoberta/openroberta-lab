@@ -129,7 +129,7 @@ function init() {
         progShareController.init();
         logListController.init();
         menuController.init();
-        userController.initUserForms();
+        userController.init();
         configurationController.init();
         programController.init();
         $(".pace").fadeOut(500, function() {
