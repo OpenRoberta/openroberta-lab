@@ -372,8 +372,8 @@ public class AstToLejosJavaScriptVisitorTest {
     @Test
     public void test26() throws Exception {
         String a =
-            "var stmt0 = createShowTextAction(createGetSample(CONST.GYRO, CONST.ANGLE), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
-                + "var stmt1 = createShowTextAction(createGetSample(CONST.GYRO, CONST.RATE), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
+            "var stmt0 = createShowTextAction(createGetGyroSensorSample(CONST.GYRO, CONST.ANGLE), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
+                + "var stmt1 = createShowTextAction(createGetGyroSensorSample(CONST.GYRO, CONST.RATE), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
                 + "var stmt2 = createResetGyroSensor();\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 

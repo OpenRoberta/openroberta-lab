@@ -30,6 +30,11 @@ public class SimConfiguration extends Configuration {
         return getMotorPortOnSide(MotorSide.LEFT);
     }
 
+    @Override
+    public Actor getLeftMotor() {
+        return getActorOnPort(getLeftMotorPort());
+    }
+
     /**
      * This method returns the port on which the right motor is connected. If there is no right motor connected throws and {@link DbcException} exception.
      *
@@ -38,6 +43,11 @@ public class SimConfiguration extends Configuration {
     @Override
     public IActorPort getRightMotorPort() {
         return getMotorPortOnSide(MotorSide.RIGHT);
+    }
+
+    @Override
+    public Actor getRightMotor() {
+        return getActorOnPort(getRightMotorPort());
     }
 
     /**

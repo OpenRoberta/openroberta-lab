@@ -364,10 +364,7 @@ define(
                         this.encoder.right = 0;
                     }
                 }
-                if (actions.gyroReset) {
-                    this.pose.theta = 0;
-                    this.pose.thetaDiff = 0;
-                }
+
                 this.bumpedAready = false;
                 if (this.frontLeft.bumped && this.left > 0) {
                     this.left *= -1;

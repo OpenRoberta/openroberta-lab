@@ -277,6 +277,14 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createGetGyroSensorSample(sensorType, sensorMode) {
+        var result = {};
+        result[CONST.EXPR] = CONST.GET_GYRO_SENSOR_SAMPLE;
+        result[CONST.SENSOR_TYPE] = sensorType;
+        result[CONST.SENSOR_MODE] = sensorMode;
+        return result;
+    }
+
     function createResetGyroSensor() {
         var result = {};
         result[CONST.STMT] = CONST.GYRO_SENSOR_RESET;

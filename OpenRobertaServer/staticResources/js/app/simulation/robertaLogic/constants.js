@@ -301,6 +301,8 @@ define({
     ENCODER_SENSOR_RESET : "encoderSensorReset",
 
     ENCODER_SENSOR_SAMPLE : "encoderSensorSample",
+    
+    GET_GYRO_SENSOR_SAMPLE : "gyroSensorSample",
 
     MOTOR_STOP : "motorStop",
 

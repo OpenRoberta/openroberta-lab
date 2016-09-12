@@ -64,6 +64,7 @@ require.config({
         'robertaLogic.motor' : '../app/simulation/robertaLogic/motor',
         'robertaLogic.program' : '../app/simulation/robertaLogic/program',
         'robertaLogic.timer' : '../app/simulation/robertaLogic/timer',
+        'robertaLogic.gyro' : '../app/simulation/robertaLogic/gyro',
 
     },
     shim : {
@@ -154,7 +155,7 @@ function handleServerErrors() {
     })
     $('#show-message :button').hide();
     $('#show-message').on('hidden.bs.modal', function(e) {
-       // $("#show-message").modal("show");
+        // $("#show-message").modal("show");
         guiStateController.setPing(true);
     });
     $("#show-message").modal("show");

@@ -634,7 +634,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             this.sb.append("createResetGyroSensor(");
             this.sb.append(end);
         } else {
-            this.sb.append("createGetSample(CONST.GYRO, CONST." + gyroSensor.getMode() + ")");
+            this.sb.append("createGetGyroSensorSample(CONST.GYRO, CONST." + gyroSensor.getMode() + ")");
         }
         return null;
     }

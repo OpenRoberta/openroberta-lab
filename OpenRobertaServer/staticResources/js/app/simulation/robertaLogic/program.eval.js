@@ -3,7 +3,7 @@
  * reads every statement of the program and gives command to the simulation what
  * the robot should do.
  */
-define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'util', 'robertaLogic.constants' ], function(Actors, Memory, Program, UTIL,
+define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.gyro', 'util', 'robertaLogic.constants'], function(Actors, Memory, Program, Gyro, UTIL,
         CONSTANTS) {
     var privateMem = new WeakMap();
 
@@ -18,6 +18,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
         internal(this).program = new Program();
         internal(this).memory = new Memory();
         internal(this).actors = new Actors();
+        internal(this).gyro = new Gyro();
         internal(this).simulationData = {};
         internal(this).outputCommands = {};
     };
@@ -130,7 +131,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
                 break;
 
             case CONSTANTS.GYRO_SENSOR_RESET:
-                evalResetGyroSensor(internal(this), stmt);
+                evalResetGyroSensor(internal(this));
                 break;
 
             case CONSTANTS.TIMER_SENSOR_RESET:
@@ -185,6 +186,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
         obj.simulationData = simulationData;
         obj.actors.getLeftMotor().setCurrentRotations(simulationData.encoder.left);
         obj.actors.getRightMotor().setCurrentRotations(simulationData.encoder.right);
+        obj.gyro.update(simulationData.gyro.angle);
+        obj.gyro.setRate(simulationData.gyro.rate);
         obj.program.getTimer().setCurrentTime(simulationData.time);
         obj.program.setNextFrameTimeDuration(simulationData.frameTime);
     };
@@ -210,8 +213,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
         }
     };
 
-    var evalResetGyroSensor = function(obj, stmt) {
-        obj.outputCommands.gyroReset = true;
+    var evalResetGyroSensor = function(obj) {
+        obj.gyro.reset()
     };
 
     var evalResetTimerSensor = function(obj, stmt) {
@@ -527,6 +530,8 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             return evalMathConst(obj, expr.value);
         case CONSTANTS.GET_SAMPLE:
             return evalSensor(obj, expr.sensorType, expr.sensorMode);
+        case CONSTANTS.GET_GYRO_SENSOR_SAMPLE:
+            return evalGyroSensor(obj, expr.sensorType, expr.sensorMode);
         case CONSTANTS.ENCODER_SENSOR_SAMPLE:
             return evalEncoderSensor(obj, expr.motorSide, expr.sensorMode);
         case CONSTANTS.MOTOR_GET_POWER:
@@ -545,6 +550,17 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             return obj.simulationData[sensorType][sensorMode];
         }
         return obj.simulationData[sensorType];
+    };
+    
+    var evalGyroSensor = function(obj, sensorType, sensorMode) {
+        switch (sensorMode) {
+        case CONSTANTS.ANGLE:
+            return obj.gyro.getAngle();
+        case CONSTANTS.RATE:
+            return obj.gyro.getRate();      
+        default:
+            throw "Invalid Gyro Mode!";
+        }
     };
 
     var evalEncoderSensor = function(obj, motorSide, sensorMode) {
