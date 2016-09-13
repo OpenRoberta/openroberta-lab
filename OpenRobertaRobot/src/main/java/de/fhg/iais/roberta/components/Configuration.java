@@ -127,6 +127,15 @@ public abstract class Configuration {
     }
 
     /**
+     * This method returns the number of right motors connected.
+     *
+     * @return port on which the left motor is connected
+     */
+    public int getNumberOfLeftMotors() {
+        throw new DbcException("Implement the method in the robot specific configuration class!");
+    }
+
+    /**
      * This method returns the right motor. If there is no right motor returns *null*
      *
      * @return right motor
@@ -141,6 +150,15 @@ public abstract class Configuration {
      * @return port on which the left motor is connected
      */
     public IActorPort getRightMotorPort() {
+        throw new DbcException("Implement the method in the robot specific configuration class!");
+    }
+
+    /**
+     * This method returns the number of right motors connected.
+     *
+     * @return port on which the left motor is connected
+     */
+    public int getNumberOfRightMotors() {
         throw new DbcException("Implement the method in the robot specific configuration class!");
     }
 
@@ -222,7 +240,7 @@ public abstract class Configuration {
                 return entry.getKey();
             }
         }
-        //throw new DbcException("No left motor defined!");
+        //        throw new DbcException("No left motor defined!");
         return null;
     }
 

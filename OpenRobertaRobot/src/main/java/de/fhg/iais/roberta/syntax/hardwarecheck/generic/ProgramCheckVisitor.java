@@ -194,6 +194,7 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
 
     private void checkDiffDrive(Phrase<Void> driveAction) {
         checkLeftRightMotorPort(driveAction);
+
     }
 
     private void checkMotorPort(MoveAction<Void> action) {
@@ -206,24 +207,53 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
         Actor leftMotor = this.brickConfiguration.getLeftMotor();
         Actor rightMotor = this.brickConfiguration.getRightMotor();
-        if ( leftMotor == null ) {
-            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
-            this.errorCount++;
-        } else if ( !leftMotor.isRegulated() ) {
-            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED"));
-            this.errorCount++;
-        }
+        checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
+        checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
+        checkLeftAndRightMotorRotationDirection(driveAction, leftMotor, rightMotor);
+        checkNumberOfMotors(driveAction);
+
+    }
+
+    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor rightMotor) {
         if ( rightMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
             this.errorCount++;
-        } else if ( !rightMotor.isRegulated() ) {
-            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED"));
-            this.errorCount++;
+        } else {
+            checkIfMotorRegulated(driveAction, rightMotor, "CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED");
         }
-        if ( leftMotor.getRotationDirection() != rightMotor.getRotationDirection() ) {
+    }
+
+    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor leftMotor) {
+        if ( leftMotor == null ) {
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
+            this.errorCount++;
+        } else {
+            checkIfMotorRegulated(driveAction, leftMotor, "CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED");
+        }
+    }
+
+    private void checkLeftAndRightMotorRotationDirection(Phrase<Void> driveAction, Actor leftMotor, Actor rightMotor) {
+        if ( leftMotor != null && rightMotor != null && leftMotor.getRotationDirection() != rightMotor.getRotationDirection() ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
             this.errorCount++;
         }
     }
 
+    private void checkNumberOfMotors(Phrase<Void> driveAction) {
+        if ( this.brickConfiguration.getNumberOfRightMotors() > 1 ) {
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS"));
+            this.errorCount++;
+        }
+        if ( this.brickConfiguration.getNumberOfLeftMotors() > 1 ) {
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS"));
+            this.errorCount++;
+        }
+    }
+
+    private void checkIfMotorRegulated(Phrase<Void> driveAction, Actor motor, String errorMsg) {
+        if ( !motor.isRegulated() ) {
+            driveAction.addInfo(NepoInfo.error(errorMsg));
+            this.errorCount++;
+        }
+    }
 }

@@ -32,7 +32,11 @@ public class ArduConfiguration extends Configuration {
 
     @Override
     public Actor getLeftMotor() {
-        return getActorOnPort(getLeftMotorPort());
+        IActorPort port = getLeftMotorPort();
+        if ( port != null ) {
+            return getActorOnPort(port);
+        }
+        return null;
     }
 
     /**
@@ -47,7 +51,34 @@ public class ArduConfiguration extends Configuration {
 
     @Override
     public Actor getRightMotor() {
-        return getActorOnPort(getRightMotorPort());
+        IActorPort port = getRightMotorPort();
+        if ( port != null ) {
+            return getActorOnPort(port);
+        }
+        return null;
+
+    }
+
+    @Override
+    public int getNumberOfRightMotors() {
+        int right = 0;
+        for ( Actor actor : this.actors.values() ) {
+            if ( actor.getMotorSide() == MotorSide.RIGHT ) {
+                right++;
+            }
+        }
+        return right;
+    }
+
+    @Override
+    public int getNumberOfLeftMotors() {
+        int leftMotors = 0;
+        for ( Actor actor : this.actors.values() ) {
+            if ( actor.getMotorSide() == MotorSide.LEFT ) {
+                leftMotors++;
+            }
+        }
+        return leftMotors;
     }
 
     /**

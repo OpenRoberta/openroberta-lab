@@ -161,8 +161,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
-    {
+    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
