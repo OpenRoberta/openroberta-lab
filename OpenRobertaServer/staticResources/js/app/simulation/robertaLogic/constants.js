@@ -108,6 +108,8 @@ define({
 
     DRIVE_ACTION : "DriveAction",
 
+    CURVE_ACTION : "CurveAction",
+
     TURN_LIGHT : "turnLight",
 
     TURN_ACTION : "TurnAction",
@@ -119,6 +121,10 @@ define({
     TURN_DIRECTION : "turnDirection",
 
     SPEED : "speed",
+
+    SPEED_L : "speedL",
+
+    SPEED_R : "speedR",
 
     DISTANCE : "distance",
 
@@ -301,7 +307,7 @@ define({
     ENCODER_SENSOR_RESET : "encoderSensorReset",
 
     ENCODER_SENSOR_SAMPLE : "encoderSensorSample",
-    
+
     GET_GYRO_SENSOR_SAMPLE : "gyroSensorSample",
 
     MOTOR_STOP : "motorStop",
@@ -373,7 +379,7 @@ define({
     VALUES : "values",
 
     INSERT : "insert",
-    
+
     LIGHT : "light",
 
     COLOR_ENUM : {

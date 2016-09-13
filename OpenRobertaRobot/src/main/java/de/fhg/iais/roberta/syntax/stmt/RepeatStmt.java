@@ -62,7 +62,7 @@ public class RepeatStmt<V> extends Stmt<V> {
      * @return read only object of {@link RepeatStmt}
      */
     public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RepeatStmt<V>(mode, expr, list, properties, comment);
+        return new RepeatStmt<>(mode, expr, list, properties, comment);
     }
 
     /**
@@ -249,6 +249,9 @@ public class RepeatStmt<V> extends Stmt<V> {
                     .addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, exprBinary.getRight());
+                break;
+            case FOREVER:
+            case FOREVER_ARDU:
                 break;
 
             default:

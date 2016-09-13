@@ -1,4 +1,4 @@
-define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
+define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
 
     function build(program) {
         eval(program);
@@ -163,6 +163,17 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         var result = {};
         result[CONST.STMT] = CONST.DRIVE_ACTION;
         result[CONST.SPEED] = speed;
+        result[CONST.DRIVE_DIRECTION] = direction;
+        result[CONST.DISTANCE] = distance;
+
+        return result;
+    }
+
+    function createCurveAction(speedL, speedR, direction, distance) {
+        var result = {};
+        result[CONST.STMT] = CONST.CURVE_ACTION;
+        result[CONST.SPEED_L] = speedL;
+        result[CONST.SPEED_R] = speedR;
         result[CONST.DRIVE_DIRECTION] = direction;
         result[CONST.DISTANCE] = distance;
 

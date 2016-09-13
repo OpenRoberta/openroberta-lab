@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.sim.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.sim.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -416,9 +417,36 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
         this.sb.append(", CONST." + driveDirection);
-        appenDriveDuration(driveAction);
+        MotorDuration<Void> duration = driveAction.getParam().getDuration();
+        appendDuration(duration);
         this.sb.append(end);
         return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        String end = createClosingBracket();
+        this.sb.append("createCurveAction(");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append(", ");
+        curveAction.getParamRight().getSpeed().visit(this);
+        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
+        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
+            driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
+        }
+        this.sb.append(", CONST." + driveDirection);
+        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+        appendDuration(duration);
+        this.sb.append(end);
+        return null;
+    }
+
+    private void appendDuration(MotorDuration<Void> duration) {
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
+        }
     }
 
     private DriveDirection getDriveDirection(boolean isReverse) {
@@ -426,14 +454,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             return DriveDirection.BACKWARD;
         }
         return DriveDirection.FOREWARD;
-    }
-
-    private void appenDriveDuration(DriveAction<Void> driveAction) {
-        boolean isDuration = driveAction.getParam().getDuration() != null;
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
-        }
     }
 
     @Override
@@ -447,7 +467,8 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
         this.sb.append(", CONST." + turnDirection);
-        appenTurnDuration(turnAction);
+        MotorDuration<Void> duration = turnAction.getParam().getDuration();
+        appendDuration(duration);
         this.sb.append(end);
         return null;
     }
@@ -457,14 +478,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             return TurnDirection.RIGHT;
         }
         return TurnDirection.LEFT;
-    }
-
-    private void appenTurnDuration(TurnAction<Void> turnAction) {
-        boolean isDuration = turnAction.getParam().getDuration() != null;
-        if ( isDuration ) {
-            this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().visit(this);
-        }
     }
 
     @Override
@@ -1168,12 +1181,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> driveAction) {
         // TODO Auto-generated method stub
         return null;
     }

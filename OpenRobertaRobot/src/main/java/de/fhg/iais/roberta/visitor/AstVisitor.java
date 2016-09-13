@@ -278,7 +278,12 @@ public interface AstVisitor<V> {
      */
     public V visitDriveAction(DriveAction<V> driveAction);
 
-    public V visitCurveAction(CurveAction<V> driveAction);
+    /**
+     * visit a {@link CurveAction}.
+     *
+     * @param turnAction to be visited
+     */
+    public V visitCurveAction(CurveAction<V> curveAction);
 
     /**
      * visit a {@link TurnAction}.

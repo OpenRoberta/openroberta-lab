@@ -1,6 +1,6 @@
 /**
  * Module representing actors of the robot.
- * 
+ *
  * @module robertaLogic/actors
  */
 define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Motor, UTIL, CONSTANTS) {
@@ -15,7 +15,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * @constructor Create an instance of the class Actors.
-     * 
+     *
      * @alias module:robertaLogic/actors
      */
     var Actors = function() {
@@ -27,7 +27,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Get the left motor of the robot.
-     * 
+     *
      * @returns {Actors} - left motor of the robot
      */
     Actors.prototype.getLeftMotor = function() {
@@ -36,7 +36,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Get the right motor of the robot.
-     * 
+     *
      * @returns {Actors} - right motor of the robot
      */
     Actors.prototype.getRightMotor = function() {
@@ -45,7 +45,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Sets the speed of the actors on the robot.
-     * 
+     *
      * @param speed
      *            {Number} - in percentage [0-100]
      * @param direction
@@ -62,7 +62,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
     /**
      * Sets the angle speed of the actors on the robot for turning left and
      * right.
-     * 
+     *
      * @param speed
      *            {Number} - in percentage [0-100]
      * @param direction
@@ -80,7 +80,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Initialize the tacho sensor on the left motor
-     * 
+     *
      * @param value
      *            {Number} - number of rotations that we want the robot to make.
      */
@@ -91,7 +91,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Initialize the tacho sensor on the right motor
-     * 
+     *
      * @param value
      *            {Number} - number of rotations that we want the robot to make.
      */
@@ -102,7 +102,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Initialize the tacho sensor on the robot motors
-     * 
+     *
      * @param leftMotorValue
      *            {Number} - number of rotations that we want the robot to make
      *            on the left motor
@@ -119,7 +119,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
      * Calculate how much distance has the robot covered. If the required
      * distance is not covered block the execution of the next statement of the
      * program.
-     * 
+     *
      * @param program
      *            {Program}
      */
@@ -174,7 +174,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
     /**
      * Set the robot to cover an angle and block execution of the next statement
      * in the program.
-     * 
+     *
      * @param program
      * @param angle
      *            {Number} - angle we want to cover
@@ -191,7 +191,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
     /**
      * Set the robot to cover a distance and block execution of the next
      * statement in the program.
-     * 
+     *
      * @param program
      * @param distance
      *            {Number} - distance we want to cover
@@ -207,27 +207,33 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Set the speed of the motor.
-     * 
+     *
      * @param value
      *            {Number} - power of the motor in percent [0-100]
      */
-    Actors.prototype.setLeftMotorSpeed = function(speed) {
+    Actors.prototype.setLeftMotorSpeed = function(speed, direction) {
+        if (direction != CONSTANTS.FOREWARD) {
+            speed = -speed;
+        }
         internal(this).leftMotor.setPower(speed);
     };
 
     /**
      * Set the speed of the motor.
-     * 
+     *
      * @param value
      *            {Number} - power of the motor in percent [0-100]
      */
-    Actors.prototype.setRightMotorSpeed = function(speed) {
+    Actors.prototype.setRightMotorSpeed = function(speed, direction) {
+        if (direction != CONSTANTS.FOREWARD) {
+            speed = -speed;
+        }
         internal(this).rightMotor.setPower(speed);
     };
 
     /**
      * Set the motors to work until condition is met.
-     * 
+     *
      * @param program
      * @param durationType
      *            {String} -
@@ -260,7 +266,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
 
     /**
      * Correction of the speed of a motor.
-     * 
+     *
      * @param nextFrameTimeDuration
      *            {Number} - duration of the next frame in seconds
      * @returns {Number} - corrected motor speed
