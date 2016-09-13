@@ -85,7 +85,8 @@ public class Ast2NxcVisitorTest {
             + MAIN_METHOD
 
             + "        if (SENSOR_1) {\n"
-            + "          SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(IN_3,IN_TYPE_COLORGREEN);\n"
+            + "          SENSOR_TYPE_LIGHT_ACTIVE;"
+            + "          SetSensorLight(IN_3,IN_TYPE_COLORGREEN);\n"
             + "        } else if ( Pickcolor.RED == Sensor(IN_)IN_TYPE_COLORCOLOUR);) {\n"
             + "        \n"
             + "            while ( true ) {\n"

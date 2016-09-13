@@ -3,7 +3,7 @@
  *
  * @module robertaLogic/actors
  */
-define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Motor, UTIL, CONSTANTS) {
+define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor, UTIL, CONSTANTS) {
     var privateMem = new WeakMap();
 
     var internal = function(object) {
@@ -128,43 +128,43 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
         var corectedSpeeds = {}
 
         var isLeftMotorFinished = UTIL.round(internal(this).leftMotor.getCurrentRotations(), roundUP) >= UTIL.round(
-                internal(this).leftMotor.getGoalRotations(), roundUP);
+            internal(this).leftMotor.getGoalRotations(), roundUP);
         var isRightMotorFinished = UTIL.round(internal(this).rightMotor.getCurrentRotations(), roundUP) >= UTIL.round(internal(this).rightMotor
-                .getGoalRotations(), roundUP);
+            .getGoalRotations(), roundUP);
 
         if (internal(this).distanceToCover) {
             switch (internal(this).driveMode) {
-            case CONSTANTS.PILOT:
-                if (isLeftMotorFinished && isRightMotorFinished) {
-                    internal(this).leftMotor.setPower(0);
-                    internal(this).rightMotor.setPower(0);
-                    internal(this).distanceToCover = false;
-                    program.setNextStatement(true);
-                } else if (isCorrectSpeed) {
-                    corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
-                    corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
-                }
-                break;
+                case CONSTANTS.PILOT:
+                    if (isLeftMotorFinished && isRightMotorFinished) {
+                        internal(this).leftMotor.setPower(0);
+                        internal(this).rightMotor.setPower(0);
+                        internal(this).distanceToCover = false;
+                        program.setNextStatement(true);
+                    } else if (isCorrectSpeed) {
+                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
+                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
+                    }
+                    break;
 
-            case CONSTANTS.MOTOR_LEFT:
-                if (isLeftMotorFinished) {
-                    internal(this).leftMotor.setPower(0);
-                    internal(this).distanceToCover = false;
-                    program.setNextStatement(true);
-                } else if (isCorrectSpeed) {
-                    corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
-                }
-                break;
+                case CONSTANTS.MOTOR_LEFT:
+                    if (isLeftMotorFinished) {
+                        internal(this).leftMotor.setPower(0);
+                        internal(this).distanceToCover = false;
+                        program.setNextStatement(true);
+                    } else if (isCorrectSpeed) {
+                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
+                    }
+                    break;
 
-            case CONSTANTS.MOTOR_RIGHT:
-                if (isRightMotorFinished) {
-                    internal(this).rightMotor.setPower(0);
-                    internal(this).distanceToCover = false;
-                    program.setNextStatement(true);
-                } else if (isCorrectSpeed) {
-                    corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
-                }
-                break;
+                case CONSTANTS.MOTOR_RIGHT:
+                    if (isRightMotorFinished) {
+                        internal(this).rightMotor.setPower(0);
+                        internal(this).distanceToCover = false;
+                        program.setNextStatement(true);
+                    } else if (isCorrectSpeed) {
+                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
+                    }
+                    break;
             }
 
         }
@@ -197,9 +197,9 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
      *            {Number} - distance we want to cover
      */
     Actors.prototype.setDistanceToCover = function(program, distance) {
-        var rotations = distanceToRotations(distance);
-        internal(this).leftMotor.setGoalRotations(rotations);
-        internal(this).rightMotor.setGoalRotations(rotations);
+        var rotations = this.distanceToRotations(distance);
+        internal(this).leftMotor.setGoalRotations(rotations.left);
+        internal(this).rightMotor.setGoalRotations(rotations.right);
         internal(this).distanceToCover = true;
         internal(this).driveMode = CONSTANTS.PILOT;
         program.setNextStatement(false);
@@ -275,7 +275,7 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
         var roundUP = 3;
         var correctedSpeed;
         var nextFrameDistanceL = Math.abs(motor.getPower()) * CONSTANTS.MAXPOWER * nextFrameTimeDuration / 3.0;
-        var nextFrameRotationsL = distanceToRotations(nextFrameDistanceL);
+        var nextFrameRotationsL = this.distanceToRotations(nextFrameDistanceL);
 
         if (UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotationsL > UTIL.round(motor.getGoalRotations(), roundUP)) {
             var dRotations = motor.getGoalRotations() - motor.getCurrentRotations();
@@ -286,15 +286,33 @@ define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Moto
     };
 
     Actors.prototype.toString = function() {
-        return JSON.stringify([ internal(this).distanceToCover, internal(this).leftMotor, internal(this).rightMotor ]);
+        return JSON.stringify([internal(this).distanceToCover, internal(this).leftMotor, internal(this).rightMotor]);
     };
 
-    var distanceToRotations = function(distance) {
-        return distance / (CONSTANTS.WHEEL_DIAMETER * Math.PI);
+    Actors.prototype.distanceToRotations = function(distance) {
+        var rotations = {};
+        var robotCircumference = CONSTANTS.WHEEL_DIAMETER * Math.PI
+
+
+        var speedL = this.getLeftMotor().getPower();
+        var speedR = this.getRightMotor().getPower();
+
+        if (speedL == speedR) {
+            rotations.left = distance / robotCircumference;
+            rotations.right = distance / robotCircumference;
+            return rotations;
+        }
+        var ratio = (2.0 * distance) / (speedL + speedR);
+
+        rotations.left = Math.abs(speedL * ratio) / robotCircumference;
+        rotations.right = Math.abs(speedR * ratio) / robotCircumference;
+
+        return rotations;
     };
 
     var rotationsToDistance = function(rotations) {
         return (CONSTANTS.WHEEL_DIAMETER * Math.PI) * rotations;
     };
+
     return Actors;
 });

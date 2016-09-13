@@ -287,7 +287,7 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
-    public void visitCurveAction_ByDefaultWhithoutDistance_CreateCurveAction() throws Exception {
+    public void visitCurveAction_ByDefaultWithoutDistance_CreateCurveAction() throws Exception {
         String a =
             "var stmt0 = createCurveAction(createConstant(CONST.NUM_CONST, 20), createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD);\n"
                 + "var stmt1 = createCurveAction(createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD);\n"
@@ -295,6 +295,18 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator30.xml");
+
+    }
+
+    @Test
+    public void visitCurveAction_ByDefaultWhithDistance_CreateCurveAction() throws Exception {
+        String a =
+            "var stmt0 = createCurveAction(createConstant(CONST.NUM_CONST, 20), createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20));\n"
+                + "var stmt1 = createCurveAction(createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 20));\n"
+
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator31.xml");
 
     }
 
