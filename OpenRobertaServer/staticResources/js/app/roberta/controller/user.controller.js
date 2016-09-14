@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller', 'jquery', 'blocks', 'blocks-msg' ], function(exports, LOG, MSG, UTIL, USER,
-        GUISTATE_C, $, Blockly) {
+define(['exports', 'log', 'message', 'util', 'user.model', 'guiState.controller', 'jquery', 'blocks', 'blocks-msg'], function(exports, LOG, MSG, UTIL, USER,
+    GUISTATE_C, $, Blockly) {
 
     var $divForms;
     var $formLogin;
@@ -18,14 +18,14 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formRegister.validate();
         if ($formRegister.valid()) {
             USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(),
-                    function(result) {
-                        if (result.rc === "ok") {
-                            $('#loginAccountName').val($("#registerAccountName").val());
-                            $('#loginPassword').val($('#registerPass').val());
-                            login();
-                        }
-                        MSG.displayInformation(result, "", result.message);
-                    });
+                function(result) {
+                    if (result.rc === "ok") {
+                        $('#loginAccountName').val($("#registerAccountName").val());
+                        $('#loginPassword').val($('#registerPass').val());
+                        login();
+                    }
+                    MSG.displayInformation(result, "", result.message);
+                });
         }
     }
 
@@ -125,8 +125,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formLost.validate();
         if ($formLost.valid()) {
             USER.userPasswordRecovery($('#lost_email').val(), function(result) {
-                if (result.rc === "ok") {
-                }
+                if (result.rc === "ok") {}
                 MSG.displayInformation(result, "", result.message);
             });
         }
@@ -150,20 +149,20 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function validateLoginUser() {
         $formLogin.removeData('validator')
         $formLogin.validate({
-            rules : {
-                loginAccountName : "required",
-                loginPassword : "required",
+            rules: {
+                loginAccountName: "required",
+                loginPassword: "required",
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                loginAccountName : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
+            messages: {
+                loginAccountName: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
                 },
-                loginPassword : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
+                loginPassword: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
                 }
             }
         });
@@ -172,44 +171,44 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function validateRegisterUser() {
         $formRegister.removeData('validator');
         $formRegister.validate({
-            rules : {
-                registerAccountName : "required",
-                registerPass : {
-                    required : true,
-                    minlength : 6
+            rules: {
+                registerAccountName: "required",
+                registerPass: {
+                    required: true,
+                    minlength: 6
                 },
-                registerPassConfirm : {
-                    required : true,
-                    equalTo : "#registerPass"
+                registerPassConfirm: {
+                    required: true,
+                    equalTo: "#registerPass"
                 },
-                registerUserName : "required",
-                registerUserEmail : {
-                    required : false,
-                    email : true
+                registerUserName: "required",
+                registerUserEmail: {
+                    required: false,
+                    email: true
                 },
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                registerAccountName : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
+            messages: {
+                registerAccountName: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
                 },
-                registerPass : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    minlength : Blockly.Msg["VALIDATION_PASSWORD_MIN_LENGTH"]
+                registerPass: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    minlength: Blockly.Msg["VALIDATION_PASSWORD_MIN_LENGTH"]
                 },
-                registerPassConfirm : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    equalTo : Blockly.Msg["SECOND_PASSWORD_EQUAL"]
+                registerPassConfirm: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    equalTo: Blockly.Msg["SECOND_PASSWORD_EQUAL"]
                 },
-                registerUserName : {
-                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
+                registerUserName: {
+                    required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 },
-                registerUserEmail : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    email : Blockly.Msg["VALID_EMAIL_ADDRESS"]
+                registerUserEmail: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    email: Blockly.Msg["VALID_EMAIL_ADDRESS"]
                 }
             }
         });
@@ -218,32 +217,32 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function validateUserPasswordChange() {
         $formUserPasswordChange.removeData('validator');
         $formUserPasswordChange.validate({
-            rules : {
-                passOld : "required",
-                passNew : {
-                    required : true,
-                    minlength : 6
+            rules: {
+                passOld: "required",
+                passNew: {
+                    required: true,
+                    minlength: 6
                 },
-                passNewRepeat : {
-                    required : true,
-                    equalTo : "#passNew"
+                passNewRepeat: {
+                    required: true,
+                    equalTo: "#passNew"
                 },
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                passOld : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
+            messages: {
+                passOld: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
                 },
-                passNew : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    minlength : Blockly.Msg["VALIDATION_PASSWORD_MIN_LENGTH"]
+                passNew: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    minlength: Blockly.Msg["VALIDATION_PASSWORD_MIN_LENGTH"]
                 },
-                passNewRepeat : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    equalTo : Blockly.Msg["VALIDATION_SECOND_PASSWORD_EQUAL"]
+                passNewRepeat: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    equalTo: Blockly.Msg["VALIDATION_SECOND_PASSWORD_EQUAL"]
                 }
             }
         });
@@ -252,20 +251,20 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function validateLostPassword() {
         $formLost.removeData('validator');
         $formLost.validate({
-            rules : {
-                lost_email : {
-                    required : true,
-                    email : true
+            rules: {
+                lost_email: {
+                    required: true,
+                    email: true
                 }
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                lost_email : {
-                    required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    email : Blockly.Msg["VALID_EMAIL_ADDRESS"]
+            messages: {
+                lost_email: {
+                    required: Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
+                    email: Blockly.Msg["VALID_EMAIL_ADDRESS"]
                 }
             }
         });
@@ -278,7 +277,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $divForms.css("height", $oldH);
         $oldForm.fadeToggle($modalAnimateTime, function() {
             $divForms.animate({
-                height : $newH
+                height: $newH
             }, $modalAnimateTime, function() {
                 $newForm.fadeToggle($modalAnimateTime);
             });
@@ -291,7 +290,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         });
     }
 
-    //header change of the modal login 
+    //header change of the modal login
     function hederChange($oldHeder, $newHeder) {
         $oldHeder.addClass('hidden');
         $newHeder.removeClass('hidden');
@@ -299,7 +298,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     /**
      * Resets the validation of every form in login modal
-     * 
+     *
      */
     function resetForm() {
         $formLogin.validate().resetForm();
@@ -416,7 +415,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      * Initialize the login modal
      */
     function init() {
-        USER.clear();
+        USER.clear(function(result) {
+            UTIL.response(result);
+        });
         $divForms = $('#div-login-forms');
         $formLogin = $('#login-form');
         $formLost = $('#lost-form');
@@ -485,18 +486,18 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             $('#single-modal span').addClass('typcn-pencil');
             $('#single-modal span').removeClass('typcn-lock-closed');
         }, {
-            rules : {
-                singleModalInput : {
-                    required : true
+            rules: {
+                singleModalInput: {
+                    required: true
                 }
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                singleModalInput : {
-                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
+            messages: {
+                singleModalInput: {
+                    required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 }
             }
         });
