@@ -755,7 +755,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             }
             motorOnAction.getParam().getDuration().getValue().visit(this);
         } else {
-
             if ( isRegulatedDrive ) {
                 this.sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", ");
                 motorOnAction.getParam().getSpeed().visit(this);
@@ -890,8 +889,38 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+
+        final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
+        final boolean confForward =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.FOREWARD;
+        final boolean blockForward = curveAction.getDirection() == DriveDirection.FOREWARD;
+        String methodName = "";
+        if ( isDuration ) {
+            methodName = "SteerDriveEx";
+        } else {
+            methodName = "SteerDrive";
+        }
+        this.sb.append(methodName);
+        this.sb.append("( OUT_" + this.brickConfiguration.getLeftMotorPort());
+        this.sb.append(", OUT_" + this.brickConfiguration.getRightMotorPort());
+        this.sb.append(", ");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append(", ");
+        curveAction.getParamRight().getSpeed().visit(this);
+        this.sb.append(", ");
+        this.sb.append(confForward == blockForward);
+        if ( isDuration ) {
+            this.sb.append(", ");
+            curveAction.getParamLeft().getDuration().getValue().visit(this);
+        }
+        this.sb.append(" );");
+        return null;
+    }
+
+    @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("Off(OUT_");
+        this.sb.append("Off( OUT_");
         if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
             this.sb.append(this.brickConfiguration.getRightMotorPort());
@@ -899,7 +928,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             this.sb.append(this.brickConfiguration.getRightMotorPort());
             this.sb.append(this.brickConfiguration.getLeftMotorPort());
         }
-        this.sb.append(");");
+        this.sb.append(" );");
         return null;
     }
 
@@ -978,7 +1007,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case "ColorSensorMode.RED":
                 this.sb.append("\"LIGHT\"");
                 break;
-        /*default:
+            /*default:
             throw new DbcException("Invalide mode for Color Sensor!");*/
         }
         this.sb.append(" )");
@@ -1726,12 +1755,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 }
             }
         }
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> driveAction) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

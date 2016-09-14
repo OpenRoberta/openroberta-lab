@@ -22,15 +22,15 @@ public class Ast2NxcVisitorTest {
 
     private static final String IMPORTS_CONSTANTS = "" //
         + "#define WHEELDIAMETER 5.6\n"
-        + "#define TRACKWIDTH 17.0\n\n"
+        + "#define TRACKWIDTH 11.0\n\n"
         + "#include\"hal.h\""
         + "#include\"NXCDefs.h\"";
     private static final String MAIN_METHOD = "" //
         + "task main() {"
-        + "    SetSensor(IN_1,SENSOR_TOUCH);\n"
-        // + "    SetSensor(IN_4, SENSOR_SOUND);\n"
-        //+ "    SetSensor(IN_3, SENSOR_LIGHT);\n"
-        + "    SetSensor(IN_2,SENSOR_LOWSPEED);\n";
+        + "    SetSensor(IN_1, SENSOR_TOUCH);\n"
+        + "    SetSensor(IN_2, SENSOR_LOWSPEED);\n";
+    //+ "    SetSensor(IN_3, SENSOR_LIGHT);\n"
+    //+ "    SetSensor(IN_4, SENSOR_SOUND);\n";
 
     private static final String SUFFIX = "";
     private static NxtConfiguration brickConfiguration;
@@ -38,7 +38,7 @@ public class Ast2NxcVisitorTest {
     @BeforeClass
     public static void setupConfigurationForAllTests() {
         final NxtConfiguration.Builder builder = new NxtConfiguration.Builder();
-        builder.setTrackWidth(17).setWheelDiameter(5.6);
+        builder.setTrackWidth(11).setWheelDiameter(5.6);
         builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
             new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
@@ -430,6 +430,33 @@ public class Ast2NxcVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
     }
 
+    @Test
+    public void testCurveBlocks() throws Exception {
+        final String a = "" //
+            + IMPORTS_CONSTANTS
+            + MAIN_METHOD
+            + "  SteerDriveEx( OUT_A, OUT_B, 30, -20, true, 20 );\n"
+            + "  SteerDriveEx( OUT_A, OUT_B, 50, -50, false, 20 );\n"
+            + "  while ( true ) {\n"
+            + "    while ( true ) {\n"
+            + "      if ( SensorLight( IN_3, \"LIGHT\" ) < 50 ) {\n"
+            + "        SteerDrive( OUT_A, OUT_B, 30, 10, true );\n"
+            + "          break;\n"
+            + "      }\n"
+            + "      if ( SensorLight( IN_3, \"LIGHT\" ) >= 50 ) {\n"
+            + "        SteerDrive( OUT_A, OUT_B, 10, 30, true );\n"
+            + "        break;\n"
+            + "      }\n"
+            + "      Wait( 15 );\n"
+            + "    }\n"
+            + "  }\n"
+            + SUFFIX
+
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator12.xml");
+    }
+
     @Ignore
     public void testStmtForEach() throws Exception {
         final String a = "" //
@@ -448,6 +475,8 @@ public class Ast2NxcVisitorTest {
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
+        System.out.println(a.replaceAll("\\s+", ""));
+        System.out.println(Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }
