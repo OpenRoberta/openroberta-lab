@@ -615,16 +615,23 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-
+        String toChar = "";
         this.sb.append("one.lcd");
         if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
             showTextAction.getY().visit(this);
         } else {
             this.sb.append("1");
         }
+        if ( showTextAction.getMsg().getKind().toString().equals("VAR")
+            && (showTextAction.getMsg().getVarType().toString().equals("STRING") || showTextAction.getMsg().getVarType().toString().equals("COLOR"))
+            || showTextAction.getMsg().getKind().toString().equals("SENSOR_EXPR")
+                && showTextAction.getMsg().getProperty().getBlockType().equals("robSensors_colour_getSample") ) {
+            toChar = ".c_str()";
+        }
+
         this.sb.append("(");
         showTextAction.getMsg().visit(this);
-        this.sb.append(");");
+        this.sb.append(toChar + ");");
         return null;
     }
 
