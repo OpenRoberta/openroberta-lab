@@ -484,5 +484,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 }
             }
         });
+        
+        $(window).on('resize', function(e) {
+            Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
+            Blockly.svgResize(GUISTATE_C.getBricklyWorkspace());
+        });
     }
 });
