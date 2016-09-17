@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.nxt;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public enum SensorPort implements ISensorPort {
-    IN_1( "1", "S1" ), IN_2( "2", "S2" ), IN_3( "3", "S3" ), IN_4( "4", "S4" );
+    S1( "1" ), S2( "2" ), S3( "3" ), S4( "4" );
 
     private final String[] values;
 
@@ -18,8 +18,6 @@ public enum SensorPort implements ISensorPort {
 
     @Override
     public String getPortNumber() {
-
         return values[0];
     }
-
 }

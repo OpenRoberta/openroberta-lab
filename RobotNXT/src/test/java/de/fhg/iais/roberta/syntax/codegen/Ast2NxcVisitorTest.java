@@ -23,14 +23,13 @@ public class Ast2NxcVisitorTest {
     private static final String IMPORTS_CONSTANTS = "" //
         + "#define WHEELDIAMETER 5.6\n"
         + "#define TRACKWIDTH 11.0\n\n"
-        + "#include\"hal.h\""
-        + "#include\"NXCDefs.h\"";
-    private static final String MAIN_METHOD = "" //
+        + "#include\"NEPODefs.h\"";
+    private static final String MASMETHOD = "" //
         + "task main() {"
-        + "    SetSensor(IN_1, SENSOR_TOUCH);\n"
-        + "    SetSensor(IN_2, SENSOR_LOWSPEED);\n";
-    //+ "    SetSensor(IN_3, SENSOR_LIGHT);\n"
-    //+ "    SetSensor(IN_4, SENSOR_SOUND);\n";
+        + "    SetSensor(S1, SENSOR_TOUCH);\n"
+        + "    SetSensor(S2, SENSOR_LOWSPEED);\n";
+    //+ "    SetSensor(S3, SENSOR_LIGHT);\n"
+    //+ "    SetSensor(S4, SENSOR_SOUND);\n";
 
     private static final String SUFFIX = "";
     private static NxtConfiguration brickConfiguration;
@@ -42,7 +41,7 @@ public class Ast2NxcVisitorTest {
         builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
             new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.IN_1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.IN_2, new Sensor(SensorType.ULTRASONIC));
+        builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = (NxtConfiguration) builder.build();
     }
 
@@ -51,7 +50,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "        TextOut(0,LCD_LINE3,\"Hallo\");\n"
             + SUFFIX
 
@@ -65,7 +64,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = ""
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
             + "           TextOut(0,LCD_LINE3,\"Hallo\");"
@@ -82,12 +81,12 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "        if (SENSOR_1) {\n"
             + "          SENSOR_TYPE_LIGHT_ACTIVE;"
-            + "          SetSensorLight(IN_3,IN_TYPE_COLORGREEN);\n"
-            + "        } else if ( Pickcolor.RED == Sensor(IN_)IN_TYPE_COLORCOLOUR);) {\n"
+            + "          SetSensorLight(S3,STYPE_COLORGREEN);\n"
+            + "        } else if ( Pickcolor.RED == Sensor(S)STYPE_COLORCOLOUR);) {\n"
             + "        \n"
             + "            while ( true ) {\n"
             + "               GraphicOut( 0, 0,\"EYESOPEN\");\n\n"
@@ -111,14 +110,14 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "        if (SENSOR_1) {\n"
-            + "           SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(IN_3,IN_TYPE_COLORGREEN);\n"
+            + "           SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(S3,STYPE_COLORGREEN);\n"
             + "        } else {\n"
             + "            if (,\"1pressed\") {\n"
-            + "                SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(IN_3,IN_TYPE_COLORGREEN);\n"
-            + "            } else if (0==SetSensorLowspeed(IN_4);) {\n"
+            + "                SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(S3,STYPE_COLORGREEN);\n"
+            + "            } else if (0==SetSensorLowspeed(S4);) {\n"
             + "               GraphicOut( 15, 15,\"FLOWERS\");\n"
             + "            } else {\n"
             + "            \n"
@@ -140,24 +139,24 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "        if ( 5 < MotorPower(OUT_B); ) {\n\n\n"
             + "             RotateMotor(OUT_B,30);\n"
             + "          RotateMotor(OUT_B,30,360.0*1);\n"
             + "            turn_right(50);\n"
             + "        }\n"
-            + "        if ((MotorTachoCount(OUT_A); + SetSensorInfrared(IN_SensorPort.S4,DISTANCE); )== SetSensorLowspeed(IN_4);) {\n"
+            + "        if ((MotorTachoCount(OUT_A); + SetSensorInfrared(SSensorPort.S4,DISTANCE); )== SetSensorLowspeed(S4);) {\n"
             + "            SENSOR_TYPE_LIGHT_INACTIVE;\n"
             + "        } else {\n"
-            + "           SetSensorGyro(IN_SensorPort.S2,RESET);\n"
+            + "           SetSensorGyro(SSensorPort.S2,RESET);\n"
             + "       \n"
             + "            while ( ,1pressed) {\n"
             + "                GraphicOut( 0, 0,\"OLDGLASSES\");\n"
             + "                ClearScreen();\n"
             + "           \n"
             + "         }\n"
-            + "           SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(IN_3,IN_TYPE_COLORGREEN);\n"
+            + "           SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(S3,STYPE_COLORGREEN);\n"
             + "        }\n"
             + SUFFIX
 
@@ -170,7 +169,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "          OnFwdReg(OUT_B,0,100);"
             + "        RotateMotorEx(OUT_B,-30,360.0*0,-100,true,true);"
@@ -189,10 +188,10 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
-
+            + MASMETHOD
+            + "byte volume = 0x02;\n"
             + "        TextOut(0,LCD_LINE0,\"Hallo\");\n"
-            + "        PlayTone(300, 3000);Wait(3000);\n"
+            + "        PlayToneEx(300, 3000, volume, false);Wait(3000);\n"
             + SUFFIX
 
             + "}\n";
@@ -204,7 +203,7 @@ public class Ast2NxcVisitorTest {
     public void test7() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "          OnFwdReg(OUT_B,30,100);\n"
             + "          RotateMotorEx(OUT_B,-30,360.0*1,-100,true,true);\n"
@@ -219,7 +218,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "        float item = 10;\n"
             + "        string item2 = \"TTTT\";\n"
             + "        bool item3 = true;\n"
@@ -239,7 +238,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "        float variablenName = 0;\n"
 
             + "OnFwdReg(OUT_AB,50);"
@@ -258,7 +257,7 @@ public class Ast2NxcVisitorTest {
     //public void test9() throws Exception {
 
     //String a = "" //
-    //+ MAIN_METHOD
+    //+ MASMETHOD
     //+ "        floatitem=0;"
     //+ "        stringitem2=\"ss\";"
     //+ "        booleanitem3=true;"
@@ -279,9 +278,8 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "void macheEtwas(float x, float x2) {\n"
-            + "     GraphicOut(x, x2,\"OLDGLASSES\");\n"
             + "}"
-            + MAIN_METHOD
+            + MASMETHOD
             + "       RotateMotor(OUT_B, 30, 360 * 1);"
             + "       macheEtwas(10, 10);"
             + "}";
@@ -296,7 +294,7 @@ public class Ast2NxcVisitorTest {
             + IMPORTS_CONSTANTS
             + "    void test() {\n"
             + "    }"
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "        test();"
 
@@ -313,7 +311,7 @@ public class Ast2NxcVisitorTest {
             + "     void test(bool x) {\n"
             + "        if (x) return;"
             + "    }"
-            + MAIN_METHOD
+            + MASMETHOD
 
             + "        test(true);"
 
@@ -333,7 +331,7 @@ public class Ast2NxcVisitorTest {
             + "    void test2() {\n"
             + "        if (variablenName2) return;"
             + "    }"
-            + MAIN_METHOD
+            + MASMETHOD
             + "    float variablenName=0;\n"
             + "    bool variablenName2=true;\n"
 
@@ -350,7 +348,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "    string variablenName[]={\"a\",\"b\",\"c\"};\n"
 
             + "        TextOut(0,LCD_LINE0,"
@@ -370,7 +368,7 @@ public class Ast2NxcVisitorTest {
     //public void test15() throws Exception {
 
     //String a = "" //
-    //+ MAIN_METHOD
+    //+ MASMETHOD
     //+ "    string variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
 
     //+ "        hal.drawText(String.valueOf(test()), 0, 0);"
@@ -404,7 +402,7 @@ public class Ast2NxcVisitorTest {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "    string message=\"exit\";\n"
 
             + "        if (message.equals(\"exit\")) {\n"
@@ -420,7 +418,7 @@ public class Ast2NxcVisitorTest {
     public void test18() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "    float item=0;\n"
             + "    string item2=\"cc\";\n"
 
@@ -433,16 +431,16 @@ public class Ast2NxcVisitorTest {
     public void testCurveBlocks() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "  SteerDriveEx( OUT_A, OUT_B, 30, -20, true, 20 );\n"
             + "  SteerDriveEx( OUT_A, OUT_B, 50, -50, false, 20 );\n"
             + "  while ( true ) {\n"
             + "    while ( true ) {\n"
-            + "      if ( SensorLight( IN_3, \"LIGHT\" ) < 50 ) {\n"
+            + "      if ( SensorLight( S3, \"LIGHT\" ) < 50 ) {\n"
             + "        SteerDrive( OUT_A, OUT_B, 30, 10, true );\n"
             + "          break;\n"
             + "      }\n"
-            + "      if ( SensorLight( IN_3, \"LIGHT\" ) >= 50 ) {\n"
+            + "      if ( SensorLight( S3, \"LIGHT\" ) >= 50 ) {\n"
             + "        SteerDrive( OUT_A, OUT_B, 10, 30, true );\n"
             + "        break;\n"
             + "      }\n"
@@ -460,7 +458,7 @@ public class Ast2NxcVisitorTest {
     public void testStmtForEach() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MAIN_METHOD
+            + MASMETHOD
             + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
             + "    public void run() throwsException {\n"
             + "        for (PickcolorvariablenName2 : variablenName) {\n"

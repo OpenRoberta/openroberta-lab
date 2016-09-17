@@ -8,7 +8,7 @@ public class MotorTachoTest {
 
     @Test
     public void setMotorTacho() throws Exception {
-        final String a = "\nNumberOfRotations(OUT_A)" + "MotorTachoCount(OUT_D)";
+        final String a = "\nMotorTachoCount(OUT_A)/360.0" + "MotorTachoCount(OUT_D)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setEncoder.xml");
     }

@@ -14,8 +14,8 @@ public class LightSensorTest {
     @Test
     public void sensorSetLight() throws Exception {
         final String a =
-            "BlockAST [project=[[Location [x=162, y=238], LightSensor [mode=RED, port=IN_3]], "
-                + "[Location [x=163, y=263], LightSensor [mode=AMBIENTLIGHT, port=IN_4]]]]";
+            "BlockAST [project=[[Location [x=162, y=238], LightSensor [mode=RED, port=S3]], "
+                + "[Location [x=163, y=263], LightSensor [mode=AMBIENTLIGHT, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setLight.xml"));
     }
@@ -37,8 +37,8 @@ public class LightSensorTest {
         final LightSensor<Void> cs = (LightSensor<Void>) transformer.getTree().get(0).get(1);
         final LightSensor<Void> cs1 = (LightSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(SensorPort.IN_3, cs.getPort());
-        Assert.assertEquals(SensorPort.IN_4, cs1.getPort());
+        Assert.assertEquals(SensorPort.S3, cs.getPort());
+        Assert.assertEquals(SensorPort.S4, cs1.getPort());
     }
 
     @Test

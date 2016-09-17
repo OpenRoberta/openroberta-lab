@@ -12,7 +12,7 @@ public class SoundSensorTest {
 
     @Test
     public void sensorSound() throws Exception {
-        String a = "BlockAST [project=[[Location [x=137, y=338], SoundSensor [port=IN_2]]]]";
+        String a = "BlockAST [project=[[Location [x=137, y=338], SoundSensor [port=S2]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_Sound.xml"));
     }
@@ -23,7 +23,7 @@ public class SoundSensorTest {
 
         SoundSensor<Void> cs = (SoundSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(SensorPort.IN_2, cs.getPort());
+        Assert.assertEquals(SensorPort.S2, cs.getPort());
     }
 
     @Test

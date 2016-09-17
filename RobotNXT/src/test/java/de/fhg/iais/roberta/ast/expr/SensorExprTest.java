@@ -15,28 +15,25 @@ public class SensorExprTest {
     @Test
     public void make() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(TouchSensorMode.TOUCH, SensorPort.IN_1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
-        String a = "SensorExpr [TouchSensor [port=IN_1]]";
+        String a = "SensorExpr [TouchSensor [port=S1]]";
         Assert.assertEquals(a, sensorExpr.toString());
     }
 
     @Test
     public void getSensor() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(TouchSensorMode.TOUCH, SensorPort.IN_1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
-        String a = "TouchSensor [port=IN_1]";
+        String a = "TouchSensor [port=S1]";
         Assert.assertEquals(a, sensorExpr.getSens().toString());
     }
 
     @Test
     public void getPresedance() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(TouchSensorMode.TOUCH, SensorPort.IN_1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(999, sensorExpr.getPrecedence());
     }
@@ -44,8 +41,7 @@ public class SensorExprTest {
     @Test
     public void getAssoc() throws Exception {
         TouchSensor<Void> touchSensor =
-            TouchSensor
-                .make(TouchSensorMode.TOUCH, SensorPort.IN_1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+            TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(Assoc.NONE, sensorExpr.getAssoc());
     }

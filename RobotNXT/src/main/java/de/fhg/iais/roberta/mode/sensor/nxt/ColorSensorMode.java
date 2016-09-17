@@ -6,10 +6,8 @@ public enum ColorSensorMode implements IColorSensorMode {
     COLOUR( "getColorSensorColour", "ColorID" ), RED( "getColorSensorRed", "Red" ), AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
 
     private final String[] values;
-    //private final String halJavaMethodName;
 
     private ColorSensorMode(String halJavaMethodName, String... values) {
-        //this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }
 
@@ -19,11 +17,6 @@ public enum ColorSensorMode implements IColorSensorMode {
     public String getLejosModeName() {
         return values[0];
     }
-
-    //    @Override
-    //    public String getHalJavaMethod() {
-    //        return this.halJavaMethodName;
-    //    }
 
     @Override
     public String[] getValues() {

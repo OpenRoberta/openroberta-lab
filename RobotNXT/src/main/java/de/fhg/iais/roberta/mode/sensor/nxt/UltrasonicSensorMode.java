@@ -20,11 +20,6 @@ public enum UltrasonicSensorMode implements IUltrasonicSensorMode {
         return this.values[0];
     }
 
-    //    @Override
-    //    public String getHalJavaMethod() {
-    //        return this.halJavaMethodName;
-    //    }
-
     @Override
     public String[] getValues() {
         return this.values;

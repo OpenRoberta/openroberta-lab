@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class UltrasonicSensorTest {
     @Test
     public void setUltrasonic() throws Exception {
-        final String a = "\nSensorUS(IN_4)SensorUS(IN_2)";
+        final String a = "\nSensorUS(S4)SensorUS(S2)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setUltrasonic.xml");
     }
