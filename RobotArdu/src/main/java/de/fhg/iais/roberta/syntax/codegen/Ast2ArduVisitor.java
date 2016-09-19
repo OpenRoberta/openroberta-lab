@@ -712,6 +712,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
+        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -720,10 +721,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         String methodName;
         String sign = "";
         if ( isDuration ) {
-            methodName = "rob.moveTime(";
+            methodName = "rob.moveTime";
         } else {
-            methodName = "one.move(";
+            methodName = "one.move";
         }
+        if ( isRegulatedDrive ) {
+            methodName = methodName + "PID";
+        }
+        methodName = methodName + "(";
         this.sb.append(methodName);
         if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
             sign = "-";
@@ -745,6 +750,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
+        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -753,10 +759,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         String methodName;
         String sign = "";
         if ( isDuration ) {
-            methodName = "rob.moveTime(";
+            methodName = "rob.moveTime";
         } else {
-            methodName = "one.move(";
+            methodName = "one.move";
         }
+        if ( isRegulatedDrive ) {
+            methodName = methodName + "PID";
+        }
+        methodName = methodName + "(";
         this.sb.append(methodName);
         if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
             sign = "-";
@@ -779,6 +789,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     // TURN ACTIONS
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
+        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -795,10 +806,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
 
         if ( isDuration ) {
-            methodName = "rob.moveTime(";
+            methodName = "rob.moveTime";
         } else {
-            methodName = "one.move(";
+            methodName = "one.move";
         }
+        if ( isRegulatedDrive ) {
+            methodName = methodName + "PID";
+        }
+        methodName = methodName + "(";
         this.sb.append(methodName);
         this.sb.append(sign1);
         turnAction.getParam().getSpeed().visit(this);
