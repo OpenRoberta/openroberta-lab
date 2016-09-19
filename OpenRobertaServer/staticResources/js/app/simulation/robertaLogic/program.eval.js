@@ -114,6 +114,10 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     evalLedOnAction(internal(this), simulationData, stmt);
                     break;
 
+                case CONSTANTS.LIGHT_ACTION:
+                    evalLightSensorAction(internal(this), simulationData, stmt);
+                    break;
+
                 case CONSTANTS.STOP_DRIVE:
                     internal(this).actors.setSpeed(0);
                     break;
@@ -230,6 +234,12 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.program.setIsRunningTimer(true);
         obj.program.resetTimer(simulationData.time);
         obj.program.setTimer(evalExpr(obj, stmt.time));
+    };
+
+    var evalLightSensorAction = function(obj, simulationData, stmt) {
+        obj.outputCommands.led = {}
+        obj.outputCommands.led.color = stmt.color;
+        obj.outputCommands.led.mode = stmt.mode;
     };
 
     var evalLedOnAction = function(obj, simulationData, stmt) {

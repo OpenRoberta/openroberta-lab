@@ -368,7 +368,7 @@ define({
 
     TEXT_JOIN: "createTextJoin",
 
-    LIGHT_ACTION: "createLightSensorAction",
+    LIGHT_ACTION: "lightSensorAction",
 
     WHERE1: "where1",
 
