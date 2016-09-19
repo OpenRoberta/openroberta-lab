@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
+import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -616,6 +617,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         String toChar = "";
+        IColorSensorMode mode = null;
+        Expr<Void> tt = showTextAction.getMsg();
+        if ( tt.getKind() == BlockType.SENSOR_EXPR ) {
+            de.fhg.iais.roberta.syntax.sensor.Sensor sens = ((SensorExpr) tt).getSens();
+            if ( sens.getKind() == BlockType.COLOR_SENSING ) {
+                mode = ((ColorSensor) sens).getMode();
+            }
+        }
+
         this.sb.append("one.lcd");
         if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
             showTextAction.getY().visit(this);
@@ -624,8 +634,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
         if ( showTextAction.getMsg().getKind().toString().equals("VAR")
             && (showTextAction.getMsg().getVarType().toString().equals("STRING") || showTextAction.getMsg().getVarType().toString().equals("COLOR"))
-            || showTextAction.getMsg().getKind().toString().equals("SENSOR_EXPR")
-                && showTextAction.getMsg().getProperty().getBlockType().equals("robSensors_colour_getSample") ) {
+            || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") ) {
             toChar = ".c_str()";
         }
 

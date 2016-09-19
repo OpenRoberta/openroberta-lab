@@ -846,7 +846,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             turnAction.getParam().getDuration().getValue().visit(this);
             this.sb.append(" * TRACKWIDTH / WHEELDIAMETER), " + turnpct + ", true, true);");
             this.nlIndent();
-            this.sb.append("Wait(1 ");
+            this.sb.append("Wait(1");
         } else {
             this.sb.append(turnpct);
         }
