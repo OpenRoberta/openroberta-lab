@@ -260,6 +260,15 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
+    function createLightSensorAction(color, mode) {
+        var result = {};
+        result[CONST.STMT] = CONST.LIGHT_ACTION;
+        result[CONST.COLOR] = color;
+        result[CONST.MODE] = mode;
+        return result;
+    }
+
+
     function createStatusLight(mode) {
         var result = {};
         result[CONST.STMT] = CONST.STATUS_LIGHT_ACTION;

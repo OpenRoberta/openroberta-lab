@@ -321,6 +321,18 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
+    public void visitLightSensorAction_RedOnPort1_CreateLightSensorAction() throws Exception {
+        String a =
+            "var stmt0 = createLightSensorAction(CONST.COLOR_ENUM.RED, CONST.ON);\n"
+                + "var stmt1 = createLightSensorAction(CONST.COLOR_ENUM.BLUE, CONST.OFF);\n"
+
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator33.xml");
+
+    }
+
+    @Test
     public void test19() throws Exception {
         String a =
             "var stmt0 = createShowTextAction(createConstant(CONST.STRING_CONST, 'Hallo'), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"

@@ -23,7 +23,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.sim.ActorPort;
 import de.fhg.iais.roberta.mode.action.sim.BlinkMode;
 import de.fhg.iais.roberta.mode.action.sim.BrickLedColor;
+import de.fhg.iais.roberta.mode.action.sim.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.action.sim.ShowPicture;
+import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.sim.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.sim.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
@@ -410,13 +412,11 @@ public class SimFactory extends AbstractRobotFactory {
 
     @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<ISoundSensorMode> getSoundSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -433,9 +433,22 @@ public class SimFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ILightSensorActionMode getLightActionColor(String mode) {
-        // TODO Auto-generated method stub
-        return null;
+    public ILightSensorActionMode getLightActionColor(String light) {
+        if ( light == null || light.isEmpty() ) {
+            throw new DbcException("Invalid Light Color Mode: " + light);
+        }
+        String sUpper = light.trim().toUpperCase(Locale.GERMAN);
+        for ( ILightSensorActionMode po : LightSensorActionMode.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Light Action Color Mode: " + light);
     }
 
     @Override
@@ -445,9 +458,22 @@ public class SimFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public IWorkingState getWorkingState(String mode) {
-        // TODO Auto-generated method stub
-        return null;
+    public IWorkingState getWorkingState(String state) {
+        if ( state == null || state.isEmpty() ) {
+            throw new DbcException("Invalid Working State Mode: " + state);
+        }
+        String sUpper = state.trim().toUpperCase(Locale.GERMAN);
+        for ( IWorkingState po : WorkingState.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid  Working State Mode: " + state);
     }
 
     @Override

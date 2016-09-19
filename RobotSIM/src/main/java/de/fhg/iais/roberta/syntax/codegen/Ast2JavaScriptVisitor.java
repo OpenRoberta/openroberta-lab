@@ -489,6 +489,14 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        String end = createClosingBracket();
+        this.sb.append("createLightSensorAction(CONST.COLOR_ENUM." + lightSensorAction.getLight() + ", CONST." + lightSensorAction.getState());
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         String end = createClosingBracket();
         this.sb.append("createStatusLight(CONST." + lightStatusAction.getStatus());
@@ -1177,12 +1185,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         if ( isInStmt() ) {
             this.sb.setLength(this.sb.length() - 2);
         }
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
