@@ -733,6 +733,10 @@ px
 	box-shadow: none;
 }
 
+.simKey:hover {
+	cursor: pointer;
+}
+
 .fixed-table-toolbar .btn {
 	width: 48px;
 	height: 48px;

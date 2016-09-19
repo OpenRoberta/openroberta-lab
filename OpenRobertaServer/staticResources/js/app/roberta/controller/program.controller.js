@@ -395,7 +395,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
                 reloadProgram(result);
 
                 if ($(".sim").hasClass('hide')) {
-                    SIM.init(result.javaScriptProgram, true);
+                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobot());
                     $(".sim").removeClass('hide');
                     $('#blocklyDiv').addClass('simActive');
                     $('#simDiv').addClass('simActive');
@@ -436,7 +436,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
                         }
                     });
                 } else {
-                    SIM.init(result.javaScriptProgram, false);
+                    SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobot());
                     setTimeout(function() {
                         SIM.setPause(false);
                     }, 1000);

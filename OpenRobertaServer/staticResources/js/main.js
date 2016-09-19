@@ -14,6 +14,7 @@ require.config({
         'jquery-ui' : 'jquery/jquery-ui-1.10.4.custom.min',
         'jquery-validate' : 'jquery/jquery.validate.min',
         'prettify' : 'code-prettify/prettify',
+        'volume-meter' : 'sound/volume-meter',
 
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
@@ -49,6 +50,8 @@ require.config({
         'simulation.robot.rescue' : '../app/simulation/simulationLogic/robot.rescue',
         'simulation.robot.roberta' : '../app/simulation/simulationLogic/robot.roberta',
         'simulation.robot.simple' : '../app/simulation/simulationLogic/robot.simple',
+        'simulation.robot.ev3' : '../app/simulation/simulationLogic/robot.ev3',
+        'simulation.robot.nxt' : '../app/simulation/simulationLogic/robot.nxt',
         'simulation.scene' : '../app/simulation/simulationLogic/scene',
         'simulation.simulation' : '../app/simulation/simulationLogic/simulation',
 
@@ -79,6 +82,14 @@ require.config({
             deps : [ 'blockly' ],
             exports : 'Blockly'
         },
+        'volume-meter' : {
+          exports: "Volume",
+        init: function () {
+            return {
+                createAudioMeter: createAudioMeter
+            };
+        }
+        },
         'jquery-validate' : {
             deps : [ 'jquery' ]
         },
@@ -90,7 +101,7 @@ require.config({
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
-        'configuration.controller', 'language.controller' ], function(require) {
+        'configuration.controller', 'language.controller','volume-meter' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');

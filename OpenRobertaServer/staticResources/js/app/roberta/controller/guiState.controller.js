@@ -189,6 +189,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             setProgramSaved(true);
             setConfigurationSaved(true);
         }
+        $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robot);
+        $('#simRobot').addClass('typcn-' + robot);
+
         GUISTATE.gui.robot = robot;
         GUISTATE.gui.sim = result.sim;
         setConfigurationName(getRobot().toUpperCase() + 'basis');
