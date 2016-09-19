@@ -22,7 +22,9 @@ public class Ast2NxcVisitorTest {
 
     private static final String IMPORTS_CONSTANTS = "" //
         + "#define WHEELDIAMETER 5.6\n"
-        + "#define TRACKWIDTH 11.0\n\n"
+        + "#define TRACKWIDTH 11.0\n"
+        + "#define MAXDISPLAYPIXELS 56 \n"
+        + "#define PIXELPERLINE 8 \n\n"
         + "#include\"NEPODefs.h\"";
     private static final String MASMETHOD = "" //
         + "task main() {"
@@ -51,7 +53,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + MASMETHOD
-            + "        TextOut(0,LCD_LINE3,\"Hallo\");\n"
+            + "        TextOut(0,(MAXDISPLAYPIXELS-(abs(3-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");\n"
             + SUFFIX
 
             + "}\n";
@@ -67,7 +69,7 @@ public class Ast2NxcVisitorTest {
             + MASMETHOD
 
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
-            + "           TextOut(0,LCD_LINE3,\"Hallo\");"
+            + "           TextOut(0,(MAXDISPLAYPIXELS-(abs(3-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");"
             + "        }\n"
             + SUFFIX
 
@@ -190,7 +192,7 @@ public class Ast2NxcVisitorTest {
             + IMPORTS_CONSTANTS
             + MASMETHOD
             + "byte volume = 0x02;\n"
-            + "        TextOut(0,LCD_LINE0,\"Hallo\");\n"
+            + "        TextOut(0,(MAXDISPLAYPIXELS-(abs(0-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");\n"
             + "        PlayToneEx(300, 3000, volume, false);Wait(3000);\n"
             + SUFFIX
 
@@ -326,7 +328,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "     void test1(float x, float x2) {\n"
-            + "        TextOut(x,LCD_LINEx2,\"Hallo\");\n"
+            + "        TextOut(x,(MAXDISPLAYPIXELS-(abs(x2-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");\n"
             + "    }\n\n"
             + "    void test2() {\n"
             + "        if (variablenName2) return;"
@@ -406,7 +408,7 @@ public class Ast2NxcVisitorTest {
             + "    string message=\"exit\";\n"
 
             + "        if (message.equals(\"exit\")) {\n"
-            + "           TextOut(0,LCD_LINE0,\"done\");"
+            + "           TextOut(0,(MAXDISPLAYPIXELS-(abs(0-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"done\");"
             + "        }\n"
 
             + "}\n";

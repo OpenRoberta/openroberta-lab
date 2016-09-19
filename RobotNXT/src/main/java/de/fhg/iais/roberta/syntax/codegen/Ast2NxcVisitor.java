@@ -642,6 +642,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     // TODO add uploading pictures to NXT before implementing this.
+    @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         return null;
     }
@@ -681,9 +682,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         }
         this.sb.append(methodName + "(");
         showTextAction.getX().visit(this);
-        this.sb.append(", LCD_LINE");
+        this.sb.append(", (MAXDISPLAYPIXELS - (abs(");
         showTextAction.getY().visit(this);
-        this.sb.append(", ");
+
+        this.sb.append(" - 1) * PIXELPERLINE) % (MAXDISPLAYPIXELS + PIXELPERLINE)), ");
         showTextAction.getMsg().visit(this);
         this.sb.append(");");
         return null;
@@ -798,7 +800,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             driveAction.getParam().getDuration().getValue().visit(this);
             this.sb.append(" * 360 / (PI * WHEELDIAMETER)), 0, true, true);");
             this.nlIndent();
-            this.sb.append("Wait(1 ");
+            this.sb.append("Wait(1");
         } else {
             this.sb.append("OUT_REGMODE_SYNC");
         }
@@ -1652,7 +1654,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
     private void addConstants() {
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
-        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n\n");
+        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
+        this.sb.append("#define MAXDISPLAYPIXELS 56 \n");
+        this.sb.append("#define PIXELPERLINE 8 \n\n");
         this.sb.append("#include \"NEPODefs.h\" \n");
     }
 
@@ -1726,82 +1730,4 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
-
-    /**
-     * @return Java code used in the code generation to regenerates the same brick configuration
-     */
-    /*
-    public String generateRegenerateConfiguration() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(" brickConfiguration = new Ev3Configuration.Builder()\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
-        appendActors(sb);
-        appendSensors(sb);
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
-        return sb.toString();
-    }
-    private void appendSensors(StringBuilder sb) {
-        for (Map.Entry<SensorPort, EV3Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            sb.append(INDENT).append(INDENT).append(INDENT);
-            appendOptional(sb, "    .addSensor(", entry.getKey(), entry.getValue());
-        }
-    }
-    private void appendActors(StringBuilder sb) {
-        for (Map.Entry<ActorPort, EV3Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            sb.append(INDENT).append(INDENT).append(INDENT);
-            appendOptional(sb, "    .addActor(", entry.getKey(), entry.getValue());
-        }
-    }
-    */
-
-    /* NXT can run the sensors quite fast, so this check is unnecessary. The sensors are already added above.
-     private static void appendOptional(StringBuilder sb, String type, @SuppressWarnings("rawtypes") Enum port, HardwareComponent hardwareComponent) {
-        if (hardwareComponent != null ) {
-            sb.append(type).append(getEnumCode(port)).append(", ");
-            if (hardwareComponent.getCategory() == Category.SENSOR ) {
-                sb.append(generateRegenerateEV3Sensor(hardwareComponent));
-            } else {
-                sb.append(generateRegenerateEV3Actor(hardwareComponent));
-            }
-            sb.append(")\n");
-        }
-    }
-    private String generateRegenerateUsedSensors() {
-        StringBuilder sb = new StringBuilder();
-        String arrayOfSensors = "";
-        for (UsedSensor usedSensor : this.usedSensors ) {
-            arrayOfSensors += usedSensor.generateRegenerate();
-            arrayOfSensors += ", ";
-        }
-        sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
-        if (this.usedSensors.size() > 0 ) {
-            sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
-        }
-        sb.append(");");
-        return sb.toString();
-    }
-    */
-
-    /* There is no need in explicit instantiation of the motors and other actors, except for the sensors,
-     * in nxc
-     private static String generateRegenerateEV3Actor(HardwareComponent actor) {
-        StringBuilder sb = new StringBuilder();
-        EV3Actor ev3Actor = (EV3Actor) actor;
-        sb.append("new EV3Actor(").append(getHardwareComponentTypeCode(actor.getComponentType()));
-        sb.append(", ").append(ev3Actor.isRegulated());
-        sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection())).append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
-        return sb.toString();
-    }
-    private static String generateRegenerateEV3Sensor(HardwareComponent sensor) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("new EV3Sensor(").append(getHardwareComponentTypeCode(sensor.getComponentType()));
-        sb.append(")");
-        return sb.toString();
-    }
-    private static String getHardwareComponentTypeCode(HardwareComponentType type) {
-        return type.getClass().getSimpleName() + "." + type.getTypeName();
-    }
-     */
-
 }
