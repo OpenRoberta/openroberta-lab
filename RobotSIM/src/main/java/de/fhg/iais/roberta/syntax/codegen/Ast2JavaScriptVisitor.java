@@ -688,6 +688,12 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        this.sb.append("createGetSample(CONST.SOUND)");
+        return null;
+    }
+
+    @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         sensorGetSample.getSensor().visit(this);
         return null;
@@ -1171,12 +1177,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         if ( isInStmt() ) {
             this.sb.setLength(this.sb.length() - 2);
         }
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

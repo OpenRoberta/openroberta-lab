@@ -299,6 +299,16 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
+    public void visitSoundSensor_ByDefault_CreateGetSample() throws Exception {
+        String a =
+            "var stmt0 = createShowTextAction(createGetSample(CONST.SOUND), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator32.xml");
+
+    }
+
+    @Test
     public void visitCurveAction_ByDefaultWhithDistance_CreateCurveAction() throws Exception {
         String a =
             "var stmt0 = createCurveAction(createConstant(CONST.NUM_CONST, 20), createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20));\n"
