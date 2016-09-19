@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
-        LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
+define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate'], function(exports,
+    LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;
 
@@ -19,30 +19,31 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     /**
      * Inject Brickly with initial toolbox
-     * 
+     *
      * @param {response}
      *            toolbox
      */
     function initView() {
         var toolbox = guiStateController.getConfigurationToolbox();
         bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
-            path : '/blockly/',
-            toolbox : toolbox,
-            trashcan : true,
-            scrollbars : true,
-            zoom : {
-                controls : true,
-                wheel : true,
-                startScale : 1.0,
-                maxScale : 4,
-                minScale : .25,
-                scaleSpeed : 1.1
+            path: '/blockly/',
+            toolbox: toolbox,
+            trashcan: true,
+            scrollbars: true,
+            zoom: {
+                controls: true,
+                wheel: true,
+                startScale: 1.0,
+                maxScale: 4,
+                minScale: .25,
+                scaleSpeed: 1.1
             },
-            checkInTask : [ '-Brick' ],
-            variableDeclaration : true,
-            robControls : true
+            checkInTask: ['-Brick'],
+            variableDeclaration: true,
+            robControls: true
         });
         bricklyWorkspace.setDevice(guiStateController.getRobot());
+        bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
         bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
@@ -106,7 +107,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     function saveAsToServer() {
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
-            $('.modal').modal('hide'); // close all opened popups       
+            $('.modal').modal('hide'); // close all opened popups
             var confName = $('#singleModalInput').val().trim();
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xmlText = Blockly.Xml.domToText(dom);
@@ -179,20 +180,20 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }, saveAsToServer, function() {
 
         }, {
-            rules : {
-                singleModalInput : {
-                    required : true,
-                    regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*$/
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*$/
                 }
             },
-            errorClass : "form-invalid",
-            errorPlacement : function(label, element) {
+            errorClass: "form-invalid",
+            errorPlacement: function(label, element) {
                 label.insertAfter(element);
             },
-            messages : {
-                singleModalInput : {
-                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_NAME"])
+            messages: {
+                singleModalInput: {
+                    required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                    regex: jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_NAME"])
                 }
             }
         });
@@ -223,7 +224,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     /**
      * Show configuration
-     * 
+     *
      * @param {load}
      *            load configuration
      * @param {data}
@@ -276,6 +277,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     function resetView() {
         bricklyWorkspace.setDevice(guiStateController.getRobot());
+        bricklyWorkspace.setVersion('2.0');
         initConfigurationEnvironment();
         var toolbox = guiStateController.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);

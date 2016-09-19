@@ -101,7 +101,6 @@ public class Ast2NxcVisitorTest {
             + "        RotateMotor(OUT_B,30,360.0*1);"
             + "        }\n"
             + SUFFIX
-
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
