@@ -927,14 +927,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         String port = infraredSensor.getPort().getPortNumber();
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case OBSTACLE:
-                this.sb.append("rob.infraredSensorObstacle(" + port + ")");
+                this.sb.append("rob.infraredSensorObstacle(");
                 break;
             case SEEK:
-                this.sb.append("one.readIRSensors()");
+                this.sb.append("rob.infraredSensorPresence(");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
         }
+        this.sb.append(port + ")");
         return null;
     }
 
