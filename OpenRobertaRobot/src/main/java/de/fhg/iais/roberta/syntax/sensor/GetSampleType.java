@@ -24,7 +24,9 @@ public enum GetSampleType {
     SOUND( "SENSORPORT", "SOUND", "SOUND" ),
     SOUND_SOUND( "SENSORPORT", "SOUND", "SOUND" ),
     LIGHT_LIGHT( "SENSORPORT", "LIGHT", "LIGHT" ),
-    LIGHT_AMBIENTLIGHT( "SENSORPORT", "LIGHT", "AMBIENTLIGHT" );
+    LIGHT_AMBIENTLIGHT( "SENSORPORT", "LIGHT", "AMBIENTLIGHT" ),
+    INFRARED_OBSTACLE( "SENSORPORT", "INFRARED", "OBSTACLE" ),
+    INFRARED_SEEK( "SENSORPORT", "INFRARED", "SEEK" );
 
     private final String portTypeName;
     private final String sensorType;
@@ -42,18 +44,18 @@ public enum GetSampleType {
      * @return type of the port
      */
     public String getPortTypeName() {
-        return portTypeName;
+        return this.portTypeName;
     }
 
     public String getSensorType() {
-        return sensorType;
+        return this.sensorType;
     }
 
     /**
      * @return the sensorMode
      */
     public String getSensorMode() {
-        return sensorMode;
+        return this.sensorMode;
     }
 
     /**

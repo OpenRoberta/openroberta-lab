@@ -862,7 +862,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 btnNumber = "3";
                 break;
         }
-        this.sb.append("one.readButton() == " + btnNumber);
+        this.sb.append("(one.readButton() == " + btnNumber + ")");
         return null;
     }
 
@@ -927,7 +927,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 this.sb.append("rob.infraredSensorObstacle(" + port + ")");
                 break;
             case SEEK:
-                this.sb.append("{one.readIRSensors()}");
+                this.sb.append("one.readIRSensors()");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
