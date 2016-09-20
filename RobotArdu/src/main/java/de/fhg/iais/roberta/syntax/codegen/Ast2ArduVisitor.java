@@ -579,7 +579,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: fix block and test
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         switch ( (BlinkMode) lightAction.getBlinkMode() ) {
@@ -595,14 +594,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     }
 
     //won't be used
-    //TODO: no such block
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
 
     //won't be used
-    //will be implemented much later
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
@@ -835,18 +832,23 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //no light sensor
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         return null;
     }
 
-    //no light sensor
+    //TODO: test with a block
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        //final String Port = getEnumCode(lightSensor.getPort());
+        this.sb.append("one.readAdc(");
+        //ports from 0 to 7
+        this.sb.append(lightSensor.getPort()); // we could add "-1" so the number of ports would be 1-8 for users
+        this.sb.append(")");
         return null;
     }
 
+    //TODO: fix the button calling
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         IBrickKey button = brickSensor.getKey();
@@ -1184,21 +1186,19 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("RandomFloat()");
+        this.sb.append("rob.randomFloat()");
         return null;
     }
 
-    //TODO: implement
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("RandomIntegerInRange( ");
+        this.sb.append("rob.randomIntegerInRange(");
         mathRandomIntFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
