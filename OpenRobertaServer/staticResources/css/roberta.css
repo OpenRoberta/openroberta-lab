@@ -78,6 +78,7 @@ html, body {
 body.blocklyMinimalBody  * {
 	opacity: 1 !important;
 	overflow: hidden;
+    transform: none;
 }
 
 #head-navigation {
@@ -309,7 +310,7 @@ body.blocklyMinimalBody  * {
 }
 
 @-webkit-keyframes blinker {
-	from { 
+	from {
 	color:#afca04;
     }
     to {
@@ -318,8 +319,8 @@ body.blocklyMinimalBody  * {
 }
 
 @keyframes  blinker {
-	from { 
-	color: #F29400;	
+	from {
+	color: #F29400;
     }
     to {
 	color: #e2001a;
@@ -361,36 +362,36 @@ body.blocklyMinimalBody  * {
 >
 .tab-pane
 :not
- 
+
 (
 .active
- 
+
 ),
 .pill-content
 >
 .pill-pane
 :not
- 
+
 (
 .active
 
-	
+
 )
 {
 display
 :
- 
+
 block
 ;
 
-	
+
 height
 :
- 
+
 0;
 overflow-y
 :
- 
+
 hidden
 ;
 
@@ -467,27 +468,27 @@ hidden
 }
 
 .navbar-default
- 
+
 .navbar-toggle
 :not
- 
+
 (
 :first-child
- 
+
 )
 {
 margin
 :
- 
+
 4
 px
- 
+
 4
 px
- 
+
 4
 px
- 
+
 4
 px
 ;
@@ -1020,23 +1021,23 @@ td.bs-checkbox {
 }
 
 #progList
- 
+
 .fixed-table-container
- 
+
 tbody
- 
+
 td
 :hover
 :not
- 
+
 (
 a
 .showRelations
- 
+
 ){
 background-color
 :
- 
+
 #BACC1E
 ;
 
