@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -752,6 +753,23 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         if ( isDuration ) {
             this.sb.append(", ");
             driveAction.getParam().getDuration().getValue().visit(this);
+        }
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+
+        this.sb.append("hal.driveInCurve(");
+        this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append(", ");
+        curveAction.getParamRight().getSpeed().visit(this);
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
         }
         this.sb.append(");");
         return null;
@@ -1660,12 +1678,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> driveAction) {
         // TODO Auto-generated method stub
         return null;
     }
