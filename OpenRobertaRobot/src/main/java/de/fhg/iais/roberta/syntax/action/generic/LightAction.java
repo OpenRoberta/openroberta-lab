@@ -29,11 +29,20 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class LightAction<V> extends Action<V> {
     private final IBrickLedColor color;
     private final IBlinkMode blinkMode;
+    private static List<Field> fields;
 
     private LightAction(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.LIGHT_ACTION, properties, comment);
         Assert.isTrue(color != null && blinkMode != null);
         this.color = color;
+        this.blinkMode = blinkMode;
+        setReadOnly();
+    }
+
+    private LightAction(IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockType.LIGHT_ACTION, properties, comment);
+        Assert.isTrue(blinkMode != null);
+        this.color = null;
         this.blinkMode = blinkMode;
         setReadOnly();
     }
@@ -50,6 +59,10 @@ public class LightAction<V> extends Action<V> {
      */
     private static <V> LightAction<V> make(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightAction<V>(color, blinkMode, properties, comment);
+    }
+
+    private static <V> LightAction<V> make(IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LightAction<V>(blinkMode, properties, comment);
     }
 
     /**
@@ -85,19 +98,24 @@ public class LightAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
+        fields = helper.extractFields(block, (short) 2);
         String blink = helper.extractField(fields, BlocklyConstants.SWITCH_BLINK);
-        return LightAction
-            .make(factory.getBrickLedColor(color), factory.getBlinkMode(blink), helper.extractBlockProperties(block), helper.extractComment(block));
+        if ( fields.size() != 1 ) {
+            String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
+            return LightAction
+                .make(factory.getBrickLedColor(color), factory.getBlinkMode(blink), helper.extractBlockProperties(block), helper.extractComment(block));
+        } else {
+            return LightAction.make(factory.getBlinkMode(blink), helper.extractBlockProperties(block), helper.extractComment(block));
+        }
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().toString());
+        if ( fields.size() != 1 ) {
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().toString());
+        }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_BLINK, getBlinkMode().toString());
 
         return jaxbDestination;

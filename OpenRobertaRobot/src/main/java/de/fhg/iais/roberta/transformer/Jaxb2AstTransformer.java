@@ -461,7 +461,7 @@ abstract public class Jaxb2AstTransformer<V> {
     public List<Field> extractFields(Block block, short numOfFields) {
         List<Field> fields;
         fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
+        Assert.isTrue(fields.size() <= numOfFields, "Number of fields is not equal to " + numOfFields + "!");
         return fields;
     }
 
