@@ -850,7 +850,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         IBrickKey button = brickSensor.getKey();
-        String btnNumber = "1";
+        String btnNumber;
         switch ( button.toString() ) {
             case "ENTER":
                 btnNumber = "2";
@@ -861,8 +861,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             case "RIGHT":
                 btnNumber = "3";
                 break;
+            default:
+                btnNumber = "123";
+                break;
         }
-        this.sb.append("(one.readButton() == " + btnNumber + ")");
+        this.sb.append("rob.buttonIsPressed(" + btnNumber + ")");
         return null;
     }
 
