@@ -613,11 +613,13 @@ Blockly.Msg.POPUP_EMAIL = "Correo electrónico";
 Blockly.Msg.POPUP_EMAIL_SEND = "Send now";  // untranslated
 Blockly.Msg.POPUP_NAME = "Nombre";
 Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
+Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li></ul>";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Contraseña";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "reset password ...";  // untranslated
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "The execution of the program on the robot has terminated unexpectedly!";  // untranslated
 Blockly.Msg.POPUP_REGISTER_USER = "Register now";  // untranslated
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repetir contraseña";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltaje";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nombre";
@@ -860,6 +862,7 @@ Blockly.Msg.WAIT = "esperar";
 Blockly.Msg.WAIT_FOREVER = "indefinidamente";
 Blockly.Msg.WAIT_FOR_TOOLTIP = "Espera a los valores de los sensores";
 Blockly.Msg.WAIT_OR = "o esperar a";
+Blockly.Msg.WAIT_TIME_TOOLTIP = "Waits for a certain time in milliseconds.";  // untranslated
 Blockly.Msg.WAIT_TOOLTIP = "espera hasta que la condición sea verdadera";
 Blockly.Msg.WAIT_UNTIL = "esperar hasta";
 Blockly.Msg.YES = "sí";

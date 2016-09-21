@@ -29,46 +29,31 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         var robots = GUISTATE_C.getRobots();
         for ( var robot in robots) {
             var clone = proto.clone();
+            clone.find('.typcn').addClass('typcn-' + robot);
+            clone.find('.typcn').text(robots[robot]);
+            clone.find('.typcn').attr('id', 'menu-' + robot);
+            clone.attr('data-type', robot);
+            clone.addClass(robot);
             $("#navigation-robot>.anchor").before(clone);
-            $(clone).find('.typcn').addClass('typcn-' + robot);
-            $(clone).find('.typcn').text(robots[robot]);
-            $(clone).find('.typcn').attr('id', 'menu-' + robot);
-            $(clone).attr('data-type', robot);
-            $(clone).addClass(robot);
         }
         proto.remove();
         proto = $('#popup-sim');
         for ( var robot in robots) {
-            var clone = proto.clone();
+            var clone = proto.clone().prop('id', 'menu-' + robot);
+            clone.find('span:eq( 0 )').removeClass('typcn-open');
+            clone.find('span:eq( 0 )').addClass('typcn-' + robot);
+            clone.find('span:eq( 1 )').text(robots[robot]);
+            clone.attr('data-type', robot);
+            clone.addClass('popup-robot');
+            // TODO get beta information from the server
+            if (robot == 'ev3'){
+                clone.find('img').css('visibility', 'hidden');
+            }
             $("#show-startup-message .modal-footer").append(clone);
-            $(clone).find('span:eq( 0 )').removeClass('typcn-open');
-            $(clone).find('span:eq( 0 )').addClass('typcn-' + robot);
-            $(clone).find('span:eq( 1 )').text(robots[robot]);
-            $(clone).attr('id', 'menu-' + robot);
-            $(clone).attr('data-type', robot);
-            $(clone).addClass('popup-robot');
         }
+        proto.find('.img-beta').css('visibility', 'hidden');
 
         GUISTATE_C.setInitialState();
-
-//        $('#backLogging').onWrap('click', function() {
-//            activateProgConfigMenu();
-//            if (bricklyActive) {
-//                $('#tabConfiguration').trigger('click');
-//            } else {
-//                $('#tabProgram').trigger('click');
-//            }
-//        });
-//
-//        $('#backConfiguration').onWrap('click', function() {
-//            activateProgConfigMenu();
-//            $('#tabConfiguration').trigger('click');
-//        });
-//
-//        $('#backProgram').onWrap('click', function() {
-//            activateProgConfigMenu();
-//            $('#tabProgram').trigger('click');
-//        });
     }
 
     /**
@@ -184,7 +169,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 }
                 $("#show-startup-message").modal("show");
             } else if (domId === 'menuAbout') { // Submenu 'Help'
-                $("#version").text(guiState.version);
+                $("#version").text(GUISTATE_C.getServerVersion() + '-SNAPSHOT');
                 $("#show-about").modal("show");
             } else if (domId === 'menuLogging') { // Submenu 'Help'
                 $('#tabLogList').click();
@@ -330,7 +315,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'beta logo was clicked');
 
         $('.menuBuildingInstructions').onWrap('click', function(event) {
-            window.open("TODO");
+            window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung#Vorbereitung-Bauanleitung");
         }, 'head navigation menu item clicked');
         $('.menuEV3conf').onWrap('click', function(event) {
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
@@ -435,10 +420,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
         }, 'codeDownload clicked');
 
-        $('.newRelease').onWrap('click', function(event) {
-            $('#show-release').modal("show");
-        }, 'show release clicked');
-
         $('#confirmContinue').onWrap('click', function(event) {
             if ($('#confirmContinue').data('type') === 'program') {
                 PROGRAM_C.newProgram(true);
@@ -484,7 +465,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 }
             }
         });
-        
+
         $(window).on('resize', function(e) {
             Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
             Blockly.svgResize(GUISTATE_C.getBricklyWorkspace());

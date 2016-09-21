@@ -127,8 +127,8 @@ body.blocklyMinimalBody  * {
 
 .logo {
 	position: absolute;
-	top: 0;
-	right: 0;
+	top: 10;
+	right: 10;
 }
 
 #states {
@@ -161,9 +161,9 @@ body.blocklyMinimalBody  * {
 }
 
 .img-beta {
-	position: absolute;
-	bottom: 5px;
-	right: 130px;
+	position: relative;
+	bottom: 80px;
+	left: 50px;
 	-moz-transform: rotate(-10deg);
 	-webkit-transform: rotate(-10deg);
 	-o-transform: rotate(-10deg);
@@ -854,6 +854,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .robot-label {
   display: block;
+  white-space: nowrap;
 }
 
 .robot-icon {
@@ -1107,7 +1108,7 @@ table.dataTable thead .sorting_desc {
 		padding-top: 56px;
 	}
 	.logo {
-		top: 10;
+		top: 11;
 	}
 	.img-nepo {
 		width: 120px;
