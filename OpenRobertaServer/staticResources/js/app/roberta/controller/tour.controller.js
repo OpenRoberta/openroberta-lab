@@ -52,8 +52,9 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
 
     var welcome = [ {
         'event_type' : 'next',
-        'selector' : '#imgLogo',
+        'selector' : '.logo',
         'description' : 'TOUR1_DESCRIPTION01',
+        'top' : 77,
         'nextButton' : {
             text : 'TOUR1_DESCRIPTION00'
         },
