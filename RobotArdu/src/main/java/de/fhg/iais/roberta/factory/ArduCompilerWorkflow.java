@@ -136,14 +136,14 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
 
-        String scriptName = this.robotCompilerResourcesDir + "linux/arduino-builder";
+        String scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
         String os = "linux";
 
         if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = this.robotCompilerResourcesDir + "windows/arduino-builder.exe";
+            scriptName = this.robotCompilerResourcesDir + "/windows/arduino-builder.exe";
             os = "windows";
         } else if ( SystemUtils.IS_OS_MAC ) {
-            scriptName = this.robotCompilerResourcesDir + "osx/arduino-builder";
+            scriptName = this.robotCompilerResourcesDir + "/osx/arduino-builder";
             os = "osx";
         }
 
@@ -153,9 +153,9 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
-                "-hardware=" + this.robotCompilerResourcesDir + "hardware",
+                "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
                 "-tools=" + this.robotCompilerResourcesDir + os + "/tools-builder",
-                "-libraries=" + this.robotCompilerResourcesDir + "libraries",
+                "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
                 "-fqbn=arduino:avr:uno",
                 "-prefs=compiler.path=" + this.robotCompilerDir,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",

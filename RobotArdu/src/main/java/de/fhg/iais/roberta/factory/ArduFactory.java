@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -48,12 +50,16 @@ public class ArduFactory extends AbstractRobotFactory {
     private final Properties arduProperties;
 
     public ArduFactory(RobotCommunicator unusedForArdu, Integer robotId) {
+        String os = "linux";
+        if ( SystemUtils.IS_OS_WINDOWS ) {
+            os = "windows";
+        }
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("ardu");
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
         this.robotId = robotId;
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
     }
