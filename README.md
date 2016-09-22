@@ -19,6 +19,7 @@ Things you need on your computer:
 
 * Java 1.7
 * Maven >= 3.2
+* avr-gcc (for using Arduino based robots)
 * Phantomjs
 * Git
 * Web browser
@@ -26,6 +27,7 @@ Things you need on your computer:
 Please also check our [wiki](http://wiki.open-roberta.org) for a detailed install
 instruction, development procedure, coding conventions and further reading. Please
 also checkout our project [issue tracker](http://jira.open-roberta.org).
+
 
 ### Fast installation with maven
 
@@ -39,17 +41,17 @@ Get a coffee! Might take a couple of minutes.
 
 A successful build looks like:
 
-
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
     [INFO] 
-    [INFO] RobertaParent ...................................... SUCCESS [  1.083 s]
-    [INFO] Resources .......................................... SUCCESS [  0.032 s]
-    [INFO] OpenRobertaRobot ................................... SUCCESS [ 15.718 s]
-    [INFO] RobotSIM ........................................... SUCCESS [  3.240 s]
-    [INFO] RobotEV3 ........................................... SUCCESS [ 12.599 s]
-    [INFO] RobotNXT ........................................... SUCCESS [ 13.902 s]
-    [INFO] OpenRobertaServer .................................. SUCCESS [ 46.404 s]
+    [INFO] RobertaParent ...................................... SUCCESS [  3.858 s]
+    [INFO] Resources .......................................... SUCCESS [  0.036 s]
+    [INFO] OpenRobertaRobot ................................... SUCCESS [ 21.395 s]
+    [INFO] RobotSIM ........................................... SUCCESS [  6.521 s]
+    [INFO] RobotEV3 ........................................... SUCCESS [ 20.394 s]
+    [INFO] RobotNXT ........................................... SUCCESS [ 19.531 s]
+    [INFO] RobotArdu .......................................... SUCCESS [ 19.677 s]
+    [INFO] OpenRobertaServer .................................. SUCCESS [ 33.178 s]
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
 
