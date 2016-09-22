@@ -154,7 +154,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
                 "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                "-tools=" + this.robotCompilerResourcesDir + os + "/tools-builder",
+                "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
                 "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
                 "-fqbn=arduino:avr:uno",
                 "-prefs=compiler.path=" + this.robotCompilerDir,
