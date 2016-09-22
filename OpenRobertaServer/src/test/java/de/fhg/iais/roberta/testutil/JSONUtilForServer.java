@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
-import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
-import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
+import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
+import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
@@ -157,7 +157,7 @@ public class JSONUtilForServer {
     }
 
     public static void registerToken(
-        final Ev3Command brickCommand,
+        final RobotCommand brickCommand,
         final ClientAdmin restBlocks,
         final HttpSessionState sessionState,
         final DbSession dbSession,
@@ -181,7 +181,7 @@ public class JSONUtilForServer {
     }
 
     public static void downloadJar(
-        final Ev3DownloadJar downloadJar,
+        final RobotDownloadProgram downloadJar,
         final ClientProgram restProgram,
         final HttpSessionState sessionState,
         final String token,

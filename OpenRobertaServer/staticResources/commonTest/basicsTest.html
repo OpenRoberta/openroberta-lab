@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title class="header">Tests f&uuml;r die basics-Moduln (f&uuml;r Selenium geeignet)</title>
+  <link rel="stylesheet" type="text/css" href="/commonTest/basicsTest.css"></link>
+  <script data-main="basicsTest.js" src="../js/require.js"></script>
+</head>
+
+<body class='blatt'>
+  <table>
+  <tr><td>mach einen LOG.info Eintrag</td><td><input id="B1" class='submit' type="submit" value="t1" /></td></tr>
+  <tr><td>check: Log-Queue f&uuml;r den Server == 0</td><td><input id="B2" class='submit' type="submit" value="t2" /></td></tr>
+  <tr><td>check: Log-Queue f&uuml;r den Server == 1</td><td><input id="B3" class='submit' type="submit" value="t3" /></td></tr>
+  <tr><td>disable log to server</td><td><input id="B4" class='submit' type="submit" value="t4" /></td></tr>
+  <tr><td>enable log to server</td><td><input id="B5" class='submit' type="submit" value="t5" /></td></tr>
+  <tr><td>check DBC</td><td><input id="B6" class='submit' type="submit" value="t6" /></td></tr>
+  <tr><td>/hello/json1</td><td><input id="B7" class='submit' type="submit" value="t7" /></td></tr>
+  <tr><td>/hello/json2</td><td><input id="B8" class='submit' type="submit" value="t8" /></td></tr>
+  </table>
+  <hr />
+  <div id="ready">Status</div>
+  <div id="result">Ergebnisse</div>
+  <hr />
+  <ol id="log"></ol>
+</body>
+</html>

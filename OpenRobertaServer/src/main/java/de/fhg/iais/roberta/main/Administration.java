@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -28,7 +27,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.Encryption;
-import de.fhg.iais.roberta.util.Option;
 
 /**
  * a class with a static main method, responsible for some administrative work, like<br>
@@ -114,58 +112,58 @@ public class Administration {
 
     private void confXml2text() throws Exception {
         Administration.LOG.info("*** confXml2text ***");
-        expectArgs(2);
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        nativeSession.beginTransaction();
-        String sqlGetQuery = "select ID, NAME, CONFIGURATION_TEXT from CONFIGURATION";
-        String sqlUpdQuery = "update CONFIGURATION set CONFIGURATION_TEXT=:text where ID=:id";
-        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
-        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
-        Administration.LOG.info("there are " + resultSet.size() + " configurations in the data base");
-        for ( Object[] object : resultSet ) {
-            try {
-                String textString = ConfigurationHelper.xmlString2textString((String) object[1], (String) object[2]);
-                upd.setInteger("id", (Integer) object[0]);
-                upd.setString("text", textString);
-                int count = upd.executeUpdate();
-                Administration.LOG.info("!!! processed configuration name: " + object[1] + ". Update count: " + count);
-            } catch ( Exception e ) {
-                Administration.LOG
-                    .info("??? exception when transforming: name: " + object[1] + ", content: " + ((String) object[2]).substring(0, 50).replace("\n", " "));
-            }
-        }
-        nativeSession.getTransaction().commit();
-        nativeSession.createSQLQuery("shutdown").executeUpdate();
-        nativeSession.close();
+        //        expectArgs(2);
+        //        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        //        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        //        nativeSession.beginTransaction();
+        //        String sqlGetQuery = "select ID, NAME, CONFIGURATION_TEXT from CONFIGURATION";
+        //        String sqlUpdQuery = "update CONFIGURATION set CONFIGURATION_TEXT=:text where ID=:id";
+        //        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
+        //        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
+        //        Administration.LOG.info("there are " + resultSet.size() + " configurations in the data base");
+        //        for ( Object[] object : resultSet ) {
+        //            try {
+        //                String textString = ConfigurationHelper.xmlString2textString((String) object[1], (String) object[2]);
+        //                upd.setInteger("id", (Integer) object[0]);
+        //                upd.setString("text", textString);
+        //                int count = upd.executeUpdate();
+        //                Administration.LOG.info("!!! processed configuration name: " + object[1] + ". Update count: " + count);
+        //            } catch ( Exception e ) {
+        //                Administration.LOG
+        //                    .info("??? exception when transforming: name: " + object[1] + ", content: " + ((String) object[2]).substring(0, 50).replace("\n", " "));
+        //            }
+        //        }
+        //        nativeSession.getTransaction().commit();
+        //        nativeSession.createSQLQuery("shutdown").executeUpdate();
+        //        nativeSession.close();
     }
 
     private void conftext2Xml() throws Exception {
         Administration.LOG.info("*** conftext2Xml ***");
-        expectArgs(2);
-        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
-        Session nativeSession = sessionFactoryWrapper.getNativeSession();
-        nativeSession.beginTransaction();
-        String sqlGetQuery = "select ID, NAME, CONFIGURATION_TEXT from CONFIGURATION";
-        String sqlUpdQuery = "update CONFIGURATION set CONFIGURATION_TEXT=:text where ID=:id";
-        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
-        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
-        Administration.LOG.info("there are " + resultSet.size() + " configurations in the data base");
-        for ( Object[] object : resultSet ) {
-            try {
-                Option<String> textString = ConfigurationHelper.textString2xmlString((String) object[2]);
-                upd.setInteger("id", (Integer) object[0]);
-                upd.setString("text", textString.getVal());
-                int count = upd.executeUpdate();
-                Administration.LOG.info("!!! processed configuration name: " + object[1] + ". Update count: " + count);
-            } catch ( Exception e ) {
-                Administration.LOG
-                    .info("??? exception when transforming: name: " + object[1] + ", content: " + ((String) object[2]).substring(0, 50).replace("\n", " "));
-            }
-        }
-        nativeSession.getTransaction().commit();
-        nativeSession.createSQLQuery("shutdown").executeUpdate();
-        nativeSession.close();
+        //        expectArgs(2);
+        //        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        //        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        //        nativeSession.beginTransaction();
+        //        String sqlGetQuery = "select ID, NAME, CONFIGURATION_TEXT from CONFIGURATION";
+        //        String sqlUpdQuery = "update CONFIGURATION set CONFIGURATION_TEXT=:text where ID=:id";
+        //        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
+        //        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
+        //        Administration.LOG.info("there are " + resultSet.size() + " configurations in the data base");
+        //        for ( Object[] object : resultSet ) {
+        //            try {
+        //                Option<String> textString = ConfigurationHelper.textString2xmlString((String) object[2]);
+        //                upd.setInteger("id", (Integer) object[0]);
+        //                upd.setString("text", textString.getVal());
+        //                int count = upd.executeUpdate();
+        //                Administration.LOG.info("!!! processed configuration name: " + object[1] + ". Update count: " + count);
+        //            } catch ( Exception e ) {
+        //                Administration.LOG
+        //                    .info("??? exception when transforming: name: " + object[1] + ", content: " + ((String) object[2]).substring(0, 50).replace("\n", " "));
+        //            }
+        //        }
+        //        nativeSession.getTransaction().commit();
+        //        nativeSession.createSQLQuery("shutdown").executeUpdate();
+        //        nativeSession.close();
     }
 
     private void encryptpasswords() throws Exception {
@@ -205,7 +203,7 @@ public class Administration {
         //            USER_ID INTEGER not null,
         //            URL_POSTFIX varchar(255),
         //            CREATED timestamp not null,
-        //            
+        //
         //            primary key (ID),
         //            foreign key (USER_ID) references USER(ID) ON DELETE CASCADE
         //        );
@@ -293,7 +291,8 @@ public class Administration {
 
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {
         BlockSet program = JaxbHelper.xml2BlockSet(updatedProgram);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>();
+        //        EV3Factory modeFactory = new EV3Factory(null);
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(null);
         transformer.transform(program);
         BlockSet blockSet = astToJaxb(transformer.getTree());
         String newXml = jaxbToXml(blockSet);

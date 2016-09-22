@@ -1,17 +1,24 @@
 package de.fhg.iais.roberta.main;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.slf4j.Logger;
@@ -21,14 +28,14 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.VersionChecker;
-import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.Util1;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -82,8 +89,9 @@ public class ServerStarter {
      * @param propertyPath optional URI to properties resource. May be null.
      */
     public ServerStarter(String propertyPath) {
-        Properties mailProperties = Util.loadProperties("classpath:openRobertaMailServer.properties");
-        Properties tmpProperties = Util.loadProperties(propertyPath);
+        Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
+        Properties tmpProperties = Util1.loadProperties(propertyPath);
+        Util1.setSystemDefaultProperty(propertyPath);
         this.properties = mergeProperties(mailProperties, tmpProperties);
     }
 
@@ -102,7 +110,7 @@ public class ServerStarter {
     public Server start(String host, int port) throws IOException {
         String versionFrom = this.properties.getProperty("validversionrange.From", "?");
         String versionTo = this.properties.getProperty("validversionrange.To", "?");
-        Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
+        //        Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
         Server server = new Server();
         ServerConnector http = new ServerConnector(server);
         http.setHost(host);
@@ -111,7 +119,10 @@ public class ServerStarter {
             http
         });
 
-        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(this.properties);
+        // configure robot plugins
+        RobotCommunicator robotCommunicator = new RobotCommunicator();
+        Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator);
+        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(this.properties, robotPluginMap, robotCommunicator);
 
         // REST API with /rest/<version>/ prefix
         ServletContextHandler versionedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -122,40 +133,38 @@ public class ServerStarter {
         versionedHttpHandler.addFilter(GuiceFilter.class, "/*", null);
         versionedHttpHandler.addServlet(DefaultServlet.class, "/*");
 
-        // REST API without prefix - deprecated
-        ServletContextHandler deprecatedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        deprecatedHttpHandler.setContextPath("/*");
-        deprecatedHttpHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
+        // REST API without prefix (deprecated) and static resources
+        ServletContextHandler rootHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        rootHandler.setContextPath("/*");
+        rootHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
 
-        deprecatedHttpHandler.addEventListener(robertaGuiceServletConfig);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/alive/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/admin/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/conf/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/ping/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/program/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/user/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/hello/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/download/*", null);
-        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/update/*", null);
-        deprecatedHttpHandler.addServlet(DefaultServlet.class, "/*");
+        rootHandler.addEventListener(robertaGuiceServletConfig);
+        rootHandler.addFilter(GuiceFilter.class, "/alive/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/admin/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/conf/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/ping/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/program/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/user/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/hello/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/pushcmd/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/download/*", null);
+        rootHandler.addFilter(GuiceFilter.class, "/update/*", null);
+        ServletHolder staticResourceServlet = rootHandler.addServlet(DefaultServlet.class, "/*");
+
+        staticResourceServlet.setInitParameter("gzip", "true");
+        staticResourceServlet.setInitParameter("resourceBase", ServerStarter.class.getResource("/staticResources").toExternalForm());
 
         // websockets with /ws/<version>/ prefix
         ServletContextHandler wsHandler = new ServletContextHandler();
         wsHandler.setContextPath("/ws");
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
-        ResourceHandler staticResourceHandler = new ResourceHandler();
-        staticResourceHandler.setDirectoriesListed(true);
-        staticResourceHandler.setResourceBase("staticResources");
-
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
-            staticResourceHandler,
             versionedHttpHandler,
             wsHandler,
-            deprecatedHttpHandler
+            rootHandler
         });
         server.setHandler(handlers);
 
@@ -167,11 +176,61 @@ public class ServerStarter {
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
         Ev3SensorLoggingWS.setGuiceInjector(this.injector);
+
         return server;
     }
 
     /**
-     * returns the guice injector configured in this class. Even if this not dangerous per se, it should <b>only be used in tests</b>
+     * detect all robot plugins (at least EV3, NXT and SIM), that may be used with this server. Uses the declarations from the openroberta.properties file.
+     * Autodetection would be great ... .
+     *
+     * @param robotCommunicator
+     * @param injector
+     * @return the mapping from robot names to the factory, that supplies all robot-specific data
+     */
+    private Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator) {
+        Set<String> pluginNumbers = new HashSet<>();
+        Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
+        for ( String key : this.properties.stringPropertyNames() ) {
+            Matcher keyMatcher = pluginPattern.matcher(key);
+            if ( keyMatcher.matches() ) {
+                pluginNumbers.add(keyMatcher.group(1));
+            }
+        }
+        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+        if ( robotCommunicator == null ) {
+            LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
+        }
+        for ( String pluginNumber : pluginNumbers ) {
+            String pluginName = this.properties.getProperty("robot.plugin." + pluginNumber + ".name");
+            String pluginId = this.properties.getProperty("robot.plugin." + pluginNumber + ".id");
+            String pluginFactory = this.properties.getProperty("robot.plugin." + pluginNumber + ".factory");
+            if ( pluginName == null || pluginId == null || pluginFactory == null ) {
+                LOG.error("the robot plugin with number " + pluginNumber + " is invalid and thus ignored. Check openRoberta.properties");
+            } else {
+                try {
+                    @SuppressWarnings("unchecked")
+                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
+                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class, Integer.class);
+                    robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator, Integer.parseInt(pluginId)));
+                } catch ( Exception e ) {
+                    LOG.error(
+                        "the robot plugin " + pluginName + " has no valid factory is thus ignored. Check openRoberta.properties and the factory class",
+                        e);
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("ROBOT PLUGINS: ").append(robotPlugins.size()).append(" plugins are found: ");
+        for ( String pluginName : robotPlugins.keySet() ) {
+            sb.append(pluginName).append(" ");
+        }
+        LOG.info(sb.toString());
+        return robotPlugins;
+    }
+
+    /**
+     * returns the guice injector configured in this class. This not dangerous, but you should ask yourself, why you need that ...</b>
      *
      * @return the injector
      */

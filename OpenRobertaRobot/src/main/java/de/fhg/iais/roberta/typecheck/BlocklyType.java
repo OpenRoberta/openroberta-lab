@@ -43,31 +43,33 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  */
 public enum BlocklyType {
     // @formatter:off
-    ANY(""),
-    COMPARABLE("", ANY), ADDABLE("", ANY),
-    ARRAY("Array", COMPARABLE),
-    ARRAY_NUMBER("Array_Number", COMPARABLE),
-    ARRAY_STRING("Array_String", COMPARABLE),
-    ARRAY_COLOUR("Array_Colour", COMPARABLE),
-    ARRAY_BOOLEAN("Array_Boolean", COMPARABLE),
-    BOOLEAN("Boolean", COMPARABLE),
-    NUMBER("Number", COMPARABLE, ADDABLE), NUMBER_INT("Number", COMPARABLE, ADDABLE),
-    STRING("String", COMPARABLE, ADDABLE),
-    COLOR("Colour", ANY), //
-    NULL("", STRING, COLOR),
-    REF("", NULL), PRIM("", NUMBER, BOOLEAN),
-    NOTHING("", REF, PRIM),
-    VOID(""),
-    CONNECTION("Connection", ANY),
-    CAPTURED_TYPE(""), R(""), S(""), T("");
+    ANY("", false),
+    COMPARABLE("", false,ANY), ADDABLE("", false,ANY),
+    ARRAY("Array", false,COMPARABLE),
+    ARRAY_NUMBER("Array_Number",true, COMPARABLE),
+    ARRAY_STRING("Array_String", true,COMPARABLE),
+    ARRAY_COLOUR("Array_Colour", true,COMPARABLE),
+    ARRAY_BOOLEAN("Array_Boolean", true,COMPARABLE),
+    BOOLEAN("Boolean", false,COMPARABLE),
+    NUMBER("Number", false,COMPARABLE, ADDABLE), NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
+    STRING("String", false,COMPARABLE, ADDABLE),
+    COLOR("Colour", false,ANY), //
+    NULL("", false,STRING, COLOR),
+    REF("", false,NULL), PRIM("",false, NUMBER, BOOLEAN),
+    NOTHING("", false,REF, PRIM),
+    VOID("",false),
+    CONNECTION("Connection",false, ANY),
+    CAPTURED_TYPE("",false), R("",false), S("",false), T("",false);
     // @formatter:on
 
     private final String blocklyName;
     private final BlocklyType[] superTypes;
+    private final boolean array;
 
-    private BlocklyType(String blocklyName, BlocklyType... superTypes) {
+    private BlocklyType(String blocklyName, boolean array, BlocklyType... superTypes) {
         this.blocklyName = blocklyName;
         this.superTypes = superTypes;
+        this.array = array;
     }
 
     /**
@@ -79,6 +81,10 @@ public enum BlocklyType {
 
     public BlocklyType[] getSuperTypes() {
         return this.superTypes;
+    }
+
+    public boolean isArray() {
+        return this.array;
     }
 
     /**

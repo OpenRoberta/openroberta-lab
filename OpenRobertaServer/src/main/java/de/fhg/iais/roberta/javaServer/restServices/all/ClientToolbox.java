@@ -20,20 +20,21 @@ import de.fhg.iais.roberta.persistence.bo.Toolbox;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/toolbox")
 public class ClientToolbox {
     private static final Logger LOG = LoggerFactory.getLogger(ClientToolbox.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientToolbox(Ev3Communicator brickCommunicator) {
+    public ClientToolbox(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 
@@ -43,7 +44,7 @@ public class ClientToolbox {
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         AliveData.rememberClientCall();
         new ClientLogger().log(LOG, fullRequest);
-        final int robotId = httpSessionState.getRobotId();
+        final String robotName = httpSessionState.getRobotName();
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -62,7 +63,7 @@ public class ClientToolbox {
                         userId = user.getId();
                     }
                 }
-                Toolbox toolbox = tp.getToolbox(toolboxName, userId, robotId);
+                Toolbox toolbox = tp.getToolbox(toolboxName, userId, httpSessionState.getRobotId());
                 if ( toolbox != null ) {
                     response.put("data", toolbox.getToolboxText());
                 }
@@ -74,7 +75,7 @@ public class ClientToolbox {
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {

@@ -1,13 +1,14 @@
 package de.fhg.iais.roberta.syntax;
 
-import de.fhg.iais.roberta.shared.action.ev3.MotorMoveMode;
+import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
+import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 
 /**
  * This class is parameter class used to set the type of the motor duration mode {@link MotorMoveMode} and value for the duration.
  */
 public class MotorDuration<V> {
-    private MotorMoveMode type;
+    private IMotorMoveMode type;
     private Expr<V> value;
 
     /**
@@ -19,7 +20,7 @@ public class MotorDuration<V> {
      * @param type of the motor movement
      * @param value for the movement
      */
-    public MotorDuration(MotorMoveMode type, Expr<V> value) {
+    public MotorDuration(IMotorMoveMode type, Expr<V> value) {
         super();
         this.setType(type);
         this.value = value;
@@ -48,14 +49,14 @@ public class MotorDuration<V> {
      *
      * @return mode of the motor duration.
      */
-    public MotorMoveMode getType() {
+    public IMotorMoveMode getType() {
         return this.type;
     }
 
     /**
      * Set the mode of the motor duration. See enum {@link MotorMoveMode} for all possible modes.
      */
-    public void setType(MotorMoveMode type) {
+    public void setType(IMotorMoveMode type) {
         this.type = type;
     }
 

@@ -1,7 +1,9 @@
 **/target
-*/bin
+**/bin
 **/*.class
 Resources/resources/*.jar
 Resources/updateResources/*.jar
 OpenRobertaRuntime/userProjects/*
+OpenRobertaServer/userProjects/*
+OpenRobertaServer/db
 **/phantomjsdriver.log

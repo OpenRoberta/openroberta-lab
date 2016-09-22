@@ -4,25 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.ev3.DriveAction;
-import de.fhg.iais.roberta.syntax.action.ev3.LightAction;
-import de.fhg.iais.roberta.syntax.action.ev3.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.ev3.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ToneAction;
-import de.fhg.iais.roberta.syntax.action.ev3.TurnAction;
-import de.fhg.iais.roberta.syntax.action.ev3.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
+import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
+import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
+import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -66,15 +68,18 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.ev3.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -614,6 +619,36 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitShadowExpr(ShadowExpr<T> shadowExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitLightSensor(LightSensor<T> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitSoundSensor(SoundSensor<T> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitLightSensorAction(LightSensorAction<T> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitCurveAction(CurveAction<T> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitCompassSensor(CompassSensor<T> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }

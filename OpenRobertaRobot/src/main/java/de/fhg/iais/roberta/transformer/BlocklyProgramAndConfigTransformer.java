@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
 
@@ -19,9 +20,9 @@ public class BlocklyProgramAndConfigTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyProgramAndConfigTransformer.class);
     private Key errorMessage;
     private Jaxb2BlocklyProgramTransformer<Void> programTransformer;
-    private Ev3Configuration brickConfiguration;
+    private Configuration brickConfiguration;
 
-    private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2BlocklyProgramTransformer<Void> programTransformer, Ev3Configuration brickConfiguration) {
+    private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2BlocklyProgramTransformer<Void> programTransformer, Configuration brickConfiguration) {
         super();
         this.errorMessage = errorMessage;
         this.programTransformer = programTransformer;
@@ -45,7 +46,7 @@ public class BlocklyProgramAndConfigTransformer {
     /**
      * @return the brickConfiguration
      */
-    public Ev3Configuration getBrickConfiguration() {
+    public Configuration getBrickConfiguration() {
         return this.brickConfiguration;
     }
 
@@ -63,7 +64,7 @@ public class BlocklyProgramAndConfigTransformer {
      * @param configurationText as XML
      * @return
      */
-    public static BlocklyProgramAndConfigTransformer transform(String programText, String configurationText) {
+    public static BlocklyProgramAndConfigTransformer transform(IRobotFactory factory, String programText, String configurationText) {
         Key errorMessage = null;
         if ( programText == null || programText.trim().equals("") ) {
             errorMessage = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
@@ -73,14 +74,14 @@ public class BlocklyProgramAndConfigTransformer {
 
         Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
         try {
-            programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
+            programTransformer = JaxbHelper.generateProgramTransformer(factory, programText);
         } catch ( Exception e ) {
             LOG.error("Transformer failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
         }
-        Ev3Configuration brickConfiguration = null;
+        Configuration brickConfiguration = null;
         try {
-            brickConfiguration = Ev3CompilerWorkflow.generateConfiguration(configurationText);
+            brickConfiguration = factory.getCompilerWorkflow().generateConfiguration(factory, configurationText);
         } catch ( Exception e ) {
             LOG.error("Generation of the configuration failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;

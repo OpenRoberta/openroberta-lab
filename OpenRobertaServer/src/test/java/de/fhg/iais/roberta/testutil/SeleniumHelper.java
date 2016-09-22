@@ -14,13 +14,16 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 public class SeleniumHelper {
+    private static final Logger LOG = LoggerFactory.getLogger(SeleniumHelper.class);
 
     public int port;
     public final ServerStarter serverStarter;
@@ -30,7 +33,7 @@ public class SeleniumHelper {
     public boolean browserVisibility;
 
     public SeleniumHelper(String baseUrl) throws Exception {
-        Properties properties = Util.loadProperties("classpath:openRoberta.properties");
+        Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
         this.server = this.serverStarter.start("localhost", 1998);
@@ -92,15 +95,18 @@ public class SeleniumHelper {
     public static WebDriver runBrowser(boolean browserVisibility) {
         WebDriver driver;
         if ( browserVisibility ) {
+            LOG.info("browserVisibility: true");
             FirefoxProfile fp = new FirefoxProfile();
             fp.setEnableNativeEvents(false);
             fp.setPreference("xpinstall.signatures.required", false);
             driver = new FirefoxDriver(fp);
             driver.manage().window().maximize();
         } else {
+            String phantomjsBinaryPath = System.getProperty("phantomjs.binary");
+            LOG.info("browserVisibility: false; phantomjsBinaryPath: " + phantomjsBinaryPath);
             DesiredCapabilities caps = DesiredCapabilities.firefox();
             caps.setCapability("nativeEvents", false);
-            caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, System.getProperty("phantomjs.binary"));
+            caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, phantomjsBinaryPath);
             driver = new PhantomJSDriver(caps);
             driver.manage().window().setSize(new Dimension(1920, 1080));
         }

@@ -32,5 +32,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/RobotEV3"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RobotNXT"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RobotSIM"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="staticResources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/RobotArdu"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

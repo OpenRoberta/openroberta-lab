@@ -1,15 +1,6 @@
-define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery', 'jquery-ui', 'jquery-validate', 'datatables', 'bootstrap' ], function(require,
-        exports) {
-
-    var $ = require('jquery');
-    var MSG = require('message');
-    var LOG = require('log');
-    var userState = require('roberta.user-state');
-
+define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ], function(exports, MSG, LOG, $) {
     /**
      * Set cookie
-     * 
-     * @memberof UTIL
      * 
      * @param {key}
      *            Key of the cookie
@@ -21,13 +12,10 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000));
         document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
     }
-
     exports.setCookie = setCookie;
 
     /**
      * Get cookie
-     * 
-     * @memberof UTIL
      * 
      * @param {key}
      *            Key of the cookie to read
@@ -36,13 +24,10 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
         return keyValue ? keyValue[2] : null;
     }
-
     exports.getCookie = getCookie;
 
     /**
      * Format date
-     * 
-     * @memberof UTIL
      * 
      * @param {date}
      *            date from server to be formatted
@@ -53,16 +38,14 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
                     + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
+        } else {
+            return "";
         }
-        return "";
     }
-
     exports.formatDate = formatDate;
 
     /**
      * Convert date into numeric value
-     * 
-     * @memberof UTIL
      * 
      * @param {d}
      *            date in the form 'dd.mm.yyyy, hh:mm:ss'
@@ -83,13 +66,10 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         }
         return 0;
     }
-
     exports.parseDate = parseDate;
 
     /**
      * Format result of server call for logging
-     * 
-     * @memberof UTIL
      * 
      * @param {result}
      *            Result-object from server call
@@ -116,13 +96,10 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         str += '}';
         return str;
     }
-
     exports.formatResultLog = formatResultLog;
 
     /**
      * Extension of Jquery-datatables for sorting German date fields
-     * 
-     * @memberof UTIL
      */
     function initDataTables() {
         $.extend($.fn.dataTableExt.oSort['date-de-asc'] = function(a, b) {
@@ -137,48 +114,15 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         });
     }
-
     exports.initDataTables = initDataTables;
 
     /**
      * Calculate height of data table
-     * 
-     * @memberof exports
      */
     function calcDataTableHeight() {
         return Math.round($(window).height() - 260);
     }
-
     exports.calcDataTableHeight = calcDataTableHeight;
-
-    function cacheBlocks(workspace) {
-        userState.programBlocksSaved = null;
-        userState.programBlocks = null;
-        if (Blockly.mainWorkspace !== null) {
-            var xmlProgram = Blockly.Xml.workspaceToDom(workspace);
-            userState.programBlocksSaved = Blockly.Xml.domToText(xmlProgram);
-            var blocks = workspace.getTopBlocks();
-            for (var i = 0; i < blocks.length; i++) {
-                if (blocks[i].type == "robControls_start") {
-                    var pos = blocks[i].getRelativeToSurfaceXY();
-                    blocks[i].moveBy(25 - pos.x, 25 - pos.y);
-                    break;
-                }
-            }
-            xmlProgram = Blockly.Xml.workspaceToDom(workspace);
-            userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
-            var blocks = workspace.getTopBlocks();
-            for (var i = 0; i < blocks.length; i++) {
-                if (blocks[i].type == "robControls_start") {
-                    var pos = blocks[i].getRelativeToSurfaceXY();
-                    blocks[i].moveBy(25 - pos.x, 25 - pos.y);
-                    break;
-                }
-            }
-        }
-    }
-
-    exports.cacheBlocks = cacheBlocks;
 
     function checkVisibility() {
         var stateKey, eventKey, keys = {
@@ -200,7 +144,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             return !document[stateKey];
         };
     }
-
     exports.checkVisibility = checkVisibility;
 
     function setFocusOnElement($elem) {
@@ -210,7 +153,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             }
         }, 800);
     }
-
     exports.setFocusOnElement = setFocusOnElement;
 
     function showSingleModal(customize, onSubmit, onHidden, validator) {
@@ -230,8 +172,24 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         setFocusOnElement($("#singleModalInput"));
         $("#single-modal").modal('show');
     }
-
     exports.showSingleModal = showSingleModal;
+
+    /**
+     * Helper to show the information on top of the share modal.
+     * 
+     */
+    function showMsgOnTop(msg) {
+
+        $('#show-message').find('button').removeAttr("data-dismiss");
+        $('#show-message').find('button').one('click', function(e) {
+            $('#show-message').modal("hide");
+            $('#show-message').find('button').attr("data-dismiss", "modal");
+        });
+        MSG.displayInformation({
+            rc : "not ok"
+        }, "", msg);
+    }
+    exports.showMsgOnTop = showMsgOnTop;
 
     /**
      * Handle result of server call
@@ -245,7 +203,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
             MSG.displayMessage(result.message, "POPUP", "");
         }
     }
-
     exports.response = response;
 
     /**
@@ -261,7 +218,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
     function round(value, decimals) {
         return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
     }
-
     exports.round = round;
 
     /**
@@ -274,7 +230,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
     function sgn(x) {
         return (x > 0) - (x < 0);
     }
-
     exports.sgn = sgn;
 
     /**
@@ -290,7 +245,6 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         }
         return base;
     }
-
     exports.getBasename = getBasename;
 
     function download(filename, content) {
@@ -304,6 +258,5 @@ define([ 'require', 'exports', 'roberta.user-state', 'message', 'log', 'jquery',
         element.click();
         document.body.removeChild(element);
     }
-    
     exports.download = download;
 });

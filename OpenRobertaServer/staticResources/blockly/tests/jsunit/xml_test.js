@@ -19,7 +19,8 @@
  */
 'use strict';
 
-var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
+var XML_TEXT = ['<block_set xmlns="http://de.fhg.iais.roberta.blockly">',
+  '<instance x="13" y="63">',
   '  <block type="controls_repeat_ext" inline="true" x="21" y="23">',
   '    <value name="TIMES">',
   '      <block type="math_number">',
@@ -30,7 +31,8 @@ var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '      <block type="variables_set" inline="true">',
   '        <field name="VAR">item</field>',
   '        <value name="VALUE">',
-  '          <block type="lists_create_empty"></block>',
+  '          <block type="lists_create_empty">',
+  '          </block>',
   '        </value>',
   '        <next>',
   '          <block type="text_print" inline="false">',
@@ -44,11 +46,12 @@ var XML_TEXT = ['<xml xmlns="http://www.w3.org/1999/xhtml">',
   '      </block>',
   '    </statement>',
   '  </block>',
-  '</xml>'].join('\n');
+  '</instance>',
+  '</block_set>'].join('\n');
 
 function test_textToDom() {
   var dom = Blockly.Xml.textToDom(XML_TEXT);
-  assertEquals('XML tag', 'xml', dom.nodeName);
+  assertEquals('XML tag', 'block_set', dom.nodeName);
   assertEquals('Block tags', 6, dom.getElementsByTagName('block').length);
 }
 

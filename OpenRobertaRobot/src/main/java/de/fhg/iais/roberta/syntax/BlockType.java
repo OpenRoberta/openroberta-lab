@@ -1,25 +1,27 @@
 package de.fhg.iais.roberta.syntax;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.ev3.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.ev3.DriveAction;
-import de.fhg.iais.roberta.syntax.action.ev3.LightAction;
-import de.fhg.iais.roberta.syntax.action.ev3.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.ev3.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.ev3.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.ev3.ToneAction;
-import de.fhg.iais.roberta.syntax.action.ev3.TurnAction;
-import de.fhg.iais.roberta.syntax.action.ev3.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
+import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
+import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
+import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
+import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
@@ -53,15 +55,18 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.ev3.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.ev3.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
@@ -75,7 +80,10 @@ import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
  */
 public enum BlockType {
     COLOR_SENSING( Category.SENSOR, ColorSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_COLOUR_GET_SAMPLE ),
+    LIGHT_SENSING( Category.SENSOR, LightSensor.class, BlocklyConstants.ROB_SENSOR_LIGHT_GET_SAMPLE, BlocklyConstants.SIM_LIGHT_GET_SAMPLE ),
+    SOUND_SENSING( Category.SENSOR, SoundSensor.class, BlocklyConstants.ROB_SENSOR_SOUND_GET_SAMPLE, BlocklyConstants.SIM_SOUND_GET_SAMPLE ),
     TOUCH_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED ),
+    COMPASS_SENSING( Category.SENSOR, CompassSensor.class, BlocklyConstants.ROB_SENSOR_COMPASS_GET_SAMPLE ),
     ULTRASONIC_SENSING(
         Category.SENSOR,
         UltrasonicSensor.class,
@@ -127,6 +135,7 @@ public enum BlockType {
         Category.STMT,
         RepeatStmt.class,
         BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER,
+        BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER_ARDU,
         BlocklyConstants.CONTROLS_WHILE_UNTIL,
         BlocklyConstants.CONTROLS_FOR,
         BlocklyConstants.ROB_CONTROLS_FOR,
@@ -146,9 +155,15 @@ public enum BlockType {
     WAIT_TIME( Category.STMT, WaitTimeStmt.class, BlocklyConstants.ROB_CONTROLS_WAIT_TIME ),
     TURN_ACTION( Category.ACTOR, TurnAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN_FOR ),
     DRIVE_ACTION( Category.ACTOR, DriveAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR ),
+    CURVE_ACTION( Category.ACTOR, CurveAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE_FOR ),
     SHOW_TEXT_ACTION( Category.ACTOR, ShowTextAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_TEXT ),
     SHOW_PICTURE_ACTION( Category.ACTOR, ShowPictureAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_PICTURE ),
     TONE_ACTION( Category.ACTOR, ToneAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_TONE ),
+    LIGHT_SENSOR_ACTION(
+        Category.ACTOR,
+        LightSensorAction.class,
+        BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON,
+        BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF ),
     LIGHT_ACTION( Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON ),
     CLEAR_DISPLAY_ACTION( Category.ACTOR, ClearDisplayAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_CLEAR ),
     MOTOR_ON_ACTION(
@@ -170,7 +185,7 @@ public enum BlockType {
         BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_RESET,
         BlocklyConstants.SIM_LED_OFF ),
     STOP_ACTION( Category.ACTOR, MotorDriveStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_STOP ),
-    MAIN_TASK( Category.TASK, MainTask.class, BlocklyConstants.ROB_CONTROLS_START ),
+    MAIN_TASK( Category.TASK, MainTask.class, BlocklyConstants.ROB_CONTROLS_START, BlocklyConstants.ROB_CONTROLS_START_ARDU ),
     ACTIVITY_TASK( Category.TASK, ActivityTask.class, BlocklyConstants.ROB_CONTROLS_ACTIVITY ),
     LOCATION( Category.TASK, null ),
     TEXT_INDEX_OF_FUNCT( Category.FUNCTION, IndexOfFunct.class, BlocklyConstants.LISTS_INDEX_OF, BlocklyConstants.ROB_LISTS_INDEX_OF ),

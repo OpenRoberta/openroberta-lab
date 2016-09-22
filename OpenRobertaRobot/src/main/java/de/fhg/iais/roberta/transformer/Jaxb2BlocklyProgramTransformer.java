@@ -8,6 +8,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
@@ -17,6 +18,10 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
  */
 public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
+
+    public Jaxb2BlocklyProgramTransformer(IRobotFactory robotFactory) {
+        super(robotFactory);
+    }
 
     /**
      * Converts object of type {@link BlockSet} to AST tree.

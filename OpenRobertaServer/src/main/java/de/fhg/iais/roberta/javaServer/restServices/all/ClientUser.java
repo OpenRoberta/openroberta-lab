@@ -22,21 +22,22 @@ import de.fhg.iais.roberta.persistence.bo.LostPassword;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/user")
 public class ClientUser {
     private static final Logger LOG = LoggerFactory.getLogger(ClientUser.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
     private final MailManagement mailManagement;
 
     @Inject
-    public ClientUser(Ev3Communicator brickCommunicator, MailManagement mailManagement) {
+    public ClientUser(RobotCommunicator brickCommunicator, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
         this.mailManagement = mailManagement;
     }
@@ -56,7 +57,6 @@ public class ClientUser {
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
-
             if ( cmd.equals("clear") ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
@@ -72,11 +72,13 @@ public class ClientUser {
                 if ( user != null ) {
                     int id = user.getId();
                     String account = user.getAccount();
+                    String name = user.getUserName();
                     httpSessionState.setUserClearDataKeepTokenAndRobotId(id);
                     user.setLastLogin();
                     response.put("userId", id);
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
+                    response.put("userName", name);
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
@@ -143,18 +145,18 @@ public class ClientUser {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
                     // TODO move this to properties!!!
-                    this.mailManagement.send(
-                        user.getEmail(),
-                        "Dein Open Roberta Passwort zurücksetzen",
-                        "Hallo, \n\n"
-                            + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
-                            + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
-                            + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
-                            + "https://lab.open-roberta.org/#forgotPassword&"
-                            + lostPassword.getUrlPostfix()
-                            + "\n\n"
-                            + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n"
-                            + "Viel Spass weiterhin mit Open Roberta");
+                    //                    this.mailManagement.send(
+                    //                        user.getEmail(),
+                    //                        "Dein Open Roberta Passwort zurücksetzen",
+                    //                        "Hallo, \n\n"
+                    //                            + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
+                    //                            + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
+                    //                            + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
+                    //                            + "https://lab.open-roberta.org/#forgotPassword&"
+                    //                            + lostPassword.getUrlPostfix()
+                    //                            + "\n\n"
+                    //                            + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n"
+                    //                            + "Viel Spass weiterhin mit Open Roberta");
                 }
 
             } else if ( cmd.equals("obtainUsers") ) {
@@ -182,7 +184,7 @@ public class ClientUser {
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {

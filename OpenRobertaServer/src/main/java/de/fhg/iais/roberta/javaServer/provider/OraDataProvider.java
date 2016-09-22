@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.javaServer.provider;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,15 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.sun.jersey.api.model.Parameter;
 import com.sun.jersey.core.spi.component.ComponentContext;
 import com.sun.jersey.core.spi.component.ComponentScope;
 import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
@@ -37,6 +41,13 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
 
     @Context
     private HttpServletRequest servletRequest;
+
+    @Inject
+    private RobotCommunicator robotCommunicator;
+
+    @Inject
+    @Named("robotPluginMap")
+    private Map<String, IRobotFactory> robotPluginMap;
 
     @Inject
     private SessionFactoryWrapper sessionFactoryWrapper;
@@ -63,6 +74,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
 
     private Injectable<HttpSessionState> getInjectableHttpSessionState() {
         return new Injectable<HttpSessionState>() {
+
             @Override
             public HttpSessionState getValue() {
                 HttpSession httpSession = OraDataProvider.this.servletRequest.getSession(true);
@@ -70,7 +82,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                 if ( httpSessionState == null ) {
                     long sessionNumber = SESSION_COUNTER.incrementAndGet();
                     LOG.info("session #" + sessionNumber + " created");
-                    httpSessionState = HttpSessionState.init();
+                    httpSessionState = HttpSessionState.init(OraDataProvider.this.robotCommunicator, OraDataProvider.this.robotPluginMap);
                     httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
                 }
                 return httpSessionState;

@@ -78,6 +78,11 @@ public class ListCreate<V> extends Expr<V> {
     }
 
     @Override
+    public BlocklyType getVarType() {
+        return this.typeVar;
+    }
+
+    @Override
     public String toString() {
         return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
     }

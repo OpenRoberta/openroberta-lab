@@ -4,7 +4,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.shared.Pickcolor;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -12,6 +13,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -24,12 +26,12 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorConst<V> extends Expr<V> {
-    private final Pickcolor value;
+    private final IPickColor value;
 
-    private ColorConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ColorConst(IPickColor color, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.COLOR_CONST, properties, comment);
-        Assert.isTrue(!value.equals(""));
-        this.value = Pickcolor.get(value);
+        Assert.isTrue(color != null);
+        this.value = color;
         setReadOnly();
     }
 
@@ -41,14 +43,14 @@ public class ColorConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorConst}.
      */
-    public static <V> ColorConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> ColorConst<V> make(IPickColor value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ColorConst<V>(value, properties, comment);
     }
 
     /**
      * @return the value of the string constant.
      */
-    public Pickcolor getValue() {
+    public IPickColor getValue() {
         return this.value;
     }
 
@@ -60,6 +62,11 @@ public class ColorConst<V> extends Expr<V> {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
+    }
+
+    @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.COLOR;
     }
 
     @Override
@@ -80,9 +87,10 @@ public class ColorConst<V> extends Expr<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String field = helper.extractField(fields, BlocklyConstants.COLOUR);
-        return ColorConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ColorConst.make(factory.getPickColor(field), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

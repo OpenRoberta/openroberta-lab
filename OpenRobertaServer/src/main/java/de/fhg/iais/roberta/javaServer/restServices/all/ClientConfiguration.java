@@ -21,20 +21,21 @@ import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/conf")
 public class ClientConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(ClientConfiguration.class);
 
-    private final Ev3Communicator brickCommunicator;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientConfiguration(Ev3Communicator brickCommunicator) {
+    public ClientConfiguration(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
     }
 
@@ -45,7 +46,7 @@ public class ClientConfiguration {
         AliveData.rememberClientCall();
         new ClientLogger().log(ClientConfiguration.LOG, fullRequest);
         int userId = httpSessionState.getUserId();
-        final int robotId = httpSessionState.getRobotId();
+        final String robotName = httpSessionState.getRobotName();
         UserProcessor up = new UserProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -57,13 +58,13 @@ public class ClientConfiguration {
             if ( cmd.equals("saveC") ) {
                 String configurationName = request.getString("name");
                 String configurationXml = request.getString("configuration");
-                cp.updateConfiguration(configurationName, userId, robotId, configurationXml, true);
+                cp.updateConfiguration(configurationName, userId, robotName, configurationXml, true);
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("saveAsC") ) {
                 String configurationName = request.getString("name");
                 String configurationXml = request.getString("configuration");
-                cp.updateConfiguration(configurationName, userId, robotId, configurationXml, false);
+                cp.updateConfiguration(configurationName, userId, robotName, configurationXml, false);
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadC") ) {
@@ -75,7 +76,7 @@ public class ClientConfiguration {
                         userId = user.getId();
                     }
                 }
-                Configuration configuration = cp.getConfiguration(configurationName, userId, robotId);
+                Configuration configuration = cp.getConfiguration(configurationName, userId, httpSessionState.getRobotId());
                 if ( configuration != null ) {
                     response.put("data", configuration.getConfigurationText());
                 }
@@ -83,11 +84,11 @@ public class ClientConfiguration {
 
             } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {
                 String configurationName = request.getString("name");
-                cp.deleteByName(configurationName, userId, robotId);
+                cp.deleteByName(configurationName, userId, httpSessionState.getRobotId());
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray configurationInfo = cp.getConfigurationInfo(userId);
+                JSONArray configurationInfo = cp.getConfigurationInfo(userId, httpSessionState.getRobotId());
                 response.put("configurationNames", configurationInfo);
                 Util.addResultInfo(response, cp);
 
@@ -98,7 +99,7 @@ public class ClientConfiguration {
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             ClientConfiguration.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {

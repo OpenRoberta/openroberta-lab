@@ -1,12 +1,7 @@
-define([ 'require', 'exports', 'log' ], function(require, exports) {
-
-    var LOG = require('log');
-
+define([ 'exports', 'log' ], function(exports, LOG) {
     /**
      * assertEq: assert that two objects are === w.r.t. to type and content,
      * otherwise LOG and throw an exception
-     * 
-     * @memberof DBC
      */
     function assertEq(expected, given) {
         function internalCheck(expected, given) {
@@ -26,14 +21,11 @@ define([ 'require', 'exports', 'log' ], function(require, exports) {
             throw msg;
         }
     }
-
     exports.assertEq = assertEq;
 
     /**
      * assertTrue: assert that a condition holds, otherwise LOG and throw an
      * exception
-     * 
-     * @memberof DBC
      */
     function assertTrue(boolToTest, msg) {
         if (!boolToTest) {
@@ -41,6 +33,5 @@ define([ 'require', 'exports', 'log' ], function(require, exports) {
             throw msg;
         }
     }
-
     exports.assertTrue = assertTrue;
 });

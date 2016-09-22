@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class PersistLostPasswordTest {
@@ -32,7 +32,7 @@ public class PersistLostPasswordTest {
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util.loadProperties("classpath:persistTmpPasswordTest.properties");
+        Properties properties = Util1.loadProperties("classpath:persistTmpPasswordTest.properties");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         this.nativeSession = this.sessionFactoryWrapper.getNativeSession();

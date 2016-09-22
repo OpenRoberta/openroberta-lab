@@ -20,6 +20,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -30,6 +31,7 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
@@ -43,44 +45,45 @@ import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.ProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.RobotProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.ProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Util1;
 
 @Path("/program")
 public class ClientProgram {
     private static final Logger LOG = LoggerFactory.getLogger(ClientProgram.class);
 
     private final SessionFactoryWrapper sessionFactoryWrapper;
-    private final Ev3Communicator brickCommunicator;
-    private final Ev3CompilerWorkflow compilerWorkflow;
+    private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, Ev3Communicator brickCommunicator, Ev3CompilerWorkflow compilerWorkflow) {
+    public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
-        this.compilerWorkflow = compilerWorkflow;
+
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
+
         AliveData.rememberClientCall();
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
+        final String robotName = httpSessionState.getRobotName();
         final int robotId = httpSessionState.getRobotId();
+
         JSONObject response = new JSONObject();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
@@ -119,7 +122,15 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.getString("programText");
                 String configurationText = request.getString("configurationText");
-                String javaSource = this.compilerWorkflow.generateSourceCode(token, programName, programText, configurationText);
+                String javaSource =
+                    httpSessionState.getRobotFactory().getCompilerWorkflow().generateSourceCode(
+                        httpSessionState.getRobotFactory(),
+                        token,
+                        programName,
+                        programText,
+                        configurationText);
+
+                javaSource = StringEscapeUtils.escapeHtml3(javaSource);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( javaSource == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
@@ -149,7 +160,7 @@ public class ClientProgram {
                 Schema schema = schemaFactory.newSchema(new StreamSource(xsdStream));
                 Validator validator = schema.newValidator();
 
-                if ( !Util.isValidJavaIdentifier(programName) ) {
+                if ( !Util1.isValidJavaIdentifier(programName) ) {
                     programName = "NEPOprog";
                 }
                 boolean xmlIsValid = true;
@@ -202,6 +213,10 @@ public class ClientProgram {
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
+            } else if ( cmd.equals("loadEN") ) {
+                JSONArray programInfo = pp.getProgramInfo(1, robotId);
+                response.put("programNames", programInfo);
+                Util.addResultInfo(response, pp);
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
                 JSONArray relations = pp.getProgramRelations(programName, userId, robotId);
@@ -218,55 +233,51 @@ public class ClientProgram {
                 String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                    BlocklyProgramAndConfigTransformer.transform(httpSessionState.getRobotFactory(), programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
-                    if ( robot.getName().equals("ev3") ) {
-                        ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                        messageKey = this.compilerWorkflow.execute(token, programName, programAndConfigTransformer);
-                        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                            wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                        } else {
-                            if ( messageKey != null ) {
-                                LOG.info(messageKey.toString());
-                            }
-                            LOG.info("download command for the ev3 skipped, Keep going with push requests");
-                        }
+                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                    messageKey = httpSessionState.getRobotFactory().getCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
+                    if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {
-                        ClientProgram.LOG.info("Waiting for new robot systems");
+                        if ( messageKey != null ) {
+                            LOG.info(messageKey.toString());
+                        }
+                        LOG.info("download command for the ev3 skipped, Keep going with push requests");
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 
             } else if ( cmd.equals("runPsim") ) {
                 Key messageKey = null;
-                RobotDao robotDao = new RobotDao(dbSession);
-                Robot robot = robotDao.get(robotId);
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
+                IRobotFactory factory = httpSessionState.getSimulationFactory();
                 boolean wasRobotWaiting = false;
 
-                BlocklyProgramAndConfigTransformer programAndConfigTransformer = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                    BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
+                //TODO program checks should be in compiler workflow
                 SimulationProgramCheckVisitor programChecker = new SimulationProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
-                    if ( robot.getName().equals("ev3") ) {
-                        ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                        String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programAndConfigTransformer.getTransformedProgram());
-                        ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
-                        response.put("javaScriptProgram", javaScriptCode);
-                        wasRobotWaiting = true;
-                        messageKey = Key.COMPILERWORKFLOW_SUCCESS;
-                    } else {
-                        ClientProgram.LOG.info("Waiting for new robot systems");
-                    }
+                    ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
+                    String javaScriptCode = factory.getCompilerWorkflow().generateSourceCode(factory, token, programName, programText, configurationText);
+
+                    ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                    response.put("javaScriptProgram", javaScriptCode);
+                    wasRobotWaiting = true;
+                    messageKey = Key.COMPILERWORKFLOW_SUCCESS;
+
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
 
@@ -277,7 +288,7 @@ public class ClientProgram {
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             ClientProgram.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {

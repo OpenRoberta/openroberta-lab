@@ -9,14 +9,16 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * 
      * @constructor
      */
-    function Scene(backgroundImg, layers, robot, obstacle) {
+    function Scene(backgroundImg, layers, robot, obstacle, ruler) {
         this.backgroundImg = backgroundImg;
         this.robot = robot;
         this.obstacle = obstacle;
-        this.uCtx = layers[0];
-        this.bCtx = layers[1];
-        this.oCtx = layers[2];
-        this.rCtx = layers[3];
+        this.ruler = ruler;
+        this.uCtx = layers[0]; // ? context
+        this.bCtx = layers[1]; // background context
+        this.oCtx = layers[2]; // object context
+        this.rCtx = layers[3]; // robot context
+        this.mCtx = layers[4]; // ruler == *m*easurement context
         this.playground = {
             x : 0,
             y : 0,
@@ -40,6 +42,20 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
             ctx.drawImage(this.backgroundImg, 0, 0);
+        }
+    };
+
+    Scene.prototype.drawRuler = function() {
+        this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20, this.ruler.wOld + 40, this.ruler.hOld + 40);
+        this.ruler.xOld = this.ruler.x;
+        this.ruler.yOld = this.ruler.y;
+        this.ruler.wOld = this.ruler.w;
+        this.ruler.hOld = this.ruler.h;
+        this.mCtx.restore();
+        this.mCtx.save();
+        this.mCtx.scale(SIM.getScale(), SIM.getScale());
+        if (this.ruler.img) {
+            this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
         }
     };
 
@@ -150,20 +166,25 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.shadowOffsetX = 0;
         this.rCtx.fillStyle = this.robot.touchSensor.color;
         this.rCtx.fillRect(this.robot.frontRight.x + 12.5, this.robot.frontRight.y, 20, 10);
-        this.rCtx.fillStyle = this.robot.led.color;
-        var grd = this.rCtx.createRadialGradient(this.robot.led.x, this.robot.led.y, 1, this.robot.led.x, this.robot.led.y, 15);
-        grd.addColorStop(0, this.robot.led.color);
-        grd.addColorStop(0.5, this.robot.geom.color);
+        if (this.robot.led) {
+            this.rCtx.fillStyle = this.robot.led.color;
+            var grd = this.rCtx.createRadialGradient(this.robot.led.x, this.robot.led.y, 1, this.robot.led.x, this.robot.led.y, 15);
+            grd.addColorStop(0, this.robot.led.color);
+            grd.addColorStop(0.5, this.robot.geom.color);
+            this.rCtx.fillStyle = grd;
+        } else {
+            this.rCtx.fillStyle = this.robot.geom.color;
+        }
         this.rCtx.shadowBlur = 5;
         this.rCtx.shadowColor = "black";
-        this.rCtx.fillStyle = grd;
+
         this.rCtx.beginPath();
         this.rCtx.moveTo(this.robot.geom.x + 2.5, this.robot.geom.y);
         this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w - 2.5, this.robot.geom.y);
         this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y, this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + 2.5);
         this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h - 2.5);
-        this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x + this.robot.geom.w - 2.5,
-                this.robot.geom.y + this.robot.geom.h);
+        this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x + this.robot.geom.w - 2.5, this.robot.geom.y
+                + this.robot.geom.h);
         this.rCtx.lineTo(this.robot.geom.x + 2.5, this.robot.geom.y + this.robot.geom.h);
         this.rCtx.quadraticCurveTo(this.robot.geom.x, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x, this.robot.geom.y + this.robot.geom.h - 2.5);
         this.rCtx.lineTo(this.robot.geom.x, this.robot.geom.y + 2.5);
@@ -184,10 +205,12 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.shadowBlur = 0;
         this.rCtx.shadowOffsetX = 0;
         //LED
-        this.rCtx.fillStyle = this.robot.led.color;
-        this.rCtx.beginPath();
-        this.rCtx.arc(this.robot.led.x, this.robot.led.y, 2.5, 0, Math.PI * 2);
-        this.rCtx.fill();
+        if (this.robot.led) {
+            this.rCtx.fillStyle = this.robot.led.color;
+            this.rCtx.beginPath();
+            this.rCtx.arc(this.robot.led.x, this.robot.led.y, 2.5, 0, Math.PI * 2);
+            this.rCtx.fill();
+        }
         //wheels
         this.rCtx.fillStyle = this.robot.wheelLeft.color;
         this.rCtx.fillRect(this.robot.wheelLeft.x, this.robot.wheelLeft.y, this.robot.wheelLeft.w, this.robot.wheelLeft.h);
@@ -201,6 +224,13 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.fill();
         this.rCtx.strokeStyle = "black";
         this.rCtx.stroke();
+        //ledSensor
+        if (this.robot.ledSensor && this.robot.ledSensor.color) {
+            this.rCtx.fillStyle = this.robot.ledSensor.color;
+            this.rCtx.beginPath();
+            this.rCtx.arc(this.robot.ledSensor.x, this.robot.ledSensor.y, 2.5, 0, Math.PI * 2);
+            this.rCtx.fill();
+        }
         this.rCtx.restore();
 
         // ultra 
@@ -352,13 +382,14 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var blue = b / num;
             if (this.robot.colorSensor) {
                 values.color = {};
+                values.light = {};
                 this.robot.colorSensor.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
                 values.color.colorValue = this.robot.colorSensor.colorValue;
                 if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.NONE) {
                     this.robot.colorSensor.color = 'grey';
                 } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.BLACK) {
                     this.robot.colorSensor.color = 'black';
-                } else if (this.robot.colorSensor.colorValue == CONSTANTS.COLOR_ENUM.WHITE) {
+                } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.WHITE) {
                     this.robot.colorSensor.color = 'white';
                 } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.YELLOW) {
                     this.robot.colorSensor.color = 'yellow';
@@ -371,10 +402,14 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 } else if (this.robot.colorSensor.colorValue === CONSTANTS.COLOR_ENUM.GREEN) {
                     this.robot.colorSensor.color = 'lime';
                 }
-                this.robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
+                this.robot.colorSensor.lightValue = ((red + green + blue) / 3 / 2.55);
+
                 values.color.red = this.robot.colorSensor.lightValue;
                 values.color.rgb = [ UTIL.round(red / 2.55, 0), UTIL.round(green / 2.55, 0), UTIL.round(blue / 2.55, 0) ];
                 values.color.ambientlight = 0;
+
+                values.light.red = this.robot.colorSensor.lightValue;
+                values.light.ambientlight = 0;
             }
         }
 
@@ -415,7 +450,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var uA = new Array(u1, u2, u3, u4, u5);
             this.robot.ultraSensor.distance = CONSTANTS.MAXDIAG;
             for (var i = 0; i < SIM.obstacleList.length; i++) {
-                var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
+                var obstacleLines = (SIMATH.getLinesFromRect(SIM.obstacleList[i]));
                 var uDis = [ CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG, CONSTANTS.MAXDIAG ];
                 for (var k = 0; k < obstacleLines.length; k++) {
                     for (var j = 0; j < uA.length; j++) {
@@ -481,17 +516,14 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var i = 0
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
-                values.buttons.any = values.buttons.any || this.robot.buttons[key];
-                //once the state of the button is delivered, reset the button
-                this.robot.buttons[key] = false;
-                // for testing only
-                if (values.buttons[key]) {
-                    console.log(key + ' pressed');
-                }
+                values.buttons.any = (values.buttons.any || this.robot.buttons[key]);
             }
         }
         if (this.robot.webAudio) {
             values.volume = this.robot.webAudio.volume * 100;
+        }
+        if (this.robot.sound) {
+            values.sound = UTIL.round(this.robot.sound.volume * 100, 0);
         }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();

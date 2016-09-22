@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -55,6 +56,11 @@ public class StringConst<V> extends Expr<V> {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
+    }
+
+    @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.STRING;
     }
 
     @Override

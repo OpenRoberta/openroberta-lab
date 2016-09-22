@@ -50,6 +50,7 @@ public final class BlocklyConstants {
     public static final String SENSORPORT = "SENSORPORT";
     public static final String SWITCH_BLINK = "SWITCH_BLINK";
     public static final String SWITCH_COLOR = "SWITCH_COLOR";
+    public static final String SWITCH_STATE = "SWITCH_STATE";
     public static final String VOLUME = "VOLUME";
     public static final String FILE = "FILE";
     public static final String DURATION = "DURATION";
@@ -67,6 +68,8 @@ public final class BlocklyConstants {
     public static final String DIRECTION = "DIRECTION";
     public static final String VALUE = "VALUE";
     public static final String POWER = "POWER";
+    public static final String POWER_LEFT = "POWER_LEFT";
+    public static final String POWER_RIGHT = "POWER_RIGHT";
     public static final String MOTORPORT = "MOTORPORT";
     public static final String VAR = "VAR";
     public static final String TYPE = "TYPE";
@@ -97,7 +100,10 @@ public final class BlocklyConstants {
     public static final String ROB_SENSORS_ENCODER_RESET = "robSensors_encoder_reset";
     public static final String ROB_SENSORS_TIMER_RESET = "robSensors_timer_reset";
     public static final String ROB_SENSOR_COLOUR_GET_SAMPLE = "robSensors_colour_getSample";
+    public static final String ROB_SENSOR_LIGHT_GET_SAMPLE = "robSensors_light_getSample";
+    public static final String ROB_SENSOR_SOUND_GET_SAMPLE = "robSensors_sound_getSample";
     public static final String ROB_SENSOR_TOUCH_IS_PRESSED = "robSensors_touch_isPressed";
+    public static final String ROB_SENSOR_COMPASS_GET_SAMPLE = "robSensors_compass_getSample";
     public static final String ROB_SENSOR_ULTRASONIC_GET_SAMPLE = "robSensors_ultrasonic_getSample";
     public static final String ROB_SENSOR_INFRARED_GET_SAMPLE = "robSensors_infrared_getSample";
     public static final String ROB_SENSOR_ENCODER_GET_SAMPLE = "robSensors_encoder_getSample";
@@ -115,6 +121,7 @@ public final class BlocklyConstants {
     public static final String ROB_CONTROLS_IF = "robControls_if";
     public static final String ROB_CONTROLS_IF_ELSE = "robControls_ifElse";
     public static final String ROB_CONTROLS_LOOP_FOREVER = "robControls_loopForever";
+    public static final String ROB_CONTROLS_LOOP_FOREVER_ARDU = "robControls_loopForever_ardu";
     public static final String CONTROLS_WHILE_UNTIL = "controls_whileUntil";
     public static final String CONTROLS_FOR = "controls_for";
     public static final String ROB_CONTROLS_FOR = "robControls_for";
@@ -162,17 +169,22 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_DISPLAY_PICTURE = "robActions_display_picture";
     public static final String ROB_ACTIONS_PLAY_TONE = "robActions_play_tone";
     public static final String ROB_ACTIONS_BRICK_LIGHT_ON = "robActions_brickLight_on";
+    public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON = "robActions_sensorLight_on";
+    public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF = "robActions_sensorLight_off";
     public static final String ROB_ACTIONS_DISPLAY_CLEAR = "robActions_display_clear";
     public static final String ROB_ACTIONS_MOTOR_ON_FOR = "robActions_motor_on_for";
     public static final String ROB_ACTIONS_MOTOR_GET_POWER = "robActions_motor_getPower";
     public static final String ROB_ACTIONS_MOTOR_SET_POWER = "robActions_motor_setPower";
     public static final String ROB_ACTIONS_MOTOR_STOP = "robActions_motor_stop";
+    public static final String ROB_ACTIONS_MOTOR_DIFF_CURVE = "robActions_motorDiff_curve";
+    public static final String ROB_ACTIONS_MOTOR_DIFF_CURVE_FOR = "robActions_motorDiff_curve_for";
     public static final String ROB_ACTIONS_PLAY_FILE = "robActions_play_file";
     public static final String ROB_ACTIONS_PLAY_GET_VOLUME = "robActions_play_getVolume";
     public static final String ROB_ACTIONS_BRICK_LIGHT_RESET = "robActions_brickLight_reset";
     public static final String ROB_ACTIONS_MOTOR_DIFF_STOP = "robActions_motorDiff_stop";
 
     public static final String ROB_CONTROLS_START = "robControls_start";
+    public static final String ROB_CONTROLS_START_ARDU = "robControls_start_ardu";
     public static final String ROB_CONTROLS_ACTIVITY = "robControls_activity";
 
     public static final String LISTS_CREATE_EMPTY = "lists_create_empty";
@@ -212,22 +224,31 @@ public final class BlocklyConstants {
     public static final String GYRO = "GYRO";
     public static final String TIME = "TIME";
     public static final String COLOR = "color";
+    public static final String LIGHT = "LIGHT";
+    public static final String SOUND = "SOUND";
 
     public static final String ROB_BRICK_GYRO = "robBrick_gyro";
     public static final String ROB_BRICK_INFRARED = "robBrick_infrared";
     public static final String ROB_BRICK_ULTRASONIC = "robBrick_ultrasonic";
     public static final String ROB_BRICK_TOUCH = "robBrick_touch";
     public static final String ROB_BRICK_COLOUR = "robBrick_colour";
+    public static final String ROB_BRICK_LIGHT = "robBrick_light";
+    public static final String ROB_BRICK_SOUND = "robBrick_sound";
 
     public static final String SIM_LED_ON = "sim_LED_on";
     public static final String SIM_LED_OFF = "sim_LED_off";
+    public static final String SENSOR_LIGHT_ON = "sensorLight_on";
+    public static final String SENSOR_LIGHT_OFF = "sensorLight_off";
 
     public static final String SIM_GET_SAMPLE = "sim_getSample";
     public static final String SIM_TOUCH_IS_PRESSED = "sim_touch_isPressed";
     public static final String SIM_ULTRASONIC_GET_SAMPLE = "sim_ultrasonic_getSample";
     public static final String SIM_COLOUR_GET_SAMPLE = "sim_colour_getSample";
+    public static final String SIM_LIGHT_GET_SAMPLE = "sim_light_getSample";
+    public static final String SIM_SOUND_GET_SAMPLE = "sim_sound_getSample";
 
     public static final String SIM_MOTOR_ON = "sim_motor_on";
     public static final String SIM_MOTOR_ON_FOR = "sim_motor_on_for";
     public static final String SIM_MOTOR_STOP = "sim_motor_stop";
+
 }

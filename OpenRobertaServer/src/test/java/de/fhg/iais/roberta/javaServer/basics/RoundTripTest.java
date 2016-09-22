@@ -19,6 +19,7 @@ import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -31,12 +32,12 @@ import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
@@ -66,14 +67,12 @@ public class RoundTripTest {
 
     private static SessionFactoryWrapper sessionFactoryWrapper;
     private static DbSetup memoryDbSetup;
-    private static Ev3Communicator brickCommunicator;
+    private static RobotCommunicator brickCommunicator;
 
     private static String buildXml;
     private static String connectionUrl;
     private static String crosscompilerBasedir;
     private static String crossCompilerResourcesDir;
-
-    private static Ev3CompilerWorkflow compilerWorkflow;
 
     private static ClientUser restUser;
     private static ClientProgram restProgram;
@@ -174,24 +173,23 @@ public class RoundTripTest {
     }
 
     private static void initialize() {
-        Properties properties = Util.loadProperties("classpath:openRoberta.properties");
-        buildXml = properties.getProperty("crosscompiler.build.xml");
+        Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
+        buildXml = properties.getProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
-        crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
+        crosscompilerBasedir = properties.getProperty("robot.plugin.1.generated.programs.dir");
+        crossCompilerResourcesDir = properties.getProperty("robot.plugin.1.compiler.resources.dir");
         browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
 
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
         nativeSession = sessionFactoryWrapper.getNativeSession();
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
-        brickCommunicator = new Ev3Communicator();
-        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, crossCompilerResourcesDir, buildXml);
-        restUser = new ClientUser(brickCommunicator, null);
-        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
+        brickCommunicator = new RobotCommunicator();
 
-        s1 = HttpSessionState.init();
-        System.setProperty("phantomjs.binary", "/home/kcvejoski/dev/OpenRoberta/phantomjs-2.1.1/bin/phantomjs");
+        restUser = new ClientUser(brickCommunicator, null);
+        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator);
+
+        s1 = HttpSessionState.init(brickCommunicator, null);
     }
 
     private static void setUpDatabase() throws Exception {
@@ -207,7 +205,7 @@ public class RoundTripTest {
                 s1,
                 sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
-        JSONUtilForServer.assertEntityRc(response, "ok", null);
+        JSONUtilForServer.assertEntityRc(response, "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(s1.isUserLoggedIn());
         int s1Id = s1.getUserId();
         Assert.assertEquals(0, getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
@@ -216,7 +214,7 @@ public class RoundTripTest {
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", blocklyProgram);
             response = restProgram.command(s1, fullRequest);
-            JSONUtilForServer.assertEntityRc(response, "ok", null);
+            JSONUtilForServer.assertEntityRc(response, "ok", Key.PROGRAM_SAVE_SUCCESS);
         }
     }
 
@@ -275,11 +273,9 @@ public class RoundTripTest {
 
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.textToBePresentInElement(programTable, program));
 
+        Actions actions = new Actions(driver);
         WebElement td = findTableRow(program, programTable);
-        td.click();
-
-        WebElement load = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("loadFromListing")));
-        load.click();
+        actions.doubleClick(td).build();
     }
 
     protected WebElement findTableRow(String program, WebElement programTable) {

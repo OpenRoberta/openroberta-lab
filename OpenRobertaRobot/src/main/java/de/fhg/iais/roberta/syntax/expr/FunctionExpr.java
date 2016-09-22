@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.functions.Function;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -45,6 +46,11 @@ public class FunctionExpr<V> extends Expr<V> {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
+    }
+
+    @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.NOTHING;
     }
 
     @Override

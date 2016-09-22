@@ -1,407 +1,421 @@
 define({
 
-    ARG1 : "arg1",
+    ARG1: "arg1",
 
-    ARG2 : "arg2",
+    ARG2: "arg2",
 
-    EXPR : "expr",
+    EXPR: "expr",
 
-    VALUE : "value",
+    VALUE: "value",
 
-    OP : "op",
+    OP: "op",
 
-    LEFT : "left",
+    LEFT: "left",
 
-    RIGHT : "right",
+    RIGHT: "right",
 
-    ENTER : "enter",
+    ENTER: "enter",
 
-    DOWN : "down",
+    DOWN: "down",
 
-    UP : "up",
+    UP: "up",
 
-    ANY : "any",
+    ANY: "any",
 
-    ESCAPE : "escape",
+    ESCAPE: "escape",
 
-    BINARY : "Binary",
+    BINARY: "Binary",
 
-    UNARY : "Unary",
+    UNARY: "Unary",
 
-    VAR : "Var",
+    VAR: "Var",
 
-    TYPE : "type",
+    TYPE: "type",
 
-    NAME : "name",
+    NAME: "name",
 
-    STMT : "stmt",
+    STMT: "stmt",
 
-    PARAMETERS : "parameters",
+    PARAMETERS: "parameters",
 
-    FUNCTION_DECLARATION : "functionDeclaration",
+    FUNCTION_DECLARATION: "functionDeclaration",
 
-    VAR_DECLARATION : "VarDeclaration",
+    VAR_DECLARATION: "VarDeclaration",
 
-    SINGLE_FUNCTION : "SingleFunction",
+    SINGLE_FUNCTION: "SingleFunction",
 
-    MATH_RAIN_FUNCTION : "MathrainFunct",
+    MATH_RAIN_FUNCTION: "MathrainFunct",
 
-    RANDOM_INT : "randInt",
+    RANDOM_INT: "randInt",
 
-    RANDOM_DOUBLE : "randDouble",
+    RANDOM_DOUBLE: "randDouble",
 
-    RANDOM : "random",
+    RANDOM: "random",
 
-    ASSIGN_STMT : "AssignStmt",
+    ASSIGN_STMT: "AssignStmt",
 
-    REPEAT_STMT : "RepeatStmt",
+    REPEAT_STMT: "RepeatStmt",
 
-    IF_STMT : "IfStatement",
+    IF_STMT: "IfStatement",
 
-    WAIT_STMT : "WaitStmt",
+    WAIT_STMT: "WaitStmt",
 
-    MATH_ : "Math",
+    MATH_CONST: "createMathConstant",
 
-    SHOW_TEXT_ACTION : "ShowTextAction",
+    SHOW_TEXT_ACTION: "ShowTextAction",
 
-    SHOW_PICTURE_ACTION : "ShowPictureAction",
+    SHOW_PICTURE_ACTION: "ShowPictureAction",
 
-    CLEAR_DISPLAY_ACTION : "ClearDisplay",
+    CLEAR_DISPLAY_ACTION: "ClearDisplay",
 
-    CREATE_DEBUG_ACTION : "CreateDebugAction",
+    CREATE_DEBUG_ACTION: "CreateDebugAction",
 
-    TONE_ACTION : "ToneAction",
+    TONE_ACTION: "ToneAction",
 
-    FREQUENCY : "frequency",
+    FREQUENCY: "frequency",
 
-    DURATION : "duration",
+    DURATION: "duration",
 
-    GET_VOLUME : "GetVolume",
+    GET_VOLUME: "GetVolume",
 
-    SET_VOLUME_ACTION : "SetVolumeAction",
+    SET_VOLUME_ACTION: "SetVolumeAction",
 
-    VOLUME : "volume",
+    VOLUME: "volume",
 
-    PLAY_FILE_ACTION : "PlayFileAction",
+    PLAY_FILE_ACTION: "PlayFileAction",
 
-    FILE : "file",
+    FILE: "file",
 
-    TEXT : "text",
+    TEXT: "text",
 
-    TEXT_APPEND : "textAppend",
+    TEXT_APPEND: "textAppend",
 
-    PICTURE : "picture",
+    PICTURE: "picture",
 
-    X : "x",
+    X: "x",
 
-    Y : "y",
+    Y: "y",
 
-    MATH_PROP_FUNCT : "MathPropFunct",
+    MATH_PROP_FUNCT: "MathPropFunct",
 
-    WAIT_TIME_STMT : "WaitTimeSTMT",
+    WAIT_TIME_STMT: "WaitTimeSTMT",
 
-    TIME : "time",
+    TIME: "time",
 
-    LIST : "list",
+    LIST: "list",
 
-    STMT_LIST : "stmtList",
+    STMT_LIST: "stmtList",
 
-    DRIVE_ACTION : "DriveAction",
+    DRIVE_ACTION: "DriveAction",
 
-    TURN_LIGHT : "turnLight",
+    CURVE_ACTION: "CurveAction",
 
-    TURN_ACTION : "TurnAction",
+    TURN_LIGHT: "turnLight",
 
-    STOP_DRIVE : "stopDrive",
+    TURN_ACTION: "TurnAction",
 
-    DRIVE_DIRECTION : "driveDirection",
+    STOP_DRIVE: "stopDrive",
 
-    TURN_DIRECTION : "turnDirection",
+    DRIVE_DIRECTION: "driveDirection",
 
-    SPEED : "speed",
+    TURN_DIRECTION: "turnDirection",
 
-    DISTANCE : "distance",
+    SPEED: "speed",
 
-    PRESENCE : "presence",
+    SPEED_L: "speedL",
 
-    SEEK : "presence",
+    SPEED_R: "speedR",
 
-    RESET : "reset",
+    DISTANCE: "distance",
 
-    GET_SAMPLE : "GetSample",
+    PRESENCE: "presence",
 
-    SENSOR_TYPE : "sensorType",
+    SEEK: "presence",
 
-    SENSOR_MODE : "sensorMode",
+    RESET: "reset",
 
-    THEN_LIST : "thenList",
+    GET_SAMPLE: "GetSample",
 
-    ELSE_STMTS : "elseStmts",
+    SENSOR_TYPE: "sensorType",
 
-    EXPR_LIST : "exprList",
+    SENSOR_MODE: "sensorMode",
 
-    STATEMENTS : "statements",
+    THEN_LIST: "thenList",
 
-    TOUCH : "touch",
+    ELSE_STMTS: "elseStmts",
 
-    INFRARED : "infrared",
+    EXPR_LIST: "exprList",
 
-    ULTRASONIC : "ultrasonic",
+    STATEMENTS: "statements",
 
-    GYRO : "gyro",
+    TOUCH: "touch",
 
-    BUTTONS : "buttons",
+    INFRARED: "infrared",
 
-    RATE : "rate",
+    ULTRASONIC: "ultrasonic",
 
-    NUM_CONST : "NumConst",
+    GYRO: "gyro",
 
-    BOOL_CONST : "BoolConst",
+    SOUND: "sound",
 
-    STRING_CONST : "StringConst",
+    BUTTONS: "buttons",
 
-    STRING : "STRING",
+    RATE: "rate",
 
-    BOOLEAN : "BOOLEAN",
+    NUM_CONST: "NumConst",
 
-    NUMBER : "NUMBER",
+    BOOL_CONST: "BoolConst",
 
-    NULL_CONST : "null",
+    STRING_CONST: "StringConst",
 
-    TERNARY_EXPR : "createTernaryExpr",
+    STRING: "STRING",
 
-    NUMERIC : "Numeric",
+    BOOLEAN: "BOOLEAN",
 
-    ARRAY_NUMBER : "Array_Number",
+    NUMBER: "NUMBER",
 
-    ARRAY_STRING : "Array_String",
+    NULL_CONST: "null",
 
-    ARRAY_BOOLEAN : "Array_Boolean",
+    TERNARY_EXPR: "createTernaryExpr",
 
-    ARRAY_COLOUR : "Array_Colour",
+    NUMERIC: "Numeric",
 
-    ADD : "ADD",
+    ARRAY_NUMBER: "Array_Number",
 
-    MINUS : "MINUS",
+    ARRAY_STRING: "Array_String",
 
-    POWER : "POWER",
+    ARRAY_BOOLEAN: "Array_Boolean",
 
-    DIVIDE : "DIVIDE",
+    ARRAY_COLOUR: "Array_Colour",
 
-    MULTIPLY : "MULTIPLY",
+    ADD: "ADD",
 
-    LT : "LT",
+    MINUS: "MINUS",
 
-    GT : "GT",
+    POWER: "POWER",
 
-    EQ : "EQ",
+    DIVIDE: "DIVIDE",
 
-    NEQ : "NEQ",
+    MULTIPLY: "MULTIPLY",
 
-    IN : "in",
+    LT: "LT",
 
-    GTE : "GTE",
+    GT: "GT",
 
-    LTE : "LTE",
+    EQ: "EQ",
 
-    OR : "OR",
+    NEQ: "NEQ",
 
-    AND : "AND",
+    IN: "in",
 
-    NEG : "NEG",
+    GTE: "GTE",
 
-    MOD : "MOD",
+    LTE: "LTE",
 
-    MIN : "min",
+    OR: "OR",
 
-    MAX : "max",
+    AND: "AND",
 
-    AVERAGE : "average",
+    NEG: "NEG",
 
-    MEDIAN : "median",
+    MOD: "MOD",
 
-    MODE : "mode",
+    MIN: "min",
 
-    STD_DEV : "stdDev",
+    MAX: "max",
 
-    FOREWARD : "FOREWARD",
+    AVERAGE: "average",
 
-    BACKWARD : "BACKWARD",
+    MEDIAN: "median",
 
-    WHILE : "WHILE",
+    MODE: "mode",
 
-    UNTIL : "UNTIL",
+    STD_DEV: "stdDev",
 
-    FOREVER : "FOREVER",
+    FOREWARD: "FOREWARD",
 
-    FOR : "FOR",
+    BACKWARD: "BACKWARD",
 
-    FOR_EACH : "forEach",
+    WHILE: "WHILE",
 
-    MATH_CHANGE : "mathChange",
+    UNTIL: "UNTIL",
 
-    NOT : "NOT",
+    FOREVER: "FOREVER",
 
-    ANGLE : "angle",
+    FOR: "FOR",
 
-    COLOR : "color",
+    FOR_EACH: "forEach",
 
-    COLOUR : "colorValue",
+    MATH_CHANGE: "mathChange",
 
-    GREEN : "GREEN",
+    NOT: "NOT",
 
-    RED : "red",
+    ANGLE: "angle",
 
-    SUM : "sum",
+    COLOR: "color",
 
-    RGB : "rgb",
+    COLOUR: "colorValue",
 
-    ORANGE : "ORANGE",
+    GREEN: "GREEN",
 
-    ON : "ON",
+    RED: "red",
 
-    OFF : "OFF",
+    SUM: "sum",
 
-    FLASH : "FLASH",
+    RGB: "rgb",
 
-    DOUBLE_FLASH : "DOUBLE_FLASH",
+    ORANGE: "ORANGE",
 
-    STATUS_LIGHT_ACTION : "statusLightAction",
+    ON: "ON",
 
-    AMBIENTLIGHT : "ambientlight",
+    OFF: "OFF",
 
-    TIMES : "TIMES",
+    FLASH: "FLASH",
 
-    SIZE : "size",
+    DOUBLE_FLASH: "DOUBLE_FLASH",
 
-    CREATE_LIST_IS_EMPTY : "isListEmpty",
+    STATUS_LIGHT_ACTION: "statusLightAction",
 
-    CREATE_LIST_LENGTH : "listLength",
+    AMBIENTLIGHT: "ambientlight",
 
-    CREATE_LIST_WITH_ITEM : "createCreateListWithItem",
+    TIMES: "TIMES",
 
-    CREATE_LIST_FIND_ITEM : "createListFindItem",
+    SIZE: "size",
 
-    COLOR_CONST : "COLOR_CONST",
+    CREATE_LIST_IS_EMPTY: "isListEmpty",
 
-    PILOT : "pilot",
+    CREATE_LIST_LENGTH: "listLength",
 
-    MOTOR_LEFT : "C",
+    CREATE_LIST_WITH_ITEM: "createCreateListWithItem",
 
-    MOTOR_RIGHT : "B",
+    CREATE_LIST_FIND_ITEM: "createListFindItem",
 
-    MOTOR_SIDE : "motorSide",
+    COLOR_CONST: "COLOR_CONST",
 
-    MOTOR_ON_ACTION : "motorOnAction",
+    PILOT: "pilot",
 
-    MOTOR_GET_POWER : "motorGetPowerAction",
+    MOTOR_LEFT: "C",
 
-    MOTOR_SET_POWER : "motorSetPowerAction",
+    MOTOR_RIGHT: "B",
 
-    ENCODER_SENSOR_RESET : "encoderSensorReset",
+    MOTOR_SIDE: "motorSide",
 
-    ENCODER_SENSOR_SAMPLE : "encoderSensorSample",
+    MOTOR_ON_ACTION: "motorOnAction",
 
-    MOTOR_STOP : "motorStop",
+    MOTOR_GET_POWER: "motorGetPowerAction",
 
-    MOTOR_MOVE_MODE : "motorMoveMode",
+    MOTOR_SET_POWER: "motorSetPowerAction",
 
-    MOTOR_DURATION : "motorDuration",
+    ENCODER_SENSOR_RESET: "encoderSensorReset",
 
-    MOTOR_DURATION_VALUE : "motorDurationValue",
+    ENCODER_SENSOR_SAMPLE: "encoderSensorSample",
 
-    ROTATIONS : "ROTATIONS",
+    GET_GYRO_SENSOR_SAMPLE: "gyroSensorSample",
 
-    ROTATION : "ROTATION",
+    MOTOR_STOP: "motorStop",
 
-    DEGREE : "DEGREE",
+    MOTOR_MOVE_MODE: "motorMoveMode",
 
-    POSITION : "position",
+    MOTOR_DURATION: "motorDuration",
 
-    FIRST : "first",
+    MOTOR_DURATION_VALUE: "motorDurationValue",
 
-    LAST : "last",
+    ROTATIONS: "ROTATIONS",
 
-    FROM_START : "fromStart",
+    ROTATION: "ROTATION",
 
-    FROM_END : "fromEnd",
+    DEGREE: "DEGREE",
 
-    GET : "get",
+    POSITION: "position",
 
-    SET : "set",
+    FIRST: "first",
 
-    REMOVE : "remove",
+    LAST: "last",
 
-    GET_REMOVE : "getRemove",
+    FROM_START: "fromStart",
 
-    ITEM : "item",
+    FROM_END: "fromEnd",
 
-    CREATE_LISTS_SET_INDEX : "createListsSetIndex",
+    GET: "get",
 
-    CREATE_LISTS_GET_INDEX : "createListsGetIndex",
+    SET: "set",
 
-    CREATE_LISTS_GET_INDEX_STMT : "createListsGetIndexStmt",
+    REMOVE: "remove",
 
-    CREATE_LISTS_GET_SUBLIST : "createGetSubList",
+    GET_REMOVE: "getRemove",
 
-    GYRO_SENSOR_RESET : "createResetGyroSensor",
+    ITEM: "item",
 
-    TIMER_SENSOR_RESET : "createResetTimer",
+    CREATE_LISTS_SET_INDEX: "createListsSetIndex",
 
-    METHOD_VOID : "createMethodVoid",
+    CREATE_LISTS_GET_INDEX: "createListsGetIndex",
 
-    METHOD_RETURN : "createMethodReturn",
+    CREATE_LISTS_GET_INDEX_STMT: "createListsGetIndexStmt",
 
-    METHOD_CALL_VOID : "createMethodCallVoid",
+    CREATE_LISTS_GET_SUBLIST: "createGetSubList",
 
-    METHOD_CALL_RETURN : "createMethodCallReturn",
+    GYRO_SENSOR_RESET: "createResetGyroSensor",
 
-    TEXT_JOIN : "createTextJoin",
+    TIMER_SENSOR_RESET: "createResetTimer",
 
-    WHERE1 : "where1",
+    METHOD_VOID: "createMethodVoid",
 
-    WHERE2 : "where2",
+    METHOD_RETURN: "createMethodReturn",
 
-    AT1 : "at1",
+    METHOD_CALL_VOID: "createMethodCallVoid",
 
-    AT2 : "at2",
+    METHOD_CALL_RETURN: "createMethodCallReturn",
 
-    RETURN : "return",
+    TEXT_JOIN: "createTextJoin",
 
-    VALUES : "values",
+    LIGHT_ACTION: "lightSensorAction",
 
-    INSERT : "insert",
+    WHERE1: "where1",
 
-    COLOR_ENUM : {
-        NONE : "NONE",
-        BLACK : "BLACK",
-        BLUE : "BLUE",
-        GREEN : "GREEN",
-        YELLOW : "YELLOW",
-        RED : "RED",
-        WHITE : "WHITE",
-        BROWN : "BROWN"
+    WHERE2: "where2",
+
+    AT1: "at1",
+
+    AT2: "at2",
+
+    RETURN: "return",
+
+    VALUES: "values",
+
+    INSERT: "insert",
+
+    LIGHT: "light",
+
+    COLOR_ENUM: {
+        NONE: "NONE",
+        BLACK: "BLACK",
+        BLUE: "BLUE",
+        GREEN: "GREEN",
+        YELLOW: "YELLOW",
+        RED: "RED",
+        WHITE: "WHITE",
+        BROWN: "BROWN"
     },
 
-    TIMER : "timer",
+    TIMER: "timer",
 
-    MATH_ON_LIST : "createMathOnList",
+    MATH_ON_LIST: "createMathOnList",
 
-    TRACKWIDTH : 40,
+    TRACKWIDTH: 40,
 
-    TURN_RATIO : (40 / 3.) / 2.8,
+    TURN_RATIO: (40 / 3.) / 2.8,
 
-    WHEEL_DIAMETER : 5.6,
+    WHEEL_DIAMETER: 5.6,
 
-    MAXDIAG : 2500,
+    MAXDIAG: 2500,
 
-    MAXPOWER : 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
+    MAXPOWER: 0.351858377 * 3, // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix : 1cm
 
-    ENC : 360.0 / (3.0 * Math.PI * 5.6),
+    ENC: 360.0 / (3.0 * Math.PI * 5.6),
 
-    MAX_WIDTH : 2000,
+    MAX_WIDTH: 2000,
 
-    MAX_HEIGHT : 1000,
+    MAX_HEIGHT: 1000,
 
-    WAVE_LENGTH : 60
+    WAVE_LENGTH: 60
 });

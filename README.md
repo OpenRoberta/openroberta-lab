@@ -19,6 +19,7 @@ Things you need on your computer:
 
 * Java 1.7
 * Maven >= 3.2
+* avr-gcc (for using Arduino based robots)
 * Phantomjs
 * Git
 * Web browser
@@ -26,6 +27,7 @@ Things you need on your computer:
 Please also check our [wiki](http://wiki.open-roberta.org) for a detailed install
 instruction, development procedure, coding conventions and further reading. Please
 also checkout our project [issue tracker](http://jira.open-roberta.org).
+
 
 ### Fast installation with maven
 
@@ -39,17 +41,18 @@ Get a coffee! Might take a couple of minutes.
 
 A successful build looks like:
 
-    [INFO] ---------------------------------------
+    [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
-    [INFO] RobertaParent ..................SUCCESS
-    [INFO] Resources ......................SUCCESS
-    [INFO] OpenRobertaShared ..............SUCCESS
-    [INFO] OpenRobertaRuntime .............SUCCESS
-    [INFO] EV3Menu ........................SUCCESS
-    [INFO] OpenRobertaRobot ...............SUCCESS
-    [INFO] OpenRobertaServer ..............SUCCESS
-    [INFO] OpenRobertaUSB .................SUCCESS
-    [INFO] ---------------------------------------
+    [INFO] 
+    [INFO] RobertaParent ...................................... SUCCESS [  3.858 s]
+    [INFO] Resources .......................................... SUCCESS [  0.036 s]
+    [INFO] OpenRobertaRobot ................................... SUCCESS [ 21.395 s]
+    [INFO] RobotSIM ........................................... SUCCESS [  6.521 s]
+    [INFO] RobotEV3 ........................................... SUCCESS [ 20.394 s]
+    [INFO] RobotNXT ........................................... SUCCESS [ 19.531 s]
+    [INFO] RobotArdu .......................................... SUCCESS [ 19.677 s]
+    [INFO] OpenRobertaServer .................................. SUCCESS [ 33.178 s]
+    [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
 
 #### Step 2a: Starting your own server instance using a unix-like shell (on either lin* or win*).
@@ -70,3 +73,22 @@ Start your browser at: http://localhost:1999
 
 
 That's it!
+
+### Development notes
+
+You can follow the test status on https://travis-ci.org/OpenRoberta/.
+
+Development happens in the 'develop# branch. Please sent PRs against that
+branch.
+
+    git clone git://github.com/OpenRoberta/robertalab.git
+    cd robertalab
+    git checkout -b develop origin/develop
+
+#### Blockly
+
+We are using Blockly as a submodule. The build of the blockly is only done in
+the OpenRoberta/Blockly project and then copied to the
+OpenRobertaServer/staticResources. You can not build Blockly in
+OpenRobertaServer project directly.
+

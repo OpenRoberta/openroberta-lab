@@ -4,14 +4,13 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 <script src="../blockly_compressed.js"></script>
-<script src="../blocks_compressed.js"></script>
 <script src="../msg/js/de.js"></script>
+<script src="../robMsg/robMessages.js"></script>
 <script src="../core/blockly.js"></script>
 <script src="../core/css.js"></script>
 <script src="../core/inject.js"></script>
 <script src="../core/field.js"></script>
 <script src="../core/field_label.js"></script>
-<script src="../core/field_robColour.js"></script>
 <script src="../core/field_dropdown.js"></script>
 <script src="../core/field_textinput.js"></script>
 <script src="../core/workspace.js"></script>
@@ -19,6 +18,7 @@
 <script src="../core/icon.js"></script>
 <script src="../core/block.js"></script>
 <script src="../core/block_svg.js"></script>
+<script src="../core/block_render_svg.js"></script>
 <script src="../core/toolbox.js"></script>
 <script src="../core/xml.js"></script>
 <script src="../core/variables.js"></script>
@@ -30,6 +30,7 @@
 <script src="../core/rob_controls.js"></script>
 <script src="../core/tooltip.js"></script>
 <script src="../core/connection.js"></script>
+<script src="../core/rendered_connection.js"></script>
 <script src="../core/warning.js"></script>
 <script src="../core/error.js"></script>
 <script src="../core/comment.js"></script>
@@ -58,6 +59,7 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
+var device = 'ev3'
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -82,12 +84,26 @@ function start() {
               startScale: 1.0,
               maxScale: 4,
               minScale: .25,
-              scaleSpeed: 1.1
-             },
+              scaleSpeed: 1.1},
            checkInTask:['start', '_def', 'event', 'EV3'],
            variableDeclaration: true,
            robControls: true
           });
+  workspace.setDevice('ev3');
+  // Restore previously displayed text.
+  if (sessionStorage) {
+    var text = sessionStorage.getItem('textarea');
+    if (text) {
+      document.getElementById('importExport').value = text;
+    }
+    // Restore event logging state.
+    var state = sessionStorage.getItem('logEvents');
+    logEvents(Boolean(Number(state)));
+  } else {
+    // MSIE 11 does not support sessionStorage on file:// URLs.
+    logEvents(false);
+  }
+  taChange();
 }
 
 function toXml() {
@@ -96,17 +112,53 @@ function toXml() {
   output.value = Blockly.Xml.domToPrettyText(xml);
   output.focus();
   output.select();
+  taChange();
 }
 
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(workspace, xml);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+  taChange();
 }
 
 function toCode(lang) {
   var output = document.getElementById('importExport');
   output.value = Blockly[lang].workspaceToCode(workspace);
+  taChange();
+}
+
+// Disable the "Import from XML" button if the XML is invalid.
+// Preserve text between page reloads.
+function taChange() {
+  var textarea = document.getElementById('importExport');
+  if (sessionStorage) {
+    sessionStorage.setItem('textarea', textarea.value);
+  }
+  var valid = true;
+  try {
+    Blockly.Xml.textToDom(textarea.value);
+  } catch (e) {
+    valid = false;
+  }
+  document.getElementById('import').disabled = !valid;
+}
+
+function logEvents(state) {
+  var checkbox = document.getElementById('logCheck');
+  checkbox.checked = state;
+  if (sessionStorage) {
+    sessionStorage.setItem('logEvents', Number(state));
+  }
+  if (state) {
+    workspace.addChangeListener(logger);
+  } else {
+    workspace.removeChangeListener(logger);
+  }
+}
+
+function logger(e) {
+  console.log(e);
 }
 
 function airstrike(n) {
@@ -136,9 +188,18 @@ function spaghetti(n) {
   xml = '<block_set xmlns="http://www.w3.org/1999/xhtml"><instance x="9" y="3">' + xml + '</instance></block_set>';
   var dom = Blockly.Xml.textToDom(xml);
   console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(workspace, dom);
+  Blockly.Xml.domToWorkspace(dom, workspace);
   console.timeEnd('Spaghetti domToWorkspace');
 }
+
+function toggleDevice() {
+  if (device ==='ev3')
+      device = 'ardu';
+      else
+          device = 'ev3';
+  workspace.setDevice(device);  
+}
+
 var spaghettiXml = [
   '  <block type="robControls_if">',
   '    <value name="IF0">',
@@ -190,26 +251,12 @@ h1 {
   height: 95%;
   width: 70%;
 }
-#collaborators {
-  float: right;
-  width: 30px;
-  margin-left: 10px;
-}
-#collaborators > img {
-  margin-right: 5px;
-  height: 30px;
-  padding-bottom: 5px;
-  width: 30px;
-  border-radius: 3px;
-}
 #importExport {
   font-family: monospace;
 }
 </style>
 </head>
 <body onload="start()">
-
-  <div id="collaborators"></div>
 
   <div id="blocklyDiv"></div>
 
@@ -219,23 +266,17 @@ h1 {
         <block type='robBrick_EV3-Brick'></block>
         <block type='robBrick_ultrasonic'></block>
         <block type='robBrick_colour'></block>
+        <block type='robBrick_light'></block>
         <block type='robBrick_infrared'></block>
         <block type='robBrick_touch'></block>
         <block type='robBrick_gyro'></block>
+        <block type='robBrick_sound'></block>
         <block type='robBrick_motor_big'></block>
         <block type='robBrick_motor_middle'></block>
         <block type='robBrick_actor'></block>
         </category>
         <category name='TOOLBOX_MOVE' svg="true">
             <block type='robActions_motor_on'>
-                <field name='MOTORPORT'>B</field>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>30</field>
-                    </block>
-                </value>
-            </block>
-            <block type='sim_motor_on'>
                 <field name='MOTORPORT'>B</field>
                 <value name='POWER'>
                     <block type='math_number'>
@@ -256,26 +297,11 @@ h1 {
                     </block>
                 </value>
             </block>
-            <block type='sim_motor_on_for'>
-                <field name='MOTORPORT'>B</field>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>30</field>
-                    </block>
-                </value>
-                <value name='VALUE'>
-                    <block type='math_number'>
-                        <field name='NUM'>1</field>
-                    </block>
-                </value>
-            </block>
-            <block type='robActions_motor_getPower'>
+           <block type='robActions_motor_getPower'>
                 <field name='MOTORPORT'>B</field>
             </block>
             <block type='robActions_motor_stop'>
                 <field name='MOTORPORT'>A</field>
-            </block>
-            <block type='sim_motor_stop'>
             </block>
         </category>
         <category name='TOOLBOX_DRIVE' svg="true">
@@ -319,6 +345,35 @@ h1 {
                     </block>
                 </value>
             </block>
+            <block type='robActions_motorDiff_curve'>
+                <value name='POWER_LEFT'>
+                    <block type='math_number'>
+                        <field name='NUM'>20</field>
+                    </block>
+                </value>
+                <value name='POWER_RIGHT'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+            </block>
+            <block type='robActions_motorDiff_curve_for'>
+                <value name='POWER_LEFT'>
+                    <block type='math_number'>
+                        <field name='NUM'>20</field>
+                    </block>
+                </value>
+                <value name='POWER_RIGHT'>
+                    <block type='math_number'>
+                        <field name='NUM'>50</field>
+                    </block>
+                </value>
+                <value name='DISTANCE'>
+                    <block type='math_number'>
+                        <field name='NUM'>20</field>
+                    </block>
+                </value>
+            </block>
         </category> 
         <category name='TOOLBOX_DISPLAY' svg="true">
             <block type='robActions_display_text'>
@@ -350,6 +405,7 @@ h1 {
                     </block>
                 </value>
             </block>
+            <block type='robActions_display_matrix'></block>
             <block type='robActions_display_clear'>
             </block>
         </category>
@@ -380,6 +436,7 @@ h1 {
         </category>
         <category name='TOOLBOX_LIGHT' svg="true">
             <block type='robActions_brickLight_on'></block>
+            <block type='robActions_sensorLight_on'></block>
             <block type='robActions_brickLight_off'></block>
             <block type='robActions_brickLight_reset'></block>
         </category> 
@@ -390,13 +447,10 @@ h1 {
         <block type='sim_touch_isPressed'>
         </block>
         <block type='robSensors_ultrasonic_getSample'>
-            <field name='SENSORPORT'>4</field> 
-        </block>
+         </block>
         <block type='robSensors_colour_getSample'>
-            <field name='SENSORPORT'>3</field> 
-        </block>
+         </block>
         <block type='robSensors_infrared_getSample'>
-            <field name='SENSORPORT'>4</field> 
         </block>
         <block type='robSensors_encoder_reset'>
         </block>
@@ -410,9 +464,17 @@ h1 {
         <block type='robSensors_gyro_getSample'>
             <field name='SENSORPORT'>2</field> 
         </block>
+        <block type='robSensors_compass_getSample'>
+        </block>
         <block type='robSensors_timer_getSample'>
         </block>
         <block type='robSensors_timer_reset'>
+        </block>
+        <block type='robSensors_sound_getSample'>
+        </block>
+        <block type='robSensors_light_getSample'>
+        </block>
+        <block type='robSensors_battery_voltage'>
         </block>
     </category>
     <category name='TOOLBOX_CONTROL' svg="true">
@@ -421,7 +483,7 @@ h1 {
             <block type='robControls_ifElse'></block>
         </category> 
         <category name='TOOLBOX_LOOP'>
-            <!-- <block type='controls_repeat'></block> -->
+            <block type='robControls_loopForever'></block>
             <block type='controls_repeat_ext'>
                 <value name='TIMES'>
                     <block type='math_number'>
@@ -479,6 +541,7 @@ h1 {
         </category>
         <category name='Tasks'> 
             <block type='robControls_start'></block> 
+<block type='robControls_start_ardu'></block> 
         </category> 
     </category>
     <category name='TOOLBOX_LOGIC' svg="true">
@@ -585,6 +648,12 @@ h1 {
         <block type='robCommunication_sendBlock'></block>
         <block type='robCommunication_receiveBlock'></block>
         <block type='robCommunication_waitForConnection'></block>
+        <block type='robCommunication_connection'></block>
+        <block type='robCommunication_checkConnection'>
+           <value name='CONNECTION'>
+           <block type='robCommunication_connection'></block>
+           </value> 
+        </block>
     </category>
 </toolbox_set>
 
@@ -604,7 +673,7 @@ h1 {
   <p>
     <input type="button" value="Export to XML" onclick="toXml()">
     &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()">
+    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
     <br>
     <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
     &nbsp;
@@ -612,16 +681,23 @@ h1 {
     &nbsp;
     <input type="button" value="To PHP" onclick="toCode('PHP')">
     &nbsp;
+    <input type="button" value="To Lua" onclick="toCode('Lua')">
+    &nbsp;
     <input type="button" value="To Dart" onclick="toCode('Dart')">
     <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
+    <textarea id="importExport" style="width: 26%; height: 12em"
+      onchange="taChange();" onkeyup="taChange()"></textarea>
   </p>
-  <hr>
 
   <p>
-    Stress test:
+    Stress test: &nbsp;
     <input type="button" value="Airstrike!" onclick="airstrike(100)">
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input type="button" value="Toggle device!" onclick="toggleDevice()">
+  </p>
+  <p>
+    Log events: &nbsp;
+    <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
   </p>
 
 </body>

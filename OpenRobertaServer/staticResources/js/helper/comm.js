@@ -1,9 +1,4 @@
-define([ 'require', 'exports', 'jquery', 'wrap', 'log' ], function(require, exports) {
-
-    var $ = require('jquery');
-    var WRAP = require('wrap');
-    var LOG = require('log');
-
+define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     /**
      * prefix to be prepended to each URL used in ajax calls.
      */
@@ -22,20 +17,15 @@ define([ 'require', 'exports', 'jquery', 'wrap', 'log' ], function(require, expo
 
     /**
      * set a error fn. A error function must accept one parameter: the response.
-     * 
-     * @memberof COMM
      */
     function setErrorFn(newErrorFn) {
         errorFn = newErrorFn;
     }
-
     exports.setErrorFn = setErrorFn;
 
     /**
      * URL-encode a JSON object, issue a GET and expect a JSON object as
      * response.
-     * 
-     * @memberof COMM
      */
     function get(url, data, successFn, message) {
         return $.ajax({
@@ -47,13 +37,10 @@ define([ 'require', 'exports', 'jquery', 'wrap', 'log' ], function(require, expo
             error : errorFn
         });
     }
-
     exports.get = get;
 
     /**
      * POST a JSON object as ENTITY and expect a JSON object as response.
-     * 
-     * @memberof COMM
      */
     function json(url, data, successFn, message) {
         var log = LOG.reportToComm();
@@ -71,13 +58,10 @@ define([ 'require', 'exports', 'jquery', 'wrap', 'log' ], function(require, expo
             error : errorFn
         });
     }
-
     exports.json = json;
 
     /**
      * POST a XML DOM object as ENTITY and expect a JSON object as response.
-     * 
-     * @memberof COMM
      */
     function xml(url, xml, successFn, message) {
         return $.ajax({
@@ -90,19 +74,15 @@ define([ 'require', 'exports', 'jquery', 'wrap', 'log' ], function(require, expo
             error : errorFn
         });
     }
-
     exports.xml = xml;
 
     /**
      * check whether a server is available (b.t.w. send logging data!).<br>
      * SuccessFn is optional.
-     * 
-     * @memberof COMM
      */
     function ping(successFn) {
         return json('/ping', {}, successFn === undefined ? function() {
         } : successFn);
     }
-
     exports.ping = ping;
 });

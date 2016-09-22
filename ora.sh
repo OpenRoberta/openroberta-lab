@@ -3,9 +3,10 @@
 ip='0.0.0.0' # The ip default. For servers, 0.0.0.0 means "all IPv4 addresses on the local machine". (see: https://en.wikipedia.org/wiki/0.0.0.0)
 port='1999'  # the port default.
 lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
-oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openroberta.properties). BE CAREFUL !!!
-databaseurl='jdbc:hsqldb:hsql://localhost/oradb' # server mode for the database. This setting should be used for production.
+oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openRoberta.properties). BE CAREFUL !!!
+#databaseurl='jdbc:hsqldb:hsql://localhost/oradb'# server mode for the database. This setting should be used for production.
                                                  # embedded would be, e.g. jdbc:hsqldb:file:db/openroberta-db
+databaseurl='jdbc:hsqldb:file:db/openroberta-db' # BUT: actually THIS is used for production, too.
 
 scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -148,20 +149,23 @@ function _exportApplication {
   else
     echo "no database setup"
   fi
-  echo "copying the web resources"
-  webresources="OpenRobertaServer/staticResources"
-  cp -r "$webresources" "$exportpath"
-  echo 'creating directories for user programs and resources'
-  mkdir "${exportpath}/userProjects"
+  echo "copying OpenRobertaServer JARs"
   mkdir "${exportpath}/resources"
-  mkdir "${exportpath}/crossCompilerResources"
-  mkdir "${exportpath}/updateResources"
-  echo "copying resources"
-  cp OpenRobertaRuntime/crosscompiler-ev3-build.xml "${exportpath}"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
-  cp OpenRobertaServer/target/updateResources/*.jar "$exportpath/updateResources"
-  cp OpenRobertaServer/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
+
+  echo 'EV3 specific: creating directories for user programs and resources'
+  mkdir "${exportpath}/userProjects"
+  mkdir "${exportpath}/updateResources"
+  mkdir "${exportpath}/crossCompilerResources"
+  echo "EV3 specific: copying resources"
+  cp RobotEV3/crosscompiler-ev3-build.xml "${exportpath}"
+  cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
+  cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
+  echo "NXT specific: copying resources"
+  cp RobotNXT/resources/* "${exportpath}/resources"
+  echo "Arduino specific: copying resources"
   cp ora.sh "$exportpath"
+
 # -------------- begin of a here document -------------------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
 version = ${oraversion}
@@ -169,12 +173,32 @@ validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
 hibernate.connection.url = ${databaseurl}
 
-crosscompiler.basedir = userProjects/
-crosscompiler.build.xml = crosscompiler-ev3-build.xml
-robot.updateResources.dir = updateResources
-robot.crossCompilerResources.dir = crossCompilerResources
-robot.type.list = ev3,oraSim
 robot.type.default = ev3
+
+robot.plugin.1.name = ev3
+robot.plugin.1.id = 42
+robot.plugin.1.factory = de.fhg.iais.roberta.factory.EV3Factory
+robot.plugin.1.generated.programs.dir  = userProjects/
+robot.plugin.1.generated.programs.build.xml  = crosscompiler-ev3-build.xml
+robot.plugin.1.compiler.resources.dir = crossCompilerResources
+robot.plugin.1.updateResources.dir = updateResources
+
+robot.plugin.2.name = nxt
+robot.plugin.2.id = 43
+robot.plugin.2.factory = de.fhg.iais.roberta.factory.NxtFactory
+robot.plugin.2.generated.programs.dir  = userProjects/
+robot.plugin.2.compiler.resources.dir = resources
+
+robot.plugin.3.name = ardu
+robot.plugin.3.id = 44
+robot.plugin.3.factory = de.fhg.iais.roberta.factory.ArduFactory
+robot.plugin.3.generated.programs.dir  = userProjects/
+
+
+robot.plugin.4.name = oraSim
+robot.plugin.4.id = 99
+robot.plugin.4.factory = de.fhg.iais.roberta.factory.SimFactory
+	
 .eof
 # -------------- end of a here document ---------------------------------------------------------------
 }
@@ -188,20 +212,19 @@ function _createemptydb {
 }
 
 function _updateLejos {
-  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
-  run="echo ${serverurl} | ssh root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
+  run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
-  shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
-  json='OpenRobertaServer/target/updateResources/json.jar'
-  websocket='OpenRobertaServer/target/updateResources/Java-WebSocket.jar'
-  run="ssh root@${lejosipaddr} mkdir -p /home/roberta/lib"
+  runtime="RobotEV3/target/updateResources/EV3Runtime.jar"
+  json='RobotEV3/target/updateResources/json.jar'
+  websocket='RobotEV3/target/updateResources/Java-WebSocket.jar'
+  run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
-  run="scp ${runtime} ${shared} ${json} ${websocket} root@${lejosipaddr}:/home/roberta/lib"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 ${runtime} ${json} ${websocket} root@${lejosipaddr}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
 }
@@ -267,15 +290,15 @@ case "$cmd" in
                     if [[ "$propfile" != '' ]] # property file given explicitly
                     then
                        propfile="file:$propfile"
-                       echo "starting the server using supplied openroberta.properties from $propFile"
+                       echo "starting the server using supplied openRoberta.properties from $propFile"
                     else
                        if [ -d OpenRobertaServer ]
                        then
-                         echo "starting the server from a git repository. Using openroberta.properties from the classpath"
+                         echo "starting the server from a git repository. Using openRoberta.properties from the classpath"
                        else
                          echo "starting the server from a installation directory (probably created by an --export command)"
-                         echo "Using file \"openroberta.properties\" from the base directory"
-                         propfile="file:openroberta.properties"
+                         echo "Using file \"openRoberta.properties\" from the base directory"
+                         propfile="file:openRoberta.properties"
                        fi
                     fi
                     _startServerFn ;;

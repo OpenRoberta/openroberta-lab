@@ -1,4 +1,4 @@
-define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
+define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
 
     function build(program) {
         eval(program);
@@ -10,6 +10,13 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
     function createConstant(dataType, value) {
         var result = {};
         result[CONST.EXPR] = dataType;
+        result[CONST.VALUE] = value;
+        return result;
+    }
+
+    function createMathConstant(value) {
+        var result = {};
+        result[CONST.EXPR] = CONST.MATH_CONST;
         result[CONST.VALUE] = value;
         return result;
     }
@@ -162,6 +169,17 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createCurveAction(speedL, speedR, direction, distance) {
+        var result = {};
+        result[CONST.STMT] = CONST.CURVE_ACTION;
+        result[CONST.SPEED_L] = speedL;
+        result[CONST.SPEED_R] = speedR;
+        result[CONST.DRIVE_DIRECTION] = direction;
+        result[CONST.DISTANCE] = distance;
+
+        return result;
+    }
+
     function createMotorOnAction(speed, motorSide, motorDuration) {
         var result = {};
         result[CONST.STMT] = CONST.MOTOR_ON_ACTION;
@@ -242,6 +260,15 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createLightSensorAction(color, mode) {
+        var result = {};
+        result[CONST.STMT] = CONST.LIGHT_ACTION;
+        result[CONST.COLOR] = color;
+        result[CONST.MODE] = mode;
+        return result;
+    }
+
+
     function createStatusLight(mode) {
         var result = {};
         result[CONST.STMT] = CONST.STATUS_LIGHT_ACTION;
@@ -265,6 +292,14 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
     function createGetSample(sensorType, sensorMode) {
         var result = {};
         result[CONST.EXPR] = CONST.GET_SAMPLE;
+        result[CONST.SENSOR_TYPE] = sensorType;
+        result[CONST.SENSOR_MODE] = sensorMode;
+        return result;
+    }
+
+    function createGetGyroSensorSample(sensorType, sensorMode) {
+        var result = {};
+        result[CONST.EXPR] = CONST.GET_GYRO_SENSOR_SAMPLE;
         result[CONST.SENSOR_TYPE] = sensorType;
         result[CONST.SENSOR_MODE] = sensorMode;
         return result;

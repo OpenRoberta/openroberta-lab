@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -57,7 +58,7 @@ public final class Binary<V> extends Expr<V> {
      */
 
     public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Binary<V>(op, left, right, operationRange, properties, comment);
+        return new Binary<>(op, left, right, operationRange, properties, comment);
     }
 
     /**
@@ -96,6 +97,11 @@ public final class Binary<V> extends Expr<V> {
     @Override
     public Assoc getAssoc() {
         return this.op.getAssoc();
+    }
+
+    @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.CAPTURED_TYPE;
     }
 
     @Override
@@ -236,13 +242,14 @@ public final class Binary<V> extends Expr<V> {
                 values = helper.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
-                return Binary.make(
-                    Binary.Op.MATH_CHANGE,
-                    helper.convertPhraseToExpr(leftt),
-                    helper.convertPhraseToExpr(rightt),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
+                return ExprStmt.make(
+                    Binary.make(
+                        Binary.Op.MATH_CHANGE,
+                        helper.convertPhraseToExpr(leftt),
+                        helper.convertPhraseToExpr(rightt),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block)));
 
             case BlocklyConstants.MATH_MODULO:
                 return helper.blockToBinaryExpr(
@@ -254,7 +261,7 @@ public final class Binary<V> extends Expr<V> {
             case BlocklyConstants.MATH_ARITHMETIC:
                 String opp = helper.extractOperation(block, BlocklyConstants.OP_);
                 if ( opp.equals(BlocklyConstants.POWER) ) {
-                    ArrayList<ExprParam> exprParams = new ArrayList<ExprParam>();
+                    ArrayList<ExprParam> exprParams = new ArrayList<>();
                     exprParams.add(new ExprParam(BlocklyConstants.A, Integer.class));
                     exprParams.add(new ExprParam(BlocklyConstants.B, Integer.class));
                     List<Expr<V>> params = helper.extractExprParameters(block, exprParams);

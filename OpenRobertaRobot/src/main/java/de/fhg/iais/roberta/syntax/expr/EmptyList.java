@@ -74,6 +74,11 @@ public class EmptyList<V> extends Expr<V> {
     }
 
     @Override
+    public BlocklyType getVarType() {
+        return BlocklyType.ARRAY;
+    }
+
+    @Override
     public String toString() {
         return "EmptyList [" + this.typeVar + "]";
     }
