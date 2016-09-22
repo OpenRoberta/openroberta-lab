@@ -23,9 +23,8 @@ public class Ast2NxcVisitorTest {
     private static final String IMPORTS_CONSTANTS = "" //
         + "#define WHEELDIAMETER 5.6\n"
         + "#define TRACKWIDTH 11.0\n"
-        + "#define MAXDISPLAYPIXELS 56 \n"
-        + "#define PIXELPERLINE 8 \n\n"
-        + "#include\"NEPODefs.h\"";
+        + "#define MAXLINES 8 \n"
+        + "#include\"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources";
     private static final String MASMETHOD = "" //
         + "task main() {"
         + "    SetSensor(S1, SENSOR_TOUCH);\n"
@@ -53,7 +52,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + MASMETHOD
-            + "        TextOut(0,(MAXDISPLAYPIXELS-(abs(3-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");\n"
+            + "        TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");\n"
             + SUFFIX
 
             + "}\n";
@@ -69,7 +68,7 @@ public class Ast2NxcVisitorTest {
             + MASMETHOD
 
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
-            + "           TextOut(0,(MAXDISPLAYPIXELS-(abs(3-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");"
+            + "           TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");"
             + "        }\n"
             + SUFFIX
 
@@ -192,7 +191,7 @@ public class Ast2NxcVisitorTest {
             + IMPORTS_CONSTANTS
             + MASMETHOD
             + "byte volume = 0x02;\n"
-            + "        TextOut(0,(MAXDISPLAYPIXELS-(abs(0-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");\n"
+            + "        TextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");\n"
             + "        PlayToneEx(300, 3000, volume, false);Wait(3000);\n"
             + SUFFIX
 
@@ -328,7 +327,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "     void test1(float x, float x2) {\n"
-            + "        TextOut(x,(MAXDISPLAYPIXELS-(abs(x2-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");\n"
+            + "        TextOut(x,(MAXLINES - x2) * MAXLINES,\"Hallo\");\n"
             + "    }\n\n"
             + "    void test2() {\n"
             + "        if (variablenName2) return;"
@@ -408,7 +407,7 @@ public class Ast2NxcVisitorTest {
             + "    string message=\"exit\";\n"
 
             + "        if (message.equals(\"exit\")) {\n"
-            + "           TextOut(0,(MAXDISPLAYPIXELS-(abs(0-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"done\");"
+            + "           TextOut(0,(MAXLINES - 0) * MAXLINES,\"done\");"
             + "        }\n"
 
             + "}\n";

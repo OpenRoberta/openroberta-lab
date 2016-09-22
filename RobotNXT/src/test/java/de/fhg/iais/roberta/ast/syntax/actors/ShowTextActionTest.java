@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class ShowTextActionTest {
     @Test
     public void clearDisplay() throws Exception {
-        final String a = "\nTextOut(0,(MAXDISPLAYPIXELS-(abs(0-1)*PIXELPERLINE)%(MAXDISPLAYPIXELS+PIXELPERLINE)),\"Hallo\");";
+        final String a = "\nTextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_ShowText.xml");
 

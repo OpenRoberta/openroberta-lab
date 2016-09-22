@@ -682,10 +682,10 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         }
         this.sb.append(methodName + "(");
         showTextAction.getX().visit(this);
-        this.sb.append(", (MAXDISPLAYPIXELS - (abs(");
+        this.sb.append(", (MAXLINES - ");
         showTextAction.getY().visit(this);
 
-        this.sb.append(" - 1) * PIXELPERLINE) % (MAXDISPLAYPIXELS + PIXELPERLINE)), ");
+        this.sb.append(") * MAXLINES, ");
         showTextAction.getMsg().visit(this);
         this.sb.append(");");
         return null;
@@ -983,7 +983,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         this.sb.append("Sensor(");
-        this.sb.append(soundSensor.getPort().getPortNumber());
+        this.sb.append(soundSensor.getPort());
         this.sb.append(")");
         return null;
     }
@@ -1655,9 +1655,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     private void addConstants() {
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
-        this.sb.append("#define MAXDISPLAYPIXELS 56 \n");
-        this.sb.append("#define PIXELPERLINE 8 \n\n");
-        this.sb.append("#include \"NEPODefs.h\" \n");
+        this.sb.append("#define MAXLINES 8 \n");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources\n");
     }
 
     private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
