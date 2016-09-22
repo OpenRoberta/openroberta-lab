@@ -289,9 +289,9 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
     Nxt.prototype.svg = '<svg xmlns="http://www.w3.org/2000/svg" width="254px" height="400px" viewBox="0 0 254 400" preserveAspectRatio="xMidYMid meet">'
             + '<rect x="7" y="1" style="stroke-width: 2px;" stroke="black" id="backgroundConnectors" width="240" height="398" fill="#6D6E6C" />'
             + '<rect x="1" y="24" style="stroke-width: 2px;" stroke="black" id="backgroundSides" width="252" height="352" fill="#F2F3F2" />'
-            + '<rect x="46" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="160" height="110" fill="#DDDDDD" rx="4" ry="4" />'
-            + '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(62, 56)" font-family="Courier New" font-size="10pt"></g>'
-            + '<defs><clipPath id="clipPath"><rect x="0" y="0" width="178" height="128"/></clipPath></defs>'
+            + '<rect x="44" y="68" style="stroke-width: 4px;" stroke="#cccccc" width="170" height="106" fill="#DDDDDD" rx="4" ry="4" />'
+            + '<g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(50, 72)" font-family="Courier New" letter-spacing="2px" font-size="10pt"></g>'
+            + '<defs><clipPath id="clipPath"><rect x="0" y="0" width="160" height="96"/></clipPath></defs>'
             + '<rect x="101" y="216" style="stroke-width: 2px;" stroke="#cccccc" id="bg-center" width="52" height="90" fill="#cccccc" rx="4" ry="4" />'
             + '<rect x="105" y="220" style="stroke-width: 1px;" stroke="black" id="enter" class="simKey" width="44" height="44" fill="#DA8540" rx="2" ry="2" />'
             + '<rect x="105" y="280" style="stroke-width: 1px;" stroke="black" id="escape" class="simKey" width="44" height="22" fill="#6D6E6C" rx="2" ry="2" />'
@@ -429,7 +429,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
         // update display
         if (actions.display) {
             if (actions.display.text) {
-                $("#display").html($("#display").html() + '<text x=' + actions.display.x * 10 + ' y=' + (actions.display.y + 1) * 13 + '>'
+                $("#display").html($("#display").html() + '<text x=' + actions.display.x * 1.5 + ' y=' + (actions.display.y) * 12 + '>'
                         + actions.display.text + '</text>');
             }
             if (actions.display.picture) {
