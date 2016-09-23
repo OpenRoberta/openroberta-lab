@@ -31,13 +31,21 @@ public class AstToEv3PythonVisitorTest {
         + "    'wheel-diameter': 5.6,\n"
         + "    'track-width': 17.0,\n"
         + "    'actors': {\n"
-        + "        'A':Hal.makeMediumMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
-        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
         + "    },\n"
         + "    'sensors': {\n"
         + "    },\n"
         + "}\n"
         + "hal = Hal(_brickConfiguration)\n\n";
+
+    private static final String CFG_MOTOR_A = "" //
+        + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n";
+
+    private static final String CFG_MOTOR_B = "" //
+        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n";
+
+    private static final String CFG_MOTORS = "" //
+        + "        'A':Hal.makeLargeMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
+        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n";
 
     private static final String CFG_TOUCH_SENSOR = "" //
         + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n";
@@ -64,9 +72,8 @@ public class AstToEv3PythonVisitorTest {
     public static void setupConfigurationForAllTests() {
         Configuration.Builder builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
-            ActorPort.B,
-            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder.addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT));
+        builder.addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = builder.build();
     }
@@ -100,7 +107,7 @@ public class AstToEv3PythonVisitorTest {
     public void testCondition1() throws Exception {
         String a = "" //
             + IMPORTS
-            + make_globals("", CFG_TOUCH_SENSOR)
+            + make_globals(CFG_MOTOR_B, CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    if hal.isPressed('1'):\n"
             + "        hal.ledOn('green', 'on')\n"
@@ -121,7 +128,7 @@ public class AstToEv3PythonVisitorTest {
     public void testCondition2() throws Exception {
         String a = "" //
             + IMPORTS
-            + make_globals("", CFG_TOUCH_SENSOR)
+            + make_globals(CFG_MOTOR_B, CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    if hal.isPressed('1'):\n"
             + "        hal.ledOn('green', 'on')\n"
@@ -142,7 +149,7 @@ public class AstToEv3PythonVisitorTest {
     public void testCondition3() throws Exception {
         String a = "" //
             + IMPORTS
-            + make_globals("", CFG_TOUCH_SENSOR)
+            + make_globals(CFG_MOTORS, CFG_TOUCH_SENSOR)
             + "def run():\n"
             + "    if 5 < hal.getRegulatedMotorSpeed('B'):\n"
             + "        hal.turnOnRegulatedMotor('B', 30)\n"
@@ -165,7 +172,7 @@ public class AstToEv3PythonVisitorTest {
     public void testMultipleStatements() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals(CFG_MOTORS, "")
             + "def run():\n"
             + "    hal.turnOnRegulatedMotor('B', 0)\n"
             + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 0)\n"
@@ -201,7 +208,7 @@ public class AstToEv3PythonVisitorTest {
     public void testUnusedVariable() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals(CFG_MOTORS, "")
             + "variablenName = 0\n"
             + "def run():\n"
             + "    hal.regulatedDrive('A', 'B', False, 'foreward', 50)\n"
@@ -400,7 +407,7 @@ public class AstToEv3PythonVisitorTest {
     public void testMethodVoid1() throws Exception {
         String a = "" //
             + IMPORTS
-            + GLOBALS
+            + make_globals(CFG_MOTOR_B, "")
             + "def run():\n"
             + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
             + "    macheEtwas(10, 10)\n"
@@ -658,14 +665,12 @@ public class AstToEv3PythonVisitorTest {
             + "_brickConfiguration = {\n"
             + "    'wheel-diameter': 5.6,\n"
             + "    'track-width': 17.0,\n"
-            + "    'actors': {\n"
-            + "        'A':Hal.makeMediumMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
-            + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
+            + "    'actors': {\n%s"
             + "    },\n"
             + "    'sensors': {\n%s"
             + "    },\n"
             + "}\n"
-            + "hal = Hal(_brickConfiguration)\n\n", sensors);
+            + "hal = Hal(_brickConfiguration)\n\n", motors, sensors);
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

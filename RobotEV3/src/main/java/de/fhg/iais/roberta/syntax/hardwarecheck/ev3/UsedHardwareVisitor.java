@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -38,14 +39,17 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class UsedHardwareVisitor extends CheckVisitor {
     private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private final Set<UsedActor> usedActors = new LinkedHashSet<UsedActor>();
+    /* drive/turn/curve blocks don't declare the motors they are using */
+    private final Configuration brickConfiguration;
 
     public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(this);
-            }
-        }
+        this.brickConfiguration = null;
+        check(phrasesSet);
+    }
+
+    public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
+        this.brickConfiguration = brickConfiguration;
+        check(phrasesSet);
     }
 
     /**
@@ -66,14 +70,25 @@ public class UsedHardwareVisitor extends CheckVisitor {
         return this.usedActors;
     }
 
+    private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        Assert.isTrue(phrasesSet.size() >= 1);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(this);
+            }
+        }
+    }
+
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         driveAction.getParam().getSpeed().visit(this);
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        // TODO: need a way to get both motor drive blocks
-        //this.usedActors.add(new UsedActor(driveAction.get???()));
+        if ( brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        }
         return null;
     }
 
@@ -83,15 +98,19 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        // TODO: need a way to get both motor drive blocks
-        //this.usedActors.add(new UsedActor(turnAction.get???()));
+        if ( brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        }
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
-        // TODO: need a way to get both motor drive blocks
-        //this.usedActors.add(new UsedActor(driveAction.get???()));
+        if ( brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        }
         return null;
     }
 

@@ -169,7 +169,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet, brickConfiguration);
         Ast2Ev3PythonVisitor astVisitor =
             new Ast2Ev3PythonVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), checkVisitor.getUsedActors(), 0);
         astVisitor.generatePrefix(withWrapping);
@@ -1483,12 +1483,21 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         return sb.toString();
     }
 
+    private boolean isActorUsed(Actor actor, IActorPort port) {
+        for ( UsedActor usedActor : this.usedActors ) {
+            if ( port == usedActor.getPort() && actor.getName() == usedActor.getType() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void appendActors(StringBuilder sb) {
         sb.append("    'actors': {\n");
         for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
             Actor actor = entry.getValue();
-            if ( actor != null ) {
-                IActorPort port = entry.getKey();
+            IActorPort port = entry.getKey();
+            if ( actor != null && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));
                 sb.append(",\n");
