@@ -1081,7 +1081,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //TODO: implement
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("Constrain( ");
+        this.sb.append("...( ");
         mathConstrainFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
@@ -1488,15 +1488,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("#include <math.h> \n");
         this.sb.append("#include <CountUpDownTimer.h> \n");
         // Bot'n Roll ONE A library:
-        this.sb.append("#include <BnrOneA.h> \n");
+        this.sb.append("#include <BnrOneA.h>   // Bot'n Roll ONE A library \n");
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
-        this.sb.append("#include <BnrRescue.h> \n");
+        this.sb.append("#include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library \n");
         //additional Roberta functions:
-        this.sb.append("#include <RobertaFunctions.h> \n");
+        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
         // SPI communication library required by BnrOne.cpp"
-        this.sb.append("#include <SPI.h> \n");
+        this.sb.append("#include <SPI.h>   // SPI communication library required by BnrOne.cpp \n");
         // required by BnrRescue.cpp (for the additional sonar kit):
-        this.sb.append("#include <Wire.h> \n");
+        this.sb.append("#include <Wire.h>   //a library required by BnrRescue.cpp for the additional sonar  \n");
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         this.sb.append("BnrOneA one; \n");
         this.sb.append("BnrRescue brm; \n");
@@ -1523,12 +1523,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("Wire.begin();");
         nlIndent();
         //set baud rate to 9600 for printing values at serial monitor:
-        this.sb.append("Serial.begin(9600);");
+        this.sb.append("Serial.begin(9600);   // sets baud rate to 9600bps for printing values at serial monitor.");
         nlIndent();
         // start the communication module:
-        this.sb.append("one.spiConnect(SSPIN);");
+        this.sb.append("one.spiConnect(SSPIN);   // starts the SPI communication module");
         nlIndent();
-        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);");
+        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);   // starts I2C communication");
         nlIndent();
         this.sb.append("brm.setModuleAddress(0x2C);");
         nlIndent();
@@ -1540,8 +1540,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
         for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             switch ( entry.getValue().getType() ) {
-                //TODO: add infrared (basic and line following), compas (that also works like gyro),
-                // additional head sonar
                 case COLOR:
                     nlIndent();
                     this.sb.append("brm.setRgbStatus(ENABLE);");
