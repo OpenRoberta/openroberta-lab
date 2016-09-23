@@ -85,7 +85,7 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedSensorsCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
@@ -166,7 +166,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<UsedSensor> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
+        Set<UsedSensor> usedSensors = UsedHardwareVisitor.check(phrasesSet);
         Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(programName, brickConfiguration, usedSensors, 0);
         astVisitor.generatePrefix(withWrapping);
 

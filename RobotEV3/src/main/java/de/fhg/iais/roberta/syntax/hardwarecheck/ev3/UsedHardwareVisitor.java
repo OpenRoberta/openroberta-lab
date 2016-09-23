@@ -29,11 +29,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
- * This visitor collects information for used sensors in blockly program.
+ * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author kcvejoski
  */
-public class UsedSensorsCheckVisitor extends CheckVisitor {
+public class UsedHardwareVisitor extends CheckVisitor {
     private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
 
     /**
@@ -44,7 +44,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
      */
     public static Set<UsedSensor> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(phrasesSet.size() >= 1);
-        UsedSensorsCheckVisitor checkVisitor = new UsedSensorsCheckVisitor();
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor();
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.visit(checkVisitor);
