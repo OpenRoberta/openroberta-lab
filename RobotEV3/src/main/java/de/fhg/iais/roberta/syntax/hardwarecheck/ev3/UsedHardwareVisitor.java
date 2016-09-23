@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
@@ -35,26 +37,33 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class UsedHardwareVisitor extends CheckVisitor {
     private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
+    private final Set<UsedActor> usedActors = new LinkedHashSet<UsedActor>();
+
+    public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        Assert.isTrue(phrasesSet.size() >= 1);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(this);
+            }
+        }
+    }
 
     /**
      * Returns set of used sensor in Blockly program.
      *
-     * @param phrases list of {@link Phrase} representing blockly program,
      * @return set of used sensors
      */
-    public static Set<UsedSensor> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor();
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(checkVisitor);
-            }
-        }
-        return checkVisitor.getUsedSensors();
+    public Set<UsedSensor> getUsedSensors() {
+        return this.usedSensors;
     }
 
-    private Set<UsedSensor> getUsedSensors() {
-        return this.usedSensors;
+    /**
+     * Returns set of used actors in Blockly program.
+     *
+     * @return set of used actors
+     */
+    public Set<UsedActor> getUsedActors() {
+        return this.usedActors;
     }
 
     @Override
@@ -63,6 +72,8 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
+        // TODO: need a way to get both motor drive blocks
+        //this.usedActors.add(new UsedActor(driveAction.get???()));
         return null;
     }
 
@@ -72,11 +83,21 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
+        // TODO: need a way to get both motor drive blocks
+        //this.usedActors.add(new UsedActor(turnAction.get???()));
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> driveAction) {
+        // TODO: need a way to get both motor drive blocks
+        //this.usedActors.add(new UsedActor(driveAction.get???()));
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), ActorType.LARGE));
         return null;
     }
 
@@ -86,17 +107,20 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( motorOnAction.getParam().getDuration() != null ) {
             motorOnAction.getDurationValue().visit(this);
         }
+        this.usedActors.add(new UsedActor(motorOnAction.getPort(), ActorType.LARGE));
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         motorSetPowerAction.getPower().visit(this);
+        this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), ActorType.LARGE));
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        this.usedActors.add(new UsedActor(motorStopAction.getPort(), ActorType.LARGE));
         return null;
     }
 
@@ -113,6 +137,7 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        this.usedActors.add(new UsedActor(encoderSensor.getMotorPort(), ActorType.LARGE));
         return null;
     }
 
@@ -130,8 +155,7 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        UsedSensor usedSensor = new UsedSensor(touchSensor.getPort(), SensorType.TOUCH, touchSensor.getMode());
-        this.usedSensors.add(usedSensor);
+        this.usedSensors.add(new UsedSensor(touchSensor.getPort(), SensorType.TOUCH, touchSensor.getMode()));
         return null;
     }
 
@@ -143,24 +167,18 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LIGHT, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        this.usedSensors.add(new UsedSensor(soundSensor.getPort(), SensorType.SOUND, soundSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> driveAction) {
         // TODO Auto-generated method stub
         return null;
     }
