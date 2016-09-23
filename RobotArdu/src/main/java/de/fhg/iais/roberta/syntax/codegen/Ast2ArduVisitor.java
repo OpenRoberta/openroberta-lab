@@ -837,14 +837,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: test with a block
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        //final String Port = getEnumCode(lightSensor.getPort());
         this.sb.append("one.readAdc(");
         //ports from 0 to 7
-        this.sb.append(lightSensor.getPort()); // we could add "-1" so the number of ports would be 1-8 for users
-        this.sb.append(")");
+        this.sb.append(lightSensor.getPort().getPortNumber()); // we could add "-1" so the number of ports would be 1-8 for users
+        this.sb.append(") / 10.23");
         return null;
     }
 
@@ -1565,14 +1563,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                     nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
                     break;
-                //case INFRARED_LINE:
-                //break;
-                case GYRO:
-                    /*nlIndent();
-                    sb.append("Wire.begin();");
-                    nlIndent();
-                    sb.append("one.spiConnect(SSPIN);");
-                    break;*/
                 default:
                     break;
             }
