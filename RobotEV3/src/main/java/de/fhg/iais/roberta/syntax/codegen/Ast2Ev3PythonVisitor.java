@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -766,6 +767,24 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("hal.stopMotors(");
         this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
         this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+
+        this.sb.append("hal.driveInCurve(");
+        this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
+        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
+        curveAction.getParamRight().getSpeed().visit(this);
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
+        }
+        this.sb.append(")");
         return null;
     }
 
@@ -1565,15 +1584,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitCurveAction(CurveAction<Void> driveAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
         return null;
     }
-
 }
