@@ -167,8 +167,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<UsedSensor> usedSensors = UsedHardwareVisitor.check(phrasesSet);
-        Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 1 : 0);
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
+        Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);

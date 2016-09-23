@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
@@ -132,6 +133,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
     private final Set<UsedSensor> usedSensors;
+    private final Set<UsedActor> usedActors;
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
 
@@ -143,11 +145,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
+    Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, Set<UsedActor> usedActors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.usedSensors = usedSensors;
+        this.usedActors = usedActors;
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
@@ -166,8 +169,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<UsedSensor> usedSensors = UsedHardwareVisitor.check(phrasesSet);
-        Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(programName, brickConfiguration, usedSensors, 0);
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
+        Ast2Ev3PythonVisitor astVisitor =
+            new Ast2Ev3PythonVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), checkVisitor.getUsedActors(), 0);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);

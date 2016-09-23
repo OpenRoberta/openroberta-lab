@@ -33,13 +33,13 @@ public class ProgramConfigurationCompatabilityTest {
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");
 
-        Set<UsedSensor> hardwareCheckVisitor = UsedHardwareVisitor.check(phrases);
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrases);
+        Set<UsedSensor> usedSensors = checkVisitor.getUsedSensors();
         RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(brickConfiguration);
         int countErrors = programChecker.check(phrases);
         ArrayList<ArrayList<Phrase<Void>>> checkedProgram = programChecker.getCheckedProgram();
         System.out.println(countErrors);
         System.out.println(checkedProgram);
-        Assert
-            .assertEquals("[HardwareComponentType [robBrick_touch, SENSOR], HardwareComponentType [robBrick_colour, SENSOR]]", hardwareCheckVisitor.toString());
+        Assert.assertEquals("[HardwareComponentType [robBrick_touch, SENSOR], HardwareComponentType [robBrick_colour, SENSOR]]", usedSensors.toString());
     }
 }
