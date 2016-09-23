@@ -1232,7 +1232,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case ODD:
                 this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2 == 1)");
+                this.sb.append(" % 2 != 0)");
                 break;
             case PRIME:
                 this.sb.append("MathPrime(");

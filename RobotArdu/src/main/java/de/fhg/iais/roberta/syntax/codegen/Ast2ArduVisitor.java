@@ -1078,66 +1078,60 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("...( ");
+        this.sb.append("rob.clamp(");
         mathConstrainFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
-    //TODO: implement math functions
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                this.sb.append("( ");
+                this.sb.append("(fmod(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2 == 0 )");
+                this.sb.append(", 2) == 0");
                 break;
             case ODD:
-                this.sb.append("( ");
+                this.sb.append("(fmod(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % 2 == 1 )");
+                this.sb.append(", 2) != 0");
                 break;
             case PRIME:
-                this.sb.append("MathPrime( ");
+                this.sb.append("rob.isPrime(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" )");
                 break;
-            // % in nxc doesn't leave a a fractional residual, e.g. 5.2%1 = 0, so it is not possible to cheack the wholeness by "%1", that is why
-            //an additional function is used
             case WHOLE:
-                this.sb.append("MathIsWhole( ");
+                this.sb.append("rob.isWhole(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" )");
                 break;
             case POSITIVE:
-                this.sb.append("( ");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" > 0 )");
+                this.sb.append(" > 0");
                 break;
             case NEGATIVE:
-                this.sb.append("( ");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" < 0 )");
+                this.sb.append(" < 0");
                 break;
-            //it would work only for whole numbers, however, I think that it makes sense to talk about being divisible only for the whole numbers
             case DIVISIBLE_BY:
-                this.sb.append("( ");
+                this.sb.append("(fmod(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" % ");
+                this.sb.append(",");
                 mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(" == 0 )");
+                this.sb.append(") == 0");
                 break;
             default:
                 break;
         }
+        this.sb.append(")");
         return null;
     }
 

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class MathNumberPropertyTest {
     @Test
     public void Test() throws Exception {
-        final String a = "(0%2==0)(0%2==1)MathPrime(0)MathIsWhole(0)(0>0)(0<0)(0%0==0)";
+        final String a = "(0%2==0)(0%2!=0)MathPrime(0)MathIsWhole(0)(0>0)(0<0)(0%0==0)";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_number_property.xml");
     }
