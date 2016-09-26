@@ -559,6 +559,7 @@ Blockly.Msg.ORA_ROBOT_NOT_WAITING = "The robot does not wait for a run command."
 Blockly.Msg.ORA_ROBOT_PUSH_RUN = "Robot waited and now the jar is pushed to the robot";  // untranslated
 Blockly.Msg.ORA_SERVER_ERROR = "Server-Error";  // untranslated
 Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = "Check if your robot is switched on and connected to the server. <br />If you have problems to do this, please have a look at our help pages.";  // untranslated
+Blockly.Msg.ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE = "You are trying to connect a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to connect again!";  // untranslated
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = "Token set";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_DELETE_ERROR = "An error has occurred while deleting the toolbox, please try it again!";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_DELETE_SUCCESS = "Toolbox deleted";  // untranslated

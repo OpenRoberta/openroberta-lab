@@ -341,8 +341,7 @@
 	"VARIABLES_SET_CREATE_GET": "context menu - Selecting this creates a block to get (change) the value of this variable.\n\nParameters:\n* %1 - the name of the variable.",
 	"PROCEDURES_DEFNORETURN_HELPURL": "url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.",
 	"PROCEDURES_DEFNORETURN_TITLE": "block text - This precedes the name of the function when defining it.  See [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample function definition].",
-	"PROCEDURES_DEFNORETURN_PROCEDURE": "default name - This acts as a placeholder for the name of a function on a function definition block, as shown on [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block]. The user will replace it with the function's name.",
-	"PROCEDURES_BEFORE_PARAMS": "block text - This precedes the list of parameters on a function's defiition block.  See [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample function with parameters].",
+	"PROCEDURES_BEFORE_PARAMS": "default name - This acts as a placeholder for the name of a function on a function definition block, as shown on [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block]. The user will replace it with the function's name. block text - This precedes the list of parameters on a function's defiition block.  See [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample function with parameters].",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "block text - This precedes the list of parameters on a function's caller block.  See [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample function with parameters].",
 	"PROCEDURES_DEFNORETURN_DO": "block text - This appears next to the function's 'body', the blocks that should be run when the function is called, as shown in [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample function definition].",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "tooltip",
@@ -859,5 +858,6 @@
 	"CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS": "",
 	"WAIT_TIME_TOOLTIP": "",
 	"POPUP_RELEASE": "",
-	"POPUP_NEW_RELEASE": ""
+	"POPUP_NEW_RELEASE": "",
+	"ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE": ""
 }

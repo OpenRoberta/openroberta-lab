@@ -46,7 +46,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             clone.attr('data-type', robot);
             clone.addClass('popup-robot');
             // TODO get beta information from the server
-            if (robot == 'ev3'){
+            if (robot == 'ev3') {
                 clone.find('img').css('visibility', 'hidden');
             }
             $("#show-startup-message .modal-footer").append(clone);
@@ -470,5 +470,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
             Blockly.svgResize(GUISTATE_C.getBricklyWorkspace());
         });
+
+        $(document).on('keydown', function(e) {
+            // You may replace `c` with whatever key you want
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'q')) {
+                PROGRAM_C.showCode();
+                PROGRAM_C.showCode();
+            }
+        });
+
     }
 });

@@ -559,6 +559,7 @@ Blockly.Msg.ORA_ROBOT_NOT_WAITING = "Robotten venter ikke på en kommando.";
 Blockly.Msg.ORA_ROBOT_PUSH_RUN = "Robotten ventede og jar-filen er nu overført til robotten";
 Blockly.Msg.ORA_SERVER_ERROR = "Server-fejl";
 Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = "Der er ingen aktiv robot.";
+Blockly.Msg.ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE = "You are trying to connect a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to connect again!";  // untranslated
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = "Symbol gemt";
 Blockly.Msg.ORA_TOOLBOX_DELETE_ERROR = "An error has occurred while deleting the toolbox, please try it again!";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_DELETE_SUCCESS = "Toolbox deleted";  // untranslated

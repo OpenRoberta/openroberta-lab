@@ -559,6 +559,7 @@ Blockly.Msg.ORA_ROBOT_NOT_WAITING = "Dein Roboter ist gerade nicht aktiv.";
 Blockly.Msg.ORA_ROBOT_PUSH_RUN = "Dein Roboter bekommt jetzt dein Programm und startet gleich.";
 Blockly.Msg.ORA_SERVER_ERROR = "Server-Fehler";
 Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = "Hast du deinen Roboter eingeschaltet und mit dem Server verbunden?<br />Wenn das nicht klappt, schau in der Hilfe nach.";
+Blockly.Msg.ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE = "Der Robotertyp, den du im Menü ausgewählt hast, passt nicht zum Roboter, den du verbinden möchtest.<br>Wähle den richtigen Robotertyp im Robotermenü aus und versuche es noch einmal!";
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = "Klasse! Dein Roboter $ ist nun mit dem Server verbunden.";
 Blockly.Msg.ORA_TOOLBOX_DELETE_ERROR = "Ein Fehler ist beim Löschen der Toolbox aufgetreten, versuche es noch einmal!";
 Blockly.Msg.ORA_TOOLBOX_DELETE_SUCCESS = "Du hast die Toolbox gelöscht.";

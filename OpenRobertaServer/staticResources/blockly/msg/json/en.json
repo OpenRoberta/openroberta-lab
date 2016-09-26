@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-09-21 08:43:58.399319",
+		"lastupdated": "2016-09-26 14:57:15.668642",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -347,7 +347,6 @@
 	"VARIABLES_SET_CREATE_GET": "Create 'get %1'",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",
-	"PROCEDURES_DEFNORETURN_PROCEDURE": "do something",
 	"PROCEDURES_BEFORE_PARAMS": "with:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "with:",
 	"PROCEDURES_DEFNORETURN_DO": "",
@@ -865,5 +864,6 @@
 	"CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS": "You have multiple left motors assigned to your configuration!",
 	"WAIT_TIME_TOOLTIP": "Waits for a certain time in milliseconds.",
 	"POPUP_RELEASE": "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>",
-	"POPUP_NEW_RELEASE": "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li></ul>"
+	"POPUP_NEW_RELEASE": "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li></ul>",
+	"ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE": "You are trying to connect a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to connect again!"
 }

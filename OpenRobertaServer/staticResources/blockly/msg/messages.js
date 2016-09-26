@@ -1043,7 +1043,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
+//  Overwritten in robMessages
+// Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
 /// block text - This precedes the list of parameters on a function's defiition block.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
 /// function with parameters].

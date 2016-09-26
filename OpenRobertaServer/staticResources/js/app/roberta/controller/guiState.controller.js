@@ -180,6 +180,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     function setRobot(robot, result, opt_init) {
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
+        $('#blocklyDiv, #bricklyDiv').css('background','url(../../../../css/img/' + robot + 'Background.jpg) repeat');
+        $('#blocklyDiv, #bricklyDiv').css('background-size','100%');
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         if (!opt_init) {

@@ -559,6 +559,7 @@ Blockly.Msg.ORA_ROBOT_NOT_WAITING = "El robot no espera a una orden 'ejecutar'";
 Blockly.Msg.ORA_ROBOT_PUSH_RUN = "Tu robot no espera una orden 'ejecutar'";
 Blockly.Msg.ORA_SERVER_ERROR = "Error de servidor";
 Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = "Comprueba si tu robotestá encendido yconéctalo al servidor.</br> Si tienes algún problema para hacerlo, por favor consulta nuestras páginas de ayuda.";
+Blockly.Msg.ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE = "You are trying to connect a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to connect again!";  // untranslated
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = "Identificador establecido";
 Blockly.Msg.ORA_TOOLBOX_DELETE_ERROR = "An error has occurred while deleting the toolbox, please try it again!";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_DELETE_SUCCESS = "Toolbox deleted";  // untranslated

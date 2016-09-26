@@ -138,6 +138,11 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             line += 15;
             this.rCtx.fillText("Ultra Sensor", endLabel, line);
             this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
+            if (this.robot.sound) {
+                line += 15;
+                this.rCtx.fillText("Sound Sensor", endLabel, line);
+                this.rCtx.fillText(UTIL.round(this.robot.sound.volume * 100, 0), endValue, line);
+            }
             line += 15;
             this.rCtx.fillText("Color Sensor", endLabel, line);
             this.rCtx.beginPath();
@@ -145,6 +150,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.rCtx.rect(endValue, line, -10, -10);
             this.rCtx.stroke();
             this.rCtx.fill();
+            
         }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
