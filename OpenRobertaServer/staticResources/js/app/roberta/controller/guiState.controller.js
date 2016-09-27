@@ -180,8 +180,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     function setRobot(robot, result, opt_init) {
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
-        $('#blocklyDiv, #bricklyDiv').css('background','url(../../../../css/img/' + robot + 'Background.jpg) repeat');
-        $('#blocklyDiv, #bricklyDiv').css('background-size','100%');
+        $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'Background.jpg) repeat');
+        $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         if (!opt_init) {
@@ -251,6 +251,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
         if (isUserLoggedIn()) {
             $('.nav > li > ul > .logout').addClass('disabled');
+            if (isProgramSaved()) {
+                $('#menuSaveProg').parent().addClass('disabled');
+            }
         } else {
             $('.nav > li > ul > .login').addClass('disabled');
         }
@@ -269,10 +272,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#menuTabConfiguration').parent().removeClass('disabled');
             $('#menuTabProgram').parent().addClass('disabled');
         } else if (view === 'tabProgList') {
-
+            $('#head-navigation-program-edit > ul > li').addClass('disabled');
+            $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
         } else if (view === 'tabConfList') {
-
-        } else if (view === 'tabLogList' || view === 'tabConfList') {
+            $('#head-navigation-program-edit > ul > li').addClass('disabled');
+            $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
+        } else if (view === 'tabLogList') {
             $('#head-navigation-program-edit > ul > li').addClass('disabled');
             $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
         }
@@ -321,7 +326,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#menuSaveProg').parent().removeClass('disabled');
             $('#menuSaveProg').parent().addClass('disabled');
             getBlocklyWorkspace().robControls.disable('saveProgram');
-
         } else {
             if (isUserLoggedIn() && !isProgramStandard() && isProgramWritable()) {
                 $('#menuSaveProg').parent().removeClass('disabled');

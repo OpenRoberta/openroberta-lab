@@ -770,7 +770,7 @@ table .typcn-flow-merge:before, table .typcn-chevron-left:before, table .typcn-c
 
 table [data-toggle="collapse"]:after {
 	font-family: 'typicons';
-	content: "\e60a";
+	content: "\e97b";
 	float: right;
 	color: #333;
 	-webkit-transform: otate(-90deg);
