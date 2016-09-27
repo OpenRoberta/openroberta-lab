@@ -120,7 +120,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
      * Calculate height of data table
      */
     function calcDataTableHeight() {
-        return Math.round($(window).height() - 260);
+        return Math.round($(window).height() - 100);
     }
     exports.calcDataTableHeight = calcDataTableHeight;
 

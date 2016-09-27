@@ -614,7 +614,7 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";  // untranslated
 Blockly.Msg.POPUP_EMAIL_SEND = "Send now";  // untranslated
 Blockly.Msg.POPUP_NAME = "Name";  // untranslated
 Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
-Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li></ul>";  // untranslated
+Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li><li>Improved Open Roberta Lab performance</ul>";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "reset password ...";  // untranslated
