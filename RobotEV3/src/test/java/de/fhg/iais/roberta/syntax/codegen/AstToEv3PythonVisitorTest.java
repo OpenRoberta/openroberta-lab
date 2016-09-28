@@ -396,7 +396,7 @@ public class AstToEv3PythonVisitorTest {
             + "    \n"
             + "def macheEtwas(x):\n"
             + "    if hal.isPressed('1'): return hal.getInfraredSensorDistance('4')\n"
-            + "    hal.drawText(str(hal.getGyroSensorValue('2, 'angle'')), 0, 0)\n"
+            + "    hal.drawText(str(hal.getGyroSensorValue('2', 'angle')), 0, 0)\n"
             + "    return hal.getUltraSonicSensorDistance('4')\n\n"
             + MAIN_METHOD;
 

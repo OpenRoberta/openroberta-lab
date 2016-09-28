@@ -846,7 +846,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + ", " + getEnumCode(gyroSensor.getMode()) + "')");
+            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
         }
         return null;
     }
