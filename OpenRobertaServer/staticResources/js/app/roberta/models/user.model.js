@@ -157,6 +157,22 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.resetPasswordToServer = resetPasswordToServer;
+    
+    /**
+     * Check if the generated target for password reset is valid.
+     * 
+     * @param target
+     *            {String} - target from link
+     * 
+     */
+    function checkTargetRecovery(target, successFn) {
+        COMM.json("/user", {
+            "cmd" : "isResetPasswordLinkExpired",
+            "resetPasswordLink" : target
+        }, successFn, "check password recovery for '" + target + "'");
+    }
+    
+    exports.checkTargetRecovery = checkTargetRecovery;
 
     /**
      * User password recovery for lost password.
@@ -165,10 +181,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - email of the user
      * 
      */
-    function userPasswordRecovery(lostEmail, successFn) {
+    function userPasswordRecovery(lostEmail, lang, successFn) {
         COMM.json("/user", {
             "cmd" : "passwordRecovery",
-            "lostEmail" : lostEmail
+            "lostEmail" : lostEmail,
+            "language" : lang
         }, successFn, "password recovery for '" + lostEmail + "'");
     }
 

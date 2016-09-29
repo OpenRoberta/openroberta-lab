@@ -158,30 +158,24 @@ public class ClientUser {
                 Util.addResultInfo(response, up);
             } else if ( cmd.equals("passwordRecovery") ) {
                 String lostEmail = request.getString("lostEmail");
+                String lang = request.getString("language");
                 User user = up.getUserByEmail(lostEmail);
                 Util.addResultInfo(response, up);
                 if ( user != null ) {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
-                    // TODO move this to properties!!!
+                    String[] body = {
+                        user.getAccount(),
+                        lostPassword.getUrlPostfix()
+                    };
                     try {
-                        this.mailManagement.send(
-                            user.getEmail(),
-                            "Dein Open Roberta Passwort zurücksetzen",
-                            "Hallo, \n\n"
-                                + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
-                                + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
-                                + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
-                                //                            + "https://lab.open-roberta.org/"
-                                + "http://192.102.162.85:8080/"
-                                + "#forgotPassword&"
-                                + lostPassword.getUrlPostfix()
-                                + "\n\n" + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n" + "Viel Spass weiterhin mit Open Roberta");
+                        this.mailManagement.send(user.getEmail(), "reset", body, lang);
+                        up.setSuccess(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS);
                     } catch ( MessagingException e ) {
                         up.setError(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
                     }
-                    up.setSuccess(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS);
                 }
+                Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {
                 String sortBy = request.getString("sortBy");
                 int offset = request.getInt("offset");

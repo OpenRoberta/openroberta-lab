@@ -149,7 +149,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
         gainNode.gain.value = 0;
 
         try {
-            // monkeypatch getUserMedia
+            // monkeypatch getUserMedia 
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
             // ask for an audio input
@@ -171,7 +171,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
                 console.log("Sorry, but there is no microphone available on your system");
             });
         } catch (e) {
-            alert('getUserMedia threw exception :' + e);
+            console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox\n" + e);
         }
     } else {
         var context = null;

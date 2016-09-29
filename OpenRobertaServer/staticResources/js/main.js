@@ -83,12 +83,12 @@ require.config({
             exports : 'Blockly'
         },
         'volume-meter' : {
-          exports: "Volume",
-        init: function () {
-            return {
-                createAudioMeter: createAudioMeter
-            };
-        }
+            exports : "Volume",
+            init : function() {
+                return {
+                    createAudioMeter : createAudioMeter
+                };
+            }
         },
         'jquery-validate' : {
             deps : [ 'jquery' ]
@@ -101,7 +101,7 @@ require.config({
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
-        'configuration.controller', 'language.controller','volume-meter' ], function(require) {
+        'configuration.controller', 'language.controller', 'volume-meter' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -133,20 +133,30 @@ function init() {
     }).then(function() {
         return robotController.init();
     }).then(function() {
+        return userController.init();
+    }).then(function() {
         progListController.init();
         progDeleteController.init();
         confListController.init();
         confDeleteController.init();
         progShareController.init();
         logListController.init();
-        menuController.init();
-        userController.init();
         configurationController.init();
         programController.init();
+        var passwordRecovery = menuController.init();
         $(".pace").fadeOut(500, function() {
             $(".cover").fadeOut(500);
             if (guiStateController.noCookie()) {
                 $("#show-startup-message").modal("show");
+            }
+            if (passwordRecovery) {
+//                if (guiStateController.noCookie()) {
+//                    $("#show-startup-message").one('shown.bs.modal', function(e) {
+//                        userController.showResetPassword(passwordRecovery);
+//                    })
+//                } else {
+//                    userController.showResetPassword(passwordRecovery);
+//                }
             }
         });
     });

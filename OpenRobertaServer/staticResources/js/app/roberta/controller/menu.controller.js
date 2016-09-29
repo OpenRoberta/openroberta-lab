@@ -20,6 +20,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             pingServer();
         }, 3000);
         LOG.info('init menu view');
+        
+        var target = document.location.hash.split("&");
+        if (target[0] === "#forgotPassword") {
+           USER_C.showResetPassword(target[1]);
+           return target[1];
+           
+        }
+        return null;
     }
 
     exports.init = init;
@@ -444,15 +452,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#about-join').onWrap('click', function() {
             $('#show-about').modal('hide');
         });
-
-        var target = document.location.hash.split("&");
-
-        if (target[0] === "#forgotPassword") {
-            $('#passOld').val(target[1]);
-            $('#resetPassLink').val(target[1]);
-            $('#show-startup-message').modal('hide');
-            USER_C.showResetPassword();
-        }
 
         $(window).on('beforeunload', function(e) {
             if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {

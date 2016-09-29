@@ -131,12 +131,6 @@ body.blocklyMinimalBody  * {
 	right: 10;
 }
 
-#states {
-	float: right;
-	margin-top: 16px;
-	padding: 0;
-}
-
 #language {
 	float: left;
 	margin: 0;
@@ -299,6 +293,10 @@ body.blocklyMinimalBody  * {
 	white-space: nowrap;
 	background-color: #fff;
 	padding: 8px;
+}
+
+#show-startup-message {
+	z-index: 1039;
 }
 
 .wait, .ok {
