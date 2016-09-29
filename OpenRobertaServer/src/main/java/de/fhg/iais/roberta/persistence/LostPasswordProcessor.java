@@ -37,7 +37,13 @@ public class LostPasswordProcessor extends AbstractProcessor {
             setError(Key.USER_PASSWORD_RECOVERY_INVALID_URL, urlPostfix);
             return null;
         }
-
     }
 
+    public void deleteLostPassword(String urlPostfix) throws Exception {
+        LostPasswordDao lostPasswordDao = new LostPasswordDao(this.dbSession);
+        LostPassword lostPassword = lostPasswordDao.loadLostPassword(urlPostfix);
+        if ( lostPassword != null ) {
+            lostPasswordDao.deleteLostPassword(lostPassword);
+        }
+    }
 }

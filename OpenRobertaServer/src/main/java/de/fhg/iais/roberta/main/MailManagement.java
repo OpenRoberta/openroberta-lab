@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -40,19 +41,14 @@ public class MailManagement {
 
     }
 
-    public void send(String to, String subject, String body) {
-        try {
-            Message message = new MimeMessage(this.session);
-            message.setFrom(new InternetAddress(this.props.getProperty("username")));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject(subject);
-            message.setText(body);
+    public void send(String to, String subject, String body) throws AddressException, MessagingException {
+        Message message = new MimeMessage(this.session);
+        message.setFrom(new InternetAddress(this.props.getProperty("username")));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+        message.setSubject(subject);
+        message.setText(body);
 
-            Transport.send(message);
-
-        } catch ( MessagingException e ) {
-            throw new RuntimeException(e);
-        }
+        Transport.send(message);
     }
 
 }

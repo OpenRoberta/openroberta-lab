@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
+import java.util.Date;
+
+import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -135,8 +138,24 @@ public class ClientUser {
                 if ( lostPassword != null ) {
                     up.resetPassword(lostPassword.getUserID(), newPassword);
                 }
+                if ( up.getMessage() == Key.USER_UPDATE_SUCCESS ) {
+                    lostPasswordProcessor.deleteLostPassword(resetPasswordLink);
+                }
                 Util.addResultInfo(response, up);
 
+            } else if ( cmd.equals("isResetPasswordLinkExpired") ) {
+                String resetPasswordLink = request.getString("resetPasswordLink");
+                LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
+                boolean isExpired = true;
+                if ( lostPassword != null ) {
+                    Date currentTime = new Date();
+                    isExpired = (currentTime.getTime() - lostPassword.getCreated().getTime()) / 3600000.0 > 24;
+                }
+                if ( isExpired ) {
+                    up.setSuccess(Key.USER_PASSWORD_RECOVERY_EXPIRED_URL);
+                }
+                response.put("resetPasswordLinkExpired", isExpired);
+                Util.addResultInfo(response, up);
             } else if ( cmd.equals("passwordRecovery") ) {
                 String lostEmail = request.getString("lostEmail");
                 User user = up.getUserByEmail(lostEmail);
@@ -145,22 +164,25 @@ public class ClientUser {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
                     // TODO move this to properties!!!
-                    this.mailManagement.send(
-                        user.getEmail(),
-                        "Dein Open Roberta Passwort zurücksetzen",
-                        "Hallo, \n\n"
-                            + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
-                            + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
-                            + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
-                            + "https://lab.open-roberta.org/#forgotPassword&"
-                            + lostPassword.getUrlPostfix()
-                            + "\n\n"
-                            + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n"
-                            + "Viel Spass weiterhin mit Open Roberta");
+                    try {
+                        this.mailManagement.send(
+                            user.getEmail(),
+                            "Dein Open Roberta Passwort zurücksetzen",
+                            "Hallo, \n\n"
+                                + "Wir haben eine Anfrage erhalten, das Passwort Deines Accounts zurückzusetzen.\n\n"
+                                + "Sollte diese Anfrage nicht von Dir stammen, kannst Du diese E-Mail ignorieren.\n"
+                                + "Klicke bitte auf den nachfolgenden Link oder gebe ihn in der Adresszeile deines Browsers ein:\n\n"
+                                //                            + "https://lab.open-roberta.org/"
+                                + "http://192.102.162.85:8080/"
+                                + "#forgotPassword&"
+                                + lostPassword.getUrlPostfix()
+                                + "\n\n" + "Gebe dann als erstes dein neues Passwort zweimal ein.\n\n" + "Viel Spass weiterhin mit Open Roberta");
+                    } catch ( MessagingException e ) {
+                        up.setError(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
+                    }
+                    up.setSuccess(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS);
                 }
-
             } else if ( cmd.equals("obtainUsers") ) {
-
                 String sortBy = request.getString("sortBy");
                 int offset = request.getInt("offset");
                 String tagFilter = request.getString("tagFilter");

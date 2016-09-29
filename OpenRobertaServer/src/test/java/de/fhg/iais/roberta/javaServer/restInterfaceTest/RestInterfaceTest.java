@@ -149,13 +149,13 @@ public class RestInterfaceTest {
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'cavy@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'cavy2@home';'role':'STUDENT'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
@@ -171,7 +171,7 @@ public class RestInterfaceTest {
      * <li>USER table has 2 rows
      * <li>update of user "minscha" fails, because the user is not logged in
      * <li>login with "minscha" -> success
-     * <li>update user name of "minscha" -> success
+     * <li>update user name of "minscha" -> fail
      * <li>user "minscha" logs out -> success
      * </ul>
      */
@@ -191,8 +191,8 @@ public class RestInterfaceTest {
         restUser(
             this.sMinscha,
             "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT'}",
-            "ok",
-            Key.USER_UPDATE_SUCCESS);
+            "error",
+            Key.USER_ERROR_EMAIL_USED);
 
         restUser(this.sMinscha, "{'cmd':'getUser';'accountName':'minscha'}", "ok", Key.USER_GET_ONE_SUCCESS);
         this.response.getEntity().toString().contains("cavy1231");

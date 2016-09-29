@@ -71,17 +71,31 @@ public class UserProcessor extends AbstractProcessor {
         if ( account == null || account.equals("") || password == null || password.equals("") ) {
             setError(Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, account);
         } else {
-            UserDao userDao = new UserDao(this.dbSession);
-            User user = userDao.persistUser(account, password, roleAsString);
-            if ( user != null ) {
-                setSuccess(Key.USER_CREATE_SUCCESS);
-                user.setUserName(userName);
-                user.setEmail(email);
-                user.setTags(tags);
-            } else {
-                setError(Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
+            if ( !isMailUsed(account, email) ) {
+                UserDao userDao = new UserDao(this.dbSession);
+                User user = userDao.persistUser(account, password, roleAsString);
+                if ( user != null ) {
+                    setSuccess(Key.USER_CREATE_SUCCESS);
+                    user.setUserName(userName);
+                    user.setEmail(email);
+                    user.setTags(tags);
+                } else {
+                    setError(Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
+                }
             }
         }
+    }
+
+    private boolean isMailUsed(String account, String email) {
+        UserDao userDao = new UserDao(this.dbSession);
+        if ( !email.equals("") ) {
+            User user = userDao.loadUserByEmail(email);
+            if ( user != null && !user.getAccount().equals(account) ) {
+                setError(Key.USER_ERROR_EMAIL_USED, account);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void updatePassword(String account, String oldPassword, String newPassword) throws Exception {
@@ -119,11 +133,13 @@ public class UserProcessor extends AbstractProcessor {
             UserDao userDao = new UserDao(this.dbSession);
             User user = userDao.loadUser(account);
             if ( user != null && this.httpSessionState.getUserId() == user.getId() ) {
-                user.setUserName(userName);
-                user.setRole(Role.valueOf(roleAsString));
-                user.setEmail(email);
-                user.setTags(tags);
-                setSuccess(Key.USER_UPDATE_SUCCESS);
+                if ( !isMailUsed(account, email) ) {
+                    user.setUserName(userName);
+                    user.setRole(Role.valueOf(roleAsString));
+                    user.setEmail(email);
+                    user.setTags(tags);
+                    setSuccess(Key.USER_UPDATE_SUCCESS);
+                }
             } else {
                 setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, account);
             }
