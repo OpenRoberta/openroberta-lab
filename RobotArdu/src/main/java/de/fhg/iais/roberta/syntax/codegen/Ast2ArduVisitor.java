@@ -1118,11 +1118,39 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        listSetIndex.getParam().get(1).visit(this);
+        switch ( getEnumCode(listSetIndex.getLocation()) ) {
+            case "IndexLocation.FROM_START":
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case "IndexLocation.FROM_END":
+                this.sb.append("sizeof(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(")/sizeof(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append("[0]) - 1 - ");
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case "IndexLocation.FIRST":
+                this.sb.append("0");
+                break;
+            case "IndexLocation.LAST":
+                this.sb.append("sizeof(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(")/sizeof(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append("[0]) - 1");
+                break;
+            case "IndexLocation.RANDOM":
+                this.sb.append("rob.randomIntegerInRange(0, sizeof(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append(")/sizeof(");
+                listSetIndex.getParam().get(0).visit(this);
+                this.sb.append("[0]))");
+                break;
+        }
         this.sb.append("]");
         this.sb.append(" = ");
-        listSetIndex.getParam().get(2).visit(this);
-        this.sb.append(";");
+        listSetIndex.getParam().get(1).visit(this);
         return null;
     }
 
