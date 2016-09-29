@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -209,9 +210,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             case T:
                 return "";
             case ARRAY:
-                return "int";
+                return "double";
             case ARRAY_NUMBER:
-                return "int";
+                return "double";
             case ARRAY_STRING:
                 return "String";
             case ARRAY_BOOLEAN:
@@ -1025,14 +1026,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     }
 
-    //TODO: implement
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        //final BlocklyType typeArr = indexOfFunct.getParam().get(0).getVarType();
+        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
+        this.sb.append(methodName);
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
-    //TODO: implement
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         String methodName;
