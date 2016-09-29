@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
@@ -696,4 +697,6 @@ public interface AstVisitor<V> {
     public V visitShadowExpr(ShadowExpr<V> shadowExpr);
 
     public V visitCompassSensor(CompassSensor<V> compassSensor);
+
+    public V visitConnectConst(ConnectConst<V> connectConst);
 }

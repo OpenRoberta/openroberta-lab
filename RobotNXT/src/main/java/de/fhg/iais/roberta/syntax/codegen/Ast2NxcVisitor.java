@@ -51,6 +51,7 @@ import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -238,6 +239,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                 return "int";
             case CONNECTION:
                 return "int";
+            case CONNECTIONNXT:
+                return "int";
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
@@ -277,6 +280,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         this.sb.append(boolConst.isValue());
         return null;
     };
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        this.sb.append(connectConst.getValue());
+        return null;
+    }
 
     //now all these constants (except for PI that was originally in nxc) are defined in NEPODefs.h
     @Override
@@ -1468,6 +1477,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         this.sb.append("SendRemoteNumber(");
+        //bluetoothSendAction.getConnection().visit(this);
+        this.sb.append(", ");
+        this.sb.append(bluetoothSendAction.getKind().toString());
+        this.sb.append(", ");
+        bluetoothSendAction.getMsg().visit(this);
+
         //TODO: add these block options: output variable (string, boolean or number. Need to create an enumeration), connection (int, 1-3 for master, always
         // 0 for slave), outbox address (int)
         //this.sb.append("SendRemoteString(");
@@ -1702,4 +1717,5 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
+
 }

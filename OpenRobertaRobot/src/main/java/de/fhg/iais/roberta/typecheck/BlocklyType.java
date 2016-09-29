@@ -59,6 +59,7 @@ public enum BlocklyType {
     NOTHING("", false,REF, PRIM),
     VOID("",false),
     CONNECTION("Connection",false, ANY),
+    CONNECTIONNXT("robCommunication_connection",false, ANY),
     CAPTURED_TYPE("",false), R("",false), S("",false), T("",false);
     // @formatter:on
 

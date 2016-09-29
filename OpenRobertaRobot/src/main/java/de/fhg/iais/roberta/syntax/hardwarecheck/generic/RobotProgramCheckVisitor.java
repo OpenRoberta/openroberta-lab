@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
@@ -67,5 +68,11 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
                     break;
             }
         }
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

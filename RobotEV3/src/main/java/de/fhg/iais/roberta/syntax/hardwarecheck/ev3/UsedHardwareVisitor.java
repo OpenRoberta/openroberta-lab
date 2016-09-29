@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -85,9 +86,9 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-            this.usedActors.add(new UsedActor(brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
         }
         return null;
     }
@@ -98,18 +99,18 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-            this.usedActors.add(new UsedActor(brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
         }
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
-        if ( brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-            this.usedActors.add(new UsedActor(brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
         }
         return null;
     }
@@ -204,6 +205,12 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         // TODO Auto-generated method stub
         return null;
     }

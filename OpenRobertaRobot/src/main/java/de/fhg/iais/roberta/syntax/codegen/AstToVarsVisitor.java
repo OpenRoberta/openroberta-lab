@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionActio
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
@@ -341,6 +342,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         // TODO Auto-generated method stub
         return null;
     }

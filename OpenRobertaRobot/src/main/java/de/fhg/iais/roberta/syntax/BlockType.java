@@ -102,6 +102,7 @@ public enum BlockType {
     BOOL_CONST( Category.EXPR, BoolConst.class, BlocklyConstants.LOGICAL_BOOLEAN ),
     NUM_CONST( Category.EXPR, NumConst.class, BlocklyConstants.MATH_NUMBER ),
     MATH_CONST( Category.EXPR, MathConst.class, BlocklyConstants.MATH_CONSTANT ),
+    CONNECTION_CONST( Category.EXPR, MathConst.class, BlocklyConstants.CONNECTIONNXT ),
     EMPTY_LIST( Category.EXPR, EmptyList.class, BlocklyConstants.LISTS_CREATE_EMPTY ),
     VAR( Category.EXPR, Var.class, BlocklyConstants.VARIABLE_GET ),
     VAR_DECLARATION( Category.EXPR, VarDeclaration.class, BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE, BlocklyConstants.ROB_GLOBAL_VARIABLES_DECLARE ),

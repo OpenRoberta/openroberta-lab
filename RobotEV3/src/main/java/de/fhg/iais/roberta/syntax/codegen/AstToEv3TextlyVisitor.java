@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -994,6 +995,12 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         // TODO Auto-generated method stub
         return null;
     }

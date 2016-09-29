@@ -85,6 +85,7 @@ public final class BlocklyConstants {
     public static final String ARG = "ARG";
     public static final String NUMBER = "NUMBER";
     public static final String CONNECTION = "CONNECTION";
+    public static final String CONNECTIONNXT = "robCommunication_connection";
     public static final String MESSAGE = "sendData";
     public static final String ADDRESS = "ADDRESS";
 

@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
@@ -102,5 +103,11 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
                     break;
             }
         }
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

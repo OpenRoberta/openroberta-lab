@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -700,6 +701,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitCompassSensor(CompassSensor<BlocklyType> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitConnectConst(ConnectConst<BlocklyType> connectConst) {
         // TODO Auto-generated method stub
         return null;
     }

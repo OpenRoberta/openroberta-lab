@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -50,11 +51,13 @@ public class UsedVolumeVisitor extends CheckVisitor {
         return this.isUsed;
     }
 
+    @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         this.isUsed = true;
         return null;
     }
 
+    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.isUsed = true;
         return null;
@@ -164,6 +167,12 @@ public class UsedVolumeVisitor extends CheckVisitor {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         // TODO Auto-generated method stub
         return null;
     }

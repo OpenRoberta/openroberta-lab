@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
@@ -649,6 +650,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitCompassSensor(CompassSensor<T> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitConnectConst(ConnectConst<T> connectConst) {
         // TODO Auto-generated method stub
         return null;
     }
