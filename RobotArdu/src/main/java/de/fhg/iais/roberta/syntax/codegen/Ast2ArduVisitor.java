@@ -325,7 +325,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
-            this.sb.append("[]");
+            if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
+                || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
+                || var.getValue().toString().equals("ListCreate [STRING, ]") ) {
+                this.sb.append("[0]");
+            } else {
+                this.sb.append("[]");
+            }
             if ( var.getValue().getKind() == BlockType.LIST_CREATE ) {
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 if ( list.getValue().get().size() == 0 ) {
@@ -1029,13 +1035,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //TODO: implement
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        String methodName = "ArrayLen( ";
+        String methodName;
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            methodName = "ArrIsEmpty( ";
+            methodName = "rob.arrayIsEmpty(";
+        } else {
+            methodName = "rob.arrayLength(";
         }
         this.sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        this.sb.append(" )");
+        this.sb.append(")");
         return null;
     }
 
