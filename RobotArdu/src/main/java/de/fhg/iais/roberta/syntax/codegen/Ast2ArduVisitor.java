@@ -1026,6 +1026,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     }
 
+    //TODO: fix the array length in a function. If won't work- pass the size to the function
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
@@ -1041,13 +1042,18 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         String methodName;
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            methodName = "rob.arrayIsEmpty(";
+            this.sb.append("(sizeof(");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(")/sizeof(");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append("[0]) == 0)");
         } else {
-            methodName = "rob.arrayLength(";
+            this.sb.append("sizeof(");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(")/sizeof(");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append("[0])");
         }
-        this.sb.append(methodName);
-        lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -1056,6 +1062,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: check the change of the list
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
         this.sb.append("{");
@@ -1073,7 +1080,36 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        listGetIndex.getParam().get(1).visit(this);
+        switch ( getEnumCode(listGetIndex.getLocation()) ) {
+            case "IndexLocation.FROM_START":
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case "IndexLocation.FROM_END":
+                this.sb.append("sizeof(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(")/sizeof(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append("[0]) - 1 - ");
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case "IndexLocation.FIRST":
+                this.sb.append("0");
+                break;
+            case "IndexLocation.LAST":
+                this.sb.append("sizeof(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(")/sizeof(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append("[0]) - 1");
+                break;
+            case "IndexLocation.RANDOM":
+                this.sb.append("rob.randomIntegerInRange(0, sizeof(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append(")/sizeof(");
+                listGetIndex.getParam().get(0).visit(this);
+                this.sb.append("[0]))");
+                break;
+        }
         this.sb.append("]");
         return null;
     }
