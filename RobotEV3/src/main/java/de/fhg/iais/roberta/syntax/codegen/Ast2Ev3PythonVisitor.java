@@ -1461,8 +1461,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
-        this.sb.append(INDENT).append(INDENT).append("if e.message:\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 2)\n");
+        // FIXME: we can only print about 30 chars
+        this.sb.append(INDENT).append(INDENT).append("hal.drawText(str(e), 0, 2)\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 4)\n");
         this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
         this.sb.append(INDENT).append(INDENT).append("raise\n");
