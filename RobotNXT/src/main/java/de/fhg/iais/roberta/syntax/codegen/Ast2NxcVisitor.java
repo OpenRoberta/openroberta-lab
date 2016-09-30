@@ -1265,39 +1265,32 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
                 this.sb.append("ArrSum(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MIN:
                 this.sb.append("ArrMin(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MAX:
                 this.sb.append("ArrMax(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case AVERAGE:
                 this.sb.append("ArrMean(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MEDIAN:
                 this.sb.append("ArrMedian(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case STD_DEV:
                 this.sb.append("ArrStandardDeviatioin(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case RANDOM:
                 this.sb.append("ArrRand(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MODE:
                 this.sb.append("ArrMode(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             default:
                 break;
         }
+        mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
         return null;
     }

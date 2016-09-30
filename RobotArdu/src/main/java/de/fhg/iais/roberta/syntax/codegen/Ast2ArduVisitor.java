@@ -1218,41 +1218,41 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
-                this.sb.append("ArrSum( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrSum(");
                 break;
             case MIN:
-                this.sb.append("ArrMin( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrMin(");
                 break;
             case MAX:
-                this.sb.append("ArrMax( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrMax(");
                 break;
             case AVERAGE:
-                this.sb.append("ArrMean( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrMean(");
                 break;
             case MEDIAN:
-                this.sb.append("ArrMedian( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrMedian(");
                 break;
             case STD_DEV:
-                this.sb.append("ArrStandardDeviatioin( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrStandardDeviatioin(");
                 break;
             case RANDOM:
-                this.sb.append("ArrRand(");
+                this.sb.append("rob.arrRand(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MODE:
-                this.sb.append("ArrMode( ");
-                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("rob.arrMode(");
                 break;
             default:
                 break;
         }
-        this.sb.append(" )");
+        this.sb.append("sizeof(");
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append(")/sizeof(");
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append("[0])");
+        this.sb.append(", ");
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
         return null;
     }
 
