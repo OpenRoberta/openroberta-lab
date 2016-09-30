@@ -7,6 +7,7 @@ import java.util.List;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -707,6 +708,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitConnectConst(ConnectConst<BlocklyType> connectConst) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<BlocklyType> bluetoothCheckConnectAction) {
         // TODO Auto-generated method stub
         return null;
     }

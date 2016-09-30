@@ -85,7 +85,7 @@ public final class BlocklyConstants {
     public static final String ARG = "ARG";
     public static final String NUMBER = "NUMBER";
     public static final String CONNECTION = "CONNECTION";
-    public static final String CONNECTIONNXT = "robCommunication_connection";
+    public static final String CHANNEL = "CHANNEL";
     public static final String MESSAGE = "sendData";
     public static final String ADDRESS = "ADDRESS";
 
@@ -113,6 +113,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSOR_TIMER_GET_SAMPLE = "robSensors_timer_getSample";
     public static final String ROB_SENSOR_GET_SAMPLE = "robSensors_getSample";
     public static final String ROB_COLOUR_PICKER = "robColour_picker";
+    public static final String CONNECTION_NXT = "robCommunication_connection";
 
     public static final String ROB_GLOBAL_VARIABLES_DECLARE = "robGlobalvariables_declare";
     public static final String ROB_LOCAL_VARIABLES_DECLARE = "robLocalVariables_declare";
@@ -212,6 +213,7 @@ public final class BlocklyConstants {
     public static final String ROB_PROCEDURES_CALL_RETURN = "robProcedures_callreturn";
     public static final String ROB_PROCEDURES_RETURN = "robProcedures_defreturn";
 
+    public static final String COM_CHECK_CONNECTION = "robCommunication_checkConnection";
     public static final String COM_START_CONNECTION = "robCommunication_startConnection";
     public static final String COM_SEND_BLOCK = "robCommunication_sendBlock";
     public static final String COM_WAIT_CONNECTION = "robCommunication_waitForConnection";

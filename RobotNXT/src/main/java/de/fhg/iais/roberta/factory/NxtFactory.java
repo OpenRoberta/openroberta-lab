@@ -510,36 +510,37 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return nxtProperties.getProperty("robot.program.toolbox.beginner");
+        return this.nxtProperties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return nxtProperties.getProperty("robot.program.toolbox.expert");
+        return this.nxtProperties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return nxtProperties.getProperty("robot.program.default");
+        return this.nxtProperties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return nxtProperties.getProperty("robot.configuration.toolbox");
+        return this.nxtProperties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return nxtProperties.getProperty("robot.configuration.default");
+        return this.nxtProperties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return nxtProperties.getProperty("robot.real.name");
+        return this.nxtProperties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return nxtProperties.getProperty("robot.sim") != null ? true : false;
+        return this.nxtProperties.getProperty("robot.sim") != null ? true : false;
     }
+
 }

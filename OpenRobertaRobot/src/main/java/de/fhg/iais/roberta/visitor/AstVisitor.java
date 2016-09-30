@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -699,4 +700,7 @@ public interface AstVisitor<V> {
     public V visitCompassSensor(CompassSensor<V> compassSensor);
 
     public V visitConnectConst(ConnectConst<V> connectConst);
+
+    public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction);
+
 }

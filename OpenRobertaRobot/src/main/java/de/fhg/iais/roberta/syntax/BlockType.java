@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax;
 
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -28,6 +29,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
@@ -102,7 +104,7 @@ public enum BlockType {
     BOOL_CONST( Category.EXPR, BoolConst.class, BlocklyConstants.LOGICAL_BOOLEAN ),
     NUM_CONST( Category.EXPR, NumConst.class, BlocklyConstants.MATH_NUMBER ),
     MATH_CONST( Category.EXPR, MathConst.class, BlocklyConstants.MATH_CONSTANT ),
-    CONNECTION_CONST( Category.EXPR, MathConst.class, BlocklyConstants.CONNECTIONNXT ),
+    CONNECTION_CONST( Category.EXPR, ConnectConst.class, BlocklyConstants.CONNECTION_NXT ),
     EMPTY_LIST( Category.EXPR, EmptyList.class, BlocklyConstants.LISTS_CREATE_EMPTY ),
     VAR( Category.EXPR, Var.class, BlocklyConstants.VARIABLE_GET ),
     VAR_DECLARATION( Category.EXPR, VarDeclaration.class, BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE, BlocklyConstants.ROB_GLOBAL_VARIABLES_DECLARE ),
@@ -218,6 +220,7 @@ public enum BlockType {
     METHOD_VOID( Category.METHOD, MethodVoid.class, BlocklyConstants.ROB_PROCEDURES_NO_RETURN ),
     METHOD_CALL( Category.METHOD, MethodCall.class, BlocklyConstants.ROB_PROCEDURES_CALL_NO_RETURN, BlocklyConstants.ROB_PROCEDURES_CALL_RETURN ),
     METHOD_RETURN( Category.METHOD, MethodReturn.class, BlocklyConstants.ROB_PROCEDURES_RETURN ),
+    BLUETOOTH_CHECK_CONNECT_ACTION( Category.ACTOR, BluetoothCheckConnectAction.class, BlocklyConstants.COM_CHECK_CONNECTION ),
     BLUETOOTH_CONNECT_ACTION( Category.ACTOR, BluetoothConnectAction.class, BlocklyConstants.COM_START_CONNECTION ),
     BLUETOOTH_SEND_ACTION( Category.ACTOR, BluetoothSendAction.class, BlocklyConstants.COM_SEND_BLOCK ),
     BLUETOOTH_WAIT_FOR_CONNECTION_ACTION( Category.ACTOR, BluetoothWaitForConnectionAction.class, BlocklyConstants.COM_WAIT_CONNECTION ),

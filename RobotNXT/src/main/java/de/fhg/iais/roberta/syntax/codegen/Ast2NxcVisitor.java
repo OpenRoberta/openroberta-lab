@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -238,8 +239,6 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case COLOR:
                 return "int";
             case CONNECTION:
-                return "int";
-            case CONNECTIONNXT:
                 return "int";
             default:
                 throw new IllegalArgumentException("unhandled type");
@@ -467,7 +466,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
                 break;
             default:
-                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                this.sb.append("null");
                 break;
         }
         return null;
@@ -1442,65 +1441,63 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    // TODO: fix calling
-    // the function is in NEPODefs.h
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("BluetoothGetNumber(");
-        //TODO: add these block options:
-        //this.sb.append("BluetoothGetString(");
-        //this.sb.append("BluetoothGetBoolean(");
-        // the function accepts inbox address (int)
-        bluetoothReadAction.getConnection().visit(this);
+        String methodName;
+        switch ( bluetoothReadAction.getDataType() ) {
+            case "Boolean":
+                methodName = "BluetoothGetBoolean(";
+                break;
+            case "String":
+                methodName = "BluetoothGetString(";
+                break;
+            default:
+                methodName = "BluetoothGetNumber(";
+        }
+        this.sb.append(methodName);
+        this.sb.append(bluetoothReadAction.getChannel());
         this.sb.append(")");
         return null;
     }
 
-    // not needed for nxt. Use a block that calls BTCheck(int conn) function instead
+    @Override
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        this.sb.append("(BluetoothStatus(");
+        bluetoothCheckConnectAction.getConnection().visit(this);
+        this.sb.append(")==NO_ERR)");
+        return null;
+    }
+
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        this.sb.append("BTCheck(");
-
-        /*this.sb.append("hal.establishConnectionTo(");
-        if (bluetoothConnectAction.get_address().getKind() != BlockType.STRING_CONST ) {
-            this.sb.append("String.valueOf(");
-            bluetoothConnectAction.get_address().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothConnectAction.get_address().visit(this);
-        }*/
-        this.sb.append(")");
         return null;
     }
 
-    // the function is built-in
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("SendRemoteNumber(");
-        //bluetoothSendAction.getConnection().visit(this);
+        String methodName;
+
+        switch ( bluetoothSendAction.getDataType() ) {
+            case "Boolean":
+                methodName = "SendRemoteBool(";
+                break;
+            case "String":
+                methodName = "SendRemoteString(";
+                break;
+            default:
+                methodName = "SendRemoteNumber(";
+        }
+
+        this.sb.append(methodName);
+        bluetoothSendAction.getConnection().visit(this);
         this.sb.append(", ");
-        this.sb.append(bluetoothSendAction.getKind().toString());
+        this.sb.append(bluetoothSendAction.getChannel());
         this.sb.append(", ");
         bluetoothSendAction.getMsg().visit(this);
-
-        //TODO: add these block options: output variable (string, boolean or number. Need to create an enumeration), connection (int, 1-3 for master, always
-        // 0 for slave), outbox address (int)
-        //this.sb.append("SendRemoteString(");
-        //this.sb.append("SendRemoteBool(");
-        // the function accepts the following: inbox address
-
-        //if (bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
-        //    String.valueOf(bluetoothSendAction.getMsg().visit(this));
-        //} else {
-        //    bluetoothSendAction.getMsg().visit(this);
-        //}
-        //this.sb.append(", ");
-        //bluetoothSendAction.getConnection().visit(this);
         this.sb.append(");");
         return null;
     }
 
-    //TODO: add SysCommBTOn
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         return null;
@@ -1717,5 +1714,4 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
-
 }

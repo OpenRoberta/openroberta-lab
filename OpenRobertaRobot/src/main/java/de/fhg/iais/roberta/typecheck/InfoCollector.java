@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -656,6 +657,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitConnectConst(ConnectConst<T> connectConst) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<T> bluetoothCheckConnectAction) {
         // TODO Auto-generated method stub
         return null;
     }

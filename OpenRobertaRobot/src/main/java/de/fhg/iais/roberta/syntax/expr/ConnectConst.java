@@ -64,7 +64,7 @@ public class ConnectConst<V> extends Expr<V> {
 
     @Override
     public BlocklyType getVarType() {
-        return BlocklyType.CONNECTIONNXT;
+        return BlocklyType.CONNECTION;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ConnectConst<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
-        String field = helper.extractField(fields, BlocklyConstants.NUM);
+        String field = helper.extractField(fields, BlocklyConstants.CONNECTION);
         return NumConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -94,7 +94,7 @@ public class ConnectConst<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.NUM, getValue());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CONNECTION, getValue());
         return jaxbDestination;
     }
 }

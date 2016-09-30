@@ -30,7 +30,7 @@ public class BluetoothTest {
         String a =
             "BlockAST [project=[[Location [x=97, y=7], MainTask [\n"
                 + "exprStmt VarDeclaration [CONNECTION, variablenName2, ActionExpr [BluetoothConnectAction [StringConst []]], false, true]], "
-                + "BluetoothSendAction [Var [variablenName2], StringConst []]]]]";
+                + "BluetoothSendAction [Var [variablenName2], StringConst [], null]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BluetoothSend.xml"));
     }
@@ -40,7 +40,7 @@ public class BluetoothTest {
         String a =
             "BlockAST [project=[[Location [x=97, y=7], MainTask [\n"
                 + "exprStmt VarDeclaration [CONNECTION, variablenName2, ActionExpr [BluetoothWaitForConnectionAction []], false, true]], "
-                + "ShowTextAction [ActionExpr [BluetoothReceiveAction [connection=Var [variablenName2]]], NumConst [0], NumConst [0]]]]]";
+                + "ShowTextAction [ActionExpr [BluetoothReceiveAction [connection=Var [variablenName2], null, null]], NumConst [0], NumConst [0]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BluetoothReceive.xml"));
     }

@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MathConst.Const;
@@ -45,6 +44,6 @@ public class JavaVisitorTest {
         EmptyExpr<Void> emptyExpr = EmptyExpr.make(Double.class);
         Ast2Ev3JavaVisitor visitor = new Ast2Ev3JavaVisitor("Test", brickConfiguration, usedSensors, 0);
         emptyExpr.visit(visitor);
-        Assert.assertEquals("[[EmptyExpr [defVal=class java.lang.Double]]]", visitor.getSb().toString());
+        Assert.assertEquals("null", visitor.getSb().toString());
     }
 }

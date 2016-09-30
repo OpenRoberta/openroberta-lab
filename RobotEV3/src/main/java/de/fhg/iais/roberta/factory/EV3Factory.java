@@ -462,36 +462,37 @@ public class EV3Factory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return ev3Properties.getProperty("robot.program.toolbox.beginner");
+        return this.ev3Properties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return ev3Properties.getProperty("robot.program.toolbox.expert");
+        return this.ev3Properties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return ev3Properties.getProperty("robot.program.default");
+        return this.ev3Properties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return ev3Properties.getProperty("robot.configuration.toolbox");
+        return this.ev3Properties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return ev3Properties.getProperty("robot.configuration.default");
+        return this.ev3Properties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return ev3Properties.getProperty("robot.real.name");
+        return this.ev3Properties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return ev3Properties.getProperty("robot.sim") != null ? true : false;
+        return this.ev3Properties.getProperty("robot.sim") != null ? true : false;
     }
+
 }

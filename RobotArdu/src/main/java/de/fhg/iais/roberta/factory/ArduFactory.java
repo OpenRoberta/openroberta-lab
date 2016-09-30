@@ -520,4 +520,5 @@ public class ArduFactory extends AbstractRobotFactory {
     public Boolean hasSim() {
         return this.arduProperties.getProperty("robot.sim") != null ? true : false;
     }
+
 }
