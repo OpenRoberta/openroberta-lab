@@ -684,6 +684,15 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
                         break;
                 }
                 break;
+            case CAPTURED_TYPE:
+                if ( showTextAction.getMsg().toString().contains("Number") ) {
+                    methodName = "NumOut";
+                } else if ( showTextAction.getMsg().toString().contains("String") ) {
+                    methodName = "TextOut";
+                } else {
+                    methodName = "BoolOut";
+                }
+                break;
             default:
                 methodName = "NumOut";
                 break;
