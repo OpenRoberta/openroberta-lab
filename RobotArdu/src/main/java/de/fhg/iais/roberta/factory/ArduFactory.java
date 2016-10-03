@@ -418,7 +418,7 @@ public class ArduFactory extends AbstractRobotFactory {
     @Override
     public ISensorPort getSensorPort(String port) {
         if ( port == null || port.isEmpty() ) {
-            throw new DbcException("Invalid Ultrasonic Sensor Mode: " + port);
+            throw new DbcException("Invalid sensor port: " + port);
         }
         String sUpper = port.trim().toUpperCase(Locale.GERMAN);
         for ( SensorPort po : SensorPort.values() ) {
@@ -431,7 +431,7 @@ public class ArduFactory extends AbstractRobotFactory {
                 }
             }
         }
-        throw new DbcException("Invalid Ultrasonic Sensor Mode: " + port);
+        throw new DbcException("Invalid sensor port: " + port);
     }
 
     @Override

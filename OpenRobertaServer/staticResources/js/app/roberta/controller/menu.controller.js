@@ -472,7 +472,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $(document).on('keydown', function(e) {
             // You may replace `c` with whatever key you want
-            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'q')) {
+            if ((e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'q')) {
                 PROGRAM_C.showCode();
                 PROGRAM_C.showCode();
             }

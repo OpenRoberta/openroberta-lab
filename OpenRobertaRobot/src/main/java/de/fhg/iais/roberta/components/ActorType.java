@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum ActorType {
-    MEDIUM( "robBrick_motor_middle" ), LARGE( "robBrick_motor_big" ), REGULATED();
+    MEDIUM( "robBrick_motor_middle" ), LARGE( "robBrick_motor_big" ), REGULATED(), ARDU( "robBrick_motor_ardu" );
 
     private final String[] values;
 

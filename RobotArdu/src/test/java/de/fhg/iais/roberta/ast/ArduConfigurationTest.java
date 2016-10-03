@@ -2,14 +2,15 @@ package de.fhg.iais.roberta.ast;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
 import de.fhg.iais.roberta.transformer.ArduConfigurationParseTree2ArduConfigurationVisitor;
+import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
 
 public class ArduConfigurationTest {
     ArduFactory factory = new ArduFactory(null, 0);
@@ -19,6 +20,7 @@ public class ArduConfigurationTest {
         testRoundtrip("brick_configuration0");
     }
 
+    @Ignore
     @Test
     public void testText2Text() throws Exception {
         testText2Text("brick_configuration0", "craesy");
@@ -26,45 +28,19 @@ public class ArduConfigurationTest {
         testText2Text("standard_ev3_configuration", "EV3basis");
     }
 
+    @Ignore
     @Test
     public void test1() throws Exception {
         String a = //
-            "robotev3test{" //
+            "robotardutest{" //
                 + "size{wheeldiameter5.0cm;trackwidth17.0cm;}"
                 + "sensorport{3:infrared;}"
                 + "actorport{A:middlemotor,regulated,forward;}}";
 
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
+        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
         Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
         Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
-    }
-
-    @Test
-    public void test2() throws Exception {
-        String a =
-            "robotev3test{"
-                + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
-                + "sensorport{1:touch;4:ultrasonic;}"
-                + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
-
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
-        Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
-        Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
-    }
-
-    @Test
-    public void test3() throws Exception {
-        String a =
-            "robotev3test{"
-                + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
-                + "sensorport{1:touch;4:ultrasonic;}"
-                + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
-
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration3.xml");
-        Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
-        Configuration b = transformer.transform(project);
+        System.out.println(b.generateText("test"));
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 

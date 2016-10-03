@@ -15,7 +15,8 @@ public enum SensorType {
     INFRARED_LINE(),
     GYRO( "robBrick_gyro" ),
     SOUND( "robBrick_sound" ),
-    LIGHT( "robBrick_light" );
+    LIGHT( "robBrick_light" ),
+    COMPASS( "robBrick_compass" );
 
     private final String[] values;
 

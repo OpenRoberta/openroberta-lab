@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
-import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -87,13 +86,13 @@ public class ArduConfiguration extends Configuration {
     @Override
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
-        sb.append("robot ev3 ").append(name).append(" {\n");
-        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) {
-            sb.append("  size {\n");
-            sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
-            sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
-            sb.append("  }\n");
-        }
+        sb.append("robot ardu ").append(name).append(" {\n");
+        //        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) {
+        //            sb.append("  size {\n");
+        //                        sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
+        //                        sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
+        //            sb.append("  }\n");
+        //        }
         if ( this.sensors.size() > 0 ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
@@ -112,6 +111,8 @@ public class ArduConfiguration extends Configuration {
                     sb.append("large");
                 } else if ( actor.getName() == ActorType.MEDIUM ) {
                     sb.append("middle");
+                } else if ( actor.getName() == ActorType.ARDU ) {
+                    sb.append("ardu");
                 } else {
                     throw new RuntimeException("Key.E3");
                 }
