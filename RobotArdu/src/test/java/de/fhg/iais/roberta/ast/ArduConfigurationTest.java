@@ -28,14 +28,12 @@ public class ArduConfigurationTest {
         testText2Text("standard_ev3_configuration", "EV3basis");
     }
 
-    @Ignore
     @Test
     public void test1() throws Exception {
         String a = //
             "robotardutest{" //
-                + "size{wheeldiameter5.0cm;trackwidth17.0cm;}"
-                + "sensorport{3:infrared;}"
-                + "actorport{A:middlemotor,regulated,forward;}}";
+                + "sensorport{1:infrared;2:infrared;3:light;4:compass;5:ultrasonic;6:ultrasonic;7:ultrasonic;8:color;9:color;10:ultrasonic;}"
+                + "actorport{A:ardumotor,regulated,forward;B:ardumotor,regulated,forward,right;C:ardumotor,regulated,forward,left;D:ardumotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
         Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
