@@ -16,16 +16,15 @@ tmp='temp'
 work='/tmp/openroberta'
 
 # Directory contains files for updating the brick after successful maven install
-libdir='../../OpenRobertaServer/target/updateResources'
+libdir='../../RobotEV3/target/updateResources'
 
 #Open Roberta default version, can be modified by the first input parameter
 # for example "sh CreateImage.sh 1.4.0"
-version='1.3.2'
+version='2.0.0'
 
 menu=${libdir}/EV3Menu.jar
 json=${libdir}/json.jar
-runtime=${libdir}/OpenRobertaRuntime.jar
-shared=${libdir}/OpenRobertaShared.jar
+runtime=${libdir}/EV3Runtime.jar
 websocket=${libdir}/Java-WebSocket.jar
 lejosfile=lejos.tar.gz
 lejosimage=lejosimage.zip
@@ -44,7 +43,7 @@ fi
 # ---
 
 # Check if required files exist
-if [ -f ${menu} ] && [ -f ${json} ] &&[ -f ${runtime} ] && [ -f ${shared} ] && [ -f ${websocket} ]
+if [ -f ${menu} ] && [ -f ${json} ] &&[ -f ${runtime} ] && [ -f ${websocket} ]
 then
     echo "Compiled EV3 libraries found!"
     echo "Using files in ${libdir}"
@@ -99,6 +98,12 @@ tar -xjf lejosimage.bz2 lejosimage
 rm lejosimage.bz2
 # ---
 
+# Add the Embedded Java Runtime
+# cd - > /dev/null 2>&1
+# cp "../../../../ejre-7u60-fcs-b19-linux-arm-sflt-headless-07_may_2014.gz" ${tmp}
+# cd - > /dev/null 2>&1
+# ---
+
 # Insert/ replace files
 echo "Replace files..."
 rm ${work}/lejosimage/lejosfs/home/root/lejos/bin/utils/EV3Menu.jar
@@ -108,7 +113,6 @@ cd - > /dev/null 2>&1
 cp ${menu} ${work}/lejosimage/lejosfs/home/root/lejos/bin/utils
 cp ${json} ${work}/lejosimage/lejosfs/home/roberta/lib
 cp ${runtime} ${work}/lejosimage/lejosfs/home/roberta/lib
-cp ${shared} ${work}/lejosimage/lejosfs/home/roberta/lib
 cp ${websocket} ${work}/lejosimage/lejosfs/home/roberta/lib
 # ---
 
