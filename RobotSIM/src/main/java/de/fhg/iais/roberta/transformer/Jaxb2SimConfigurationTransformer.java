@@ -109,6 +109,7 @@ public class Jaxb2SimConfigurationTransformer {
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
+            case "robBrick_ardu-Brick":
                 List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<Pair<ISensorPort, Sensor>>();
                 List<Pair<IActorPort, Actor>> actors = new ArrayList<Pair<IActorPort, Actor>>();
                 List<Field> fields = extractFields(block, (short) 2);

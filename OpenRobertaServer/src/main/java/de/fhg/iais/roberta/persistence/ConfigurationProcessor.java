@@ -20,7 +20,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public Configuration getConfiguration(String configurationName, int userId, int robotId) {
+    public Configuration getConfiguration(String configurationName, int userId, String robotName) {
         if ( !Util1.isValidJavaIdentifier(configurationName) ) {
             setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return null;
@@ -28,7 +28,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             Configuration configuration = null;
             RobotDao robotDao = new RobotDao(this.dbSession);
-            Robot robot = robotDao.get(robotId);
+            Robot robot = robotDao.loadRobot(robotName);
             if ( this.httpSessionState.isUserLoggedIn() ) {
                 UserDao userDao = new UserDao(this.dbSession);
                 User owner = userDao.get(userId);
@@ -66,7 +66,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             User owner = userDao.get(ownerId);
-            Robot robot = robotDao.get(this.httpSessionState.getRobotId());
+            Robot robot = robotDao.loadRobot(this.httpSessionState.getRobotName());
             boolean success = configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist);
             if ( success ) {
                 setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
@@ -78,12 +78,12 @@ public class ConfigurationProcessor extends AbstractProcessor {
         }
     }
 
-    public JSONArray getConfigurationInfo(int ownerId, int robotId) {
+    public JSONArray getConfigurationInfo(int ownerId, String robotName) {
         UserDao userDao = new UserDao(this.dbSession);
         ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
         User owner = userDao.get(ownerId);
         RobotDao robotDao = new RobotDao(this.dbSession);
-        Robot robot = robotDao.get(robotId);
+        Robot robot = robotDao.loadRobot(robotName);
         List<Configuration> programs = configurationDao.loadAll(owner, robot);
         JSONArray configurationInfos = new JSONArray();
         for ( Configuration program : programs ) {
@@ -98,12 +98,12 @@ public class ConfigurationProcessor extends AbstractProcessor {
         return configurationInfos;
     }
 
-    public void deleteByName(String configurationName, int ownerId, int robotId) {
+    public void deleteByName(String configurationName, int ownerId, String robotName) {
         UserDao userDao = new UserDao(this.dbSession);
         ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
         User owner = userDao.get(ownerId);
         RobotDao robotDao = new RobotDao(this.dbSession);
-        Robot robot = robotDao.get(robotId);
+        Robot robot = robotDao.loadRobot(robotName);
         int rowCount = configurationDao.deleteByName(configurationName, owner, robot);
         if ( rowCount > 0 ) {
             setSuccess(Key.CONFIGURATION_DELETE_SUCCESS);

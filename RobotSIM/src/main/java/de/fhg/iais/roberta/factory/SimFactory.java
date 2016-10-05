@@ -42,11 +42,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class SimFactory extends AbstractRobotFactory {
     private final SimCompilerWorkflow compilerWorkflow;
-    private final int robotId;
 
-    public SimFactory(RobotCommunicator unusedForSim, Integer robotId) {
+    public SimFactory(RobotCommunicator unusedForSim) {
         this.compilerWorkflow = new SimCompilerWorkflow();
-        this.robotId = robotId;
     }
 
     @Override
@@ -403,11 +401,6 @@ public class SimFactory extends AbstractRobotFactory {
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
         return this.compilerWorkflow;
-    }
-
-    @Override
-    public int getRobotId() {
-        return this.robotId;
     }
 
     @Override

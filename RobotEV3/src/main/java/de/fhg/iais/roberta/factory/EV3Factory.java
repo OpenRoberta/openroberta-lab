@@ -43,10 +43,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class EV3Factory extends AbstractRobotFactory {
     private final Ev3CompilerWorkflow compilerWorkflow;
-    private final int robotId;
     private final Properties ev3Properties;
 
-    public EV3Factory(RobotCommunicator robotCommunicator, Integer robotId) {
+    public EV3Factory(RobotCommunicator robotCommunicator) {
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("ev3");
         this.ev3Properties = Util1.loadProperties("classpath:EV3.properties");
 
@@ -56,7 +55,6 @@ public class EV3Factory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
-        this.robotId = robotId;
     }
 
     @Override
@@ -417,11 +415,6 @@ public class EV3Factory extends AbstractRobotFactory {
     @Override
     public AbstractModule getGuiceModule() {
         return new Ev3GuiceModule(Util1.getRobertaProperties());
-    }
-
-    @Override
-    public int getRobotId() {
-        return this.robotId;
     }
 
     @Override

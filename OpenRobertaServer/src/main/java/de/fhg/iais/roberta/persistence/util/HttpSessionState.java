@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
@@ -30,6 +31,7 @@ public class HttpSessionState {
     public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
         this.robotCommunicator = robotCommunicator;
         this.robotPluginMap = robotPluginMap;
+        this.robotName = Util1.getRobertaProperty("robot.type.default");
     }
 
     public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
@@ -135,22 +137,5 @@ public class HttpSessionState {
 
     public IRobotFactory getRobotFactory(String robotName) {
         return robotPluginMap.get(robotName);
-    }
-
-    /**
-     * temporary fix until DB is updated
-     *
-     * @return the temporary robot id
-     */
-    public int getRobotId() {
-        if ( robotPluginMap == null ) {
-            return 42;
-        }
-        IRobotFactory robotFactory = robotPluginMap.get(this.robotName);
-        if ( robotFactory == null ) {
-            LOG.error("robot factory for robot \"" + this.robotName + "\" not found. Fallback is \"ev3\"");
-            robotFactory = robotPluginMap.get("ev3");
-        }
-        return robotFactory.getRobotId();
     }
 }

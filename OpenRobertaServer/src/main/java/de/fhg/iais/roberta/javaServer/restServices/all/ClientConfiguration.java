@@ -76,7 +76,7 @@ public class ClientConfiguration {
                         userId = user.getId();
                     }
                 }
-                Configuration configuration = cp.getConfiguration(configurationName, userId, httpSessionState.getRobotId());
+                Configuration configuration = cp.getConfiguration(configurationName, userId, httpSessionState.getRobotName());
                 if ( configuration != null ) {
                     response.put("data", configuration.getConfigurationText());
                 }
@@ -84,11 +84,11 @@ public class ClientConfiguration {
 
             } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {
                 String configurationName = request.getString("name");
-                cp.deleteByName(configurationName, userId, httpSessionState.getRobotId());
+                cp.deleteByName(configurationName, userId, httpSessionState.getRobotName());
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray configurationInfo = cp.getConfigurationInfo(userId, httpSessionState.getRobotId());
+                JSONArray configurationInfo = cp.getConfigurationInfo(userId, httpSessionState.getRobotName());
                 response.put("configurationNames", configurationInfo);
                 Util.addResultInfo(response, cp);
 

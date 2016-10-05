@@ -13,7 +13,7 @@ public class ExceptionTest {
     @Test
     public void valueException() throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet("/ast/exceptions/value_exception.xml");
-        EV3Factory robotModeFactory = new EV3Factory(null, 0);
+        EV3Factory robotModeFactory = new EV3Factory(null);
         Jaxb2BlocklyProgramTransformer<?> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         try {
             transformer.transform(project);

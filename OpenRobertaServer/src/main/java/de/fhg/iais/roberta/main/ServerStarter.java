@@ -31,10 +31,14 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
+import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -78,6 +82,7 @@ public class ServerStarter {
         ServerStarter serverStarter = new ServerStarter(properties);
         Server server = serverStarter.start(ip != null ? ip : "0.0.0.0", port != null ? port : 1999);
         ServerStarter.LOG.info("*** server started using URI: " + server.getURI() + " ***");
+        serverStarter.checkRobotPluginsDB();
         serverStarter.logTheNumberOfStoredPrograms();
         server.join();
         System.exit(0);
@@ -203,16 +208,15 @@ public class ServerStarter {
         }
         for ( String pluginNumber : pluginNumbers ) {
             String pluginName = this.properties.getProperty("robot.plugin." + pluginNumber + ".name");
-            String pluginId = this.properties.getProperty("robot.plugin." + pluginNumber + ".id");
             String pluginFactory = this.properties.getProperty("robot.plugin." + pluginNumber + ".factory");
-            if ( pluginName == null || pluginId == null || pluginFactory == null ) {
+            if ( pluginName == null || pluginFactory == null ) {
                 LOG.error("the robot plugin with number " + pluginNumber + " is invalid and thus ignored. Check openRoberta.properties");
             } else {
                 try {
                     @SuppressWarnings("unchecked")
                     Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class, Integer.class);
-                    robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator, Integer.parseInt(pluginId)));
+                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
+                    robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator));
                 } catch ( Exception e ) {
                     LOG.error(
                         "the robot plugin " + pluginName + " has no valid factory is thus ignored. Check openRoberta.properties and the factory class",
@@ -258,6 +262,41 @@ public class ServerStarter {
         @Override
         public void configure(WebSocketServletFactory factory) {
             factory.register(Ev3SensorLoggingWS.class);
+        }
+    }
+
+    /**
+     * @deprecated
+     *             This method shouldn't be called anymore when the robot type is no longer stored in the database.
+     */
+    @Deprecated
+    private void checkRobotPluginsDB() {
+
+        Set<String> pluginNumbers = new HashSet<>();
+        Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
+        for ( String key : this.properties.stringPropertyNames() ) {
+            Matcher keyMatcher = pluginPattern.matcher(key);
+            if ( keyMatcher.matches() ) {
+                pluginNumbers.add(keyMatcher.group(1));
+            }
+        }
+        try {
+            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
+            RobotDao robotDao = new RobotDao(session);
+            for ( String pluginNumber : pluginNumbers ) {
+                String pluginName = this.properties.getProperty("robot.plugin." + pluginNumber + ".name");
+                Robot pluginRobot = robotDao.loadRobot(pluginName);
+                if ( pluginRobot == null ) {
+                    // add missing robot type to database
+                    Pair<Key, Robot> result = robotDao.persistRobot(pluginName);
+                    session.save(result.getSecond());
+                    ServerStarter.LOG.info(result.getSecond().getName() + " added to the database");
+                }
+            }
+            session.close();
+        } catch ( Exception e ) {
+            ServerStarter.LOG.error("Server was started, but could not connect to the database", e);
+            System.exit(20);
         }
     }
 }

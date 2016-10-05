@@ -35,7 +35,7 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param robotId the robot the program was written for
      * @return the program; null, if no program was found
      */
-    public Program getProgram(String programName, int ownerId, int robotId) {
+    public Program getProgram(String programName, int ownerId, String robotName) {
         if ( !Util1.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
@@ -44,7 +44,7 @@ public class ProgramProcessor extends AbstractProcessor {
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User owner = userDao.get(ownerId);
-            Robot robot = robotDao.get(robotId);
+            Robot robot = robotDao.loadRobot(robotName);
             Program program = programDao.load(programName, owner, robot);
             if ( program != null ) {
                 setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
@@ -70,13 +70,13 @@ public class ProgramProcessor extends AbstractProcessor {
      *
      * @param ownerId the owner of the program
      */
-    public JSONArray getProgramInfo(int ownerId, int robotId) {
+    public JSONArray getProgramInfo(int ownerId, String robotName) {
         UserDao userDao = new UserDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(ownerId);
-        Robot robot = robotDao.get(robotId);
+        Robot robot = robotDao.loadRobot(robotName);
         // First we obtain all programs owned by the user
         List<Program> programs = programDao.loadAll(owner, robot);
 
@@ -133,13 +133,13 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programName the name of the program
      * @param ownerId the owner of the program
      */
-    public JSONArray getProgramRelations(String programName, int ownerId, int robotId) {
+    public JSONArray getProgramRelations(String programName, int ownerId, String robotName) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(ownerId);
-        Robot robot = robotDao.get(robotId);
+        Robot robot = robotDao.loadRobot(robotName);
         JSONArray relations = new JSONArray();
         Program program = programDao.load(programName, owner, robot);
         //If shared find with whom and under which rights
@@ -186,7 +186,7 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      */
-    public Program persistProgramText(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean isOwner) {
+    public Program persistProgramText(String programName, int userId, String robotName, String programText, Timestamp programTimestamp, boolean isOwner) {
         if ( !Util1.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
@@ -196,7 +196,7 @@ public class ProgramProcessor extends AbstractProcessor {
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User user = userDao.get(userId);
-            Robot robot = robotDao.get(robotId);
+            Robot robot = robotDao.loadRobot(robotName);
             Pair<Key, Program> result;
             if ( isOwner ) {
                 result = programDao.persistOwnProgram(programName, user, robot, programText, programTimestamp);
@@ -222,12 +222,12 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programName the name of the program
      * @param ownerId the owner of the program
      */
-    public void deleteByName(String programName, int ownerId, int robotId) {
+    public void deleteByName(String programName, int ownerId, String robotName) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         User owner = userDao.get(ownerId);
-        Robot robot = robotDao.get(robotId);
+        Robot robot = robotDao.loadRobot(robotName);
         int rowCount = programDao.deleteByName(programName, owner, robot);
         if ( rowCount > 0 ) {
             setSuccess(Key.PROGRAM_DELETE_SUCCESS);

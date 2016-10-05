@@ -67,7 +67,7 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        SimFactory robotModeFactory = new SimFactory(null, 0);
+        SimFactory robotModeFactory = new SimFactory(null);
         Jaxb2SimConfigurationTransformer transformer = new Jaxb2SimConfigurationTransformer(robotModeFactory);
         return transformer.transform(project);
     }
@@ -81,7 +81,7 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        SimFactory robotModeFactory = new SimFactory(null, 0);
+        SimFactory robotModeFactory = new SimFactory(null);
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
@@ -96,7 +96,7 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        SimFactory robotModeFactory = new SimFactory(null, 0);
+        SimFactory robotModeFactory = new SimFactory(null);
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
@@ -122,7 +122,7 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        SimFactory robotModeFactory = new SimFactory(null, 0);
+        SimFactory robotModeFactory = new SimFactory(null);
         Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();

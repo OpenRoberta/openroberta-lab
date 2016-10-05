@@ -13,14 +13,14 @@ import de.fhg.iais.roberta.transformer.ArduConfigurationParseTree2ArduConfigurat
 import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
 
 public class ArduConfigurationTest {
-    ArduFactory factory = new ArduFactory(null, 0);
+    ArduFactory factory = new ArduFactory(null);
 
     @Test
     public void testRoundtrip() throws Exception {
         testRoundtrip("brick_configuration0");
     }
 
-    @Ignore
+    @Ignore // currently there is only one fixed configuration allowed
     @Test
     public void testText2Text() throws Exception {
         testText2Text("brick_configuration0", "craesy");

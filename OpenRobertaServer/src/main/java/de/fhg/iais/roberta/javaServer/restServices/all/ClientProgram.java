@@ -39,9 +39,7 @@ import de.fhg.iais.roberta.persistence.DummyProcessor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
-import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -81,8 +79,7 @@ public class ClientProgram {
         AliveData.rememberClientCall();
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
-        final String robotName = httpSessionState.getRobotName();
-        final int robotId = httpSessionState.getRobotId();
+        final String robot = httpSessionState.getRobotName();
 
         JSONObject response = new JSONObject();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
@@ -104,9 +101,9 @@ public class ClientProgram {
                     Long timestamp = request.getLong("timestamp");
                     Timestamp programTimestamp = new Timestamp(timestamp);
                     boolean isShared = request.optBoolean("shared", false);
-                    program = pp.persistProgramText(programName, userId, robotId, programText, programTimestamp, !isShared);
+                    program = pp.persistProgramText(programName, userId, robot, programText, programTimestamp, !isShared);
                 } else {
-                    program = pp.persistProgramText(programName, userId, robotId, programText, null, true);
+                    program = pp.persistProgramText(programName, userId, robot, programText, null, true);
                 }
                 if ( pp.isOk() ) {
                     if ( program != null ) {
@@ -145,7 +142,7 @@ public class ClientProgram {
                 String ownerName = request.getString("owner");
                 User owner = up.getUser(ownerName);
                 int ownerID = owner.getId();
-                Program program = pp.getProgram(programName, ownerID, robotId);
+                Program program = pp.getProgram(programName, ownerID, robot);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
                     response.put("lastChanged", program.getLastChanged().getTime());
@@ -176,57 +173,41 @@ public class ClientProgram {
                 } else {
                     Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
                 }
-            } else if ( cmd.equals("checkP") ) {
-                //TODO: this will not be supported in the feature
-                //                Key messageKey = null;
-                //                String programText = request.optString("programText");
-                //                String configurationText = request.optString("configurationText");
-                //                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-                //                messageKey = data.getErrorMessage();
-                //                messageKey = programConfigurationCompatibilityCheck(response, data, "");
-                //                if ( messageKey == null ) {
-                //                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
-                //                } else {
-                //                    Util.addErrorInfo(response, messageKey);
-                //                }
-
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("programName");
                 String userToShareName = request.getString("userToShare");
                 String right = request.getString("right");
-                upp.shareToUser(userId, robotId, programName, userToShareName, right);
+                upp.shareToUser(userId, robot, programName, userToShareName, right);
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("shareDelete") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("programName");
                 String owner = request.getString("owner");
-                upp.shareDelete(owner, robotId, programName, userId);
+                upp.shareDelete(owner, robot, programName, userId);
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("deleteP") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
-                pp.deleteByName(programName, userId, robotId);
+                pp.deleteByName(programName, userId, robot);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadPN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray programInfo = pp.getProgramInfo(userId, robotId);
+                JSONArray programInfo = pp.getProgramInfo(userId, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadEN") ) {
-                JSONArray programInfo = pp.getProgramInfo(1, robotId);
+                JSONArray programInfo = pp.getProgramInfo(1, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
-                JSONArray relations = pp.getProgramRelations(programName, userId, robotId);
+                JSONArray relations = pp.getProgramRelations(programName, userId, robot);
                 response.put("relations", relations);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("runP") ) {
                 Key messageKey = null;
-                RobotDao robotDao = new RobotDao(dbSession);
-                Robot robot = robotDao.get(robotId);
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");

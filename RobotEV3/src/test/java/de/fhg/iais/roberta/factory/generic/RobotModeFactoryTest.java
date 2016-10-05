@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import junit.framework.Assert;
 
 public class RobotModeFactoryTest {
-    EV3Factory factory = new EV3Factory(null, 0);
+    EV3Factory factory = new EV3Factory(null);
 
     @Test
     public void getIndexLocationFromString() {

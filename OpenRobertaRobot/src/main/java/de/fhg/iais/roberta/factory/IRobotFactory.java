@@ -313,13 +313,6 @@ public interface IRobotFactory {
      */
     AbstractModule getGuiceModule();
 
-    /**
-     * Get the robot id for this robot. <b>this is a temporaray fix as long as the robot&configuration objects are not removed from the database</b>
-     *
-     * @return
-     */
-    int getRobotId();
-
     String getProgramToolboxBeginner();
 
     String getProgramToolboxExpert();

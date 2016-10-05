@@ -16,7 +16,7 @@ public class ToolboxProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public Toolbox getToolbox(String toolboxName, int userId, int robotId) {
+    public Toolbox getToolbox(String toolboxName, int userId, String robotName) {
         if ( !Util1.isValidJavaIdentifier(toolboxName) ) {
             setError(Key.TOOLBOX_ERROR_ID_INVALID, toolboxName);
             return null;
@@ -29,7 +29,7 @@ public class ToolboxProcessor extends AbstractProcessor {
                 owner = userDao.get(userId);
             }
             RobotDao robotDao = new RobotDao(this.dbSession);
-            Robot robot = robotDao.get(robotId);
+            Robot robot = robotDao.loadRobot(robotName);
             toolbox = toolboxDao.load(toolboxName, owner, robot);
             if ( toolbox == null ) {
                 setError(Key.TOOLBOX_GET_ONE_ERROR_NOT_FOUND);

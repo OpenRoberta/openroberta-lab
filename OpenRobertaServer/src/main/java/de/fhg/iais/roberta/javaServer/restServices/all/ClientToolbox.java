@@ -63,7 +63,7 @@ public class ClientToolbox {
                         userId = user.getId();
                     }
                 }
-                Toolbox toolbox = tp.getToolbox(toolboxName, userId, httpSessionState.getRobotId());
+                Toolbox toolbox = tp.getToolbox(toolboxName, userId, httpSessionState.getRobotName());
                 if ( toolbox != null ) {
                     response.put("data", toolbox.getToolboxText());
                 }

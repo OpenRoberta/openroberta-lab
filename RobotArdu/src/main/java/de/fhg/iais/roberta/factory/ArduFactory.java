@@ -46,10 +46,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class ArduFactory extends AbstractRobotFactory {
 
     private ArduCompilerWorkflow compilerWorkflow;
-    private final int robotId;
     private final Properties arduProperties;
 
-    public ArduFactory(RobotCommunicator unusedForArdu, Integer robotId) {
+    public ArduFactory(RobotCommunicator unusedForArdu) {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
@@ -60,7 +59,6 @@ public class ArduFactory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.robotId = robotId;
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
     }
 
@@ -446,11 +444,6 @@ public class ArduFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public int getRobotId() {
-        return this.robotId;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -520,5 +513,4 @@ public class ArduFactory extends AbstractRobotFactory {
     public Boolean hasSim() {
         return this.arduProperties.getProperty("robot.sim") != null ? true : false;
     }
-
 }

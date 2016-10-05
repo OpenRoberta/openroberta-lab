@@ -39,7 +39,6 @@ public class Robot implements WithSurrogateId {
      * create a new Robot
      *
      * @param name the name of the Robot, not null
-     * @param owner the user who created and thus owns the program
      */
     public Robot(String name) {
         this.name = name;

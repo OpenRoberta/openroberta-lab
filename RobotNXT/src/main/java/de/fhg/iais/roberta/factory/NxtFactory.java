@@ -46,17 +46,15 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class NxtFactory extends AbstractRobotFactory {
 
     private NxtCompilerWorkflow compilerWorkflow;
-    private final int robotId;
     private final Properties nxtProperties;
 
-    public NxtFactory(RobotCommunicator unusedForNxt, Integer robotId) {
+    public NxtFactory(RobotCommunicator unusedForNxt) {
 
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("nxt");
         this.compilerWorkflow =
             new NxtCompilerWorkflow(
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
-        this.robotId = robotId;
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
     }
 
@@ -439,11 +437,6 @@ public class NxtFactory extends AbstractRobotFactory {
     @Override
     public ICompilerWorkflow getCompilerWorkflow() {
         return this.compilerWorkflow;
-    }
-
-    @Override
-    public int getRobotId() {
-        return this.robotId;
     }
 
     @Override
