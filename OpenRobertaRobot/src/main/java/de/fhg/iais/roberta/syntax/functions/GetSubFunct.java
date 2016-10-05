@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -34,7 +34,7 @@ public class GetSubFunct<V> extends Function<V> {
     private final List<IMode> strParam;
 
     private GetSubFunct(FunctionNames name, List<IMode> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.GET_SUB_FUNCT, properties, comment);
+        super(BlockTypeContainer.getByName("GET_SUB_FUNCT"),properties, comment);
         Assert.isTrue(name != null && param != null && strParam != null);
         this.functName = name;
         this.param = param;

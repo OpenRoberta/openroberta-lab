@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -27,7 +27,7 @@ public class StartActivityTask<V> extends Expr<V> {
     private final Expr<V> activityName;
 
     private StartActivityTask(Expr<V> activityName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.START_ACTIVITY_TASK, properties, comment);
+        super(BlockTypeContainer.getByName("START_ACTIVITY_TASK"),properties, comment);
         this.activityName = activityName;
         setReadOnly();
     }

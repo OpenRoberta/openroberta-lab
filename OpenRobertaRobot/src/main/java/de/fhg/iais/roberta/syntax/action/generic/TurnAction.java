@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -33,7 +33,7 @@ public class TurnAction<V> extends Action<V> {
     private final MotionParam<V> param;
 
     private TurnAction(ITurnDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.TURN_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("TURN_ACTION"),properties, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;

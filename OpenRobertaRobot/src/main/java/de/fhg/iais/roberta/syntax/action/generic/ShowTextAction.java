@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -31,7 +31,7 @@ public class ShowTextAction<V> extends Action<V> {
     private final Expr<V> y;
 
     private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.SHOW_TEXT_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"),properties, comment);
         Assert.isTrue(msg != null && column != null && row != null);
         this.msg = msg;
         this.x = column;

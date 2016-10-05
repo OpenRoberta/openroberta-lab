@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -30,7 +30,7 @@ public class Unary<V> extends Expr<V> {
     private final Expr<V> expr;
 
     private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.UNARY, properties, comment);
+        super(BlockTypeContainer.getByName("UNARY"),properties, comment);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;

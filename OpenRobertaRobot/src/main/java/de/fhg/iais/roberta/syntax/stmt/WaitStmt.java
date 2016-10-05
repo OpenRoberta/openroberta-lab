@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -32,7 +32,7 @@ public class WaitStmt<V> extends Stmt<V> {
     private final StmtList<V> statements;
 
     private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.WAIT_STMT, properties, comment);
+        super(BlockTypeContainer.getByName("WAIT_STMT"),properties, comment);
         Assert.isTrue(statements != null && statements.isReadOnly());
         this.statements = statements;
         setReadOnly();

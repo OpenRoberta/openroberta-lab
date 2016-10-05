@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class NullConst<V> extends Expr<V> {
 
     private NullConst(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.NULL_CONST, properties, comment);
+        super(BlockTypeContainer.getByName("NULL_CONST"),properties, comment);
         setReadOnly();
     }
 

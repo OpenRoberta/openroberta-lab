@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -29,7 +29,7 @@ public class ColorConst<V> extends Expr<V> {
     private final IPickColor value;
 
     private ColorConst(IPickColor color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.COLOR_CONST, properties, comment);
+        super(BlockTypeContainer.getByName("COLOR_CONST"),properties, comment);
         Assert.isTrue(color != null);
         this.value = color;
         setReadOnly();

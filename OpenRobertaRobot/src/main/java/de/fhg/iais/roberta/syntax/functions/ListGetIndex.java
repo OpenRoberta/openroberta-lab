@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -38,7 +38,7 @@ public class ListGetIndex<V> extends Function<V> {
     private final List<Expr<V>> param;
 
     private ListGetIndex(IListElementOperations mode, IIndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LIST_INDEX_OF, properties, comment);
+        super(BlockTypeContainer.getByName("LIST_INDEX_OF"),properties, comment);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
         this.location = name;

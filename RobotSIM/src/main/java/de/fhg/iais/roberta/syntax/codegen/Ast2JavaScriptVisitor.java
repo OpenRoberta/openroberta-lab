@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.sim.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.sim.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -138,7 +137,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append("createConstant(CONST." + numConst.getKind() + ", " + numConst.getValue() + ")");
+        this.sb.append("createConstant(CONST." + numConst.getKind().getName() + ", " + numConst.getValue() + ")");
         return null;
     }
 
@@ -150,25 +149,25 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append("createConstant(CONST." + boolConst.getKind() + ", " + boolConst.isValue() + ")");
+        this.sb.append("createConstant(CONST." + boolConst.getKind().getName() + ", " + boolConst.isValue() + ")");
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("createConstant(CONST." + stringConst.getKind() + ", '" + stringConst.getValue() + "')");
+        this.sb.append("createConstant(CONST." + stringConst.getKind().getName() + ", '" + stringConst.getValue() + "')");
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("createConstant(CONST." + nullConst.getKind() + ", undefined)");
+        this.sb.append("createConstant(CONST." + nullConst.getKind().getName() + ", undefined)");
         return null;
     }
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("createConstant(CONST." + colorConst.getKind() + ", CONST.COLOR_ENUM." + colorConst.getValue() + ")");
+        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getValue() + ")");
         return null;
     }
 
@@ -191,7 +190,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append("createVarDeclaration(CONST." + var.getTypeVar() + ", \"" + var.getName() + "\", ");
-        if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+        if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
             ExprList<Void> list = (ExprList<Void>) var.getValue();
             if ( list.get().size() == 2 ) {
                 list.get().get(1).visit(this);
@@ -300,7 +299,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitExprList(ExprList<Void> exprList) {
         boolean first = true;
         for ( Expr<Void> expr : exprList.get() ) {
-            if ( expr.getKind() != BlockType.EMPTY_EXPR ) {
+            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
                 if ( first ) {
                     first = false;
                 } else {

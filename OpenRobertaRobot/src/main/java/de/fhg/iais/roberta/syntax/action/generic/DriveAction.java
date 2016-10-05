@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -36,7 +36,7 @@ public class DriveAction<V> extends Action<V> {
     private final MotionParam<V> param;
 
     private DriveAction(IDriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.DRIVE_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("DRIVE_ACTION"),properties, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;

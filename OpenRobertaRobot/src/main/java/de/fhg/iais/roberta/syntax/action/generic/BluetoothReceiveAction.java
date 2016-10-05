@@ -7,7 +7,7 @@ import org.apache.commons.lang3.ObjectUtils.Null;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -30,7 +30,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         String dataType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockType.BLUETOOTH_RECEIVED_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"),properties, comment);
         this.connection = bluetoothRecieveConnection;
         this.channel = channel;
         this.dataType = dataType;
@@ -38,7 +38,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
     }
 
     private BluetoothReceiveAction(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.BLUETOOTH_RECEIVED_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("BLUETOOTH_RECEIVED_ACTION"),properties, comment);
         this.connection = bluetoothRecieveConnection;
         setReadOnly();
     }

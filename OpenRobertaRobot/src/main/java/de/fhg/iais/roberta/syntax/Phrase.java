@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -12,8 +13,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 /**
  * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
  * that is in this class. An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
- * {@link #setReadOnly()} is called.
- * This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>
+ * {@link #setReadOnly()} is called. This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>
  * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
  * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
  * <br>
@@ -100,8 +100,8 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * visit this phrase. Inside this method is a LOG statement, usually commented out. If it is commented in, it will generate a nice trace of the phrases
-     * of the AST when they are visited.
+     * visit this phrase. Inside this method is a LOG statement, usually commented out. If it is commented in, it will generate a nice trace of the phrases of
+     * the AST when they are visited.
      *
      * @param visitor to be used
      */

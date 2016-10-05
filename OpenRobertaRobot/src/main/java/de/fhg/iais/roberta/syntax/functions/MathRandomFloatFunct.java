@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.functions;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class MathRandomFloatFunct<V> extends Function<V> {
     private MathRandomFloatFunct(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.MATH_RANDOM_FLOAT_FUNCT, properties, comment);
+        super(BlockTypeContainer.getByName("MATH_RANDOM_FLOAT_FUNCT"),properties, comment);
         setReadOnly();
     }
 

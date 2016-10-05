@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Statement;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -28,7 +28,7 @@ public class MethodVoid<V> extends Method<V> {
     private final StmtList<V> body;
 
     private MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.METHOD_VOID, properties, comment);
+        super(BlockTypeContainer.getByName("METHOD_VOID"),properties, comment);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;

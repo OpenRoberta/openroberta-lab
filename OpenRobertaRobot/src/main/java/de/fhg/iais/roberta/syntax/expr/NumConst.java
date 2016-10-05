@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -25,7 +25,7 @@ public class NumConst<V> extends Expr<V> {
     private final String value;
 
     private NumConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.NUM_CONST, properties, comment);
+        super(BlockTypeContainer.getByName("NUM_CONST"),properties, comment);
         Assert.isTrue(!value.equals(""));
         this.value = value;
         setReadOnly();

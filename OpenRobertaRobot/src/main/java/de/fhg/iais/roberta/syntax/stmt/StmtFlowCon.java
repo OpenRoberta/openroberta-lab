@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -26,7 +26,7 @@ public class StmtFlowCon<V> extends Stmt<V> {
     private final Flow flow;
 
     private StmtFlowCon(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.STMT_FLOW_CONTROL, properties, comment);
+        super(BlockTypeContainer.getByName("STMT_FLOW_CONTROL"),properties, comment);
         Assert.isTrue(flow != null);
         this.flow = flow;
         setReadOnly();

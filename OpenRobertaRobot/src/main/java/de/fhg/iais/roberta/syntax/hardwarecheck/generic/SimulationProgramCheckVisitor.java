@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.generic;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -68,34 +68,34 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
     protected void checkSensorPort(BaseSensor<Void> sensor) {
         Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
-            if ( sensor.getKind() == BlockType.INFRARED_SENSING ) {
+            if ( sensor.getKind().hasName("INFRARED_SENSING") ) {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
             } else {
                 sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_SENSOR_MISSING"));
             }
         } else {
-            switch ( sensor.getKind() ) {
-                case COLOR_SENSING:
+            switch ( sensor.getKind().getName() ) {
+                case "COLOR_SENSING":
                     if ( usedSensor.getType() != SensorType.COLOR ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
-                case TOUCH_SENSING:
+                case "TOUCH_SENSING":
                     if ( usedSensor.getType() != SensorType.TOUCH ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
-                case ULTRASONIC_SENSING:
+                case "ULTRASONIC_SENSING":
                     if ( usedSensor.getType() != SensorType.ULTRASONIC ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
-                case INFRARED_SENSING:
+                case "INFRARED_SENSING":
                     if ( usedSensor.getType() != SensorType.INFRARED ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT"));
                     }
                     break;
-                case GYRO_SENSING:
+                case "GYRO_SENSING":
                     if ( usedSensor.getType() != SensorType.GYRO ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }

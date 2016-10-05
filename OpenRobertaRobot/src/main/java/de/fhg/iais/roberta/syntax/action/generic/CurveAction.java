@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -42,7 +42,7 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> paramRight,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockType.CURVE_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("CURVE_ACTION"),properties, comment);
         Assert.isTrue(direction != null && paramLeft != null && paramRight != null);
         this.direction = direction;
         this.paramLeft = paramLeft;

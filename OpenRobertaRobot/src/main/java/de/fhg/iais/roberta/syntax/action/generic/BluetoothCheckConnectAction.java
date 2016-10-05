@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -21,7 +21,7 @@ public class BluetoothCheckConnectAction<V> extends Action<V> {
     private final Expr<V> _connection;
 
     private BluetoothCheckConnectAction(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.BLUETOOTH_CHECK_CONNECT_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("BLUETOOTH_CHECK_CONNECT_ACTION"),properties, comment);
         Assert.isTrue(_connection.isReadOnly() && _connection != null);
         this._connection = _connection;
         setReadOnly();

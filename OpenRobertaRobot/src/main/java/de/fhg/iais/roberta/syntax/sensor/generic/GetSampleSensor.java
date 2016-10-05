@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -38,7 +38,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
     private final GetSampleType sensorType;
 
     private GetSampleSensor(GetSampleType sensorType, String port, BlocklyBlockProperties properties, BlocklyComment comment, IRobotFactory factory) {
-        super(BlockType.SENSOR_GET_SAMPLE, properties, comment);
+        super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"),properties, comment);
         Assert.isTrue(sensorType != null && port != "");
         this.sensorPort = port;
         this.sensorType = sensorType;

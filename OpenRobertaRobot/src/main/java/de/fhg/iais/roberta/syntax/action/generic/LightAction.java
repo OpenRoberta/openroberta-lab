@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -32,7 +32,7 @@ public class LightAction<V> extends Action<V> {
     private static List<Field> fields;
 
     private LightAction(IBrickLedColor color, IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LIGHT_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("LIGHT_ACTION"),properties, comment);
         Assert.isTrue(color != null && blinkMode != null);
         this.color = color;
         this.blinkMode = blinkMode;
@@ -40,7 +40,7 @@ public class LightAction<V> extends Action<V> {
     }
 
     private LightAction(IBlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LIGHT_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("LIGHT_ACTION"),properties, comment);
         Assert.isTrue(blinkMode != null);
         this.color = null;
         this.blinkMode = blinkMode;

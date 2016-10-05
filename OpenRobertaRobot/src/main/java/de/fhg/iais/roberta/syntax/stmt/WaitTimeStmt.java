@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -25,7 +25,7 @@ public class WaitTimeStmt<V> extends Stmt<V> {
     private final Expr<V> time;
 
     private WaitTimeStmt(Expr<V> time, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.WAIT_TIME, properties, comment);
+        super(BlockTypeContainer.getByName("WAIT_TIME"),properties, comment);
         Assert.isTrue(time != null && time.isReadOnly());
         this.time = time;
         setReadOnly();

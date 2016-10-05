@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -18,7 +18,7 @@ public class StmtList<V> extends Stmt<V> {
     private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
     private StmtList() {
-        super(BlockType.STMT_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        super(BlockTypeContainer.getByName("STMT_LIST"),BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
     }
 
     /**

@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
@@ -63,7 +63,7 @@ public final class JaxbTransformerHelper {
      */
     public static void addStatement(Block block, String name, Phrase<?> value) {
         Assert.isTrue(block != null && value != null && !name.equals(""));
-        Assert.isTrue(value.getKind() == BlockType.STMT_LIST, "Phrase is not STMT_LIST");
+        Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
         if ( ((StmtList<?>) value).get().size() != 0 ) {
             Statement statement = new Statement();
             statement.setName(name);
@@ -84,7 +84,7 @@ public final class JaxbTransformerHelper {
      */
     public static void addStatement(Block block, String name, ExprList<?> exprList) {
         Assert.isTrue(block != null && exprList != null && !name.equals(""));
-        Assert.isTrue(exprList.getKind() == BlockType.EXPR_LIST, "Phrase is not EXPR_LIST");
+        Assert.isTrue(exprList.getKind().hasName("EXPR_LIST"), "Phrase is not EXPR_LIST");
         if ( exprList.get().size() != 0 ) {
             Statement statement = new Statement();
             statement.setName(name);
@@ -103,7 +103,7 @@ public final class JaxbTransformerHelper {
      */
     public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
         Assert.isTrue(repetitions != null && value != null && !name.equals(""));
-        Assert.isTrue(value.getKind() == BlockType.STMT_LIST, "Phrase is not STMT_LIST");
+        Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
         if ( ((StmtList<?>) value).get().size() != 0 ) {
             Statement statement = new Statement();
             statement.setName(name);
@@ -124,7 +124,7 @@ public final class JaxbTransformerHelper {
      */
     public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
         Assert.isTrue(repetitions != null && exprList != null && !name.equals(""));
-        Assert.isTrue(exprList.getKind() == BlockType.EXPR_LIST, "Phrase is not EXPR_LIST");
+        Assert.isTrue(exprList.getKind().hasName("EXPR_LIST"), "Phrase is not EXPR_LIST");
         if ( exprList.get().size() != 0 ) {
             Statement statement = new Statement();
             statement.setName(name);
@@ -144,10 +144,10 @@ public final class JaxbTransformerHelper {
      */
     public static void addValue(Block block, String name, Phrase<?> value) {
         Assert.isTrue(block != null && value != null && !name.equals(""));
-        if ( value.getKind() != BlockType.EMPTY_EXPR ) {
+        if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            if ( value.getKind() == BlockType.SHADOW_EXPR ) {
+            if ( value.getKind().hasName("SHADOW_EXPR") ) {
                 ShadowExpr<?> shadowExpr = (ShadowExpr<?>) value;
                 blockValue.setShadow(block2shadow(shadowExpr.getShadow().astToBlock()));
                 if ( shadowExpr.getBlock() != null ) {
@@ -169,7 +169,7 @@ public final class JaxbTransformerHelper {
      * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
      */
     public static void addValue(Repetitions repetitions, String name, Phrase<?> value) {
-        if ( value.getKind() != BlockType.EMPTY_EXPR ) {
+        if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
             blockValue.setBlock(value.astToBlock());
@@ -205,7 +205,7 @@ public final class JaxbTransformerHelper {
 
     private static List<Block> extractStmtList(Phrase<?> phrase) {
         List<Block> result = new ArrayList<Block>();
-        Assert.isTrue(phrase.getKind() == BlockType.STMT_LIST, "Phrase is not StmtList!");
+        Assert.isTrue(phrase.getKind().hasName("STMT_LIST"), "Phrase is not StmtList!");
         StmtList<?> stmtList = (StmtList<?>) phrase;
         for ( Stmt<?> stmt : stmtList.get() ) {
             result.add(stmt.astToBlock());
@@ -215,7 +215,7 @@ public final class JaxbTransformerHelper {
 
     private static List<Block> extractExprList(Phrase<?> phrase) {
         List<Block> result = new ArrayList<Block>();
-        Assert.isTrue(phrase.getKind() == BlockType.EXPR_LIST, "Phrase is not ExprList!");
+        Assert.isTrue(phrase.getKind().hasName("EXPR_LIST"), "Phrase is not ExprList!");
         ExprList<?> exprList = (ExprList<?>) phrase;
         for ( Expr<?> expr : exprList.get() ) {
             result.add(expr.astToBlock());

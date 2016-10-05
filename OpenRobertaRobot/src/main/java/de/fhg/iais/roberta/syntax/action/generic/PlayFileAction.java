@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -25,7 +25,7 @@ public class PlayFileAction<V> extends Action<V> {
     private final String fileName;
 
     private PlayFileAction(String fileName, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.PLAY_FILE_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("PLAY_FILE_ACTION"),properties, comment);
         Assert.isTrue(!fileName.equals(""));
         this.fileName = fileName;
         setReadOnly();

@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -25,7 +25,7 @@ public class Var<V> extends Expr<V> {
     private final String name;
 
     private Var(BlocklyType typeVar, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.VAR, properties, comment);
+        super(BlockTypeContainer.getByName("VAR"),properties, comment);
         Assert.isTrue(!value.equals("") && typeVar != null);
         this.name = value;
         this.typeVar = typeVar;

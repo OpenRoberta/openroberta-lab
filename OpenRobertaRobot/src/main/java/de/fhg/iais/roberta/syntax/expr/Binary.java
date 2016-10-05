@@ -7,7 +7,7 @@ import java.util.Locale;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -37,7 +37,7 @@ public final class Binary<V> extends Expr<V> {
     private final String operationRange;
 
     private Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.BINARY, properties, comment);
+        super(BlockTypeContainer.getByName("BINARY"),properties, comment);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;

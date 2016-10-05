@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -15,7 +15,7 @@ public class SensorExpr<V> extends Expr<V> {
     private final Sensor<V> sensor;
 
     private SensorExpr(Sensor<V> sens) {
-        super(BlockType.SENSOR_EXPR, sens.getProperty(), sens.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_EXPR"),sens.getProperty(), sens.getComment());
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();

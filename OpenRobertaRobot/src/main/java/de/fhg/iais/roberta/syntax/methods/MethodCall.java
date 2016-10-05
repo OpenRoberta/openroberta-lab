@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -38,7 +38,7 @@ public class MethodCall<V> extends Method<V> {
         BlocklyType returnType,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockType.METHOD_CALL, properties, comment);
+        super(BlockTypeContainer.getByName("METHOD_CALL"),properties, comment);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && parametersValues.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;

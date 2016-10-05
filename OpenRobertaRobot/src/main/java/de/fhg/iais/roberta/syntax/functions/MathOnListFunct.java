@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -29,7 +29,7 @@ public class MathOnListFunct<V> extends Function<V> {
     private final List<Expr<V>> param;
 
     private MathOnListFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.MATH_ON_LIST_FUNCT, properties, comment);
+        super(BlockTypeContainer.getByName("MATH_ON_LIST_FUNCT"),properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;

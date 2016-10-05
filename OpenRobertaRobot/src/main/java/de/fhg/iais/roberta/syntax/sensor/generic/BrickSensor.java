@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -31,7 +31,7 @@ public class BrickSensor<V> extends Sensor<V> {
     private final Mode mode;
 
     private BrickSensor(Mode mode, IBrickKey key, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.BRICK_SENSING, properties, comment);
+        super(BlockTypeContainer.getByName("BRICK_SENSING"),properties, comment);
         Assert.isTrue(mode != null && key != null);
         this.mode = mode;
         this.key = key;
