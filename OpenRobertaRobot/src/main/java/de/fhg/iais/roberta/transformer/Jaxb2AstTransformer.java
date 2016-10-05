@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -274,7 +273,7 @@ abstract public class Jaxb2AstTransformer<V> {
             expr = FunctionExpr.make((Function<V>) p);
         } else if ( p.getKind().getCategory() == Category.METHOD ) {
             expr = MethodExpr.make((Method<V>) p);
-        } else if ( p.getKind() == BlockType.IF_STMT && ((IfStmt<V>) p).isTernary() ) {
+        } else if ( p.getKind().hasName("IF_STMT") && ((IfStmt<V>) p).isTernary() ) {
             expr = StmtExpr.make((Stmt<V>) p);
         } else {
             expr = (Expr<V>) p;

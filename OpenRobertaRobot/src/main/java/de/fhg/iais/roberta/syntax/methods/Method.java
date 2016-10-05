@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.methods;
 
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;

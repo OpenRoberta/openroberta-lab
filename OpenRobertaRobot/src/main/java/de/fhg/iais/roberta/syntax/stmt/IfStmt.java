@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -42,7 +42,7 @@ public class IfStmt<V> extends Stmt<V> {
         BlocklyComment comment,
         int _else,
         int _elseIf) {
-        super(BlockType.IF_STMT, properties, comment);
+        super(BlockTypeContainer.getByName("IF_STMT"),properties, comment);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;

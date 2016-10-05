@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Statement;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -29,7 +29,7 @@ public class MainTask<V> extends Task<V> {
     private final String debug;
 
     private MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.MAIN_TASK, properties, comment);
+        super(BlockTypeContainer.getByName("MAIN_TASK"),properties, comment);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
         this.debug = debug;

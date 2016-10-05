@@ -21,44 +21,44 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         } else {
-            switch ( sensor.getKind() ) {
-                case COLOR_SENSING:
+            switch ( sensor.getKind().getName() ) {
+                case "COLOR_SENSING":
                     if ( usedSensor.getType() != SensorType.COLOR ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
-                case TOUCH_SENSING:
+                case "TOUCH_SENSING":
                     if ( usedSensor.getType() != SensorType.TOUCH ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
-                case ULTRASONIC_SENSING:
+                case "ULTRASONIC_SENSING":
                     if ( usedSensor.getType() != SensorType.ULTRASONIC ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
-                case INFRARED_SENSING:
+                case "INFRARED_SENSING":
                     if ( usedSensor.getType() != SensorType.INFRARED ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
-                case GYRO_SENSING:
+                case "GYRO_SENSING":
                     if ( usedSensor.getType() != SensorType.GYRO ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
-                case SOUND_SENSING:
+                case "SOUND_SENSING":
                     if ( usedSensor.getType() != SensorType.SOUND ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
-                case LIGHT_SENSING:
+                case "LIGHT_SENSING":
                     if ( usedSensor.getType() != SensorType.LIGHT ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;

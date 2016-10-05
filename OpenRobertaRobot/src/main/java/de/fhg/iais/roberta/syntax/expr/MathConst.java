@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -27,7 +27,7 @@ public class MathConst<V> extends Expr<V> {
     private final Const mathConst;
 
     private MathConst(Const mathConst, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.MATH_CONST, properties, comment);
+        super(BlockTypeContainer.getByName("MATH_CONST"),properties, comment);
         Assert.isTrue(mathConst != null);
         this.mathConst = mathConst;
         setReadOnly();

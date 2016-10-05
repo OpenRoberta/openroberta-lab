@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -12,7 +12,7 @@ public class ShadowExpr<V> extends Expr<V> {
     private final Expr<V> block;
 
     private ShadowExpr(Expr<V> shadow, Expr<V> block) {
-        super(BlockType.SHADOW_EXPR, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
+        super(BlockTypeContainer.getByName("SHADOW_EXPR"),BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         Assert.isTrue(shadow != null);
         this.shadow = shadow;
         this.block = block;

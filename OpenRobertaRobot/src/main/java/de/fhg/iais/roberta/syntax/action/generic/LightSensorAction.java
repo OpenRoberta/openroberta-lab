@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -33,7 +33,7 @@ public class LightSensorAction<V> extends Action<V> {
     private final ISensorPort port;
 
     private LightSensorAction(ISensorPort port, ILightSensorActionMode light, IWorkingState state, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LIGHT_SENSOR_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("LIGHT_SENSOR_ACTION"),properties, comment);
         Assert.isTrue(light != null);
         this.light = light;
         this.state = state;

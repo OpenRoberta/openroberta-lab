@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.methods.Method;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -15,7 +15,7 @@ public class MethodExpr<V> extends Expr<V> {
     private final Method<V> method;
 
     private MethodExpr(Method<V> method) {
-        super(BlockType.METHOD_EXPR, method.getProperty(), method.getComment());
+        super(BlockTypeContainer.getByName("METHOD_EXPR"),method.getProperty(), method.getComment());
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();

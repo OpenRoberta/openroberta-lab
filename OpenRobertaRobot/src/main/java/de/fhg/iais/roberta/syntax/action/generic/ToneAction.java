@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -28,7 +28,7 @@ public class ToneAction<V> extends Action<V> {
     private final Expr<V> duration;
 
     private ToneAction(Expr<V> frequency, Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.TONE_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("TONE_ACTION"),properties, comment);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && frequency != null && duration != null);
         this.frequency = frequency;
         this.duration = duration;

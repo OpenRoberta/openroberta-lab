@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.methods.Method;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -13,7 +13,7 @@ public class MethodStmt<V> extends Stmt<V> {
     private final Method<V> method;
 
     private MethodStmt(Method<V> method) {
-        super(BlockType.METHOD_STMT, method.getProperty(), method.getComment());
+        super(BlockTypeContainer.getByName("METHOD_STMT"),method.getProperty(), method.getComment());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;
         setReadOnly();

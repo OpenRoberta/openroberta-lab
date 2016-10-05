@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -32,7 +32,7 @@ public class ShowPictureAction<V> extends Action<V> {
     private final Expr<V> y;
 
     private ShowPictureAction(IShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.SHOW_PICTURE_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("SHOW_PICTURE_ACTION"),properties, comment);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
         this.x = x;

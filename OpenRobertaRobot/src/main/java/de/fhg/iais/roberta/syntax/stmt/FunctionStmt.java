@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.functions.Function;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -13,7 +13,7 @@ public class FunctionStmt<V> extends Stmt<V> {
     private final Function<V> function;
 
     private FunctionStmt(Function<V> function) {
-        super(BlockType.SENSOR_STMT, function.getProperty(), function.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_STMT"),function.getProperty(), function.getComment());
         Assert.isTrue(function != null && function.isReadOnly());
         this.function = function;
         setReadOnly();

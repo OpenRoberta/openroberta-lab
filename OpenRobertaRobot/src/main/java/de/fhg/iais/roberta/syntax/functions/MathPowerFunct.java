@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.functions;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -27,7 +27,7 @@ public class MathPowerFunct<V> extends Expr<V> {
     private final List<Expr<V>> param;
 
     private MathPowerFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.FUNCTIONS, properties, comment);
+        super(BlockTypeContainer.getByName("FUNCTIONS"),properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;

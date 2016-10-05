@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -14,7 +14,7 @@ public final class ActionExpr<V> extends Expr<V> {
     private final Action<V> action;
 
     private ActionExpr(Action<V> action) {
-        super(BlockType.ACTION_EXPR, action.getProperty(), action.getComment());
+        super(BlockTypeContainer.getByName("ACTION_EXPR"), action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

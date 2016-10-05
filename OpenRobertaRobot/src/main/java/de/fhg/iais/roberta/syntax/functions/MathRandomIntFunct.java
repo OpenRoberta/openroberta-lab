@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -28,7 +28,7 @@ public class MathRandomIntFunct<V> extends Function<V> {
     private final List<Expr<V>> param;
 
     private MathRandomIntFunct(List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.MATH_RANDOM_INT_FUNCT, properties, comment);
+        super(BlockTypeContainer.getByName("MATH_RANDOM_INT_FUNCT"),properties, comment);
         Assert.isTrue(param != null);
         this.param = param;
         setReadOnly();

@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -125,8 +124,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable Python code representation of a phrase to a StringBuilder. <b>This representation is correct Python code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 @SuppressWarnings("rawtypes")
 public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
@@ -200,7 +199,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private static boolean handleMainBlocks(Ast2Ev3PythonVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
-        } else if ( phrase.getKind() != BlockType.LOCATION ) {
+        } else if ( !phrase.getKind().getName().equals("LOCATION") ) {
             mainBlock = true;
         }
         return mainBlock;
@@ -324,9 +323,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(var.getName());
-        if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
+        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" = ");
-            if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
                 ExprList<Void> list = (ExprList<Void>) var.getValue();
                 if ( list.get().size() == 2 ) {
                     list.get().get(1).visit(this);
@@ -455,11 +454,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitExprList(ExprList<Void> exprList) {
         boolean first = true;
         for ( Expr<Void> expr : exprList.get() ) {
-            if ( expr.getKind() != BlockType.EMPTY_EXPR ) {
+            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
                 if ( first ) {
                     first = false;
                 } else {
-                    if ( expr.getKind() == BlockType.BINARY || expr.getKind() == BlockType.UNARY ) {
+                    if ( expr.getKind().hasName("BINARY", "UNARY") ) {
                         this.sb.append("; "); // FIXME
                     } else {
                         this.sb.append(", ");
@@ -660,7 +659,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("hal.drawText(");
-        if ( showTextAction.getMsg().getKind() != BlockType.STRING_CONST ) {
+        if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             showTextAction.getMsg().visit(this);
             this.sb.append(")");
@@ -1307,7 +1306,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
         this.sb.append("if ");
         methodIfReturn.getCondition().visit(this);
-        if ( methodIfReturn.getReturnValue().getKind() != BlockType.EMPTY_EXPR ) {
+        if ( !methodIfReturn.getReturnValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(": return ");
             methodIfReturn.getReturnValue().visit(this);
         } else {
@@ -1341,7 +1340,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
         this.sb.append("hal.establishConnectionTo(");
-        if ( bluetoothConnectAction.get_address().getKind() != BlockType.STRING_CONST ) {
+        if ( !bluetoothConnectAction.get_address().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             bluetoothConnectAction.get_address().visit(this);
             this.sb.append(")");
@@ -1357,7 +1356,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("hal.sendMessage(");
         bluetoothSendAction.getConnection().visit(this);
         this.sb.append(", ");
-        if ( bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
+        if ( !bluetoothSendAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             bluetoothSendAction.getMsg().visit(this);
             this.sb.append(")");
@@ -1376,12 +1375,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Binary.Op.MINUS
-            && binary.getRight().getKind() == BlockType.BINARY
+            && binary.getRight().getKind().hasName("BINARY")
             && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && expr.getKind() != BlockType.BINARY ) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
             // parentheses are omitted
             expr.visit(this);
         } else {

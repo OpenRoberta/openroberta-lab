@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.action.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -22,7 +22,7 @@ public class LightStatusAction<V> extends Action<V> {
     private final Status status;
 
     private LightStatusAction(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LIGHT_STATUS_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"),properties, comment);
         Assert.isTrue(status != null);
         this.status = status;
         setReadOnly();

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -30,7 +30,7 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
     private final Expr<V> power;
 
     private MotorSetPowerAction(IActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockType.MOTOR_SET_POWER_ACTION, properties, comment);
+        super(port, BlockTypeContainer.getByName("MOTOR_SET_POWER_ACTION"), properties, comment);
         Assert.isTrue(port != null && power.isReadOnly());
         this.power = power;
         setReadOnly();

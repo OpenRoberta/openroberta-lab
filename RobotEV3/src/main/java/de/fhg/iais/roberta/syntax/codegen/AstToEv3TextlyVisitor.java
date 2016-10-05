@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -109,8 +108,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable text(ly) representation of a blockly program
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable text(ly) representation of a blockly program
  *
  * @deprecated
  */
@@ -286,7 +284,7 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
             if ( first ) {
                 first = false;
             } else {
-                if ( expr.getKind() == BlockType.BINARY || expr.getKind() == BlockType.UNARY ) {
+                if ( expr.getKind().hasName("BINARY", "UNARY") ) {
                     this.sb.append("; ");
                 } else {
                     this.sb.append(", ");
@@ -468,7 +466,7 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("Display.drawText(");
-        if ( showTextAction.getMsg().getKind() != BlockType.STRING_CONST ) {
+        if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("String.valueOf(");
             showTextAction.getMsg().visit(this);
             this.sb.append(")");
@@ -714,7 +712,7 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == BlockType.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -103,8 +102,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
@@ -187,13 +186,13 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitNumConst(NumConst<BlocklyType> numConst) {
-        Assert.isTrue(numConst.getKind().equals(BlockType.NUM_CONST));
+        Assert.isTrue(numConst.getKind().hasName("NUM_CONST"));
         return BlocklyType.NUMBER;
     }
 
     @Override
     public BlocklyType visitMathConst(MathConst<BlocklyType> mathConst) {
-        Assert.isTrue(mathConst.getKind().equals(BlockType.MATH_CONST));
+        Assert.isTrue(mathConst.getKind().hasName("MATH_CONST"));
         String name = mathConst.getMathConst().name();
         BlocklyType type = TypeTransformations.getConstantSignature(name);
         checkLookupNotNull(mathConst, name, type, "invalid mathematical constant");
@@ -202,25 +201,25 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitBoolConst(BoolConst<BlocklyType> boolConst) {
-        Assert.isTrue(boolConst.getKind().equals(BlockType.BOOL_CONST));
+        Assert.isTrue(boolConst.getKind().hasName("BOOL_CONST"));
         return BlocklyType.BOOLEAN;
     }
 
     @Override
     public BlocklyType visitStringConst(StringConst<BlocklyType> stringConst) {
-        Assert.isTrue(stringConst.getKind().equals(BlockType.STRING_CONST));
+        Assert.isTrue(stringConst.getKind().hasName("STRING_CONST"));
         return BlocklyType.STRING;
     }
 
     @Override
     public BlocklyType visitNullConst(NullConst<BlocklyType> nullConst) {
-        Assert.isTrue(nullConst.getKind().equals(BlockType.NULL_CONST));
+        Assert.isTrue(nullConst.getKind().hasName("NULL_CONST"));
         return BlocklyType.NULL;
     }
 
     @Override
     public BlocklyType visitColorConst(ColorConst<BlocklyType> colorConst) {
-        Assert.isTrue(colorConst.getKind().equals(BlockType.COLOR_CONST));
+        Assert.isTrue(colorConst.getKind().hasName("COLOR_CONST"));
         return BlocklyType.COLOR;
     }
 

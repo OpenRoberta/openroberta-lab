@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -26,7 +26,7 @@ public class EmptyList<V> extends Expr<V> {
     private final BlocklyType typeVar;
 
     private EmptyList(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.EMPTY_LIST, properties, comment);
+        super(BlockTypeContainer.getByName("EMPTY_LIST"),properties, comment);
         Assert.isTrue(typeVar != null);
         this.typeVar = typeVar;
         setReadOnly();

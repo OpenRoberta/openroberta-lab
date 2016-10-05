@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -13,7 +13,7 @@ public class SensorStmt<V> extends Stmt<V> {
     private final Sensor<V> sensor;
 
     private SensorStmt(Sensor<V> sensor) {
-        super(BlockType.SENSOR_STMT, sensor.getProperty(), sensor.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_STMT"),sensor.getProperty(), sensor.getComment());
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;
         setReadOnly();

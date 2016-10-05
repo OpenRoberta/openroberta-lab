@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -44,7 +44,7 @@ public class MethodReturn<V> extends Method<V> {
         Expr<V> returnValue,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockType.METHOD_RETURN, properties, comment);
+        super(BlockTypeContainer.getByName("METHOD_RETURN"),properties, comment);
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly() && returnValue.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;

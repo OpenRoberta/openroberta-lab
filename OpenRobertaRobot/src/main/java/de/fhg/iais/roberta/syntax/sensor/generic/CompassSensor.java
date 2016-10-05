@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -11,10 +11,8 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into
- * the AST (abstract syntax
- * tree).
- * Object from this class will generate code for checking if the sensor is pressed.<br/>
+ * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will generate
+ * code for checking if the sensor is pressed.<br/>
  * <br>
  * The client must provide the {@link SensorPort}.<br>
  * <br>
@@ -23,7 +21,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class CompassSensor<V> extends Sensor<V> {
 
     private CompassSensor(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.COMPASS_SENSING, properties, comment);
+        super(BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
         setReadOnly();
     }
 

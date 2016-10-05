@@ -7,7 +7,7 @@ import java.util.Locale;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -43,7 +43,7 @@ public class RepeatStmt<V> extends Stmt<V> {
     private final StmtList<V> list;
 
     private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.REPEAT_STMT, properties, comment);
+        super(BlockTypeContainer.getByName("REPEAT_STMT"),properties, comment);
         Assert.isTrue(mode != null && expr != null && list != null && expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;

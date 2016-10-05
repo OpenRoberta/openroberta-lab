@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -34,7 +34,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
     private final MotionParam<V> param;
 
     private MotorOnAction(IActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockType.MOTOR_ON_ACTION, properties, comment);
+        super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"), properties, comment);
         Assert.isTrue(param != null && port != null);
         this.param = param;
 

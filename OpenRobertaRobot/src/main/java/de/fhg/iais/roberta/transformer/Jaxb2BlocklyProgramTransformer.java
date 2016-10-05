@@ -9,9 +9,11 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -56,15 +58,9 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
             throw new DbcException("Invalid block: " + block);
         }
         String type = block.getType().trim().toLowerCase();
-        for ( BlockType co : BlockType.values() ) {
-            for ( String value : co.getBlocklyNames() ) {
-                if ( type.equals(value.toLowerCase()) ) {
-                    return invokeMethod(block, co.getAstClass().getName());
-                }
-
-            }
-        }
-        throw new DbcException("Invalid Block: " + block.getType());
+        BlockType matchingBlockType = BlockTypeContainer.getByBlocklyName(type);
+        Assert.notNull(matchingBlockType, "Invalid Block: " + block.getType());
+        return invokeMethod(block, matchingBlockType.getAstClass().getName());
     }
 
     @SuppressWarnings("unchecked")

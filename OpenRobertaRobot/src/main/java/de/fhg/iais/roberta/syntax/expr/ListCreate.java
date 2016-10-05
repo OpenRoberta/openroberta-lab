@@ -7,7 +7,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -29,7 +29,7 @@ public class ListCreate<V> extends Expr<V> {
     private final ExprList<V> exprList;
 
     private ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.LIST_CREATE, properties, comment);
+        super(BlockTypeContainer.getByName("LIST_CREATE"),properties, comment);
         Assert.isTrue(exprList != null && exprList.isReadOnly() && typeVar != null);
         this.exprList = exprList;
         this.typeVar = typeVar;

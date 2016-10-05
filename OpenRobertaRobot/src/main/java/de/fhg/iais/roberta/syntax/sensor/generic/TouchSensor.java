@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -31,7 +31,7 @@ public class TouchSensor<V> extends BaseSensor<V> {
     private final ITouchSensorMode mode;
 
     private TouchSensor(ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockType.TOUCH_SENSING, properties, comment);
+        super(port, BlockTypeContainer.getByName("TOUCH_SENSING"), properties, comment);
         this.mode = mode;
         setReadOnly();
     }

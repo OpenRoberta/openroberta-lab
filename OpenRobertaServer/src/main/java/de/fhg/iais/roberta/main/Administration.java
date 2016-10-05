@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -335,7 +334,7 @@ public class Administration {
         Instance instance = null;
         for ( ArrayList<Phrase<Void>> tree : astProgram ) {
             for ( Phrase<Void> phrase : tree ) {
-                if ( phrase.getKind() == BlockType.LOCATION ) {
+                if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
                     instance = new Instance();
                     instance.setX(((Location<Void>) phrase).getX());

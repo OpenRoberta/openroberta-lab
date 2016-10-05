@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.action.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public final class ClearDisplayAction<V> extends Action<V> {
 
     private ClearDisplayAction(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.CLEAR_DISPLAY_ACTION, properties, comment);
+        super(BlockTypeContainer.getByName("CLEAR_DISPLAY_ACTION"),properties, comment);
         setReadOnly();
     }
 

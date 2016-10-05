@@ -59,7 +59,7 @@ public class ActionTest {
             transformer.transform(project);
             Assert.fail();
         } catch ( Exception e ) {
-            Assert.assertEquals("Invalid Block: robActions_brickLight_on1", e.getMessage());
+            Assert.assertEquals("blockly name is not found: robactions_bricklight_on1", e.getMessage());
         }
     }
 

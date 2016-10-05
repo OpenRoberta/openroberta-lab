@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -15,7 +15,7 @@ public class StmtExpr<V> extends Expr<V> {
     private final Stmt<V> stmt;
 
     private StmtExpr(Stmt<V> stmt) {
-        super(BlockType.SENSOR_EXPR, stmt.getProperty(), stmt.getComment());
+        super(BlockTypeContainer.getByName("SENSOR_EXPR"),stmt.getProperty(), stmt.getComment());
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
         setReadOnly();

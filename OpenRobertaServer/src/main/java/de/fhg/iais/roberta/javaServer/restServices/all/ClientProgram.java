@@ -45,7 +45,6 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.ProgramCheckVisitor;
@@ -320,7 +319,7 @@ public class ClientProgram {
         Instance instance = null;
         for ( ArrayList<Phrase<Void>> tree : astProgram ) {
             for ( Phrase<Void> phrase : tree ) {
-                if ( phrase.getKind() == BlockType.LOCATION ) {
+                if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
                     instance = new Instance();
                     instance.setX(((Location<Void>) phrase).getX());

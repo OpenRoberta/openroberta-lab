@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -13,7 +13,7 @@ public class ExprStmt<V> extends Stmt<V> {
     private final Expr<V> expr;
 
     private ExprStmt(Expr<V> expr) {
-        super(BlockType.EXPR_STMT, expr.getProperty(), expr.getComment());
+        super(BlockTypeContainer.getByName("EXPR_STMT"),expr.getProperty(), expr.getComment());
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();

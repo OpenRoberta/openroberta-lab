@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -40,7 +40,7 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean global,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockType.VAR_DECLARATION, properties, comment);
+        super(BlockTypeContainer.getByName("VAR_DECLARATION"),properties, comment);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;

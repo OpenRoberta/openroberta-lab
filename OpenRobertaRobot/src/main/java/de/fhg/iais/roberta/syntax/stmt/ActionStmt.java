@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -13,7 +13,7 @@ public class ActionStmt<V> extends Stmt<V> {
     private final Action<V> action;
 
     private ActionStmt(Action<V> action) {
-        super(BlockType.AKTION_STMT, action.getProperty(), action.getComment());
+        super(BlockTypeContainer.getByName("AKTION_STMT"),action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

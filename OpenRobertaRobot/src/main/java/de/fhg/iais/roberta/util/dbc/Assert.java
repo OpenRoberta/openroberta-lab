@@ -85,6 +85,75 @@ public final class Assert {
     }
 
     /**
+     * <b>DBC:</b> asserts, that a condition is <code>false</code>. If the assertion is violated, a {@link DbcException} is thrown.
+     *
+     * @param b the condition to be checked
+     */
+    public static void isFalse(boolean b) {
+        if ( b ) {
+            throw new DbcException("Assertion is violated");
+        }
+    }
+
+    /**
+     * <b>DBC:</b> asserts, that a condition is <code>false</code>. If the assertion is violated, a {@link DbcException} is thrown. The error message must
+     * state, that the assertion is <i>violated</i>
+     *
+     * @param b the condition to be checked
+     * @param msg the error message; states, that the assertion is <i>violated</i>
+     */
+    public static void isFalse(boolean b, String msg) {
+        if ( b ) {
+            throw new DbcException(msg);
+        }
+    }
+
+    /**
+     * <b>DBC:</b> asserts, that a condition is <code>false</code>. If the assertion is violated, a {@link DbcException} is thrown. The error message must
+     * state, that the assertion is <i>violated</i><br>
+     * <br>
+     * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
+     * For formatting details, see {@link String#format(String, Object...)}
+     *
+     * @param b the condition to be checked
+     * @param format format for the error message; states, that the assertion is <i>violated</i>
+     * @param params arguments for the format
+     */
+    public static void isFalse(boolean b, String format, Object... params) {
+        if ( b ) {
+            String msg = Assert.makeMessage(format, params);
+            throw new DbcException(msg);
+        }
+    }
+
+    /**
+     * <b>DBC:</b> asserts, that a condition is <code>false</code>. If the assertion is violated, a stacktrace is printed, then a {@link DbcException} is
+     * thrown. <br>
+     * <br>
+     * Use in rare cases. If you have written a class using the DBC paradigm and you suspect, that caller of your class catch DBC exceptions and do not react on
+     * DBC exceptions as required, a printed stack trace may help unveiling such a problem.<br>
+     * <br>
+     * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
+     * For formatting details, see {@link String#format(String, Object...)}
+     *
+     * @param b the condition to be checked
+     * @param format format for the error message; states, that the assertion is <i>violated</i>
+     * @param params arguments for the format
+     */
+
+    public static void isFalseOnErrorPrintStacktrace(boolean b, String format, Object... params) {
+        if ( b ) {
+            try {
+                throw new DbcException("Assertion is violated");
+            } catch ( DbcException e ) {
+                e.printStackTrace();
+                String msg = Assert.makeMessage(format, params);
+                throw new DbcException(msg);
+            }
+        }
+    }
+
+    /**
      * <b>DBC:</b> an assertion <i>is</i> violated, thus a {@link DbcException} is thrown.
      */
     public static void fail() {

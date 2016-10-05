@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -122,8 +122,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 public class Ast2NxcVisitor implements AstVisitor<Void> {
     public static final String INDENT = "  ";
@@ -197,7 +197,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         //        if (phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
-        } else if ( phrase.getKind() != BlockType.LOCATION ) {
+        } else if ( !phrase.getKind().hasName("LOCATION") ) {
             mainBlock = true;
         }
         //        }
@@ -368,7 +368,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append("[]");
-            if ( var.getValue().getKind() == BlockType.LIST_CREATE ) {
+            if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 if ( list.getValue().get().size() == 0 ) {
                     return null;
@@ -377,9 +377,9 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
 
         }
 
-        if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
+        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" = ");
-            if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
                 ExprList<Void> list = (ExprList<Void>) var.getValue();
                 if ( list.get().size() == 2 ) {
                     list.get().get(1).visit(this);
@@ -486,7 +486,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     public Void visitExprList(ExprList<Void> exprList) {
         boolean first = true;
         for ( final Expr<Void> expr : exprList.get() ) {
-            if ( expr.getKind() != BlockType.EMPTY_EXPR ) {
+            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
                 if ( first ) {
                     first = false;
                 } else {
@@ -1533,20 +1533,20 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     private boolean isStringExpr(Expr<Void> e) {
-        switch ( e.getKind() ) {
-            case STRING_CONST:
+        switch ( e.getKind().getName() ) {
+            case "STRING_CONST":
                 return true;
-            case VAR:
+            case "VAR":
                 return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
-            case FUNCTION_EXPR:
+            case "FUNCTION_EXPR":
                 final BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
-                return functionKind == BlockType.TEXT_JOIN_FUNCT || functionKind == BlockType.LIST_INDEX_OF;
-            case METHOD_EXPR:
+                return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
+            case "METHOD_EXPR":
                 final MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
-                return methodCall.getKind() == BlockType.METHOD_CALL && methodCall.getReturnType() == BlocklyType.STRING;
-            case ACTION_EXPR:
+                return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
+            case "ACTION_EXPR":
                 final Action<?> action = ((ActionExpr<?>) e).getAction();
-                return action.getKind() == BlockType.BLUETOOTH_RECEIVED_ACTION;
+                return action.getKind().hasName("BLUETOOTH_RECEIVED_ACTION");
 
             default:
                 return false;
@@ -1554,11 +1554,11 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == BlockType.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && expr.getKind() != BlockType.BINARY ) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
             // parentheses are omitted
             expr.visit(this);
         } else {
@@ -1700,7 +1700,7 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         if ( phrasesSet.size() > 1 ) {
             for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
                 for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && phrase.getKind() != BlockType.METHOD_CALL;
+                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
                     if ( isCreateMethodPhrase ) {
                         phrase.visit(this);
                         this.sb.append("\n");

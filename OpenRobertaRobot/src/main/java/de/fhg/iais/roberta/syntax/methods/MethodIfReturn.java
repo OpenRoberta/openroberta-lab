@@ -6,7 +6,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -30,7 +30,7 @@ public class MethodIfReturn<V> extends Method<V> {
     private final Expr<V> returnValue;
 
     private MethodIfReturn(Expr<V> condition, BlocklyType returnType, Expr<V> returnValue, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.METHOD_IF_RETURN, properties, comment);
+        super(BlockTypeContainer.getByName("METHOD_IF_RETURN"),properties, comment);
         Assert.isTrue(condition != null && condition.isReadOnly() && returnType != null && returnValue != null && returnValue.isReadOnly());
         this.condition = condition;
         this.returnType = returnType;

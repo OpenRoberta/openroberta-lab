@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
@@ -226,7 +226,7 @@ public class Helper {
         Instance instance = null;
         for ( ArrayList<Phrase<Void>> tree : astProgram ) {
             for ( Phrase<Void> phrase : tree ) {
-                if ( phrase.getKind() == BlockType.LOCATION ) {
+                if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
                     instance = new Instance();
                     instance.setX(((Location<Void>) phrase).getX());

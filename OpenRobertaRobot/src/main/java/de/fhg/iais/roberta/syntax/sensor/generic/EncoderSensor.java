@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -34,7 +34,7 @@ public class EncoderSensor<V> extends Sensor<V> {
     private final IActorPort motor;
 
     private EncoderSensor(IMotorTachoMode mode, IActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.ENCODER_SENSING, properties, comment);
+        super(BlockTypeContainer.getByName("ENCODER_SENSING"),properties, comment);
         Assert.isTrue(mode != null && motor != null);
         this.mode = mode;
         this.motor = motor;

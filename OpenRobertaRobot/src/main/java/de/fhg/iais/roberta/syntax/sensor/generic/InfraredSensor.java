@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.syntax.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -34,7 +34,7 @@ public class InfraredSensor<V> extends BaseSensor<V> {
     private final IInfraredSensorMode mode;
 
     private InfraredSensor(IInfraredSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockType.INFRARED_SENSING, properties, comment);
+        super(port, BlockTypeContainer.getByName("INFRARED_SENSING"), properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
         setReadOnly();
