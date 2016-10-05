@@ -254,6 +254,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             if (isProgramSaved()) {
                 $('#menuSaveProg').parent().addClass('disabled');
             }
+            if (isConfigurationSaved()) {
+                $('#menuSaveConfig').parent().addClass('disabled');
+            }
         } else {
             $('.nav > li > ul > .login').addClass('disabled');
         }

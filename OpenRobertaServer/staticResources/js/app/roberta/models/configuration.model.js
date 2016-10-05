@@ -55,7 +55,9 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         COMM.json("/conf", {
             "cmd" : "deleteC",
             "name" : configName
-        }, successFn, 'delete configuration ' + configName);
+        }, function(result) {
+            successFn(result, configName);
+        }, 'delete configuration ' + configName);
     }
     exports.deleteConfigurationFromListing = deleteConfigurationFromListing;
 

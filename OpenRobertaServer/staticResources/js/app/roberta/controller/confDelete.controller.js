@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG,
-        UTIL, MSG, COMM, PROGRAM, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'configuration.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports,
+        LOG, UTIL, MSG, COMM, CONFIGURATION, Blockly, $) {
 
     function init() {
 //        initView();
@@ -16,34 +16,21 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
         /**
          * Delete the programs that were selected in program list
          */
-        $('#doDeleteProgram').onWrap('click', function() {
-            var programs = $("#confirmDeleteProgram").data('programs');
-            for (var i = 0; i < programs.length; i++) {
-                var prog = programs[i];
-                var progName = prog[0];
-                var progOwner = prog[1];
-                var progRight = prog[2];
-                if (progRight.sharedFrom) {
-                    PROGRAM.deleteShare(progName, progOwner, function(result, progName) {
-                        UTIL.response(result);
-                        if (result.rc === 'ok') {
-                            MSG.displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
-                            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
-                            LOG.info('remove shared program "' + progName + '"form List');
-                        }
-                    });
-                } else {
-                    PROGRAM.deleteProgramFromListing(progName, function(result, progName) {
-                        UTIL.response(result);
-                        if (result.rc === 'ok') {
-                            MSG.displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
-                            $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
-                            LOG.info('delete program "' + progName);
-                        }
-                    });
-                }
+        $('#doDeleteConfiguration').onWrap('click', function() {
+            var configurations = $("#confirmDeleteConfiguration").data('configurations');
+            for (var i = 0; i < configurations.length; i++) {
+                var conf = configurations[i];
+                var confName = conf[0];
+                CONFIGURATION.deleteConfigurationFromListing(confName, function(result, confName) {
+                    UTIL.response(result);
+                    if (result.rc === 'ok') {
+                        MSG.displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, confName);
+                        $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                        LOG.info('delete configuration "' + confName);
+                    }
+                });
             }
             $('.modal').modal('hide');
-        }), 'doDeletePrograms clicked';
+        }), 'doDeleteConfigurations clicked';
     }
 });

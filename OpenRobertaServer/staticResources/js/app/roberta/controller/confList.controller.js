@@ -69,7 +69,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                     {
                         field : '7',
                         events : eventsDeleteShareLoad,
-                        title : '<a href="#" id="deleteSome" class="disabled" title="Delete selected configurations">'
+                        title : '<a href="#" class="deleteSomeConf disabled" title="Delete selected configurations">'
                                 + '<span class="typcn typcn-delete"></span></a>',
                         align : 'left',
                         valign : 'top',
@@ -103,7 +103,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
         }, "Load configuration from listing double clicked");
 
         $('#confNameTable').onWrap('check-all.bs.table', function($element, rows) {
-            $('#deleteSome').removeClass('disabled');
+            $('.deleteSomeConf').removeClass('disabled');
             $('#shareSome').removeClass('disabled');
             $('.delete').addClass('disabled');
             $('.share').addClass('disabled');
@@ -111,7 +111,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
         }, 'check all configurations');
 
         $('#confNameTable').onWrap('check.bs.table', function($element, row) {
-            $('#deleteSome').removeClass('disabled');
+            $('.deleteSomeConf').removeClass('disabled');
             $('#shareSome').removeClass('disabled');
             $('.delete').addClass('disabled');
             $('.share').addClass('disabled');
@@ -119,7 +119,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
         }, 'check one configuration');
 
         $('#confNameTable').onWrap('uncheck-all.bs.table', function($element, rows) {
-            $('#deleteSome').addClass('disabled');
+            $('.deleteSomeConf').addClass('disabled');
             $('#shareSome').addClass('disabled');
             $('.delete').removeClass('disabled');
             $('.share').removeClass('disabled');
@@ -129,7 +129,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
         $('#confNameTable').onWrap('uncheck.bs.table', function($element, row) {
             var selectedRows = $('#confNameTable').bootstrapTable('getSelections');
             if (selectedRows.length <= 0 || selectedRows == null) {
-                $('#deleteSome').addClass('disabled');
+                $('.deleteSomeConf').addClass('disabled');
                 $('#shareSome').addClass('disabled');
                 $('.delete').removeClass('disabled');
                 $('.share').removeClass('disabled');
@@ -142,7 +142,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
             return false;
         }, "back to configuration view");
 
-        $('#deleteSome').onWrap('click', function() {
+        $(document).onWrap('click', '.deleteSomeConf', function() {
             var configurations = $('#confNameTable').bootstrapTable('getSelections', {});
             var names = '';
             for (var i = 0; i < configurations.length; i++) {
@@ -150,11 +150,11 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                 names += '<br>';
             }
             $('#confirmDeleteConfName').html(names);
-            $('#confirmDeleteConf').one('hide.bs.modal', function(event) {
+            $('#confirmDeleteConfiguration').one('hide.bs.modal', function(event) {
                 CONFLIST.loadConfList(update);
             });
-            $("#confirmDeleteConf").data('configurations', configurations);
-            $("#confirmDeleteConf").modal("show");
+            $("#confirmDeleteConfiguration").data('configurations', configurations);
+            $("#confirmDeleteConfiguration").modal("show");
             return false;
         }, "delete configurations");
 
@@ -168,13 +168,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                 $('#confNameTable').bootstrapTable({});
                 $('#confNameTable').bootstrapTable("load", result.configurationNames);
                 $('#confNameTable').bootstrapTable("hideColumn", '2');
-                $('#confNameTable').bootstrapTable("hideColumn", '3');
-                $('#confNameTable').bootstrapTable("hideColumn", '5');
-                if ($('#tabConfList').data('type') === 'userConf') {
-                    $('#deleteSome').show();
-                } else {
-                    $('#deleteSome').hide();
-                }
+                $('#confNameTable').bootstrapTable("hideColumn", '3');            
             }
         }
     }
@@ -189,14 +183,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                 names += '<br>';
             }
             $('#confirmDeleteConfName').html(names);
-            $("#confirmDeleteConf").data('configurations', selectedRows);
-            $('#confirmDeleteConf').one('hidden.bs.modal', function(event) {
-//                if (deleted) {
-//                    $('#confNameTable').bootstrapTable('uncheckAll', {});
-//                    $('.selected').removeClass('selected');
-//                }
-            });
-            $("#confirmDeleteConf").modal("show");
+            $("#confirmDeleteConfiguration").data('configurations', selectedRows);
+            $("#confirmDeleteConfiguration").modal("show");
             return false;
         },
         'click .share' : function(e, value, row, index) {
@@ -271,9 +259,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
 
     var formatDeleteShareLoad = function(value, row, index) {
         var result = '';
-        if ($('#tabConfList').data('type') === 'userConf') {
-            result += '<a href="#" class="delete" title="Delete configuration"><span class="typcn typcn-delete"></span></a>';
-        }
+        result += '<a href="#" class="delete" title="Delete configuration"><span class="typcn typcn-delete"></span></a>';
         result += '<a href="#" class="load" title="Load configuration"><span class="typcn typcn-document"></span></a>';
         return result;
     }

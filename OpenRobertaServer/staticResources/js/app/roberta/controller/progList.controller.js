@@ -68,7 +68,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             {
                 field : '7',
                 events : eventsDeleteShareLoad,
-                title : '<a href="#" id="deleteSome" class="disabled" title="Delete selected programs">' + '<span class="typcn typcn-delete"></span></a>',
+                title : '<a href="#" class="deleteSomeProg disabled" title="Delete selected programs">' + '<span class="typcn typcn-delete"></span></a>',
                 align : 'left',
                 valign : 'top',
                 formatter : formatDeleteShareLoad,
@@ -108,7 +108,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         }, "Load program from listing double clicked");
 
         $('#programNameTable').onWrap('check-all.bs.table', function($element, rows) {
-            $('#deleteSome').removeClass('disabled');
+            $('.deleteSomeProg').removeClass('disabled');
             $('#shareSome').removeClass('disabled');
             $('.delete').addClass('disabled');
             $('.share').addClass('disabled');
@@ -116,7 +116,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         }, 'check all programs');
 
         $('#programNameTable').onWrap('check.bs.table', function($element, row) {
-            $('#deleteSome').removeClass('disabled');
+            $('.deleteSomeProg').removeClass('disabled');
             $('#shareSome').removeClass('disabled');
             $('.delete').addClass('disabled');
             $('.share').addClass('disabled');
@@ -124,7 +124,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         }, 'check one program');
 
         $('#programNameTable').onWrap('uncheck-all.bs.table', function($element, rows) {
-            $('#deleteSome').addClass('disabled');
+            $('.deleteSomeProg').addClass('disabled');
             $('#shareSome').addClass('disabled');
             $('.delete').removeClass('disabled');
             $('.share').removeClass('disabled');
@@ -134,7 +134,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         $('#programNameTable').onWrap('uncheck.bs.table', function($element, row) {
             var selectedRows = $('#programNameTable').bootstrapTable('getSelections');
             if (selectedRows.length <= 0 || selectedRows == null) {
-                $('#deleteSome').addClass('disabled');
+                $('.deleteSomeProg').addClass('disabled');
                 $('#shareSome').addClass('disabled');
                 $('.delete').removeClass('disabled');
                 $('.share').removeClass('disabled');
@@ -147,7 +147,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             return false;
         }, "back to program view")
 
-        $('#deleteSome').onWrap('click', function() {
+        $(document).onWrap('click', '.deleteSomeProg', function() {
             var programs = $('#programNameTable').bootstrapTable('getSelections', {});
             var names = '';
             for (var i = 0; i < programs.length; i++) {
@@ -170,15 +170,14 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
-                $('#programNameTable').bootstrapTable({});
+                //$('#programNameTable').bootstrapTable({});
                 $('#programNameTable').bootstrapTable("load", result.programNames);
                 $('#programNameTable').bootstrapTable("showColumn", '2');
                 $('#programNameTable').bootstrapTable("showColumn", '3');
-                $('#programNameTable').bootstrapTable("showColumn", '5');
                 if ($('#tabProgList').data('type') === 'userProgram') {
-                    $('#deleteSome').show();
+                    $('.deleteSomeProg').show();
                 } else {
-                    $('#deleteSome').hide();
+                    $('.deleteSomeProg').hide();
                 }
             }
         }

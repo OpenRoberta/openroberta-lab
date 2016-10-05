@@ -100,13 +100,13 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
+        'progDelete.controller', 'confDelete.controller','progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
         'configuration.controller', 'language.controller', 'volume-meter' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
     COMM = require('comm');
-    confDeleteController = require('progDelete.controller');
+    confDeleteController = require('confDelete.controller');
     configurationController = require('configuration.controller');
     confListController = require('confList.controller');
     guiStateController = require('guiState.controller');
