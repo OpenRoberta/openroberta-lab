@@ -10,6 +10,12 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 public class ShowTextActionTest {
 
     @Test
+    public void makeHelloWorld() throws Exception {
+        String a = "BlockAST [project=[[Location [x=-76, y=1], ShowHelloWorldAction]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowHelloWorld.xml"));
+    }
+
+    @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-76, y=1], ShowTextAction [StringConst [Hallo], NumConst [0], NumConst [0]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowText.xml"));
