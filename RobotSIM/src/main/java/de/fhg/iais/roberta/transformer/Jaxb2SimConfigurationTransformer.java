@@ -109,9 +109,8 @@ public class Jaxb2SimConfigurationTransformer {
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
-            case "robBrick_ardu-Brick":
-                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<Pair<ISensorPort, Sensor>>();
-                List<Pair<IActorPort, Actor>> actors = new ArrayList<Pair<IActorPort, Actor>>();
+                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
+                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
                 List<Field> fields = extractFields(block, (short) 2);
                 double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 double trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
@@ -120,6 +119,14 @@ public class Jaxb2SimConfigurationTransformer {
                 extractHardwareComponent(values, sensors, actors);
 
                 return new SimConfiguration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
+            case "robBrick_ardu-Brick":
+                List<Pair<ISensorPort, Sensor>> sensorsArdu = new ArrayList<>();
+                List<Pair<IActorPort, Actor>> actorsArdu = new ArrayList<>();
+
+                List<Value> valuesArdu = extractValues(block, (short) 8);
+                extractHardwareComponent(valuesArdu, sensorsArdu, actorsArdu);
+
+                return new SimConfiguration.Builder().addActors(actorsArdu).addSensors(sensorsArdu).build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }
