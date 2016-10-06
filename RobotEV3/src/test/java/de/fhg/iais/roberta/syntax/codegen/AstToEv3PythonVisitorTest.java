@@ -194,6 +194,7 @@ public class AstToEv3PythonVisitorTest {
             + "item2 = \"TTTT\"\n"
             + "item3 = True\n"
             + "def run():\n"
+            + "    global item, item2, item3\n"
             + "    hal.drawText(str(item), 0, 0)\n"
             + "    hal.drawText(str(item2), 0, 0)\n"
             + "    hal.drawText(str(item3), 0, 0)\n"
@@ -210,6 +211,7 @@ public class AstToEv3PythonVisitorTest {
             + make_globals(CFG_MOTORS, "")
             + "variablenName = 0\n"
             + "def run():\n"
+            + "    global variablenName\n"
             + "    hal.regulatedDrive('A', 'B', False, 'foreward', 50)\n"
             + "    hal.drawPicture('oldglasses', 0, 0)\n"
             + "    \n\n" // FIXME: where is this whitespace coming from?
@@ -229,6 +231,7 @@ public class AstToEv3PythonVisitorTest {
             + "item = 0\n"
             + "item2 = \"cc\"\n"
             + "def run():\n"
+            + "    global item, item2\n"
             + "\n"
             + MAIN_METHOD;
 
@@ -340,6 +343,7 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
             + "def run():\n"
+            + "    global variablenName\n"
             + "    hal.drawText(str(test()), 0, 0)\n"
             + "    \n"
             + "def test():\n"
@@ -358,6 +362,7 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
             + "def run():\n"
+            + "    global variablenName\n"
             + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n"
             + "    \n"
             + "def test(x, x2):\n"
@@ -375,6 +380,7 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
             + "def run():\n"
+            + "    global variablenName\n"
             + "    hal.drawText(str(test()), 0, 0)\n"
             + "    \n"
             + "def test():\n"
@@ -441,6 +447,7 @@ public class AstToEv3PythonVisitorTest {
             + "variablenName = 0\n"
             + "variablenName2 = True\n"
             + "def run():\n"
+            + "    global variablenName, variablenName2\n"
             + "    test1(0, 0)\n"
             + "    test2()\n"
             + "    \n"
@@ -462,6 +469,7 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = hal.getColorSensorColour('3')\n"
             + "def run():\n"
+            + "    global variablenName\n"
             + "    macheEtwas(hal.getInfraredSensorDistance('4'))\n"
             + "    \n"
             + "def macheEtwas(x):\n"
@@ -529,6 +537,7 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith('none', 'red', 'blue')\n"
             + "def run():\n"
+            + "    global variablenName\n"
             + "    for variablenName2 in variablenName:\n"
             + "        hal.drawText(str(variablenName2), 0, 0)\n\n"
             + MAIN_METHOD;
@@ -629,6 +638,7 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "message = \"exit\"\n"
             + "def run():\n"
+            + "    global message\n"
             + "    if message == \"exit\":\n"
             + "        hal.drawText(\"done\", 0, 0)\n\n"
             + MAIN_METHOD;

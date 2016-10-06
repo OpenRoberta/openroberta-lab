@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -472,15 +473,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        //        switch ( funct.getFunctName() ) {
-        //            case PRINT:
-        //                this.sb.append("System.out.println(");
-        //                funct.getParam().get(0).visit(this);
-        //                this.sb.append(")");
-        //                break;
-        //            default:
-        //                break;
-        //        }
+        this.sb.append("math.pow(");
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -904,9 +901,33 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().visit(this);
+        StmtList<Void> variables = mainTask.getVariables();
+        variables.visit(this);
         this.sb.append("\n").append("def run():");
         incrIndentation();
+        List<Stmt<Void>> variableList = variables.get();
+        if ( !variableList.isEmpty() ) {
+            nlIndent();
+            // insert global statement for all variables
+            // TODO: there must be an easier way without the casts
+            // TODO: we'd only list variables that we change, ideally we'd do this in
+            // visitAssignStmt(), but we must only to this once per method and visitAssignStmt()
+            // would need the list of mainTask variables (store in the class?)
+            // TODO: I could store the names as a list in the instance and filter it against the parameters
+            // in visitMethodVoid, visitMethodReturn
+            this.sb.append("global ");
+            boolean first = true;
+            for ( Stmt<Void> s : variables.get() ) {
+                ExprStmt<Void> es = (ExprStmt<Void>) s;
+                VarDeclaration<Void> vd = (VarDeclaration<Void>) es.getExpr();
+                if ( first ) {
+                    first = false;
+                } else {
+                    this.sb.append(", ");
+                }
+                this.sb.append(vd.getName());
+            }
+        }
         return null;
     }
 
