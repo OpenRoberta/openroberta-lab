@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.nxt.addition.ShowHelloWorldAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -120,12 +121,13 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class Ast2NxcVisitor implements AstVisitor<Void> {
+public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     public static final String INDENT = "  ";
 
     private final NxtConfiguration brickConfiguration;
@@ -160,8 +162,8 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        boolean timeSensorUsed = UsedTimerVisitor.check(phrasesSet);
-        boolean volumeActionUsed = UsedVolumeVisitor.check(phrasesSet);
+        boolean timeSensorUsed = NxtUsedTimerVisitor.check(phrasesSet);
+        boolean volumeActionUsed = NxtUsedVolumeVisitor.check(phrasesSet);
         final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, volumeActionUsed);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
 
@@ -1714,6 +1716,12 @@ public class Ast2NxcVisitor implements AstVisitor<Void> {
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
+        this.sb.append("!!!Hello World!!!");
         return null;
     }
 }

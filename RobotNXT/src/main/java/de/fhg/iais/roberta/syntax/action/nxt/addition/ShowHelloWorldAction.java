@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 
 /**
  * This class represents the <b>robActions_display_text</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -37,7 +38,7 @@ public class ShowHelloWorldAction<V> extends Action<V> {
      * @return read only object of class {@link ShowHelloWorldAction}
      */
     private static <V> ShowHelloWorldAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ShowHelloWorldAction<V>(properties, comment);
+        return new ShowHelloWorldAction<>(properties, comment);
     }
 
     @Override
@@ -47,8 +48,7 @@ public class ShowHelloWorldAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // XXX: return visitor.visitShowTextAction(this);
-        return null;
+        return ((NxtAstVisitor<V>) visitor).visitShowHelloWorldAction(this);
     }
 
     /**

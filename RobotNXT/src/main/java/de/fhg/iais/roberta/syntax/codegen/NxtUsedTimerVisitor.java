@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
+import de.fhg.iais.roberta.syntax.action.nxt.addition.ShowHelloWorldAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -27,18 +28,19 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class UsedTimerVisitor extends CheckVisitor {
+public class NxtUsedTimerVisitor extends CheckVisitor implements NxtAstVisitor<Void> {
 
     private boolean isUsed = false;
 
     public static boolean check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(phrasesSet.size() >= 1);
-        UsedTimerVisitor checkVisitor = new UsedTimerVisitor();
+        NxtUsedTimerVisitor checkVisitor = new NxtUsedTimerVisitor();
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.visit(checkVisitor);
@@ -187,6 +189,11 @@ public class UsedTimerVisitor extends CheckVisitor {
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
         return null;
     }
 

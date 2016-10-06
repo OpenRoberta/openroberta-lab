@@ -251,7 +251,11 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
         return null;
     }
 
-    protected void addBlockTypesFromProperties(Properties properties) {
+    protected void addBlockTypesFromProperties(String propertyFileName, Properties properties) {
+        boolean alreadyLoaded = BlockTypeContainer.register(propertyFileName);
+        if ( alreadyLoaded ) {
+            return;
+        }
         for ( Entry<Object, Object> property : properties.entrySet() ) {
             String propertyKey = (String) property.getKey();
             if ( propertyKey.startsWith("blockType.") ) {
