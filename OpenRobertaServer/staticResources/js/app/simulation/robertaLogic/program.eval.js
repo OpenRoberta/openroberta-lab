@@ -373,27 +373,27 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalMotorOnAction = function(obj, stmt) {
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
             obj.actors.initLeftTachoMotor(obj.simulationData.encoder.left);
-            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed));
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
         } else {
             obj.actors.initRightTachoMotor(obj.simulationData.encoder.right);
-            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
         }
         setDurationToCover(obj, stmt);
     };
 
     var evalMotorSetPowerAction = function(obj, stmt) {
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
-            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed));
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
         } else {
-            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed));
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
         }
     };
 
     var evalMotorStopAction = function(obj, stmt) {
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
-            obj.actors.setLeftMotorSpeed(0);
+            obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
         } else {
-            obj.actors.setRightMotorSpeed(0);
+            obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
         }
     };
 
