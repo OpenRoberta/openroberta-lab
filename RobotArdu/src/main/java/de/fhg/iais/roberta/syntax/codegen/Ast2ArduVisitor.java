@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
@@ -105,6 +105,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -506,10 +507,23 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+        this.sb.append("(" + whitespace());
+        ifStmt.getExpr().get(0).visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        this.sb.append(whitespace() + ":" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+    }
+
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        generateCodeFromIfElse(ifStmt);
-        generateCodeFromElse(ifStmt);
+        if ( ifStmt.isTernary() ) {
+            generateCodeFromTernary(ifStmt);
+        } else {
+            generateCodeFromIfElse(ifStmt);
+            generateCodeFromElse(ifStmt);
+        }
         return null;
     }
 
@@ -677,40 +691,30 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //TODO Not implemented. Wait for the function
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName = null;
-        if ( motorOnAction.getPort() == ActorPort.A ) {
-            methodName = "one.servo1";
-        } else if ( motorOnAction.getPort() == ActorPort.D ) {
-            methodName = "one.servo2";
+        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
+        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+        String methodName;
+        if ( isDuration ) {
+            methodName = "one.moveMotorRotation(";
+            this.sb.append(methodName);
+            this.sb.append(motorOnAction.getPort());
+            this.sb.append(", ");
+            motorOnAction.getParam().getSpeed().visit(this);
+            this.sb.append(", ");
+            motorOnAction.getParam().getDuration().getValue().visit(this);
+            if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
+                this.sb.append("/2/PI");
+            }
         } else {
-            //        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-            //        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-            //        String methodName;
-            //        if ( isDuration ) {
-            //            methodName = "one.moveMotorRotation(";
-            //            this.sb.append(methodName);
-            //            this.sb.append(motorOnAction.getPort());
-            //            this.sb.append(", ");
-            //            motorOnAction.getParam().getSpeed().visit(this);
-            //            this.sb.append(", ");
-            //            motorOnAction.getParam().getDuration().getValue().visit(this);
-            //            if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
-            //                this.sb.append("/2/PI");
-            //            }
-            //        } else {
-            //            //there is no regulated drive function for the robot, the closest function if PID controlled
-            //            //movement. The coefficients are default, they seem to make movement of the robot
-            //            //much smoother.
-            //            methodName = isRegulatedDrive ? "one.move1mPID(" : "one.move1m(";
-            //            this.sb.append(methodName);
-            //            this.sb.append(motorOnAction.getPort());
-            //            this.sb.append(", ");
-            //            motorOnAction.getParam().getSpeed().visit(this);
-            //        }
-            //        this.sb.append(");");
+            //there is no regulated drive function for the robot, the closest function if PID controlled
+            //movement. The coefficients are default, they seem to make movement of the robot
+            //much smoother.
+            methodName = isRegulatedDrive ? "one.move1mPID(" : "one.move1m(";
+            this.sb.append(methodName);
+            this.sb.append(motorOnAction.getPort());
+            this.sb.append(", ");
+            motorOnAction.getParam().getSpeed().visit(this);
         }
-        this.sb.append(methodName + "(");
-        motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(");");
         return null;
     }
@@ -919,9 +923,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 this.sb.append(")");
                 break;
             case "ColorSensorMode.RGB":
-                this.sb.append("{rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[0], rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[1], rob.colorSensorRGB(" + colors + port);
+                this.sb.append("{(double) rob.colorSensorRGB(" + colors + port);
+                this.sb.append(")[0], (double) rob.colorSensorRGB(" + colors + port);
+                this.sb.append(")[1], (double) rob.colorSensorRGB(" + colors + port);
                 this.sb.append(")[2]}");
                 break;
             case "ColorSensorMode.RED":
@@ -946,6 +950,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         this.sb.append("rob.readBearing()");
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        this.sb.append("one.readBattery()");
         return null;
     }
 
@@ -994,7 +1004,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort().getPortNumber();
-        this.sb.append("rob.ultrasonicDistance(" + port + ")");
+        if ( ultrasonicSensor.getPort().getPortNumber().equals("3") ) {
+            this.sb.append("rob.sonar()");
+        } else {
+            this.sb.append("rob.ultrasonicDistance(" + port + ")");
+        }
         return null;
     }
 
@@ -1639,15 +1653,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                     nlIndent();
                     this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
-                //TODO: add a function for sonar
-                case ULTRASONIC_HEAD:
-                    nlIndent();
-                    this.sb.append("one.spiConnect(SSPIN);");
-                    //sonar setup:
-                    this.sb.append("pinMode(trigPin, OUTPUT);");
-                    this.sb.append("pinMode(echoPin, INPUT);");
-                    this.sb.append("pinMode(LEDPin,  OUTPUT);");
-                    break;
                 case INFRARED:
                     nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
@@ -1677,4 +1682,5 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
+
 }
