@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Category;
@@ -329,20 +328,20 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
+            this.sb.append("Raw");
+            ListCreate<Void> list = (ListCreate<Void>) var.getValue();
             if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
                 || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
                 || var.getValue().toString().equals("ListCreate [STRING, ]") ) {
                 this.sb.append("[0]");
             } else {
-                this.sb.append("[]");
+                this.sb.append("[" + list.getValue().get().size() + "]");
             }
             if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
-                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 if ( list.getValue().get().size() == 0 ) {
                     return null;
                 }
             }
-
         }
 
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -356,6 +355,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 }
             } else {
                 var.getValue().visit(this);
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(";");
+                    nlIndent();
+                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
+                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
+                }
             }
         }
         return null;
@@ -1039,16 +1044,20 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     }
 
-    private void arrayLen(String arr) {
-        String array = StringUtils.substringBetween(arr, "[", "]");
-        this.sb.append("sizeof(" + array + ")/sizeof(" + array + "[0])");
+    private void arrayLen(Var<Void> arr) {
+
+        this.sb.append("sizeof(" + arr.getValue() + ")/sizeof(" + arr.getValue() + "[0])");
     }
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
         String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
         this.sb.append(methodName);
-        arrayLen(indexOfFunct.getParam().get(0).toString());
+        arrayLen((Var<Void>) indexOfFunct.getParam().get(0));
         this.sb.append(", ");
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1059,12 +1068,16 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
             this.sb.append("(");
-            arrayLen(lengthOfIsEmptyFunct.getParam().get(0).toString());
+            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
             this.sb.append(" == 0)");
         } else {
-            arrayLen(lengthOfIsEmptyFunct.getParam().get(0).toString());
+            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
         }
         return null;
     }
@@ -1090,6 +1103,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
         switch ( getEnumCode(listGetIndex.getLocation()) ) {
@@ -1097,7 +1114,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case "IndexLocation.FROM_END":
-                arrayLen(listGetIndex.getParam().get(0).toString());
+                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
                 this.sb.append(" - 1 - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
@@ -1105,12 +1122,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 this.sb.append("0");
                 break;
             case "IndexLocation.LAST":
-                arrayLen(listGetIndex.getParam().get(0).toString());
+                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
                 this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
                 this.sb.append("rob.randomIntegerInRange(0, ");
-                arrayLen(listGetIndex.getParam().get(0).toString());
+                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
                 this.sb.append(")");
                 break;
         }
@@ -1120,6 +1137,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
+            return null;
+        }
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
         switch ( getEnumCode(listSetIndex.getLocation()) ) {
@@ -1127,7 +1147,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case "IndexLocation.FROM_END":
-                arrayLen(listSetIndex.getParam().get(0).toString());
+                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
                 this.sb.append(" - 1 - ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
@@ -1135,12 +1155,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 this.sb.append("0");
                 break;
             case "IndexLocation.LAST":
-                arrayLen(listSetIndex.getParam().get(0).toString());
+                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
                 this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
                 this.sb.append("rob.randomIntegerInRange(0, ");
-                arrayLen(listSetIndex.getParam().get(0).toString());
+                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
                 this.sb.append(")");
                 break;
         }
@@ -1209,6 +1229,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
                 this.sb.append("rob.arrSum(");
@@ -1237,7 +1261,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             default:
                 break;
         }
-        arrayLen(mathOnListFunct.getParam().get(0).toString());
+        arrayLen((Var<Void>) mathOnListFunct.getParam().get(0));
         this.sb.append(", ");
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
