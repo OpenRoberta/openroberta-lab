@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Category;
@@ -1038,11 +1039,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     }
 
-    //TODO: fix the array length in a function. If won't work- pass the size to the function
+    private void arrayLen(String arr) {
+        String array = StringUtils.substringBetween(arr, "[", "]");
+        this.sb.append("sizeof(" + array + ")/sizeof(" + array + "[0])");
+    }
+
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
         this.sb.append(methodName);
+        arrayLen(indexOfFunct.getParam().get(0).toString());
+        this.sb.append(", ");
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
@@ -1052,19 +1059,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        String methodName;
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            this.sb.append("(sizeof(");
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-            this.sb.append(")/sizeof(");
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-            this.sb.append("[0]) == 0)");
+            this.sb.append("(");
+            arrayLen(lengthOfIsEmptyFunct.getParam().get(0).toString());
+            this.sb.append(" == 0)");
         } else {
-            this.sb.append("sizeof(");
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-            this.sb.append(")/sizeof(");
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-            this.sb.append("[0])");
+            arrayLen(lengthOfIsEmptyFunct.getParam().get(0).toString());
         }
         return null;
     }
@@ -1097,29 +1097,21 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case "IndexLocation.FROM_END":
-                this.sb.append("sizeof(");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(")/sizeof(");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append("[0]) - 1 - ");
+                arrayLen(listGetIndex.getParam().get(0).toString());
+                this.sb.append(" - 1 - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
             case "IndexLocation.FIRST":
                 this.sb.append("0");
                 break;
             case "IndexLocation.LAST":
-                this.sb.append("sizeof(");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(")/sizeof(");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append("[0]) - 1");
+                arrayLen(listGetIndex.getParam().get(0).toString());
+                this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
-                this.sb.append("rob.randomIntegerInRange(0, sizeof(");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append(")/sizeof(");
-                listGetIndex.getParam().get(0).visit(this);
-                this.sb.append("[0]))");
+                this.sb.append("rob.randomIntegerInRange(0, ");
+                arrayLen(listGetIndex.getParam().get(0).toString());
+                this.sb.append(")");
                 break;
         }
         this.sb.append("]");
@@ -1135,29 +1127,21 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case "IndexLocation.FROM_END":
-                this.sb.append("sizeof(");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(")/sizeof(");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append("[0]) - 1 - ");
+                arrayLen(listSetIndex.getParam().get(0).toString());
+                this.sb.append(" - 1 - ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
             case "IndexLocation.FIRST":
                 this.sb.append("0");
                 break;
             case "IndexLocation.LAST":
-                this.sb.append("sizeof(");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(")/sizeof(");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append("[0]) - 1");
+                arrayLen(listSetIndex.getParam().get(0).toString());
+                this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
-                this.sb.append("rob.randomIntegerInRange(0, sizeof(");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append(")/sizeof(");
-                listSetIndex.getParam().get(0).visit(this);
-                this.sb.append("[0]))");
+                this.sb.append("rob.randomIntegerInRange(0, ");
+                arrayLen(listSetIndex.getParam().get(0).toString());
+                this.sb.append(")");
                 break;
         }
         this.sb.append("]");
@@ -1223,7 +1207,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: implement
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
@@ -1247,7 +1230,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 break;
             case RANDOM:
                 this.sb.append("rob.arrRand(");
-                mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MODE:
                 this.sb.append("rob.arrMode(");
@@ -1255,11 +1237,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             default:
                 break;
         }
-        this.sb.append("sizeof(");
-        mathOnListFunct.getParam().get(0).visit(this);
-        this.sb.append(")/sizeof(");
-        mathOnListFunct.getParam().get(0).visit(this);
-        this.sb.append("[0])");
+        arrayLen(mathOnListFunct.getParam().get(0).toString());
         this.sb.append(", ");
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
