@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -95,6 +97,8 @@ public class BlockTypeContainer {
     private static final Logger LOG = LoggerFactory.getLogger(BlockTypeContainer.class);
 
     private static final String[] NO_BLOCKLY_NAMES = new String[0];
+
+    private static final List<String> loadedPropertyFiles = new ArrayList<>();
 
     private static final Map<String, BlockType> blockTypesByName = new HashMap<>();
     private static final Map<String, BlockType> blockTypesByBlocklyName = new HashMap<>();
@@ -314,6 +318,22 @@ public class BlockTypeContainer {
         return blockType;
     }
 
+    /**
+     * Registers a property file to avoid loading property files more than once.
+     * Properties are not loaded by calling this method use the {@link #add(String, Category, Class, String...)}
+     *
+     * @param propertyFileName
+     * @return true if the property file was already loaded or false otherwise
+     */
+    public static boolean register(String propertyFileName) {
+        if ( loadedPropertyFiles.contains(propertyFileName) ) {
+            return true;
+        } else {
+            loadedPropertyFiles.add(propertyFileName);
+            return false;
+        }
+    }
+
     public static class BlockType {
         private final String name;
         private final Category category;
@@ -363,7 +383,7 @@ public class BlockTypeContainer {
          */
         public boolean hasName(String... namesToCheck) {
             for ( String nameToCheck : namesToCheck ) {
-                boolean found = name.equals(nameToCheck);
+                boolean found = this.name.equals(nameToCheck);
                 if ( found ) {
                     return true;
                 }

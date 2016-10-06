@@ -10,6 +10,12 @@ public class ShowTextActionTest {
         final String a = "\nTextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_ShowText.xml");
+    }
 
+    @Test
+    public void showHelloWorldActionCode() throws Exception {
+        final String a = "!!!Hello World!!!" + "!!!Hello World!!!";
+
+        Helper.assertCodeIsOk(a, "/ast/actions/action_ShowHelloWorld.xml");
     }
 }
