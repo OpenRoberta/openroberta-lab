@@ -5,84 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
-import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
-import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
-import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Unary;
-import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -94,108 +17,15 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * <i>not</i> implemented as a enum type. Duriong registraion of new block types the uniqueness of names is guaranteed by this container.
  */
 public class BlockTypeContainer {
-    private static final Logger LOG = LoggerFactory.getLogger(BlockTypeContainer.class);
-
     private static final String[] NO_BLOCKLY_NAMES = new String[0];
 
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
     private static final List<String> loadedPropertyFiles = new ArrayList<>();
 
-=======
-    private static final List<BlockType> allBlockTypes = new ArrayList<>();
->>>>>>> #253: restructuring of the block-type logic to allow extensions
     private static final Map<String, BlockType> blockTypesByName = new HashMap<>();
     private static final Map<String, BlockType> blockTypesByBlocklyName = new HashMap<>();
 
     static {
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("COLOR_SENSING", Category.SENSOR, ColorSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_COLOUR_GET_SAMPLE);
-        add("LIGHT_SENSING", Category.SENSOR, LightSensor.class, BlocklyConstants.ROB_SENSOR_LIGHT_GET_SAMPLE, BlocklyConstants.SIM_LIGHT_GET_SAMPLE);
-        add("SOUND_SENSING", Category.SENSOR, SoundSensor.class, BlocklyConstants.ROB_SENSOR_SOUND_GET_SAMPLE, BlocklyConstants.SIM_SOUND_GET_SAMPLE);
-        add("TOUCH_SENSING", Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED);
-        add("COMPASS_SENSING", Category.SENSOR, CompassSensor.class, BlocklyConstants.ROB_SENSOR_COMPASS_GET_SAMPLE);
-        add(
-=======
-        configure("COLOR_SENSING", Category.SENSOR, ColorSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_COLOUR_GET_SAMPLE);
-        configure("LIGHT_SENSING", Category.SENSOR, LightSensor.class, BlocklyConstants.ROB_SENSOR_LIGHT_GET_SAMPLE, BlocklyConstants.SIM_LIGHT_GET_SAMPLE);
-        configure("SOUND_SENSING", Category.SENSOR, SoundSensor.class, BlocklyConstants.ROB_SENSOR_SOUND_GET_SAMPLE, BlocklyConstants.SIM_SOUND_GET_SAMPLE);
-        configure("TOUCH_SENSING", Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED);
-        configure("COMPASS_SENSING", Category.SENSOR, CompassSensor.class, BlocklyConstants.ROB_SENSOR_COMPASS_GET_SAMPLE);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "ULTRASONIC_SENSING",
-            Category.SENSOR,
-            UltrasonicSensor.class,
-            BlocklyConstants.ROB_SENSOR_ULTRASONIC_GET_SAMPLE,
-            BlocklyConstants.SIM_ULTRASONIC_GET_SAMPLE);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("INFRARED_SENSING", Category.SENSOR, InfraredSensor.class, BlocklyConstants.ROB_SENSOR_INFRARED_GET_SAMPLE);
-        add(
-=======
-        configure("INFRARED_SENSING", Category.SENSOR, InfraredSensor.class, BlocklyConstants.ROB_SENSOR_INFRARED_GET_SAMPLE);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "ENCODER_SENSING",
-            Category.SENSOR,
-            EncoderSensor.class,
-            BlocklyConstants.ROB_SENSOR_ENCODER_GET_SAMPLE,
-            BlocklyConstants.ROB_SENSORS_ENCODER_RESET);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("BRICK_SENSING", Category.SENSOR, BrickSensor.class, BlocklyConstants.ROB_SENSOR_KEY_IS_PRESSED);
-        add("GYRO_SENSING", Category.SENSOR, GyroSensor.class, BlocklyConstants.ROB_SENSOR_GYRO_GET_SAMPLE, BlocklyConstants.ROB_SENSORS_GYRO_RESET);
-        add("TIMER_SENSING", Category.SENSOR, TimerSensor.class, BlocklyConstants.ROB_SENSOR_TIMER_GET_SAMPLE, BlocklyConstants.ROB_SENSORS_TIMER_RESET);
-        add("SENSOR_GET_SAMPLE", Category.SENSOR, GetSampleSensor.class, BlocklyConstants.ROB_SENSOR_GET_SAMPLE, BlocklyConstants.SIM_GET_SAMPLE);
         add("EXPR_LIST", Category.EXPR);
-        add("STRING_CONST", Category.EXPR, StringConst.class, BlocklyConstants.STRING_CONST_TEXT);
-        add("COLOR_CONST", Category.EXPR, ColorConst.class, BlocklyConstants.ROB_COLOUR_PICKER);
-        add("NULL_CONST", Category.EXPR, NullConst.class, BlocklyConstants.LOGICAL_NULL);
-        add("BOOL_CONST", Category.EXPR, BoolConst.class, BlocklyConstants.LOGICAL_BOOLEAN);
-        add("NUM_CONST", Category.EXPR, NumConst.class, BlocklyConstants.MATH_NUMBER);
-        add("MATH_CONST", Category.EXPR, MathConst.class, BlocklyConstants.MATH_CONSTANT);
-        add("CONNECTION_CONST", Category.EXPR, ConnectConst.class, BlocklyConstants.CONNECTION_NXT);
-        add("EMPTY_LIST", Category.EXPR, EmptyList.class, BlocklyConstants.LISTS_CREATE_EMPTY);
-        add("VAR", Category.EXPR, Var.class, BlocklyConstants.VARIABLE_GET);
-        add(
-=======
-        configure("BRICK_SENSING", Category.SENSOR, BrickSensor.class, BlocklyConstants.ROB_SENSOR_KEY_IS_PRESSED);
-        configure("GYRO_SENSING", Category.SENSOR, GyroSensor.class, BlocklyConstants.ROB_SENSOR_GYRO_GET_SAMPLE, BlocklyConstants.ROB_SENSORS_GYRO_RESET);
-        configure("TIMER_SENSING", Category.SENSOR, TimerSensor.class, BlocklyConstants.ROB_SENSOR_TIMER_GET_SAMPLE, BlocklyConstants.ROB_SENSORS_TIMER_RESET);
-        configure("SENSOR_GET_SAMPLE", Category.SENSOR, GetSampleSensor.class, BlocklyConstants.ROB_SENSOR_GET_SAMPLE, BlocklyConstants.SIM_GET_SAMPLE);
-        configure("EXPR_LIST", Category.EXPR);
-        configure("STRING_CONST", Category.EXPR, StringConst.class, BlocklyConstants.STRING_CONST_TEXT);
-        configure("COLOR_CONST", Category.EXPR, ColorConst.class, BlocklyConstants.ROB_COLOUR_PICKER);
-        configure("NULL_CONST", Category.EXPR, NullConst.class, BlocklyConstants.LOGICAL_NULL);
-        configure("BOOL_CONST", Category.EXPR, BoolConst.class, BlocklyConstants.LOGICAL_BOOLEAN);
-        configure("NUM_CONST", Category.EXPR, NumConst.class, BlocklyConstants.MATH_NUMBER);
-        configure("MATH_CONST", Category.EXPR, MathConst.class, BlocklyConstants.MATH_CONSTANT);
-        configure("CONNECTION_CONST", Category.EXPR, ConnectConst.class, BlocklyConstants.CONNECTION_NXT);
-        configure("EMPTY_LIST", Category.EXPR, EmptyList.class, BlocklyConstants.LISTS_CREATE_EMPTY);
-        configure("VAR", Category.EXPR, Var.class, BlocklyConstants.VARIABLE_GET);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "VAR_DECLARATION",
-            Category.EXPR,
-            VarDeclaration.class,
-            BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE,
-            BlocklyConstants.ROB_GLOBAL_VARIABLES_DECLARE);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("UNARY", Category.EXPR, Unary.class, BlocklyConstants.LOGIC_NEGATE);
-        add(
-=======
-        configure("UNARY", Category.EXPR, Unary.class, BlocklyConstants.LOGIC_NEGATE);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "BINARY",
-            Category.EXPR,
-            Binary.class,
-            BlocklyConstants.LOGIC_COMPARE,
-            BlocklyConstants.LOGIC_COPERATION,
-            BlocklyConstants.MATH_ARITHMETIC,
-            BlocklyConstants.MATH_CHANGE,
-            BlocklyConstants.ROB_MATH_CHANGE,
-            BlocklyConstants.MATH_MODULO,
-            BlocklyConstants.TEXT_APPEND);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
         add("SENSOR_EXPR", Category.EXPR);
         add("ACTION_EXPR", Category.EXPR);
         add("EMPTY_EXPR", Category.EXPR);
@@ -203,246 +33,20 @@ public class BlockTypeContainer {
         add("FUNCTION_EXPR", Category.EXPR);
         add("METHOD_EXPR", Category.EXPR);
         add("FUNCTIONS", Category.EXPR);
-        add("START_ACTIVITY_TASK", Category.EXPR, StartActivityTask.class, BlocklyConstants.ROB_CONTROLS_START_ACTIVITY);
-        add(
-=======
-        configure("SENSOR_EXPR", Category.EXPR);
-        configure("ACTION_EXPR", Category.EXPR);
-        configure("EMPTY_EXPR", Category.EXPR);
-        configure("SHADOW_EXPR", Category.EXPR);
-        configure("FUNCTION_EXPR", Category.EXPR);
-        configure("METHOD_EXPR", Category.EXPR);
-        configure("FUNCTIONS", Category.EXPR);
-        configure("START_ACTIVITY_TASK", Category.EXPR, StartActivityTask.class, BlocklyConstants.ROB_CONTROLS_START_ACTIVITY);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "IF_STMT",
-            Category.STMT,
-            IfStmt.class,
-            BlocklyConstants.LOGIC_TERNARY,
-            BlocklyConstants.CONTROLS_IF,
-            BlocklyConstants.ROB_CONTROLS_IF,
-            BlocklyConstants.ROB_CONTROLS_IF_ELSE);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add(
-=======
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "REPEAT_STMT",
-            Category.STMT,
-            RepeatStmt.class,
-            BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER,
-            BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER_ARDU,
-            BlocklyConstants.CONTROLS_WHILE_UNTIL,
-            BlocklyConstants.CONTROLS_FOR,
-            BlocklyConstants.ROB_CONTROLS_FOR,
-            BlocklyConstants.CONTROLS_REPEAT_EXT,
-            BlocklyConstants.CONTROLS_REPEAT,
-            BlocklyConstants.CONTROLS_FOR_EACH,
-            BlocklyConstants.ROB_CONTROLS_FOR_EACH);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
         add("EXPR_STMT", Category.STMT);
         add("STMT_LIST", Category.STMT);
-        add("ASSIGN_STMT", Category.STMT, AssignStmt.class, BlocklyConstants.VARIABLE_SET);
         add("AKTION_STMT", Category.STMT);
         add("SENSOR_STMT", Category.STMT);
         add("FUNCTION_STMT", Category.STMT);
         add("METHOD_STMT", Category.STMT);
-        add("STMT_FLOW_CONTROL", Category.STMT, StmtFlowCon.class, BlocklyConstants.CONTROLS_FLOW_STATEMENT);
-        add("WAIT_STMT", Category.STMT, WaitStmt.class, BlocklyConstants.ROB_CONTROLS_WAIT_FOR, BlocklyConstants.ROB_CONTROLS_WAIT);
-        add("WAIT_TIME", Category.STMT, WaitTimeStmt.class, BlocklyConstants.ROB_CONTROLS_WAIT_TIME);
-        add("TURN_ACTION", Category.ACTOR, TurnAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN_FOR);
-        add("DRIVE_ACTION", Category.ACTOR, DriveAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR);
-        add(
-=======
-        configure("EXPR_STMT", Category.STMT);
-        configure("STMT_LIST", Category.STMT);
-        configure("ASSIGN_STMT", Category.STMT, AssignStmt.class, BlocklyConstants.VARIABLE_SET);
-        configure("AKTION_STMT", Category.STMT);
-        configure("SENSOR_STMT", Category.STMT);
-        configure("FUNCTION_STMT", Category.STMT);
-        configure("METHOD_STMT", Category.STMT);
-        configure("STMT_FLOW_CONTROL", Category.STMT, StmtFlowCon.class, BlocklyConstants.CONTROLS_FLOW_STATEMENT);
-        configure("WAIT_STMT", Category.STMT, WaitStmt.class, BlocklyConstants.ROB_CONTROLS_WAIT_FOR, BlocklyConstants.ROB_CONTROLS_WAIT);
-        configure("WAIT_TIME", Category.STMT, WaitTimeStmt.class, BlocklyConstants.ROB_CONTROLS_WAIT_TIME);
-        configure(
-            "TURN_ACTION",
-            Category.ACTOR,
-            TurnAction.class,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN_FOR);
-        configure(
-            "DRIVE_ACTION",
-            Category.ACTOR,
-            DriveAction.class,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "CURVE_ACTION",
-            Category.ACTOR,
-            CurveAction.class,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE_FOR);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("SHOW_TEXT_ACTION", Category.ACTOR, ShowTextAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_TEXT);
-        add("SHOW_PICTURE_ACTION", Category.ACTOR, ShowPictureAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_PICTURE);
-        add("TONE_ACTION", Category.ACTOR, ToneAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_TONE);
-        add(
-=======
-        configure("SHOW_TEXT_ACTION", Category.ACTOR, ShowTextAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_TEXT);
-        configure("SHOW_PICTURE_ACTION", Category.ACTOR, ShowPictureAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_PICTURE);
-        configure("TONE_ACTION", Category.ACTOR, ToneAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_TONE);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "LIGHT_SENSOR_ACTION",
-            Category.ACTOR,
-            LightSensorAction.class,
-            BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_ON,
-            BlocklyConstants.ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("LIGHT_ACTION", Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON);
-        add("CLEAR_DISPLAY_ACTION", Category.ACTOR, ClearDisplayAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_CLEAR);
-        add(
-=======
-        configure("LIGHT_ACTION", Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON);
-        configure("CLEAR_DISPLAY_ACTION", Category.ACTOR, ClearDisplayAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_CLEAR);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "MOTOR_ON_ACTION",
-            Category.ACTOR,
-            MotorOnAction.class,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_ON,
-            BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR,
-            BlocklyConstants.SIM_MOTOR_ON,
-            BlocklyConstants.SIM_MOTOR_ON_FOR);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("MOTOR_GET_POWER_ACTION", Category.ACTOR, MotorGetPowerAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_GET_POWER);
-        add("MOTOR_SET_POWER_ACTION", Category.ACTOR, MotorSetPowerAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_SET_POWER);
-        add("MOTOR_STOP_ACTION", Category.ACTOR, MotorStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_STOP, BlocklyConstants.SIM_MOTOR_STOP);
-        add("PLAY_FILE_ACTION", Category.ACTOR, PlayFileAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_FILE);
-        add("VOLUME_ACTION", Category.ACTOR, VolumeAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME, BlocklyConstants.ROB_ACTIONS_PLAY_GET_VOLUME);
-        add(
-=======
-        configure("MOTOR_GET_POWER_ACTION", Category.ACTOR, MotorGetPowerAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_GET_POWER);
-        configure("MOTOR_SET_POWER_ACTION", Category.ACTOR, MotorSetPowerAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_SET_POWER);
-        configure("MOTOR_STOP_ACTION", Category.ACTOR, MotorStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_STOP, BlocklyConstants.SIM_MOTOR_STOP);
-        configure("PLAY_FILE_ACTION", Category.ACTOR, PlayFileAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_FILE);
-        configure(
-            "VOLUME_ACTION",
-            Category.ACTOR,
-            VolumeAction.class,
-            BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME,
-            BlocklyConstants.ROB_ACTIONS_PLAY_GET_VOLUME);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "LIGHT_STATUS_ACTION",
-            Category.ACTOR,
-            LightStatusAction.class,
-            BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF,
-            BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_RESET,
-            BlocklyConstants.SIM_LED_OFF);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("STOP_ACTION", Category.ACTOR, MotorDriveStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_STOP);
-        add("MAIN_TASK", Category.TASK, MainTask.class, BlocklyConstants.ROB_CONTROLS_START, BlocklyConstants.ROB_CONTROLS_START_ARDU);
-        add("ACTIVITY_TASK", Category.TASK, ActivityTask.class, BlocklyConstants.ROB_CONTROLS_ACTIVITY);
         add("LOCATION", Category.TASK);
-        add("TEXT_INDEX_OF_FUNCT", Category.FUNCTION, IndexOfFunct.class, BlocklyConstants.LISTS_INDEX_OF, BlocklyConstants.ROB_LISTS_INDEX_OF);
         add("TEXT_CHAR_AT_FUNCT", Category.FUNCTION);
-        add("GET_SUB_FUNCT", Category.FUNCTION, GetSubFunct.class, BlocklyConstants.LISTS_GET_SUBLIST, BlocklyConstants.ROB_LISTS_GET_SUBLIST);
-        add(
-=======
-        configure("STOP_ACTION", Category.ACTOR, MotorDriveStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_STOP);
-        configure("MAIN_TASK", Category.TASK, MainTask.class, BlocklyConstants.ROB_CONTROLS_START, BlocklyConstants.ROB_CONTROLS_START_ARDU);
-        configure("ACTIVITY_TASK", Category.TASK, ActivityTask.class, BlocklyConstants.ROB_CONTROLS_ACTIVITY);
-        configure("LOCATION", Category.TASK);
-        configure("TEXT_INDEX_OF_FUNCT", Category.FUNCTION, IndexOfFunct.class, BlocklyConstants.LISTS_INDEX_OF, BlocklyConstants.ROB_LISTS_INDEX_OF);
-        configure("TEXT_CHAR_AT_FUNCT", Category.FUNCTION);
-        configure("GET_SUB_FUNCT", Category.FUNCTION, GetSubFunct.class, BlocklyConstants.LISTS_GET_SUBLIST, BlocklyConstants.ROB_LISTS_GET_SUBLIST);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "MATH_SINGLE_FUNCT",
-            Category.FUNCTION,
-            MathSingleFunct.class,
-            BlocklyConstants.MATH_ROUND,
-            BlocklyConstants.MATH_TRIG,
-            BlocklyConstants.MATH_SINGLE);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("MATH_ON_LIST_FUNCT", Category.FUNCTION, MathOnListFunct.class, BlocklyConstants.MATH_ON_LIST);
-        add("MATH_CONSTRAIN_FUNCT", Category.FUNCTION, MathConstrainFunct.class, BlocklyConstants.MATH_ON_CONSTRAINT);
-        add("MATH_RANDOM_INT_FUNCT", Category.FUNCTION, MathRandomIntFunct.class, BlocklyConstants.MATH_RANDOM_INT);
-        add("MATH_RANDOM_FLOAT_FUNCT", Category.FUNCTION, MathRandomFloatFunct.class, BlocklyConstants.MATH_RANDOM_FLOAT);
-        add("MATH_NUM_PROP_FUNCT", Category.FUNCTION, MathNumPropFunct.class, BlocklyConstants.MATH_NUMBER_PROPERTY);
-        add(
-=======
-        configure("MATH_ON_LIST_FUNCT", Category.FUNCTION, MathOnListFunct.class, BlocklyConstants.MATH_ON_LIST);
-        configure("MATH_CONSTRAIN_FUNCT", Category.FUNCTION, MathConstrainFunct.class, BlocklyConstants.MATH_ON_CONSTRAINT);
-        configure("MATH_RANDOM_INT_FUNCT", Category.FUNCTION, MathRandomIntFunct.class, BlocklyConstants.MATH_RANDOM_INT);
-        configure("MATH_RANDOM_FLOAT_FUNCT", Category.FUNCTION, MathRandomFloatFunct.class, BlocklyConstants.MATH_RANDOM_FLOAT);
-        configure("MATH_NUM_PROP_FUNCT", Category.FUNCTION, MathNumPropFunct.class, BlocklyConstants.MATH_NUMBER_PROPERTY);
-        configure(
->>>>>>> #253: restructuring of the block-type logic to allow extensions
-            "LENGTH_OF_IS_EMPTY_FUNCT",
-            Category.FUNCTION,
-            LengthOfIsEmptyFunct.class,
-            BlocklyConstants.LISTS_LENGTH,
-            BlocklyConstants.ROB_LISTS_LENGTH,
-            BlocklyConstants.LISTS_IS_EMPTY,
-            BlocklyConstants.ROB_LISTS_IS_EMPTY);
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
-        add("TEXT_JOIN_FUNCT", Category.FUNCTION, TextJoinFunct.class, BlocklyConstants.ROB_TEXT_JOIN, BlocklyConstants.TEXT_JOIN);
         add("TEXT_TRIM_FUNCT", Category.FUNCTION);
-        add("TEXT_PRINT_FUNCT", Category.FUNCTION, TextPrintFunct.class, BlocklyConstants.TEXT_PRINT);
         add("TEXT_PROMPT_FUNCT", Category.FUNCTION);
-        add("LIST_REPEAT_FUNCT", Category.FUNCTION, ListRepeat.class, BlocklyConstants.LISTS_REPEAT, BlocklyConstants.ROB_LISTS_REPEAT);
-        add("LIST_CREATE", Category.EXPR, ListCreate.class, BlocklyConstants.LISTS_CREATE_WITH, BlocklyConstants.ROB_LISTS_CREATE_WITH);
-        add("LIST_INDEX_OF", Category.FUNCTION, ListGetIndex.class, BlocklyConstants.LISTS_GET_INDEX, BlocklyConstants.ROB_LISTS_GET_INDEX);
-        add("LIST_SET_INDEX", Category.FUNCTION, ListSetIndex.class, BlocklyConstants.LISTS_SET_INDEX, BlocklyConstants.ROB_LISTS_SET_INDEX);
         add("TEXT_CHANGE_CASE_FUNCT", Category.FUNCTION);
-        add("METHOD_IF_RETURN", Category.METHOD, MethodIfReturn.class, BlocklyConstants.ROB_PROCEDURES_IF_RETURN);
-        add("METHOD_VOID", Category.METHOD, MethodVoid.class, BlocklyConstants.ROB_PROCEDURES_NO_RETURN);
-        add("METHOD_CALL", Category.METHOD, MethodCall.class, BlocklyConstants.ROB_PROCEDURES_CALL_NO_RETURN, BlocklyConstants.ROB_PROCEDURES_CALL_RETURN);
-        add("METHOD_RETURN", Category.METHOD, MethodReturn.class, BlocklyConstants.ROB_PROCEDURES_RETURN);
-        add("BLUETOOTH_CHECK_CONNECT_ACTION", Category.ACTOR, BluetoothCheckConnectAction.class, BlocklyConstants.COM_CHECK_CONNECTION);
-        add("BLUETOOTH_CONNECT_ACTION", Category.ACTOR, BluetoothConnectAction.class, BlocklyConstants.COM_START_CONNECTION);
-        add("BLUETOOTH_SEND_ACTION", Category.ACTOR, BluetoothSendAction.class, BlocklyConstants.COM_SEND_BLOCK);
-        add("BLUETOOTH_WAIT_FOR_CONNECTION_ACTION", Category.ACTOR, BluetoothWaitForConnectionAction.class, BlocklyConstants.COM_WAIT_CONNECTION);
-        add("BLUETOOTH_RECEIVED_ACTION", Category.ACTOR, BluetoothReceiveAction.class, BlocklyConstants.COM_RECEIVE_BLOCK);
     }
 
     public static void add(String name, Category category, Class<?> astClass, String... blocklyNames) {
-=======
-        configure("TEXT_JOIN_FUNCT", Category.FUNCTION, TextJoinFunct.class, BlocklyConstants.ROB_TEXT_JOIN, BlocklyConstants.TEXT_JOIN);
-        configure("TEXT_TRIM_FUNCT", Category.FUNCTION);
-        configure("TEXT_PRINT_FUNCT", Category.FUNCTION, TextPrintFunct.class, BlocklyConstants.TEXT_PRINT);
-        configure("TEXT_PROMPT_FUNCT", Category.FUNCTION);
-        configure("LIST_REPEAT_FUNCT", Category.FUNCTION, ListRepeat.class, BlocklyConstants.LISTS_REPEAT, BlocklyConstants.ROB_LISTS_REPEAT);
-        configure("LIST_CREATE", Category.EXPR, ListCreate.class, BlocklyConstants.LISTS_CREATE_WITH, BlocklyConstants.ROB_LISTS_CREATE_WITH);
-        configure("LIST_INDEX_OF", Category.FUNCTION, ListGetIndex.class, BlocklyConstants.LISTS_GET_INDEX, BlocklyConstants.ROB_LISTS_GET_INDEX);
-        configure("LIST_SET_INDEX", Category.FUNCTION, ListSetIndex.class, BlocklyConstants.LISTS_SET_INDEX, BlocklyConstants.ROB_LISTS_SET_INDEX);
-        configure("TEXT_CHANGE_CASE_FUNCT", Category.FUNCTION);
-        configure("METHOD_IF_RETURN", Category.METHOD, MethodIfReturn.class, BlocklyConstants.ROB_PROCEDURES_IF_RETURN);
-        configure("METHOD_VOID", Category.METHOD, MethodVoid.class, BlocklyConstants.ROB_PROCEDURES_NO_RETURN);
-        configure(
-            "METHOD_CALL",
-            Category.METHOD,
-            MethodCall.class,
-            BlocklyConstants.ROB_PROCEDURES_CALL_NO_RETURN,
-            BlocklyConstants.ROB_PROCEDURES_CALL_RETURN);
-        configure("METHOD_RETURN", Category.METHOD, MethodReturn.class, BlocklyConstants.ROB_PROCEDURES_RETURN);
-        configure("BLUETOOTH_CHECK_CONNECT_ACTION", Category.ACTOR, BluetoothCheckConnectAction.class, BlocklyConstants.COM_CHECK_CONNECTION);
-        configure("BLUETOOTH_CONNECT_ACTION", Category.ACTOR, BluetoothConnectAction.class, BlocklyConstants.COM_START_CONNECTION);
-        configure("BLUETOOTH_SEND_ACTION", Category.ACTOR, BluetoothSendAction.class, BlocklyConstants.COM_SEND_BLOCK);
-        configure("BLUETOOTH_WAIT_FOR_CONNECTION_ACTION", Category.ACTOR, BluetoothWaitForConnectionAction.class, BlocklyConstants.COM_WAIT_CONNECTION);
-        configure("BLUETOOTH_RECEIVED_ACTION", Category.ACTOR, BluetoothReceiveAction.class, BlocklyConstants.COM_RECEIVE_BLOCK);
-    }
-
-    private static void configure(String name, Category category) {
-        configure(name, category, null, NO_BLOCKLY_NAMES);
-    }
-
-    private static void configure(String name, Category category, Class<?> astClass, String... blocklyNames) {
->>>>>>> #253: restructuring of the block-type logic to allow extensions
         BlockType blockType = new BlockType(name, category, astClass, blocklyNames);
         BlockType oldValue = blockTypesByName.put(name.toLowerCase(), blockType);
         Assert.isNull(oldValue, "Block name %s is mapped twice. Initialization aborted", name);
@@ -452,13 +56,10 @@ public class BlockTypeContainer {
         }
     }
 
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
     private static void add(String name, Category category) {
         add(name, category, null, NO_BLOCKLY_NAMES);
     }
 
-=======
->>>>>>> #253: restructuring of the block-type logic to allow extensions
     /**
      * access block type values by its unique name
      *
@@ -484,7 +85,6 @@ public class BlockTypeContainer {
         return blockType;
     }
 
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
     /**
      * Registers a property file to avoid loading property files more than once.
      * Properties are not loaded by calling this method use the {@link #add(String, Category, Class, String...)}
@@ -501,8 +101,6 @@ public class BlockTypeContainer {
         }
     }
 
-=======
->>>>>>> #253: restructuring of the block-type logic to allow extensions
     public static class BlockType {
         private final String name;
         private final Category category;
@@ -552,11 +150,7 @@ public class BlockTypeContainer {
          */
         public boolean hasName(String... namesToCheck) {
             for ( String nameToCheck : namesToCheck ) {
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
                 boolean found = this.name.equals(nameToCheck);
-=======
-                boolean found = name.equals(nameToCheck);
->>>>>>> #253: restructuring of the block-type logic to allow extensions
                 if ( found ) {
                     return true;
                 }

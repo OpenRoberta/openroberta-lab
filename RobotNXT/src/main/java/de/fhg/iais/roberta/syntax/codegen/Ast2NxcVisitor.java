@@ -1718,13 +1718,11 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
-<<<<<<< 67f76278cc2ed5b7bc0bba1c6240d9dc52a39ae8
 
     @Override
     public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
         this.sb.append("!!!Hello World!!!");
         return null;
     }
-=======
->>>>>>> #253: restructuring of the block-type logic to allow extensions
+
 }
