@@ -529,10 +529,23 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         return null;
     }
 
+    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+        this.sb.append("(" + whitespace());
+        ifStmt.getExpr().get(0).visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        this.sb.append(whitespace() + ":" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+    }
+
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        generateCodeFromIfElse(ifStmt);
-        generateCodeFromElse(ifStmt);
+        if ( ifStmt.isTernary() ) {
+            generateCodeFromTernary(ifStmt);
+        } else {
+            generateCodeFromIfElse(ifStmt);
+            generateCodeFromElse(ifStmt);
+        }
         return null;
     }
 
