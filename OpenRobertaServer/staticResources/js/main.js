@@ -143,20 +143,11 @@ function init() {
         logListController.init();
         configurationController.init();
         programController.init();
-        var passwordRecovery = menuController.init();
+        menuController.init();
         $(".pace").fadeOut(500, function() {
             $(".cover").fadeOut(500);
             if (guiStateController.noCookie()) {
                 $("#show-startup-message").modal("show");
-            }
-            if (passwordRecovery) {
-//                if (guiStateController.noCookie()) {
-//                    $("#show-startup-message").one('shown.bs.modal', function(e) {
-//                        userController.showResetPassword(passwordRecovery);
-//                    })
-//                } else {
-//                    userController.showResetPassword(passwordRecovery);
-//                }
             }
         });
     });

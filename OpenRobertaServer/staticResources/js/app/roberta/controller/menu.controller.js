@@ -24,10 +24,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         var target = document.location.hash.split("&");
         if (target[0] === "#forgotPassword") {
            USER_C.showResetPassword(target[1]);
-           return target[1];
-           
         }
-        return null;
     }
 
     exports.init = init;

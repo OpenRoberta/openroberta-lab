@@ -43,6 +43,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
         blocklyWorkspace.setVersion('2.0');
         GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
         blocklyWorkspace.robControls.disable('saveProgram');
+        GUISTATE_C.checkSim();       
     }
 
     function initEvents() {

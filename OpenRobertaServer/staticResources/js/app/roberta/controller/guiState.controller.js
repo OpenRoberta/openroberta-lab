@@ -180,6 +180,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     function setRobot(robot, result, opt_init) {
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
+        GUISTATE.gui.sim = result.sim;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('.robotType').removeClass('disabled');
@@ -190,12 +191,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#head-navi-icon-robot').addClass('typcn-' + robot);
             setProgramSaved(true);
             setConfigurationSaved(true);
+            checkSim();
         }
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robot);
         $('#simRobot').addClass('typcn-' + robot);
 
         GUISTATE.gui.robot = robot;
-        GUISTATE.gui.sim = result.sim;
         setConfigurationName(getRobot().toUpperCase() + 'basis');
         setProgramName('NEPOprog');
     }
@@ -599,6 +600,17 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         }
     }
     exports.setConfiguration = setConfiguration;
+
+    function checkSim() {
+        if (GUISTATE.gui.sim === true) {
+            $('#menuRunSim').parent().removeClass('disabled');
+            getBlocklyWorkspace().robControls.enable('runInSim');
+        } else {
+            $('#menuRunSim').parent().addClass('disabled');
+            getBlocklyWorkspace().robControls.disable('runInSim');
+        }
+    }
+    exports.checkSim = checkSim;
 
     function setPing(ping) {
         GUISTATE.server.ping = ping;
