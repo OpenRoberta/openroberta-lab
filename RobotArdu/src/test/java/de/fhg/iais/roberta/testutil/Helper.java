@@ -181,14 +181,14 @@ public class Helper {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         final BlockSet blockSet = astToJaxb(transformer.getTree());
-        //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        //      m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         final StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         final String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //      System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 

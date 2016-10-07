@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
@@ -79,6 +80,12 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         // TODO Auto-generated method stub
         return null;
     }
