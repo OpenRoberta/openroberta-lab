@@ -338,8 +338,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 nlIndent();
                 this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
                 this.sb.append(var.getName() + " = " + var.getName() + "Raw");
+<<<<<<< 07ce0297aa745d783bb87b533431416007739455
             } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
                 this.sb.append("[3]");
+=======
+>>>>>>> #196 fixed some bugs in empty array initialization
             } else {
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 this.sb.append("[" + list.getValue().get().size() + "]");
