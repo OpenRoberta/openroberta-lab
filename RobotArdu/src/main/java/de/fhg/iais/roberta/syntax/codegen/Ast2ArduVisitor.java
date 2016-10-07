@@ -330,10 +330,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append("Raw");
-<<<<<<< 7a6370c5ecd69f963bebafe2f8d7b89856a02a56
-=======
-            ListCreate<Void> list = (ListCreate<Void>) var.getValue();
->>>>>>> #196 added possibility to rewrite an array, corrected other array functions
             if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
                 || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
                 || var.getValue().toString().equals("ListCreate [STRING, ]")
@@ -345,13 +341,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
                 this.sb.append("[3]");
             } else {
-<<<<<<< 7a6370c5ecd69f963bebafe2f8d7b89856a02a56
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-=======
->>>>>>> #196 added possibility to rewrite an array, corrected other array functions
                 this.sb.append("[" + list.getValue().get().size() + "]");
             }
             if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
+                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 if ( list.getValue().get().size() == 0 ) {
                     return null;
                 }
