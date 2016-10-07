@@ -110,11 +110,8 @@ public class Jaxb2ArduConfigurationTransformer {
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
             case "robBrick_ardu-Brick":
-                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<Pair<ISensorPort, Sensor>>();
-                List<Pair<IActorPort, Actor>> actors = new ArrayList<Pair<IActorPort, Actor>>();
-                // List<Field> fields = extractFields(block, (short) 2);
-                //                double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
-                //                double trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
+                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
+                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
 
                 List<Value> values = extractValues(block, (short) 14);
                 extractHardwareComponent(values, sensors, actors);
@@ -131,7 +128,6 @@ public class Jaxb2ArduConfigurationTransformer {
                 // Extract sensor
                 sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
             } else {
-                List<Field> fields;
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_ardu":

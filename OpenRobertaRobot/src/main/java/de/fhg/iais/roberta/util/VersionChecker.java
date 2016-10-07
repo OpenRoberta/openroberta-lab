@@ -34,7 +34,7 @@ public class VersionChecker {
     }
 
     public boolean validateServerSide() {
-        return check("OpenRobertaRuntime", "OpenRobertaServer", "OpenRobertaShared");
+        return check("EV3Runtime", "OpenRobertaServer");
     }
 
     @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of FALSE")
