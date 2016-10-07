@@ -9,7 +9,7 @@ public class ColorSensorTest {
     @Test
     public void setColor() throws Exception {
         final String a =
-            "\nrob.colorSensorColor(colorsRight,3)rob.colorSensorLight(colorsLeft,1){rob.colorSensorRGB(colorsRight,2)[0],rob.colorSensorRGB(colorsRight,2)[1],rob.colorSensorRGB(colorsRight,2)[2]}";
+            "\nrob.colorSensorColor(colorsRight,3)rob.colorSensorLight(colorsLeft,1){(double)rob.colorSensorRGB(colorsRight,2)[0],(double)rob.colorSensorRGB(colorsRight,2)[1],(double)rob.colorSensorRGB(colorsRight,2)[2]}";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setColor.xml");
     }
