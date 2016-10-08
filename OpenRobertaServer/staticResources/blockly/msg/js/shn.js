@@ -12,6 +12,7 @@ Blockly.Msg.ADD_COMMENT = "သႂ်ႇၶေႃႈၵႂၢမ်း";
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Represents the Bot'n Roll board with connected actors and sensors. There are also inbuild actors and sensors available, e.g. pushbuttons, display ...";  // untranslated
 Blockly.Msg.AUTH = "ၶွပ်ႈၸႂ် ပၼ်ၶႂၢင်ႉႁပ်ႉဢဝ် ဢႅပ်ႉၼႆႉ တီႈၼႂ်းၵၢၼ်ၸဝ်ႈၵဝ်ႇသေယဝ်ႉ ၸဝ်ႈၵဝ်ႇ ႁႂ်ႈလႆႈသိမ်း ႁႂ်ႈလႆႈပိုၼ်ပၼ်သေၵမ်း";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the battery.";  // untranslated
+Blockly.Msg.BOTH = "both";  // untranslated
 Blockly.Msg.BRICKLIGHT = "brick light";  // untranslated
 Blockly.Msg.BRICKLIGHT_BLUE = "blue";  // untranslated
 Blockly.Msg.BRICKLIGHT_COLOR = "colour";  // untranslated

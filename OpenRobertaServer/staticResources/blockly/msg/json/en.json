@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-10-06 17:01:21.289259",
+		"lastupdated": "2016-10-08 17:11:23.479777",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -880,5 +880,6 @@
 	"MOTOR_ARDU_TOOLTIP": "Represents a Bot'n Roll chassis motor.",
 	"NXTBRICK_TOOLTIP": "Represents the NXT brick with connected actors and sensors. There are also inbuild actors and sensors available, e.g. buttons, display ...",
 	"ARDUBRICK_TOOLTIP": "Represents the Bot'n Roll board with connected actors and sensors. There are also inbuild actors and sensors available, e.g. pushbuttons, display ...",
-	"EV3BRICK_TOOLTIP": "Represents the EV3 brick with connected actors and sensors. There are also inbuild actors and sensors available, e.g. buttons, display ..."
+	"EV3BRICK_TOOLTIP": "Represents the EV3 brick with connected actors and sensors. There are also inbuild actors and sensors available, e.g. buttons, display ...",
+	"BOTH": "both"
 }
