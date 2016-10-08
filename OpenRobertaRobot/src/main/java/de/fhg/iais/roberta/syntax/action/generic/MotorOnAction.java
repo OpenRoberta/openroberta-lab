@@ -67,7 +67,9 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         List<Value> values;
         MotionParam<V> mp;
         IRobotFactory factory = helper.getModeFactory();
-        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON) || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON) ) {
+        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON)
+            || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON)
+            || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_ARDU) ) {
             fields = helper.extractFields(block, (short) 1);
             values = helper.extractValues(block, (short) 1);
             port = helper.extractField(fields, BlocklyConstants.MOTORPORT);

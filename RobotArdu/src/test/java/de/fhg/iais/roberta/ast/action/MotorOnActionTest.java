@@ -21,20 +21,19 @@ public class MotorOnActionTest {
     public void getParam() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]", mo.getParam().toString());
+        Assert.assertEquals("MotionParam [speed=NumConst [30], duration=null]", mo.getParam().toString());
     }
 
     @Test
     public void getPort() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(ActorPort.B, mo.getPort());
+        Assert.assertEquals(ActorPort.A, mo.getPort());
     }
 
     @Test
     public void motorOnFor() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=1, y=55], MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=55], MotorOnAction [A, MotionParam [speed=NumConst [30], duration=null]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOnFor.xml"));
     }
 

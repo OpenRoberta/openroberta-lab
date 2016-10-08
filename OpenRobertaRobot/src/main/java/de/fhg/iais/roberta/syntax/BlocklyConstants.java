@@ -112,6 +112,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSOR_GYRO_GET_SAMPLE = "robSensors_gyro_getSample";
     public static final String ROB_SENSOR_TIMER_GET_SAMPLE = "robSensors_timer_getSample";
     public static final String ROB_SENSOR_GET_SAMPLE = "robSensors_getSample";
+    public static final String ROB_SENSOR_GET_SAMPLE_ARDU = "robSensors_getSample_ardu";
     public static final String ROB_COLOUR_PICKER = "robColour_picker";
     public static final String CONNECTION_NXT = "robCommunication_connection";
 
@@ -175,6 +176,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF = "robActions_sensorLight_off";
     public static final String ROB_ACTIONS_DISPLAY_CLEAR = "robActions_display_clear";
     public static final String ROB_ACTIONS_MOTOR_ON_FOR = "robActions_motor_on_for";
+    public static final String ROB_ACTIONS_MOTOR_ON_FOR_ARDU = "robActions_motor_on_for_ardu";
     public static final String ROB_ACTIONS_MOTOR_GET_POWER = "robActions_motor_getPower";
     public static final String ROB_ACTIONS_MOTOR_SET_POWER = "robActions_motor_setPower";
     public static final String ROB_ACTIONS_MOTOR_STOP = "robActions_motor_stop";
