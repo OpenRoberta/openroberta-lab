@@ -30,7 +30,20 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 
     var currentBackground = 1;
 
-    function setBackground(num) {
+    function setBackground(num, callback) {
+        if (num == undefined) {
+            robot.debug = debug;
+            setObstacle();
+            setRuler();
+            scene = new Scene(currentBackground, layers, robot, obstacle, ruler);
+            resizeAll();
+            scene.updateBackgrounds();
+            scene.drawObjects();
+            scene.drawRuler();
+            reloadProgram();
+            window.addEventListener("resize", resizeAll);
+            return currentBackground;
+        }
         window.removeEventListener("resize", resizeAll);
         setPause(true);
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
@@ -43,9 +56,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             currentBackground = num;
         }
         var debug = robot.debug;
-        if (currentBackground == 1) {
-            var moduleName = 'simulation.robot.' + simRobotType;
-            require([ moduleName ], function(ROBOT, robot) {
+        var moduleName = 'simulation.robot.' + simRobotType;
+        require([ moduleName ], function(ROBOT) {
+            if (currentBackground == 1) {
                 robot = new ROBOT({
                     x : 240,
                     y : 200,
@@ -55,11 +68,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                     transX : 0,
                     transY : 0
                 });
-            })
-            robot.canDraw = false;
-        } else if (currentBackground == 2) {
-            var moduleName = 'simulation.robot.' + simRobotType;
-            require([ moduleName ], function(ROBOT, robot) {
+                robot.canDraw = false;
+            } else if (currentBackground == 2) {
                 robot = new ROBOT({
                     x : 200,
                     y : 200,
@@ -69,26 +79,21 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                     transX : 0,
                     transY : 0
                 });
-            });
-            robot.canDraw = true;
-            robot.drawColor = "#000000";
-            robot.drawWidth = 10;
-        } else if (currentBackground == 3) {
-            require([ moduleName ], function(ROBOT, robot) {
+                robot.canDraw = true;
+                robot.drawColor = "#000000";
+                robot.drawWidth = 10;
+            } else if (currentBackground == 3) {
                 robot = new ROBOT({
                     x : 70,
-                    y : 90,
+                    y : 86,
                     theta : 0,
                     xOld : 70,
-                    yOld : 90,
+                    yOld : 86,
                     transX : 0,
                     transY : 0
                 });
-            });
-            robot.canDraw = false;
-        } else if (currentBackground == 4) {
-            var moduleName = 'simulation.robot.' + simRobotType;
-            require([ moduleName ], function(ROBOT, robot) {
+                robot.canDraw = false;
+            } else if (currentBackground == 4) {
                 robot = new ROBOT({
                     x : 400,
                     y : 40,
@@ -98,11 +103,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                     transX : 0,
                     transY : 0
                 });
-            });
-            robot.canDraw = false;
-        } else if (currentBackground == 5) {
-            var moduleName = 'simulation.robot.' + simRobotType;
-            require([ moduleName ], function(ROBOT, robot) {
+                robot.canDraw = false;
+            } else if (currentBackground == 5) {
                 robot = new ROBOT({
                     x : 400,
                     y : 250,
@@ -112,22 +114,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                     transX : -400,
                     transY : -250
                 });
-            });
-            robot.canDraw = true;
-            robot.drawColor = "#ffffff";
-            robot.drawWidth = 1;
-        }
-        robot.debug = debug;
-        setObstacle();
-        setRuler();
-        scene = new Scene(currentBackground, layers, robot, obstacle, ruler);
-        resizeAll();
-        scene.updateBackgrounds();
-        scene.drawObjects();
-        scene.drawRuler();
-        reloadProgram();
-        window.addEventListener("resize", resizeAll);
-        return currentBackground;
+                robot.canDraw = true;
+                robot.drawColor = "#ffffff";
+                robot.drawWidth = 1;
+            }
+            callback();
+        });
+
     }
     exports.setBackground = setBackground;
 
@@ -246,6 +239,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var globalID;
     var robot;
     var simRobotType;
+    var ROBOT;
 
     function init(program, refresh, robotType) {
         simRobotType = robotType;
@@ -255,8 +249,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var blocklyProgram = BUILDER.build(userProgram);
         programEval.initProgram(blocklyProgram);
         if (refresh) {
-            require([ 'simulation.robot.' + simRobotType ], function(ROBOT) {
-                robot = new ROBOT({
+            require([ 'simulation.robot.' + simRobotType ], function(reqRobot) {
+                robot = new reqRobot({
                     x : 240,
                     y : 200,
                     theta : 0,

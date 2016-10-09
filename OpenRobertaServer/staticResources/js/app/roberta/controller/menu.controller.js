@@ -206,27 +206,27 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             if (domId === 'menuSimSimple') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simSimple').parent().addClass('disabled');
-                SIM.setBackground(1);
+                SIM.setBackground(1, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimDraw') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simDraw').parent().addClass('disabled');
-                SIM.setBackground(2);
+                SIM.setBackground(2, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimRoberta') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simRoberta').parent().addClass('disabled');
-                SIM.setBackground(3);
+                SIM.setBackground(3, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimRescue') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simRescue').parent().addClass('disabled');
-                SIM.setBackground(4);
+                SIM.setBackground(4, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimMath') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simMath').parent().addClass('disabled');
-                SIM.setBackground(5);
+                SIM.setBackground(5, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             }
         }, 'sim clicked');
@@ -337,7 +337,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         // $('#simRobotModal').draggable();
         //  $('#simRobotModal').resizable();
         $('.simScene').onWrap('click', function(event) {
-            SIM.setBackground(0);
+            SIM.setBackground(0, SIM.setBackground);
             var scene = $("#simButtonsCollapse").collapse('hide');
             $('.menuSim').parent().removeClass('disabled');
             if (scene == 1) {
@@ -378,7 +378,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 done : function() {
                     $('#codeDiv').removeClass('codeActive');
                     $('.nav > li > ul > .robotType').removeClass('disabled');
-                    //$('.' + guiState.robot).addClass('disabled');
+                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                     $(window).resize();
                     Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 }

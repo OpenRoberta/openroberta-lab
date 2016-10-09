@@ -515,7 +515,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      * Show user info
      */
     function showUserInfo() {
-        $("#loggedIn").text(GUISTATE_C.getUserName());
+        $("#loggedIn").text(GUISTATE_C.getUserAccountName());
         if (GUISTATE_C.isUserLoggedIn()) {
             $("#popup_username").text(Blockly.Msg["POPUP_USERNAME"] + ": ");
         } else {

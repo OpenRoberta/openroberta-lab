@@ -23,7 +23,7 @@ exports.displayPopupMessage = displayPopupMessage;
 function displayToastMessages() {
     $('#toastText').text(toastMessages[toastMessages.length - 1]);
     $('#toastContainer').delay(100).fadeIn("slow", function() {
-        $(this).delay(1000).fadeOut("slow", function() {
+        $(this).delay(2000).fadeOut("slow", function() {
             toastMessages.pop();
             if (toastMessages.length > 0) {
                 displayToastMessages();
