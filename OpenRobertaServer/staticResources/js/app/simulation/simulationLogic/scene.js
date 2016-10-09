@@ -9,8 +9,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * 
      * @constructor
      */
-    function Scene(backgroundImg, layers, robot, obstacle, ruler) {
-        this.backgroundImg = backgroundImg;
+    function Scene(backgroundNo, layers, robot, obstacle, ruler) {
+        var bg = new Image;
+        bg.src = $('#img_0'+backgroundNo).css('background-image').replace('url("','').replace('")','');
+        this.backgroundImg = bg;
         this.robot = robot;
         this.obstacle = obstacle;
         this.ruler = ruler;

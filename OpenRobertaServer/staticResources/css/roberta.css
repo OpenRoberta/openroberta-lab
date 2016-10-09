@@ -354,6 +354,62 @@ body.blocklyMinimalBody  * {
 	position: absolute;
 	z-index: 99;
 }
+#img_00 {
+    background: url(/js/app/simulation/simBackgrounds/baustelle-02.svg) no-repeat;
+    display: none;
+    }
+#img_01 {
+    background: url(/js/app/simulation/simBackgrounds/simpleBackground.svg) no-repeat;
+    display: none;
+    }
+#img_02 {
+    background: url(/js/app/simulation/simBackgrounds/drawBackground.svg) no-repeat;
+    display: none;
+    }
+#img_03 {
+    background: url(/js/app/simulation/simBackgrounds/robertaBackground.svg) no-repeat;
+    display: none;
+    }
+#img_04 {
+    background: url(/js/app/simulation/simBackgrounds/rescueBackground.svg) no-repeat;
+    display: none;
+    }
+#img_05 {
+    background: url(/js/app/simulation/simBackgrounds/mathBackground.svg) no-repeat;
+    display: none;
+    }
+#img_06 {
+    background: url(/js/app/simulation/simBackgrounds/ruler.svg) no-repeat;
+    display: none;
+    }
+#img_00.isIE {
+    background: url(/js/app/simulation/simBackgrounds/baustelle-02.png) no-repeat;
+    display: none;
+    }
+#img_01.isIE {
+    background: url(/js/app/simulation/simBackgrounds/simpleBackground.png) no-repeat;
+    display: none;
+    }
+#img_02.isIE {
+    background: url(/js/app/simulation/simBackgrounds/drawBackground.png) no-repeat;
+    display: none;
+    }
+#img_03.isIE {
+    background: url(/js/app/simulation/simBackgrounds/robertaBackground.png) no-repeat;
+    display: none;
+    }
+#img_04.isIE {
+    background: url(/js/app/simulation/simBackgrounds/rescueBackground.png) no-repeat;
+    display: none;
+    }
+#img_05.isIE {
+    background: url(/js/app/simulation/simBackgrounds/mathBackground.png) no-repeat;
+    display: none;
+    }
+#img_06.isIE {
+    background: url(/js/app/simulation/simBackgrounds/ruler.png) no-repeat;
+    display: none;
+    }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tab-content

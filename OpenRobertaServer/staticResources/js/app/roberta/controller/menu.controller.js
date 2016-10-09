@@ -286,6 +286,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('#simRobot').onWrap('click', function(event) {
             $("#simRobotModal").modal("toggle");
+            $('#simRobotModal').draggable();
             $("#simButtonsCollapse").collapse('hide');
         }, 'simRobot clicked');
 

@@ -7,8 +7,8 @@
  * @namespace SIM
  */
 
-define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller',
-        'robertaLogic.constants', 'simulation.program.builder' ], function(exports, EV3, NXT, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER) {
+define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants',
+        'simulation.program.builder' ], function(exports, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER) {
 
     var programEval = new ProgramEval();
 
@@ -24,18 +24,6 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
     var startX;
     var startY;
     var scale = 1;
-    // Note: The ruler is currently only used for the scene with
-    // robertaBackground.svg.
-    var imgSrc = [ "/js/app/simulation/simBackgrounds/baustelle-02.svg", "/js/app/simulation/simBackgrounds/simpleBackground.svg",
-            "/js/app/simulation/simBackgrounds/drawBackground.svg", "/js/app/simulation/simBackgrounds/robertaBackground.svg",
-            "/js/app/simulation/simBackgrounds/rescueBackground.svg", "/js/app/simulation/simBackgrounds/mathBackground.svg",
-            "/js/app/simulation/simBackgrounds/ruler.svg" ];
-    //TODO combine to one image for better performance
-    var imgSrcIE = [ "/js/app/simulation/simBackgrounds/baustelle-02.svg", "/js/app/simulation/simBackgrounds/simpleBackground.png",
-            "/js/app/simulation/simBackgrounds/drawBackground.png", "/js/app/simulation/simBackgrounds/robertaBackground.png",
-            "/js/app/simulation/simBackgrounds/rescueBackground.png", "/js/app/simulation/simBackgrounds/mathBackground.png",
-            "/js/app/simulation/simBackgrounds/ruler.svg" ];
-    var img;
     var timerStep = 0;
     var ready;
     var canceled;
@@ -56,57 +44,74 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
         }
         var debug = robot.debug;
         if (currentBackground == 1) {
-            robot = new (require('simulation.robot.' + simRobotType))({
-                x : 240,
-                y : 200,
-                theta : 0,
-                xOld : 240,
-                yOld : 200,
-                transX : 0,
-                transY : 0
-            });
+            var moduleName = 'simulation.robot.' + simRobotType;
+            require([ moduleName ], function(ROBOT, robot) {
+                robot = new ROBOT({
+                    x : 240,
+                    y : 200,
+                    theta : 0,
+                    xOld : 240,
+                    yOld : 200,
+                    transX : 0,
+                    transY : 0
+                });
+            })
+            robot.canDraw = false;
         } else if (currentBackground == 2) {
-            robot = new (require('simulation.robot.' + simRobotType))({
-                x : 200,
-                y : 200,
-                theta : 0,
-                xOld : 200,
-                yOld : 200,
-                transX : 0,
-                transY : 0
+            var moduleName = 'simulation.robot.' + simRobotType;
+            require([ moduleName ], function(ROBOT, robot) {
+                robot = new ROBOT({
+                    x : 200,
+                    y : 200,
+                    theta : 0,
+                    xOld : 200,
+                    yOld : 200,
+                    transX : 0,
+                    transY : 0
+                });
             });
             robot.canDraw = true;
             robot.drawColor = "#000000";
             robot.drawWidth = 10;
         } else if (currentBackground == 3) {
-            robot = new (require('simulation.robot.' + simRobotType))({
-                x : 70,
-                y : 90,
-                theta : 0,
-                xOld : 70,
-                yOld : 90,
-                transX : 0,
-                transY : 0
+            require([ moduleName ], function(ROBOT, robot) {
+                robot = new ROBOT({
+                    x : 70,
+                    y : 90,
+                    theta : 0,
+                    xOld : 70,
+                    yOld : 90,
+                    transX : 0,
+                    transY : 0
+                });
             });
+            robot.canDraw = false;
         } else if (currentBackground == 4) {
-            robot = new (require('simulation.robot.' + simRobotType))({
-                x : 400,
-                y : 40,
-                theta : 0,
-                xOld : 400,
-                yOld : 40,
-                transX : 0,
-                transY : 0
+            var moduleName = 'simulation.robot.' + simRobotType;
+            require([ moduleName ], function(ROBOT, robot) {
+                robot = new ROBOT({
+                    x : 400,
+                    y : 40,
+                    theta : 0,
+                    xOld : 400,
+                    yOld : 40,
+                    transX : 0,
+                    transY : 0
+                });
             });
+            robot.canDraw = false;
         } else if (currentBackground == 5) {
-            robot = new (require('simulation.robot.' + simRobotType))({
-                x : 400,
-                y : 250,
-                theta : 0,
-                xOld : 400,
-                yOld : 250,
-                transX : -400,
-                transY : -250
+            var moduleName = 'simulation.robot.' + simRobotType;
+            require([ moduleName ], function(ROBOT, robot) {
+                robot = new ROBOT({
+                    x : 400,
+                    y : 250,
+                    theta : 0,
+                    xOld : 400,
+                    yOld : 250,
+                    transX : -400,
+                    transY : -250
+                });
             });
             robot.canDraw = true;
             robot.drawColor = "#ffffff";
@@ -115,7 +120,7 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
         robot.debug = debug;
         setObstacle();
         setRuler();
-        scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
+        scene = new Scene(currentBackground, layers, robot, obstacle, ruler);
         resizeAll();
         scene.updateBackgrounds();
         scene.drawObjects();
@@ -250,32 +255,34 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
         var blocklyProgram = BUILDER.build(userProgram);
         programEval.initProgram(blocklyProgram);
         if (refresh) {
-            robot = new (require('simulation.robot.' + simRobotType))({
-                x : 240,
-                y : 200,
-                theta : 0,
-                xOld : 240,
-                yOld : 200,
-                transX : 0,
-                transY : 0
+            require([ 'simulation.robot.' + simRobotType ], function(ROBOT) {
+                robot = new ROBOT({
+                    x : 240,
+                    y : 200,
+                    theta : 0,
+                    xOld : 240,
+                    yOld : 200,
+                    transX : 0,
+                    transY : 0
+                });
+                robot.reset();
+                robot.resetPose();
+                ready = false;
+                removeMouseEvents();
+                canceled = false;
+                isDownrobot = false;
+                isDownObstacle = false;
+                isDownRuler = false;
+                stepCounter = 0;
+                pause = true;
+                info = false;
+                setObstacle();
+                if (isIE()) {
+                    $('.img_sim').addClass('isIE');
+                }
+                initScene();
             });
-            ready = false;
-            removeMouseEvents();
-            canceled = false;
-            isDownrobot = false;
-            isDownObstacle = false;
-            isDownRuler = false;
-            stepCounter = 0;
-            pause = true;
-            info = false;
-            robot.reset();
-            robot.resetPose();
-            setObstacle();
-            img = [];
-            if (isIE()) {
-                imgSrc = imgSrcIE;
-            }
-            loadImages(0);
+
         } else {
             robot.debug = false;
             reloadProgram();
@@ -353,7 +360,9 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
             obstacle.y = 250;
             obstacle.w = 100;
             obstacle.h = 100;
-            obstacle.img = img[0];
+            var bg = new Image;
+            bg.src = $('#img_00').css('background-image').replace('url("', '').replace('")', '');
+            obstacle.img = bg;
             obstacle.color = null;
         } else if (currentBackground == 5) {
             obstacle.x = 0;
@@ -377,7 +386,9 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
             ruler.y = 380;
             ruler.w = 300;
             ruler.h = 30;
-            ruler.img = img[6];
+            var bg = new Image;
+            bg.src = $('#img_06').css('background-image').replace('url("', '').replace('")', '');
+            ruler.img = bg;
             ruler.color = null;
         } else {
             // All other scenes currently don't have a movable ruler.
@@ -499,20 +510,6 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
         }
     }
 
-    function loadImages(i) {
-        if (i < imgSrc.length - 1) {
-            img[i] = new Image();
-            img[i].onload = function() {
-                loadImages(i + 1);
-            }
-            img[i].src = imgSrc[i];
-        } else {
-            img[i] = new Image();
-            img[i].onload = initScene;
-            img[i].src = imgSrc[i];
-        }
-    }
-
     function addMouseEvents() {
         $("#robotLayer").mousedown(function(e) {
             handleMouseDown(e);
@@ -551,7 +548,7 @@ define([ 'exports', 'simulation.robot.ev3', 'simulation.robot.nxt', 'simulation.
     function initScene() {
 
         layers = createLayers();
-        scene = new Scene(img[currentBackground], layers, robot, obstacle, ruler);
+        scene = new Scene(currentBackground, layers, robot, obstacle, ruler);
         scene.updateBackgrounds();
         scene.drawObjects();
         scene.drawRuler();
