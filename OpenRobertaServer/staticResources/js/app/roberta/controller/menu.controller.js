@@ -20,10 +20,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             pingServer();
         }, 3000);
         LOG.info('init menu view');
-        
+
         var target = document.location.hash.split("&");
         if (target[0] === "#forgotPassword") {
-           USER_C.showResetPassword(target[1]);
+            USER_C.showResetPassword(target[1]);
         }
     }
 
@@ -35,7 +35,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         for ( var robot in robots) {
             var clone = proto.clone();
             clone.find('.typcn').addClass('typcn-' + robot);
-            clone.find('.typcn').text(robots[robot]);
+            clone.find('.typcn').text(robots[robot].realName);
             clone.find('.typcn').attr('id', 'menu-' + robot);
             clone.attr('data-type', robot);
             clone.addClass(robot);
@@ -44,19 +44,22 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         proto.remove();
         proto = $('#popup-sim');
         for ( var robot in robots) {
+            if (robot == 'oraSim') {
+                continue;
+            }
             var clone = proto.clone().prop('id', 'menu-' + robot);
             clone.find('span:eq( 0 )').removeClass('typcn-open');
             clone.find('span:eq( 0 )').addClass('typcn-' + robot);
-            clone.find('span:eq( 1 )').text(robots[robot]);
+            clone.find('span:eq( 1 )').text(robots[robot].realName);
             clone.attr('data-type', robot);
             clone.addClass('popup-robot');
-            // TODO get beta information from the server
-            if (robot == 'ev3') {
+            if (!robots[robot].beta) {
                 clone.find('img').css('visibility', 'hidden');
             }
             $("#show-startup-message .modal-footer").append(clone);
         }
         proto.find('.img-beta').css('visibility', 'hidden');
+        proto.find('a[href]').css('visibility', 'hidden');
 
         GUISTATE_C.setInitialState();
     }
@@ -388,25 +391,32 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'codeBack clicked');
 
         $('.popup-robot').onWrap('click', function(event) {
-            var choosenRobotType = event.target.parentElement.dataset.type || event.target.dataset.type;
-            if (choosenRobotType) {
-                ROBOT_C.switchRobot(choosenRobotType, true);
-            }
-            if ($('#checkbox_id').is(':checked')) {
-                $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
-                    expires : 99,
-                    secure : true,
-                    domain : ''
-                });
-                // check if it is really stored: chrome issue
-                if (!$.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
+            event.preventDefault();
+            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
+                    || event.target.dataset.type;
+            if (event.target.className.indexOf("info") >= 0) {
+                var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
+            } else {
+                if (choosenRobotType) {
+                    ROBOT_C.switchRobot(choosenRobotType, true);
+                }
+                if ($('#checkbox_id').is(':checked')) {
                     $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
                         expires : 99,
+                        secure : true,
                         domain : ''
                     });
+                    // check if it is really stored: chrome issue
+                    if (!$.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
+                        $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
+                            expires : 99,
+                            domain : ''
+                        });
+                    }
+                } else {
+                    $.removeCookie("OpenRoberta_" + GUISTATE_C.getServerVersion());
                 }
-            } else {
-                $.removeCookie("OpenRoberta_" + GUISTATE_C.getServerVersion());
+                $('#show-startup-message').modal('hide');
             }
         }, 'robot choosen in start popup');
 

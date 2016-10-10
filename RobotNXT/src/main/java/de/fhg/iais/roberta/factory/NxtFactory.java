@@ -536,4 +536,13 @@ public class NxtFactory extends AbstractRobotFactory {
         return this.nxtProperties.getProperty("robot.sim") != null ? true : false;
     }
 
+    @Override
+    public String getInfo() {
+        return this.nxtProperties.getProperty("robot.info") != null ? this.nxtProperties.getProperty("robot.info") : "#";
+    }
+
+    @Override
+    public Boolean isBeta() {
+        return this.nxtProperties.getProperty("robot.beta") != null ? true : false;
+    }
 }

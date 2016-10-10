@@ -517,4 +517,16 @@ public class SimFactory extends AbstractRobotFactory {
         return null;
     }
 
+    @Override
+    public String getInfo() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Boolean isBeta() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

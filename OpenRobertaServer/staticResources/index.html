@@ -629,16 +629,17 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
                     </div>
                 </div>
                 <div class="modal-footer" style="text-align: center">
-                    <div id="takeATour" class="robot-container" data-dismiss="modal"
-                        style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat" />
+                    <div id="takeATour" class="hidden-xs robot-container" data-dismiss="modal"
+                        style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat" /><br>
                     <span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
                 </div>
                 <div class="clearer"></div>
                 <h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
                 <div class="clearer"></div>
-                <div id="popup-sim" href="#" class="robot-container" data-dismiss="modal" data-type="ev3">
+                <div id="popup-sim" href="#" class="robot-container" data-type="ev3">
                     <span href="#" class='typcn typcn-open robot-icon'></span><span class="robot-label">I don't have a robot!</span>
                     <img class="img-beta" src="/css/img/beta.png" alt="beta" />
+                    <a href="#" target="_blank" style="display: inline;"><span class='robot-info typcn typcn-info-large'></span></a>
                 </div>
             </div>
             <div class="modal-body left-inner-addon popup-checkbox">

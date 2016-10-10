@@ -513,4 +513,14 @@ public class ArduFactory extends AbstractRobotFactory {
     public Boolean hasSim() {
         return this.arduProperties.getProperty("robot.sim") != null ? true : false;
     }
+
+    @Override
+    public String getInfo() {
+        return this.arduProperties.getProperty("robot.info") != null ? this.arduProperties.getProperty("robot.info") : "#";
+    }
+
+    @Override
+    public Boolean isBeta() {
+        return this.arduProperties.getProperty("robot.beta") != null ? true : false;
+    }
 }

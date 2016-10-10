@@ -488,4 +488,13 @@ public class EV3Factory extends AbstractRobotFactory {
         return this.ev3Properties.getProperty("robot.sim") != null ? true : false;
     }
 
+    @Override
+    public String getInfo() {
+        return this.ev3Properties.getProperty("robot.info") != null ? this.ev3Properties.getProperty("robot.info") : "#";
+    }
+
+    @Override
+    public Boolean isBeta() {
+        return this.ev3Properties.getProperty("robot.beta") != null ? true : false;
+    }
 }

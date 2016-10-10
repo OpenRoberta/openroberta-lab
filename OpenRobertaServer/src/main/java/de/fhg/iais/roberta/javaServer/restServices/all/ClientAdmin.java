@@ -55,7 +55,11 @@ public class ClientAdmin {
                 JSONObject robots = new JSONObject();
                 Collection<String> availableRobots = httpSessionState.getAllRobotsPluggedIn();
                 for ( String robot : availableRobots ) {
-                    robots.put(robot, httpSessionState.getRobotFactory(robot).getRealName());
+                    JSONObject robotDescription = new JSONObject();
+                    robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
+                    robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
+                    robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
+                    robots.put(robot, robotDescription);
                 }
                 server.put("robots", robots);
                 response.put("server", server);

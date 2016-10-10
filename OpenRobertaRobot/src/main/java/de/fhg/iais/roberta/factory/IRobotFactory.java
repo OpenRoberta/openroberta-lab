@@ -327,4 +327,8 @@ public interface IRobotFactory {
 
     Boolean hasSim();
 
+    String getInfo();
+
+    Boolean isBeta();
+
 }
