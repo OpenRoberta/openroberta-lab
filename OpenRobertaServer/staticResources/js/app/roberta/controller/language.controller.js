@@ -21,10 +21,10 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'it';
         } else if (navigator.language.indexOf("ca") > -1) {
             language = 'ca';
-        } else if (navigator.language.indexOf("eu") > -1) {
-            language = 'eu';
-        } else if (navigator.language.indexOf("gl") > -1) {
-            language = 'gl';
+//        } else if (navigator.language.indexOf("eu") > -1) {
+//            language = 'eu';
+//        } else if (navigator.language.indexOf("gl") > -1) {
+//            language = 'gl';
         } else {
             language = 'en';
         }
