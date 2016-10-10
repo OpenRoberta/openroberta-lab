@@ -25,14 +25,14 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css" href="js/libs/code-prettify/prettify.css"></link>
 <link href="/css/enjoyhint.css" rel="stylesheet">
-    <!-- Make sure css files are loaded before js files -->
+	<!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico" type="image/vnd.microsoft.icon"></link>
 <!-- enable linenumbers for all lines on highlighted source code -->
 <style>
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
-    list-style-type: decimal !important
+	list-style-type: decimal !important
 }
 </style>
 <!-- Feedback badge, reports user feedback to issue tracker. -->
@@ -47,682 +47,686 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 <title>Open Roberta Lab</title>
 </head>
 <body>
-    <div class="cover" width="100%" height="100%"></div>
-    <div class="pace"></div>
-    <!-- ################## HEAD NAVIGATION ################## -->
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="head-navigation">
-        <!--  Brand and toggle get grouped for better mobile display -->
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button id="navbarButtonsHead" type="button" class="navbar-toggle head-navi-icons typcn typcn-th-menu pull-left sr-only" data-toggle="collapse"
-                    data-target="#navbarCollapse"></button>
-                <button id="simButtonsHead" type="button" class="sim hide navbar-toggle head-navi-icons typcn typcn-th-small pull-left sr-only" data-toggle="collapse"
-                    data-target="#simButtonsCollapse"></button>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="nav navbar-nav">
-                    <!-- Menu Program -->
-                    <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-program"
-                            lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-program" class="head-navi-icons typcn typcn-document-text"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
-                                lkey="Blockly.Msg.MENU_EDIT"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
-                            <li><a href="#" id="menuRunSim" class="typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
-                            <li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                            <li class="login"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
-                            <li><a href="#" id="menuListExamples" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG_EXAMPLES">Beispielprogramme ...</a></li>
-                            <li class="login"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-                            <li class="login"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
-                            <li class=""><a href="#" id="menuShowCode" class="typcn typcn-code" lkey="Blockly.Msg.MENU_SHOW_CODE">show code</a></li>
-                            <li class=""><a href="#" id="menuExportProg" class="typcn typcn-download" lkey="Blockly.Msg.MENU_EXPORT_PROG">export program</a></li>
-                            <li class=""><a href="#" id="menuImportProg" class="typcn typcn-upload" lkey="Blockly.Msg.MENU_IMPORT_PROG">import program ...</a></li>
-                            <li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
-                            <li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
-                            <li class="divider"></li>
-                            <li class="level beginner"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
-                                    Anfänger</a></li>
-                            <li class="level expert"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
-                        </ul></li>
-                    <!-- Menu Configuration -->
-                    <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
-                            id="head-navi-tooltip-configuration" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-configuration" class="head-navi-icons typcn typcn-document-text"></span><span
-                                class="head-navi-title hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_EDIT"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="hidden"><a href="#" id="menuCheckConfig" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
-                            <li><a href="#" id="menuNewConfig" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                            <li class="login"><a href="#" id="menuListConfig" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_CONF">Liste ... </a></li>
-                            <li class="login"><a href="#" id="menuSaveConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-                            <li class="login"><a href="#" id="menuSaveAsConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
-                            <li class="hidden"><a href="#" id="menuPropertiesConfig" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</a></li>
-                        </ul></li>
-                    <!--   Menu Robot -->
-                    <li class="dropdown" id="head-navigation-robot"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-robot"
-                            lkey="Blockly.Msg.MENU_ROBOT_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-robot" class="head-navi-icons typcn typcn-open"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
-                                lkey="Blockly.Msg.MENU_ROBOT"></span>
-                        </a>
-                        <ul id="navigation-robot" class="dropdown-menu">
-                            <li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
-                            <li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
-                            <li class="divider"></li>
-                            <li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
-                            <li class="hidden anchor"></li>
-                        </ul></li>
-                    <!-- Menu Help -->
-                    <li class="dropdown" id="head-navigation-help"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-help"
-                            lkey="Blockly.Msg.MENU_HELP_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-help" class="head-navi-icons typcn typcn-lightbulb"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
-                                lkey="Blockly.Msg.MENU_HELP"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" id="menuBuildingInstructions" class="menuBuildingInstructions typcn typcn-book" lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS">building
-                                    instructions</a></li>
-                            <li><a href="#" id="menuGeneral" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_GENERAL">Allgemeine Hilfe</a></li>
-                            <li><a href="#" id="menuEV3conf" class="menuEV3conf typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_EV3">EV3 vorbereiten</a></li>
-                            <li><a href="#" id="menuProgramming" class="menuProgramming typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_PROGRAMMING">Programmieren</a></li>
-                            <li><a href="#" id="menuFaq" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
-                            <li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">Über Open Roberta Lab</a></li>
-                            <li><a href="#" id="menuShowRelease" class="typcn typcn-refresh" lkey="Blockly.Msg.MENU_SHOW_AGAIN">Starthinweis anzeigen</a></li>
-                            <li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
-                        </ul></li>
-                    <!--   Menu User -->
-                    <li class="dropdown" id="head-navigation-user"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-user"
-                            lkey="Blockly.Msg.MENU_USER_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-user" class="head-navi-icons  typcn typcn-user"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
-                                lkey="Blockly.Msg.MENU_USER"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="logout"><a href="#" id="menuLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
-                            <li class="login"><a href="#" id="menuLogout" class="typcn typcn-user-outline" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
-                            <!-- <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li> -->
-                            <li class="login"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
-                            <li class="login"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
-                            <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
-                        </ul></li>
-                    <!-- Menu Languages -->
-                    <li class="dropdown" id="head-navigation-language"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-program"
-                            lkey="Blockly.Msg.MENU_LANGUAGE_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-program" class="head-navi-icons typcn typcn-world"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
-                                lkey="Blockly.Msg.MENU_LANGUAGE"></span>
-                        </a>
-                        <ul id="language" class="dropdown-menu" role="menu" aria-labelledby="chosenLanguage">
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="de"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="en"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="it"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="fr"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="ca"></a></li>
-                            <!-- <li><a role="menuitem" href="#" class="lang-lbl" lang="eu"></a></li>
-                            <li><a role="menuitem" href="#" class="lang-lbl" lang="gl"></a></li>
- -->                        </ul></li>
-                    <!-- Menu Navigation -->
-                    <li class="divider visible-xs"></li>
-                    <li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
-                    <li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
-                    <!--  only if simulation is active -->
-                    <li class="dropdown sim hide hidden-xs sim-nav" id="head-navigation-sim-controle"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
-                            id="head-navi-tooltip-program" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
-                            <span id="head-navi-icon-program" class="head-navi-icons typcn typcn-th-small"></span><span class="hidden-sm hidden-md hidden-lg"
-                                lkey="Blockly.Msg.MENU_EDIT"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="disabled"><a href="#" id="menuSimSimple" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
-                            <li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
-                            <li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
-                            <li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
-                            <li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-                            <li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
-                        </ul></li>
-                </ul>
-            </div>
-        </div>
-        <div class="collapse navbar-collapse sim-nav" id="simButtonsCollapse">
-            <ul class="nav navbar-nav visible-xs">
-                <li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
-                <li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
-                <li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
-                <li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
-                <li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
-                <li class="divider visible-xs"></li>
-                <li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-                <li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
-            </ul>
-        </div>
-        </div>
-        <!-- Roberta-Logo -->
-        <div class="logo">
-                <img class="img-nepo" src="/css/svg/NEPO_Logo_RGB.svg" />
-        </div>
-        <!-- Toasts -->
-        <div class="panel-body" id="toastContainer">
-            <div class="panel-body" id="toastLeftContainer">
-                <span id="toastText"></span>
-            </div>
-        </div>
-        <!-- Head-navigation-tabs -->
-        <div id="headNavigationTabs" class="navigation-row collapse navbar-collapse container">
-            <ul class="nav nav-tabs" id="head-navigation-tabs">
-                <li class="active"><a data-toggle="tab" id="tabProgram" href="#blockly">
-                        <span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span>
-                    </a></li>
-                <li><a data-toggle="tab" id="tabConfiguration" href="#bricklyDiv">
-                        <span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span id="tabConfigurationName"></span>
-                    </a></li>
-                <li class="hidden"><a data-toggle="tab" id="tabProgList" href="#progList">Listing of programs</a></li>
-                <li class="hidden"><a data-toggle="tab" id="tabConfList" href="#confList">Listing of configurations</a></li>
-                <li class="hidden"><a data-toggle="tab" id="tabLogList" href="#logList">Logging</a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- ################## END HEAD NAVIGATION ################## -->
-    <!-- ################## TABS ################## -->
-    <div class="tab-content container" id="main-section">
-        <div id="blockly" class="tab-pane fade in active">
-            <div id="blocklyDiv"></div>
-            <div id="simDiv">
-                <div id="uniDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
-                <div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
-                <div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-                <div id="rulerDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-                <div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
-                <div id="infoDiv" width="100px" height="200px" style="position: absolute; right: 0; top: 0; z-index: 1"></div>
-                <div id="simButtons">
-                    <button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK_TOOLTIP" rel="tooltip"
-                        data-original-title="" title=""></button>
-                    <button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip" data-original-title=""
-                        title=""></button>
-                    <button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3" lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip" data-original-title=""
-                        title=""></button>
-                </div>
-            </div>
-            <div id="codeDiv">
-                <div id="codeContent"></div>
-                <div id="codeButtons" class="code">
-                    <button id="codeBack" type="button" class="codeBack blbtn typcn typcn-arrow-left-thick" data-toggle="collapse"></button>
-                    <button id="codeDownload" type="button" class="codeDownload blbtn typcn typcn-download" data-toggle="collapse"></button>
-                </div>
-            </div>
-        </div>
-        <div id="progList" class="tab-pane fade">
-            <!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
+	<div class="cover" width="100%" height="100%"></div>
+	<div class="pace"></div>
+	<!-- ################## HEAD NAVIGATION ################## -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="head-navigation">
+		<!--  Brand and toggle get grouped for better mobile display -->
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button id="navbarButtonsHead" type="button" class="navbar-toggle head-navi-icons typcn typcn-th-menu pull-left sr-only" data-toggle="collapse"
+					data-target="#navbarCollapse"></button>
+				<button id="simButtonsHead" type="button" class="sim hide navbar-toggle head-navi-icons typcn typcn-th-small pull-left sr-only" data-toggle="collapse"
+					data-target="#simButtonsCollapse"></button>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="nav navbar-nav">
+					<!-- Menu Program -->
+					<li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-program"
+							lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-program" class="head-navi-icons typcn typcn-document-text"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_EDIT"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
+							<li><a href="#" id="menuRunSim" class="typcn typcn-media-play-outline" lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
+							<li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+							<li class="login"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG">Liste ...</a></li>
+							<li><a href="#" id="menuListExamples" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_PROG_EXAMPLES">Beispielprogramme ...</a></li>
+							<li class="login"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+							<li class="login"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
+							<li class=""><a href="#" id="menuShowCode" class="typcn typcn-code" lkey="Blockly.Msg.MENU_SHOW_CODE">show code</a></li>
+							<li class=""><a href="#" id="menuExportProg" class="typcn typcn-download" lkey="Blockly.Msg.MENU_EXPORT_PROG">export program</a></li>
+							<li class=""><a href="#" id="menuImportProg" class="typcn typcn-upload" lkey="Blockly.Msg.MENU_IMPORT_PROG">import program ...</a></li>
+							<li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
+							<li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
+							<li class="divider"></li>
+							<li class="level beginner"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
+									Anfänger</a></li>
+							<li class="level expert"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
+						</ul></li>
+					<!-- Menu Configuration -->
+					<li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
+							id="head-navi-tooltip-configuration" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-configuration" class="head-navi-icons typcn typcn-document-text"></span><span
+								class="head-navi-title hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_EDIT"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="hidden"><a href="#" id="menuCheckConfig" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+							<li><a href="#" id="menuNewConfig" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+							<li class="login"><a href="#" id="menuListConfig" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST_CONF">Liste ... </a></li>
+							<li class="login"><a href="#" id="menuSaveConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+							<li class="login"><a href="#" id="menuSaveAsConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
+							<li class="hidden"><a href="#" id="menuPropertiesConfig" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</a></li>
+						</ul></li>
+					<!--   Menu Robot -->
+					<li class="dropdown" id="head-navigation-robot"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-robot"
+							lkey="Blockly.Msg.MENU_ROBOT_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-robot" class="head-navi-icons typcn typcn-open"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_ROBOT"></span>
+						</a>
+						<ul id="navigation-robot" class="dropdown-menu">
+							<li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
+							<li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
+							<li class="divider"></li>
+							<li class="robotType"><a href="#" class="typcn menu-robot"></a></li>
+							<li class="hidden anchor"></li>
+						</ul></li>
+					<!-- Menu Help -->
+					<li class="dropdown" id="head-navigation-help"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-help"
+							lkey="Blockly.Msg.MENU_HELP_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-help" class="head-navi-icons typcn typcn-lightbulb"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_HELP"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="menuBuildingInstructions" class="menuBuildingInstructions typcn typcn-book" lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS">building
+									instructions</a></li>
+							<li><a href="#" id="menuGeneral" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_GENERAL">Allgemeine Hilfe</a></li>
+							<li><a href="#" id="menuEV3conf" class="menuEV3conf typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_EV3">EV3 vorbereiten</a></li>
+							<li><a href="#" id="menuProgramming" class="menuProgramming typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_PROGRAMMING">Programmieren</a></li>
+							<li><a href="#" id="menuFaq" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
+							<li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">Über Open Roberta Lab</a></li>
+							<li><a href="#" id="menuShowRelease" class="typcn typcn-refresh" lkey="Blockly.Msg.MENU_SHOW_AGAIN">Starthinweis anzeigen</a></li>
+							<li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
+						</ul></li>
+					<!--   Menu User -->
+					<li class="dropdown" id="head-navigation-user"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-user"
+							lkey="Blockly.Msg.MENU_USER_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-user" class="head-navi-icons  typcn typcn-user"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_USER"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="logout"><a href="#" id="menuLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
+							<li class="login"><a href="#" id="menuLogout" class="typcn typcn-user-outline" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
+							<!-- <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li> -->
+							<li class="login"><a href="#" id="menuChangeUser" class="typcn typcn-lock-closed" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
+							<li class="login"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
+							<li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
+						</ul></li>
+					<!-- Menu Languages -->
+					<li class="dropdown" id="head-navigation-language"><a href="#" data-toggle="dropdown" class="dropdown-toggle" id="head-navi-tooltip-program"
+							lkey="Blockly.Msg.MENU_LANGUAGE_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-program" class="head-navi-icons typcn typcn-world"></span><span class="head-navi-title hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_LANGUAGE"></span>
+						</a>
+						<ul id="language" class="dropdown-menu" role="menu" aria-labelledby="chosenLanguage">
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="de"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="en"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="it"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="fr"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="ca"></a></li>
+						</ul></li>
+					<!-- Menu Navigation -->
+					<li class="divider visible-xs"></li>
+					<li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
+					<li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
+					<!--  only if simulation is active -->
+					<li class="dropdown sim hide hidden-xs sim-nav" id="head-navigation-sim-controle"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
+							id="head-navi-tooltip-program" lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip" data-original-title="" title="">
+							<span id="head-navi-icon-program" class="head-navi-icons typcn typcn-th-small"></span><span class="hidden-sm hidden-md hidden-lg"
+								lkey="Blockly.Msg.MENU_EDIT"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="disabled"><a href="#" id="menuSimSimple" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
+							<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
+							<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
+							<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+							<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
+							<li class="divider"></li>
+							<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+							<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+		<div class="collapse navbar-collapse sim-nav" id="simButtonsCollapse">
+			<ul class="nav navbar-nav visible-xs">
+				<li class="disabled"><a href="#" id="menuSimSimle" class="simSimple menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_SIMPLE">Simple Scene</a></li>
+				<li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
+				<li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
+				<li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+				<li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
+				<li class="divider visible-xs"></li>
+				<li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+				<li><a href="#" class="simBack typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+			</ul>
+		</div>
+		</div>
+		<!-- Roberta-Logo -->
+		<div class="logo">
+			<img class="img-nepo" src="/css/svg/NEPO_Logo_RGB.svg" />
+		</div>
+		<!-- Toasts -->
+		<div class="panel-body" id="toastContainer">
+			<div class="panel-body" id="toastLeftContainer">
+				<span id="toastText"></span>
+			</div>
+		</div>
+		<!-- Head-navigation-tabs -->
+		<div id="headNavigationTabs" class="navigation-row collapse navbar-collapse container">
+			<ul class="nav nav-tabs" id="head-navigation-tabs">
+				<li class="active"><a data-toggle="tab" id="tabProgram" href="#blockly">
+						<span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span>
+					</a></li>
+				<li><a data-toggle="tab" id="tabConfiguration" href="#bricklyDiv">
+						<span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span id="tabConfigurationName"></span>
+					</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabProgList" href="#progList">Listing of programs</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabConfList" href="#confList">Listing of configurations</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabLogList" href="#logList">Logging</a></li>
+			</ul>
+		</div>
+	</nav>
+	<!-- ################## END HEAD NAVIGATION ################## -->
+	<!-- ################## TABS ################## -->
+	<div class="tab-content container" id="main-section">
+		<div id="blockly" class="tab-pane fade in active">
+			<div id="blocklyDiv"></div>
+			<div id="simDiv">
+				<div id="uniDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
+				<div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
+				<div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
+				<div id="rulerDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
+				<div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
+				<div id="infoDiv" width="100px" height="200px" style="position: absolute; right: 0; top: 0; z-index: 1"></div>
+				<div id="simButtons">
+					<button id="simBack" type="button" class="simBack blbtn typcn typcn-arrow-left-thick" lkey="Blockly.Msg.MENU_SIM_BACK_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
+					<button id="simScene" type="button" class="simScene blbtn typcn typcn-image" lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip" data-original-title=""
+						title=""></button>
+					<button id="simRobot" type="button" class="simRobot blbtn typcn typcn-ev3" lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip" data-original-title=""
+						title=""></button>
+				</div>
+			</div>
+			<div id="codeDiv">
+				<div id="codeContent"></div>
+				<div id="codeButtons" class="code">
+					<button id="codeBack" type="button" class="codeBack blbtn typcn typcn-arrow-left-thick" data-toggle="collapse"></button>
+					<button id="codeDownload" type="button" class="codeDownload blbtn typcn typcn-download" data-toggle="collapse"></button>
+				</div>
+			</div>
+		</div>
+		<div id="progList" class="tab-pane fade">
+			<!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
  -->
-            <div id="progListToolbar">
-                <button id="backProgList" class="btn">
-                    <i class="typcn typcn-arrow-left"></i>
-                </button>
-            </div>
-            <table id="programNameTable">
-            </table>
-        </div>
-        <div id="confList" class="tab-pane fade">
-            <!-- <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2> -->
-            <div id="confListToolbar">
-                <button id="backConfList" class="btn">
-                    <i class="typcn typcn-arrow-left"></i>
-                </button>
-            </div>
-            <table id="confNameTable">
-            </table>
-        </div>
-        <div id="logList" class="tab-pane fade">
-            <!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>-->
-            <div id="logListToolbar">
-                <button id="backLogList" class="btn">
-                    <i class="typcn typcn-arrow-left"></i>
-                </button>
-            </div>
-            <table id="logTable">
-            </table>
-        </div>
-        <div id="bricklyDiv" class="tab-pane fade"></div>
-    </div>
-    <!--  ################## END TABS ################## -->
-    <!-- ################## POPUPS ################## -->
-    <!-- Popup login -->
-    <div class="modal fade" id="login-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.MENU_LOG_IN" id="loginLabel">Login</h3>
-                    <h3 class="modal-title hidden" id="userInfoLabel" lkey="Blockly.Msg.MENU_CHANGE">Change user information</h3>
-                    <h3 class="modal-title hidden" id="registerInfoLabel" lkey="Blockly.Msg.MENU_NEW">Change user information</h3>
-                    <h3 class="modal-title hidden" id="forgotPasswordLabel" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Forgot Password?</h3>
-                </div>
-                <div id="div-login-forms">
-                    <form id="login-form">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="loginAccountName" lkey="Blockly.Msg.POPUP_USERNAME"></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-user"></span>
-                                    <input type="text" class="form-control" id="loginAccountName" name="loginAccountName" autofocus />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="loginPassword" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
-                                    <input type="password" class="form-control" id="loginPassword" name="loginPassword" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary btn-block" id="doLogin">OK</button>
-                            <div>
-                                <button type="button" id="login_lost_btn" class="btn-link" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Lost Password?</button>
-                                <button type="button" id="login_register_btn" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- Begin | Register Form -->
-                    <form id="register-form" style="display: none;">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="registerAccountName" lkey="Blockly.Msg.POPUP_USERNAME">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-user"></span>
-                                    <input type="text" class="form-control" id="registerAccountName" name="registerAccountName" />
-                                </div>
-                            </div>
-                            <div class="form-group" id="fgRegisterPass">
-                                <label for="registerPass" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
-                                    <input type="password" class="form-control" id="registerPass" name="registerPass" />
-                                </div>
-                            </div>
-                            <div class="form-group" id="fgRegisterPassConfirm">
-                                <label for="registerPassConfirm" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat password</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
-                                    <input type="password" class="form-control" id="registerPassConfirm" name="registerPassConfirm" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerUserName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-user-outline"></span>
-                                    <input type="text" class="form-control" id="registerUserName" name="registerUserName" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="registerUserEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-at"></span>
-                                    <input type="email" class="form-control" id="registerUserEmail" name="registerUserEmail" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button id="showChangeUserPassword" type="button" class="btn-link hidden" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"></button>
-                            <button type="submit" class="btn btn-primary btn-block" id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="register"></button>
-                            <div>
-                                <button id="register_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
-                                <button id="register_lost_btn" type="button" class="btn-link" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Lost Password?</button>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- End | Register Form -->
-                    <!-- Begin | Lost Password Form -->
-                    <form id="lost-form" style="display: none;">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="lost_email" lkey="Blockly.Msg.POPUP_EMAIL">E-mail</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon typcn input-typcn typcn-mail"></span>
-                                    <input type="email" id="lost_email" class="form-control" name="lost_email" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary btn-block" id="sendEmailLostPassword" lkey="Blockly.Msg.POPUP_EMAIL_SEND">Send</button>
-                            <div>
-                                <button id="lost_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
-                                <button id="lost_register_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- End | Lost Password Form -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup change password -->
-    <div id="change-user-password" class="modal fade" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD">Change User Password</h3>
-                </div>
-                <form id="change-user-password-form">
-                    <div class="modal-body">
-                        <div id="grOldPassword" class="form-group">
-                            <label for="passOld" lkey="Blockly.Msg.POPUP_OLD_PASSWORD">Old Password</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
-                                <input type="password" class="form-control" id="passOld" name="passOld" autofocus />
-                                <input type="hidden" class="form-control" id="resetPassLink" name="resetPassLink" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="passNew" lkey="Blockly.Msg.POPUP_NEW_PASSWORD">New Password</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
-                                <input type="password" class="form-control" id="passNew" name="passNew" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="passNewRepeat" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat Password</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
-                                <input type="password" class="form-control" id="passNewRepeat" name="passNewRepeat" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="changeUserPassword">OK</button>
-                        <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Single Modal -->
-    <div id="single-modal" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title">Single Modal Header</h3>
-                </div>
-                <form id="single-modal-form">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="singleModalInput">Single Input</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-pencil"></span>
-                                <input type="text" class="form-control" id="singleModalInput" name="singleModalInput" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" id="singleModalOk">OK</button>
-                        <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Popup show about info -->
-    <div id="show-about" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.MENU_ABOUT">About</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="robertaLogo imgFloatLeft"></div>
-                    <span lkey="Blockly.Msg.POPUP_ABOUT_TEXT">Open Roberta Lab</span> <img alt="powered by Google" src="../css/img/powered-by-google-on-white.png" />
-                    <div style="overflow: auto; width: 100%"></div>
-                    <br />
-                    <div class="fraunhoferLogo imgFloatLeft"></div>
-                    <span lkey="Blockly.Msg.POPUP_ABOUT_TEXT_DEV">Entwickelt vom Open Roberta Team ...</span>
-                    <div style="overflow: auto; width: 100%"></div>
-                    <br />
-                    <div class="googleLogo imgFloatLeft"></div>
-                    <span lkey="Blockly.Msg.POPUP_ABOUT_TEXT_GOOG">Entwickelt vom Open Roberta Team ...</span> </br> </br>
-                    <a href="https://www.iais.fraunhofer.de/de/impressum.html" target="_blank" class="DE">Impressum</a>
-                    <a href="https://www.iais.fraunhofer.de/en/footer/publishing-notes.html" target="_blank" class="EN">Publishing notes</a>
-                    <div style="overflow: auto; width: 100%"></div>
-                    <br />
-                    <div>
-                        <span id="version">Version beta 1.1.0</span>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">Cool</button>
-                    <a class="btn" id="about-join" href="https://dev.open-roberta.org" target="_blank" lkey="Blockly.Msg.POPUP_ABOUT_JOIN">Ich möchte mithelfen</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup show state info -->
-    <div id="show-state-info" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.MENU_STATE_INFO">User state</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span id="popup_username" lkey="Blockly.Msg.POPUP_USERNAME">User</span><span id="loggedIn"></span> <br /> <span lkey="Blockly.Msg.TAB_PROGRAM">Program</span>
-                    <span>:&nbsp;</span> <span id="programName">???</span> <br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span> <span
-                        id="configurationName">???</span> <br /> <span lkey="Blockly.Msg.MENU_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span id="toolbox">???</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup show robot info -->
-    <div id="show-robot-info" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Robot state</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_SYSTEM">System</span>:&nbsp;<span
-                        id="robotSystem"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotStateWait"
-                        lkey="Blockly.Msg.POPUP_ROBOT_STATE_WAIT"></span><span id="robotStateDisconnected" lkey="Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED"></span><span
-                        id="robotStateBusy" lkey="Blockly.Msg.POPUP_ROBOT_STATE_BUSY"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span
-                        id="robotBattery"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup confirm deletion of program -->
-    <div id="confirmDeleteProgram" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Do you really want to delete the program?</span>
-                    <p id="confirmDeleteProgramName"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="doDeleteProgram">OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--  Popup confirm deletion of configuration -->
-    <div id="confirmDeleteConfiguration" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Do you really want to delete the configuration ?</span>
-                    <p id="confirmDeleteConfName"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="doDeleteConfiguration">OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup confirm update firmware -->
-    <div id="confirmUpdateFirmware" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE">Update firmware ?</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="doUpdateFirmware" lkey="Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE">Update now</button>
-                    <input id="buttonCancelFirmwareUpdate" type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                    <input id="buttonCancelFirmwareUpdateAndRun" type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- New popup 4 Startup -->
-    <div id="show-startup-message" class="modal fade" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div id="roberta"></div>
-                <div class="modal-header" style="background-color: #BACC1E; text-align: center; color: white">
-                    <!-- <button style="color: white" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_STARTUP_TITLE">Welcome</h3>
-                    <div class="connector">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="26px"
-                            viewBox="0 0 48 26" style="enable-background: new 0 0 48 26;" xml:space="preserve">
+			<div id="progListToolbar">
+				<button id="backProgList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
+			</div>
+			<table id="programNameTable">
+			</table>
+		</div>
+		<div id="confList" class="tab-pane fade">
+			<!-- <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2> -->
+			<div id="confListToolbar">
+				<button id="backConfList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
+			</div>
+			<table id="confNameTable">
+			</table>
+		</div>
+		<div id="logList" class="tab-pane fade">
+			<!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>-->
+			<div id="logListToolbar">
+				<button id="backLogList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
+			</div>
+			<table id="logTable">
+			</table>
+		</div>
+		<div id="bricklyDiv" class="tab-pane fade"></div>
+	</div>
+	<!--  ################## END TABS ################## -->
+	<!-- ################## POPUPS ################## -->
+	<!-- Popup login -->
+	<div class="modal fade" id="login-user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.MENU_LOG_IN" id="loginLabel">Login</h3>
+					<h3 class="modal-title hidden" id="userInfoLabel" lkey="Blockly.Msg.MENU_CHANGE">Change user information</h3>
+					<h3 class="modal-title hidden" id="registerInfoLabel" lkey="Blockly.Msg.MENU_NEW">Change user information</h3>
+					<h3 class="modal-title hidden" id="forgotPasswordLabel" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Forgot Password?</h3>
+				</div>
+				<div id="div-login-forms">
+					<form id="login-form">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="loginAccountName" lkey="Blockly.Msg.POPUP_USERNAME"></label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-user"></span>
+									<input type="text" class="form-control" id="loginAccountName" name="loginAccountName" autofocus />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="loginPassword" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+									<input type="password" class="form-control" id="loginPassword" name="loginPassword" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary btn-block" id="doLogin">OK</button>
+							<div>
+								<button type="button" id="login_lost_btn" class="btn-link" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Lost Password?</button>
+								<button type="button" id="login_register_btn" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
+							</div>
+						</div>
+					</form>
+					<!-- Begin | Register Form -->
+					<form id="register-form" style="display: none;">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="registerAccountName" lkey="Blockly.Msg.POPUP_USERNAME">Username</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-user"></span>
+									<input type="text" class="form-control" id="registerAccountName" name="registerAccountName" />
+								</div>
+							</div>
+							<div class="form-group" id="fgRegisterPass">
+								<label for="registerPass" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+									<input type="password" class="form-control" id="registerPass" name="registerPass" />
+								</div>
+							</div>
+							<div class="form-group" id="fgRegisterPassConfirm">
+								<label for="registerPassConfirm" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat password</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+									<input type="password" class="form-control" id="registerPassConfirm" name="registerPassConfirm" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="registerUserName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-user-outline"></span>
+									<input type="text" class="form-control" id="registerUserName" name="registerUserName" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="registerUserEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-at"></span>
+									<input type="email" class="form-control" id="registerUserEmail" name="registerUserEmail" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button id="showChangeUserPassword" type="button" class="btn-link hidden" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"></button>
+							<button type="submit" class="btn btn-primary btn-block" id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="register"></button>
+							<div>
+								<button id="register_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
+								<button id="register_lost_btn" type="button" class="btn-link" lkey="Blockly.Msg.POPUP_PASSWORD_RECOVERY">Lost Password?</button>
+							</div>
+						</div>
+					</form>
+					<!-- End | Register Form -->
+					<!-- Begin | Lost Password Form -->
+					<form id="lost-form" style="display: none;">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="lost_email" lkey="Blockly.Msg.POPUP_EMAIL">E-mail</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-mail"></span>
+									<input type="email" id="lost_email" class="form-control" name="lost_email" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary btn-block" id="sendEmailLostPassword" lkey="Blockly.Msg.POPUP_EMAIL_SEND">Send</button>
+							<div>
+								<button id="lost_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
+								<button id="lost_register_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
+							</div>
+						</div>
+					</form>
+					<!-- End | Lost Password Form -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup change password -->
+	<div id="change-user-password" class="modal fade" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD">Change User Password</h3>
+				</div>
+				<form id="change-user-password-form">
+					<div class="modal-body">
+						<div id="grOldPassword" class="form-group">
+							<label for="passOld" lkey="Blockly.Msg.POPUP_OLD_PASSWORD">Old Password</label>
+							<div class="input-group">
+								<span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+								<input type="password" class="form-control" id="passOld" name="passOld" autofocus />
+								<input type="hidden" class="form-control" id="resetPassLink" name="resetPassLink" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="passNew" lkey="Blockly.Msg.POPUP_NEW_PASSWORD">New Password</label>
+							<div class="input-group">
+								<span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+								<input type="password" class="form-control" id="passNew" name="passNew" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="passNewRepeat" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat Password</label>
+							<div class="input-group">
+								<span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+								<input type="password" class="form-control" id="passNewRepeat" name="passNewRepeat" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" id="changeUserPassword">OK</button>
+						<input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Single Modal -->
+	<div id="single-modal" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title">Single Modal Header</h3>
+				</div>
+				<form id="single-modal-form">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="singleModalInput">Single Input</label>
+							<div class="input-group">
+								<span class="input-group-addon typcn input-typcn typcn-pencil"></span>
+								<input type="text" class="form-control" id="singleModalInput" name="singleModalInput" />
+							</div>
+							<div align="right">
+								<a href="#" target="_blank" style="display: inline;"></a>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" id="singleModalOk">OK</button>
+						<input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- Popup show about info -->
+	<div id="show-about" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.MENU_ABOUT">About</h3>
+				</div>
+				<div class="modal-body">
+					<div class="robertaLogo imgFloatLeft"></div>
+					<span lkey="Blockly.Msg.POPUP_ABOUT_TEXT">Open Roberta Lab</span> <img alt="powered by Google" src="../css/img/powered-by-google-on-white.png" />
+					<div style="overflow: auto; width: 100%"></div>
+					<br />
+					<div class="fraunhoferLogo imgFloatLeft"></div>
+					<span lkey="Blockly.Msg.POPUP_ABOUT_TEXT_DEV">Entwickelt vom Open Roberta Team ...</span>
+					<div style="overflow: auto; width: 100%"></div>
+					<br />
+					<div class="googleLogo imgFloatLeft"></div>
+					<span lkey="Blockly.Msg.POPUP_ABOUT_TEXT_GOOG">Entwickelt vom Open Roberta Team ...</span> </br> </br>
+					<a href="https://www.iais.fraunhofer.de/de/impressum.html" target="_blank" class="DE">Impressum</a>
+					<a href="https://www.iais.fraunhofer.de/en/footer/publishing-notes.html" target="_blank" class="EN">Publishing notes</a>
+					<div style="overflow: auto; width: 100%"></div>
+					<br />
+					<div>
+						<span id="version">Version beta 1.1.0</span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal">Cool</button>
+					<a class="btn" id="about-join" href="https://dev.open-roberta.org" target="_blank" lkey="Blockly.Msg.POPUP_ABOUT_JOIN">Ich möchte mithelfen</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup show state info -->
+	<div id="show-state-info" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.MENU_STATE_INFO">User state</h3>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span id="popup_username" lkey="Blockly.Msg.POPUP_USERNAME">User</span><span id="loggedIn"></span> <br /> <span lkey="Blockly.Msg.TAB_PROGRAM">Program</span>
+					<span>:&nbsp;</span> <span id="programName">???</span> <br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span> <span
+						id="configurationName">???</span> <br /> <span lkey="Blockly.Msg.MENU_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span id="toolbox">???</span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup show robot info -->
+	<div id="show-robot-info" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Robot state</h3>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_SYSTEM">System</span>:&nbsp;<span
+						id="robotSystem"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotStateWait"
+						lkey="Blockly.Msg.POPUP_ROBOT_STATE_WAIT"></span><span id="robotStateDisconnected" lkey="Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED"></span><span
+						id="robotStateBusy" lkey="Blockly.Msg.POPUP_ROBOT_STATE_BUSY"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span
+						id="robotBattery"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup confirm deletion of program -->
+	<div id="confirmDeleteProgram" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Do you really want to delete the program?</span>
+					<p id="confirmDeleteProgramName"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" id="doDeleteProgram">OK</button>
+					<input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--  Popup confirm deletion of configuration -->
+	<div id="confirmDeleteConfiguration" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Do you really want to delete the configuration ?</span>
+					<p id="confirmDeleteConfName"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" id="doDeleteConfiguration">OK</button>
+					<input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup confirm update firmware -->
+	<div id="confirmUpdateFirmware" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span lkey="Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE">Update firmware ?</span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" id="doUpdateFirmware" lkey="Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE">Update now</button>
+					<input id="buttonCancelFirmwareUpdate" type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+					<input id="buttonCancelFirmwareUpdateAndRun" type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- New popup 4 Startup -->
+	<div id="show-startup-message" class="modal fade" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div id="roberta"></div>
+				<div class="modal-header" style="background-color: #BACC1E; text-align: center; color: white">
+					<!-- <button style="color: white" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_STARTUP_TITLE">Welcome</h3>
+					<div class="connector">
+						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="48px" height="26px"
+							viewBox="0 0 48 26" style="enable-background: new 0 0 48 26;" xml:space="preserve">
                             <path class="connector_fill" d="M40.922,0c0.92,16.925-7.92,21.222-24.932,16.379l-8.742-3.933L8.117,0H40.922z"></path></svg>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="border-dotted col-md-6 with-devider">
-                                <h4 lkey="Blockly.Msg.POPUP_STARTUP_NEW">What's new?</h4>
-                                <div lkey="Blockly.Msg.POPUP_NEW_RELEASE"></div>
-                                <button id='moreReleases' type='button' class='btn-link' lkey="Blockly.Msg.BUTTON_MORE">more</button>
-                                <div id="oldReleases" style="display: none; color: #bbb" lkey="Blockly.Msg.POPUP_RELEASE"></div>
-                            </div>
-                            <div class="col-md-6 with-devider">
-                                <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
-                                <ul class="list-new-version nonIcon">
-                                    <li><a class="menuEV3conf" lkey="Blockly.Msg.MENU_EV3" href="#">EV3 preparation</a></li>
-                                    <li><a class="menuProgramming" lkey="Blockly.Msg.MENU_PROGRAMMING" href="#">general help</a></li>
-                                    <li><a class="menuBuildingInstructions" lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS" href="#">building instructions</a></li>
-                                </ul>
-                            </div>
-                            <div class="clearer"></div>
-                            <hr style="border: 1px dashed #afca04; margin-top: 10px" />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="text-align: center">
-                    <div id="takeATour" class="hidden-xs robot-container" data-dismiss="modal"
-                        style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat" /><br>
-                    <span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
-                </div>
-                <div class="clearer"></div>
-                <h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
-                <div class="clearer"></div>
-                <div id="popup-sim" href="#" class="robot-container" data-type="ev3">
-                    <span href="#" class='typcn typcn-open robot-icon'></span><span class="robot-label">I don't have a robot!</span>
-                    <img class="img-beta" src="/css/img/beta.png" alt="beta" />
-                    <a href="#" target="_blank" style="display: inline;"><span class='robot-info typcn typcn-info-large'></span></a>
-                </div>
-            </div>
-            <div class="modal-body left-inner-addon popup-checkbox">
-                <input type="checkbox" name="checkbox" id="checkbox_id" value="value" />
-                <label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br /> <br /> <span
-                    lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
-                <a href="https://www.open-roberta.org/datenschutz" target="_blank" class="DE" style="display: inline;">Details ansehen.</a>
-                <a href="https://www.open-roberta.org/en/datenschutz" target="_blank" class="EN" style="display: inline;">Show details.</a>
-            </div>
-        </div>
-    </div>
-    </div>
-    <!--  Popup to show relations / share programs -->
-    <div id="show-relations" class="modal fade">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 id="#headShare" class="modal-title">Share</h3>
-                </div>
-                <!-- <form id="share-program-form"> -->
-                <div class="modal-body">
-                    <table id="relationsTable">
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="shareProgram">OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup show message -->
-    <div id="show-message" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span id="message">Message to show</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal" autofocus>OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup show message with cancel -->
-    <div id="show-messageContinue" class="modal fade">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span id="messageContinue">Message to show</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal" autofocus>OK</button>
-                    <input type="button" id="confirmContinue" class="btn" data-dismiss="modal" value="continue anyway" lkey="Blockly.Msg.POPUP_CONTINUE"></input>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Popup for simulated robot -> EV3 -->
-    <div id="simRobotModal" class="modal fade simRobotModal" data-backdrop="false">
-        <div class="modal-dialog">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            </div>
-            <div id="simRobotContent"></div>
-        </div>
-    </div>
-    <div id="img_00" class="img_sim"></div>
-    <div id="img_01" class="img_sim"></div>
-    <div id="img_02" class="img_sim"></div>
-    <div id="img_03" class="img_sim"></div>
-    <div id="img_04" class="img_sim"></div>
-    <div id="img_05" class="img_sim"></div>
-    <div id="img_06" class="img_sim"></div>
-    <div id="img_07" class="img_sim"></div>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="border-dotted col-md-6 with-devider">
+								<h4 lkey="Blockly.Msg.POPUP_STARTUP_NEW">What's new?</h4>
+								<div lkey="Blockly.Msg.POPUP_NEW_RELEASE"></div>
+								<button id='moreReleases' type='button' class='btn-link' lkey="Blockly.Msg.BUTTON_MORE">more</button>
+								<div id="oldReleases" style="display: none; color: #bbb" lkey="Blockly.Msg.POPUP_RELEASE"></div>
+							</div>
+							<div class="col-md-6 with-devider">
+								<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
+								<ul class="list-new-version nonIcon">
+									<li><a class="menuEV3conf" lkey="Blockly.Msg.MENU_EV3" href="#">EV3 preparation</a></li>
+									<li><a class="menuProgramming" lkey="Blockly.Msg.MENU_PROGRAMMING" href="#">general help</a></li>
+									<li><a class="menuBuildingInstructions" lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS" href="#">building instructions</a></li>
+								</ul>
+							</div>
+							<div class="clearer"></div>
+							<hr style="border: 1px dashed #afca04; margin-top: 10px" />
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer" style="text-align: center">
+					<div id="takeATour" class="hidden-xs robot-container" data-dismiss="modal"
+						style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat" />
+					<br>
+					<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
+				</div>
+				<div class="clearer"></div>
+				<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
+				<div class="clearer"></div>
+				<div id="popup-sim" href="#" class="popup-robot robot-container" data-type="ev3">
+					<span href="#" class='typcn typcn-open robot-icon'></span><span class="robot-label">I don't have a robot!</span> <img class="img-beta"
+						src="/css/img/beta.png" alt="beta" />
+					<a href="#" target="_blank" style="display: inline;">
+						<span class='robot-info typcn typcn-info-large'></span>
+					</a>
+				</div>
+			</div>
+			<div class="modal-body left-inner-addon popup-checkbox">
+				<input type="checkbox" name="checkbox" id="checkbox_id" value="value" />
+				<label for="checkbox_id" lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this again.</label><br /> <br /> <span
+					lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to personalise content and to analyse our traffic.</span>
+				<a href="https://www.open-roberta.org/datenschutz" target="_blank" class="DE" style="display: inline;">Details ansehen.</a>
+				<a href="https://www.open-roberta.org/en/datenschutz" target="_blank" class="EN" style="display: inline;">Show details.</a>
+			</div>
+		</div>
+	</div>
+	</div>
+	<!--  Popup to show relations / share programs -->
+	<div id="show-relations" class="modal fade">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 id="#headShare" class="modal-title">Share</h3>
+				</div>
+				<!-- <form id="share-program-form"> -->
+				<div class="modal-body">
+					<table id="relationsTable">
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="shareProgram">OK</button>
+					<input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup show message -->
+	<div id="show-message" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span id="message">Message to show</span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal" autofocus>OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup show message with cancel -->
+	<div id="show-messageContinue" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+				</div>
+				<div class="modal-body left-inner-addon">
+					<span id="messageContinue">Message to show</span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal" autofocus>OK</button>
+					<input type="button" id="confirmContinue" class="btn" data-dismiss="modal" value="continue anyway" lkey="Blockly.Msg.POPUP_CONTINUE"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Popup for simulated robot -> EV3 -->
+	<div id="simRobotModal" class="modal fade simRobotModal" data-backdrop="false">
+		<div class="modal-dialog">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div id="simRobotContent"></div>
+		</div>
+	</div>
+	<div id="img_00" class="img_sim"></div>
+	<div id="img_01" class="img_sim"></div>
+	<div id="img_02" class="img_sim"></div>
+	<div id="img_03" class="img_sim"></div>
+	<div id="img_04" class="img_sim"></div>
+	<div id="img_05" class="img_sim"></div>
+	<div id="img_06" class="img_sim"></div>
+	<div id="img_07" class="img_sim"></div>
 </body>
 </html>

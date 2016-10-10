@@ -52,7 +52,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             clone.find('span:eq( 0 )').addClass('typcn-' + robot);
             clone.find('span:eq( 1 )').text(robots[robot].realName);
             clone.attr('data-type', robot);
-            clone.addClass('popup-robot');
             if (!robots[robot].beta) {
                 clone.find('img').css('visibility', 'hidden');
             }

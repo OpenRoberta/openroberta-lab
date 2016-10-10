@@ -65,7 +65,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             $('#single-modal h3').text(Blockly.Msg["MENU_CONNECT"]);
             $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
             $('#singleModalInput').addClass('capitalLetters');
-        }, function() {
+            $('#single-modal a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
+            $('#single-modal a[href]').attr("href", "https://wiki.open-roberta.org");
+         }, function() {
             setToken($('#singleModalInput').val().toUpperCase());
         }, function() {
             $('#singleModalInput').removeClass('capitalLetters');
