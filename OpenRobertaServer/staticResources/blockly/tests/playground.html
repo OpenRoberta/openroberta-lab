@@ -85,7 +85,7 @@ function start() {
               maxScale: 4,
               minScale: .25,
               scaleSpeed: 1.1},
-           checkInTask:['start', '_def', 'event', 'EV3'],
+           checkInTask:['start', '_def', 'event', '-Brick' ],
            variableDeclaration: true,
            robControls: true
           });
@@ -264,15 +264,20 @@ h1 {
     <category name='TOOLBOX_ACTION' svg="true">
         <category name='brick'>
         <block type='robBrick_EV3-Brick'></block>
+        <block type='robBrick_ardu-Brick'></block>
         <block type='robBrick_ultrasonic'></block>
         <block type='robBrick_colour'></block>
         <block type='robBrick_light'></block>
         <block type='robBrick_infrared'></block>
         <block type='robBrick_touch'></block>
         <block type='robBrick_gyro'></block>
+        <block type='robBrick_compass'></block>
+        <block type='robBrick_ultrasonic_ardu'></block>
         <block type='robBrick_sound'></block>
         <block type='robBrick_motor_big'></block>
         <block type='robBrick_motor_middle'></block>
+        <block type='robBrick_motor_ardu'>
+        </block>
         <block type='robBrick_actor'></block>
         </category>
         <category name='TOOLBOX_MOVE' svg="true">
@@ -303,6 +308,8 @@ h1 {
             <block type='robActions_motor_stop'>
                 <field name='MOTORPORT'>A</field>
             </block>
+            <block type='robActions_motor_on_for_ardu'>
+            </block>           
         </category>
         <category name='TOOLBOX_DRIVE' svg="true">
             <block type='robActions_motorDiff_on'>
@@ -538,10 +545,25 @@ h1 {
                     </block> 
                 </value>
             </block> 
+            <block type='robControls_wait_for'>
+                <value name='WAIT0'>
+                    <block type='logic_compare'>
+                    <mutation operator_range='BOOL'></mutation>
+                        <value name='A'>
+                            <block type='robSensors_getSample_ardu'>
+                            </block> 
+                        </value>
+                        <value name='B'>
+                            <block type='logic_boolean'>
+                            </block> 
+                        </value>
+                    </block> 
+                </value>
+            </block> 
         </category>
         <category name='Tasks'> 
             <block type='robControls_start'></block> 
-<block type='robControls_start_ardu'></block> 
+            <block type='robControls_start_ardu'></block> 
         </category> 
     </category>
     <category name='TOOLBOX_LOGIC' svg="true">

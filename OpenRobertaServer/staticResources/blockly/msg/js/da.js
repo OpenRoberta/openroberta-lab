@@ -554,6 +554,7 @@ Blockly.Msg.ORA_PROGRAM_GET_ONE_ERROR_NOT_FOUND = "Program ikke fundet.";
 Blockly.Msg.ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = "Bruger ikke logget ind.";
 Blockly.Msg.ORA_PROGRAM_GET_ONE_SUCCESS = "Program åbnet";
 Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR = "This program is not a valid NEPO program and cannot be uploaded!";  // untranslated
+Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE = "You are trying to import a program for a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to import again!";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = "This program already exists.";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Kunne ikke gemme program.";
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = "You don't have the permission to modify this program!";  // untranslated

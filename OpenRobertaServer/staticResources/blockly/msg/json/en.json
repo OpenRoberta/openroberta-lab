@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-10-08 17:11:23.479777",
+		"lastupdated": "2016-10-10 10:53:03.509142",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -881,5 +881,6 @@
 	"NXTBRICK_TOOLTIP": "Represents the NXT brick with connected actors and sensors. There are also inbuild actors and sensors available, e.g. buttons, display ...",
 	"ARDUBRICK_TOOLTIP": "Represents the Bot'n Roll board with connected actors and sensors. There are also inbuild actors and sensors available, e.g. pushbuttons, display ...",
 	"EV3BRICK_TOOLTIP": "Represents the EV3 brick with connected actors and sensors. There are also inbuild actors and sensors available, e.g. buttons, display ...",
-	"BOTH": "both"
+	"BOTH": "both",
+	"ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE": "You are trying to import a program for a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to import again!"
 }

@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.DummyProcessor;
@@ -163,13 +164,20 @@ public class ClientProgram {
                 boolean xmlIsValid = true;
                 try {
                     validator.validate(new StreamSource(new java.io.StringReader(xmlText)));
+
                 } catch ( org.xml.sax.SAXException e ) {
                     xmlIsValid = false;
                 }
                 if ( xmlIsValid ) {
-                    response.put("name", programName);
-                    response.put("data", xmlText);
-                    Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
+                    BlockSet jaxbProgramSet = JaxbHelper.xml2BlockSet(xmlText);
+                    String robotType = jaxbProgramSet.getRobottype();
+                    if ( robotType.equals(httpSessionState.getRobotName()) ) {
+                        response.put("name", programName);
+                        response.put("data", xmlText);
+                        Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
+                    } else {
+                        Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
+                    }
                 } else {
                     Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
                 }
