@@ -3,8 +3,9 @@ package de.fhg.iais.roberta.syntax.expr;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -16,7 +17,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree).
+ * This class represents the <b>robConnection</b> block from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate color constant.<br/>
  * <br>
  * The client must provide the value of the color. <br>
@@ -25,11 +26,13 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class ConnectConst<V> extends Expr<V> {
     private final String value;
+    private final String dataValue;
 
-    private ConnectConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("CONNECTION_CONST"),properties, comment);
+    private ConnectConst(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("CONNECTION_CONST"), properties, comment);
         Assert.isTrue(!value.equals(""));
         this.value = value;
+        this.dataValue = dataValue;
         setReadOnly();
     }
 
@@ -41,8 +44,8 @@ public class ConnectConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link NumConst}
      */
-    public static <V> ConnectConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ConnectConst<V>(value, properties, comment);
+    public static <V> ConnectConst<V> make(String dataValue, String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ConnectConst<V>(dataValue, value, properties, comment);
     }
 
     /**
@@ -86,8 +89,10 @@ public class ConnectConst<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
+        Data data = block.getData();
+        String datum = data.getValue();
         String field = helper.extractField(fields, BlocklyConstants.CONNECTION);
-        return NumConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ConnectConst.make(datum, field, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -95,6 +100,9 @@ public class ConnectConst<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CONNECTION, getValue());
+        Data data = new Data();
+        data.setValue(this.dataValue);
+        jaxbDestination.setData(data);
         return jaxbDestination;
     }
 }
