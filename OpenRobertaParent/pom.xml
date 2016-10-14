@@ -65,6 +65,8 @@
 		<module>../RobotEV3</module>
 		<module>../RobotNXT</module>
         <module>../RobotArdu</module>
+        <module>../RobotNAO</module>
+        <module>../RobotCalliope</module>
 		<module>../OpenRobertaServer</module>
 	</modules>
 	<repositories>
