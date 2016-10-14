@@ -29,11 +29,18 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractRobotFactory implements IRobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
+    private Properties robotProperties;
+
+    public AbstractRobotFactory() {
+        this.robotProperties = Util1.loadProperties("classpath:Robot.properties");
+        addBlockTypesFromProperties("Robot.properties", this.robotProperties);
+    }
 
     @Override
     public IIndexLocation getIndexLocation(String indexLocation) {
