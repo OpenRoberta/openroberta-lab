@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -165,7 +164,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         boolean timeSensorUsed = UsedTimerVisitorArdu.check(phrasesSet);
 
         final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed);
-        astVisitor.generatePrefix(withWrapping);
+        astVisitor.generatePrefix(withWrapping, phrasesSet);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
 
@@ -174,21 +173,29 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2ArduVisitor astVisitor) {
         boolean mainBlock = false;
-        for ( final ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( final Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                phrase.visit(astVisitor);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                    phrase.visit(astVisitor);
+                }
+                if ( mainBlock ) {
+                    generateSuffix(withWrapping, astVisitor);
+                    mainBlock = false;
+                }
             }
         }
-        generateSuffix(withWrapping, astVisitor);
     }
 
     private static boolean handleMainBlocks(Ast2ArduVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK && !phrase.getProperty().getBlockType().equals(BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER_ARDU) ) {
+        //        if (phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
+        if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
         } else if ( !phrase.getKind().hasName("LOCATION") ) {
             mainBlock = true;
         }
+        //        }
         return mainBlock;
     }
 
@@ -1390,26 +1397,26 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append(INDENT).append("void ");
+        this.sb.append("\n").append("void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
         this.sb.append(") {");
         methodVoid.getBody().visit(this);
-        this.sb.append("\n").append(INDENT).append("}");
+        this.sb.append("\n").append("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append(getBlocklyTypeCode(methodReturn.getReturnType()));
-        this.sb.append(" " + methodReturn.getMethodName() + "( ");
+        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
-        this.sb.append(" ) {");
+        this.sb.append(") {");
         methodReturn.getBody().visit(this);
         this.nlIndent();
         this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append(INDENT).append("}");
+        this.sb.append(";\n").append("}");
         return null;
     }
 
@@ -1436,7 +1443,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         methodCall.getParametersValues().visit(this);
         this.sb.append(")");
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            this.sb.append(";");
+            //this.sb.append(";");
         }
         return null;
     }
@@ -1496,7 +1503,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
             case "FUNCTION_EXPR":
                 final BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
-                return functionKind.hasName("TEXT_JOIN_FUNCT", "BlockType.LIST_INDEX_OF");
+                return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
             case "METHOD_EXPR":
                 final MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
                 return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
@@ -1595,11 +1602,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
-    //WHEELDIAMETER = 6.5
-    //TRACKWIDTH = 16.5
     private void addConstants() {
-        this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
-        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#include <math.h> \n");
         this.sb.append("#include <CountUpDownTimer.h> \n");
         // Bot'n Roll ONE A library:
@@ -1625,13 +1628,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("byte colorsRight[3]={0,0,0}; \n \n");
     }
 
-    private void generatePrefix(boolean withWrapping) {
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         if ( !withWrapping ) {
             return;
         }
 
         this.addConstants();
-
+        generateUserDefinedMethods(phrasesSet);
         this.sb.append("void setup() \n");
         this.sb.append("{");
         nlIndent();
@@ -1678,6 +1681,21 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         if ( this.timeSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
+        }
+    }
+
+    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        if ( phrasesSet.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+                    if ( isCreateMethodPhrase ) {
+                        phrase.visit(this);
+                        this.sb.append("\n");
+                    }
+
+                }
+            }
         }
     }
 
