@@ -695,40 +695,32 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO Not implemented. Wait for the function
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String methodName = null;
+        String port;
         if ( motorOnAction.getPort() == ActorPort.A ) {
             methodName = "one.servo1";
         } else if ( motorOnAction.getPort() == ActorPort.D ) {
             methodName = "one.servo2";
         } else {
-            //        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-            //        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-            //        String methodName;
-            //        if ( isDuration ) {
-            //            methodName = "one.moveMotorRotation(";
-            //            this.sb.append(methodName);
-            //            this.sb.append(motorOnAction.getPort());
-            //            this.sb.append(", ");
-            //            motorOnAction.getParam().getSpeed().visit(this);
-            //            this.sb.append(", ");
-            //            motorOnAction.getParam().getDuration().getValue().visit(this);
-            //            if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
-            //                this.sb.append("/2/PI");
-            //            }
-            //        } else {
-            //            //there is no regulated drive function for the robot, the closest function if PID controlled
-            //            //movement. The coefficients are default, they seem to make movement of the robot
-            //            //much smoother.
-            //            methodName = isRegulatedDrive ? "one.move1mPID(" : "one.move1m(";
-            //            this.sb.append(methodName);
-            //            this.sb.append(motorOnAction.getPort());
-            //            this.sb.append(", ");
-            //            motorOnAction.getParam().getSpeed().visit(this);
-            //        }
-            //        this.sb.append(");");
+            port = motorOnAction.getPort() == ActorPort.B ? "1" : "2";
+            final boolean isDuration = motorOnAction.getParam().getDuration() != null;
+            if ( isDuration ) {
+                methodName = "rob.move1mTime(";
+                this.sb.append(methodName);
+                this.sb.append(port + ", ");
+                motorOnAction.getParam().getSpeed().visit(this);
+                this.sb.append(", ");
+                motorOnAction.getParam().getDuration().getValue().visit(this);
+            } else {
+                methodName = "one.move1m(";
+                this.sb.append(methodName);
+                this.sb.append(motorOnAction.getPort());
+                this.sb.append(", ");
+                motorOnAction.getParam().getSpeed().visit(this);
+            }
+            this.sb.append(");");
         }
         this.sb.append(methodName + "(");
         motorOnAction.getParam().getSpeed().visit(this);
@@ -748,15 +740,16 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: so far this function can be implemented in a nice way only for two motors. Wait for
-    // a new function
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        String port = motorStopAction.getPort() == ActorPort.B ? "1" : "2";
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
-            this.sb.append("");
+            this.sb.append("one.stop1m(");
+
         } else {
-            this.sb.append("");
+            this.sb.append("one.brake1m(");
         }
+        this.sb.append(port + ")");
         return null;
     }
 
