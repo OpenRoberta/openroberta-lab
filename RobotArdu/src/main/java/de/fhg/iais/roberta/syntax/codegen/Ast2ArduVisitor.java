@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
@@ -691,30 +691,40 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     //TODO Not implemented. Wait for the function
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        String methodName;
-        if ( isDuration ) {
-            methodName = "one.moveMotorRotation(";
-            this.sb.append(methodName);
-            this.sb.append(motorOnAction.getPort());
-            this.sb.append(", ");
-            motorOnAction.getParam().getSpeed().visit(this);
-            this.sb.append(", ");
-            motorOnAction.getParam().getDuration().getValue().visit(this);
-            if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
-                this.sb.append("/2/PI");
-            }
+        String methodName = null;
+        if ( motorOnAction.getPort() == ActorPort.A ) {
+            methodName = "one.servo1";
+        } else if ( motorOnAction.getPort() == ActorPort.D ) {
+            methodName = "one.servo2";
         } else {
-            //there is no regulated drive function for the robot, the closest function if PID controlled
-            //movement. The coefficients are default, they seem to make movement of the robot
-            //much smoother.
-            methodName = isRegulatedDrive ? "one.move1mPID(" : "one.move1m(";
-            this.sb.append(methodName);
-            this.sb.append(motorOnAction.getPort());
-            this.sb.append(", ");
-            motorOnAction.getParam().getSpeed().visit(this);
+            //        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
+            //        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+            //        String methodName;
+            //        if ( isDuration ) {
+            //            methodName = "one.moveMotorRotation(";
+            //            this.sb.append(methodName);
+            //            this.sb.append(motorOnAction.getPort());
+            //            this.sb.append(", ");
+            //            motorOnAction.getParam().getSpeed().visit(this);
+            //            this.sb.append(", ");
+            //            motorOnAction.getParam().getDuration().getValue().visit(this);
+            //            if ( motorOnAction.getDurationMode() == MotorMoveMode.DEGREE ) {
+            //                this.sb.append("/2/PI");
+            //            }
+            //        } else {
+            //            //there is no regulated drive function for the robot, the closest function if PID controlled
+            //            //movement. The coefficients are default, they seem to make movement of the robot
+            //            //much smoother.
+            //            methodName = isRegulatedDrive ? "one.move1mPID(" : "one.move1m(";
+            //            this.sb.append(methodName);
+            //            this.sb.append(motorOnAction.getPort());
+            //            this.sb.append(", ");
+            //            motorOnAction.getParam().getSpeed().visit(this);
+            //        }
+            //        this.sb.append(");");
         }
+        this.sb.append(methodName + "(");
+        motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(");");
         return null;
     }
