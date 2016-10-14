@@ -1419,7 +1419,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append(getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -1427,7 +1427,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         this.nlIndent();
         this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append(INDENT).append("}");
+        this.sb.append(";\n").append("}");
         return null;
     }
 
