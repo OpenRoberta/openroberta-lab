@@ -55,6 +55,7 @@ public class EV3Factory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
+        addBlockTypesFromProperties("EV3.properties", this.ev3Properties);
     }
 
     @Override
