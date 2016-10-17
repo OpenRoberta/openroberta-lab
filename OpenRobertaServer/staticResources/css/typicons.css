@@ -32,6 +32,12 @@
 .typcn-ev3:before {
     content: "\ea4a";
 }
+.typcn-nao:before {
+    content: "\ea4a";
+}
+.typcn-calliope:before {
+    content: "\ea4a";
+}
 .typcn-Roberta:before {
     content: "\e603";
 }
