@@ -47,7 +47,12 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 abstract public class Jaxb2AstTransformer<V> {
-    protected ArrayList<ArrayList<Phrase<V>>> tree = new ArrayList<ArrayList<Phrase<V>>>();
+    protected Jaxb2AstTransformerData<V> data = new Jaxb2AstTransformerData<>();
+
+    public Jaxb2AstTransformerData<V> getData() {
+        return this.data;
+    }
+
     private IRobotFactory modeFactory;
     private int variableCounter = 0;
 
@@ -64,7 +69,7 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return abstract syntax tree generated from JAXB objects.
      */
     public ArrayList<ArrayList<Phrase<V>>> getTree() {
-        return this.tree;
+        return this.data.getTree();
     }
 
     /**
@@ -83,7 +88,7 @@ abstract public class Jaxb2AstTransformer<V> {
 
     @Override
     public String toString() {
-        return "BlockAST [project=" + this.tree + "]";
+        return "BlockAST [project=" + this.data.getTree() + "]";
     }
 
     /**
@@ -150,7 +155,7 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return list of parameters represented with the {@link Expr} class.
      */
     public List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
-        List<Expr<V>> params = new ArrayList<Expr<V>>();
+        List<Expr<V>> params = new ArrayList<>();
         List<Value> values = extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
             params.add(convertPhraseToExpr(extractValue(values, exprParam)));
@@ -169,12 +174,12 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return if statement object from the AST representation
      */
     public Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
-        List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
-        List<StmtList<V>> thenList = new ArrayList<StmtList<V>>();
+        List<Expr<V>> exprsList = new ArrayList<>();
+        List<StmtList<V>> thenList = new ArrayList<>();
         StmtList<V> elseList = null;
 
-        List<Value> values = new ArrayList<Value>();
-        List<Statement> statements = new ArrayList<Statement>();
+        List<Value> values = new ArrayList<>();
+        List<Statement> statements = new ArrayList<>();
 
         if ( _else + _elseIf != 0 ) {
             List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();

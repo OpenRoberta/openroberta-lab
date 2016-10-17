@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
+import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;;
 
@@ -156,6 +157,7 @@ public class Helper {
      * </ol>
      * Return true if the first XML is equal to second XML.
      *
+     * @param <V>
      * @param fileName of the program
      * @throws Exception
      */
@@ -166,7 +168,7 @@ public class Helper {
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        BlockSet blockSet = astToJaxb(transformer.getTree());
+        BlockSet blockSet = astToJaxb(transformer.getData());
         //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
@@ -178,11 +180,12 @@ public class Helper {
         Assert.assertTrue(diff.identical());
     }
 
-    public static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
+    public static BlockSet astToJaxb(Jaxb2AstTransformerData<Void> data) {
         BlockSet blockSet = new BlockSet();
-
+        blockSet.setRobottype(data.getRobotType());
+        blockSet.setXmlversion(data.getXmlVersion());
         Instance instance = null;
-        for ( ArrayList<Phrase<Void>> tree : astProgram ) {
+        for ( ArrayList<Phrase<Void>> tree : data.getTree() ) {
             for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);

@@ -31,6 +31,8 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
      * @param program
      */
     public void transform(BlockSet set) {
+        this.data.setRobotType(set.getRobottype());
+        this.data.setXmlVersion(set.getXmlversion());
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
             instanceToAST(instance);
@@ -40,12 +42,12 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
     private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        ArrayList<Phrase<V>> range = new ArrayList<Phrase<V>>();
+        ArrayList<Phrase<V>> range = new ArrayList<>();
         range.add(location);
         for ( Block block : blocks ) {
             range.add(blockToAST(block));
         }
-        this.tree.add(range);
+        this.data.getTree().add(range);
     }
 
     @Override
