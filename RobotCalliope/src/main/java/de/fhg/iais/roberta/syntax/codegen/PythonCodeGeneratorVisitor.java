@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.calliope.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -352,7 +352,6 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 this.sb.append("0");
                 break;
             case "java.util.ArrayList":
-                break;
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
                 break;
             default:
@@ -580,18 +579,20 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("hal.drawText(");
-        if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
+        //TODO this should be removed from this project
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
+        this.sb.append("display.show(");
+        if ( !displayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
-            showTextAction.getMsg().visit(this);
+            displayTextAction.getMsg().visit(this);
             this.sb.append(")");
         } else {
-            showTextAction.getMsg().visit(this);
+            displayTextAction.getMsg().visit(this);
         }
-        this.sb.append(", ");
-        showTextAction.getX().visit(this);
-        this.sb.append(", ");
-        showTextAction.getY().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -608,107 +609,41 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName;
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
-        boolean duration = motorOnAction.getParam().getDuration() != null;
-        if ( duration ) {
-            methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
-        } else {
-            methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
-        }
-        this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        if ( duration ) {
-            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-            this.sb.append(", ");
-            motorOnAction.getDurationValue().visit(this);
-        }
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(')');
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        boolean isDuration = driveAction.getParam().getDuration() != null;
-        String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
-        driveAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
-        }
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
-        this.sb.append(methodName);
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
-        turnAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().visit(this);
-        }
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("hal.stopMotors(");
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-
-        this.sb.append("hal.driveInCurve(");
-        this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        if ( duration != null ) {
-            this.sb.append(", ");
-            duration.getValue().visit(this);
-        }
-        this.sb.append(")");
         return null;
     }
 
@@ -754,7 +689,6 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getPort().getPortNumber() + "')");
         return null;
     }
 
@@ -767,8 +701,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
-        this.sb.append("\n").append("def run():");
-        incrIndentation();
+        //        incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
             nlIndent();
@@ -1432,4 +1365,5 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 break;
         }
     }
+
 }
