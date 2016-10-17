@@ -10,18 +10,14 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.action.calliope.ActorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -30,10 +26,10 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * JAXB to brick configuration. Client should provide a tree of jaxb objects.
  * Generates a BrickConfiguration object.
  */
-public class Jaxb2ArduConfigurationTransformer {
+public class Jaxb2CalliopeConfigurationTransformer {
     IRobotFactory factory;
 
-    public Jaxb2ArduConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2CalliopeConfigurationTransformer(IRobotFactory factory) {
         this.factory = factory;
     }
 
@@ -132,18 +128,18 @@ public class Jaxb2ArduConfigurationTransformer {
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_ardu":
                         //fields = extractFields(value.getBlock(), (short) 2);
-                        IMotorSide motorSide;
-                        if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
-                            motorSide = MotorSide.RIGHT;
-                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.C) ) {
-                            motorSide = MotorSide.LEFT;
-                        } else {
-                            motorSide = MotorSide.NONE;
-                        }
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
+                        //                        IMotorSide motorSide;
+                        //                        if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
+                        //                            motorSide = MotorSide.RIGHT;
+                        //                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.C) ) {
+                        //                            motorSide = MotorSide.LEFT;
+                        //                        } else {
+                        //                            motorSide = MotorSide.NONE;
+                        //                        }
+                        //                        actors.add(
+                        //                            Pair.of(
+                        //                                this.factory.getActorPort(value.getName()),
+                        //                                new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
 
                         break;
                     default:
