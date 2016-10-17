@@ -209,6 +209,7 @@ public class ServerStarter {
         for ( String pluginNumber : pluginNumbers ) {
             String pluginName = this.properties.getProperty("robot.plugin." + pluginNumber + ".name");
             String pluginFactory = this.properties.getProperty("robot.plugin." + pluginNumber + ".factory");
+            System.out.println(pluginFactory);
             if ( pluginName == null || pluginFactory == null ) {
                 LOG.error("the robot plugin with number " + pluginNumber + " is invalid and thus ignored. Check openRoberta.properties");
             } else {
