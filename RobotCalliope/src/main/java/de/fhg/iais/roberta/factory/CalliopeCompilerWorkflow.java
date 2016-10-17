@@ -13,13 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.syntax.codegen.Ast2CalliopeVisitor;
+import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -66,7 +65,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2CalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = PythonCodeGeneratorVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
@@ -111,7 +110,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2CalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return PythonCodeGeneratorVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
@@ -195,7 +194,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(factory);
+        Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 }
