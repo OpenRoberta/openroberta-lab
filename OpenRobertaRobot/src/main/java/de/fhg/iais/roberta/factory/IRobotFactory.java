@@ -7,6 +7,7 @@ import com.google.inject.AbstractModule;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
+import de.fhg.iais.roberta.inter.mode.action.IDisplayImageMode;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
@@ -312,6 +313,18 @@ public interface IRobotFactory {
      * @return the guice module for this robot or <code>null</code>, if this robot doesn't need to inject resources
      */
     AbstractModule getGuiceModule();
+
+    /**
+     * Get display image mode from {@link IDisplayImageMode} given string parameter. It is possible for one display image mode to have multiple string mappings.
+     * Throws
+     * exception if the motor side does not exists.
+     *
+     * @param name of the display image mode
+     * @return the display image mode from the enum {@link IDisplayImageMode}
+     */
+    IDisplayImageMode getDisplayImageMode(String displaImageMode);
+
+    List<IDisplayImageMode> getDisplayImageModes();
 
     String getProgramToolboxBeginner();
 

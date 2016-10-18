@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.transformer;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,13 +12,10 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.util.Pair;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -105,67 +101,11 @@ public class Jaxb2CalliopeConfigurationTransformer {
 
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
-            case "robBrick_ardu-Brick":
-                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
-                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
-
-                List<Value> values = extractValues(block, (short) 14);
-                extractHardwareComponent(values, sensors, actors);
-
-                return new CalliopeConfiguration.Builder().addActors(actors).addSensors(sensors).build();
+            case "mbedBrick_Calliope-Brick":
+            case "mbedBrick_microbit-Brick":
+                return new CalliopeConfiguration.Builder().build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }
-    }
-
-    private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
-        for ( Value value : values ) {
-            if ( value.getName().startsWith("S") ) {
-                // Extract sensor
-                sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
-            } else {
-                // Extract actor
-                switch ( value.getBlock().getType() ) {
-                    case "robBrick_motor_ardu":
-                        //fields = extractFields(value.getBlock(), (short) 2);
-                        //                        IMotorSide motorSide;
-                        //                        if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
-                        //                            motorSide = MotorSide.RIGHT;
-                        //                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.C) ) {
-                        //                            motorSide = MotorSide.LEFT;
-                        //                        } else {
-                        //                            motorSide = MotorSide.NONE;
-                        //                        }
-                        //                        actors.add(
-                        //                            Pair.of(
-                        //                                this.factory.getActorPort(value.getName()),
-                        //                                new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
-
-                        break;
-                    default:
-                        throw new DbcException("Invalide motor type!");
-                }
-            }
-        }
-    }
-
-    private List<Value> extractValues(Block block, int numOfValues) {
-        List<Value> values;
-        values = block.getValue();
-        Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
-        return values;
-    }
-
-    private List<Field> extractFields(Block block, int numOfFields) {
-        List<Field> fields;
-        fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
-        return fields;
-    }
-
-    private String extractField(List<Field> fields, String name, int fieldLocation) {
-        Field field = fields.get(fieldLocation);
-        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
-        return field.getValue();
     }
 }
