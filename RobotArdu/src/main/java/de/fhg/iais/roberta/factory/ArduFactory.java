@@ -524,4 +524,9 @@ public class ArduFactory extends AbstractRobotFactory {
     public Boolean isBeta() {
         return this.arduProperties.getProperty("robot.beta") != null ? true : false;
     }
+
+    @Override
+    public Boolean isAutoconnected() {
+        return this.arduProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
 }
