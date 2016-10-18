@@ -498,4 +498,9 @@ public class EV3Factory extends AbstractRobotFactory {
     public Boolean isBeta() {
         return this.ev3Properties.getProperty("robot.beta") != null ? true : false;
     }
+
+    @Override
+    public Boolean isAutoconnected() {
+        return this.ev3Properties.getProperty("robot.connection.server") != null ? true : false;
+    }
 }

@@ -211,6 +211,18 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.runOnBrick = runOnBrick;
+    
+    function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+        COMM.json("/program", {
+            "cmd" : "runPBack",
+            "name" : programName,
+            "configuration" : configName,
+            "programText" : xmlTextProgram,
+            "configurationText" : xmlTextConfig
+        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
+    }
+
+    exports.runOnBrickBack = runOnBrickBack;
 
     /**
      * Run program

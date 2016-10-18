@@ -534,4 +534,10 @@ public class SimFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+    @Override
+    public Boolean isAutoconnected() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

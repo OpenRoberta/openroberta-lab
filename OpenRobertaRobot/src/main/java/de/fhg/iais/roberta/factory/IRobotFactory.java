@@ -346,4 +346,6 @@ public interface IRobotFactory {
 
     Boolean isBeta();
 
+    Boolean isAutoconnected();
+
 }

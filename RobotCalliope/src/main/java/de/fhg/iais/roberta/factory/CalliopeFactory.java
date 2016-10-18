@@ -297,4 +297,8 @@ public class CalliopeFactory extends AbstractRobotFactory {
         return this.calliopeProperties.getProperty("robot.beta") != null ? true : false;
     }
 
+    @Override
+    public Boolean isAutoconnected() {
+        return this.calliopeProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
 }

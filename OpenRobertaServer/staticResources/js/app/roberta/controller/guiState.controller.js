@@ -132,26 +132,36 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#iconDisplayLogin').removeClass('ok');
             $('#iconDisplayLogin').addClass('error');
         }
-        if (GUISTATE.robot.state === 'wait') {
+
+        if (isAutoconnected()) {
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
             GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             $('#menuRunProg').parent().removeClass('disabled');
-
-        } else if (GUISTATE.robot.state === 'busy') {
-            $('#head-navi-icon-robot').removeClass('wait');
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').addClass('busy');
-            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            $('#menuRunProg').parent().addClass('disabled');
-
         } else {
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            $('#head-navi-icon-robot').addClass('error');
-            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            $('#menuRunProg').parent().addClass('disabled');
+
+            if (GUISTATE.robot.state === 'wait') {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').addClass('wait');
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+                $('#menuRunProg').parent().removeClass('disabled');
+
+            } else if (GUISTATE.robot.state === 'busy') {
+                $('#head-navi-icon-robot').removeClass('wait');
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').addClass('busy');
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+                $('#menuRunProg').parent().addClass('disabled');
+
+            } else {
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').removeClass('wait');
+                $('#head-navi-icon-robot').addClass('error');
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+                $('#menuRunProg').parent().addClass('disabled');
+            }
         }
 
     }
@@ -178,9 +188,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     exports.setBricklyWorkspace = setBricklyWorkspace;
 
     function setRobot(robot, result, opt_init) {
+        console.log(result);
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
+        GUISTATE.gui.connection = result.connection;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('.robotType').removeClass('disabled');
@@ -209,7 +221,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     exports.getRobot = getRobot;
 
     function isRobotConnected() {
-        return GUISTATE.robot.time > 0;
+        return GUISTATE.robot.time > 0 || GUISTATE.gui.connection;
     }
     exports.isRobotConnected = isRobotConnected;
 
@@ -611,6 +623,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         }
     }
     exports.checkSim = checkSim;
+
+    function isAutoconnected() {
+        return GUISTATE.gui.connection;
+    }
+    exports.isAutoconnected = isAutoconnected;
 
     function setPing(ping) {
         GUISTATE.server.ping = ping;
