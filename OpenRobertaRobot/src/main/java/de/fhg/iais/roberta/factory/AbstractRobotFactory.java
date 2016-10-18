@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
+import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
@@ -25,6 +26,7 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
@@ -63,6 +65,31 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
 
     @Override
     public List<IIndexLocation> getIndexLocations() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IDirection getDirection(String direction) {
+        if ( direction == null || direction.isEmpty() ) {
+            throw new DbcException("Invalid Direction: " + direction);
+        }
+        String sUpper = direction.trim().toUpperCase(Locale.GERMAN);
+        for ( Direction po : Direction.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Direction: " + direction);
+    }
+
+    @Override
+    public List<IDirection> getDirections() {
         // TODO Auto-generated method stub
         return null;
     }

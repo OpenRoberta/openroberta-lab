@@ -1,16 +1,25 @@
 package de.fhg.iais.roberta.syntax.action.calliope;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.mode.action.calliope.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
+import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.CalliopeAstVisitor;
 
 /**
  * This class represents the <b>mbedActions_display_image</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -71,8 +80,7 @@ public class DisplayImageAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return null;
-        //        return visitor.visitDriveAction(this);
+        return ((CalliopeAstVisitor<V>) visitor).visitDisplayImageAction(this);
     }
 
     /**
@@ -83,47 +91,29 @@ public class DisplayImageAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        //        List<Field> fields;
-        //        String mode;
-        //        List<Value> values;
-        //        MotionParam<V> mp;
-        //        Phrase<V> power;
-        //        IRobotFactory factory = helper.getModeFactory();
-        //        fields = helper.extractFields(block, (short) 1);
-        //        mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
-        //
-        //        if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON) ) {
-        //            values = helper.extractValues(block, (short) 2);
-        //            power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-        //            Phrase<V> distance = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
-        //            MotorDuration<V> md = new MotorDuration<>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(distance));
-        //            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).duration(md).build();
-        //        } else {
-        //            values = helper.extractValues(block, (short) 1);
-        //            power = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-        //            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(power)).build();
-        //        }
-        //        return DisplayImageAction.make(factory.getDriveDirection(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
-        return null;
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Value> values = helper.extractValues(block, (short) 1);
+
+        String mode = helper.extractField(fields, BlocklyConstants.TYPE);
+        Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, String.class));
+
+        return DisplayImageAction
+            .make(DisplayImageMode.get(mode), helper.convertPhraseToExpr(image), helper.extractBlockProperties(block), helper.extractComment(block));
+
     }
 
     @Override
     public Block astToBlock() {
-        //        Block jaxbDestination = new Block();
-        //        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        //
-        //        if ( getProperty().getBlockType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR) ) {
-        //            JaxbTransformerHelper
-        //                .addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString() == "FOREWARD" ? getDirection().toString() : "BACKWARDS");
-        //        } else {
-        //            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().toString());
-        //        }
-        //        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
-        //
-        //        if ( getParam().getDuration() != null ) {
-        //            JaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().toString(), getParam().getDuration().getValue());
-        //        }
-        //        return jaxbDestination;
-        return null;
+        Block jaxbDestination = new Block();
+        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        Mutation mutation = new Mutation();
+        mutation.setType(this.displayImageMode.name());
+        jaxbDestination.setMutation(mutation);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.displayImageMode.name());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.valuesToDisplay);
+
+        return jaxbDestination;
+
     }
 }
