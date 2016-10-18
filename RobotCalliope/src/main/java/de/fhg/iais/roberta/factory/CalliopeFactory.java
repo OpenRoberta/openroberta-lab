@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -9,7 +8,6 @@ import org.apache.commons.lang3.SystemUtils;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
-import de.fhg.iais.roberta.inter.mode.action.IDisplayImageMode;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
@@ -24,11 +22,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.action.calliope.DisplayImageMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class CalliopeFactory extends AbstractRobotFactory {
 
@@ -48,31 +44,6 @@ public class CalliopeFactory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
         addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);
-    }
-
-    @Override
-    public IDisplayImageMode getDisplayImageMode(String displaImageMode) {
-        if ( displaImageMode == null || displaImageMode.isEmpty() ) {
-            throw new DbcException("Invalid Display Image Mode: " + displaImageMode);
-        }
-        String sUpper = displaImageMode.trim().toUpperCase(Locale.GERMAN);
-        for ( DisplayImageMode mo : DisplayImageMode.values() ) {
-            if ( mo.toString().equals(sUpper) ) {
-                return mo;
-            }
-            for ( String value : mo.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return mo;
-                }
-            }
-        }
-        throw new DbcException("Invalid Display Image Mode: " + displaImageMode);
-    }
-
-    @Override
-    public List<IDisplayImageMode> getDisplayImageModes() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.calliope.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.calliope.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -61,6 +62,8 @@ import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
@@ -239,7 +242,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        this.sb.append("IMAGE." + predefinedImage.getImageName());
+        this.sb.append("Image." + predefinedImage.getImageName());
         return null;
     }
 
@@ -361,6 +364,9 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
             case "java.util.ArrayList":
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
                 break;
+            case "de.fhg.iais.roberta.syntax.expr.PredefinedImage":
+                this.sb.append("Image.SILLY");
+                break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
@@ -395,6 +401,13 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 expr.visit(this);
             }
         }
+        return null;
+    }
+
+    @Override
+    public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+        imageInvertFunction.getImage().visit(this);
+        this.sb.append(".invert()");
         return null;
     }
 
@@ -526,7 +539,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("hal.clearDisplay()");
+        this.sb.append("display.clear()");
         return null;
     }
 
@@ -600,6 +613,14 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
         } else {
             displayTextAction.getMsg().visit(this);
         }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+        this.sb.append("display.show(");
+        displayImageAction.getValuesToDisplay().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -778,6 +799,15 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     }
 
     @Override
+    public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
+        imageShiftFunction.getImage().visit(this);
+        this.sb.append(".shift_" + imageShiftFunction.getShiftDirection().toString().toLowerCase() + "(");
+        imageShiftFunction.getPositions().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         this.sb.append("BlocklyMethods.listsGetSubList( ");
         getSubFunct.getParam().get(0).visit(this);
@@ -855,9 +885,9 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("BlocklyMethods.createListWith(");
+        this.sb.append("[");
         listCreate.getValue().visit(this);
-        this.sb.append(")");
+        this.sb.append("]");
         return null;
     }
 
@@ -1372,4 +1402,5 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 break;
         }
     }
+
 }

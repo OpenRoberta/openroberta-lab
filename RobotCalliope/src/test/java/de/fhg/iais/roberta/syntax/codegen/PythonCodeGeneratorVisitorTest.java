@@ -44,11 +44,83 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "Element = IMAGE.HEART\n"
-            + "Element2 = IMAGE.FABULOUS\n"
+            + "Element = Image.HEART\n"
+            + "Element2 = Image.FABULOUS\n"
             + "global Element, Element2";
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
+    }
+
+    @Test
+    public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsMicroPythonScriptWithDisplayImageAndAnimation() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(Image.HEART)\n"
+            + "display.show([Image.HEART_SMALL, Image.ASLEEP])";
+
+        assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");
+    }
+
+    @Test
+    public void visitDisplayImageAction_ScriptWithMissinImageToDisplay_ReturnsMicroPythonScriptWithMissingImageToDisplay() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(\"\")";
+
+        assertCodeIsOk(expectedResult, "/action/display_image_missing_image_name.xml");
+    }
+
+    @Test
+    public void visitClearDisplayAction_ScriptWithClearDisplay_ReturnsMicroPythonScriptClearDisplay() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.clear()";
+
+        assertCodeIsOk(expectedResult, "/action/display_clear.xml");
+    }
+
+    @Test
+    public void visitImageShiftFunction_ScriptWithShiftTwoImages_ReturnsMicroPythonScriptShiftTwoImages() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(Image.SILLY.shift_up(1))\n"
+            + "display.show(Image.SILLY.shift_down(2))";
+
+        assertCodeIsOk(expectedResult, "/function/image_shift_up_down.xml");
+    }
+
+    @Test
+    public void visitImageShiftFunction_ScriptWithMissingPositionImage_ReturnsMicroPythonScriptMissingPositionImage() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(Image.SILLY.shift_up(0))";
+
+        assertCodeIsOk(expectedResult, "/function/image_shift_missing_image_and_position.xml");
+    }
+
+    @Test
+    public void visitImageInvertFunction_ScriptWithInvertHeartImage_ReturnsMicroPythonScriptInvertHeartImage() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(Image.HEART.invert())";
+
+        assertCodeIsOk(expectedResult, "/function/image_invert_heart_image.xml");
+    }
+
+    @Test
+    public void visitImageInvertFunction_ScriptWithMissingImage_ReturnsMicroPythonScriptInvertDefaultImage() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(Image.SILLY.invert())";
+
+        assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
     }
 
     //    @Test

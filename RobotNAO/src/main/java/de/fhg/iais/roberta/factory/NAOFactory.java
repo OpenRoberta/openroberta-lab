@@ -9,7 +9,6 @@ import com.google.inject.AbstractModule;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
-import de.fhg.iais.roberta.inter.mode.action.IDisplayImageMode;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
@@ -452,16 +451,6 @@ public class NAOFactory extends AbstractRobotFactory {
     @Override
     public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IDisplayImageMode getDisplayImageMode(String displaImageMode) {
-        return null;
-    }
-
-    @Override
-    public List<IDisplayImageMode> getDisplayImageModes() {
         return null;
     }
 

@@ -1,8 +1,10 @@
 package de.fhg.iais.roberta.mode.action.calliope;
 
-import de.fhg.iais.roberta.inter.mode.action.IDisplayImageMode;
+import java.util.Locale;
 
-public enum DisplayImageMode implements IDisplayImageMode {
+import de.fhg.iais.roberta.util.dbc.DbcException;
+
+public enum DisplayImageMode {
     IMAGE(), ANIMATION();
 
     private final String[] values;
@@ -11,8 +13,22 @@ public enum DisplayImageMode implements IDisplayImageMode {
         this.values = values;
     }
 
-    @Override
-    public String[] getValues() {
-        return this.values;
+    public static DisplayImageMode get(String mode) {
+        if ( mode == null || mode.isEmpty() ) {
+            throw new DbcException("Invalid Display Image Mode: " + mode);
+        }
+        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
+        for ( DisplayImageMode mo : DisplayImageMode.values() ) {
+            if ( mo.toString().equals(sUpper) ) {
+                return mo;
+            }
+            for ( String value : mo.values ) {
+                if ( sUpper.equals(value) ) {
+                    return mo;
+                }
+            }
+        }
+        throw new DbcException("Invalid Display Image Mode: " + mode);
     }
+
 }
