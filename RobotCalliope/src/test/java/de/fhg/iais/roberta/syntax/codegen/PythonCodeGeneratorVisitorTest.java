@@ -14,8 +14,6 @@ public class PythonCodeGeneratorVisitorTest {
         + "from microbit import *\n"
         + "import math\n\n";
 
-    private static final String GLOBALS = "\n";
-
     private static Configuration brickConfiguration;
 
     @BeforeClass
@@ -36,9 +34,21 @@ public class PythonCodeGeneratorVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsMicroPythonScriptWithShowTextCall() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "\ndisplay.show(\"Hallo\")";
+            + "\ndisplay.scroll(\"Hallo\")";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
+    }
+
+    @Test
+    public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsMicroPythonScriptWithTwoImageVariables() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "Element = IMAGE.HEART\n"
+            + "Element2 = IMAGE.FABULOUS\n"
+            + "global Element, Element2";
+
+        assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
     }
 
     //    @Test

@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
@@ -233,6 +234,12 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
             default:
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
+        this.sb.append("IMAGE." + predefinedImage.getImageName());
         return null;
     }
 
@@ -585,7 +592,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("display.show(");
+        this.sb.append("display.scroll(");
         if ( !displayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             displayTextAction.getMsg().visit(this);
@@ -1365,5 +1372,4 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 break;
         }
     }
-
 }

@@ -54,6 +54,7 @@ public enum BlocklyType {
     NUMBER("Number", false,COMPARABLE, ADDABLE), NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
     STRING("String", false,COMPARABLE, ADDABLE),
     COLOR("Colour", false,ANY), //
+    IMAGE("Image", false, ANY),
     NULL("", false,STRING, COLOR),
     REF("", false,NULL), PRIM("",false, NUMBER, BOOLEAN),
     NOTHING("", false,REF, PRIM),
