@@ -110,7 +110,6 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.CalliopeAstVisitor;
 
@@ -531,7 +530,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("hal.waitFor(");
+        this.sb.append("sleep(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
         return null;
@@ -545,55 +544,26 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        switch ( volumeAction.getMode() ) {
-            case SET:
-                this.sb.append("hal.setVolume(");
-                volumeAction.getVolume().visit(this);
-                this.sb.append(")");
-                break;
-            case GET:
-                this.sb.append("hal.getVolume()");
-                break;
-            default:
-                throw new DbcException("Invalid volume action mode!");
-        }
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ")");
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        switch ( lightStatusAction.getStatus() ) {
-            case OFF:
-                this.sb.append("hal.ledOff()");
-                break;
-            case RESET:
-                this.sb.append("hal.resetLED()");
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("hal.playFile(" + playFileAction.getFileName() + ")");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(" + getEnumCode(showPictureAction.getPicture()) + ", ");
-        showPictureAction.getX().visit(this);
-        this.sb.append(", ");
-        showPictureAction.getY().visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -627,11 +597,6 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("hal.playTone(");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -677,16 +642,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        switch ( brickSensor.getMode() ) {
-            case IS_PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getKey()) + ")");
-                break;
-            case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
-                break;
-            default:
-                throw new DbcException("Invalide mode for BrickSensor!");
-        }
+        this.sb.append(getEnumCode(brickSensor.getKey()) + ".is_pressed()");
         return null;
     }
 
@@ -1166,45 +1122,23 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
-        bluetoothReadAction.getConnection().visit(this);
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        this.sb.append("hal.establishConnectionTo(");
-        if ( !bluetoothConnectAction.get_address().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            bluetoothConnectAction.get_address().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothConnectAction.get_address().visit(this);
-        }
-        this.sb.append(")");
+
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("hal.sendMessage(");
-        bluetoothSendAction.getConnection().visit(this);
-        this.sb.append(", ");
-        if ( !bluetoothSendAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            bluetoothSendAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothSendAction.getMsg().visit(this);
-        }
-        this.sb.append(")");
+
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        this.sb.append("hal.waitForConnection()");
         return null;
     }
 
@@ -1216,7 +1150,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("compass.heading()");
         return null;
     }
 
@@ -1275,7 +1209,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     }
 
     private static String getEnumCode(IMode value) {
-        return "'" + value.toString().toLowerCase() + "'";
+        return value.toString().toLowerCase();
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
