@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.calliope.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.calliope.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
@@ -44,4 +45,11 @@ public interface CalliopeAstVisitor<V> extends AstVisitor<V> {
      * @param imageShiftFunction phrase to be visited
      */
     public V visitImageInvertFunction(ImageInvertFunction<V> imageInvertFunction);
+
+    /**
+     * visit a {@link Image}.
+     *
+     * @param image phrase to be visited
+     */
+    public V visitImage(Image<V> image);
 }

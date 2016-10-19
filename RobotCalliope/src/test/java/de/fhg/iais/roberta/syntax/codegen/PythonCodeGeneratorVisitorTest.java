@@ -143,6 +143,16 @@ public class PythonCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
     }
 
+    @Test
+    public void visitImage_ScriptCreatingImage_ReturnsMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.show(Image(\"99000:00009:03000:00090:02000\"))";
+
+        assertCodeIsOk(expectedResult, "/expr/image_create.xml");
+    }
+
     //    @Test
     //    public void testSingleStatement() throws Exception {
     //        String a = "" //
