@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -22,9 +23,11 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.calliope.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class CalliopeFactory extends AbstractRobotFactory {
 
@@ -92,7 +95,21 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public IBrickKey getBrickKey(String brickKey) {
-        return null;
+        if ( brickKey == null || brickKey.isEmpty() ) {
+            throw new DbcException("Invalid Brick Key: " + brickKey);
+        }
+        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
+        for ( BrickKey sp : BrickKey.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Brick Key: " + brickKey);
     }
 
     @Override

@@ -123,6 +123,26 @@ public class PythonCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
     }
 
+    @Test
+    public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.scroll(str(button_a.is_pressed()))";
+
+        assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
+    }
+
+    @Test
+    public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.scroll(str(compass.heading()))";
+
+        assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
+    }
+
     //    @Test
     //    public void testSingleStatement() throws Exception {
     //        String a = "" //
