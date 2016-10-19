@@ -175,7 +175,7 @@ public class PredefinedImage<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.IMAGE, this.imageName.name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.IMAGE, this.imageName.toString());
         return jaxbDestination;
     }
 }

@@ -48,6 +48,7 @@ import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
@@ -210,7 +211,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     public Void visitBoolConst(BoolConst<Void> boolConst) {
         this.sb.append(boolConst.isValue() ? "True" : "False");
         return null;
-    };
+    }
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
@@ -522,9 +523,9 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
         this.sb.append("while True:");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
-        nlIndent();
-        this.sb.append("hal.waitFor(15)");
-        decrIndentation();
+        //        nlIndent();
+        //        this.sb.append("hal.waitFor(15)");
+        //        decrIndentation();
         return null;
     }
 
@@ -539,6 +540,27 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         this.sb.append("display.clear()");
+        return null;
+    }
+
+    @Override
+    public Void visitImage(Image<Void> image) {
+        this.sb.append("Image(\"");
+        for ( int i = 0; i < 5; i++ ) {
+            for ( int j = 0; j < 5; j++ ) {
+                String pixel = image.getImage()[i][j].trim();
+                if ( pixel.equals("#") ) {
+                    pixel = "9";
+                } else if ( pixel.equals("") ) {
+                    pixel = "0";
+                }
+                this.sb.append(pixel);
+            }
+            if ( i < 4 ) {
+                this.sb.append(":");
+            }
+        }
+        this.sb.append("\")");
         return null;
     }
 
@@ -1336,5 +1358,4 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 break;
         }
     }
-
 }
