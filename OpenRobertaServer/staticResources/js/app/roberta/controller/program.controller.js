@@ -370,7 +370,17 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 GUISTATE_C.setState(result);
                 if (result.rc == "ok") {
                     MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                    console.log(result.compiledCode);
+                    //create link with content
+                    var programLink = '<div id="programLink" style="text-align: center;"><br><a download="' + GUISTATE_C.getProgramName()
+                            + '.hex" href="data:text/plain;charset=utf-8,' + result.compiledCode + '"><strong>' + GUISTATE_C.getProgramName()
+                            + '</strong></a></div>';
+                    MSG.displayPopupMessage('hallo', 'Please right click on your program link and choose »Save link as ...«, then click on »MICROBIT« in the left column and »Save«, that is all!', false);
+                    $('#show-message').one('shown.bs.modal', function(e) {
+                        $('#show-message div.modal-body').append(programLink);
+                    });
+                    $('#show-message').one('hidden.bs.modal', function(e) {
+                        $('#programLink').remove();
+                    });
                 } else {
                     MSG.displayInformation(result, "", result.message, "");
                 }
