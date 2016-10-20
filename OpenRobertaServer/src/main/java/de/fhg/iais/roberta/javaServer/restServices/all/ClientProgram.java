@@ -44,6 +44,7 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
@@ -250,34 +251,28 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
-                //                boolean wasRobotWaiting = false;
-                //
-                //                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
-                //                    BlocklyProgramAndConfigTransformer.transform(httpSessionState.getRobotFactory(), programText, configurationText);
-                //                messageKey = programAndConfigTransformer.getErrorMessage();
-                //                // TODO: this is quick fix not to check the program for arduino
-                //                if ( !httpSessionState.getRobotName().equals("ardu") ) {
-                //                    RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                //                    messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
-                //                } else {
-                //                    response.put("data", programText);
-                //                }
-                //                if ( messageKey == null ) {
-                //                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                //                    messageKey = httpSessionState.getRobotFactory().getCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
-                //                    if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                //                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                //                    } else {
-                //                        if ( messageKey != null ) {
-                //                            LOG.info(messageKey.toString());
-                //                        }
-                //                        LOG.info("download command for the ev3 skipped, Keep going with push requests");
-                //                    }
-                //                }
-                //                handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                    BlocklyProgramAndConfigTransformer.transform(httpSessionState.getRobotFactory(), programText, configurationText);
+                messageKey = programAndConfigTransformer.getErrorMessage();
+
+                if ( messageKey == null ) {
+                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                    ICompilerWorkflow compilerWorkflow = httpSessionState.getRobotFactory().getCompilerWorkflow();
+                    messageKey = compilerWorkflow.execute(token, programName, programAndConfigTransformer);
+                    if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                        response.put("compiledCode", compilerWorkflow.getCompiledCode());
+                    } else {
+                        if ( messageKey != null ) {
+                            LOG.info(messageKey.toString());
+                        }
+                    }
+                } else {
+                    handleRunProgramError(response, messageKey, token, true);
+                }
+
                 response.put("data", programText);
                 response.put("rc", "ok");
-                response.put("compiledCode", "Hex ist zu groß zum testen");
             } else if ( cmd.equals("runPsim") ) {
                 Key messageKey = null;
                 String token = httpSessionState.getToken();

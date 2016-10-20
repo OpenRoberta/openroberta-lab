@@ -232,4 +232,10 @@ public class NAOCompilerWorkflow implements ICompilerWorkflow {
         return transformer.transform(project);
     }
 
+    @Override
+    public String getCompiledCode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

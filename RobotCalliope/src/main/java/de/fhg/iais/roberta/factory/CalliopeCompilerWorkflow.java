@@ -1,14 +1,8 @@
 package de.fhg.iais.roberta.factory;
 
-import java.io.File;
 import java.lang.ProcessBuilder.Redirect;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,18 +14,17 @@ import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CalliopeCompilerWorkflow.class);
 
-    public final String pathToCrosscompilerBaseDir;
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
 
-    public CalliopeCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
+    private String compiledHex = "";
+
+    public CalliopeCompilerWorkflow(String robotCompilerResourcesDir, String robotCompilerDir) {
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
         this.robotCompilerDir = robotCompilerDir;
 
@@ -67,14 +60,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = PythonCodeGeneratorVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
-        try {
-            storeGeneratedProgram(token, programName, sourceCode, ".ino");
-        } catch ( Exception e ) {
-            CalliopeCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
-        }
-
-        Key messageKey = runBuild(token, programName, "generated.main");
+        Key messageKey = runBuild(sourceCode);
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             CalliopeCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
@@ -113,15 +99,6 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
         return PythonCodeGeneratorVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
-    private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
-        Assert.isTrue(token != null && programName != null && sourceCode != null);
-        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src/" + programName + ext);
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target/");
-        Files.createDirectories(path);
-        CalliopeCompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
-        FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
-    }
-
     /**
      * 1. Make target folder (if not exists).<br>
      * 2. Clean target folder (everything inside).<br>
@@ -132,45 +109,24 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
      * @param mainFile
      * @param mainPackage
      */
-    Key runBuild(String token, String mainFile, String mainPackage) {
+    Key runBuild(String sourceCode) {
         final StringBuilder sb = new StringBuilder();
 
-        String scriptName = this.robotCompilerResourcesDir + "/linux/arduino-builder";
-        String os = "linux";
-
-        if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = this.robotCompilerResourcesDir + "/windows/arduino-builder.exe";
-            os = "windows";
-        } else if ( SystemUtils.IS_OS_MAC ) {
-            scriptName = this.robotCompilerResourcesDir + "/osx/arduino-builder";
-            os = "osx";
-        }
-
-        Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
-        Path base = Paths.get("");
+        String scriptName = this.robotCompilerResourcesDir + "/compile.py";
 
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
+                this.robotCompilerDir + "python",
                 scriptName,
-                "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
-                "-fqbn=arduino:avr:uno",
-                "-prefs=compiler.path=" + this.robotCompilerDir,
-                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                sourceCode
             });
 
             procBuilder.redirectInput(Redirect.INHERIT);
-            procBuilder.redirectOutput(Redirect.INHERIT);
             procBuilder.redirectError(Redirect.INHERIT);
             Process p = procBuilder.start();
-            int ecode = p.waitFor();
-            System.err.println("Exit code " + ecode);
 
-            if ( ecode != 0 ) {
-                return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
+            this.compiledHex = IOUtils.toString(p.getInputStream());
+            //            FileUtils.writeStringToFile(new File("/home/kcvejoski/Desktop/test.hex"), out); TESTING PURPOSE
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
@@ -181,6 +137,11 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
             e.printStackTrace();
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
+    }
+
+    @Override
+    public String getCompiledCode() {
+        return this.compiledHex;
     }
 
     /**
@@ -197,4 +158,5 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
         Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(factory);
         return transformer.transform(project);
     }
+
 }

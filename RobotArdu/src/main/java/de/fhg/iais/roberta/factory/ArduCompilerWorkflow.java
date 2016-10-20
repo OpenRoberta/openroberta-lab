@@ -198,4 +198,10 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(factory);
         return transformer.transform(project);
     }
+
+    @Override
+    public String getCompiledCode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

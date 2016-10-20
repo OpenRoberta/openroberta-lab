@@ -50,4 +50,6 @@ public interface ICompilerWorkflow {
      */
     Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception;
 
+    String getCompiledCode();
+
 }
