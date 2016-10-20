@@ -566,7 +566,37 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                String varType;
+                String expression = repeatStmt.getExpr().toString();
+                String segments[] = expression.split(",");
+                String element = segments[2];
+                String arr = null;
+                if ( expression.contains("NUMBER") || expression.contains("CONNECTION") ) {
+                    varType = "float";
+                } else if ( expression.contains("BOOLEAN") ) {
+                    varType = "bool";
+                } else {
+                    varType = "String";
+                }
+                if ( !segments[6].contains("java.util") ) {
+                    arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));
+                    this.sb.append(
+                        "for("
+                            + varType
+                            + whitespace()
+                            + element
+                            + " = 0;"
+                            + element
+                            + " < sizeof("
+                            + arr
+                            + ") / sizeof("
+                            + arr
+                            + "[0]); "
+                            + element
+                            + "++) {");
+                } else {
+                    this.sb.append("while(false){");
+                }
                 break;
             default:
                 break;
