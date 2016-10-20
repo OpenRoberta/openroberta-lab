@@ -109,8 +109,7 @@ public class Jaxb2ArduConfigurationTransformer {
 
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
-            //TODO: change it to Arduino
-            case "robBrick_EV3-Brick":
+            case "robBrick_ardu-Brick":
                 List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
                 List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
 
@@ -131,7 +130,7 @@ public class Jaxb2ArduConfigurationTransformer {
             } else {
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
-                    case "robBrick_motor_big":
+                    case "robBrick_motor_ardu":
                         //fields = extractFields(value.getBlock(), (short) 2);
                         IMotorSide motorSide;
                         if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
