@@ -109,7 +109,8 @@ public class Jaxb2ArduConfigurationTransformer {
 
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
-            case "robBrick_ardu-Brick":
+            //TODO: change it to Arduino
+            case "robBrick_EV3-Brick":
                 List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
                 List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
 
@@ -118,7 +119,7 @@ public class Jaxb2ArduConfigurationTransformer {
 
                 return new ArduConfiguration.Builder().addActors(actors).addSensors(sensors).build();
             default:
-                throw new DbcException("There was no correct configuration block found!");
+                throw new DbcException("There was no correct configuration block found! " + block.getType());
         }
     }
 
@@ -130,7 +131,7 @@ public class Jaxb2ArduConfigurationTransformer {
             } else {
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
-                    case "robBrick_motor_ardu":
+                    case "robBrick_motor_big":
                         //fields = extractFields(value.getBlock(), (short) 2);
                         IMotorSide motorSide;
                         if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
@@ -147,7 +148,7 @@ public class Jaxb2ArduConfigurationTransformer {
 
                         break;
                     default:
-                        throw new DbcException("Invalide motor type!");
+                        throw new DbcException("Invalide motor type! " + value.getBlock().getType());
                 }
             }
         }
