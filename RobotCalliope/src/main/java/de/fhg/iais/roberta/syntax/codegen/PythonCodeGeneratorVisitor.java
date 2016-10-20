@@ -1309,7 +1309,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
         this.sb.append(stmtType).append(' ');
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
-        this.sb.append(" in xrange(");
+        this.sb.append(" in range(");
         expressions.get().get(1).visit(this);
         this.sb.append(", ");
         expressions.get().get(2).visit(this);
