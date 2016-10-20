@@ -90,6 +90,7 @@ public class PredefinedImage<V> extends Expr<V> {
         FABULOUS(),
         MEH(),
         ES(),
+        YES(),
         NO(),
         TRIANGLE(),
         TRIANGLE_LEFT(),

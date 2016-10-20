@@ -166,4 +166,10 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
         Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(factory);
         return transformer.transform(project);
     }
+
+    @Override
+    public String getCompiledCode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
