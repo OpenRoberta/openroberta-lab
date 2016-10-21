@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -79,10 +79,15 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             fields = helper.extractFields(block, (short) 2);
             values = helper.extractValues(block, (short) 2);
             port = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-            String mode = helper.extractField(fields, BlocklyConstants.MOTORROTATION);
             Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
             Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
-            MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode(mode), helper.convertPhraseToExpr(right));
+            MotorDuration<V> md;
+            if ( fields.size() == 1 ) {
+                md = new MotorDuration<V>(null, helper.convertPhraseToExpr(right));
+            } else {
+                String mode = helper.extractField(fields, BlocklyConstants.MOTORROTATION);
+                md = new MotorDuration<V>(factory.getMotorMoveMode(mode), helper.convertPhraseToExpr(right));
+            }
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
         return MotorOnAction.make(factory.getActorPort(port), mp, helper.extractBlockProperties(block), helper.extractComment(block));

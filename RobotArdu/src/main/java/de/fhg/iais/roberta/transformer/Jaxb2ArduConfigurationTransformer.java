@@ -129,14 +129,22 @@ public class Jaxb2ArduConfigurationTransformer {
                 sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
             } else {
                 // Extract actor
+                IMotorSide motorSide;
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_ardu":
+                        motorSide = MotorSide.NONE;
+                        actors.add(
+                            Pair.of(
+                                this.factory.getActorPort(value.getName()),
+                                new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
+
+                        break;
+                    case "robBrick_motor_middle":
                         //fields = extractFields(value.getBlock(), (short) 2);
-                        IMotorSide motorSide;
                         if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
-                            motorSide = MotorSide.RIGHT;
-                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.C) ) {
                             motorSide = MotorSide.LEFT;
+                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.C) ) {
+                            motorSide = MotorSide.RIGHT;
                         } else {
                             motorSide = MotorSide.NONE;
                         }

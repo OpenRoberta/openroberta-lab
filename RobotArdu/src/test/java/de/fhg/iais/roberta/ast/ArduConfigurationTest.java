@@ -33,7 +33,7 @@ public class ArduConfigurationTest {
         String a = //
             "robotardutest{" //
                 + "sensorport{1:infrared;2:infrared;3:light;4:compass;5:ultrasonic;6:ultrasonic;7:ultrasonic;8:color;9:color;10:ultrasonic;}"
-                + "actorport{A:ardumotor,regulated,forward;B:ardumotor,regulated,forward,right;C:ardumotor,regulated,forward,left;D:ardumotor,regulated,forward;}}";
+                + "actorport{A:ardumotor,regulated,forward;B:ardumotor,regulated,forward;C:ardumotor,regulated,forward;D:ardumotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
         Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
