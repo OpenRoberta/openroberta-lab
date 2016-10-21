@@ -776,13 +776,23 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //TODO: look into motors - why there is no "right":
+    //actor port {
+    //    A: middle motor, regulated, forward;
+    //    B: middle motor, regulated, forward, left;
+    //    C: ardu motor, regulated, forward;
+    //    D: ardu motor, regulated, forward;
+    //  }
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+        //this.sb.append(this.brickConfiguration.generateText("q") + "\n");
+        final boolean isRegulatedDrive =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -805,9 +815,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append(sign);
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
-
             this.sb.append(", ");
-            //here will be duration in seconds
             driveAction.getParam().getDuration().getValue().visit(this);
         }
         this.sb.append(");");
@@ -816,11 +824,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+        final boolean isRegulatedDrive =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean localReverse = curveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -843,9 +853,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append(sign);
         curveAction.getParamRight().getSpeed().visit(this);
         if ( isDuration ) {
-
             this.sb.append(", ");
-            //here will be duration in seconds
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
         this.sb.append(");");
@@ -855,11 +863,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     // TURN ACTIONS
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
+        final boolean isRegulatedDrive =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD;
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean turnRight = turnAction.getDirection() == TurnDirection.RIGHT;
         final boolean turnLeft = turnAction.getDirection() == TurnDirection.LEFT;
         String methodName;
