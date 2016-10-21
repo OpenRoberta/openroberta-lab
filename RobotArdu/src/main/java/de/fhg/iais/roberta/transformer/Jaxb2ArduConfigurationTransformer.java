@@ -148,10 +148,15 @@ public class Jaxb2ArduConfigurationTransformer {
                         } else {
                             motorSide = MotorSide.NONE;
                         }
+                        List<Field> fields = extractFields(value.getBlock(), (short) 2);
                         actors.add(
                             Pair.of(
                                 this.factory.getActorPort(value.getName()),
-                                new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
+                                new Actor(
+                                    ActorType.get(value.getBlock().getType()),
+                                    extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
+                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
+                                    motorSide)));
 
                         break;
                     default:
