@@ -45,8 +45,7 @@ public class PythonCodeGeneratorVisitorTest {
             + IMPORTS
             + "\n"
             + "Element = Image.HEART\n"
-            + "Element2 = Image.FABULOUS\n"
-            + "global Element, Element2";
+            + "Element2 = Image.FABULOUS";
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
     }
