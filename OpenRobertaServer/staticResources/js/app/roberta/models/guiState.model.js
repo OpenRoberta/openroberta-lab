@@ -22,6 +22,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.gui.program = {};
         exports.gui.program.toolbox = {};
         exports.gui.program.prog = {};
+        exports.gui.program.download = false;
         exports.gui.configuration = {}
         exports.gui.configuration.toolbox = '';
         exports.gui.configuration.conf = '';

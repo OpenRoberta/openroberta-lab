@@ -628,6 +628,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.gui.connection;
     }
     exports.isAutoconnected = isAutoconnected;
+    
+    function setProgramToDownload() {
+        return GUISTATE.gui.program.download = true;
+    }
+    exports.setProgramToDownload = setProgramToDownload;
+    
+    function isProgramToDownload() {
+        return GUISTATE.gui.program.download;
+    }
+    exports.isProgramToDownload = isProgramToDownload;
 
     function setPing(ping) {
         GUISTATE.server.ping = ping;
