@@ -50,6 +50,7 @@ public enum BlocklyType {
     ARRAY_STRING("Array_String", true,COMPARABLE),
     ARRAY_COLOUR("Array_Colour", true,COMPARABLE),
     ARRAY_BOOLEAN("Array_Boolean", true,COMPARABLE),
+    ARRAY_IMAGE("Array_Image", true,COMPARABLE),
     BOOLEAN("Boolean", false,COMPARABLE),
     NUMBER("Number", false,COMPARABLE, ADDABLE), NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
     STRING("String", false,COMPARABLE, ADDABLE),
