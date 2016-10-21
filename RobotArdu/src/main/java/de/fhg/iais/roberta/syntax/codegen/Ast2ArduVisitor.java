@@ -728,33 +728,25 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName = null;
-        String port;
-        if ( motorOnAction.getPort() == ActorPort.A ) {
-            methodName = "one.servo1";
-        } else if ( motorOnAction.getPort() == ActorPort.D ) {
-            methodName = "one.servo2";
+        String methodName;
+        String port = null;
+        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
+        final boolean isServo = motorOnAction.getPort() == ActorPort.A || motorOnAction.getPort() == ActorPort.D;
+        if ( isServo ) {
+            methodName = motorOnAction.getPort() == ActorPort.A ? "one.servo1(" : "one.servo2(";
         } else {
+            methodName = isDuration ? "rob.move1mTime(" : "one.move1m(";
             port = motorOnAction.getPort() == ActorPort.B ? "1" : "2";
-            final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-            if ( isDuration ) {
-                methodName = "rob.move1mTime(";
-                this.sb.append(methodName);
-                this.sb.append(port + ", ");
-                motorOnAction.getParam().getSpeed().visit(this);
-                this.sb.append(", ");
-                motorOnAction.getParam().getDuration().getValue().visit(this);
-            } else {
-                methodName = "one.move1m(";
-                this.sb.append(methodName);
-                this.sb.append(motorOnAction.getPort());
-                this.sb.append(", ");
-                motorOnAction.getParam().getSpeed().visit(this);
-            }
-            this.sb.append(");");
         }
-        this.sb.append(methodName + "(");
+        this.sb.append(methodName);
+        if ( !isServo ) {
+            this.sb.append(port + ", ");
+        }
         motorOnAction.getParam().getSpeed().visit(this);
+        if ( isDuration ) {
+            this.sb.append(", ");
+            motorOnAction.getParam().getDuration().getValue().visit(this);
+        }
         this.sb.append(");");
         return null;
     }
@@ -787,7 +779,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        //this.sb.append(this.brickConfiguration.getActors().toString() + "qqqq\n");
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
