@@ -691,6 +691,29 @@ px
 	display: initial;
 }
 
+.download-checkbox ul
+{
+    list-style: none;
+}
+
+.download-checkbox li:before
+{
+    content: "\2610";
+    color: #BACC1E;
+    margin-right:5px;
+    margin-left: -40px;
+    font-weight: 700;
+}
+
+.download-checkbox li:hover:before
+{
+    content: "\2611";
+    color: #000000;
+    margin-right:5px;
+    margin-left: -40px;
+    font-weight: 400;
+}
+
 .clearer {
 	clear: both;
 }
@@ -701,6 +724,7 @@ px
 	right: inherit;
 	bottom: inherit;
 }
+
 .modal.simRobotModal button.close {
     margin-right: -10px;
     margin-top: -14px;
