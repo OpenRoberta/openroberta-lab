@@ -728,6 +728,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        final boolean reverse =
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
+                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
         String methodName;
         String port = null;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
@@ -741,6 +744,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append(methodName);
         if ( !isServo ) {
             this.sb.append(port + ", ");
+        }
+        if ( reverse ) {
+            this.sb.append("-");
         }
         motorOnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
