@@ -67,6 +67,7 @@
         <module>../RobotArdu</module>
         <module>../RobotNAO</module>
         <module>../RobotCalliope</module>
+        <module>../RobotMicrobit</module>
 		<module>../OpenRobertaServer</module>
 	</modules>
 	<repositories>
@@ -118,6 +119,21 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotArdu</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotCalliope</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotMicrobit</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotNAO</artifactId>
                 <version>${project.version}</version>
             </dependency>
 			<dependency>
