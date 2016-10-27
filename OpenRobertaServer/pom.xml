@@ -169,6 +169,13 @@
 								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>RobotMicrobit</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
 									<artifactId>RobotNAO</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
