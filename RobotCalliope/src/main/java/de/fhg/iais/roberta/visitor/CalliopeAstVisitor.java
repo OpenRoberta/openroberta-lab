@@ -6,6 +6,8 @@ import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.calliope.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.calliope.TemperatureSensor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
@@ -52,4 +54,18 @@ public interface CalliopeAstVisitor<V> extends AstVisitor<V> {
      * @param image phrase to be visited
      */
     public V visitImage(Image<V> image);
+
+    /**
+     * visit a {@link GestureSensor}.
+     *
+     * @param gestureSensor phrase to be visited
+     */
+    public V visitGestureSensor(GestureSensor<V> gestureSensor);
+
+    /**
+     * visit a {@link TemperatureSensor}.
+     *
+     * @param temperatureSensor phrase to be visited
+     */
+    public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
 }

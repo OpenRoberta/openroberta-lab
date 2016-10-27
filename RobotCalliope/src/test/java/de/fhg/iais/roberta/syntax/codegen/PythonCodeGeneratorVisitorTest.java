@@ -12,7 +12,9 @@ public class PythonCodeGeneratorVisitorTest {
 
     private static final String IMPORTS = "" //
         + "from microbit import *\n"
-        + "import math\n\n";
+        + "import random\n"
+        + "import math\n\n"
+        + "timer1 = running_time()\n";
 
     private static Configuration brickConfiguration;
 
@@ -150,6 +152,27 @@ public class PythonCodeGeneratorVisitorTest {
             + "display.show(Image(\"99000:00009:03000:00090:02000\"))";
 
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
+    }
+
+    @Test
+    public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.scroll(str(\"face down\" == accelerometer.current_gesture()))\n"
+            + "display.scroll(str(\"left\" == accelerometer.current_gesture()))";
+
+        assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
+    }
+
+    @Test
+    public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.scroll(str(temperature()))";
+
+        assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
     }
 
     //    @Test

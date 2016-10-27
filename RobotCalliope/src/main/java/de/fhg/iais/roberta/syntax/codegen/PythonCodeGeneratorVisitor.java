@@ -82,6 +82,8 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.sensor.calliope.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.calliope.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -671,6 +673,12 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     }
 
     @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        this.sb.append("temperature()");
+        return null;
+    }
+
+    @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         return null;
     }
@@ -759,6 +767,12 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     }
 
     @Override
+    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+        this.sb.append("\"" + gestureSensor.getMode().getPythonCode() + "\" == accelerometer.current_gesture()");
+        return null;
+    }
+
+    @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         this.sb.append("print(");
         textPrintFunct.getParam().get(0).visit(this);
@@ -841,15 +855,14 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         switch ( lengthOfIsEmptyFunct.getFunctName() ) {
             case LISTS_LENGTH:
-                this.sb.append("BlocklyMethods.length( ");
+                this.sb.append("len( ");
                 lengthOfIsEmptyFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
 
             case LIST_IS_EMPTY:
-                this.sb.append("BlocklyMethods.isEmpty( ");
+                this.sb.append("not ");
                 lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
                 break;
             default:
                 break;
@@ -873,11 +886,10 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("BlocklyMethods.createListWithItem(");
+        this.sb.append("[");
         listRepeat.getParam().get(0).visit(this);
-        this.sb.append(", ");
+        this.sb.append("] * ");
         listRepeat.getParam().get(1).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -931,14 +943,14 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                this.sb.append("BlocklyMethods.isEven(");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" % 2) == 0");
                 break;
             case ODD:
-                this.sb.append("BlocklyMethods.isOdd(");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" % 2) == 1");
                 break;
             case PRIME:
                 this.sb.append("BlocklyMethods.isPrime(");
@@ -946,26 +958,22 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 this.sb.append(")");
                 break;
             case WHOLE:
-                this.sb.append("BlocklyMethods.isWhole(");
+                this.sb.append("(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" % 1) == 0");
                 break;
             case POSITIVE:
-                this.sb.append("BlocklyMethods.isPositive(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" > 0");
                 break;
             case NEGATIVE:
-                this.sb.append("BlocklyMethods.isNegative(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(")");
+                this.sb.append(" < 0");
                 break;
             case DIVISIBLE_BY:
-                this.sb.append("BlocklyMethods.isDivisibleBy(");
                 mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(", ");
+                this.sb.append(" % ");
                 mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(")");
                 break;
             default:
                 break;
@@ -977,20 +985,23 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
-                this.sb.append("BlocklyMethods.sumOnList(");
+                this.sb.append("sum(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MIN:
-                this.sb.append("BlocklyMethods.minOnList(");
+                this.sb.append("min(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case MAX:
-                this.sb.append("BlocklyMethods.maxOnList(");
+                this.sb.append("max(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
             case AVERAGE:
-                this.sb.append("BlocklyMethods.averageOnList(");
+                this.sb.append("float(sum(");
                 mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append("))/len(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
                 break;
             case MEDIAN:
                 this.sb.append("BlocklyMethods.medianOnList(");
@@ -1017,13 +1028,13 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("BlocklyMethods.randDouble()");
+        this.sb.append("random()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("BlocklyMethods.randInt(");
+        this.sb.append("randint(");
         mathRandomIntFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathRandomIntFunct.getParam().get(1).visit(this);
@@ -1090,7 +1101,7 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        this.sb.append("BlocklyMethods.textJoin(");
+        this.sb.append("\"\".join(");
         textJoinFunct.getParam().visit(this);
         this.sb.append(")");
         return null;
@@ -1325,7 +1336,10 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
             return;
         }
         this.sb.append("from microbit import *\n");
+        this.sb.append("import random\n");
         this.sb.append("import math\n\n");
+
+        this.sb.append("timer1 = running_time()\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1360,4 +1374,5 @@ public class PythonCodeGeneratorVisitor implements CalliopeAstVisitor<Void> {
                 break;
         }
     }
+
 }
