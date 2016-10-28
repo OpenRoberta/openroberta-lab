@@ -607,12 +607,12 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                this.sb.append("hal.setVolume(");
+                this.sb.append("tts.setVolume(");
                 volumeAction.getVolume().visit(this);
                 this.sb.append(")");
                 break;
             case GET:
-                this.sb.append("hal.getVolume()");
+                this.sb.append("tts.getVolume()");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -622,7 +622,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ")");
+        this.sb.append("led.setRGB(" + "\"FaceLeds\", " + getEnumCode(lightAction.getColor()) + ")");
         return null;
     }
 
@@ -630,10 +630,10 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
-                this.sb.append("hal.ledOff()");
+                this.sb.append("led.off()");
                 break;
             case RESET:
-                this.sb.append("hal.resetLED()");
+                this.sb.append("led.reset()");
                 break;
             default:
                 throw new DbcException("Invalid LED status mode!");
@@ -659,7 +659,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("hal.drawText(");
+        this.sb.append("tts.say(");
         if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             showTextAction.getMsg().visit(this);
@@ -667,11 +667,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         } else {
             showTextAction.getMsg().visit(this);
         }
-        this.sb.append(", ");
-        showTextAction.getX().visit(this);
-        this.sb.append(", ");
-        showTextAction.getY().visit(this);
-        this.sb.append(")");
+        this.sb.append(", \"German\") ");
         return null;
     }
 
@@ -726,62 +722,55 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(')');
+        this.sb.append("motion.stopMove()");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        boolean isDuration = driveAction.getParam().getDuration() != null;
-        String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
+        String methodName = "motion.moveTo(";
         this.sb.append(methodName);
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
-        driveAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
+        if ( getEnumCode(driveAction.getDirection()).equals("\'foreward\'") ) {
+            driveAction.getParam().getSpeed().visit(this);
+            this.sb.append(", 0, 0)");
+        } else {
+            this.sb.append("-");
+            driveAction.getParam().getSpeed().visit(this);
+            this.sb.append(", 0, 0)");
         }
-        this.sb.append(")");
+
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
+        String methodName = "motion.moveTo(";
         this.sb.append(methodName);
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
-        turnAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().visit(this);
+        if ( getEnumCode(turnAction.getDirection()).equals("\'right\'") ) {
+            this.sb.append("0, ");
+            turnAction.getParam().getSpeed().visit(this);
+            this.sb.append(", 0)");
+        } else {
+            this.sb.append("0, -");
+            turnAction.getParam().getSpeed().visit(this);
+            this.sb.append(", 0)");
         }
-        this.sb.append(")");
+
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("hal.stopMotors(");
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
+        this.sb.append("motion.stopMove()");
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-
-        this.sb.append("hal.driveInCurve(");
-        this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
-        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+        this.sb.append("motion.moveToward(");
         curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", '" + this.brickConfiguration.getRightMotorPort().toString() + "', ");
+        this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
         if ( duration != null ) {
             this.sb.append(", ");
@@ -890,12 +879,16 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = ultrasonicSensor.getPort().getPortNumber();
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
-            this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
+            this.sb.append("sonar.subscribe(\"RobertaLab\")\n");
+            this.sb.append("memory.getData(\"Device/SubDeviceList/US/Right/Sensor/Value\")\n");
+            this.sb.append("sonar.unsubsrcibe(\"RobertaLab\"\n");
         } else {
-            this.sb.append("hal.getUltraSonicSensorPresence('" + ultrasonicSensorPort + "')");
+            this.sb.append("sonar.subscribe(\"RobertaLab\")\n");
+            this.sb.append("memory.getData(\"Device/SubDeviceList/US/Left/Sensor/Value\")\n");
+            this.sb.append("sonar.unsubsrcibe(\"RobertaLab\"\n");
         }
+
         return null;
     }
 
@@ -1463,14 +1456,38 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
             return;
         }
         this.sb.append("#!/usr/bin/python\n\n");
-        this.sb.append("from __future__ import absolute_import\n");
-        this.sb.append("from roberta.ev3 import Hal\n");
-        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
-        this.sb.append("from ev3dev import ev3 as ev3dev\n");
-        this.sb.append("import math\n\n");
+        this.sb.append("import math\n");
+        this.sb.append("import time\n");
 
-        this.sb.append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append("hal = Hal(_brickConfiguration)\n");
+        //the following lines are needed to make the generated code compilable and executable on the robot
+
+        this.sb.append("from optparse import OptionParser\n\n");
+        this.sb.append("from naoqi import ALBroker\n");
+        this.sb.append("from naoqi import ALProxy" + " #import ALProxy\n\n");
+
+        this.sb.append("#parse command-line options\n");
+        this.sb.append("parser = OptionParser()\n");
+        this.sb.append("parser.add_option(\"--pip\",help=\"Parent broker port. The IP address or your robot\",dest=\"pip\")\n");
+        this.sb.append("parser.add_option(\"--pport\",help=\"Parent broker port. The port NAOqi is listening to\",dest=\"pport\")\n");
+        this.sb.append("parser.set_defaults(pip=NAO_IP_FROM_ROBOTCONFIGURATION,pport=9559)\n");
+
+        this.sb.append("(opts,args_) = parser.parse_args()\n");
+        this.sb.append("pip = opts.pip\n");
+        this.sb.append("pport = opts.pport\n");
+
+        //Broker is needed to be able to construct NAOqi modules and subscribe to other modules. Broker must stay alive until the program exits.
+        this.sb.append("myBroker = ALBroker(\"myBroker\", \"0.0.0.0\", 0, pip, pport)\n\n");
+
+        //create proxies to all needed modules
+        this.sb.append("motion = ALProxy(\"ALMotion\")" + " #create a proxy to ALMotion\n");
+        this.sb.append("posture = ALProxy(\"ALRobotPosture\")" + " #create a proxy to ALRobotPosture\n");
+        this.sb.append("memory = ALProxy(\"ALMemory\")" + " #create a proxy to ALMemory\n");
+        this.sb.append("tracker = ALProxy(\"ALTracker\")" + " #create a proxy to ALTracker\n");
+        this.sb.append("mark = ALProxy(\"ALLandMarkDetection\")" + " #create a proxy to ALLandMarkDetection\n");
+        this.sb.append("photo = ALProxy(\"ALPhotoCapture\")" + " #create a proxy to ALPhotoCapture\n");
+        this.sb.append("sonar = ALProxy(\"ALSonar\")" + " #create a proxy to ALSonar\n");
+        this.sb.append("tts = ALProxy(\"ALTextToSpeech\")" + " #create a proxy to ALTextToSpeech\n");
+        this.sb.append("led = ALProxy(\"ALLedsProxy\")" + " #create a proxy to ALLedsProxy\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1482,13 +1499,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("try:\n");
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
-        // FIXME: we can only print about 30 chars
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText(str(e), 0, 2)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 4)\n");
-        this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
-        this.sb.append(INDENT).append(INDENT).append("raise\n");
+        this.sb.append(INDENT).append(INDENT).append("tts.say(\"Error!\",\"English\")\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
