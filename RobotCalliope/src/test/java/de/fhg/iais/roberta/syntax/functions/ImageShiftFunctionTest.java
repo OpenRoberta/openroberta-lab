@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.functions;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
@@ -32,13 +33,13 @@ public class ImageShiftFunctionTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/function/image_shift_up_down.xml");
+        Helper.assertTransformationIsOk("/function/image_shift_up_down.xml");
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingImagePosition_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/function/image_shift_missing_image_and_position.xml");
+        Helper.assertTransformationIsOk("/function/image_shift_missing_image_and_position.xml");
     }
 }

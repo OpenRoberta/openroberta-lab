@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.functions;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
@@ -31,13 +32,13 @@ public class ImageInvertFunctionTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/function/image_invert_heart_image.xml");
+        Helper.assertTransformationIsOk("/function/image_invert_heart_image.xml");
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingImage_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/function/image_invert_missing_image.xml");
+        Helper.assertTransformationIsOk("/function/image_invert_missing_image.xml");
     }
 }

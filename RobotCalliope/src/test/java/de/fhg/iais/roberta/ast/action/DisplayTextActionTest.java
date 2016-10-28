@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.action;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
@@ -25,13 +26,13 @@ public class DisplayTextActionTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/action/display_text_show_hello.xml");
+        Helper.assertTransformationIsOk("/action/display_text_show_hello.xml");
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingMessage_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/action/display_text_missing_message.xml");
+        Helper.assertTransformationIsOk("/action/display_text_missing_message.xml");
     }
 }

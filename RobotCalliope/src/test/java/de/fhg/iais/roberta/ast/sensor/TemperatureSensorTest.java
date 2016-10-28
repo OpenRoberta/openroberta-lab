@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
@@ -16,9 +17,9 @@ public class TemperatureSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/sensor/get_temperature.xml");
+        Helper.assertTransformationIsOk("/sensor/get_temperature.xml");
     }
 
 }
