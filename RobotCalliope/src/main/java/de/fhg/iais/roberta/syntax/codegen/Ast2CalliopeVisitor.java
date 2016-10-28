@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -190,6 +189,11 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     private static void generateSuffix(boolean withWrapping, Ast2CalliopeVisitor astVisitor) {
         if ( withWrapping ) {
+            astVisitor.nlIndent();
+            // If main exits, there may still be other fibers running or registered event handlers etc.
+            // Simply release this fiber, which will mean we enter the scheduler. Worse case, we then
+            // sit in the idle task forever, in a power efficient sleep.
+            astVisitor.sb.append("release_fiber();");
             astVisitor.sb.append("\n}\n");
         }
     }
@@ -582,7 +586,7 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("delay(15);");
+        this.sb.append("uBit.sleep(15);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -591,7 +595,7 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("delay(");
+        this.sb.append("uBit.sleep(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(");");
         return null;
@@ -599,6 +603,7 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        this.sb.append("uBit.display.clear();");
         return null;
     }
 
@@ -633,7 +638,24 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        this.sb.append(showTextAction.getMsg().getVarType().toString());
+        this.sb.append("uBit.display.print(");
+        if ( showTextAction.getMsg().getKind().toString().equals("VAR") && showTextAction.getMsg().getVarType().toString().equals("NUMBER") ) {
+            this.sb.append("(int)");
+        }
         showTextAction.getMsg().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
+        this.sb.append("uBit.display.print(");
+        if ( displayTextAction.getMsg().getKind().getName().equals("VAR") && displayTextAction.getMsg().getVarType().toString().equals("NUMBER") ) {
+            this.sb.append("(int) ");
+        }
+        displayTextAction.getMsg().visit(this);
+        this.sb.append(");");
         return null;
     }
 
@@ -701,23 +723,29 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        IBrickKey button = brickSensor.getKey();
-        String btnNumber;
-        switch ( button.toString() ) {
-            case "ENTER":
-                btnNumber = "2";
-                break;
-            case "LEFT":
-                btnNumber = "1";
-                break;
-            case "RIGHT":
-                btnNumber = "3";
-                break;
-            default:
-                btnNumber = "123";
-                break;
+        String key = brickSensor.getKey().toString();
+        key = key.substring(key.length() - 1);
+        this.sb.append("uBit.button" + key + ".isPressed()");
+        return null;
+    }
+
+    @Override
+    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+        String gest = gestureSensor.getMode().toString();
+        this.sb.append("uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
+        if ( gestureSensor.getMode().toString() == "UP"
+            || gestureSensor.getMode().toString() == "DOWN"
+            || gestureSensor.getMode().toString() == "LEFT"
+            || gestureSensor.getMode().toString() == "RIGHT" ) {
+            this.sb.append("TILT_");
         }
-        this.sb.append("rob.buttonIsPressed(" + btnNumber + ")");
+        this.sb.append(gest);
+        return null;
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        this.sb.append("uBit.thermometer.getTemperature()");
         return null;
     }
 
@@ -1360,6 +1388,7 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
         this.sb.append("int main() \n");
         this.sb.append("{");
         nlIndent();
+        // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
 
     }
@@ -1396,12 +1425,6 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
     }
 
     @Override
-    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
         // TODO Auto-generated method stub
         return null;
@@ -1427,18 +1450,6 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitImage(Image<Void> image) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
         // TODO Auto-generated method stub
         return null;
     }
