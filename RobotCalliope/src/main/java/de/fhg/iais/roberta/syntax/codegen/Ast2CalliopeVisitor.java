@@ -88,6 +88,7 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.calliope.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.calliope.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.calliope.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -117,6 +118,7 @@ import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.CalliopeAstVisitor;
 
@@ -750,6 +752,12 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
     }
 
     @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        this.sb.append("uBit.compass.getFieldStrength()");
+        return null;
+    }
+
+    @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         return null;
     }
@@ -762,11 +770,6 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         return null;
     }
 
@@ -787,6 +790,16 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        switch ( (TimerSensorMode) timerSensor.getMode() ) {
+            case GET_SAMPLE:
+                this.sb.append("uBit.systemTime() - initTime");
+                break;
+            case RESET:
+                this.sb.append("initTime = uBit.systemTime();");
+                break;
+            default:
+                throw new DbcException("Invalid Time Mode!");
+        }
         return null;
     }
 
@@ -1390,6 +1403,8 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
         nlIndent();
         // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
+        nlIndent();
+        this.sb.append("int initTime = uBit.systemTime();");
 
     }
 

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2CalliopeVisitorTest {
 
-    private static final String IMPORTS = "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();";
+    private static final String IMPORTS = "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();intinitTime=uBit.systemTime();";
     //+ "from microbit import *\n"
     //+ "import random\n"
     //+ "import math\n\n"
@@ -47,7 +47,7 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsMicroPythonScriptWithTwoImageVariables() throws Exception {
         String expectedResult = "" //
-            + "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();"
+            + IMPORTS
             + "Element=;Element2=;"
             + END;
         //+ "\n"
@@ -150,7 +150,7 @@ public class Ast2CalliopeVisitorTest {
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsMicroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.print();"
+            + "uBit.display.print(uBit.compass.getFieldStrength());"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
