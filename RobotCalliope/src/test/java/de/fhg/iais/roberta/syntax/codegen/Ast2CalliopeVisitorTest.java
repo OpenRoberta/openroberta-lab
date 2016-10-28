@@ -10,11 +10,12 @@ import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2CalliopeVisitorTest {
 
-    private static final String IMPORTS = "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();}";
+    private static final String IMPORTS = "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();";
     //+ "from microbit import *\n"
     //+ "import random\n"
     //+ "import math\n\n"
     //+ "timer1 = running_time()\n";
+    private static final String END = "release_fiber();}";
 
     private static CalliopeConfiguration brickConfiguration;
 
@@ -27,7 +28,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitMainTask_ByDefault_ReturnsEmptyMicroPythonScript() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
 
         assertCodeIsOk(expectedResult, "/task/main_task_no_variables_empty.xml");
     }
@@ -35,8 +37,9 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitDisplayText_ShowHelloScript_ReturnsMicroPythonScriptWithShowTextCall() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
-        //+ "\ndisplay.scroll(\"Hallo\")";
+            + IMPORTS
+            + "uBit.display.print(\"Hallo\");"
+            + END;
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
     }
@@ -45,7 +48,8 @@ public class Ast2CalliopeVisitorTest {
     public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsMicroPythonScriptWithTwoImageVariables() throws Exception {
         String expectedResult = "" //
             + "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();"
-            + "Element=;Element2=;}";
+            + "Element=;Element2=;"
+            + END;
         //+ "\n"
         //+ "Element = Image.HEART\n"
         //+ "Element2 = Image.FABULOUS";
@@ -56,7 +60,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsMicroPythonScriptWithDisplayImageAndAnimation() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         //+ "\n"
         //+ "display.show(Image.HEART)\n"
         //+ "display.show([Image.HEART_SMALL, Image.ASLEEP])";
@@ -67,7 +72,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitDisplayImageAction_ScriptWithMissinImageToDisplay_ReturnsMicroPythonScriptWithMissingImageToDisplay() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         //+ "\n"
         // + "display.show(\"\")";
 
@@ -77,9 +83,10 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitClearDisplayAction_ScriptWithClearDisplay_ReturnsMicroPythonScriptClearDisplay() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
-        //+ "\n"
-        //+ "display.clear()";
+            + IMPORTS
+            + "\n"
+            + "uBit.display.clear();"
+            + END;
 
         assertCodeIsOk(expectedResult, "/action/display_clear.xml");
     }
@@ -87,7 +94,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitImageShiftFunction_ScriptWithShiftTwoImages_ReturnsMicroPythonScriptShiftTwoImages() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         // + "\n"
         // + "display.show(Image.SILLY.shift_up(1))\n"
         // + "display.show(Image.SILLY.shift_down(2))";
@@ -98,7 +106,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitImageShiftFunction_ScriptWithMissingPositionImage_ReturnsMicroPythonScriptMissingPositionImage() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         // + "\n"
         // + "display.show(Image.SILLY.shift_up(0))";
 
@@ -108,7 +117,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitImageInvertFunction_ScriptWithInvertHeartImage_ReturnsMicroPythonScriptInvertHeartImage() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         // + "\n"
         // + "display.show(Image.HEART.invert())";
 
@@ -118,7 +128,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitImageInvertFunction_ScriptWithMissingImage_ReturnsMicroPythonScriptInvertDefaultImage() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         // + "\n"
         //+ "display.show(Image.SILLY.invert())";
 
@@ -128,9 +139,9 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsMicroPythonScript() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
-        //+ "\n"
-        //+ "display.scroll(str(button_a.is_pressed()))";
+            + IMPORTS
+            + "uBit.display.print(uBit.buttonA.isPressed());"
+            + END;
 
         assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
     }
@@ -138,9 +149,9 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsMicroPythonScript() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
-        // + "\n"
-        // + "display.scroll(str(compass.heading()))";
+            + IMPORTS
+            + "uBit.display.print();"
+            + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
     }
@@ -148,7 +159,8 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitImage_ScriptCreatingImage_ReturnsMicroPythonScript() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
+            + IMPORTS
+            + END;
         // + "\n"
         // + "display.show(Image(\"99000:00009:03000:00090:02000\"))";
 
@@ -158,9 +170,10 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
-        // + "\n"
-        // + "display.scroll(str(\"face down\" == accelerometer.current_gesture()))\n"
+            + IMPORTS
+            + "\n"
+            + "uBit.display.print(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN);uBit.display.print(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT);"
+            + END;
         // + "display.scroll(str(\"left\" == accelerometer.current_gesture()))";
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
@@ -169,9 +182,9 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
         String expectedResult = "" //
-            + IMPORTS;
-        // + "\n"
-        // + "display.scroll(str(temperature()))";
+            + IMPORTS
+            + "uBit.display.print(uBit.thermometer.getTemperature());"
+            + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
     }
