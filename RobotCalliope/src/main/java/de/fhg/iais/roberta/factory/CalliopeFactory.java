@@ -38,7 +38,8 @@ public class CalliopeFactory extends AbstractRobotFactory {
         this.compilerWorkflow =
             new CalliopeCompilerWorkflow(
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"),
+                null);
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
         addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);
     }

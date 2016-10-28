@@ -22,15 +22,16 @@ import de.fhg.iais.roberta.factory.CalliopeFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
+import de.fhg.iais.roberta.syntax.codegen.Ast2CalliopeVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;;
+import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
+    CalliopeFactory factory = new CalliopeFactory(null);
+
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
      *
@@ -39,25 +40,23 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        String javaCode = PythonCodeGeneratorVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
-        // System.out.println(javaCode); // only needed for EXTREME debugging
-        // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
-        // System.out.println(textlyCode); // only needed for EXTREME debugging
+        final String javaCode = Ast2CalliopeVisitor.generate((CalliopeConfiguration) brickConfiguration, transformer.getTree(), false);
+
         return javaCode;
     }
 
     /**
-     * Generate python code as string from a given program . Prepend and append wrappings.
+     * Generate java code as string from a given program . Prepend and append wrappings.
      *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code as string
      * @throws Exception
      */
-    public static String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = PythonCodeGeneratorVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+    public static String generateString(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        final String code = Ast2CalliopeVisitor.generate(brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -70,9 +69,9 @@ public class Helper {
      * @throws Exception
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        CalliopeFactory robotModeFactory = new CalliopeFactory(null);
-        Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(robotModeFactory);
+        final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        CalliopeFactory factory = new CalliopeFactory(null);
+        final Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 
@@ -84,9 +83,9 @@ public class Helper {
      * @throws Exception
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
-        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        CalliopeFactory robotModeFactory = new CalliopeFactory(null);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
+        final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
+        CalliopeFactory factory = new CalliopeFactory(null);
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
     }
@@ -99,9 +98,9 @@ public class Helper {
      * @throws Exception
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        CalliopeFactory robotModeFactory = new CalliopeFactory(null);
-        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
+        final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        CalliopeFactory factory = new CalliopeFactory(null);
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
     }
@@ -125,11 +124,11 @@ public class Helper {
      * @throws Exception
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
-        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        CalliopeFactory robotModeFactory = new CalliopeFactory(null);
-        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
+        final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
+        CalliopeFactory factory = new CalliopeFactory(null);
+        final Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>(factory);
         transformer.transform(project);
-        ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
+        final ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;
     }
 
@@ -141,7 +140,7 @@ public class Helper {
      * @throws Exception
      */
     public static <V> Phrase<V> generateAST(String pathToProgramXml) throws Exception {
-        ArrayList<ArrayList<Phrase<V>>> tree = generateASTs(pathToProgramXml);
+        final ArrayList<ArrayList<Phrase<V>>> tree = generateASTs(pathToProgramXml);
         return tree.get(0).get(1);
     }
 
@@ -157,36 +156,34 @@ public class Helper {
      * </ol>
      * Return true if the first XML is equal to second XML.
      *
-     * @param <V>
      * @param fileName of the program
      * @throws Exception
      */
     public static void assertTransformationIsOk(String fileName) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(fileName);
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Marshaller m = jaxbContext.createMarshaller();
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(fileName);
+        final JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        final Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        BlockSet blockSet = astToJaxb(transformer.getData());
-        //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
-        StringWriter writer = new StringWriter();
+        final BlockSet blockSet = astToJaxb(transformer.getTree());
+        //      m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        final StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
-        String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
+        final String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
-        Diff diff = XMLUnit.compareXML(writer.toString(), t);
+        final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //      System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 
-    public static BlockSet astToJaxb(Jaxb2AstTransformerData<Void> data) {
-        BlockSet blockSet = new BlockSet();
-        blockSet.setRobottype(data.getRobotType());
-        blockSet.setXmlversion(data.getXmlVersion());
+    public static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
+        final BlockSet blockSet = new BlockSet();
+
         Instance instance = null;
-        for ( ArrayList<Phrase<Void>> tree : data.getTree() ) {
-            for ( Phrase<Void> phrase : tree ) {
+        for ( final ArrayList<Phrase<Void>> tree : astProgram ) {
+            for ( final Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
                     instance = new Instance();
@@ -209,7 +206,7 @@ public class Helper {
      */
     public static void assertXML(String arg1, String arg2) throws Exception {
         XMLUnit.setIgnoreWhitespace(true);
-        Diff diff = XMLUnit.compareXML(arg1, arg2);
+        final Diff diff = XMLUnit.compareXML(arg1, arg2);
         Assert.assertTrue(diff.identical());
     }
 
@@ -226,10 +223,10 @@ public class Helper {
     }
 
     public static String jaxbToXml(BlockSet blockSet) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Marshaller m = jaxbContext.createMarshaller();
+        final JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        final Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        StringWriter writer = new StringWriter();
+        final StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         return writer.toString();
     }
