@@ -633,6 +633,7 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        showTextAction.getMsg().visit(this);
         return null;
     }
 
@@ -1358,6 +1359,8 @@ public class Ast2CalliopeVisitor implements CalliopeAstVisitor<Void> {
 
         this.sb.append("int main() \n");
         this.sb.append("{");
+        nlIndent();
+        this.sb.append("uBit.init();");
 
     }
 

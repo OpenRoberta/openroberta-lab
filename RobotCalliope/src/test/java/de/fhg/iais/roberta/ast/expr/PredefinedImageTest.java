@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.expr;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
@@ -19,9 +20,9 @@ public class PredefinedImageTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Test
+    @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        //Helper.assertTransformationIsOk("/expr/image_get_image_defined_as_global_variables.xml");
+        Helper.assertTransformationIsOk("/expr/image_get_image_defined_as_global_variables.xml");
     }
 
 }

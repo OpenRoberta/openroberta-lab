@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2CalliopeVisitorTest {
 
-    private static final String IMPORTS = "#include<math.h>bytecolorsRight[3]={0,0,0};voidloop(){}";
+    private static final String IMPORTS = "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();}";
     //+ "from microbit import *\n"
     //+ "import random\n"
     //+ "import math\n\n"
@@ -44,7 +44,7 @@ public class Ast2CalliopeVisitorTest {
     @Test
     public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsMicroPythonScriptWithTwoImageVariables() throws Exception {
         String expectedResult = "" //
-            + "#include<math.h>bytecolorsRight[3]={0,0,0};voidloop(){"
+            + "#include\"MicroBit.h\"MicroBituBit;intmain(){uBit.init();"
             + "Element=;Element2=;}";
         //+ "\n"
         //+ "Element = Image.HEART\n"
