@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.calliope.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.sensor.calliope.TimerSensorMode;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -170,7 +171,21 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
-        return null;
+        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
+            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
+        }
+        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
+        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
+            if ( timerSens.toString().equals(sUpper) ) {
+                return timerSens;
+            }
+            for ( String value : timerSens.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return timerSens;
+                }
+            }
+        }
+        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
     }
 
     @Override

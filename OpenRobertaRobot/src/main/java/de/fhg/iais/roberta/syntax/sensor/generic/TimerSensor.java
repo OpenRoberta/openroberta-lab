@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -32,7 +32,7 @@ public class TimerSensor<V> extends Sensor<V> {
     private final int timer;
 
     private TimerSensor(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("TIMER_SENSING"),properties, comment);
+        super(BlockTypeContainer.getByName("TIMER_SENSING"), properties, comment);
         Assert.isTrue(timer < 10);
         this.mode = mode;
         this.timer = timer;
@@ -87,8 +87,7 @@ public class TimerSensor<V> extends Sensor<V> {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORNUM);
-
-        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) ) {
+        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) || block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET_CALLIOPE) ) {
             return TimerSensor
                 .make(factory.getTimerSensorMode("RESET"), Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
         }
