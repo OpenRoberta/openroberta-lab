@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensor.calliope;
+package de.fhg.iais.roberta.syntax.sensor.mbed;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;

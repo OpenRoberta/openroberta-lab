@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.CppCodeGenerationVisitor;
 import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
+import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 
@@ -169,24 +170,25 @@ public class Helper {
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        final BlockSet blockSet = astToJaxb(transformer.getTree());
-        //      m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        final BlockSet blockSet = astToJaxb(transformer.getData());
+        //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         final StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         final String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //      System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 
-    public static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
-        final BlockSet blockSet = new BlockSet();
-
+    public static BlockSet astToJaxb(Jaxb2AstTransformerData<Void> data) {
+        BlockSet blockSet = new BlockSet();
+        blockSet.setRobottype(data.getRobotType());
+        blockSet.setXmlversion(data.getXmlVersion());
         Instance instance = null;
-        for ( final ArrayList<Phrase<Void>> tree : astProgram ) {
-            for ( final Phrase<Void> phrase : tree ) {
+        for ( ArrayList<Phrase<Void>> tree : data.getTree() ) {
+            for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
                     instance = new Instance();

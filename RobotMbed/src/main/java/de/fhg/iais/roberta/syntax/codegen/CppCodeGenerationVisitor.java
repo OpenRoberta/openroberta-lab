@@ -7,12 +7,11 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.action.calliope.DisplayImageAction;
-import de.fhg.iais.roberta.syntax.action.calliope.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -35,6 +34,9 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -64,6 +66,7 @@ import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
@@ -86,9 +89,6 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.calliope.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.calliope.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.calliope.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -102,6 +102,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -232,11 +235,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             case VOID:
                 return "void";
             case COLOR:
-                return "String";
+                return "int";
             case CONNECTION:
                 return "int";
             case IMAGE:
-                return "";
+                return "MicroBitImage";
         }
         throw new IllegalArgumentException("unhandled type");
     }
@@ -448,6 +451,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 break;
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
                 break;
+            case "de.fhg.iais.roberta.syntax.expr.mbed.LedColor":
+                this.sb.append("0, 0, 0, 255");
+                break;
             default:
                 this.sb.append("null");
                 break;
@@ -622,6 +628,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     //won't be used
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        this.sb.append("uBit.rgb.off();");
         return null;
     }
 
@@ -639,19 +646,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append(showTextAction.getMsg().getVarType().toString());
-        this.sb.append("uBit.display.print(");
-        if ( showTextAction.getMsg().getKind().toString().equals("VAR") && showTextAction.getMsg().getVarType().toString().equals("NUMBER") ) {
-            this.sb.append("(int)");
-        }
-        showTextAction.getMsg().visit(this);
-        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("uBit.display.print(");
+        this.sb.append("uBit.display.scroll(");
         if ( displayTextAction.getMsg().getKind().getName().equals("VAR") && displayTextAction.getMsg().getVarType().toString().equals("NUMBER") ) {
             this.sb.append("(int) ");
         }
@@ -667,6 +667,14 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        this.sb.append("uBit.soundmotor.Motor");
+        if ( motorOnAction.getPort() == ActorPort.AB ) {
+            this.sb.append("On(");
+        } else {
+            this.sb.append(motorOnAction.getPort() + "_On(");
+        }
+        motorOnAction.getParam().getSpeed().visit(this);
+        this.sb.append(");");
         return null;
     }
 
@@ -1440,13 +1448,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        // TODO Auto-generated method stub
+        this.sb.append("MicroBitImage(\"" + predefinedImage.getImageName().getImageString() + "\")");
         return null;
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        // TODO Auto-generated method stub
+        this.sb.append("uBit.display.print(");
+        displayImageAction.getValuesToDisplay().visit(this);
+        this.sb.append(");");
         return null;
     }
 
@@ -1465,6 +1475,20 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitImage(Image<Void> image) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedColor(LedColor<Void> ledColor) {
+        this.sb.append(ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255");
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        this.sb.append("uBit.rgb.setColour(");
+        ledOnAction.getLedColor().visit(this);
+        this.sb.append(");");
         return null;
     }
 

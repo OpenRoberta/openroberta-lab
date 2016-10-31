@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.action.calliope;
+package de.fhg.iais.roberta.mode.action.mbed;
 
 import java.util.Locale;
 

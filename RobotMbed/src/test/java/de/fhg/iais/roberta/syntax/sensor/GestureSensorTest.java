@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.sensor;
+package de.fhg.iais.roberta.syntax.sensor;
 
 import org.junit.Assert;
 import org.junit.Ignore;

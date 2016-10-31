@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.calliope;
+package de.fhg.iais.roberta.syntax.action.mbed;
 
 import java.util.List;
 

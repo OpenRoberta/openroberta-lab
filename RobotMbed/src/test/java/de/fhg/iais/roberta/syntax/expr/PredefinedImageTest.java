@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.expr;
+package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Assert;
 import org.junit.Ignore;

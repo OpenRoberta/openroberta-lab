@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.sensor.calliope;
+package de.fhg.iais.roberta.mode.sensor.mbed;
 
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 

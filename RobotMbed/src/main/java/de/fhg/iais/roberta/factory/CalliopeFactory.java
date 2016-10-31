@@ -21,10 +21,11 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.sensor.calliope.BrickKey;
+import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.syntax.sensor.calliope.TimerSensorMode;
+import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -58,7 +59,21 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public IActorPort getActorPort(String port) {
-        return null;
+        if ( port == null || port.isEmpty() ) {
+            throw new DbcException("Invalid Actor Port: " + port);
+        }
+        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
+        for ( ActorPort co : ActorPort.values() ) {
+            if ( co.toString().equals(sUpper) ) {
+                return co;
+            }
+            for ( String value : co.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return co;
+                }
+            }
+        }
+        throw new DbcException("Invalid Actor Port: " + port);
     }
 
     @Override
