@@ -97,6 +97,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
@@ -1381,6 +1382,12 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

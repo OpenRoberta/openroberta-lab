@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 
@@ -85,4 +86,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param ledOnAction phrase to be visited
      */
     public V visitLedOnAction(LedOnAction<V> ledOnAction);
+
+    /**
+     * visit a {@link AmbientLightSensor}.
+     *
+     * @param ambientLightSensor phrase to be visited
+     */
+    public V visitAmbientLightSensor(AmbientLightSensor<V> ambientLightSensor);
 }

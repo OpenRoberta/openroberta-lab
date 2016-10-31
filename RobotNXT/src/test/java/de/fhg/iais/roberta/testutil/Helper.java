@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    NxtFactory factory = new NxtFactory(null);
+    static NxtFactory factory = new NxtFactory(null);
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
@@ -45,8 +45,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        //NxtFactory factory = new NxtFactory(null, 0);
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         Configuration brickConfiguration =
             new NxtConfiguration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
@@ -84,7 +83,6 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        NxtFactory factory = new NxtFactory(null);
         final Jaxb2NxtConfigurationTransformer transformer = new Jaxb2NxtConfigurationTransformer(factory);
         return transformer.transform(project);
     }
@@ -98,7 +96,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        NxtFactory factory = new NxtFactory(null);
         final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
@@ -113,7 +110,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        NxtFactory factory = new NxtFactory(null);
         final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
@@ -139,8 +135,7 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        NxtFactory factory = new NxtFactory(null);
-        final Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>(factory);
+        final Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         final ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;

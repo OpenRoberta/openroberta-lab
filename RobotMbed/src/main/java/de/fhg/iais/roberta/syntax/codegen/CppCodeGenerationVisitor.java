@@ -102,6 +102,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
@@ -662,6 +663,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        this.sb.append("uBit.soundmotor.Sound_On(");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(");");
+        this.sb.append("uBit.sleep( ");
+        toneAction.getDuration().visit(this);
+        this.sb.append(");");
+        this.sb.append("uBit.soundmotor.Sound_Off();");
         return null;
     }
 
@@ -1411,6 +1419,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
         nlIndent();
+        this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
+        nlIndent();
         this.sb.append("int initTime = uBit.systemTime();");
 
     }
@@ -1489,6 +1499,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append("uBit.rgb.setColour(");
         ledOnAction.getLedColor().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
+        this.sb.append("uBit.display.readLightLevel()");
         return null;
     }
 

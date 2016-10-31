@@ -32,7 +32,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    CalliopeFactory factory = new CalliopeFactory(null);
+    public static CalliopeFactory factory = new CalliopeFactory(null);
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
@@ -74,7 +74,6 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        CalliopeFactory factory = new CalliopeFactory(null);
         final Jaxb2CalliopeConfigurationTransformer transformer = new Jaxb2CalliopeConfigurationTransformer(factory);
         return transformer.transform(project);
     }
@@ -87,9 +86,8 @@ public class Helper {
      * @throws Exception
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
-        final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        CalliopeFactory factory = new CalliopeFactory(null);
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
+        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
+        Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
     }
@@ -103,7 +101,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        CalliopeFactory factory = new CalliopeFactory(null);
         final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
@@ -129,7 +126,6 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        CalliopeFactory factory = new CalliopeFactory(null);
         final Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         final ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();

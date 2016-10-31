@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    ArduFactory factory = new ArduFactory(null);
+    static ArduFactory factory = new ArduFactory(null);
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
@@ -45,8 +45,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        ArduFactory factory = new ArduFactory(null);
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         Configuration brickConfiguration =
             new ArduConfiguration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
@@ -54,11 +53,11 @@ public class Helper {
                 .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
                 .build();
-        final String javaCode = Ast2ArduVisitor.generate((ArduConfiguration) brickConfiguration, transformer.getTree(), false);
+        String code = Ast2ArduVisitor.generate((ArduConfiguration) brickConfiguration, transformer.getTree(), false);
         // System.out.println(javaCode); // only needed for EXTREME debugging
         // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
         // System.out.println(textlyCode); // only needed for EXTREME debugging
-        return javaCode;
+        return code;
     }
 
     /**
@@ -84,7 +83,6 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        ArduFactory factory = new ArduFactory(null);
         final Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(factory);
         return transformer.transform(project);
     }
@@ -98,7 +96,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        ArduFactory factory = new ArduFactory(null);
         final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
@@ -113,7 +110,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        ArduFactory factory = new ArduFactory(null);
         final Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;
@@ -139,8 +135,7 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         final BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        ArduFactory factory = new ArduFactory(null);
-        final Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>(factory);
+        final Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         final ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;
