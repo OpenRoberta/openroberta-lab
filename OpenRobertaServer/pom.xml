@@ -162,18 +162,11 @@
 								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>RobotCalliope</artifactId>
+									<artifactId>RobotMbed</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>RobotMicrobit</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
+								</artifactItem>								
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
 									<artifactId>RobotNAO</artifactId>
