@@ -77,55 +77,105 @@ public class PredefinedImage<V> extends Expr<V> {
      * This enum defines all possible predefined images.
      */
     public static enum PredefinedImageNames {
-        HEART(),
-        HEART_SMALL(),
-        HAPPY(),
-        SMILE(),
-        SAD(),
-        CONFUSED(),
-        ANGRY(),
-        ASLEEP(),
-        SURPRISED(),
-        SILLY(),
-        FABULOUS(),
-        MEH(),
-        ES(),
-        YES(),
-        NO(),
-        TRIANGLE(),
-        TRIANGLE_LEFT(),
-        CHESSBOARD(),
-        DIAMOND(),
-        DIAMOND_SMALL(),
-        SQUARE(),
-        SQUARE_SMALL(),
-        RABBIT(),
-        COW(),
-        MUSIC_CROTCHET(),
-        MUSIC_QUAVER(),
-        MUSIC_QUAVERS(),
-        PITCHFORK(),
-        XMAS(),
-        PACMAN(),
-        TARGET(),
-        TSHIRT(),
-        ROLLERSKATE(),
-        DUCK(),
-        HOUSE(),
-        TORTOISE(),
-        BUTTERFLY(),
-        STICKFIGURE(),
-        GHOST(),
-        SWORD(),
-        GIRAFFE(),
-        SKULL(),
-        UMBRELLA(),
-        SNAKE();
+        HEART( "0,1,0,1,0\\n" //
+            + "1,1,1,1,1\\n"
+            + "1,1,1,1,1\\n"
+            + "0,1,1,1,0\\n"
+            + "0,0,1,0,0\\n" ),
+        HEART_SMALL( "0,0,0,0,0\\n" //
+            + "0,1,0,1,0\\n"
+            + "0,1,1,1,0\\n"
+            + "0,0,1,0,0\\n"
+            + "0,0,0,0,0\\n" ),
+        HAPPY( "0,0,0,0,0\\n" //
+            + "0,1,0,1,0\\n"
+            + "0,0,0,0,0\\n"
+            + "1,0,0,0,1\\n"
+            + "0,1,1,1,0\\n" ),
+        SMILE( "0,0,0,0,0\\n" //
+            + "0,1,0,1,0\\n"
+            + "0,0,0,0,0\\n"
+            + "0,1,1,1,0\\n"
+            + "1,0,0,0,1\\n" ),
+        SAD( "0,0,0,0,0\\n" //
+            + "0,1,0,1,0\\n"
+            + "0,0,0,0,0\\n"
+            + "0,1,1,1,0\\n"
+            + "1,0,0,0,1\\n" ),
+        CONFUSED( "0,0,0,0,0\\n" //
+            + "0,1,0,1,0\\n"
+            + "0,0,0,0,0\\n"
+            + "0,1,0,1,0\\n"
+            + "1,0,1,0,1\\n" ),
+        ANGRY( "1,0,0,0,1\\n" //
+            + "0,1,0,1,0\\n"
+            + "0,0,0,0,0\\n"
+            + "1,1,1,1,1\\n"
+            + "1,0,1,0,1\\n" ),
+        ASLEEP( "0,0,0,0,0\\n" //
+            + "1,1,0,1,1\\n"
+            + "0,0,0,0,0\\n"
+            + "0,1,1,1,0\\n"
+            + "0,0,0,0,0\\n" ),
+        SURPRISED( "0,1,0,1,0\\n" //
+            + "0,0,0,0,0\\n"
+            + "0,0,1,0,0\\n"
+            + "0,1,0,1,0\\n"
+            + "0,0,1,0,0\\n" ),
+        SILLY( "1,0,0,0,1\\n" //
+            + "0,0,0,0,0\\n"
+            + "1,1,1,1,1\\n"
+            + "0,0,1,0,1\\n"
+            + "0,0,1,1,1\\n" ),
+        FABULOUS( "1,1,1,1,1\\n" //
+            + "1,1,0,1,1\\n"
+            + "0,0,0,0,0\\n"
+            + "0,1,0,1,0\\n"
+            + "0,1,1,1,0\\n" ),
+        MEH( "" ),
+        ES( "" ),
+        YES( "" ),
+        NO( "" ),
+        TRIANGLE( "" ),
+        TRIANGLE_LEFT( "" ),
+        CHESSBOARD( "" ),
+        DIAMOND( "" ),
+        DIAMOND_SMALL( "" ),
+        SQUARE( "" ),
+        SQUARE_SMALL( "" ),
+        RABBIT( "" ),
+        COW( "" ),
+        MUSIC_CROTCHET( "" ),
+        MUSIC_QUAVER( "" ),
+        MUSIC_QUAVERS( "" ),
+        PITCHFORK( "" ),
+        XMAS( "" ),
+        PACMAN( "" ),
+        TARGET( "" ),
+        TSHIRT( "" ),
+        ROLLERSKATE( "" ),
+        DUCK( "" ),
+        HOUSE( "" ),
+        TORTOISE( "" ),
+        BUTTERFLY( "" ),
+        STICKFIGURE( "" ),
+        GHOST( "" ),
+        SWORD( "" ),
+        GIRAFFE( "" ),
+        SKULL( "" ),
+        UMBRELLA( "" ),
+        SNAKE( "" );
 
         private final String[] values;
+        private String imageString;
 
-        private PredefinedImageNames(String... values) {
+        private PredefinedImageNames(String imageString, String... values) {
             this.values = values;
+            this.imageString = imageString;
+        }
+
+        public String getImageString() {
+            return this.imageString;
         }
 
         /**
@@ -152,6 +202,7 @@ public class PredefinedImage<V> extends Expr<V> {
             }
             throw new DbcException("Invalid predifined image: " + s);
         }
+
     }
 
     @Override

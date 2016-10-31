@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.action.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -22,7 +22,7 @@ public class LightStatusAction<V> extends Action<V> {
     private final Status status;
 
     private LightStatusAction(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"),properties, comment);
+        super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment);
         Assert.isTrue(status != null);
         this.status = status;
         setReadOnly();
@@ -37,7 +37,7 @@ public class LightStatusAction<V> extends Action<V> {
      * @return read only object of class {@link LightStatusAction}
      */
     public static <V> LightStatusAction<V> make(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightStatusAction<V>(status, properties, comment);
+        return new LightStatusAction<>(status, properties, comment);
     }
 
     /**
@@ -66,7 +66,7 @@ public class LightStatusAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         Status statuss = LightStatusAction.Status.RESET;
-        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF) ) {
+        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF) || block.getType().equals("mbedActions_leds_off") ) {
             statuss = LightStatusAction.Status.OFF;
         }
         return LightStatusAction.make(statuss, helper.extractBlockProperties(block), helper.extractComment(block));

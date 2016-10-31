@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensor.calliope;
+package de.fhg.iais.roberta.syntax.sensor.mbed;
 
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 

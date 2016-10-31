@@ -231,7 +231,7 @@ public final class BlocklyConstants {
     public static final String KEY_PRESSED = "KEYS_PRESSED";
     public static final String GYRO = "GYRO";
     public static final String TIME = "TIME";
-    public static final String COLOR = "color";
+    public static final String COLOR = "COLOR";
     public static final String LIGHT = "LIGHT";
     public static final String SOUND = "SOUND";
     public static final String COMPASS = "COMPASS";

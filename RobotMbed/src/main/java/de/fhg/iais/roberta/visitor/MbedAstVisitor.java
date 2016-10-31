@@ -1,13 +1,15 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.action.calliope.DisplayImageAction;
-import de.fhg.iais.roberta.syntax.action.calliope.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
+import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.sensor.calliope.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.calliope.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
@@ -69,4 +71,18 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param temperatureSensor phrase to be visited
      */
     public V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+
+    /**
+     * visit a {@link LedColor}.
+     *
+     * @param ledColor phrase to be visited
+     */
+    public V visitLedColor(LedColor<V> ledColor);
+
+    /**
+     * visit a {@link LedOnAction}.
+     *
+     * @param ledOnAction phrase to be visited
+     */
+    public V visitLedOnAction(LedOnAction<V> ledOnAction);
 }
