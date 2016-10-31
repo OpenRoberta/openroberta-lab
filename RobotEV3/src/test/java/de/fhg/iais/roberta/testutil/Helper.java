@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
@@ -38,6 +37,9 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
+
+    static EV3Factory robotModeFactory = new EV3Factory(null);
+
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
      *
@@ -98,7 +100,6 @@ public class Helper {
      */
     public static Configuration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(robotModeFactory);
         return transformer.transform(project);
     }
@@ -126,7 +127,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
@@ -141,7 +141,6 @@ public class Helper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         return transformer;
@@ -167,8 +166,7 @@ public class Helper {
      */
     public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        EV3Factory robotModeFactory = new EV3Factory(null);
-        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<V>(robotModeFactory);
+        Jaxb2BlocklyProgramTransformer<V> transformer = new Jaxb2BlocklyProgramTransformer<>(robotModeFactory);
         transformer.transform(project);
         ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;

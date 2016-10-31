@@ -11,7 +11,13 @@ import de.fhg.iais.roberta.testutil.Helper;
 
 public class CppCodeGeneratorVisitorTest {
 
-    private static final String IMPORTS = "#include \"MicroBit.h\"" + "MicroBituBit;" + "int main() {" + "uBit.init();" + "int initTime=uBit.systemTime();";
+    private static final String IMPORTS =
+        "#include \"MicroBit.h\""
+            + "MicroBituBit;"
+            + "int main() {"
+            + "uBit.init();"
+            + "uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
+            + "int initTime=uBit.systemTime();";
 
     private static final String END = "release_fiber();}";
 
@@ -46,8 +52,8 @@ public class CppCodeGeneratorVisitorTest {
     public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsCppProgramWithTwoImageVariables() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "MicroBitImage Element = MicroBitImage(\"0,1,0,1,0\\n1,1,1,1,1\\n1,1,1,1,1\\n0,1,1,1,0\\n0,0,1,0,0\\n\");"
-            + "MicroBitImage Element2 = MicroBitImage(\"1,1,1,1,1\\n1,1,0,1,1\\n0,0,0,0,0\\n0,1,0,1,0\\n0,1,1,1,0\\n\");"
+            + "MicroBitImage Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
+            + "MicroBitImage Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
             + END;
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
@@ -227,6 +233,28 @@ public class CppCodeGeneratorVisitorTest {
             + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_on.xml");
+    }
+
+    @Test
+    public void visitToneAction_PlayTone50Hz500ms_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.soundmotor.Sound_On(50);\n"
+            + "uBit.sleep(500);\n"
+            + "uBit.soundmotor.Sound_Off();\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/action/play_tone.xml");
+    }
+
+    @Test
+    public void visitTAmbientLightSensor_GetAmbientLigthAndDisplay_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.display.scroll(uBit.display.readLightLevel());\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/sensor/get_ambient_light.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
