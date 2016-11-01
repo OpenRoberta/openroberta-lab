@@ -25,6 +25,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             toolbox : toolbox,
             trashcan : true,
             scrollbars : true,
+            media: '../blockly/media/',
             zoom : {
                 controls : true,
                 wheel : true,
