@@ -30,6 +30,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
             toolbox: toolbox,
             trashcan: true,
             scrollbars: true,
+            media: '../blockly/media/',
             zoom: {
                 controls: true,
                 wheel: true,
