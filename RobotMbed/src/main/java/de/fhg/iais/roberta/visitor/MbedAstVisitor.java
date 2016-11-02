@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
@@ -39,6 +40,13 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param displayImageAction phrase to be visited
      */
     public V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
+    
+    /**
+     * visit a {@link PlayNoteAction}.
+     *
+     * @param playNoteAction phrase to be visited
+     */
+    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction);
 
     /**
      * visit a {@link ImageShiftFunction}.
