@@ -138,7 +138,7 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
     }
 
-    @Ignore
+    @Test
     public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
@@ -158,13 +158,12 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
     }
 
-    @Ignore
+    @Test
     public void visitImage_ScriptCreatingImage_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + "uBit.display.print(MicroBitImage(\"255,255,0,0,0\\n0,0,0,0,255\\n0,85,0,0,0\\n0,0,0,255,0\\n0,56,0,0,0\\n\"));"
             + END;
-        // + "\n"
-        // + "display.show(Image(\"99000:00009:03000:00090:02000\"))";
 
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
     }
@@ -176,7 +175,6 @@ public class CppCodeGeneratorVisitorTest {
             + "\n"
             + "uBit.display.scroll(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN);uBit.display.scroll(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT);"
             + END;
-        // + "display.scroll(str(\"left\" == accelerometer.current_gesture()))";
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
     }

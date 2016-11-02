@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -114,7 +115,7 @@ public class ClientAdmin {
                         if ( robot.equals("oraSim") ) {
                             httpSessionState.setToken("00000000");
                         } else {
-                            httpSessionState.setToken("123");
+                            httpSessionState.setToken(RandomUrlPostfix.generate(12, 12, 3, 3, 3));
                         }
                         httpSessionState.setRobotName(robot);
                         IRobotFactory robotFactory = httpSessionState.getRobotFactory();

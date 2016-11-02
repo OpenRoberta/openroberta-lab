@@ -139,7 +139,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     PythonCodeGeneratorVisitor(Configuration brickConfiguration, int indentation) {
-
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         for ( int i = 0; i < indentation; i++ ) {
@@ -717,30 +716,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
-        //        //        incrIndentation();
-        //        List<Stmt<Void>> variableList = variables.get();
-        //        if ( !variableList.isEmpty() ) {
-        //            nlIndent();
-        //            // insert global statement for all variables
-        //            // TODO: there must be an easier way without the casts
-        //            // TODO: we'd only list variables that we change, ideally we'd do this in
-        //            // visitAssignStmt(), but we must only to this once per method and visitAssignStmt()
-        //            // would need the list of mainTask variables (store in the class?)
-        //            // TODO: I could store the names as a list in the instance and filter it against the parameters
-        //            // in visitMethodVoid, visitMethodReturn
-        //            //            this.sb.append("global ");
-        //            boolean first = true;
-        //            for ( Stmt<Void> s : variables.get() ) {
-        //                ExprStmt<Void> es = (ExprStmt<Void>) s;
-        //                VarDeclaration<Void> vd = (VarDeclaration<Void>) es.getExpr();
-        //                if ( first ) {
-        //                    first = false;
-        //                } else {
-        //                    this.sb.append(", ");
-        //                }
-        //                this.sb.append(vd.getName());
-        //            }
-        //        }
         return null;
     }
 
@@ -1387,7 +1362,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.codegen.CppCodeGenerationVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
@@ -69,8 +68,8 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = CppCodeGenerationVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-        token = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
+        String sourceCode =
+            CppCodeGenerationVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".cpp");
         } catch ( Exception e ) {
@@ -113,7 +112,6 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-
         return CppCodeGenerationVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
