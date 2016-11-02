@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -62,5 +63,11 @@ public class UsedHardwareVisitor extends CheckVisitor {
         this.radioUsed = true;
         return null;
     }
+
+	@Override
+	public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

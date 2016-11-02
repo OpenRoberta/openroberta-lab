@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
@@ -672,10 +673,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("uBit.soundmotor.Sound_On(");
         toneAction.getFrequency().visit(this);
-        this.sb.append(");");
-        this.sb.append("uBit.sleep( ");
+        this.sb.append("); ");
+        this.sb.append("uBit.sleep(");
         toneAction.getDuration().visit(this);
-        this.sb.append(");");
+        this.sb.append("); ");
         this.sb.append("uBit.soundmotor.Sound_Off();");
         return null;
     }
@@ -1554,4 +1555,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
+	@Override
+	public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+	        this.sb.append("uBit.soundmotor.Sound_On(");
+	        this.sb.append(playNoteAction.getFrequency());
+	        this.sb.append("); ");
+	        this.sb.append("uBit.sleep(");
+	        this.sb.append(playNoteAction.getDuration());
+	        this.sb.append("); ");
+	        this.sb.append("uBit.soundmotor.Sound_Off();");
+	        return null;
+	    }
 }

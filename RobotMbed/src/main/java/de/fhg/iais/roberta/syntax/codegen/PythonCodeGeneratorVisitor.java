@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
@@ -1378,5 +1379,11 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
