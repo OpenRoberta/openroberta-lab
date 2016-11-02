@@ -12,7 +12,7 @@
 		<relativePath>../OpenRobertaParent</relativePath>
 	</parent>
 	<artifactId>RobotMbed</artifactId>
-	<name>RobotCalliope</name>
+	<name>RobotEmbed</name>
 	<description>the robot related part of the OpenRoberta application</description>
 	<dependencies>
 		<dependency>
