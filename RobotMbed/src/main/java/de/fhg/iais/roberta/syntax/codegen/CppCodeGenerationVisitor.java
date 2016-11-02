@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
@@ -37,6 +38,8 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -85,6 +88,7 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
@@ -134,6 +138,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public static final String INDENT = "    ";
 
     private final CalliopeConfiguration brickConfiguration;
+    private final UsedHardwareVisitor usedHardwareVisitor;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
 
@@ -145,8 +150,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
 
-    public CppCodeGenerationVisitor(CalliopeConfiguration brickConfiguration, int indentation) {
+    public CppCodeGenerationVisitor(CalliopeConfiguration brickConfiguration, UsedHardwareVisitor usedHardware, int indentation) {
         this.brickConfiguration = brickConfiguration;
+        this.usedHardwareVisitor = usedHardware;
         this.indentation = indentation;
     }
 
@@ -160,7 +166,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public static String generate(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
-        final CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(brickConfiguration, withWrapping ? 1 : 0);
+        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
+        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
@@ -700,6 +707,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        if ( motorStopAction.getMode() == MotorStopMode.NONFLOAT ) {
+            this.sb.append("uBit.rgb.motorBreak();");
+        } else {
+            this.sb.append("uBit.rgb.motorCoast();");
+        }
         return null;
     }
 
@@ -1422,6 +1434,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         nlIndent();
         this.sb.append("int initTime = uBit.systemTime();");
+        if ( this.usedHardwareVisitor.isRadioUsed() ) {
+            nlIndent();
+            this.sb.append("uBit.radio.enable();");
+        }
 
     }
 
@@ -1521,6 +1537,20 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
         this.sb.append("uBit.display.readLightLevel()");
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+        this.sb.append("uBit.radio.datagram.send(");
+        radioSendAction.getMsg().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+        this.sb.append("uBit.radio.datagram.recv()");
         return null;
     }
 

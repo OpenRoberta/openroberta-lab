@@ -34,6 +34,8 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -1362,6 +1364,18 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 

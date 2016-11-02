@@ -255,6 +255,50 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/get_ambient_light.xml");
     }
 
+    @Test
+    public void visitRadioSendAction_SendHelloMessage_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.radio.enable();\n"
+            + "uBit.radio.datagram.send(\"Hallo\");\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/action/radio_send_message.xml");
+    }
+
+    @Test
+    public void visitRadioSendAction_SendMissingMessage_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.radio.enable();\n"
+            + "uBit.radio.datagram.send(\"\");\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/action/radio_send_missing_message.xml");
+    }
+
+    @Test
+    public void visitRadioReceiveAction_ReceiveMessage_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.radio.enable();\n"
+            + "uBit.display.scroll(uBit.radio.datagram.recv());\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/action/radio_receive_message.xml");
+    }
+
+    @Test
+    public void visitMotorStopAction_StopMotorFloatNonFloat_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.rgb.motorCoast();\n"
+            + "uBit.rgb.motorBreak();\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/action/motor_stop.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }

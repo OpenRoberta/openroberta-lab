@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
@@ -93,4 +95,18 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param ambientLightSensor phrase to be visited
      */
     public V visitAmbientLightSensor(AmbientLightSensor<V> ambientLightSensor);
+
+    /**
+     * visit a {@link RadioSendAction}.
+     *
+     * @param radioSendAction phrase to be visited
+     */
+    public V visitRadioSendAction(RadioSendAction<V> radioSendAction);
+
+    /**
+     * visit a {@link RadioReceiveAction}.
+     *
+     * @param radioReceiveAction phrase to be visited
+     */
+    public V visitRadioReceiveAction(RadioReceiveAction<V> radioReceiveAction);
 }
