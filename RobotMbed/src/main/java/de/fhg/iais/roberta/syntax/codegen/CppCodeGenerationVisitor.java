@@ -1452,10 +1452,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    public Void visitDisplayImageAction() {
-        return null;
-    }
-
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
         this.sb.append("MicroBitImage(\"" + predefinedImage.getImageName().getImageString() + "\")");
@@ -1482,9 +1478,29 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
+    private int map(int x, int in_min, int in_max, int out_min, int out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
     @Override
     public Void visitImage(Image<Void> image) {
-        // TODO Auto-generated method stub
+        this.sb.append("MicroBitImage(\"");
+        for ( int i = 0; i < 5; i++ ) {
+            for ( int j = 0; j < 5; j++ ) {
+                String pixel = image.getImage()[i][j].trim();
+                if ( pixel.equals("#") ) {
+                    pixel = "9";
+                } else if ( pixel.equals("") ) {
+                    pixel = "0";
+                }
+                this.sb.append(map(Integer.parseInt(pixel), 0, 9, 0, 255));
+                if ( j < 4 ) {
+                    this.sb.append(",");
+                }
+            }
+            this.sb.append("\\n");
+        }
+        this.sb.append("\")");
         return null;
     }
 
