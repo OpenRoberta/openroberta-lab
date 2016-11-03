@@ -900,14 +900,15 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //SelectCamera
+    //edit block: change name, edit Parameters, remove GET_SAMPLE
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
+            case GET_SAMPLE:										
                 break;
-            case RESET:
-                this.sb.append("hal.resetTimer(" + timerSensor.getTimer() + ")");
+            case RESET:												//Select Camera
+            	this.sb.append("video.setActive(" + timerSensor.getTimer() + ")"); //0 = Top ; 1 = Bottom
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
