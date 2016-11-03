@@ -656,12 +656,8 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     		case "1":					//Rasta
     			this.sb.append("led.rasta(5)");
     			break;
-    		case "2":					//Blink, reduce to one line
-    			this.sb.append("led.fadeRGB(\"FaceLeds\",0xffffff)");
-    			this.sb.append("time.sleep(0.5)");
-    			this.sb.append("led.fadeRGB(\"FaceLeds\",0x000000)");
-    			this.sb.append("time.sleep(0.5)");
-    			this.sb.append("led.fadeRGB(\"FaceLeds\",0xffffff)");
+    		case "2":					//Blink
+    			this.sb.append("hal.blink()");
     			break;
     	}
         return null;
@@ -940,16 +936,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
-            this.sb.append("sonar.subscribe(\"RobertaLab\")\n");
-            this.sb.append("memory.getData(\"Device/SubDeviceList/US/Right/Sensor/Value\")\n");
-            this.sb.append("sonar.unsubsrcibe(\"RobertaLab\"\n");
-        } else {
-            this.sb.append("sonar.subscribe(\"RobertaLab\")\n");
-            this.sb.append("memory.getData(\"Device/SubDeviceList/US/Left/Sensor/Value\")\n");
-            this.sb.append("sonar.unsubsrcibe(\"RobertaLab\"\n");
-        }
-
+        this.sb.append("hal.sonar()");
         return null;
     }
 
