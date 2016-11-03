@@ -1525,6 +1525,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         this.sb.append("from optparse import OptionParser\n\n");
         this.sb.append("from naoqi import ALBroker\n");
         this.sb.append("from naoqi import ALProxy" + " #import ALProxy\n\n");
+        this.sb.append("import hal");
 
         this.sb.append("#parse command-line options\n");
         this.sb.append("parser = OptionParser()\n");
