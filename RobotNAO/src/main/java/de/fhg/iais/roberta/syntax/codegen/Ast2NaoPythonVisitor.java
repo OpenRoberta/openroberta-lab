@@ -603,6 +603,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //set/getVolume
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
@@ -620,6 +621,8 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //SetEyeColor
+    //edit Block: change name
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         this.sb.append("led.setRGB(" + "\"FaceLeds\", " + getEnumCode(lightAction.getColor()) + ")");
@@ -641,9 +644,26 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //LED Animations
+    //edit Block: change name, edit parameters
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("hal.playFile(" + playFileAction.getFileName() + ")");
+    	String mode = playFileAction.getFileName();
+    	switch (mode) {
+    		case "0":					//RandomEyes
+    			this.sb.append("led.randomEyes(5)");
+    			break;
+    		case "1":					//Rasta
+    			this.sb.append("led.rasta(5)");
+    			break;
+    		case "2":					//Blink, reduce to one line
+    			this.sb.append("led.fadeRGB(\"FaceLeds\",0xffffff)");
+    			this.sb.append("time.sleep(0.5)");
+    			this.sb.append("led.fadeRGB(\"FaceLeds\",0x000000)");
+    			this.sb.append("time.sleep(0.5)");
+    			this.sb.append("led.fadeRGB(\"FaceLeds\",0xffffff)");
+    			break;
+    	}
         return null;
     }
 
@@ -657,6 +677,8 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //say Text
+    //edit Block: change Name
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("tts.say(");
@@ -828,31 +850,61 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //Gyrometer + Accelerometer (Inertial Unit)
+    //edit Block: change name, edit Port numbers, remove RESET
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = gyroSensor.getPort().getPortNumber();
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
-            this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
-        } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
-        }
-        return null;
+    	String direction = gyroSensor.getPort().getPortNumber();
+    	switch ( (GyroSensorMode) gyroSensor.getMode()) {
+    		case ANGLE:								//Gyrometer
+    			if (direction.equals("1")) {		//X
+    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value\")");
+    			} else if (direction.equals("2")) {	//Y
+    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/GyroscopeY/Sensor/Value\")");
+    			} else if (direction.equals("3")) {	//Z
+    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/GyroscopeZ/Sensor/Value\")");
+    			} else if (direction.equals("4")) {	
+    				;//do nothing
+    			}
+    			break;
+    		case RATE:								//Accelerometer
+    			if (direction.equals("1")) {		//X
+    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value\")");
+    			} else if (direction.equals("2")) {	//Y
+    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/AccelerometerY/Sensor/Value\")");
+    			} else if (direction.equals("3")) {	//Z
+    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value\")");
+    			} else if (direction.equals("4")) {
+    				;//do nothing
+    			}
+    			break;
+    		case RESET:
+    			; //do nothing	
+    	}
+    	return null;
     }
 
+    //Touchsensors
+    //edit Block: change name, edit parameters
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = infraredSensor.getPort().getPortNumber();
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case DISTANCE:
-                this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
-                break;
-            case SEEK:
-                this.sb.append("hal.getInfraredSensorSeek('" + infraredSensorPort + "')");
-                break;
-            default:
-                throw new DbcException("Invalid Infrared Sensor Mode!");
-        }
-
+    	String position = infraredSensor.getPort().getPortNumber();
+    	switch ( (InfraredSensorMode) infraredSensor.getMode()) {
+    		case DISTANCE:							//Hand
+    			if (position.equals("1")) {			//Left
+    				this.sb.append("memory.getData(\"HandLeftBackTouched\")");
+    			} else if (position.equals("2")) {	//Right
+    				this.sb.append("memory.getData(\"HandRightBackTouched\")");
+    			}
+    			break;
+    		case SEEK:								//Bumper
+    			if (position.equals("1")) {			//Left
+    				this.sb.append("memory.getData(\"LeftBumperPressed\")");
+    			} else if (position.equals("2")) {	//Right
+    				this.sb.append("memory.getData(\"RightBumperPressed\")");
+    			}
+    			break;
+    	}
         return null;
     }
 
@@ -871,9 +923,18 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //HeadSensor
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed('" + touchSensor.getPort().getPortNumber() + "')");
+    	if (touchSensor.getPort().getPortNumber().equals("1")) {		//1 = Front
+    		this.sb.append("memory.getData(\"FrontTactilTouched\")");
+    	} else if(touchSensor.getPort().getPortNumber().equals("2")) { 	//2 = Middle
+    		this.sb.append("memory.getData(\"MiddleTactilTouched\")");
+    	} else if(touchSensor.getPort().getPortNumber().equals("3")) {  //3 = Rear
+    		this.sb.append("memory.getData(\"RearTactilTouched\")");
+    	} else if(touchSensor.getPort().getPortNumber().equals("4")) {	//only three options so 4 is not used
+    		;
+    	}
         return null;
     }
 
