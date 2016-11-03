@@ -701,22 +701,18 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName;
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
-        boolean duration = motorOnAction.getParam().getDuration() != null;
-        if ( duration ) {
-            methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
-        } else {
-            methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
-        }
-        this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        if ( duration ) {
-            this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
-            this.sb.append(", ");
-            motorOnAction.getDurationValue().visit(this);
-        }
-        this.sb.append(")");
+    	String animation = motorOnAction.getPort().toString();
+    	switch (animation) {
+    		case "A":								//Tai Chi
+    			this.sb.append("hal.taiChi()");
+    			break;
+    		case "B":								//Wave
+    			this.sb.append("hal.wave()");
+    			break;
+    		case "C":								//wipe Forehead
+    			this.sb.append("hal.wipeForehead()");
+    			break;
+    	}
         return null;
     }
 
