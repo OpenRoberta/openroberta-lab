@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
@@ -681,11 +680,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.sb.append("uBit.soundmotor.Motor");
-        if ( motorOnAction.getPort() == ActorPort.AB ) {
-            this.sb.append("On(");
-        } else {
-            this.sb.append(motorOnAction.getPort() + "_On(");
+        if ( motorOnAction.getPort() != ActorPort.AB ) {
+            this.sb.append(motorOnAction.getPort());
         }
+        this.sb.append("_On(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(");");
         return null;
@@ -696,7 +694,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    //impossible to implement it without encoder
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         return null;
@@ -704,11 +701,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( motorStopAction.getMode() == MotorStopMode.NONFLOAT ) {
-            this.sb.append("uBit.rgb.motorBreak();");
+        this.sb.append("uBit.soundmotor.Motor");
+        if ( motorStopAction.getPort() == ActorPort.AB ) {
+            this.sb.append("A_Off();");
+            nlIndent();
+            this.sb.append("uBit.soundmotor.MotorB");
         } else {
-            this.sb.append("uBit.rgb.motorCoast();");
+            this.sb.append(motorStopAction.getPort());
         }
+        this.sb.append("_Off();");
         return null;
     }
 

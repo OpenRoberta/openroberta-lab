@@ -227,7 +227,7 @@ public class CppCodeGeneratorVisitorTest {
             + IMPORTS
             + "uBit.soundmotor.MotorA_On(30);\n"
             + "uBit.soundmotor.MotorB_On(30);\n"
-            + "uBit.soundmotor.MotorOn(30);\n"
+            + "uBit.soundmotor.Motor_On(30);\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_on.xml");
@@ -292,8 +292,8 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMotorStopAction_StopMotorFloatNonFloat_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.rgb.motorCoast();\n"
-            + "uBit.rgb.motorBreak();\n"
+            + "uBit.soundmotor.MotorA_Off();\n"
+            + "uBit.soundmotor.MotorB_Off();\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_stop.xml");
