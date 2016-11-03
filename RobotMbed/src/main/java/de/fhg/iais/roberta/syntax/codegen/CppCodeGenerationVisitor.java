@@ -634,20 +634,17 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     }
 
-    //won't be used
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         this.sb.append("uBit.rgb.off();");
         return null;
     }
 
-    //won't be used
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 
-    //won't be used
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         return null;
@@ -694,7 +691,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    // not needed
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         return null;
@@ -1555,15 +1551,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-	@Override
-	public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-	        this.sb.append("uBit.soundmotor.Sound_On(");
-	        this.sb.append(playNoteAction.getFrequency());
-	        this.sb.append("); ");
-	        this.sb.append("uBit.sleep(");
-	        this.sb.append(playNoteAction.getDuration());
-	        this.sb.append("); ");
-	        this.sb.append("uBit.soundmotor.Sound_Off();");
-	        return null;
-	    }
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb.append("uBit.soundmotor.Sound_On(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append("); ");
+        this.sb.append("uBit.sleep(");
+        this.sb.append(playNoteAction.getDuration());
+        this.sb.append("); ");
+        this.sb.append("uBit.soundmotor.Sound_Off();");
+        return null;
+    }
 }
