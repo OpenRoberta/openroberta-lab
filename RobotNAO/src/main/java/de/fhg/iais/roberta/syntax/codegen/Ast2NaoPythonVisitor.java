@@ -775,7 +775,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("motion.stopMove()");
+        this.sb.append("hal.stop()");
         return null;
     }
 
