@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -20,6 +21,7 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     private final Configuration brickConfiguration;
     private boolean radioUsed;
+    private boolean accelerometerUsed;
 
     public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         this.brickConfiguration = null;
@@ -37,6 +39,10 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     public boolean isRadioUsed() {
         return this.radioUsed;
+    }
+
+    public boolean isAccelerometerUsed() {
+        return this.accelerometerUsed;
     }
 
     @Override
@@ -64,10 +70,16 @@ public class UsedHardwareVisitor extends CheckVisitor {
         return null;
     }
 
-	@Override
-	public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+        this.accelerometerUsed = true;
+        return null;
+    }
 
 }
