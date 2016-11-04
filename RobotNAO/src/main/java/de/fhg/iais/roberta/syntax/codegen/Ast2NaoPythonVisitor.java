@@ -608,12 +608,12 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                this.sb.append("tts.setVolume(");
+                this.sb.append("hal.setVolume(");
                 volumeAction.getVolume().visit(this);
                 this.sb.append(")");
                 break;
             case GET:
-                this.sb.append("tts.getVolume()");
+                this.sb.append("hal.getVolume()");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -625,7 +625,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     //edit Block: change name
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("led.setRGB(" + "\"FaceLeds\", " + getEnumCode(lightAction.getColor()) + ")");
+        this.sb.append("hal.setEyeColor(" + getEnumCode(lightAction.getColor()) + ")");
         return null;
     }
 
@@ -633,10 +633,10 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
-                this.sb.append("led.off()");
+                this.sb.append("hal.off()");
                 break;
             case RESET:
-                this.sb.append("led.reset()");
+                this.sb.append("hal.reset()");
                 break;
             default:
                 throw new DbcException("Invalid LED status mode!");
@@ -651,10 +651,10 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     	String mode = playFileAction.getFileName();
     	switch (mode) {
     		case "0":					//RandomEyes
-    			this.sb.append("led.randomEyes(5)");
+    			this.sb.append("hal.randomEyes(5)");
     			break;
     		case "1":					//Rasta
-    			this.sb.append("led.rasta(5)");
+    			this.sb.append("hal.rasta(5)");
     			break;
     		case "2":					//Blink
     			this.sb.append("hal.blink()");
@@ -677,7 +677,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     //edit Block: change Name
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("tts.say(");
+        this.sb.append("hal.say(");
         if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             showTextAction.getMsg().visit(this);
@@ -685,7 +685,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         } else {
             showTextAction.getMsg().visit(this);
         }
-        this.sb.append(", \"German\") ");
+        this.sb.append(")");
         return null;
     }
 
@@ -736,13 +736,13 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("motion.stopMove()");
+        this.sb.append("hal.stop()");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        String methodName = "motion.moveTo(";
+        String methodName = "hal.walk(";
         this.sb.append(methodName);
         if ( getEnumCode(driveAction.getDirection()).equals("\'foreward\'") ) {
             driveAction.getParam().getSpeed().visit(this);
@@ -758,7 +758,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        String methodName = "motion.moveTo(";
+        String methodName = "hal.walk(";
         this.sb.append(methodName);
         if ( getEnumCode(turnAction.getDirection()).equals("\'right\'") ) {
             this.sb.append("0, ");
@@ -782,7 +782,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-        this.sb.append("motion.moveToward(");
+        this.sb.append("hal.walk(");
         curveAction.getParamLeft().getSpeed().visit(this);
         this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
@@ -849,29 +849,13 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     	String direction = gyroSensor.getPort().getPortNumber();
     	switch ( (GyroSensorMode) gyroSensor.getMode()) {
     		case ANGLE:								//Gyrometer
-    			if (direction.equals("1")) {		//X
-    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value\")");
-    			} else if (direction.equals("2")) {	//Y
-    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/GyroscopeY/Sensor/Value\")");
-    			} else if (direction.equals("3")) {	//Z
-    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/GyroscopeZ/Sensor/Value\")");
-    			} else if (direction.equals("4")) {	
-    				;//do nothing
-    			}
+    			this.sb.append("hal.gyrometer(" + direction + ")");
     			break;
     		case RATE:								//Accelerometer
-    			if (direction.equals("1")) {		//X
-    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value\")");
-    			} else if (direction.equals("2")) {	//Y
-    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/AccelerometerY/Sensor/Value\")");
-    			} else if (direction.equals("3")) {	//Z
-    				this.sb.append("memory.getData(\"Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value\")");
-    			} else if (direction.equals("4")) {
-    				;//do nothing
-    			}
+    			this.sb.append("hal.accelerometer(" + direction + ")");
     			break;
     		case RESET:
-    			; //do nothing	
+    			break; //do nothing	
     	}
     	return null;
     }
@@ -881,22 +865,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
     	String position = infraredSensor.getPort().getPortNumber();
-    	switch ( (InfraredSensorMode) infraredSensor.getMode()) {
-    		case DISTANCE:							//Hand
-    			if (position.equals("1")) {			//Left
-    				this.sb.append("memory.getData(\"HandLeftBackTouched\")");
-    			} else if (position.equals("2")) {	//Right
-    				this.sb.append("memory.getData(\"HandRightBackTouched\")");
-    			}
-    			break;
-    		case SEEK:								//Bumper
-    			if (position.equals("1")) {			//Left
-    				this.sb.append("memory.getData(\"LeftBumperPressed\")");
-    			} else if (position.equals("2")) {	//Right
-    				this.sb.append("memory.getData(\"RightBumperPressed\")");
-    			}
-    			break;
-    	}
+    	this.sb.append("hal.touchsensor(" + infraredSensor.getMode().toString() + ", " + position + ")");
         return null;
     }
 
@@ -904,30 +873,14 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     //edit block: change name, edit Parameters, remove GET_SAMPLE
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:										
-                break;
-            case RESET:												//Select Camera
-            	this.sb.append("video.setActive(" + timerSensor.getTimer() + ")"); //0 = Top ; 1 = Bottom
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
+    	this.sb.append("hal.selectCamera(" + timerSensor.getTimer() + ")");
         return null;
     }
 
     //HeadSensor
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-    	if (touchSensor.getPort().getPortNumber().equals("1")) {		//1 = Front
-    		this.sb.append("memory.getData(\"FrontTactilTouched\")");
-    	} else if(touchSensor.getPort().getPortNumber().equals("2")) { 	//2 = Middle
-    		this.sb.append("memory.getData(\"MiddleTactilTouched\")");
-    	} else if(touchSensor.getPort().getPortNumber().equals("3")) {  //3 = Rear
-    		this.sb.append("memory.getData(\"RearTactilTouched\")");
-    	} else if(touchSensor.getPort().getPortNumber().equals("4")) {	//only three options so 4 is not used
-    		;
-    	}
+    	this.sb.append("hal.headsensor(" + touchSensor.getPort().getPortNumber() + ")");
         return null;
     }
 
