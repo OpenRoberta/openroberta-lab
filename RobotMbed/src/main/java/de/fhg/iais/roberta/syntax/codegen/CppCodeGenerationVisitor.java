@@ -778,7 +778,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.sb.append("uBit.compass.getFieldStrength()");
+        this.sb.append("uBit.compass.heading()");
         return null;
     }
 
@@ -1435,6 +1435,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( this.usedHardwareVisitor.isRadioUsed() ) {
             nlIndent();
             this.sb.append("uBit.radio.enable();");
+        }
+        if ( this.usedHardwareVisitor.isAccelerometerUsed() ) {
+            nlIndent();
+            this.sb.append("uBit.accelerometer.updateSample();");
         }
 
     }

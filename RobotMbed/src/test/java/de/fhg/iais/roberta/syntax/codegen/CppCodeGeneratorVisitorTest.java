@@ -152,7 +152,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(uBit.compass.getFieldStrength());"
+            + "uBit.display.scroll(uBit.compass.heading());"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
@@ -172,6 +172,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + "uBit.accelerometer.updateSample();\n"
             + "\n"
             + "uBit.display.scroll(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN);uBit.display.scroll(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT);"
             + END;
