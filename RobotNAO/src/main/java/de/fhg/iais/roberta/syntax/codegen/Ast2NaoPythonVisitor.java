@@ -1456,37 +1456,6 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("import math\n");
         this.sb.append("import time\n");
-
-        //the following lines are needed to make the generated code compilable and executable on the robot
-
-        this.sb.append("from optparse import OptionParser\n\n");
-        this.sb.append("from naoqi import ALBroker\n");
-        this.sb.append("from naoqi import ALProxy" + " #import ALProxy\n");
-        this.sb.append("import hal \n\n");
-
-        this.sb.append("#parse command-line options\n");
-        this.sb.append("parser = OptionParser()\n");
-        this.sb.append("parser.add_option(\"--pip\",help=\"Parent broker port. The IP address or your robot\",dest=\"pip\")\n");
-        this.sb.append("parser.add_option(\"--pport\",help=\"Parent broker port. The port NAOqi is listening to\",dest=\"pport\")\n");
-        this.sb.append("parser.set_defaults(pip=NAO_IP_FROM_ROBOTCONFIGURATION,pport=9559)\n");
-
-        this.sb.append("(opts,args_) = parser.parse_args()\n");
-        this.sb.append("pip = opts.pip\n");
-        this.sb.append("pport = opts.pport\n");
-
-        //Broker is needed to be able to construct NAOqi modules and subscribe to other modules. Broker must stay alive until the program exits.
-        this.sb.append("myBroker = ALBroker(\"myBroker\", \"0.0.0.0\", 0, pip, pport)\n\n");
-
-        //create proxies to all needed modules
-        this.sb.append("motion = ALProxy(\"ALMotion\")" + " #create a proxy to ALMotion\n");
-        this.sb.append("posture = ALProxy(\"ALRobotPosture\")" + " #create a proxy to ALRobotPosture\n");
-        this.sb.append("memory = ALProxy(\"ALMemory\")" + " #create a proxy to ALMemory\n");
-        this.sb.append("tracker = ALProxy(\"ALTracker\")" + " #create a proxy to ALTracker\n");
-        this.sb.append("mark = ALProxy(\"ALLandMarkDetection\")" + " #create a proxy to ALLandMarkDetection\n");
-        this.sb.append("photo = ALProxy(\"ALPhotoCapture\")" + " #create a proxy to ALPhotoCapture\n");
-        this.sb.append("sonar = ALProxy(\"ALSonar\")" + " #create a proxy to ALSonar\n");
-        this.sb.append("tts = ALProxy(\"ALTextToSpeech\")" + " #create a proxy to ALTextToSpeech\n");
-        this.sb.append("led = ALProxy(\"ALLedsProxy\")" + " #create a proxy to ALLedsProxy\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1498,7 +1467,7 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("try:\n");
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("tts.say(\"Error!\",\"English\")\n");
+        this.sb.append(INDENT).append(INDENT).append("hal.say(\"Error!\")\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
