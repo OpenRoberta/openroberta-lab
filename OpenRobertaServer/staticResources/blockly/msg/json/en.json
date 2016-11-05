@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-11-01 21:32:00.090109",
+		"lastupdated": "2016-11-05 12:39:33.290502",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -911,5 +911,7 @@
 	"IMAGE_TOOLTIP": "Creates an image for the display.",
 	"IMAGE_GET_TOOLTIP": "Returns the choosen image.",
 	"IMAGE_INVERT_TOOLTIP": "Inverts the image. Each pixel with value 0 or none will be set to # or 9 and pixels with value # or 9 will be set to 0 or none.",
-	"IMAGE_SHIFT_TOOLTIP": "Shifts the image in the given direction by the given number"
+	"IMAGE_SHIFT_TOOLTIP": "Shifts the image in the given direction by the given number",
+	"VARIABLES_TYPE_ARRAY_IMAGE": "List Image",
+	"VARIABLES_TYPE_IMAGE": "Image"
 }
