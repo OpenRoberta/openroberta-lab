@@ -1018,13 +1018,13 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
 	@Override
 	public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-		this.sb.append("random()");
+		this.sb.append("random.random()");
 		return null;
 	}
 
 	@Override
 	public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-		this.sb.append("randint(");
+		this.sb.append("random.randint(");
 		mathRandomIntFunct.getParam().get(0).visit(this);
 		this.sb.append(", ");
 		mathRandomIntFunct.getParam().get(1).visit(this);
