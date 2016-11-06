@@ -40,9 +40,9 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/OpenRobertaRobot"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotArdu"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotEV3"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/RobotMbed"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotNAO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotNXT"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotSIM"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/RobotMbed"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
