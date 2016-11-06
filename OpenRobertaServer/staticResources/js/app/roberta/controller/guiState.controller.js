@@ -188,7 +188,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     exports.setBricklyWorkspace = setBricklyWorkspace;
 
     function setRobot(robot, result, opt_init) {
-        console.log(result);
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
