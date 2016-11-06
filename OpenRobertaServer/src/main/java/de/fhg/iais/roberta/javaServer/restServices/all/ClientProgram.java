@@ -262,17 +262,18 @@ public class ClientProgram {
                     messageKey = compilerWorkflow.execute(token, programName, programAndConfigTransformer);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         response.put("compiledCode", compilerWorkflow.getCompiledCode());
+                        response.put("rc", "ok");
                     } else {
                         if ( messageKey != null ) {
                             LOG.info(messageKey.toString());
+                            handleRunProgramError(response, messageKey, token, true);
                         }
                     }
                 } else {
                     handleRunProgramError(response, messageKey, token, true);
                 }
-
                 response.put("data", programText);
-                response.put("rc", "ok");
+
             } else if ( cmd.equals("runPsim") ) {
                 Key messageKey = null;
                 String token = httpSessionState.getToken();

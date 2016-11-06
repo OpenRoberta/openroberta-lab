@@ -137,7 +137,6 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final CalliopeConfiguration brickConfiguration;
     private final UsedHardwareVisitor usedHardwareVisitor;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
@@ -151,7 +150,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
      */
 
     public CppCodeGenerationVisitor(CalliopeConfiguration brickConfiguration, UsedHardwareVisitor usedHardware, int indentation) {
-        this.brickConfiguration = brickConfiguration;
         this.usedHardwareVisitor = usedHardware;
         this.indentation = indentation;
     }
@@ -657,11 +655,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         this.sb.append("uBit.display.scroll(");
-        if ( displayTextAction.getMsg().getKind().getName().equals("VAR") && displayTextAction.getMsg().getVarType().toString().equals("NUMBER") ) {
-            this.sb.append("(int) ");
+        String ending = ")";
+        if ( !displayTextAction.getMsg().getVarType().toString().equals("STRING") ) {
+            this.sb.append("ManagedString(");
+            ending += ")";
         }
         displayTextAction.getMsg().visit(this);
-        this.sb.append(");");
+        this.sb.append(ending + ";");
         return null;
     }
 

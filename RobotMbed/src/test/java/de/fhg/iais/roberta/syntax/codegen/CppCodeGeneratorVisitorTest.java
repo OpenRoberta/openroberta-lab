@@ -142,7 +142,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(uBit.buttonA.isPressed());"
+            + "uBit.display.scroll(ManagedString(uBit.buttonA.isPressed()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
@@ -152,7 +152,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(uBit.compass.heading());"
+            + "uBit.display.scroll(ManagedString(uBit.compass.heading()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
@@ -174,7 +174,8 @@ public class CppCodeGeneratorVisitorTest {
             + IMPORTS
             + "uBit.accelerometer.updateSample();\n"
             + "\n"
-            + "uBit.display.scroll(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN);uBit.display.scroll(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT);"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN));"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
@@ -184,7 +185,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(uBit.thermometer.getTemperature());"
+            + "uBit.display.scroll(ManagedString(uBit.thermometer.getTemperature()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
@@ -250,7 +251,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitTAmbientLightSensor_GetAmbientLigthAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(uBit.display.readLightLevel());\n"
+            + "uBit.display.scroll(ManagedString(uBit.display.readLightLevel()));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/get_ambient_light.xml");
@@ -283,7 +284,7 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "uBit.radio.enable();\n"
-            + "uBit.display.scroll(uBit.radio.datagram.recv());\n"
+            + "uBit.display.scroll(ManagedString(uBit.radio.datagram.recv()));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_receive_message.xml");
