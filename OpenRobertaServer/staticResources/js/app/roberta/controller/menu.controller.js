@@ -33,6 +33,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         var proto = $('.robotType');
         var robots = GUISTATE_C.getRobots();
         for ( var robot in robots) {
+            if (robot == 'oraSim') {
+                continue;
+            }
             var clone = proto.clone();
             clone.find('.typcn').addClass('typcn-' + robot);
             clone.find('.typcn').text(robots[robot].realName);
