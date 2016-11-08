@@ -11,12 +11,13 @@ import de.fhg.iais.roberta.testutil.Helper;
 
 public class CppCodeGeneratorVisitorTest {
 
-    private static final String IMPORTS =
-        "#include \"MicroBit.h\""
+    private static final String IMPORTS = //
+        "#include \"MicroBit.h\"" //
+            + "#include <array>\n"
+            + "#include <stdlib.h>\n"
             + "MicroBituBit;"
             + "int main() {"
             + "uBit.init();"
-            + "uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
             + "int initTime=uBit.systemTime();";
 
     private static final String END = "release_fiber();}";
@@ -162,6 +163,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitImage_ScriptCreatingImage_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + "uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
             + "uBit.display.print(MicroBitImage(\"255,255,0,0,0\\n0,0,0,0,255\\n0,85,0,0,0\\n0,0,0,255,0\\n0,56,0,0,0\\n\"));"
             + END;
 
@@ -299,6 +301,26 @@ public class CppCodeGeneratorVisitorTest {
             + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_stop.xml");
+    }
+
+    @Test
+    public void visitMathRandomIntFunct_ShowRandInt1to200_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.display.scroll(ManagedString(rand() % 200 + 1));\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/function/random_int_generator.xml");
+    }
+
+    @Test
+    public void visitMathRandomIntFunct_ShowRandIntMissingParam_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.display.scroll(ManagedString(rand() % 0 + 0));\n"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/function/random_int_generator_missing_param.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

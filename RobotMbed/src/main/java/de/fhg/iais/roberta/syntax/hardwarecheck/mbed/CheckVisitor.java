@@ -22,8 +22,8 @@ import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode;
-import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
@@ -660,7 +659,7 @@ public abstract class CheckVisitor implements MbedAstVisitor<Void> {
     }
 
     @Override
-    public Void visitImage(Image<Void> image) {
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 
@@ -686,11 +685,6 @@ public abstract class CheckVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        return null;
-    }
-
-    @Override
-    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
         return null;
     }
 

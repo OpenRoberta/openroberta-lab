@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -40,7 +40,7 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean global,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("VAR_DECLARATION"),properties, comment);
+        super(BlockTypeContainer.getByName("VAR_DECLARATION"), properties, comment);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;
@@ -144,6 +144,7 @@ public class VarDeclaration<V> extends Expr<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
         BlocklyType typeVar = BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE));
         String name = helper.extractField(fields, BlocklyConstants.VAR);
+        //TODO replace the place holder with the specificType
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
         boolean next = block.getMutation().isNext();
 

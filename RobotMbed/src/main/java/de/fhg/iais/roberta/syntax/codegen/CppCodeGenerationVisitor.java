@@ -223,13 +223,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             case T:
                 return "";
             case ARRAY:
-                return "double";
+                return "array<";
             case ARRAY_NUMBER:
-                return "double";
+                return "array<double, ";
             case ARRAY_STRING:
-                return "String";
+                return "array<ManagedString,";
             case ARRAY_BOOLEAN:
-                return "bool";
+                return "array<bool,";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -237,7 +237,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             case NUMBER_INT:
                 return "int";
             case STRING:
-                return "String";
+                return "ManagedString";
             case VOID:
                 return "void";
             case COLOR:
@@ -313,7 +313,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("(String) \"" + colorConst.getValue() + "\"");
+        this.sb.append(" \"" + colorConst.getValue() + "\"");
         return null;
     }
 
@@ -337,51 +337,24 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
-        this.sb.append(var.getName());
-        if ( var.getTypeVar().isArray() ) {
-            this.sb.append("Raw");
-            if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
-                || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
-                || var.getValue().toString().equals("ListCreate [STRING, ]")
-                || var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                this.sb.append("[0];");
-                nlIndent();
-                this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
-                this.sb.append(var.getName() + " = " + var.getName() + "Raw");
-            } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
-                this.sb.append("[3]");
-            } else {
+        //TODO there must be a way to make this code simpler
+        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+            this.sb.append(getBlocklyTypeCode(var.getTypeVar()));
+            if ( var.getTypeVar().isArray() ) {
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                this.sb.append("[" + list.getValue().get().size() + "]");
+                this.sb.append(list.getValue().get().size() + ">");
             }
-            if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
-                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                if ( list.getValue().get().size() == 0 ) {
-                    return null;
-                }
+            this.sb.append(whitespace() + var.getName());
+            this.sb.append(whitespace() + "=" + whitespace());
+            var.getValue().visit(this);
+        } else {
+            this.sb.append(getBlocklyTypeCode(var.getTypeVar()));
+            if ( var.getTypeVar().isArray() ) {
+                this.sb.append("0>");
             }
+            this.sb.append(whitespace() + var.getName());
         }
 
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(";");
-                    nlIndent();
-                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
-                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
-                }
-            }
-        }
         return null;
     }
 
@@ -414,7 +387,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            this.sb.append("String(");
+            this.sb.append("ManagedString(");
             generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
@@ -595,11 +568,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        this.sb.append("while (true) {");
+        this.sb.append("while (1) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("uBit.sleep(15);");
+        this.sb.append("uBit.sleep(100);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -654,15 +627,45 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("uBit.display.scroll(");
         String ending = ")";
-        if ( !displayTextAction.getMsg().getVarType().toString().equals("STRING") ) {
-            this.sb.append("ManagedString(");
-            ending += ")";
+        String varType = displayTextAction.getMsg().getVarType().toString();
+
+        if ( !varType.equals("STRING") ) {
+            ending = wrapInManageStringToDisplay(displayTextAction, ending, varType);
+        } else {
+            this.sb.append("uBit.display.scroll(");
+            displayTextAction.getMsg().visit(this);
         }
-        displayTextAction.getMsg().visit(this);
+
         this.sb.append(ending + ";");
         return null;
+    }
+
+    private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending, String varType) {
+        if ( varType.equals("NUMBER") ) {
+            castDoubleToStringToDisplay(displayTextAction);
+        } else {
+            this.sb.append("uBit.display.scroll(");
+            this.sb.append("ManagedString(");
+            displayTextAction.getMsg().visit(this);
+            ending += ")";
+        }
+        return ending;
+    }
+
+    private void castDoubleToStringToDisplay(DisplayTextAction<Void> displayTextAction) {
+        this.sb.append("ManagedString __m1((int) ");
+        displayTextAction.getMsg().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("ManagedString __m2((int) ((");
+        displayTextAction.getMsg().visit(this);
+        this.sb.append("-(int)");
+        displayTextAction.getMsg().visit(this);
+        this.sb.append(")*10));");
+        nlIndent();
+        this.sb.append("uBit.display.scroll(");
+        this.sb.append("ManagedString(__m1 + \".\" + __m2)");
     }
 
     @Override
@@ -892,8 +895,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     private void arrayLen(Var<Void> arr) {
-
-        this.sb.append("sizeof(" + arr.getValue() + ")/sizeof(" + arr.getValue() + "[0])");
+        this.sb.append(arr.getValue() + ".size()");
     }
 
     @Override
@@ -920,11 +922,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             return null;
         }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            this.sb.append("(");
-            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
-            this.sb.append(" == 0)");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(".empty()");
         } else {
-            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
+            this.sb.append("((int) ");
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+            this.sb.append(".size())");
         }
         return null;
     }
@@ -972,9 +975,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
-                this.sb.append("rob.randomIntegerInRange(0, ");
+                this.sb.append("rand() % ");
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(")");
                 break;
         }
         this.sb.append("]");
@@ -1005,14 +1007,14 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
-                this.sb.append("rob.randomIntegerInRange(0, ");
+                this.sb.append("rand() % ");
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(")");
                 break;
         }
         this.sb.append("]");
         this.sb.append(" = ");
         listSetIndex.getParam().get(1).visit(this);
+        this.sb.append(";");
         return null;
     }
 
@@ -1116,17 +1118,16 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("rob.randomFloat()");
+        this.sb.append("((double) rand() / (RAND_MAX))");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("rob.randomIntegerInRange(");
-        mathRandomIntFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
+        this.sb.append("rand() % ");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        this.sb.append(" + ");
+        mathRandomIntFunct.getParam().get(0).visit(this);
         return null;
     }
 
@@ -1200,6 +1201,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        textJoinFunct.getParam().visit(this);
         return null;
     }
 
@@ -1385,7 +1387,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(" + "float" + whitespace());
+        this.sb.append(stmtType + whitespace() + "(" + "int" + whitespace());
         final ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
         this.sb.append(whitespace() + "=" + whitespace());
@@ -1412,6 +1414,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     private void addConstants() {
         this.sb.append("#include \"MicroBit.h\" \n");
+        this.sb.append("#include <array>\n");
+        this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit uBit; \n \n");
     }
 
@@ -1429,9 +1433,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
         nlIndent();
-        this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
-        nlIndent();
         this.sb.append("int initTime = uBit.systemTime();");
+        nlIndent();
+        if ( this.usedHardwareVisitor.isGreyScale() ) {
+            this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
+            nlIndent();
+        }
         if ( this.usedHardwareVisitor.isRadioUsed() ) {
             nlIndent();
             this.sb.append("uBit.radio.enable();");
