@@ -2,13 +2,13 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.mbed;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -19,12 +19,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class UsedHardwareVisitor extends CheckVisitor {
 
-    private final Configuration brickConfiguration;
     private boolean radioUsed;
     private boolean accelerometerUsed;
+    private boolean greyScale;
 
     public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        this.brickConfiguration = null;
         check(phrasesSet);
     }
 
@@ -45,6 +44,10 @@ public class UsedHardwareVisitor extends CheckVisitor {
         return this.accelerometerUsed;
     }
 
+    public boolean isGreyScale() {
+        return this.greyScale;
+    }
+
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         // TODO Auto-generated method stub
@@ -54,6 +57,12 @@ public class UsedHardwareVisitor extends CheckVisitor {
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         displayTextAction.getMsg().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+        displayImageAction.getValuesToDisplay().visit(this);
         return null;
     }
 
@@ -71,14 +80,14 @@ public class UsedHardwareVisitor extends CheckVisitor {
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        // TODO Auto-generated method stub
+    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+        this.accelerometerUsed = true;
         return null;
     }
 
     @Override
-    public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        this.accelerometerUsed = true;
+    public Void visitImage(Image<Void> image) {
+        this.greyScale = true;
         return null;
     }
 
