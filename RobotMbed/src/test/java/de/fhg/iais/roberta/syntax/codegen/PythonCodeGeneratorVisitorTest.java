@@ -36,7 +36,7 @@ public class PythonCodeGeneratorVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsMicroPythonScriptWithShowTextCall() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "\ndisplay.scroll(\"Hallo\")";
+            + "\ndisplay.scroll('Hallo')";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
     }
@@ -149,7 +149,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image(\"99000:00009:03000:00090:02000\"))";
+            + "display.show(Image('99000:00009:03000:00090:02000'))";
 
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
     }
