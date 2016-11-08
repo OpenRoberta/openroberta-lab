@@ -130,7 +130,6 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final Configuration brickConfiguration;
     private final UsedHardwareVisitor usedHardwareVisitor;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
@@ -149,7 +148,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
      *        to start with. Will be ince/decr depending on block structure
      */
     PythonCodeGeneratorVisitor(Configuration brickConfiguration, UsedHardwareVisitor usedHardware, int indentation) {
-        this.brickConfiguration = brickConfiguration;
         this.usedHardwareVisitor = usedHardware;
         this.indentation = indentation;
         for ( int i = 0; i < indentation; i++ ) {
@@ -269,7 +267,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        this.sb.append("'").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("'");
         return null;
     }
 
@@ -562,7 +560,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitImage(Image<Void> image) {
-        this.sb.append("Image(\"");
+        this.sb.append("Image('");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
                 String pixel = image.getImage()[i][j].trim();
@@ -577,7 +575,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
                 this.sb.append(":");
             }
         }
-        this.sb.append("\")");
+        this.sb.append("')");
         return null;
     }
 

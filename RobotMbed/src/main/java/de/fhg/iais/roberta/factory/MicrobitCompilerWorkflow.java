@@ -125,7 +125,7 @@ public class MicrobitCompilerWorkflow implements ICompilerWorkflow {
             procBuilder.redirectError(Redirect.INHERIT);
             Process p = procBuilder.start();
 
-            this.compiledHex = IOUtils.toString(p.getInputStream());
+            this.compiledHex = IOUtils.toString(p.getInputStream(), "US-ASCII");
             //            FileUtils.writeStringToFile(new File("/home/kcvejoski/Desktop/test.hex"), out); TESTING PURPOSE
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
