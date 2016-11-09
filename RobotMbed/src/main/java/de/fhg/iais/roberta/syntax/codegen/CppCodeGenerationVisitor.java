@@ -670,23 +670,23 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("uBit.soundmotor.Sound_On(");
+        this.sb.append("uBit.soundmotor.soundOn(");
         toneAction.getFrequency().visit(this);
         this.sb.append("); ");
         this.sb.append("uBit.sleep(");
         toneAction.getDuration().visit(this);
         this.sb.append("); ");
-        this.sb.append("uBit.soundmotor.Sound_Off();");
+        this.sb.append("uBit.soundmotor.soundOff();");
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("uBit.soundmotor.Motor");
+        this.sb.append("uBit.soundmotor.motor");
         if ( motorOnAction.getPort() != ActorPort.AB ) {
             this.sb.append(motorOnAction.getPort());
         }
-        this.sb.append("_On(");
+        this.sb.append("On(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(");");
         return null;
@@ -704,15 +704,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("uBit.soundmotor.Motor");
+        this.sb.append("uBit.soundmotor.motor");
         if ( motorStopAction.getPort() == ActorPort.AB ) {
-            this.sb.append("A_Off();");
+            this.sb.append("AOff();");
             nlIndent();
-            this.sb.append("uBit.soundmotor.MotorB");
+            this.sb.append("uBit.soundmotor.motorB");
         } else {
             this.sb.append(motorStopAction.getPort());
         }
-        this.sb.append("_Off();");
+        this.sb.append("Off();");
         return null;
     }
 
