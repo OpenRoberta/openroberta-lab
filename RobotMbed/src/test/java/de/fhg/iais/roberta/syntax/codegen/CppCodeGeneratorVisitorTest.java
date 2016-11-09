@@ -229,9 +229,9 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMotorOnAction_TurnOnMotorsA_B_AB_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.soundmotor.MotorA_On(30);\n"
-            + "uBit.soundmotor.MotorB_On(30);\n"
-            + "uBit.soundmotor.Motor_On(30);\n"
+            + "uBit.soundmotor.motorAOn(30);\n"
+            + "uBit.soundmotor.motorBOn(30);\n"
+            + "uBit.soundmotor.motorOn(30);\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_on.xml");
@@ -241,9 +241,9 @@ public class CppCodeGeneratorVisitorTest {
     public void visitToneAction_PlayTone50Hz500ms_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.soundmotor.Sound_On(50);\n"
+            + "uBit.soundmotor.soundOn(50);\n"
             + "uBit.sleep(500);\n"
-            + "uBit.soundmotor.Sound_Off();\n"
+            + "uBit.soundmotor.soundOff();\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/play_tone.xml");
@@ -296,8 +296,8 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMotorStopAction_StopMotorFloatNonFloat_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.soundmotor.MotorA_Off();\n"
-            + "uBit.soundmotor.MotorB_Off();\n"
+            + "uBit.soundmotor.motorAOff();\n"
+            + "uBit.soundmotor.motorBOff();\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/motor_stop.xml");
