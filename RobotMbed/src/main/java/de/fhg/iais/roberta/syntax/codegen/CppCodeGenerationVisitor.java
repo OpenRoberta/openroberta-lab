@@ -1565,13 +1565,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        this.sb.append("uBit.soundmotor.Sound_On(");
+        this.sb.append("uBit.soundmotor.soundOn(");
         this.sb.append(playNoteAction.getFrequency());
         this.sb.append("); ");
         this.sb.append("uBit.sleep(");
         this.sb.append(playNoteAction.getDuration());
         this.sb.append("); ");
-        this.sb.append("uBit.soundmotor.Sound_Off();");
+        this.sb.append("uBit.soundmotor.soundOff();");
         return null;
     }
 }
