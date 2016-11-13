@@ -100,7 +100,6 @@ Blockly.Msg.CHAT = 'Chat with your collaborator by typing in this box!';
 Blockly.Msg.AUTH = 'Please authorize this app to enable your work to be saved and to allow it to be shared by you.';
 /// First person singular - objective case
 Blockly.Msg.ME = 'Me';
-
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
 Blockly.Msg.CHANGE_VALUE_TITLE = 'Change value:';
@@ -865,12 +864,21 @@ Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_START = 'Returns the item at the sp
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_END = 'Returns the item at the specified position in a list. #1 is the last item.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
+
+
+
+
+
+
+
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FIRST = 'Returns the first item in a list.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
+
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_LAST = 'Returns the last item in a list.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_RANDOM = 'Returns a random item in a list.';
 /// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item]
 /// (for remove and return) and
@@ -1043,8 +1051,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-//  Overwritten in robMessages
-// Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
+/// Overwritten in robMessages
+/// Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
 /// block text - This precedes the list of parameters on a function's defiition block.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
 /// function with parameters].

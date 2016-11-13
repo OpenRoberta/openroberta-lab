@@ -679,14 +679,21 @@ px
 	width: 80%;
 }
 
-.popup-checkbox input {
+.download-checkbox {
+	color: #bbb;
+	font-size: 14px;
+	padding-bottom: 16px !important;
+	width: 100%;
+}
+
+.popup-checkbox input, .download-checkbox input {
 	position: relative;
 	top: 2;
 	margin-right: 6px;
 	margin-bottom: 6px;
 }
 
-.popup-checkbox label {
+.popup-checkbox label, .download-checkbox label {
 	font-weight: normal;
 	display: initial;
 }
@@ -696,22 +703,28 @@ px
     list-style: none;
 }
 
-.download-checkbox li:before
+table#download-instructions
 {
-    content: "\2610";
-    color: #BACC1E;
-    margin-right:5px;
-    margin-left: -40px;
-    font-weight: 700;
+    padding-left: 0;
+    margin-top: 24px;
 }
 
-.download-checkbox li:hover:before
+#download-instructions tr
 {
-    content: "\2611";
-    color: #000000;
-    margin-right:5px;
-    margin-left: -40px;
-    font-weight: 400;
+    height:80px;
+    font-size: 20px;
+    opacity: 0;
+}
+
+#download-instructions td
+{
+    padding-left:12px;
+    vertical-align: top;
+}
+
+#programLink a {
+	text-decoration: underline;
+	color: #337ab7;
 }
 
 .clearer {
