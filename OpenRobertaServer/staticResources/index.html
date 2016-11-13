@@ -184,20 +184,17 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							lkey="Blockly.Msg.MENU_HELP"></span>
 					</a>
 						<ul class="dropdown-menu">
-							<li><a href="#" id="menuBuildingInstructions"
-								class="menuBuildingInstructions typcn typcn-book"
-								lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS">building
-									instructions</a></li>
 							<li><a href="#" id="menuGeneral"
-								class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_GENERAL">Allgemeine
-									Hilfe</a></li>
-							<li><a href="#" id="menuEV3conf"
-								class="menuEV3conf typcn typcn-lightbulb"
-								lkey="Blockly.Msg.MENU_EV3">EV3 vorbereiten</a></li>
+								class="menuGeneral typcn typcn-lightbulb"
+								lkey="Blockly.Msg.MENU_GENERAL">Allgemeine Hilfe</a></li>
 							<li><a href="#" id="menuProgramming"
 								class="menuProgramming typcn typcn-lightbulb"
 								lkey="Blockly.Msg.MENU_PROGRAMMING">Programmieren</a></li>
-							<li><a href="#" id="menuFaq" class="typcn typcn-lightbulb"
+							<li><a href="#" id="menuEV3conf"
+								class="menuEV3conf typcn typcn-lightbulb"
+								lkey="Blockly.Msg.MENU_EV3">EV3 vorbereiten</a></li>
+							<li><a href="#" id="menuFaq"
+								class="menuFAQ typcn typcn-lightbulb"
 								lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
 							<li><a href="#" id="menuAbout"
 								class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">Über
@@ -250,15 +247,15 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							aria-labelledby="chosenLanguage">
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="de"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="en"></a></li>
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>							
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="es"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="pt"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="fr"></a></li>
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="ru"></a></li>							
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="ru"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="pl"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="it"></a></li>
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>							
-							<!-- <li><a role="menuitem" href="#" class="lang-lbl" lang="ca"></a></li> -->														
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>					
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>
+							<!-- <li><a role="menuitem" href="#" class="lang-lbl" lang="ca"></a></li> -->
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>
 						</ul></li>
 					<!-- Menu Navigation -->
 					<li class="divider visible-xs"></li>
@@ -870,10 +867,14 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<div class="col-md-6 with-devider">
 								<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
 								<ul class="list-new-version nonIcon">
+									<li><a href="#" id="menuGeneral" class="menuGeneral"
+										lkey="Blockly.Msg.MENU_GENERAL">Allgemeine Hilfe</a></li>
+									<li><a href="#" id="menuProgramming"
+										class="menuProgramming" lkey="Blockly.Msg.MENU_PROGRAMMING">Programmieren</a></li>
 									<li><a class="menuEV3conf" lkey="Blockly.Msg.MENU_EV3"
 										href="#">EV3 preparation</a></li>
-									<li><a class="menuProgramming"
-										lkey="Blockly.Msg.MENU_PROGRAMMING" href="#">general help</a></li>
+									<li><a href="#" id="menuFaq" class="menuFAQ"
+										lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
 									<li><a class="menuBuildingInstructions"
 										lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS" href="#">building
 											instructions</a></li>
@@ -999,8 +1000,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					style="background-color: #BACC1E; text-align: center; color: white">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-					<h3 id="popupDownloadHeader" class="modal-title" lkey="Blockly.Msg.POPUP_DOWNLOAD">Download
-						your program</h3>
+					<h3 id="popupDownloadHeader" class="modal-title"
+						lkey="Blockly.Msg.POPUP_DOWNLOAD">Download your program</h3>
 				</div>
 				<div class="modal-body">
 					<table id="download-instructions" cellpadding=20>
@@ -1032,9 +1033,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<div id='programHint' class='download-checkbox'>
 						<br>
 						<input type='checkbox' name='checkbox' id='label-checkbox'
-							value='value' /><label for='label-checkbox' lkey="Blockly.Msg.POPUP_DOWNLOAD_CHECK">Okay, I
-							changed the download folder of my browser permanently. Don't show
-							this popup again and download my programs directly.</label>
+							value='value' /><label for='label-checkbox'
+							lkey="Blockly.Msg.POPUP_DOWNLOAD_CHECK">Okay, I changed
+							the download folder of my browser permanently. Don't show this
+							popup again and download my programs directly.</label>
 						<div></div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary"
