@@ -636,7 +636,7 @@ Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE = "You are trying to impor
 Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = "This program already exists.";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Kunne ikke gemme program.";
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = "You don't have the permission to modify this program!";  // untranslated
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = "This program has been changed recently by someone else. You can can save your changes in a new program, choose >save as< !";  // untranslated
+Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = "This program has been changed recently by someone else. You can save your changes in a new program, choose >save as< !";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND = "The program could not be found, so it is impossible to update it.";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_SUCCESS = "Program gemt";
 Blockly.Msg.ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST = "Det program der skulle deles kunne ikke findes.";
@@ -702,6 +702,7 @@ Blockly.Msg.PLAY_VOLUME = "lydstyrke";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
 Blockly.Msg.POINTAT = "point at";  // untranslated
 Blockly.Msg.POINTAT_TOOLTIP = "NAO points at a given position";  // untranslated
+Blockly.Msg.POPUP_2_0_1 = "Version beta 2.0.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Jeg vil gerne hjælpe";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab er et cloud-baseret integreret programmerings-miljø der gør børn og unge i stand til nemt at programmere Lego Mindstorms EV3 robotter. Denne platform er fuldstændigt open-source, så deltagelse er påskyndt! Både softwaren og de åbne værktøjer er tilgængelige på Fraunhofer serverne.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab er en open-source programmerings platform udviklet af Fraunhofer IAIS under initiativet <a href='http://www.roberta-home.de/'>»Roberta – Lær med Robotter«</a>";

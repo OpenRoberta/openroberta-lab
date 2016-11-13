@@ -21,6 +21,12 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'it';
         } else if (navigator.language.indexOf("ca") > -1) {
             language = 'ca';
+        } else if (navigator.language.indexOf("pt") > -1) {
+            language = 'pt';
+        } else if (navigator.language.indexOf("pl") > -1) {
+            language = 'pl';
+        } else if (navigator.language.indexOf("ru") > -1) {
+            language = 'ru';
 //        } else if (navigator.language.indexOf("eu") > -1) {
 //            language = 'eu';
 //        } else if (navigator.language.indexOf("gl") > -1) {
