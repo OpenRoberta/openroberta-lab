@@ -169,11 +169,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#head-navigation-help').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
-            if (domId === 'menuGeneral') { // Submenu 'Help'
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
-            } else if (domId === 'menuFaq') { // Submenu 'Help'
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
-            } else if (domId === 'menuShowRelease') { // Submenu 'Help'
+            if (domId === 'menuShowRelease') { // Submenu 'Help'
                 if ($.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
                     $('#checkbox_id').prop('checked', true);
                 }
@@ -325,15 +321,34 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             window.open('http://open-roberta.org');
         }, 'beta logo was clicked');
 
+        $('.menuGeneral').onWrap('click', function(event) {
+            if (GUISTATE_C.getLanguage() == 'de')
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Das+Open+Roberta+Lab");
+            else
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/The+Open+Roberta+Lab");
+        }, 'head navigation menu item clicked');
+        $('.menuEV3conf').onWrap('click', function(event) {
+            if (GUISTATE_C.getLanguage() == 'de')
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung");
+            else
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Set+up");
+        }, 'head navigation menu item clicked');
+        $('.menuProgramming').onWrap('click', function(event) {
+            if (GUISTATE_C.getLanguage() == 'de')
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Das+Open+Roberta+Lab");
+            else
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/The+Open+Roberta+Lab");
+        }, 'head navigation menu item clicked');
+        $('.menuFaq').onWrap('click', function(event) {
+            if (GUISTATE_C.getLanguage() == 'de')
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+            else
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+        }, 'head navigation menu item clicked');
         $('.menuBuildingInstructions').onWrap('click', function(event) {
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung#Vorbereitung-Bauanleitung");
         }, 'head navigation menu item clicked');
-        $('.menuEV3conf').onWrap('click', function(event) {
-            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
-        }, 'head navigation menu item clicked');
-        $('.menuProgramming').onWrap('click', function(event) {
-            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
-        }, 'head navigation menu item clicked');
+
         $('.menuPrivacy').onWrap('click', function(event) {
             window.open("TODO");
         }, 'head navigation menu item clicked');
