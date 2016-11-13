@@ -702,6 +702,7 @@ Blockly.Msg.PLAY_VOLUME = "Lautstärke";
 Blockly.Msg.PLAY_WHOLE = "ganze Note";
 Blockly.Msg.POINTAT = "point at";  // untranslated
 Blockly.Msg.POINTAT_TOOLTIP = "NAO points at a given position";  // untranslated
+Blockly.Msg.POPUP_2_0_1 = "Version 2.0.1 <ul class='NonIcon'><li>Calliope - programmiere deinen Calliope!</li><li>micro:bit - programmiere deinen micro:bit©</li><li>Neue Sprachen: Portugiesisch, Russisch, Polnisch</li></ul>";
 Blockly.Msg.POPUP_ABOUT_JOIN = "Ich möchte mithelfen";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab ist eine cloudbasierte grafische Programmierumgebung, die es Kindern und Jugendlichen ermöglicht ohne technische Hürden einen Roboter zu programmieren. <br /> Die Programmierplattform ist komplett »open source«, Mitmachen und Anregungen erwünscht! Alle benötigte Software und Open-Source-Entwicklertools stehen über Fraunhofer-Server bereit.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Das Open Roberta Lab ist eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS im Kontext der Initiative  <a href='http://www.roberta-home.de/'>»Roberta – Lernen mit Robotern«</a>";
