@@ -686,6 +686,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( motorOnAction.getPort() != ActorPort.AB ) {
             this.sb.append(motorOnAction.getPort());
         }
+        // fix for IT Gipfel
+        else {
+            this.sb.append("AOn(");
+            motorOnAction.getParam().getSpeed().visit(this);
+            this.sb.append(");");
+            this.nlIndent();
+            this.sb.append("uBit.soundmotor.motorB");
+        }
+        // fix for IT Gipfel
         this.sb.append("On(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(");");
