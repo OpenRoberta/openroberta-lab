@@ -67,20 +67,29 @@ A successful build looks like:
     [INFO] OpenRobertaServer .................................. SUCCESS [ 33.178 s]
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
+    
+#### Step 2: Make sure you have a database
+If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db** with the database inside. You can either 
+* copy the folder **dbBase** (also in OpenRobertaServer) under the name **db**
+* or create an empty an empty database with
 
-#### Step 2a: Starting your own server instance using a unix-like shell (on either lin* or win*).
+    ./ora.sh --createemptydb OpenRoberta/db/openroberta-db (from the root folder)
+    
+If you update the server with git pull, your database will not be changed. 
+
+#### Step 3a: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
     cd .. # return to the root folder
     ./ora.sh --start-server # start the server using default properties
 
 You can also run `./ora.sh --help` for more options.
 
-#### Step 2b: Starting your own server instance without using the shell script
+#### Step 3b: Starting your own server instance without using the shell script
 
     cd ../OpenRobertaServer # go to the folder of the server resources and the database
     java -cp target/resources/\* de.fhg.iais.roberta.main.ServerStarter --properties  --ip 0.0.0.0 --port 1999
 
-#### Step 3: Accessing your programming environment
+#### Step 4: Accessing your programming environment
 
 Start your browser at: http://localhost:1999
 
