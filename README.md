@@ -19,14 +19,27 @@ Things you need on your computer:
 
 * Java 1.7
 * Maven >= 3.2
-* avr-gcc (for using Arduino based robots)
-* Phantomjs
 * Git
 * Web browser
 
-Please also check our [wiki](http://wiki.open-roberta.org) for a detailed install
-instruction, development procedure, coding conventions and further reading. Please
-also checkout our project [issue tracker](http://jira.open-roberta.org).
+If you would like the server to compile code for the different systems, you need to install additional software:
+
+for linux:
+* Arduino based robots
+ * sudo apt-get install libusb-0.1-4
+ * sudo apt-get install gcc-avr binutils-avr gdb-avr avr-libc avrdude
+* NXT
+ * sudo apt-get install nbc
+* Calliope
+ * sudo apt-get install gcc-arm-none-eabi srecord libssl-dev
+* micro:bit
+ * pip install uflash
+ 
+for windows:
+* coming soon
+
+
+Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system. Please file issues in the main project **robertalab**.
 
 
 ### Fast installation with maven
