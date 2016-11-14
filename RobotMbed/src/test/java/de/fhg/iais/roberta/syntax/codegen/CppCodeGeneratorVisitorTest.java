@@ -225,6 +225,7 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/action/led_off.xml");
     }
 
+    @Ignore
     @Test
     public void visitMotorOnAction_TurnOnMotorsA_B_AB_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
