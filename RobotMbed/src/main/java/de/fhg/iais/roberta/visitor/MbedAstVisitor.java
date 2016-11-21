@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 
 /**
@@ -40,7 +41,7 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param displayImageAction phrase to be visited
      */
     public V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
-    
+
     /**
      * visit a {@link PlayNoteAction}.
      *
@@ -117,4 +118,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param radioReceiveAction phrase to be visited
      */
     public V visitRadioReceiveAction(RadioReceiveAction<V> radioReceiveAction);
+
+    /**
+     * visit a {@link MbedGetSampleSensor}.
+     *
+     * @param getSampleSensor phrase to be visited
+     */
+    public V visitMbedGetSampleSensor(MbedGetSampleSensor<V> getSampleSensor);
 }

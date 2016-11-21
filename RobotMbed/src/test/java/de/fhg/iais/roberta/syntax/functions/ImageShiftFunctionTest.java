@@ -33,7 +33,7 @@ public class ImageShiftFunctionTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Ignore
+    @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
         Helper.assertTransformationIsOk("/function/image_shift_up_down.xml");
     }

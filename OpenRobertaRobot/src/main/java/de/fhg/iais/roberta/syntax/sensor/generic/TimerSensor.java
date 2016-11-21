@@ -48,7 +48,7 @@ public class TimerSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link TimerSensor}
      */
-    static <V> TimerSensor<V> make(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static public <V> TimerSensor<V> make(ITimerSensorMode mode, int timer, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TimerSensor<V>(mode, timer, properties, comment);
     }
 

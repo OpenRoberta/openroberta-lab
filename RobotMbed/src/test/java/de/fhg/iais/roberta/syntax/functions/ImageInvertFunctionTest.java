@@ -32,7 +32,7 @@ public class ImageInvertFunctionTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Ignore
+    @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
         Helper.assertTransformationIsOk("/function/image_invert_heart_image.xml");
     }

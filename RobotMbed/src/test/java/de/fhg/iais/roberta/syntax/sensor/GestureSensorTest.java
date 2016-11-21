@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
@@ -22,7 +21,7 @@ public class GestureSensorTest {
         Assert.assertEquals(expectedResult, result);
     }
 
-    @Ignore
+    @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
         Helper.assertTransformationIsOk("/sensor/check_gesture.xml");
     }

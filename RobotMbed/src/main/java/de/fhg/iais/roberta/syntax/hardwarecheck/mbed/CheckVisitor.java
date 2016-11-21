@@ -86,6 +86,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -692,4 +693,9 @@ public abstract class CheckVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> mbedGetSampleSensor) {
+        mbedGetSampleSensor.getSensor().visit(this);
+        return null;
+    }
 }

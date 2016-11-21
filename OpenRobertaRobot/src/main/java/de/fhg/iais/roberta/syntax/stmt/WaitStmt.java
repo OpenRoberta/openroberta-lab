@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -32,7 +32,7 @@ public class WaitStmt<V> extends Stmt<V> {
     private final StmtList<V> statements;
 
     private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("WAIT_STMT"),properties, comment);
+        super(BlockTypeContainer.getByName("WAIT_STMT"), properties, comment);
         Assert.isTrue(statements != null && statements.isReadOnly());
         this.statements = statements;
         setReadOnly();
@@ -59,7 +59,7 @@ public class WaitStmt<V> extends Stmt<V> {
 
     @Override
     public String toString() {
-        return "WaitStmt [statements=" + this.statements + "]";
+        return "WaitStmt [" + this.statements + "]";
     }
 
     @Override
@@ -92,12 +92,8 @@ public class WaitStmt<V> extends Stmt<V> {
         for ( int i = 0; i <= mutat; i++ ) {
             Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT + i, Boolean.class));
             statement = helper.extractStatement(statementss, BlocklyConstants.DO + i);
-            list.addStmt(RepeatStmt.make(
-                Mode.WAIT,
-                helper.convertPhraseToExpr(expr),
-                statement,
-                helper.extractBlockProperties(block),
-                helper.extractComment(block)));
+            list.addStmt(
+                RepeatStmt.make(Mode.WAIT, helper.convertPhraseToExpr(expr), statement, helper.extractBlockProperties(block), helper.extractComment(block)));
         }
         list.setReadOnly();
         return WaitStmt.make(list, helper.extractBlockProperties(block), helper.extractComment(block));

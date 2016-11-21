@@ -112,9 +112,8 @@ public class GestureSensor<V> extends Sensor<V> {
         }
 
         public String getPythonCode() {
-            return pythonCode;
+            return this.pythonCode;
         }
-
     }
 
 }

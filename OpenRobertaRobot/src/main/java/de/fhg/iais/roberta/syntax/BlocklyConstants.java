@@ -261,5 +261,8 @@ public final class BlocklyConstants {
     public static final String SIM_MOTOR_STOP = "sim_motor_stop";
     public static final String IMAGE = "IMAGE";
     public static final String GESTURE = "GESTURE";
+    public static final String GESTURE_ACTIVE = "GESTURE_ACTIVE";
+    public static final String TEMPERATURE = "TEMPERATURE";
+    public static final String LIGHT_LEVEL = "LIGHT_LEVEL";
 
 }
