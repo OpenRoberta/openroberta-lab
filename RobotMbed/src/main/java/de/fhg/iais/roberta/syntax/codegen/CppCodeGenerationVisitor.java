@@ -524,6 +524,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         incrIndentation();
         repeatStmt.getList().visit(this);
         appendBreakStmt(repeatStmt);
+        if ( repeatStmt.getMode() == Mode.FOREVER ) {
+            nlIndent();
+            this.sb.append("uBit.sleep(1);");
+        }
         decrIndentation();
         nlIndent();
         this.sb.append("}");
