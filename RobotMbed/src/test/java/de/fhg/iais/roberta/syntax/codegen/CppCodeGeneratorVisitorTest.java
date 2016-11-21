@@ -153,6 +153,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + "uBit.accelerometer.updateSample();\n"
             + "uBit.display.scroll(ManagedString(uBit.compass.heading()));"
             + END;
 
@@ -287,7 +288,7 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "uBit.radio.enable();\n"
-            + "uBit.display.scroll(ManagedString(uBit.radio.datagram.recv()));\n"
+            + "uBit.display.scroll(ManagedString(ManagedString(uBit.radio.datagram.recv())));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_receive_message.xml");

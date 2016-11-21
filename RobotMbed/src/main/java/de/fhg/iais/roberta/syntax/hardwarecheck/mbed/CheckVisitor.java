@@ -75,7 +75,6 @@ import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -645,11 +644,6 @@ public abstract class CheckVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         return null;
     }
 

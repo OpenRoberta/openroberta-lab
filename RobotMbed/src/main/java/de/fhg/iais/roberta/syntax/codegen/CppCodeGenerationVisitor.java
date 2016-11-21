@@ -9,9 +9,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -372,18 +370,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        if ( binary.getOp() == Op.EQ || binary.getOp() == Op.NEQ ) {
-            if ( isStringExpr(binary.getLeft()) && isStringExpr(binary.getRight()) ) {
-                if ( binary.getOp() == Op.NEQ ) {
-                    this.sb.append("!");
-                }
-                generateSubExpr(this.sb, false, binary.getLeft(), binary);
-                this.sb.append(".equals(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                return null;
-            }
-        }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
@@ -1314,27 +1300,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return " ";
     }
 
-    private boolean isStringExpr(Expr<Void> e) {
-        switch ( e.getKind().getName() ) {
-            case "STRING_CONST":
-                return true;
-            case "VAR":
-                return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
-            case "FUNCTION_EXPR":
-                final BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
-                return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
-            case "METHOD_EXPR":
-                final MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
-                return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
-            case "ACTION_EXPR":
-                final Action<?> action = ((ActionExpr<?>) e).getAction();
-                return action.getKind().hasName("BLUETOOTH_RECEIVED_ACTION");
-
-            default:
-                return false;
-        }
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
@@ -1568,7 +1533,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        this.sb.append("uBit.radio.datagram.recv()");
+        this.sb.append("ManagedString(uBit.radio.datagram.recv())");
         return null;
     }
 

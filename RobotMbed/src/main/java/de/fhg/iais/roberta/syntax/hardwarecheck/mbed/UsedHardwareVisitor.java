@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -81,6 +82,12 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+        this.accelerometerUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         this.accelerometerUsed = true;
         return null;
     }
