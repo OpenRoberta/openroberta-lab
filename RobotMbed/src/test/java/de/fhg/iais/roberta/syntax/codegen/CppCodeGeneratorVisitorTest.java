@@ -64,7 +64,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsCppProgramWithDisplayImageAndAnimation() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.print(MicroBitImage(\"0,1,0,1,0\\n1,1,1,1,1\\n1,1,1,1,1\\n0,1,1,1,0\\n0,0,1,0,0\\n\"));"
+            + "uBit.display.print(MicroBitImage(\"0,255,0,1,0\\n1,1,1,1,1\\n1,1,1,1,1\\n0,1,1,1,0\\n0,0,1,0,0\\n\"));"
             + END;
         //+ "\n"
         //+ "display.show([Image.HEART_SMALL, Image.ASLEEP])";
@@ -323,6 +323,58 @@ public class CppCodeGeneratorVisitorTest {
             + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator_missing_param.xml");
+    }
+
+    @Test
+    public void visitWaitStmt_TestAllTheSensorsInTheWaitStmt_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.accelerometer.updateSample();"
+            + "while(1){"
+            + "if(uBit.buttonA.isPressed()==true){"
+            + "break;"
+            + "}"
+            + "uBit.sleep(100);"
+            + "}"
+            + "while(1){"
+            + "if(uBit.buttonB.isPressed()==true){"
+            + "break;"
+            + "}"
+            + "uBit.sleep(100);"
+            + "}"
+            + "while(1){"
+            + "if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_UP==true){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_DOWN==true){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_UP==true){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN==true){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_SHAKE==true){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FREEFALL==true){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.compass.heading()>180){break;}uBit.sleep(100);}while(1){if(uBit.systemTime()-initTime>500){break;}uBit.sleep(100);}"
+            + "while(1){if(uBit.thermometer.getTemperature()>20){break;}uBit.sleep(100);}while(1){if(uBit.display.readLightLevel()>50){break;}uBit.sleep(100);}"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/sensor/get_sample_sensor.xml");
+    }
+
+    @Test
+    public void visitWaitStmt_TestTwoCases_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "while(1){"
+            + "if(uBit.buttonA.isPressed()==true){"
+            + "uBit.display.scroll(\"Hallo\");"
+            + "break;"
+            + "}"
+            + "if(uBit.thermometer.getTemperature()>20){"
+            + "uBit.display.scroll(\"Hallo\");"
+            + "break;"
+            + "}"
+            + "uBit.sleep(100);"
+            + "}"
+
+            + END;
+
+        assertCodeIsOk(expectedResult, "/sensor/wait_stmt_two_cases.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

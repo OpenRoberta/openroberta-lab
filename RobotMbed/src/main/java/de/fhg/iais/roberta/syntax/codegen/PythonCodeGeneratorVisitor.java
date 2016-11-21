@@ -103,6 +103,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -1404,6 +1405,12 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     // not supported
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
+        getSampleSensor.getSensor().visit(this);
         return null;
     }
 
