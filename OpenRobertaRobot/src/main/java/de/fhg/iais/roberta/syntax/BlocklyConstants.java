@@ -264,5 +264,8 @@ public final class BlocklyConstants {
     public static final String GESTURE_ACTIVE = "GESTURE_ACTIVE";
     public static final String TEMPERATURE = "TEMPERATURE";
     public static final String LIGHT_LEVEL = "LIGHT_LEVEL";
+    public static final String RED = "RED";
+    public static final String GREEN = "GREEN";
+    public static final String BLUE = "BLUE";
 
 }
