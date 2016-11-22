@@ -1465,9 +1465,25 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        this.sb.append("uBit.display.print(");
-        displayImageAction.getValuesToDisplay().visit(this);
-        this.sb.append(");");
+        if ( displayImageAction.getDisplayImageMode().name().equals("ANIMATION") ) {
+            this.sb.append("MicroBitImage imageArray[] = ");
+            displayImageAction.getValuesToDisplay().visit(this);
+            this.sb.append(";");
+            nlIndent();
+            this.sb.append("for ( int i = 0; i < (int)(sizeof(imageArray)/sizeof(*imageArray)); i++ ) {");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("uBit.display.print(imageArray[i]);");
+            nlIndent();
+            this.sb.append("uBit.sleep(200);");
+            decrIndentation();
+            nlIndent();
+            this.sb.append("}");
+        } else {
+            this.sb.append("uBit.display.print(");
+            displayImageAction.getValuesToDisplay().visit(this);
+            this.sb.append(");");
+        }
         return null;
     }
 
