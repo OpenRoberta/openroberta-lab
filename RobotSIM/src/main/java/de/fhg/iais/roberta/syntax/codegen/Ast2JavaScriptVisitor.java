@@ -364,8 +364,10 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             appendIfStmtConditions(ifStmt);
             this.sb.append("], [");
             appendThenStmts(ifStmt);
-            this.sb.append("]");
+            this.sb.append("], [");
             appendElseStmt(ifStmt);
+            this.sb.append("]");
+
             this.sb.append(end);
         }
         return null;
@@ -379,6 +381,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         appendRepeatStmtStatements(repeatStmt);
         this.sb.append("]");
         this.sb.append(end);
+        removeInStmt();
         return null;
     }
 
@@ -404,7 +407,6 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             this.sb.append(symbol);
         }
         removeLastComma();
-        removeInStmt();
         return null;
     }
 
@@ -950,6 +952,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         this.sb.append("], [");
         addInStmt();
         methodVoid.getBody().visit(this);
+        removeInStmt();
         this.sb.append("]);\n");
         increaseMethods();
         return null;
@@ -963,6 +966,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         this.sb.append("], ");
         methodReturn.getReturnValue().visit(this);
         this.sb.append(");\n");
+        removeInStmt();
         increaseMethods();
         return null;
     }
@@ -1105,10 +1109,9 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
 
     private void appendElseStmt(IfStmt<Void> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
-            this.sb.append(", [");
             addInStmt();
             ifStmt.getElseList().visit(this);
-            this.sb.append("]");
+            removeInStmt();
         }
     }
 
@@ -1122,6 +1125,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
             if ( isLastStmt ) {
                 this.sb.append(", ");
             }
+            removeInStmt();
         }
     }
 
