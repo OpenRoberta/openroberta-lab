@@ -27,15 +27,35 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var timerStep = 0;
     var ready;
     var canceled;
+    
+    var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg',
+            '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg',
+            '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg',
+            '/js/app/simulation/simBackgrounds/ruler.svg' ];
+    var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/simpleBackground.png',
+            '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png',
+            '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png',
+            '/js/app/simulation/simBackgrounds/ruler.png' ];
+    var imgObjectList = [];
+
+    function preloadImages() {
+        if (isIE()) {
+            imgList = imgListIE;
+        }
+        for (var i = 0; i < imgList.length; i++) {
+            imgObjectList[i] = new Image();
+            imgObjectList[i].src = imgList[i];
+        }
+    }
+    preloadImages();
 
     var currentBackground = 1;
 
     function setBackground(num, callback) {
         if (num == undefined) {
-            robot.debug = debug;
             setObstacle();
             setRuler();
-            scene = new Scene(currentBackground, layers, robot, obstacle, ruler);
+            scene = new Scene(imgObjectList[currentBackground], layers, robot, obstacle, ruler);
             resizeAll();
             scene.updateBackgrounds();
             scene.drawObjects();
@@ -118,6 +138,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 robot.drawColor = "#ffffff";
                 robot.drawWidth = 1;
             }
+            robot.debug = debug;
             callback();
         });
 
@@ -271,9 +292,6 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 pause = true;
                 info = false;
                 setObstacle();
-                if (isIE()) {
-                    $('.img_sim').addClass('isIE');
-                }
                 initScene();
             });
 
@@ -326,9 +344,6 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
 
     function reloadProgram() {
-//        robot.reset();
-//        eval(userProgram);
-//        programEval.initProgram(blocklyProgram);
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
@@ -354,9 +369,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.y = 250;
             obstacle.w = 100;
             obstacle.h = 100;
-            var bg = new Image;
-            bg.src = $('#img_00').css('background-image').replace('url("', '').replace('")', '');
-            obstacle.img = bg;
+            obstacle.img = imgObjectList[0];
             obstacle.color = null;
         } else if (currentBackground == 5) {
             obstacle.x = 0;
@@ -380,9 +393,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             ruler.y = 380;
             ruler.w = 300;
             ruler.h = 30;
-            var bg = new Image;
-            bg.src = $('#img_06').css('background-image').replace('url("', '').replace('")', '');
-            ruler.img = bg;
+            ruler.img = imgObjectList[6];
             ruler.color = null;
         } else {
             // All other scenes currently don't have a movable ruler.
@@ -439,6 +450,20 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     function handleMouseMove(e) {
         e.preventDefault();
         if (!isDownrobot && !isDownObstacle && !isDownRuler) {
+            var X = e.clientX || e.originalEvent.touches[0].pageX;
+            var Y = e.clientY || e.originalEvent.touches[0].pageY;
+            var startx = (parseInt(X - offsetX, 10)) / scale;
+            var starty = (parseInt(Y - offsetY, 10)) / scale;
+            var dx = startx - robot.mouse.rx;
+            var dy = starty - robot.mouse.ry;
+            var hoverRobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
+            var hoverObstacle = (startx > obstacle.x && startx < obstacle.x + obstacle.w && starty > obstacle.y && starty < obstacle.y + obstacle.h);
+            var hoverRuler = (startx > ruler.x && startx < ruler.x + ruler.w && starty > ruler.y && starty < ruler.y + ruler.h);
+            if (hoverRobot || hoverObstacle || hoverRuler)
+                $("#robotLayer").css('cursor', 'pointer');
+            else
+                $("#robotLayer").css('cursor', 'auto');
+            e.stopPropagation();
             return;
         }
         $("#robotLayer").css('cursor', 'pointer');
@@ -542,7 +567,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     function initScene() {
 
         layers = createLayers();
-        scene = new Scene(currentBackground, layers, robot, obstacle, ruler);
+        scene = new Scene(imgObjectList[currentBackground], layers, robot, obstacle, ruler);
         scene.updateBackgrounds();
         scene.drawObjects();
         scene.drawRuler();
