@@ -84,7 +84,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test4() throws Exception {
 
         String a =
-            "var stmt0 = createIfStmt([createBinaryExpr(CONST.NEQ, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 6)), createBinaryExpr(CONST.GTE, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 6))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD)]]);\n"
+            "var stmt0 = createIfStmt([createBinaryExpr(CONST.NEQ, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 6)), createBinaryExpr(CONST.GTE, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 6))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD)]], []);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
@@ -120,7 +120,7 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
-                + "var stmt2 = createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))], [[createIfStmt([createBinaryExpr(CONST.NEQ, createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 1)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 1))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD), createTurnAction(createConstant(CONST.NUM_CONST, 50), CONST.RIGHT)]])]], [createStopDrive()]);\n"
+                + "var stmt2 = createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))], [[createIfStmt([createBinaryExpr(CONST.NEQ, createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 1)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 1))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD), createTurnAction(createConstant(CONST.NUM_CONST, 50), CONST.RIGHT)]], [])]], [createStopDrive()]);\n"
                 + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.ULTRASONIC, CONST.DISTANCE), createConstant(CONST.NUM_CONST, 30))], [])]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
@@ -203,7 +203,7 @@ public class AstToLejosJavaScriptVisitorTest {
     public void test13() throws Exception {
 
         String a =
-            "var stmt0 = createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true)), createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, false))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 20))]]);\n"
+            "var stmt0 = createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true)), createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, false))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 20))]], []);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator13.xml");
