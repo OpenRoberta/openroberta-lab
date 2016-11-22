@@ -9,10 +9,9 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * 
      * @constructor
      */
-    function Scene(backgroundNo, layers, robot, obstacle, ruler) {
-        var bg = new Image;
-        bg.src = $('#img_0'+backgroundNo).css('background-image').replace('url("','').replace('")','');
-        this.backgroundImg = bg;
+    function Scene(backgroundImg, layers, robot, obstacle, ruler) {
+        
+        this.backgroundImg = backgroundImg;
         this.robot = robot;
         this.obstacle = obstacle;
         this.ruler = ruler;
@@ -44,6 +43,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
             ctx.drawImage(this.backgroundImg, 0, 0);
+            
         }
     };
 
@@ -252,7 +252,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.strokeStyle = "#555555";
         for (var i = 0; i < this.robot.ultraSensor.u.length; i++) {
             this.rCtx.moveTo(this.robot.ultraSensor.rx, this.robot.ultraSensor.ry);
-            this.rCtx.lineTo(this.robot.ultraSensor.u[i].x, this.robot.ultraSensor.u[i].y);
+            if (this.robot.ultraSensor.u[i]) {
+                this.rCtx.lineTo(this.robot.ultraSensor.u[i].x, this.robot.ultraSensor.u[i].y);}
         }
         this.rCtx.stroke();
         this.rCtx.beginPath();
