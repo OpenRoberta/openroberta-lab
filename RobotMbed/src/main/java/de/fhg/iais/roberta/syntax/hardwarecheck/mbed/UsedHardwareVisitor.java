@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
+import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -95,6 +96,14 @@ public class UsedHardwareVisitor extends CheckVisitor {
     @Override
     public Void visitImage(Image<Void> image) {
         this.greyScale = true;
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        rgbColor.getR().visit(this);
+        rgbColor.getG().visit(this);
+        rgbColor.getB().visit(this);
         return null;
     }
 

@@ -60,6 +60,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
+import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
@@ -1557,6 +1558,17 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
         getSampleSensor.getSensor().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        rgbColor.getR().visit(this);
+        this.sb.append(", ");
+        rgbColor.getG().visit(this);
+        this.sb.append(", ");
+        rgbColor.getB().visit(this);
+        this.sb.append(", 255");
         return null;
     }
 }

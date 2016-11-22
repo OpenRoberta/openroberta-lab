@@ -377,6 +377,16 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/wait_stmt_two_cases.xml");
     }
 
+    @Test
+    public void visitRgbColor_CreateColorAndDisplay_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "uBit.display.scroll(ManagedString(20, 25, 30, 255));"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/expr/create_color.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }

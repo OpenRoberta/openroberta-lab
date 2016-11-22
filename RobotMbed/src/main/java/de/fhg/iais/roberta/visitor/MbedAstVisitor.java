@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
+import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
@@ -125,4 +126,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param getSampleSensor phrase to be visited
      */
     public V visitMbedGetSampleSensor(MbedGetSampleSensor<V> getSampleSensor);
+
+    /**
+     * visit a {@link RgbColor}.
+     *
+     * @param rgbColor phrase to be visited
+     */
+    public V visitRgbColor(RgbColor<V> rgbColor);
 }
