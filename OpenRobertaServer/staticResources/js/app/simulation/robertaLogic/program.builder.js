@@ -86,7 +86,7 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
 
     function createRandDouble() {
         var result = {};
-        result[EXPR] = RANDOM_DOUBLE;
+        result[CONST.EXPR] = CONST.RANDOM_DOUBLE;
         return result;
     }
 
