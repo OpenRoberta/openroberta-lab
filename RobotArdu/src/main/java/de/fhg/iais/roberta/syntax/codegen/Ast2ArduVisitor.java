@@ -135,6 +135,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
     private boolean timeSensorUsed;
+    private final ArrayList<ArrayList<Phrase<Void>>> phrases;
 
     /**
      * initialize the Java code generator visitor.
@@ -144,10 +145,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
 
-    public Ast2ArduVisitor(ArduConfiguration brickConfiguration, int indentation, boolean timeSensorUsed) {
+    public Ast2ArduVisitor(ArduConfiguration brickConfiguration, int indentation, boolean timeSensorUsed, ArrayList<ArrayList<Phrase<Void>>> phrases) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.timeSensorUsed = timeSensorUsed;
+        this.phrases = phrases;
     }
 
     /**
@@ -163,11 +165,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         Assert.isTrue(phrasesSet.size() >= 1);
         boolean timeSensorUsed = UsedTimerVisitorArdu.check(phrasesSet);
 
-        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed);
+        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, phrasesSet);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
-
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
-
         return astVisitor.sb.toString();
     }
 
@@ -1063,7 +1063,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        decrIndentation();
         mainTask.getVariables().visit(this);
+        incrIndentation();
+        generateUserDefinedMethods(this.phrases);
+        this.sb.append("\n").append("void loop() \n");
+        this.sb.append("{");
+        if ( this.timeSensorUsed ) {
+            nlIndent();
+            this.sb.append("T.Timer();");
+        }
+        this.generateSensors();
         return null;
     }
 
@@ -1634,7 +1644,32 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void addConstants() {
+    private void generateSensors() {
+        for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+            switch ( entry.getValue().getType() ) {
+                case COLOR:
+                    nlIndent();
+                    this.sb.append("brm.setRgbStatus(ENABLE);");
+                    break;
+                case ULTRASONIC:
+                    nlIndent();
+                    this.sb.append("brm.setSonarStatus(ENABLE);");
+                    break;
+                case INFRARED:
+                    nlIndent();
+                    this.sb.append("one.obstacleEmitters(ON);");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        if ( !withWrapping ) {
+            return;
+        }
+
         this.sb.append("#include <math.h> \n");
         this.sb.append("#include <CountUpDownTimer.h> \n");
         // Bot'n Roll ONE A library:
@@ -1658,15 +1693,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
         this.sb.append("byte colorsRight[3]={0,0,0}; \n \n");
-    }
-
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        if ( !withWrapping ) {
-            return;
-        }
-
-        this.addConstants();
-        generateUserDefinedMethods(phrasesSet);
         this.sb.append("void setup() \n");
         this.sb.append("{");
         nlIndent();
@@ -1688,32 +1714,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
-        for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            switch ( entry.getValue().getType() ) {
-                case COLOR:
-                    nlIndent();
-                    this.sb.append("brm.setRgbStatus(ENABLE);");
-                    break;
-                case ULTRASONIC:
-                    nlIndent();
-                    this.sb.append("brm.setSonarStatus(ENABLE);");
-                    break;
-                case INFRARED:
-                    nlIndent();
-                    this.sb.append("one.obstacleEmitters(ON);");
-                    break;
-                default:
-                    break;
-            }
-        }
-        this.sb.append("\n");
-        this.sb.append("} \n");
-        this.sb.append("void loop() \n");
-        this.sb.append("{");
-        if ( this.timeSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.Timer();");
-        }
+        this.sb.append("\n}\n");
     }
 
     private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
