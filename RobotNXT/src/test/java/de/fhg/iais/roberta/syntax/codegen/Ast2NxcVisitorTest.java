@@ -406,7 +406,7 @@ public class Ast2NxcVisitorTest {
             + MASMETHOD
             + "    string message=\"exit\";\n"
 
-            + "        if (message.equals(\"exit\")) {\n"
+            + "        if (message == \"exit\") {\n"
             + "           TextOut(0,(MAXLINES - 0) * MAXLINES,\"done\");"
             + "        }\n"
 
