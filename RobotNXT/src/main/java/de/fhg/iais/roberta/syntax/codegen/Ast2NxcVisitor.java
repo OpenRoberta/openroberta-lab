@@ -179,7 +179,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     private static void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
         if ( withWrapping ) {
-            astVisitor.sb.append("\n}\n");
+            //astVisitor.sb.append("\n}\n");
         }
     }
 
@@ -1112,7 +1112,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         incrIndentation();
         generateUserDefinedMethods(this.phrases);
         this.sb.append("\n").append("task main() {");
-        this.generateImports();
+        this.generateSensors();
         return null;
     }
 
@@ -1663,7 +1663,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
     }
 
-    private void generateImports() {
+    private void generateSensors() {
         for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
             this.sb.append("SetSensor(");
