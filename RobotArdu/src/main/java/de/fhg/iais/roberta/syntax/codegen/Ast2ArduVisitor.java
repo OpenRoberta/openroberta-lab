@@ -398,9 +398,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            if ( binary.getRight().getVarType().equals("NUMBER") ) {
-                this.sb.append(binary.getRight().getVarType());
-            }
             generateSubExpr(this.sb, false, binary.getRight(), binary);
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);

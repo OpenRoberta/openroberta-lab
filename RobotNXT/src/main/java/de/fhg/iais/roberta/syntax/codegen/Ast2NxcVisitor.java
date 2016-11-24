@@ -419,9 +419,11 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            if ( binary.getRight().getVarType().equals("NUMBER") ) {
-                this.sb.append("NumToStr(" + binary.getRight() + ")");
+            if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
+                this.sb.append("NumToStr(");
                 generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                //generateSubExpr(this.sb, false, binary.getRight(), binary);
             } else {
                 generateSubExpr(this.sb, false, binary.getRight(), binary);
             }
