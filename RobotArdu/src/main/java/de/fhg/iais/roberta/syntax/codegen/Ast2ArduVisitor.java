@@ -395,24 +395,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        if ( binary.getOp() == Op.EQ || binary.getOp() == Op.NEQ ) {
-            if ( isStringExpr(binary.getLeft()) && isStringExpr(binary.getRight()) ) {
-                if ( binary.getOp() == Op.NEQ ) {
-                    this.sb.append("!");
-                }
-                generateSubExpr(this.sb, false, binary.getLeft(), binary);
-                this.sb.append(".equals(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                return null;
-            }
-        }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            this.sb.append("String(");
+            if ( binary.getRight().getVarType().equals("NUMBER") ) {
+                this.sb.append(binary.getRight().getVarType());
+            }
             generateSubExpr(this.sb, false, binary.getRight(), binary);
-            this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
