@@ -1478,7 +1478,9 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        //this.sb.append(";");
+        if (methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn")){
+            this.sb.append(";");
+        }
         return null;
     }
 
