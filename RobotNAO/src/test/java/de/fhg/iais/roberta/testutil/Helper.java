@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.testutil;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -26,12 +27,19 @@ import de.fhg.iais.roberta.syntax.codegen.Ast2NaoPythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NaoConfigurationTransformer;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    public static NAOFactory factory = new NAOFactory(null);
+    public static NAOFactory factory;
+
+    static {
+        Properties properties = Util1.loadProperties(null);
+        Util1.setRobertaProperties(properties);
+        factory = new NAOFactory(null);
+    }
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.

@@ -52,7 +52,7 @@ public class ClientAdmin {
             response.put("cmd", cmd);
             if ( cmd.equals("init") ) {
                 JSONObject server = new JSONObject();
-                server.put("defaultRobot", Util1.getRobertaProperty("robot.type.default"));
+                server.put("defaultRobot", Util1.getStringProperty("robot.type.default"));
                 JSONObject robots = new JSONObject();
                 Collection<String> availableRobots = httpSessionState.getAllRobotsPluggedIn();
                 for ( String robot : availableRobots ) {

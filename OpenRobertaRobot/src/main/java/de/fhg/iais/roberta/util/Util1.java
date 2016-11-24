@@ -19,9 +19,7 @@ public class Util1 {
     private static final Logger LOG = LoggerFactory.getLogger(Util1.class);
     private static final String PROPERTY_DEFAULT_PATH = "openRoberta.properties";
     private static Properties robertaProperties;
-    static {
-        robertaProperties = loadProperties(null);
-    }
+
     private static final String[] reservedWords = new String[] {
         //  @formatter:off
         "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "default", "do", "double", "else", "enum",
@@ -33,20 +31,15 @@ public class Util1 {
 
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
-    private static final String openRobertaVersion = VersionChecker.retrieveVersionOfOpenRobertaServer();
-
     private Util1() {
         // no objects
     }
 
-    public static void setSystemDefaultProperty(String propertyURI) {
-        robertaProperties = loadProperties(propertyURI);
-    }
-
     /**
-     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. Is used in both production and test.<br>
-     * If the URI-parameter is null, the classpath is searched for the default property file "openRoberta.properties".<br>
-     * If the URI-parameters start with "file:" the file system is to load the properties.<br>
+     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
+     * <br>
+     * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
+     * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
      * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
      *
      * @param propertyURI URI of the property file. May be null
@@ -56,17 +49,16 @@ public class Util1 {
         Properties properties = new Properties();
         try {
             if ( propertyURI == null || propertyURI.trim().equals("") ) {
-                Util1.LOG.info("properties from classpath. Using the resource: " + Util1.PROPERTY_DEFAULT_PATH);
+                Util1.LOG.info("default properties from classpath. Using the resource: " + Util1.PROPERTY_DEFAULT_PATH);
                 properties.load(Util1.class.getClassLoader().getResourceAsStream(Util1.PROPERTY_DEFAULT_PATH));
             } else if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
-                Util1.LOG.info("properties from file system. Path: " + filesystemPathName);
+                Util1.LOG.info("properties from file system. Using the path: " + filesystemPathName);
                 properties.load(new FileReader(filesystemPathName));
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
                 Util1.LOG.info("properties from classpath. Using the resource: " + classPathName);
                 properties.load(Util1.class.getClassLoader().getResourceAsStream(classPathName));
-                //                robertaProperties = properties;
             } else {
                 Util1.LOG.error("Could not load properties. Invalid URI: " + propertyURI);
                 return null;
@@ -76,6 +68,19 @@ public class Util1 {
             Util1.LOG.error("Could not load properties. Inspect the stacktrace", e);
             return null;
         }
+    }
+
+    /**
+     * store the final set of properties, that control the OpenRoberta system.<br>
+     * <br>
+     * After the ServerStarter has loaded the properties, merged with optional runtime properties, it calls this method with the (final) set of properties. They
+     * are stored in this class. From here they can be retrieved and used elsewhere.<br>
+     * <b>But note:</b> Getting properties from <b><i>Guice</i></b> is <b>preferred</b>
+     *
+     * @param properties
+     */
+    public static void setRobertaProperties(Properties properties) {
+        robertaProperties = properties;
     }
 
     /**
@@ -138,8 +143,13 @@ public class Util1 {
         throw new DbcException("Only 999 robots supported!");
     }
 
-    public static String getRobertaProperty(String propertyName) {
+    public static String getStringProperty(String propertyName) {
         return robertaProperties.getProperty(propertyName);
+    }
+
+    public static int getIntProperty(String propertyName) {
+        String property = robertaProperties.getProperty(propertyName);
+        return Integer.parseInt(property);
     }
 
     public static Properties getRobertaProperties() {

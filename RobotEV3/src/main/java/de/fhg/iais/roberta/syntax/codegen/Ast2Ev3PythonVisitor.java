@@ -128,7 +128,6 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-@SuppressWarnings("rawtypes")
 public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 

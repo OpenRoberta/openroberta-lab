@@ -55,9 +55,9 @@ public class ArduFactory extends AbstractRobotFactory {
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("ardu");
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
+                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
         addBlockTypesFromProperties("Ardu.properties", this.arduProperties);
     }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.testutil;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -33,13 +34,20 @@ import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
 import de.fhg.iais.roberta.syntax.codegen.AstToEv3TextlyVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
 
-    static EV3Factory robotModeFactory = new EV3Factory(null);
+    static EV3Factory robotModeFactory;
+
+    static {
+        Properties properties = Util1.loadProperties(null);
+        Util1.setRobertaProperties(properties);
+        robotModeFactory = new EV3Factory(null);
+    }
 
     /**
      * Generate java script code as string from a given program .

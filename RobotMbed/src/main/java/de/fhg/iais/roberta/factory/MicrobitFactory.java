@@ -39,8 +39,8 @@ public class MicrobitFactory extends AbstractRobotFactory {
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("microbit");
         this.compilerWorkflow =
             new MicrobitCompilerWorkflow(
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Microbit.properties");
         addBlockTypesFromProperties("Microbit.properties", this.calliopeProperties);
     }

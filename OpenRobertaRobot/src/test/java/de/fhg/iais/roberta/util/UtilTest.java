@@ -39,6 +39,7 @@ public class UtilTest {
 
     @Test
     public void testGetRobotNumberFromProperty() {
+        Util1.setRobertaProperties(Util1.loadProperties(null));
         assertEquals(1, Util1.getRobotNumberFromProperty("ev3"));
         assertEquals(2, Util1.getRobotNumberFromProperty("nxt"));
         assertEquals(3, Util1.getRobotNumberFromProperty("ardu"));
@@ -46,6 +47,14 @@ public class UtilTest {
 
     @Test(expected = DbcException.class)
     public void testGetRobotNumberFromPropertyWrong() {
+        Util1.setRobertaProperties(Util1.loadProperties(null));
         Util1.getRobotNumberFromProperty("ev31");
+    }
+
+    @Test
+    public void testMissingProperty() {
+        Util1.setRobertaProperties(Util1.loadProperties(null));
+        boolean browserVisibility = Boolean.parseBoolean(Util1.getStringProperty("browser.visibility"));
+        assertEquals(false, browserVisibility);
     }
 }

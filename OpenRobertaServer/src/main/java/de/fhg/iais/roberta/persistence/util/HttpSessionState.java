@@ -29,7 +29,7 @@ public class HttpSessionState {
 
     public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
         this.robotPluginMap = robotPluginMap;
-        this.robotName = Util1.getRobertaProperty("robot.type.default");
+        this.robotName = Util1.getStringProperty("robot.type.default");
     }
 
     public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
