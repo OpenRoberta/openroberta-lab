@@ -230,6 +230,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 return "array<ManagedString,";
             case ARRAY_BOOLEAN:
                 return "array<bool,";
+            case ARRAY_IMAGE:
+                return "array<MicroBitImage,";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -1466,16 +1468,16 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
         if ( displayImageAction.getDisplayImageMode().name().equals("ANIMATION") ) {
-            this.sb.append("MicroBitImage imageArray[] = ");
+            this.sb.append("for ( int i = 0; i < ");
             displayImageAction.getValuesToDisplay().visit(this);
-            this.sb.append(";");
-            nlIndent();
-            this.sb.append("for ( int i = 0; i < (int)(sizeof(imageArray)/sizeof(*imageArray)); i++ ) {");
+            this.sb.append(".size(); i++) {");
             incrIndentation();
             nlIndent();
-            this.sb.append("uBit.display.print(imageArray[i]);");
+            this.sb.append("uBit.display.print(");
+            displayImageAction.getValuesToDisplay().visit(this);
+            this.sb.append("[i]);");
             nlIndent();
-            this.sb.append("uBit.sleep(200);");
+            this.sb.append("uBit.sleep(400);");
             decrIndentation();
             nlIndent();
             this.sb.append("}");
