@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-11-20 12:44:21.298693",
+		"lastupdated": "2016-11-24 11:39:50.272415",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1014,6 +1014,12 @@
 	"NAO_FRAME_TORSO": "torso",
 	"NAO_FRAME_WORLD": "world",
 	"NAO_FRAME_ROBOT": "robot",
+	"NAO_BODY_ARM": "arms",
+	"NAO_BODY_LARM": "left arm",
+	"NAO_BODY_RARM": "right arm",
+	"NAO_TURN_RIGHT": "right",
+	"NAO_TURN_LEFT": "left",
+	"NAO_TURN_DEGREES": "degrees",
 	"NAO_LANGUAGE_GERMAN": "German",
 	"NAO_LANGUAGE_ENGLISH": "English",
 	"NAO_LANGUAGE_FRENCH": "French",
@@ -1027,6 +1033,8 @@
 	"NAO_TOUCHED": "touched?",
 	"NAO_TOUCH_HAND": "Hand",
 	"NAO_TOUCH_BUMPER": "Bumper",
+	"NAO_TOUCH_RIGHT": "right",
+	"NAO_TOUCH_LEFT": "left",
 	"NAO_CAMERA_TOP": "Top",
 	"NAO_CAMERA_BOTTOM": "Bottom",
 	"NAO_QQVGA": "160*120",
