@@ -1465,7 +1465,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        this.sb.append(";");
+        //this.sb.append(";");
         return null;
     }
 
@@ -1475,7 +1475,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         methodCall.getParametersValues().visit(this);
         this.sb.append(")");
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            //this.sb.append(";");
+            this.sb.append(";");
         }
         return null;
     }

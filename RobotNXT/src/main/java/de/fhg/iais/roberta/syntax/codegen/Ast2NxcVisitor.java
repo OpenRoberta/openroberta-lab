@@ -413,7 +413,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         return null;
     }
 
-    //TODO: fixt the string concatination
+    //TODO: fix the string concatenation
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
@@ -1473,7 +1473,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        this.sb.append(";");
+        //this.sb.append(";");
         return null;
     }
 
