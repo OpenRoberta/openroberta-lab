@@ -131,6 +131,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     private final NxtConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
+    private final ArrayList<ArrayList<Phrase<Void>>> phrases;
     private int indentation;
     private boolean timeSensorUsed;
     private boolean volumeActionUsed;
@@ -142,11 +143,17 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public Ast2NxcVisitor(NxtConfiguration brickConfiguration, int indentation, boolean timeSensorUsed, boolean volumeActionUsed) {
+    public Ast2NxcVisitor(
+        NxtConfiguration brickConfiguration,
+        int indentation,
+        boolean timeSensorUsed,
+        boolean volumeActionUsed,
+        ArrayList<ArrayList<Phrase<Void>>> phrases) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.timeSensorUsed = timeSensorUsed;
         this.volumeActionUsed = volumeActionUsed;
+        this.phrases = phrases;
     }
 
     /**
@@ -162,12 +169,11 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         Assert.isTrue(phrasesSet.size() >= 1);
 
         boolean timeSensorUsed = NxtUsedTimerVisitor.check(phrasesSet);
+
         boolean volumeActionUsed = NxtUsedVolumeVisitor.check(phrasesSet);
-        final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, volumeActionUsed);
+        final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, volumeActionUsed, phrasesSet);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
-
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
-
         return astVisitor.sb.toString();
     }
 
@@ -192,6 +198,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                 }
             }
         }
+
     }
 
     private static boolean handleMainBlocks(Ast2NxcVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
@@ -406,6 +413,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         return null;
     }
 
+    //TODO: fixt the string concatination
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
@@ -1099,7 +1107,12 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        decrIndentation();
         mainTask.getVariables().visit(this);
+        incrIndentation();
+        generateUserDefinedMethods(this.phrases);
+        this.sb.append("\n").append("task main() {");
+        this.generateImports();
         return null;
     }
 
@@ -1650,24 +1663,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
     }
 
-    private void addConstants() {
-        this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
-        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
-        this.sb.append("#define MAXLINES 8 \n");
-        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources\n");
-    }
-
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        if ( !withWrapping ) {
-            return;
-        }
-
-        this.addConstants();
-
-        generateUserDefinedMethods(phrasesSet);
-
-        this.sb.append("\ntask main() {");
-
+    private void generateImports() {
         for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
             nlIndent();
             this.sb.append("SetSensor(");
@@ -1691,19 +1687,26 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                     break;
             }
         }
-
         if ( this.timeSensorUsed ) {
             nlIndent();
             this.sb.append("long timer1;");
             nlIndent();
             this.sb.append("SetTimerValue(timer1);");
         }
-
         if ( this.volumeActionUsed ) {
             nlIndent();
             this.sb.append("byte volume = 0x02;");
         }
+    }
 
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
+        this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
+        this.sb.append("#define MAXLINES 8 \n");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources\n");
     }
 
     private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
