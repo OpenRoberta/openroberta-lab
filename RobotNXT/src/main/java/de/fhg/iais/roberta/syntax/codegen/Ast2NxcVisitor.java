@@ -179,7 +179,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     private static void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
         if ( withWrapping ) {
-            //astVisitor.sb.append("\n}\n");
+            astVisitor.sb.append("\n}\n");
         }
     }
 
@@ -419,9 +419,12 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            this.sb.append("String(");
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
-            this.sb.append(")");
+            if ( binary.getRight().getVarType().equals("NUMBER") ) {
+                this.sb.append("NumToStr(" + binary.getRight() + ")");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+            } else {
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+            }
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
