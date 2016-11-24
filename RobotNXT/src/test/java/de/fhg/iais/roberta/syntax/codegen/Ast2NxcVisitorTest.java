@@ -310,7 +310,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "     void test(bool x) {\n"
-            + "        if (x) return"
+            + "        if (x) return;"
             + "    }"
             + MASMETHOD
 
@@ -332,7 +332,7 @@ public class Ast2NxcVisitorTest {
             + "        TextOut(x,(MAXLINES - x2) * MAXLINES,\"Hallo\");\n"
             + "    }\n\n"
             + "    void test2() {\n"
-            + "        if (variablenName2) return"
+            + "        if (variablenName2) return;"
             + "    }"
             + MASMETHOD
             + "        test1(0, 0);"
