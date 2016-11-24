@@ -326,6 +326,8 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "    float variablenName=0;\n"
+            + "    bool variablenName2=true;\n"
             + "     void test1(float x, float x2) {\n"
             + "        TextOut(x,(MAXLINES - x2) * MAXLINES,\"Hallo\");\n"
             + "    }\n\n"
@@ -333,9 +335,6 @@ public class Ast2NxcVisitorTest {
             + "        if (variablenName2) return;"
             + "    }"
             + MASMETHOD
-            + "    float variablenName=0;\n"
-            + "    bool variablenName2=true;\n"
-
             + "        test1(0, 0);"
             + "        test2();"
 
@@ -403,9 +402,8 @@ public class Ast2NxcVisitorTest {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MASMETHOD
             + "    string message=\"exit\";\n"
-
+            + MASMETHOD
             + "        if (message == \"exit\") {\n"
             + "           TextOut(0,(MAXLINES - 0) * MAXLINES,\"done\");"
             + "        }\n"
@@ -419,10 +417,9 @@ public class Ast2NxcVisitorTest {
     public void test18() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + MASMETHOD
             + "    float item=0;\n"
             + "    string item2=\"cc\";\n"
-
+            + MASMETHOD
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
