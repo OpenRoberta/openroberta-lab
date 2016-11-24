@@ -36,7 +36,12 @@ for linux:
  * pip install uflash
  
 for windows:
-* coming soon
+* Calliope
+ * install gcc-arm-none-eabi (see: http://gnuarmeclipse.github.io/toolchain/install/)
+ * install srecord (see: http://srecord.sourceforge.net/)
+* micro:bit
+ * install python
+ * pip install uflash
 
 
 Please also check our wiki for detailed installation instructions, development procedure, coding conventions and further reading. We also use the github issue tracking system. Please file issues in the main project **robertalab**.
