@@ -394,7 +394,7 @@ public class AstToLejosJavaVisitorTest {
             + "        test(true);"
             + "    }\n\n"
             + "    private void test(boolean x) {\n"
-            + "        if (x) return;"
+            + "        if (x) return"
             + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "    }"
             + "}\n";
@@ -421,7 +421,7 @@ public class AstToLejosJavaVisitorTest {
             + "        hal.drawText(\"Hallo\", x, x2);\n"
             + "    }\n\n"
             + "    private void test2() {\n"
-            + "        if (variablenName2) return;"
+            + "        if (variablenName2) return"
             + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "    }"
             + "}\n";
@@ -487,7 +487,7 @@ public class AstToLejosJavaVisitorTest {
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
             + "    }\n\n"
             + "    private PickColor test() {\n"
-            + "        if (true) return PickColor.RED;\n"
+            + "        if (true) return PickColor.RED\n"
             + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
             + "        return PickColor.NONE;\n"
             + "    }"
