@@ -1474,6 +1474,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("import math\n");
         this.sb.append("import time\n");
+        this.sb.append("import hal\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1762,27 +1763,27 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     /*Methods for new Blocks
     //Move
-
+    
     public void visitStandUp(StandUp<Void> standUp) {
     	this.sb.append("hal.standUp()");
     }
-
+    
     public void visitSitDown(SitDown<Void> sitDown) {
     	this.sb.append("hal.sitDown()");
     }
-
+    
     public void visitTaiChi(TaiChi<Void> taiChi) {
     	this.sb.append("hal.taiChi()");
     }
-
+    
     public void visitWave(Wave<Void> wave) {
     	this.sb.append("hal.wave()");
     }
-
+    
     public void visitWipeForehead(WipeForehead<Void> wipeForehead) {
     	this.sb.append("hal.wipeForehead()");
     }
-
+    
     public void visitApplyPosture(ApplyPosture<Void> applyPosture) {
     	this.sb.append("hal.applyPosture(");
     	switch ( ApplyPosture.getPoseName() ) {
@@ -1797,7 +1798,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	break;
     	}
     }
-
+    
     public void visitPointAt(PointAt<Void> pointAt) {
     this.sb.append("hal.pointAt(");
     visitPointAt.getX().visit(this);
@@ -1810,7 +1811,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     visitPointAt.getSpeed().visit(this);
     this.sb.append(" )");
     }
-
+    
     public void visitLookAt(LookAt<Void> lookAt) {
     this.sb.append("hal.lookAt(");
     visitLookAt.getX().visit(this);
@@ -1823,15 +1824,15 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     visitLookAt.getSpeed().visit(this);
     this.sb.append(" )");
     }
-
+    
     public void visitStiffnessOn(StiffnessOn<Void> stiffnessOn) {
     	this.sb.append("hal.stiffnessOn()");
     }
-
+    
     public void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
     	this.sb.append("hal.stiffnessOff()");
     }
-
+    
     public void visitPartialStiffnessOn(PartialstiffnessOn<Void> partialStifnessOn) {
     	this.sb.append("hal.partialStiffnessOn(");
     	switch ( PartialStiffnessOn.getBodyName() ) {
@@ -1846,7 +1847,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	break;
     	}
     }
-
+    
     public void visitPartialStiffnessOff(PartialstiffnessOff<Void> partialStiffnessOff) {
     	this.sb.append("hal.partialStiffnessOff(");
     	switch ( PartialStiffnessOff.getBodyName() ) {
@@ -1861,15 +1862,15 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	break;
     	}
     }
-
+    
     //Walk
-
+    
     public void visitWalk(Walk<Void> walk) {
     	this.sb.append("hal.walk(");
     visitWalk.getPower().visit(this);
     this.sb.append(", 0, 0)");
     }
-
+    
     public void visitWalkTo(WalkTo<Void> walkTo) {
     	this.sb.append("hal.walk(");
     visitWalkTo.getX().visit(this);
@@ -1879,53 +1880,53 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     visitWalkTo.getTheta().visit(this);
     this.sb.append(" )");
     }
-
+    
     public void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
     	this.sb.append("hal.stiffnessOff()");
     }
-
+    
     //Sounds
-
+    
     public void visitSetVolume(SetVolume<Void> setVolume) {
     	this.sb.append("hal.setVolume(");
     	setVolume.getVolume().visit(this);
     	this.sb.append(")");
     }
-
+    
     public void visitGetVolume(GetVolume<Void> getVolume) {
     	this.sb.append("hal.getVolume()");
     }
-
+    
     public void visitGetLanguage(GetLanguage<Void> getLanguage) {
     	this.sb.append("hal.getLanguage()");
     }
-
+    
     //TODO: add more languages
     public void visitSetLanguage(SetLanguage<Void> setLanguage) {
     	this.sb.append("hal.setLanguage(");
     	this.sb.append(setLanguage.getLanguageName().toString() + ")");
     }
-
+    
     public void visitSayText(SayText<Void> sayText) {
     	this.sb.append("hal.say(");
     	this.sb.append("str(");
     sayText.getMsg().visit(this);
     this.sb.append(")");
     }
-
+    
     //LEDs
-
+    
     public void visitSetEyeColor(SetEyeColor<Void> setEyeColor) {
     	this.sb.append("hal.setEyeColor(");
     	this.sb.append(getEnumCode(setEyeColor.getColor()) + ")");
     }
-
+    
     public void visitSetEarIntensity(SetEarIntensity<Void> setEarIntensity) {
     	this.sb.append("hal.setEarIntensity(");
     	visitSetEarIntensity.getIntensity.visit(this);
     	this.sb.append(")");
     }
-
+    
     //TODO: add complete List of LEDs as case
     public void visitSetSingleLed(SetSingleLed<Void> setSingleLed) {
     	this.sb.append("hal.setSingleLed(");
@@ -1936,62 +1937,62 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	}
     	this.sb.append(", " + getEnumCode(setEyeColor.getColor()) + ")");
     }
-
+    
     public void visitBlink(Blink<Void> blink) {
     	this.sb.append("hal.blink()");
     }
-
+    
     public void visitLedOff(LedOff<Void> ledOff) {
     	this.sb.append("hal.ledOff()");
     }
-
+    
     public void visitLedReset(LedReset<Void> ledReset) {
     	this.sb.append("hal.ledReset()");
     }
-
+    
     public void visitRandomEyes(RandomEyes<Void> randomEyes) {
     	this.sb.append("hal.randomEyes(");
     	visitRandomEyes.getTime().visit(this);
     	this.sb.append(")");
     }
-
+    
     public void visitRasta(Rasta<Void> rasta) {
     	this.sb.append("hal.rasta(");
     	visitRasta.getTime().visit(this);
     	this.sb.append(")");
     }
-
+    
     //Sensors
-
+    
     public void visitAccelerometer(Accelerometer<Void> accelerometer) {
     	this.sb.append("hal.accelerometer(");
     	visitAccelerometer.getTime().visit(this);
     	this.sb.append(accelerometer.getCoordinate().toString() + ")");
     }
-
+    
     public void visitTouchsensor(Touchsensor<Void> touchsensor) {
     	this.sb.append(touchsensor.getPosition().toString() + ", ");
     	this.sb.append(touchsensor.getSide().toString() + ")");
     }
-
+    
     public void visitGyrometer(Gyrometer<Void> gyrometer) {
     	this.sb.append("hal.gyrometer(");
     	this.sb.append(visitGyrometer.getCoordinate().toString() + ")");
     }
-
+    
     public void visitSonar(Sonar<Void> sonar) {
     	this.sb.append("hal.sonar()");
     }
-
+    
     public void visitFsr(Fsr<Void> fsr) {
     	this.sb.append("hal.fsr(");
     	this.sb.append(visitFsr.getSide().toString() + ")");
     }
-
+    
     public void visitnaoMark(NaoMark<Void> naomark) {
     	this.sb.append("hal.naoMark()");
     }
-
+    
     public void visitRecordVideo(RecordVideo<Void> recordvideo) {
     	this.sb.append("hal.recordVideo(");
     	visitRecordVideo.getResolution().visit(this);
@@ -2000,17 +2001,17 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	this.sb.append(")");
     	this.sb.append(setLanguage.getLanguageName().toString() + ")");
     }
-
+    
     public void visitTakePicture(TakePicture<Void> takepicture) {
     	this.sb.append("hal.takePicture()");
     }
-
+    
     public void visitSelectCamera(SelectCamera<Void> selectcamera) {
     	this.sb.append("hal.selectCamera(");
     	visitSelectCamera.getId().visit(this);
     	this.sb.append(")");
     }
-
+    
     public void visitHeadsensor(Headsensor<Void> headsensor) {
     	this.sb.append("hal.headSensor(");
     	this.sb.append(Headsensor.getPosition().toString() + ")");
