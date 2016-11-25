@@ -1474,7 +1474,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("import math\n");
         this.sb.append("import time\n");
-        this.sb.append("import hal\n");
+        this.sb.append("from hal import Hal\n");
+        this.sb.append("h = Hal()");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1486,7 +1487,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(INDENT).append("try:\n");
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.say(\"Error!\")\n");
+        this.sb.append(INDENT).append(INDENT).append("h.sayText(\"Error!\")\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
@@ -1534,7 +1535,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
-        this.sb.append("hal.walk(");
+        this.sb.append("h.walk(");
         if ( walkDistance.getWalkDirection() == WalkDirection.BACKWARD ) {
             this.sb.append("-");
         }
@@ -1545,7 +1546,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        this.sb.append("hal.turn(0,");
+        this.sb.append("h.turn(0,");
         if ( turnDegrees.getTurnDirection() == TurnDirection.LEFT ) {
             this.sb.append("-");
         }
@@ -1556,7 +1557,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
-        this.sb.append("hal.walkTo(");
+        this.sb.append("h.walkTo(");
         walkTo.getWalkToX().visit(this);
         this.sb.append(",");
         walkTo.getWalkToY().visit(this);
@@ -1569,49 +1570,49 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitStop(Stop<Void> stop) {
-        this.sb.append("hal.stop()");
+        this.sb.append("h.stop()");
 
         return null;
     }
 
     @Override
     public Void visitStandUp(StandUp<Void> standUp) {
-        this.sb.append("hal.standUp()");
+        this.sb.append("h.standUp()");
 
         return null;
     }
 
     @Override
     public Void visitSitDown(SitDown<Void> sitDown) {
-        this.sb.append("hal.sitDown()");
+        this.sb.append("h.sitDown()");
 
         return null;
     }
 
     @Override
     public Void visitTaiChi(TaiChi<Void> taiChi) {
-        this.sb.append("hal.taiChi()");
+        this.sb.append("h.taiChi()");
 
         return null;
     }
 
     @Override
     public Void visitWave(Wave<Void> wave) {
-        this.sb.append("hal.wave()");
+        this.sb.append("h.wave()");
 
         return null;
     }
 
     @Override
     public Void visitWipeForehead(WipeForehead<Void> wipeForehead) {
-        this.sb.append("hal.wipeForehead()");
+        this.sb.append("h.wipeForehead()");
 
         return null;
     }
 
     @Override
     public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
-        this.sb.append("hal.applyPosture(");
+        this.sb.append("h.applyPosture(");
         if ( applyPosture.getPosture() == Posture.STAND ) {
             this.sb.append("\"Stand\")");
         } else if ( applyPosture.getPosture() == Posture.STANDINIT ) {
@@ -1624,19 +1625,19 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitStiffnessOn(StiffnessOn<Void> stiffnessOn) {
-        this.sb.append("hal.stiffnessOn()");
+        this.sb.append("h.stiffnessOn()");
         return null;
     }
 
     @Override
     public Void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
-        this.sb.append("hal.stiffnessOff()");
+        this.sb.append("h.stiffnessOff()");
         return null;
     }
 
     @Override
     public Void visitLookAt(LookAt<Void> lookAt) {
-        this.sb.append("hal.lookAt(");
+        this.sb.append("h.lookAt(");
         lookAt.getlookX().visit(this);
         this.sb.append(", ");
         lookAt.getlookY().visit(this);
@@ -1651,7 +1652,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitPointAt(PointAt<Void> pointAt) {
-        this.sb.append("hal.pointAt(");
+        this.sb.append("h.pointAt(");
         pointAt.getpointX().visit(this);
         this.sb.append(", ");
         pointAt.getpointY().visit(this);
@@ -1666,7 +1667,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitPartialStiffnessOn(PartialStiffnessOn<Void> partialStiffnessOn) {
-        this.sb.append("hal.partialStiffnessOn(");
+        this.sb.append("h.partialStiffnessOn(");
         if ( partialStiffnessOn.getBodyPart() == BodyPart.ARM ) {
             this.sb.append("\"Arms\")");
         } else if ( partialStiffnessOn.getBodyPart() == BodyPart.LARM ) {
@@ -1679,7 +1680,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitPartialStiffnessOff(PartialStiffnessOff<Void> partialStiffnessOff) {
-        this.sb.append("hal.partialStiffnessOff(");
+        this.sb.append("h.partialStiffnessOff(");
         if ( partialStiffnessOff.getBodyPart() == BodyPart.ARM ) {
             this.sb.append("\"Arms\")");
         } else if ( partialStiffnessOff.getBodyPart() == BodyPart.LARM ) {
@@ -1692,7 +1693,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
-        this.sb.append("hal.setVolume(");
+        this.sb.append("h.setVolume(");
         setVolume.getVolume().visit(this);
         this.sb.append(")");
 
@@ -1701,14 +1702,14 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitSetEyeColor(SetEyeColor<Void> setEyeColor) {
-        this.sb.append("hal.setEyeColor(");
+        this.sb.append("h.setEyeColor(");
         this.sb.append(getEnumCode(setEyeColor.getColor()) + ")");
         return null;
     }
 
     @Override
     public Void visitSetEarIntensity(SetEarIntensity<Void> setEarIntensity) {
-        this.sb.append("hal.setEarIntensity(");
+        this.sb.append("h.setEarIntensity(");
         setEarIntensity.getIntensity().visit(this);
         this.sb.append(")");
         return null;
@@ -1716,25 +1717,25 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitBlink(Blink<Void> blink) {
-        this.sb.append("hal.blink()");
+        this.sb.append("h.blink()");
         return null;
     }
 
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
-        this.sb.append("hal.ledOff()");
+        this.sb.append("h.ledOff()");
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
-        this.sb.append("hal.ledReset()");
+        this.sb.append("h.ledReset()");
         return null;
     }
 
     @Override
     public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
-        this.sb.append("hal.randomEyes(");
+        this.sb.append("h.randomEyes(");
         randomEyesDuration.getDuration().visit(this);
         this.sb.append(")");
         return null;
@@ -1742,7 +1743,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
-        this.sb.append("hal.rasta(");
+        this.sb.append("h.rasta(");
         rastaDuration.getDuration().visit(this);
         this.sb.append(")");
         return null;
@@ -1750,7 +1751,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
-        this.sb.append("hal.setLanguage(");
+        this.sb.append("h.setLanguage(");
         if ( setLanguage.getLanguage() == Language.GERMAN ) {
             this.sb.append("\"German\")");
         } else if ( setLanguage.getLanguage() == Language.ENGLISH ) {
