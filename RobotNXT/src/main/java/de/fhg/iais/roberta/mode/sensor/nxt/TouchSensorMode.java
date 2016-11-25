@@ -3,12 +3,11 @@ package de.fhg.iais.roberta.mode.sensor.nxt;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 
 public enum TouchSensorMode implements ITouchSensorMode {
-    TOUCH( "isPressed", "touch" );
-    private final String halJavaMethodName;
+    TOUCH( "touch" );
+
     private final String[] values;
 
-    private TouchSensorMode(String halJavaMethodName, String... values) {
-        this.halJavaMethodName = halJavaMethodName;
+    private TouchSensorMode(String... values) {
         this.values = values;
     }
 

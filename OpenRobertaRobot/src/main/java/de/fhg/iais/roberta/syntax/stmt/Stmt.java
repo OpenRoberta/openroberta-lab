@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 public abstract class Stmt<V> extends Phrase<V> {
     /**
      * This constructor set the kind of the statement object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
-     * 
+     *
      * @param kind of the the statement object used in AST,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block

@@ -20,6 +20,7 @@ public class PythonCodeGeneratorVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
+        @SuppressWarnings("rawtypes")
         Configuration.Builder configuration = new MicrobitConfiguration.Builder();
         brickConfiguration = configuration.build();
     }

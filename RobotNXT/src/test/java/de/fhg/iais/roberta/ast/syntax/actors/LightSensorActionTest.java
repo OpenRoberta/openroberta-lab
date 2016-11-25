@@ -1,13 +1,15 @@
 package de.fhg.iais.roberta.ast.syntax.actors;
 
-import org.junit.Test;
+import org.junit.Ignore;
+
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class LightSensorActionTest {
 
-    @Test
+    @Ignore
     public void redOn() throws Exception {
         String a = "";
 
-        //Helper.assertCodeIsOk(a, "/ast/actions/action_LightSensorAction.xml");
+        Helper.assertCodeIsOk(a, "/ast/actions/action_LightSensorAction.xml");
     }
 }

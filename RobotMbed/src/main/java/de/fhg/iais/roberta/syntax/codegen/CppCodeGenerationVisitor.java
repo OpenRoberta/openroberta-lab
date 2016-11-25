@@ -248,8 +248,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 return "int";
             case IMAGE:
                 return "MicroBitImage";
+            default:
+                throw new IllegalArgumentException("unhandled type");
         }
-        throw new IllegalArgumentException("unhandled type");
     }
 
     private static String getEnumCode(IMode value) {
@@ -1479,7 +1480,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             displayImageAction.getValuesToDisplay().visit(this);
             this.sb.append("[i]);");
             nlIndent();
-            this.sb.append("uBit.sleep(400);");
+            this.sb.append("uBit.sleep(200);");
             decrIndentation();
             nlIndent();
             this.sb.append("}");
