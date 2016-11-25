@@ -13,7 +13,8 @@ public class Ast2NaoPythonVisitorTest {
     private static final String IMPORTS = "" //
         + "#!/usr/bin/python\n\n"
         + "import math\n"
-        + "import time\n\n"
+        + "import time\n"
+        + "import hal\n\n"
         + "def run():\n";
 
     private static final String SUFFIX = "" //

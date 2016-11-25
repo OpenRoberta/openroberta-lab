@@ -27,13 +27,13 @@ public final class LedOff<V> extends Action<V> {
     }
 
     /**
-     * Creates instance of {@link LedOff}. This instance is read only and can not be modified.
+     * Creates instance of {@link LedOffTest}. This instance is read only and can not be modified.
      *
      * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LedOff}
+     * @return read only object of class {@link LedOffTest}
      */
     private static <V> LedOff<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LedOff<V>(properties, comment);
