@@ -14,7 +14,8 @@ public class Ast2NaoPythonVisitorTest {
         + "#!/usr/bin/python\n\n"
         + "import math\n"
         + "import time\n"
-        + "import hal\n\n"
+        + "from hal import Hal\n"
+        + "h = Hal()\n"
         + "def run():\n";
 
     private static final String SUFFIX = "" //
@@ -22,7 +23,7 @@ public class Ast2NaoPythonVisitorTest {
         + "    try:\n"
         + "        run()\n"
         + "    except Exception as e:\n"
-        + "        hal.say(\"Error!\")\n\n"
+        + "        h.sayText(\"Error!\")\n\n"
         + "if __name__ == \"__main__\":\n"
         + "    main()";
 
@@ -38,7 +39,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWalkDistance_ByDefault_ReturnsWalkForTwoMetersForwardPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.walk(2,0,0)\n"
+            + "    h.walk(2,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/walk_forwards.xml");
@@ -48,7 +49,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWalkDistance_ByMissingNumber_ReturnsWalkForZeroMetersBackwardPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.walk(-0,0,0)\n"
+            + "    h.walk(-0,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/walk_backward_missing_distance.xml");
@@ -58,7 +59,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitTurnDegrees_ByDefault_ReturnsTurnForTwentyDegreesLeftPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.turn(0,-20,0)\n"
+            + "    h.turn(0,-20,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/turn_left.xml");
@@ -68,7 +69,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitTurnDegrees_ByMissingNumber_ReturnsTurnForTwentyDegreesRightPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.turn(0,0,0)\n"
+            + "    h.turn(0,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/turn_right_missing_degrees.xml");
@@ -78,7 +79,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWalkTo_ByDefault_ReturnsWalkToZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.walkTo(0,0,0)\n"
+            + "    h.walkTo(0,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/walk_to.xml");
@@ -88,7 +89,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWalkTo_ByMissingNumber_ReturnsWalkToMissingCoordinatesPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.walkTo(0,0,0)\n"
+            + "    h.walkTo(0,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/walk_to_missing_coordinates.xml");
@@ -98,7 +99,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitStop_ByDefault_ReturnsStopPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.stop()\n"
+            + "    h.stop()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/stop.xml");
@@ -108,7 +109,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitStandUp_ByDefault_ReturnsStandUpPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.standUp()\n"
+            + "    h.standUp()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/standUp.xml");
@@ -118,7 +119,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitSitDown_ByDefault_ReturnsSitDownPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.sitDown()\n"
+            + "    h.sitDown()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/sitDown.xml");
@@ -128,7 +129,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitTaiChi_ByDefault_ReturnsTaiChiPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.taiChi()\n"
+            + "    h.taiChi()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/taiChi.xml");
@@ -138,7 +139,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWave_ByDefault_ReturnsWavePythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.wave()\n"
+            + "    h.wave()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/wave.xml");
@@ -148,7 +149,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWipeForehead_ByDefault_ReturnsWipeForeheadPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.wipeForehead()\n"
+            + "    h.wipeForehead()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/wipeForehead.xml");
@@ -158,7 +159,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitApplyPosture_ByDefault_ReturnsApplyPostureStandPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.applyPosture(\"Stand\")\n"
+            + "    h.applyPosture(\"Stand\")\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/posture_stand.xml");
@@ -168,7 +169,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitStiffnessOn_ByDefault_ReturnsStiffnessOnPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.stiffnessOn()\n"
+            + "    h.stiffnessOn()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/stiffnessOn.xml");
@@ -178,7 +179,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitStiffnessOff_ByDefault_ReturnsStiffnessOffPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.stiffnessOff()\n"
+            + "    h.stiffnessOff()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/stiffnessOff.xml");
@@ -188,7 +189,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitLookAt_ByDefault_ReturnsLookAtTorsoZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.lookAt(0, 0, 0, \'torso\', 0)\n"
+            + "    h.lookAt(0, 0, 0, \'torso\', 0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/lookAt_torso.xml");
@@ -198,7 +199,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitLookAt_ByMissingNumber_ReturnsLookAtWorldZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.lookAt(0, 0, 0, \'world\', 0)\n"
+            + "    h.lookAt(0, 0, 0, \'world\', 0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/lookAt_world_missing_coordinates.xml");
@@ -208,7 +209,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitpointAt_ByDefault_ReturnsLookAtTorsoZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.pointAt(0, 0, 0, \'torso\', 0)\n"
+            + "    h.pointAt(0, 0, 0, \'torso\', 0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/pointAt_torso.xml");
@@ -218,7 +219,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitpointAt_ByMissingNumber_ReturnsLookAtWorldZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.pointAt(0, 0, 0, \'world\', 0)\n"
+            + "    h.pointAt(0, 0, 0, \'world\', 0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/pointAt_world_missing_coordinates.xml");
@@ -228,7 +229,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitPartialStiffnessOn_ByDefault_ReturnsPartialStiffnessOnPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.partialStiffnessOn(\"LArm\")\n"
+            + "    h.partialStiffnessOn(\"LArm\")\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/partialStiffnessOn_larm.xml");
@@ -238,7 +239,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitPartialStiffnessOff_ByDefault_ReturnsPartialStiffnessOffPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.partialStiffnessOff(\"LArm\")\n"
+            + "    h.partialStiffnessOff(\"LArm\")\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/partialStiffnessOff_larm.xml");
@@ -248,7 +249,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitSetVolume_ByDefault_ReturnsSetVolumePythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.setVolume(50)\n"
+            + "    h.setVolume(50)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/setVolume.xml");
@@ -258,7 +259,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitSetEyeColor_ByDefault_ReturnsSetEyeColorGreenPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.setEyeColor(\'green\')\n"
+            + "    h.setEyeColor(\'green\')\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/setEyeColor.xml");
@@ -268,7 +269,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitSetEarIntensity_ByDefault_ReturnsSetEarIntensityPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.setEarIntensity(0)\n"
+            + "    h.setEarIntensity(0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/setEarIntensity.xml");
@@ -278,7 +279,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitBlink_ByDefault_ReturnsBlinkPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.blink()\n"
+            + "    h.blink()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/blink.xml");
@@ -288,7 +289,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitLedOff_ByDefault_ReturnsLedOffPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.ledOff()\n"
+            + "    h.ledOff()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/ledOff.xml");
@@ -298,7 +299,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitLedReset_ByDefault_ReturnsLedResetPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.ledReset()\n"
+            + "    h.ledReset()\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/ledReset.xml");
@@ -308,7 +309,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitRandomEyesDuration_ByDefault_ReturnsRandomEyesDurationTwoPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.randomEyes(2)\n"
+            + "    h.randomEyes(2)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/randomEyes.xml");
@@ -318,7 +319,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitRastaDuration_ByDefault_ReturnsRastaDurationTwoPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.rasta(2)\n"
+            + "    h.rasta(2)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/rasta.xml");
@@ -328,7 +329,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitSetLanguage_ByDefault_ReturnsSetLanguageEnglishPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    hal.setLanguage(\"English\")\n"
+            + "    h.setLanguage(\"English\")\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/setLanguage_English.xml");
