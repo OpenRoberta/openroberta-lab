@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.util.Option;
 public class Ev3ConfigurationParseTree2Ev3ConfigurationVisitor extends Ev3ConfigurationBaseVisitor<Void> {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.class);
 
+    @SuppressWarnings("rawtypes")
     private final Configuration.Builder builder = new EV3Configuration.Builder();
     private IRobotFactory factory;
     private IActorPort nextActorToAttach = null;

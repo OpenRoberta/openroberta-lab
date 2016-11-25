@@ -8,7 +8,7 @@
     <script src="../blocks_compressed.js"></script>
     <script src="../robMsg/robMessages.js"></script>
     <script src="../msg/js/de.js"></script>
-   
+
     <script src="../core/blockly.js"></script>
     <script src="../core/constants.js"></script>
     <script src="../core/events.js"></script>
@@ -315,9 +315,9 @@
             <block type='mbedActions_motor_stop'></block>
             </category>
             <category name='TOOLBOX_SOUND' svg="true">
-               <block type='mbedActions_play_tone'>                 
+               <block type='mbedActions_play_tone'>
                 </block>
-                <block type='mbedActions_play_note'>            
+                <block type='mbedActions_play_note'>
                 </block>
             </category>
             <category name='TOOLBOX_LIGHT' svg="true">
@@ -343,7 +343,7 @@
             <block type='mbedSensors_temperature_getSample'>
             </block>
             <block type='mbedSensors_ambientLight_getSample'>
-            </block>          
+            </block>
         </category>
         <category name='TOOLBOX_CONTROL' svg="true">
             <category name='TOOLBOX_DECISION'>
@@ -391,7 +391,7 @@
                         </block>
                     </value>
                 </block>
-                <block type='robControls_wait_for'>
+                <block type='mbedControls_wait_for'>
                     <value name='WAIT0'>
                         <block type='logic_compare'>
                             <mutation operator_range='BOOL'></mutation>
@@ -527,11 +527,11 @@
         </category>
         <category name='TOOLBOX_VARIABLE' custom='VARIABLE' svg="true"></category>
         <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE' svg="true"></category>
-        <category name='TOOLBOX_COMMUNICATION' svg="true">        
+        <category name='TOOLBOX_COMMUNICATION' svg="true">
             <block type='mbedCommunication_sendBlock'></block>
             <block type='mbedCommunication_receiveBlock'></block>
             <!--<block type='robCommunication_startConnection'></block>
-            
+
             <block type='robCommunication_waitForConnection'></block>
             <block type='robCommunication_connection'></block>
             <block type='robCommunication_checkConnection'>
@@ -539,7 +539,7 @@
                     <block type='robCommunication_connection'></block>
                 </value>
             </block>-->
-        </category> 
+        </category>
     </toolbox_set>
 
     <h1>Blockly Playground</h1>

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax.blocksequence;
 
-import de.fhg.iais.roberta.syntax.BlockTypeContainer;import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -19,14 +19,14 @@ public abstract class Task<V> extends Phrase<V> {
 
     /**
      * get the precedence of the expression
-     * 
+     *
      * @return the precedence
      */
     abstract public int getPrecedence();
 
     /**
      * get the association of the expression
-     * 
+     *
      * @return the association
      */
     abstract public Assoc getAssoc();
