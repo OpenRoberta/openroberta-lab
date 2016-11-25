@@ -268,4 +268,12 @@ public final class BlocklyConstants {
     public static final String GREEN = "GREEN";
     public static final String BLUE = "BLUE";
 
+    public static final String X = "X";
+    public static final String Y = "Y";
+    public static final String Z = "Z";
+    public static final String Speed = "Speed";
+    public static final String Theta = "Theta";
+    public static final String INTENSITY = "Intensity";
+    public static final String LANGUAGE = "LANGUAGE";
+
 }

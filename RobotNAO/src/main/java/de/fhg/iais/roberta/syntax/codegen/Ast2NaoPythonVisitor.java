@@ -2,27 +2,21 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.nao.BodyPart;
+import de.fhg.iais.roberta.mode.action.nao.Language;
+import de.fhg.iais.roberta.mode.action.nao.Posture;
+import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
+import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nao.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.nao.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nao.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -47,6 +41,31 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
+import de.fhg.iais.roberta.syntax.action.nao.Blink;
+import de.fhg.iais.roberta.syntax.action.nao.LedOff;
+import de.fhg.iais.roberta.syntax.action.nao.LedReset;
+import de.fhg.iais.roberta.syntax.action.nao.LookAt;
+import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOff;
+import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
+import de.fhg.iais.roberta.syntax.action.nao.PointAt;
+import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
+import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
+import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
+import de.fhg.iais.roberta.syntax.action.nao.SitDown;
+import de.fhg.iais.roberta.syntax.action.nao.StandUp;
+import de.fhg.iais.roberta.syntax.action.nao.StiffnessOff;
+import de.fhg.iais.roberta.syntax.action.nao.StiffnessOn;
+import de.fhg.iais.roberta.syntax.action.nao.Stop;
+import de.fhg.iais.roberta.syntax.action.nao.TaiChi;
+import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
+import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.nao.Wave;
+import de.fhg.iais.roberta.syntax.action.nao.WipeForehead;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -123,20 +142,21 @@ import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 @SuppressWarnings("rawtypes")
-public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
+public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public static final String INDENT = "    ";
 
     private final Configuration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
-    private final Set<UsedSensor> usedSensors;
-    private final Set<UsedActor> usedActors;
+    private final UsedHardwareVisitor usedHardware;
+
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
 
@@ -145,15 +165,14 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param usedSensors in the current program
+     * @param usedHardware in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2NaoPythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, Set<UsedActor> usedActors, int indentation) {
+    Ast2NaoPythonVisitor(String programName, Configuration brickConfiguration, UsedHardwareVisitor usedHardwareVisitor, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
-        this.usedSensors = usedSensors;
-        this.usedActors = usedActors;
+        this.usedHardware = usedHardwareVisitor;
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
@@ -172,9 +191,8 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet, brickConfiguration);
-        Ast2NaoPythonVisitor astVisitor =
-            new Ast2NaoPythonVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), checkVisitor.getUsedActors(), 0);
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
+        Ast2NaoPythonVisitor astVisitor = new Ast2NaoPythonVisitor(programName, brickConfiguration, checkVisitor, 0);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
@@ -648,18 +666,18 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     //edit Block: change name, edit parameters
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-    	String mode = playFileAction.getFileName();
-    	switch (mode) {
-    		case "0":					//RandomEyes
-    			this.sb.append("hal.randomEyes(5)");
-    			break;
-    		case "1":					//Rasta
-    			this.sb.append("hal.rasta(5)");
-    			break;
-    		case "2":					//Blink
-    			this.sb.append("hal.blink()");
-    			break;
-    	}
+        String mode = playFileAction.getFileName();
+        switch ( mode ) {
+            case "0": //RandomEyes
+                this.sb.append("hal.randomEyes(5)");
+                break;
+            case "1": //Rasta
+                this.sb.append("hal.rasta(5)");
+                break;
+            case "2": //Blink
+                this.sb.append("hal.blink()");
+                break;
+        }
         return null;
     }
 
@@ -701,18 +719,18 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-    	String animation = motorOnAction.getPort().toString();
-    	switch (animation) {
-    		case "A":								//Tai Chi
-    			this.sb.append("hal.taiChi()");
-    			break;
-    		case "B":								//Wave
-    			this.sb.append("hal.wave()");
-    			break;
-    		case "C":								//wipe Forehead
-    			this.sb.append("hal.wipeForehead()");
-    			break;
-    	}
+        String animation = motorOnAction.getPort().toString();
+        switch ( animation ) {
+            case "A": //Tai Chi
+                this.sb.append("hal.taiChi()");
+                break;
+            case "B": //Wave
+                this.sb.append("hal.wave()");
+                break;
+            case "C": //wipe Forehead
+                this.sb.append("hal.wipeForehead()");
+                break;
+        }
         return null;
     }
 
@@ -846,26 +864,26 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     //edit Block: change name, edit Port numbers, remove RESET
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-    	String direction = gyroSensor.getPort().getPortNumber();
-    	switch ( (GyroSensorMode) gyroSensor.getMode()) {
-    		case ANGLE:								//Gyrometer
-    			this.sb.append("hal.gyrometer(" + direction + ")");
-    			break;
-    		case RATE:								//Accelerometer
-    			this.sb.append("hal.accelerometer(" + direction + ")");
-    			break;
-    		case RESET:
-    			break; //do nothing	
-    	}
-    	return null;
+        String direction = gyroSensor.getPort().getPortNumber();
+        switch ( (GyroSensorMode) gyroSensor.getMode() ) {
+            case ANGLE: //Gyrometer
+                this.sb.append("hal.gyrometer(" + direction + ")");
+                break;
+            case RATE: //Accelerometer
+                this.sb.append("hal.accelerometer(" + direction + ")");
+                break;
+            case RESET:
+                break; //do nothing
+        }
+        return null;
     }
 
     //Touchsensors
     //edit Block: change name, edit parameters
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-    	String position = infraredSensor.getPort().getPortNumber();
-    	this.sb.append("hal.touchsensor(" + infraredSensor.getMode().toString() + ", " + position + ")");
+        String position = infraredSensor.getPort().getPortNumber();
+        this.sb.append("hal.touchsensor(" + infraredSensor.getMode().toString() + ", " + position + ")");
         return null;
     }
 
@@ -873,14 +891,14 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     //edit block: change name, edit Parameters, remove GET_SAMPLE
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-    	this.sb.append("hal.selectCamera(" + timerSensor.getTimer() + ")");
+        this.sb.append("hal.selectCamera(" + timerSensor.getTimer() + ")");
         return null;
     }
 
     //HeadSensor
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-    	this.sb.append("hal.headsensor(" + touchSensor.getPort().getPortNumber() + ")");
+        this.sb.append("hal.headsensor(" + touchSensor.getPort().getPortNumber() + ")");
         return null;
     }
 
@@ -1474,115 +1492,6 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("main()");
     }
 
-    private String generateRegenerateConfiguration() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("_brickConfiguration = {\n");
-        sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameterCM() + ",\n");
-        sb.append("    'track-width': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
-        appendActors(sb);
-        appendSensors(sb);
-        sb.append("}");
-        return sb.toString();
-    }
-
-    private boolean isActorUsed(Actor actor, IActorPort port) {
-        for ( UsedActor usedActor : this.usedActors ) {
-            if ( port == usedActor.getPort() && actor.getName() == usedActor.getType() ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void appendActors(StringBuilder sb) {
-        sb.append("    'actors': {\n");
-        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            Actor actor = entry.getValue();
-            IActorPort port = entry.getKey();
-            if ( actor != null && isActorUsed(actor, port) ) {
-                sb.append("        '").append(port.toString()).append("':");
-                sb.append(generateRegenerateActor(actor, port));
-                sb.append(",\n");
-            }
-        }
-        sb.append("    },\n");
-    }
-
-    private boolean isSensorUsed(Sensor sensor, ISensorPort port) {
-        for ( UsedSensor usedSensor : this.usedSensors ) {
-            if ( port == usedSensor.getPort() && sensor.getType() == usedSensor.getType() ) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void appendSensors(StringBuilder sb) {
-        sb.append("    'sensors': {\n");
-        for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            Sensor sensor = entry.getValue();
-            ISensorPort port = entry.getKey();
-            if ( sensor != null && isSensorUsed(sensor, port) ) {
-                sb.append("        '").append(port.getPortNumber()).append("':");
-                sb.append(generateRegenerateSensor(sensor, port));
-                sb.append(",\n");
-            }
-        }
-        sb.append("    },\n");
-    }
-
-    private static String generateRegenerateActor(Actor actor, IActorPort port) {
-        StringBuilder sb = new StringBuilder();
-        // FIXME: that won't scale
-        String name = null;
-        switch ( actor.getName() ) {
-            case MEDIUM:
-                name = "MediumMotor";
-                break;
-            case LARGE:
-                name = "LargeMotor";
-                break;
-            default:
-                throw new IllegalArgumentException("no mapping for " + actor.getName() + "to ev3dev-lang-python");
-        }
-
-        sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
-        sb.append(", ").append(actor.isRegulated() ? "'on'" : "'off'");
-        sb.append(", ").append(getEnumCode(actor.getRotationDirection()));
-        sb.append(", ").append(getEnumCode(actor.getMotorSide()));
-        sb.append(")");
-        return sb.toString();
-    }
-
-    private static String generateRegenerateSensor(Sensor sensor, ISensorPort port) {
-        StringBuilder sb = new StringBuilder();
-        // FIXME: that won't scale
-        String name = null;
-        // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
-        // ['ColorSensor', 'GyroSensor', 'I2cSensor', 'InfraredSensor', 'LightSensor', 'SoundSensor', 'TouchSensor', 'UltrasonicSensor']
-        switch ( sensor.getType() ) {
-            case COLOR:
-                name = "ColorSensor";
-                break;
-            case GYRO:
-                name = "GyroSensor";
-                break;
-            case INFRARED:
-                name = "InfraredSensor";
-                break;
-            case TOUCH:
-                name = "TouchSensor";
-                break;
-            case ULTRASONIC:
-                name = "UltrasonicSensor";
-                break;
-            default:
-                throw new IllegalArgumentException("no mapping for " + sensor.getType() + "to ev3dev-lang-python");
-        }
-        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
-        return sb.toString();
-    }
-
     private static boolean isInteger(String str) {
         try {
             Integer.parseInt(str);
@@ -1621,167 +1530,402 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
-    
+
+    @Override
+    public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
+        this.sb.append("hal.walk(");
+        if ( walkDistance.getWalkDirection() == WalkDirection.BACKWARD ) {
+            this.sb.append("-");
+        }
+        walkDistance.getDistanceToWalk().visit(this);
+        this.sb.append(",0,0)");
+        return null;
+    }
+
+    @Override
+    public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
+        this.sb.append("hal.turn(0,");
+        if ( turnDegrees.getTurnDirection() == TurnDirection.LEFT ) {
+            this.sb.append("-");
+        }
+        turnDegrees.getDegreesToTurn().visit(this);
+        this.sb.append(",0)");
+        return null;
+    }
+
+    @Override
+    public Void visitWalkTo(WalkTo<Void> walkTo) {
+        this.sb.append("hal.walkTo(");
+        walkTo.getWalkToX().visit(this);
+        this.sb.append(",");
+        walkTo.getWalkToY().visit(this);
+        this.sb.append(",");
+        walkTo.getWalkToTheta().visit(this);
+        this.sb.append(")");
+
+        return null;
+    }
+
+    @Override
+    public Void visitStop(Stop<Void> stop) {
+        this.sb.append("hal.stop()");
+
+        return null;
+    }
+
+    @Override
+    public Void visitStandUp(StandUp<Void> standUp) {
+        this.sb.append("hal.standUp()");
+
+        return null;
+    }
+
+    @Override
+    public Void visitSitDown(SitDown<Void> sitDown) {
+        this.sb.append("hal.sitDown()");
+
+        return null;
+    }
+
+    @Override
+    public Void visitTaiChi(TaiChi<Void> taiChi) {
+        this.sb.append("hal.taiChi()");
+
+        return null;
+    }
+
+    @Override
+    public Void visitWave(Wave<Void> wave) {
+        this.sb.append("hal.wave()");
+
+        return null;
+    }
+
+    @Override
+    public Void visitWipeForehead(WipeForehead<Void> wipeForehead) {
+        this.sb.append("hal.wipeForehead()");
+
+        return null;
+    }
+
+    @Override
+    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
+        this.sb.append("hal.applyPosture(");
+        if ( applyPosture.getPosture() == Posture.STAND ) {
+            this.sb.append("\"Stand\")");
+        } else if ( applyPosture.getPosture() == Posture.STANDINIT ) {
+            this.sb.append("\"StandInit\")");
+        } else if ( applyPosture.getPosture() == Posture.STANDZERO ) {
+            this.sb.append("\"StandZero\")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitStiffnessOn(StiffnessOn<Void> stiffnessOn) {
+        this.sb.append("hal.stiffnessOn()");
+        return null;
+    }
+
+    @Override
+    public Void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
+        this.sb.append("hal.stiffnessOff()");
+        return null;
+    }
+
+    @Override
+    public Void visitLookAt(LookAt<Void> lookAt) {
+        this.sb.append("hal.lookAt(");
+        lookAt.getlookX().visit(this);
+        this.sb.append(", ");
+        lookAt.getlookY().visit(this);
+        this.sb.append(", ");
+        lookAt.getlookZ().visit(this);
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(lookAt.getFrame()) + ", ");
+        lookAt.getSpeed().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPointAt(PointAt<Void> pointAt) {
+        this.sb.append("hal.pointAt(");
+        pointAt.getpointX().visit(this);
+        this.sb.append(", ");
+        pointAt.getpointY().visit(this);
+        this.sb.append(", ");
+        pointAt.getpointZ().visit(this);
+        this.sb.append(", ");
+        this.sb.append(getEnumCode(pointAt.getFrame()) + ", ");
+        pointAt.getSpeed().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPartialStiffnessOn(PartialStiffnessOn<Void> partialStiffnessOn) {
+        this.sb.append("hal.partialStiffnessOn(");
+        if ( partialStiffnessOn.getBodyPart() == BodyPart.ARM ) {
+            this.sb.append("\"Arms\")");
+        } else if ( partialStiffnessOn.getBodyPart() == BodyPart.LARM ) {
+            this.sb.append("\"LArm\")");
+        } else if ( partialStiffnessOn.getBodyPart() == BodyPart.RARM ) {
+            this.sb.append("\"RArm\")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitPartialStiffnessOff(PartialStiffnessOff<Void> partialStiffnessOff) {
+        this.sb.append("hal.partialStiffnessOff(");
+        if ( partialStiffnessOff.getBodyPart() == BodyPart.ARM ) {
+            this.sb.append("\"Arms\")");
+        } else if ( partialStiffnessOff.getBodyPart() == BodyPart.LARM ) {
+            this.sb.append("\"LArm\")");
+        } else if ( partialStiffnessOff.getBodyPart() == BodyPart.RARM ) {
+            this.sb.append("\"RArm\")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolume(SetVolume<Void> setVolume) {
+        this.sb.append("hal.setVolume(");
+        setVolume.getVolume().visit(this);
+        this.sb.append(")");
+
+        return null;
+    }
+
+    @Override
+    public Void visitSetEyeColor(SetEyeColor<Void> setEyeColor) {
+        this.sb.append("hal.setEyeColor(");
+        this.sb.append(getEnumCode(setEyeColor.getColor()) + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitSetEarIntensity(SetEarIntensity<Void> setEarIntensity) {
+        this.sb.append("hal.setEarIntensity(");
+        setEarIntensity.getIntensity().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitBlink(Blink<Void> blink) {
+        this.sb.append("hal.blink()");
+        return null;
+    }
+
+    @Override
+    public Void visitLedOff(LedOff<Void> ledOff) {
+        this.sb.append("hal.ledOff()");
+        return null;
+    }
+
+    @Override
+    public Void visitLedReset(LedReset<Void> ledReset) {
+        this.sb.append("hal.ledReset()");
+        return null;
+    }
+
+    @Override
+    public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
+        this.sb.append("hal.randomEyes(");
+        randomEyesDuration.getDuration().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
+        this.sb.append("hal.rasta(");
+        rastaDuration.getDuration().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
+        this.sb.append("hal.setLanguage(");
+        if ( setLanguage.getLanguage() == Language.GERMAN ) {
+            this.sb.append("\"German\")");
+        } else if ( setLanguage.getLanguage() == Language.ENGLISH ) {
+            this.sb.append("\"English\")");
+        } else if ( setLanguage.getLanguage() == Language.FRENCH ) {
+            this.sb.append("\"French\")");
+        }
+        return null;
+    }
+
     /*Methods for new Blocks
     //Move
-    
+
     public void visitStandUp(StandUp<Void> standUp) {
     	this.sb.append("hal.standUp()");
     }
-    
+
     public void visitSitDown(SitDown<Void> sitDown) {
     	this.sb.append("hal.sitDown()");
     }
-    
+
     public void visitTaiChi(TaiChi<Void> taiChi) {
     	this.sb.append("hal.taiChi()");
     }
-    
+
     public void visitWave(Wave<Void> wave) {
     	this.sb.append("hal.wave()");
     }
-    
+
     public void visitWipeForehead(WipeForehead<Void> wipeForehead) {
     	this.sb.append("hal.wipeForehead()");
     }
-    
+
     public void visitApplyPosture(ApplyPosture<Void> applyPosture) {
     	this.sb.append("hal.applyPosture(");
     	switch ( ApplyPosture.getPoseName() ) {
-        case STAND:
-            this.sb.append("Stand)");
-            break;
-        case STAND_INIT:
-            this.sb.append("StandInit)");
-            break;
-        case STAND_ZERO:
-        	this.sb.append("StandZero)");
-        	break;
+    case STAND:
+        this.sb.append("Stand)");
+        break;
+    case STAND_INIT:
+        this.sb.append("StandInit)");
+        break;
+    case STAND_ZERO:
+    	this.sb.append("StandZero)");
+    	break;
     	}
     }
-    	
+
     public void visitPointAt(PointAt<Void> pointAt) {
-        this.sb.append("hal.pointAt(");
-        visitPointAt.getX().visit(this);
-        this.sb.append(", ");
-        visitPointAt.getY().visit(this);
-        this.sb.append(", ");
-        visitPointAt.getZ().visit(this);
-        this.sb.append(", ");        
-        this.sb.append(getEnumCode(PointAt.getFrame()) + ", ");
-        visitPointAt.getSpeed().visit(this);
-        this.sb.append(" )");
+    this.sb.append("hal.pointAt(");
+    visitPointAt.getX().visit(this);
+    this.sb.append(", ");
+    visitPointAt.getY().visit(this);
+    this.sb.append(", ");
+    visitPointAt.getZ().visit(this);
+    this.sb.append(", ");
+    this.sb.append(getEnumCode(PointAt.getFrame()) + ", ");
+    visitPointAt.getSpeed().visit(this);
+    this.sb.append(" )");
     }
-    
+
     public void visitLookAt(LookAt<Void> lookAt) {
-        this.sb.append("hal.lookAt(");
-        visitLookAt.getX().visit(this);
-        this.sb.append(", ");
-        visitLookAt.getY().visit(this);
-        this.sb.append(", ");
-        visitLookAt.getZ().visit(this);
-        this.sb.append(", ");        
-        this.sb.append(getEnumCode(LookAt.getFrame()) + ", ");
-        visitLookAt.getSpeed().visit(this);
-        this.sb.append(" )");
+    this.sb.append("hal.lookAt(");
+    visitLookAt.getX().visit(this);
+    this.sb.append(", ");
+    visitLookAt.getY().visit(this);
+    this.sb.append(", ");
+    visitLookAt.getZ().visit(this);
+    this.sb.append(", ");
+    this.sb.append(getEnumCode(LookAt.getFrame()) + ", ");
+    visitLookAt.getSpeed().visit(this);
+    this.sb.append(" )");
     }
-    
+
     public void visitStiffnessOn(StiffnessOn<Void> stiffnessOn) {
     	this.sb.append("hal.stiffnessOn()");
     }
-    
+
     public void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
     	this.sb.append("hal.stiffnessOff()");
     }
-    
+
     public void visitPartialStiffnessOn(PartialstiffnessOn<Void> partialStifnessOn) {
     	this.sb.append("hal.partialStiffnessOn(");
     	switch ( PartialStiffnessOn.getBodyName() ) {
-        case ARMS:
-            this.sb.append("\"Arms\")");
-            break;
-        case LEFT_ARM:
-            this.sb.append("\"LArm\")");
-            break;
-        case RIGHT_ARM:
-        	this.sb.append("\"RArm\")");
-        	break;
+    case ARMS:
+        this.sb.append("\"Arms\")");
+        break;
+    case LEFT_ARM:
+        this.sb.append("\"LArm\")");
+        break;
+    case RIGHT_ARM:
+    	this.sb.append("\"RArm\")");
+    	break;
     	}
     }
-    
-    public void visitPartialStiffnessOff(PartialstiffnessOff<Void> partialStifnessOff) {
+
+    public void visitPartialStiffnessOff(PartialstiffnessOff<Void> partialStiffnessOff) {
     	this.sb.append("hal.partialStiffnessOff(");
     	switch ( PartialStiffnessOff.getBodyName() ) {
-        case ARMS:
-            this.sb.append("\"Arms\")");
-            break;
-        case LEFT_ARM:
-            this.sb.append("\"LArm\")");
-            break;
-        case RIGHT_ARM:
-        	this.sb.append("\"RArm\")");
-        	break;
+    case ARMS:
+        this.sb.append("\"Arms\")");
+        break;
+    case LEFT_ARM:
+        this.sb.append("\"LArm\")");
+        break;
+    case RIGHT_ARM:
+    	this.sb.append("\"RArm\")");
+    	break;
     	}
     }
-    
+
     //Walk
-    
+
     public void visitWalk(Walk<Void> walk) {
     	this.sb.append("hal.walk(");
-        visitWalk.getX().visit(this);
-        this.sb.append(", ");
-        visitWalk.getY().visit(this);
-        this.sb.append(", ");
-        visitWalk.getTheta().visit(this);
-        this.sb.append(" )");
+    visitWalk.getPower().visit(this);
+    this.sb.append(", 0, 0)");
     }
-    
+
+    public void visitWalkTo(WalkTo<Void> walkTo) {
+    	this.sb.append("hal.walk(");
+    visitWalkTo.getX().visit(this);
+    this.sb.append(", ");
+    visitWalkTo.getY().visit(this);
+    this.sb.append(", ");
+    visitWalkTo.getTheta().visit(this);
+    this.sb.append(" )");
+    }
+
     public void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
     	this.sb.append("hal.stiffnessOff()");
     }
-    
+
     //Sounds
-    
+
     public void visitSetVolume(SetVolume<Void> setVolume) {
     	this.sb.append("hal.setVolume(");
     	setVolume.getVolume().visit(this);
     	this.sb.append(")");
     }
-    
+
     public void visitGetVolume(GetVolume<Void> getVolume) {
     	this.sb.append("hal.getVolume()");
     }
-    
+
     public void visitGetLanguage(GetLanguage<Void> getLanguage) {
     	this.sb.append("hal.getLanguage()");
     }
-    
+
     //TODO: add more languages
     public void visitSetLanguage(SetLanguage<Void> setLanguage) {
     	this.sb.append("hal.setLanguage(");
     	this.sb.append(setLanguage.getLanguageName().toString() + ")");
     }
-        	
+
     public void visitSayText(SayText<Void> sayText) {
     	this.sb.append("hal.say(");
     	this.sb.append("str(");
-        sayText.getMsg().visit(this);
-        this.sb.append(")");
+    sayText.getMsg().visit(this);
+    this.sb.append(")");
     }
-    
+
     //LEDs
-    
+
     public void visitSetEyeColor(SetEyeColor<Void> setEyeColor) {
     	this.sb.append("hal.setEyeColor(");
     	this.sb.append(getEnumCode(setEyeColor.getColor()) + ")");
     }
-    
+
     public void visitSetEarIntensity(SetEarIntensity<Void> setEarIntensity) {
     	this.sb.append("hal.setEarIntensity(");
     	visitSetEarIntensity.getIntensity.visit(this);
     	this.sb.append(")");
     }
-    
+
     //TODO: add complete List of LEDs as case
     public void visitSetSingleLed(SetSingleLed<Void> setSingleLed) {
     	this.sb.append("hal.setSingleLed(");
@@ -1792,62 +1936,62 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     	}
     	this.sb.append(", " + getEnumCode(setEyeColor.getColor()) + ")");
     }
-    
+
     public void visitBlink(Blink<Void> blink) {
     	this.sb.append("hal.blink()");
     }
-    
+
     public void visitLedOff(LedOff<Void> ledOff) {
-    	this.sb.append("hal.ledOff()");    
+    	this.sb.append("hal.ledOff()");
     }
-    
+
     public void visitLedReset(LedReset<Void> ledReset) {
     	this.sb.append("hal.ledReset()");
     }
-    
+
     public void visitRandomEyes(RandomEyes<Void> randomEyes) {
     	this.sb.append("hal.randomEyes(");
     	visitRandomEyes.getTime().visit(this);
     	this.sb.append(")");
     }
-    
+
     public void visitRasta(Rasta<Void> rasta) {
     	this.sb.append("hal.rasta(");
     	visitRasta.getTime().visit(this);
     	this.sb.append(")");
     }
-    
+
     //Sensors
-    
+
     public void visitAccelerometer(Accelerometer<Void> accelerometer) {
     	this.sb.append("hal.accelerometer(");
     	visitAccelerometer.getTime().visit(this);
     	this.sb.append(accelerometer.getCoordinate().toString() + ")");
     }
-    
+
     public void visitTouchsensor(Touchsensor<Void> touchsensor) {
     	this.sb.append(touchsensor.getPosition().toString() + ", ");
     	this.sb.append(touchsensor.getSide().toString() + ")");
     }
-    
+
     public void visitGyrometer(Gyrometer<Void> gyrometer) {
     	this.sb.append("hal.gyrometer(");
     	this.sb.append(visitGyrometer.getCoordinate().toString() + ")");
     }
-    
+
     public void visitSonar(Sonar<Void> sonar) {
     	this.sb.append("hal.sonar()");
     }
-    
+
     public void visitFsr(Fsr<Void> fsr) {
     	this.sb.append("hal.fsr(");
     	this.sb.append(visitFsr.getSide().toString() + ")");
     }
-    
+
     public void visitnaoMark(NaoMark<Void> naomark) {
     	this.sb.append("hal.naoMark()");
     }
-    
+
     public void visitRecordVideo(RecordVideo<Void> recordvideo) {
     	this.sb.append("hal.recordVideo(");
     	visitRecordVideo.getResolution().visit(this);
@@ -1856,17 +2000,17 @@ public class Ast2NaoPythonVisitor implements AstVisitor<Void> {
     	this.sb.append(")");
     	this.sb.append(setLanguage.getLanguageName().toString() + ")");
     }
-    
+
     public void visitTakePicture(TakePicture<Void> takepicture) {
     	this.sb.append("hal.takePicture()");
     }
-    
+
     public void visitSelectCamera(SelectCamera<Void> selectcamera) {
     	this.sb.append("hal.selectCamera(");
     	visitSelectCamera.getId().visit(this);
     	this.sb.append(")");
     }
-    
+
     public void visitHeadsensor(Headsensor<Void> headsensor) {
     	this.sb.append("hal.headSensor(");
     	this.sb.append(Headsensor.getPosition().toString() + ")");

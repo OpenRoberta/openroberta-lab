@@ -1,0 +1,9 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="">
+  <instance x="38" y="88">
+    <block type="robControls_start" id="y#o+?y]FjL_GfGa]^1GJ" intask="true" deletable="false">
+      <mutation declare="false"></mutation>
+      <field name="DEBUG">FALSE</field>
+    </block>
+    <block type="naoActions_sitDown" id="bD+e}Cm*tt0]p{M4BqI3" intask="true"></block>
+  </instance>
+</block_set>
