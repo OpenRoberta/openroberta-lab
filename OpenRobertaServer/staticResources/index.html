@@ -856,7 +856,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<div class="modal-body">
 					<div class="container-fluid">
 						<div class="row">
-							<div class="border-dotted col-md-6 with-devider">
+							<div class="border-dotted col-md-5 with-devider">
 								<h4 lkey="Blockly.Msg.POPUP_STARTUP_NEW">What's new?</h4>
 								<div lkey="Blockly.Msg.POPUP_2_0_1"></div>
 								<button id='moreReleases' type='button' class='btn-link'
@@ -864,7 +864,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								<div id="oldReleases" style="display: none; color: #bbb"
 									lkey="Blockly.Msg.POPUP_NEW_RELEASE"></div>
 							</div>
-							<div class="col-md-6 with-devider">
+							<div class="col-md-4 with-devider">
 								<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
 								<ul class="list-new-version nonIcon">
 									<li><a href="#" id="menuGeneral" class="menuGeneral"
@@ -880,42 +880,46 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 											instructions</a></li>
 								</ul>
 							</div>
-							<div class="clearer"></div>
-							<hr style="border: 1px dashed #afca04; margin-top: 10px" />
+							<div class="col-md-3 with-devider">
+								<!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
+								<div style="text-align: center">
+									<div id="takeATour" class="hidden-xs robot-container"
+										data-dismiss="modal"
+										style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
+										<br>
+										<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearer"></div>
+					<div class="modal-footer" style="text-align: center">
+						<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your
+							system!</h4>
+						<div id="popup-sim" href="#" class="popup-robot robot-container"
+							data-type="ev3">
+							<span href="#" class='typcn typcn-open robot-icon'></span><span lkey="Blockly.Msg.POPUP_ROBOT_SIM"
+								class="robot-label">I don't have a robot!</span> <img
+								class="img-beta" src="/css/img/beta.png" alt="beta" /> <a
+								href="#" target="_blank" style="display: inline;"> <span
+								class='robot-info typcn typcn-info-large'></span>
+							</a>
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer" style="text-align: center">
-					<div id="takeATour" class="hidden-xs robot-container"
-						data-dismiss="modal"
-						style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat" />
-					<br>
-					<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
+				<div class="modal-body left-inner-addon popup-checkbox">
+					<input type="checkbox" name="checkbox" id="checkbox_id"
+						value="value" /> <label for="checkbox_id"
+						lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show
+						this again.</label><br /> <br /> <span
+						lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to
+						personalise content and to analyse our traffic.</span> <a
+						href="https://www.open-roberta.org/datenschutz" target="_blank"
+						class="DE" style="display: inline;">Details ansehen.</a> <a
+						href="https://www.open-roberta.org/en/datenschutz" target="_blank"
+						class="EN" style="display: inline;">Show details.</a>
 				</div>
-				<div class="clearer"></div>
-				<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
-				<div class="clearer"></div>
-				<div id="popup-sim" href="#" class="popup-robot robot-container"
-					data-type="ev3">
-					<span href="#" class='typcn typcn-open robot-icon'></span><span
-						class="robot-label">I don't have a robot!</span> <img
-						class="img-beta" src="/css/img/beta.png" alt="beta" /> <a
-						href="#" target="_blank" style="display: inline;"> <span
-						class='robot-info typcn typcn-info-large'></span>
-					</a>
-				</div>
-			</div>
-			<div class="modal-body left-inner-addon popup-checkbox">
-				<input type="checkbox" name="checkbox" id="checkbox_id"
-					value="value" /> <label for="checkbox_id"
-					lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show this
-					again.</label><br /> <br /> <span
-					lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to
-					personalise content and to analyse our traffic.</span> <a
-					href="https://www.open-roberta.org/datenschutz" target="_blank"
-					class="DE" style="display: inline;">Details ansehen.</a> <a
-					href="https://www.open-roberta.org/en/datenschutz" target="_blank"
-					class="EN" style="display: inline;">Show details.</a>
 			</div>
 		</div>
 	</div>
