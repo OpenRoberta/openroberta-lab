@@ -465,6 +465,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             }
         }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {
+            if (GUISTATE_C.getRobot() !== 'ev3')
+                ROBOT_C.switchRobot('ev3', true);
+            PROGRAM_C.newProgram(true);
             TOUR_C.start('welcome');
         }, 'take a tour clicked');
 

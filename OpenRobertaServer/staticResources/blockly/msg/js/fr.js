@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Répéter le mot de passe";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Charge de la batterie";
 Blockly.Msg.POPUP_ROBOT_NAME = "nom";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Le robot n'est actuellement pas connecté au serveur. Regarde s'il est allumé puis connecte le de nouveau au serveur et donne le mot de passe dans la case - connexion <br />Si cela ne fonctionne pas, regarde dans l'aide.";
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "état";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "Programme est en cours d'exécution.";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "Pas de connexion avec le robot.";

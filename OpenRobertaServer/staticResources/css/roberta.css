@@ -898,7 +898,10 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 #takeATour {
-	margin-top: 0;
+	top: 50%;
+    position: relative;
+    margin-top: 48px;
+    height: 96px;
 }
 
 .robot-label {
