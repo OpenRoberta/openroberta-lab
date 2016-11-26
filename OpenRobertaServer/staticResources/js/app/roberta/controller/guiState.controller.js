@@ -133,21 +133,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#iconDisplayLogin').addClass('error');
         }
 
-        if (isAutoconnected()) {
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').addClass('wait');
-            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            $('#menuRunProg').parent().removeClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
-        } else {
+        if (!isAutoconnected()) {
             $('#menuConnect').parent().removeClass('disabled');
             if (GUISTATE.robot.state === 'wait') {
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
                 $('#head-navi-icon-robot').addClass('wait');
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                $('#menuRunProg').parent().removeClass('disabled');                
+                $('#menuRunProg').parent().removeClass('disabled');
             } else if (GUISTATE.robot.state === 'busy') {
                 $('#head-navi-icon-robot').removeClass('wait');
                 $('#head-navi-icon-robot').removeClass('error');
@@ -206,12 +199,39 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robot);
         $('#simRobot').addClass('typcn-' + robot);
 
+        if (isAutoconnected()) {
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').addClass('wait');
+            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            $('#menuRunProg').parent().removeClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');
+        } else {
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            $('#menuRunProg').parent().addClass('disabled');
+            $('#menuConnect').parent().removeClass('disabled')
+        }
+
         GUISTATE.gui.robot = robot;
         setConfigurationName(getRobot().toUpperCase() + 'basis');
         setProgramName('NEPOprog');
     }
 
     exports.setRobot = setRobot;
+
+    function setAutoConnectedBusy(busy) {
+        if (busy) {
+            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            $('#menuRunProg').parent().addClass('disabled');
+        } else {
+            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            $('#menuRunProg').parent().removeClass('disabled');
+        }
+    }
+    exports.setAutoConnectedBusy = setAutoConnectedBusy;
 
     function getRobot() {
         return GUISTATE.gui.robot;
@@ -626,12 +646,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.gui.connection;
     }
     exports.isAutoconnected = isAutoconnected;
-    
+
     function setProgramToDownload() {
         return GUISTATE.gui.program.download = true;
     }
     exports.setProgramToDownload = setProgramToDownload;
-    
+
     function isProgramToDownload() {
         return GUISTATE.gui.program.download;
     }

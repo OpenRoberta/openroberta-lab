@@ -367,12 +367,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
 
         if (GUISTATE_C.isAutoconnected()) {
+            GUISTATE_C.setAutoConnectedBusy(true);
             PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 GUISTATE_C.setState(result);
                 if (result.rc == "ok") {
                     if (GUISTATE_C.isProgramToDownload()) {
                         var filename = GUISTATE_C.getProgramName() + '.hex';
                         UTIL.download(filename, result.compiledCode);
+                        GUISTATE_C.setAutoConnectedBusy(false);
                     } else {
                         //create link with content
                         var programLink = "<div id='programLink' style='text-align: center;'><br><a style='font-size:36px; padding: 20px' download='"
@@ -425,10 +427,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             if (textH) {
                                 $("#popupDownloadHeader").text(textH);
                             }
+                            GUISTATE_C.setAutoConnectedBusy(false);
                         });
                         // fix header$(selector).attr(attribute)
                         textH = $("#popupDownloadHeader").text();
-                        console.log(GUISTATE_C.getRobots()[GUISTATE_C.getGuiRobot()].realName +"B");
                         $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobots()[GUISTATE_C.getGuiRobot()].realName)));
                         textC = $("#download-instructions").find("tr").eq(2).find("td").eq(1).html();
                         $("#download-instructions").find("tr").eq(2).find("td").eq(1).html(textC.replace("$", usb));
@@ -436,6 +438,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     }
                 } else {
                     MSG.displayInformation(result, "", result.message, "");
+                    GUISTATE_C.setAutoConnectedBusy(false);
                 }
                 reloadProgram(result);
             });
