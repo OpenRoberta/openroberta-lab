@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -133,7 +133,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
     private final Configuration brickConfiguration;
-    private final String programName;
     private final StringBuilder sb = new StringBuilder();
     private final Set<UsedSensor> usedSensors;
     private final Set<UsedActor> usedActors;
@@ -149,7 +148,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, Set<UsedActor> usedActors, int indentation) {
-        this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.usedSensors = usedSensors;

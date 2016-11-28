@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -1321,7 +1321,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        if (methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn")){
+        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
         return null;

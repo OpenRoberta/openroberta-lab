@@ -318,7 +318,14 @@ public interface IRobotFactory {
      *
      * @return
      */
-    ICompilerWorkflow getCompilerWorkflow();
+    ICompilerWorkflow getRobotCompilerWorkflow();
+
+    /**
+     * Get the compiler workflow object for this simulation.
+     *
+     * @return
+     */
+    ICompilerWorkflow getSimCompilerWorkflow();
 
     /**
      * Get the guice module for this robot. This is used to add bindings to guice. It should not be used often.<br>

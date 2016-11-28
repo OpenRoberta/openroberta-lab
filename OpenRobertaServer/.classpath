@@ -43,6 +43,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotMbed"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotNAO"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RobotNXT"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/RobotSIM"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

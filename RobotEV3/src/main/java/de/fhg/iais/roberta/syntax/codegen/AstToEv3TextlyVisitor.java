@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -117,7 +117,6 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final String programName;
     private final StringBuilder sb = new StringBuilder();
 
     private int indentation;
@@ -130,7 +129,6 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     AstToEv3TextlyVisitor(String programName, int indentation) {
-        this.programName = programName;
         this.indentation = indentation;
     }
 

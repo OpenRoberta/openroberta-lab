@@ -254,11 +254,6 @@ public class CalliopeFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -290,6 +285,17 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public List<IWorkingState> getWorkingStates() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.compilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
         // TODO Auto-generated method stub
         return null;
     }

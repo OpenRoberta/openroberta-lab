@@ -81,7 +81,7 @@ public class BlocklyProgramAndConfigTransformer {
         }
         Configuration brickConfiguration = null;
         try {
-            brickConfiguration = factory.getCompilerWorkflow().generateConfiguration(factory, configurationText);
+            brickConfiguration = factory.getRobotCompilerWorkflow().generateConfiguration(factory, configurationText);
         } catch ( Exception e ) {
             LOG.error("Generation of the configuration failed", e);
             errorMessage = Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
 
-public class AstToLejosJavaScriptVisitorTest {
+public class Ast2Ev3SimVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
@@ -321,18 +321,6 @@ public class AstToLejosJavaScriptVisitorTest {
     }
 
     @Test
-    public void visitLightSensorAction_RedOnPort1_CreateLightSensorAction() throws Exception {
-        String a =
-            "var stmt0 = createLightSensorAction(CONST.COLOR_ENUM.RED, CONST.ON);\n"
-                + "var stmt1 = createLightSensorAction(CONST.COLOR_ENUM.BLUE, CONST.OFF);\n"
-
-                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
-
-        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator33.xml");
-
-    }
-
-    @Test
     public void test19() throws Exception {
         String a =
             "var stmt0 = createShowTextAction(createConstant(CONST.STRING_CONST, 'Hallo'), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
@@ -460,16 +448,6 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator28.xml");
-
-    }
-
-    @Test
-    public void testLightSensor() throws Exception {
-        String a = "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
-
-            + "var blocklyProgram = {'programStmts': [stmt0]};";
-
-        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator29.xml");
 
     }
 

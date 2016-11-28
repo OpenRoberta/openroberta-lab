@@ -44,18 +44,20 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class NxtFactory extends AbstractRobotFactory {
-
-    private NxtCompilerWorkflow compilerWorkflow;
+    private final NxtCompilerWorkflow robotCompilerWorkflow;
+    private final NxtSimCompilerWorkflow simCompilerWorkflow;
     private final Properties nxtProperties;
 
     public NxtFactory(RobotCommunicator unusedForNxt) {
 
         int robotPropertyNumber = Util1.getRobotNumberFromProperty("nxt");
-        this.compilerWorkflow =
+        this.robotCompilerWorkflow =
             new NxtCompilerWorkflow(
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
+
+        this.simCompilerWorkflow = new NxtSimCompilerWorkflow();
         addBlockTypesFromProperties("NXT.properties", this.nxtProperties);
     }
 
@@ -436,11 +438,6 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -503,6 +500,16 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.robotCompilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        return this.simCompilerWorkflow;
+    }
+
+    @Override
     public String getProgramToolboxBeginner() {
         return this.nxtProperties.getProperty("robot.program.toolbox.beginner");
     }
@@ -551,4 +558,5 @@ public class NxtFactory extends AbstractRobotFactory {
     public Boolean isAutoconnected() {
         return this.nxtProperties.getProperty("robot.connection.server") != null ? true : false;
     }
+
 }

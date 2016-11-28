@@ -409,16 +409,6 @@ public class NAOFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
-    public AbstractModule getGuiceModule() {
-        return new NAOGuiceModule(Util1.getRobertaProperties());
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -452,6 +442,22 @@ public class NAOFactory extends AbstractRobotFactory {
     public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.compilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public AbstractModule getGuiceModule() {
+        return new NAOGuiceModule(Util1.getRobertaProperties());
     }
 
     @Override

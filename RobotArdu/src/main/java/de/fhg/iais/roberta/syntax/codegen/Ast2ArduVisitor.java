@@ -18,11 +18,9 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -1461,7 +1459,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        if (methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn")){
+        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
         return null;
@@ -1523,27 +1521,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     private String whitespace() {
         return " ";
-    }
-
-    private boolean isStringExpr(Expr<Void> e) {
-        switch ( e.getKind().getName() ) {
-            case "STRING_CONST":
-                return true;
-            case "VAR":
-                return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
-            case "FUNCTION_EXPR":
-                final BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
-                return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
-            case "METHOD_EXPR":
-                final MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
-                return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
-            case "ACTION_EXPR":
-                final Action<?> action = ((ActionExpr<?>) e).getAction();
-                return action.getKind().hasName("BLUETOOTH_RECEIVED_ACTION");
-
-            default:
-                return false;
-        }
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {

@@ -7,16 +7,16 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.syntax.codegen.Ast2JavaScriptVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2SimConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 
-public class SimCompilerWorkflow implements ICompilerWorkflow {
+public class Ev3SimCompilerWorkflow implements ICompilerWorkflow {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SimCompilerWorkflow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Ev3SimCompilerWorkflow.class);
 
-    public SimCompilerWorkflow() {
+    public Ev3SimCompilerWorkflow() {
 
     }
 
@@ -64,8 +64,8 @@ public class SimCompilerWorkflow implements ICompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2JavaScriptVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
-        SimCompilerWorkflow.LOG.info("generating javascript code");
+        String sourceCode = Ast2Ev3SimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+        Ev3SimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;
     }
@@ -80,7 +80,7 @@ public class SimCompilerWorkflow implements ICompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2SimConfigurationTransformer transformer = new Jaxb2SimConfigurationTransformer(factory);
+        Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 

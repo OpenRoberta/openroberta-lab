@@ -3,39 +3,12 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
-import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.action.sim.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.sim.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.sim.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.sim.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.MotorDuration;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
-import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
-import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
-import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -44,7 +17,6 @@ import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -82,19 +54,8 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -109,71 +70,60 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
-    private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
-    private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
-    private final StringBuilder sb = new StringBuilder();
-    private int stmtsNumber = 0;
-    private int methodsNumber = 0;
+public abstract class SimulationVisitor<V> implements AstVisitor<V> {
+
+    protected int stmtsNumber = 0;
+    protected int methodsNumber = 0;
     private ArrayList<Boolean> inStmt = new ArrayList<>();
-    private Configuration brickConfiguration;
 
-    private Ast2JavaScriptVisitor(Configuration brickConfiguration) {
+    protected final StringBuilder sb = new StringBuilder();
+    protected final Configuration brickConfiguration;
+
+    protected SimulationVisitor(Configuration brickConfiguration) {
         this.brickConfiguration = brickConfiguration;
-
-    }
-
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
-        Assert.notNull(brickConfiguration);
-
-        Ast2JavaScriptVisitor astVisitor = new Ast2JavaScriptVisitor(brickConfiguration);
-        generateCodeFromPhrases(phrasesSet, astVisitor);
-        return astVisitor.sb.toString();
     }
 
     @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
+    public V visitNumConst(NumConst<V> numConst) {
         this.sb.append("createConstant(CONST." + numConst.getKind().getName() + ", " + numConst.getValue() + ")");
         return null;
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
+    public V visitMathConst(MathConst<V> mathConst) {
         this.sb.append("createMathConstant('" + mathConst.getMathConst() + "')");
         return null;
     }
 
     @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
+    public V visitBoolConst(BoolConst<V> boolConst) {
         this.sb.append("createConstant(CONST." + boolConst.getKind().getName() + ", " + boolConst.isValue() + ")");
         return null;
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
+    public V visitStringConst(StringConst<V> stringConst) {
         this.sb.append("createConstant(CONST." + stringConst.getKind().getName() + ", '" + stringConst.getValue() + "')");
         return null;
     }
 
     @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
+    public V visitNullConst(NullConst<V> nullConst) {
         this.sb.append("createConstant(CONST." + nullConst.getKind().getName() + ", undefined)");
         return null;
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
+    public V visitColorConst(ColorConst<V> colorConst) {
         this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getValue() + ")");
         return null;
     }
 
     @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
+    public V visitShadowExpr(ShadowExpr<V> shadowExpr) {
         if ( shadowExpr.getBlock() != null ) {
             shadowExpr.getBlock().visit(this);
         } else {
@@ -183,16 +133,16 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitVar(Var<Void> var) {
+    public V visitVar(Var<V> var) {
         this.sb.append("createVarReference(CONST." + var.getTypeVar() + ", \"" + var.getValue() + "\")");
         return null;
     }
 
     @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+    public V visitVarDeclaration(VarDeclaration<V> var) {
         this.sb.append("createVarDeclaration(CONST." + var.getTypeVar() + ", \"" + var.getName() + "\", ");
         if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-            ExprList<Void> list = (ExprList<Void>) var.getValue();
+            ExprList<V> list = (ExprList<V>) var.getValue();
             if ( list.get().size() == 2 ) {
                 list.get().get(1).visit(this);
             } else {
@@ -206,7 +156,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitUnary(Unary<Void> unary) {
+    public V visitUnary(Unary<V> unary) {
         this.sb.append("createUnaryExpr(CONST." + unary.getOp() + ", ");
         unary.getExpr().visit(this);
         this.sb.append(")");
@@ -214,7 +164,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitBinary(Binary<Void> binary) {
+    public V visitBinary(Binary<V> binary) {
         String method = "createBinaryExpr(CONST." + binary.getOp() + ", ";
         String end = ")";
         // FIXME: The math change should be removed from the binary expression since it is a statement
@@ -239,7 +189,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+    public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
         this.sb.append("createBinaryExpr(CONST." + mathPowerFunct.getFunctName() + ", ");
         mathPowerFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -249,30 +199,30 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
+    public V visitActionExpr(ActionExpr<V> actionExpr) {
         actionExpr.getAction().visit(this);
         return null;
     }
 
     @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
+    public V visitSensorExpr(SensorExpr<V> sensorExpr) {
         sensorExpr.getSens().visit(this);
         return null;
     }
 
     @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
+    public V visitMethodExpr(MethodExpr<V> methodExpr) {
         methodExpr.getMethod().visit(this);
         return null;
     }
 
     @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
+    public V visitEmptyList(EmptyList<V> emptyList) {
         return null;
     }
 
     @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
+    public V visitEmptyExpr(EmptyExpr<V> emptyExpr) {
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
                 this.sb.append("createConstant(CONST.STRING_CONST, '')");
@@ -297,9 +247,9 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitExprList(ExprList<Void> exprList) {
+    public V visitExprList(ExprList<V> exprList) {
         boolean first = true;
-        for ( Expr<Void> expr : exprList.get() ) {
+        for ( Expr<V> expr : exprList.get() ) {
             if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
                 if ( first ) {
                     first = false;
@@ -313,19 +263,19 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
+    public V visitStmtExpr(StmtExpr<V> stmtExpr) {
         stmtExpr.getStmt().visit(this);
         return null;
     }
 
     @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
+    public V visitActionStmt(ActionStmt<V> actionStmt) {
         actionStmt.getAction().visit(this);
         return null;
     }
 
     @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+    public V visitAssignStmt(AssignStmt<V> assignStmt) {
         String end = createClosingBracket();
         this.sb.append("createAssignStmt(\"" + assignStmt.getName().getValue());
         this.sb.append("\", ");
@@ -335,7 +285,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
+    public V visitExprStmt(ExprStmt<V> exprStmt) {
         String end = "";
         if ( !isInStmt() ) {
             this.sb.append("var stmt" + this.stmtsNumber + " = ");
@@ -349,14 +299,14 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
+    public V visitIfStmt(IfStmt<V> ifStmt) {
         if ( ifStmt.isTernary() ) {
             this.sb.append("createTernaryExpr(");
             ifStmt.getExpr().get(0).visit(this);
             this.sb.append(", ");
-            ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+            ((ExprStmt<V>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
             this.sb.append(", ");
-            ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+            ((ExprStmt<V>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
             this.sb.append(")");
         } else {
             String end = createClosingBracket();
@@ -374,7 +324,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+    public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
         String end = createClosingBracket();
         appendRepeatStmtCondition(repeatStmt);
         addInStmt();
@@ -386,18 +336,18 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
+    public V visitSensorStmt(SensorStmt<V> sensorStmt) {
         sensorStmt.getSensor().visit(this);
         return null;
     }
 
     @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+    public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
         return null;
     }
 
     @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
+    public V visitStmtList(StmtList<V> stmtList) {
         if ( stmtList.get().size() == 0 ) {
             return null;
         }
@@ -411,267 +361,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        String end = createClosingBracket();
-        this.sb.append("createDriveAction(");
-        driveAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
-        }
-        this.sb.append(", CONST." + driveDirection);
-        MotorDuration<Void> duration = driveAction.getParam().getDuration();
-        appendDuration(duration);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        String end = createClosingBracket();
-        this.sb.append("createCurveAction(");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
-        }
-        this.sb.append(", CONST." + driveDirection);
-        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-        appendDuration(duration);
-        this.sb.append(end);
-        return null;
-    }
-
-    private void appendDuration(MotorDuration<Void> duration) {
-        if ( duration != null ) {
-            this.sb.append(", ");
-            duration.getValue().visit(this);
-        }
-    }
-
-    private DriveDirection getDriveDirection(boolean isReverse) {
-        if ( isReverse ) {
-            return DriveDirection.BACKWARD;
-        }
-        return DriveDirection.FOREWARD;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        String end = createClosingBracket();
-        this.sb.append("createTurnAction(");
-        turnAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        ITurnDirection turnDirection = turnAction.getDirection();
-        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
-            turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
-        }
-        this.sb.append(", CONST." + turnDirection);
-        MotorDuration<Void> duration = turnAction.getParam().getDuration();
-        appendDuration(duration);
-        this.sb.append(end);
-        return null;
-    }
-
-    private TurnDirection getTurnDirection(boolean isReverse) {
-        if ( isReverse ) {
-            return TurnDirection.RIGHT;
-        }
-        return TurnDirection.LEFT;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        String end = createClosingBracket();
-        this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        String end = createClosingBracket();
-        this.sb.append("createLightSensorAction(CONST.COLOR_ENUM." + lightSensorAction.getLight() + ", CONST." + lightSensorAction.getState());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        String end = createClosingBracket();
-        this.sb.append("createStatusLight(CONST." + lightStatusAction.getStatus());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        String end = createClosingBracket();
-        this.sb.append("createMotorOnAction(");
-        motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + (motorOnAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
-        if ( isDuration ) {
-            this.sb.append(", createDuration(CONST.");
-            this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
-            motorOnAction.getParam().getDuration().getValue().visit(this);
-            this.sb.append(")");
-        }
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        String end = createClosingBracket();
-        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        String end = createClosingBracket();
-        this.sb.append("createStopMotorAction(");
-        this.sb.append((motorStopAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        String end = createClosingBracket();
-        this.sb.append("createClearDisplayAction(");
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == VolumeAction.Mode.SET ) {
-            String end = createClosingBracket();
-            this.sb.append("createSetVolumeAction(CONST." + volumeAction.getMode() + ", ");
-            volumeAction.getVolume().visit(this);
-            this.sb.append(end);
-        } else {
-            this.sb.append("createGetVolume()");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        String end = createClosingBracket();
-        this.sb.append("createPlayFileAction(CONST." + playFileAction.getFileName());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        String end = createClosingBracket();
-        this.sb.append("createShowPictureAction('" + showPictureAction.getPicture() + "', ");
-        showPictureAction.getX().visit(this);
-        this.sb.append(", ");
-        showPictureAction.getY().visit(this);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        String end = createClosingBracket();
-        this.sb.append("createShowTextAction(");
-        showTextAction.getMsg().visit(this);
-        this.sb.append(", ");
-        showTextAction.getX().visit(this);
-        this.sb.append(", ");
-        showTextAction.getY().visit(this);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        String end = createClosingBracket();
-        this.sb.append("createStopDrive(");
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        String end = createClosingBracket();
-        this.sb.append("createToneAction(");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getKey() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(CONST.COLOR, CONST." + colorSensor.getMode() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("createGetSample(CONST.LIGHT, CONST." + lightSensor.getMode() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderMotor = (encoderSensor.getMotorPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
-            String end = createClosingBracket();
-            this.sb.append("createResetEncoderSensor(" + encoderMotor);
-            this.sb.append(end);
-        } else {
-            this.sb.append("createGetSampleEncoderSensor(" + encoderMotor + ", CONST." + encoderSensor.getMode() + ")");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
-            String end = createClosingBracket();
-            this.sb.append("createResetGyroSensor(");
-            this.sb.append(end);
-        } else {
-            this.sb.append("createGetGyroSensorSample(CONST.GYRO, CONST." + gyroSensor.getMode() + ")");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("createGetSample(CONST.INFRARED, CONST." + infraredSensor.getMode() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+    public V visitTimerSensor(TimerSensor<V> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getTimer() + "')");
@@ -688,31 +378,13 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("createGetSample(CONST.TOUCH)");
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("createGetSample(CONST.ULTRASONIC, CONST." + ultrasonicSensor.getMode() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("createGetSample(CONST.SOUND)");
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+    public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
         sensorGetSample.getSensor().visit(this);
         return null;
     }
 
     @Override
-    public Void visitMainTask(MainTask<Void> mainTask) {
+    public V visitMainTask(MainTask<V> mainTask) {
         if ( mainTask.getDebug().equals("TRUE") ) {
             String end = createClosingBracket();
             this.sb.append("createDebugAction(");
@@ -723,17 +395,17 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
+    public V visitActivityTask(ActivityTask<V> activityTask) {
         return null;
     }
 
     @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
+    public V visitStartActivityTask(StartActivityTask<V> startActivityTask) {
         return null;
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+    public V visitWaitStmt(WaitStmt<V> waitStmt) {
         String end = createClosingBracket();
         this.sb.append("createWaitStmt([");
         addInStmt();
@@ -745,7 +417,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    public V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt) {
         String end = createClosingBracket();
         this.sb.append("createWaitTimeStmt(");
         waitTimeStmt.getTime().visit(this);
@@ -754,28 +426,28 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitLocation(Location<Void> location) {
+    public V visitLocation(Location<V> location) {
         return null;
     }
 
     @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+    public V visitTextPrintFunct(TextPrintFunct<V> textPrintFunct) {
         return null;
     }
 
     @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
+    public V visitFunctionStmt(FunctionStmt<V> functionStmt) {
         return null;
     }
 
     @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
+    public V visitFunctionExpr(FunctionExpr<V> functionExpr) {
         functionExpr.getFunction().visit(this);
         return null;
     }
 
     @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+    public V visitGetSubFunct(GetSubFunct<V> getSubFunct) {
         this.sb.append("createGetSubList({list: ");
         getSubFunct.getParam().get(0).visit(this);
         this.sb.append(", where1: CONST.");
@@ -801,7 +473,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+    public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct) {
         this.sb.append("createListFindItem(CONST." + indexOfFunct.getLocation() + ", ");
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -811,7 +483,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+    public V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct) {
         String methodName = "createListLength(";
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
             methodName = "createListIsEmpty(";
@@ -823,7 +495,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
+    public V visitListCreate(ListCreate<V> listCreate) {
         this.sb.append("createCreateListWith(CONST.ARRAY_" + listCreate.getTypeVar() + ", [");
         listCreate.getValue().visit(this);
         this.sb.append("])");
@@ -831,7 +503,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+    public V visitListSetIndex(ListSetIndex<V> listSetIndex) {
         String end = createClosingBracket();
         this.sb.append("createListsSetIndex(");
         listSetIndex.getParam().get(0).visit(this);
@@ -850,7 +522,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+    public V visitListGetIndex(ListGetIndex<V> listGetIndex) {
         String methodName = "createListsGetIndex(";
         String end = ")";
         if ( listGetIndex.getElementOperation().isStatment() ) {
@@ -872,7 +544,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+    public V visitListRepeat(ListRepeat<V> listRepeat) {
         this.sb.append("createCreateListWithItem(");
         listRepeat.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -882,7 +554,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+    public V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct) {
         this.sb.append("createMathConstrainFunct(");
         mathConstrainFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -894,7 +566,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+    public V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct) {
         this.sb.append("createMathPropFunct('" + mathNumPropFunct.getFunctName() + "', ");
         mathNumPropFunct.getParam().get(0).visit(this);
         if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
@@ -906,7 +578,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+    public V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct) {
         this.sb.append("createMathOnList(CONST." + mathOnListFunct.getFunctName() + ", ");
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
@@ -914,13 +586,13 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+    public V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct) {
         this.sb.append("createRandDouble()");
         return null;
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+    public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
         this.sb.append("createRandInt(");
         mathRandomIntFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -930,7 +602,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+    public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
         this.sb.append("createSingleFunction('" + mathSingleFunct.getFunctName() + "', ");
         mathSingleFunct.getParam().get(0).visit(this);
         this.sb.append(")");
@@ -938,7 +610,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+    public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
         this.sb.append("createTextJoin([");
         textJoinFunct.getParam().visit(this);
         this.sb.append("])");
@@ -946,8 +618,8 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("var method" + this.methodsNumber + " = createMethodVoid('" + methodVoid.getMethodName() + "', [");
+    public V visitMethodVoid(MethodVoid<V> methodVoid) {
+        this.sb.append("var method" + this.methodsNumber + " = createMethodV('" + methodVoid.getMethodName() + "', [");
         methodVoid.getParameters().visit(this);
         this.sb.append("], [");
         addInStmt();
@@ -959,7 +631,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+    public V visitMethodReturn(MethodReturn<V> methodReturn) {
         this.sb.append("var method" + this.methodsNumber + " = createMethodReturn('" + methodReturn.getMethodName() + "', [");
         addInStmt();
         methodReturn.getBody().visit(this);
@@ -972,7 +644,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
+    public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
         this.sb.append("createIfReturn(");
         methodIfReturn.getCondition().visit(this);
         this.sb.append(", ");
@@ -982,13 +654,13 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
+    public V visitMethodStmt(MethodStmt<V> methodStmt) {
         methodStmt.getMethod().visit(this);
         return null;
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
+    public V visitMethodCall(MethodCall<V> methodCall) {
         String end = ")";
         String name = "createMethodCallReturn('";
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
@@ -1004,37 +676,37 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+    public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
         return null;
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+    public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+    public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
         return null;
     }
 
     @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+    public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
         return null;
     }
 
-    private void increaseStmt() {
+    protected void increaseStmt() {
         this.stmtsNumber++;
     }
 
-    private void increaseMethods() {
+    protected void increaseMethods() {
         this.methodsNumber++;
     }
 
     /**
      * @return the inStmt
      */
-    private boolean isInStmt() {
+    protected boolean isInStmt() {
         if ( this.inStmt.size() == 0 ) {
             return false;
         }
@@ -1044,61 +716,17 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
     /**
      * @param inStmt the inStmt to set
      */
-    private void addInStmt() {
+    protected void addInStmt() {
         this.inStmt.add(true);
     }
 
-    private void removeInStmt() {
+    protected void removeInStmt() {
         if ( this.inStmt.size() != 0 ) {
             this.inStmt.remove(this.inStmt.size() - 1);
         }
     }
 
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Ast2JavaScriptVisitor astVisitor) {
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(astVisitor);
-            }
-        }
-        appendProgramInitialization(astVisitor);
-    }
-
-    private static void appendProgramInitialization(Ast2JavaScriptVisitor astVisitor) {
-        astVisitor.sb.append("var blocklyProgram = {");
-        appendMethodsInitialization(astVisitor);
-        appendStmtsInitialization(astVisitor);
-        astVisitor.sb.append("};");
-    }
-
-    private static void appendStmtsInitialization(Ast2JavaScriptVisitor astVisitor) {
-        astVisitor.sb.append("'programStmts': [");
-        if ( astVisitor.stmtsNumber > 0 ) {
-            for ( int i = 0; i < astVisitor.stmtsNumber; i++ ) {
-                astVisitor.sb.append("stmt" + i);
-                if ( i != astVisitor.stmtsNumber - 1 ) {
-                    astVisitor.sb.append(",");
-                }
-
-            }
-        }
-        astVisitor.sb.append("]");
-    }
-
-    private static void appendMethodsInitialization(Ast2JavaScriptVisitor astVisitor) {
-        if ( astVisitor.methodsNumber > 0 ) {
-            astVisitor.sb.append("'programMethods': [");
-            for ( int i = 0; i < astVisitor.methodsNumber; i++ ) {
-                astVisitor.sb.append("method" + i);
-                if ( i != astVisitor.methodsNumber - 1 ) {
-                    astVisitor.sb.append(",");
-                } else {
-                    astVisitor.sb.append("], ");
-                }
-            }
-        }
-    }
-
-    private void appendIfStmtConditions(IfStmt<Void> ifStmt) {
+    protected void appendIfStmtConditions(IfStmt<V> ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
             ifStmt.getExpr().get(i).visit(this);
             if ( i < ifStmt.getExpr().size() - 1 ) {
@@ -1107,7 +735,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void appendElseStmt(IfStmt<Void> ifStmt) {
+    protected void appendElseStmt(IfStmt<V> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
             addInStmt();
             ifStmt.getElseList().visit(this);
@@ -1115,7 +743,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void appendThenStmts(IfStmt<Void> ifStmt) {
+    protected void appendThenStmts(IfStmt<V> ifStmt) {
         for ( int i = 0; i < ifStmt.getThenList().size(); i++ ) {
             addInStmt();
             this.sb.append("[");
@@ -1129,7 +757,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void appendRepeatStmtStatements(RepeatStmt<Void> repeatStmt) {
+    protected void appendRepeatStmtStatements(RepeatStmt<V> repeatStmt) {
         if ( repeatStmt.getMode() == Mode.WAIT ) {
             if ( repeatStmt.getList().get().size() != 0 ) {
                 this.sb.append("[");
@@ -1141,7 +769,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void appendRepeatStmtCondition(RepeatStmt<Void> repeatStmt) {
+    protected void appendRepeatStmtCondition(RepeatStmt<V> repeatStmt) {
         switch ( repeatStmt.getMode() ) {
             case WAIT:
                 this.sb.append("createIfStmt([");
@@ -1150,7 +778,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
                 break;
             case TIMES:
                 this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
-                ((NumConst<Void>) ((ExprList<Void>) repeatStmt.getExpr()).get().get(2)).visit(this);
+                ((NumConst<V>) ((ExprList<V>) repeatStmt.getExpr()).get().get(2)).visit(this);
                 this.sb.append(", [");
                 break;
             case FOREVER:
@@ -1177,7 +805,7 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         }
     }
 
-    private String createClosingBracket() {
+    protected String createClosingBracket() {
         String end = ")";
         if ( !isInStmt() ) {
             this.sb.append("var stmt" + this.stmtsNumber + " = ");
@@ -1187,34 +815,9 @@ public class Ast2JavaScriptVisitor implements AstVisitor<Void> {
         return end;
     }
 
-    private void removeLastComma() {
+    protected void removeLastComma() {
         if ( isInStmt() ) {
             this.sb.setLength(this.sb.length() - 2);
         }
     }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

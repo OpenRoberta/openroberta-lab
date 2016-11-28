@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
+import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -30,6 +31,7 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -276,6 +278,31 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
 
     @Override
     public List<IDriveDirection> getDriveDirections() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
+        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
+            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
+        }
+        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
+        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
+            if ( timerSens.toString().equals(sUpper) ) {
+                return timerSens;
+            }
+            for ( String value : timerSens.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return timerSens;
+                }
+            }
+        }
+        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
+    }
+
+    @Override
+    public List<ITimerSensorMode> getTimerSensorModes() {
         // TODO Auto-generated method stub
         return null;
     }
