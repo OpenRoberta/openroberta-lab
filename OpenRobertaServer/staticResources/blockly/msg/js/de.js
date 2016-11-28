@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Batteriespannung";
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du hast gerade keinen Roboter mit dem Server verbunden. Schau nach, ob der Roboter eingeschaltet ist, melde ihn am Server an und gib das Kennwort unter Roboter - Verbinden ein.<br />Wenn das nicht klappt, schau in der Hilfe nach.";
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";
 Blockly.Msg.POPUP_ROBOT_STATE = "Status";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "Programm wird ausgeführt";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "Keine Verbindung zum Roboter";

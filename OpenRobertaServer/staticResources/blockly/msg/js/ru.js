@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Повторить пароль";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Напряжение";
 Blockly.Msg.POPUP_ROBOT_NAME = "Имя";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Сначала вы должны подсоединить своего робота.";
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Состояние";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "занят";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "разъединен";

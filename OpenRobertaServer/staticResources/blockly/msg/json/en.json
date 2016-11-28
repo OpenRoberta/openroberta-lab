@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-11-28 10:22:24.554252",
+		"lastupdated": "2016-11-28 10:32:20.869810",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -966,6 +966,7 @@
 	"POPUP_DOWNLOAD_SAVE_AS": "Save link as ...",
 	"POPUP_DOWNLOAD_SAVE": "Save",
 	"POPUP_2_0_1": "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>",
+	"POPUP_ROBOT_SIM": "Open Roberta Sim",
 	"NAO_BRICK_IPADDRESS": "Ip Address",
 	"NAO_BRICK_PORT": "Port number",
 	"NAO_BRICK_USERNAME": "Username",
