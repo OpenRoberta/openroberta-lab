@@ -786,7 +786,7 @@ Blockly.Msg.PLAY_TONE = "тон";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Проигрывает тон.";
 Blockly.Msg.PLAY_VOLUME = "громкость";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.0.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Мне нужна помощь.";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Roberta Lab Open представляет собой облачную интегрированную среду программирования, которая позволяет детям и подросткам с легкостью программировать различные системы робота. Исходный код этой платформа с полностью открыт, поэтому приветствуются любое участие! И программное обеспечение и инструменты для разработчиков с открытым исходным кодом доступны через серверы Фраунгофера.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Roberta Lab Open является платформой с открытым исходным кодом, разработанным Fraunhofer IAIS в рамках инициативы http://www.roberta-home.de »Роберта - Обучение с роботами«";
@@ -824,7 +824,6 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Повторить пароль";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Напряжение";
 Blockly.Msg.POPUP_ROBOT_NAME = "Имя";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Сначала вы должны подсоединить своего робота.";
-Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Состояние";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "занят";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "разъединен";

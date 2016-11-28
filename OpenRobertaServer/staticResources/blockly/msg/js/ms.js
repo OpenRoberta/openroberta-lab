@@ -786,7 +786,7 @@ Blockly.Msg.PLAY_TONE = "tone";  // untranslated
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Plays a tone.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "volume";  // untranslated
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.0.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "I want to help";  // untranslated
 Blockly.Msg.POPUP_ABOUT_TEXT = "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.";  // untranslated
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";  // untranslated
@@ -824,7 +824,6 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repeat password";  // untranslated
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltage";  // untranslated
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";  // untranslated
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "You have to make a connection to your robot first.";  // untranslated
-Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "State";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "busy";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "disconnected";  // untranslated
