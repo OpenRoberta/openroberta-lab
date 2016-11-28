@@ -786,7 +786,7 @@ Blockly.Msg.PLAY_TONE = "suono/tuono";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Riproduce un suono.";
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.0.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Voglio aiutare";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Il Open Roberta Lab è un ambiente di programmazione integrato, basato su cloud, che permette a bambini e adolescenti di imparare a programmare facilmente con robot di Lego Mindstorms EV3. Questa piattaforma é completamente open source (fonte aperta), quindi la partecipazione è vantaggiosa! La software e gli strumenti di sviluppo open source (a fonte aperta) sono disponibili tramite i server di Fraunhofer.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Il Open Roberta Lab è una piattaforma a fonte aperta (open source) di programmazione, sviluppata dal Fraunhofer IAIS nell'ambito della initiativa <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";
@@ -824,7 +824,6 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Ripeti password";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltaggio";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nome";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Prima devi effettuare una connessione con il tuo robot.";
-Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Stato";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "occupato";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "disconnesso";

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-11-26 19:34:33.868562",
+		"lastupdated": "2016-11-28 10:22:24.554252",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -965,8 +965,7 @@
 	"POPUP_DOWNLOAD_CHECK": "Okay, I've changed the download folder of my browser permanently. Don't show this popup again and download my programs directly.",
 	"POPUP_DOWNLOAD_SAVE_AS": "Save link as ...",
 	"POPUP_DOWNLOAD_SAVE": "Save",
-	"POPUP_2_0_1": "Version 2.0.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>",
-	"POPUP_ROBOT_SIM": "Open Roberta Sim",
+	"POPUP_2_0_1": "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>",
 	"NAO_BRICK_IPADDRESS": "Ip Address",
 	"NAO_BRICK_PORT": "Port number",
 	"NAO_BRICK_USERNAME": "Username",

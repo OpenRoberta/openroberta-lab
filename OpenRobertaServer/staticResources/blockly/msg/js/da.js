@@ -786,7 +786,7 @@ Blockly.Msg.PLAY_TONE = "tone";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Afspiller en tone.";
 Blockly.Msg.PLAY_VOLUME = "lydstyrke";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.0.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Jeg vil gerne hjælpe";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab er et cloud-baseret integreret programmerings-miljø der gør børn og unge i stand til nemt at programmere Lego Mindstorms EV3 robotter. Denne platform er fuldstændigt open-source, så deltagelse er påskyndt! Både softwaren og de åbne værktøjer er tilgængelige på Fraunhofer serverne.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab er en open-source programmerings platform udviklet af Fraunhofer IAIS under initiativet <a href='http://www.roberta-home.de/'>»Roberta – Lær med Robotter«</a>";
@@ -824,7 +824,6 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Gentag kodeord";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Spænding";
 Blockly.Msg.POPUP_ROBOT_NAME = "Navn";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du er nødt til at forbinde din robot først.";
-Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Tilstand";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "kører";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "ikke tilsluttet";
