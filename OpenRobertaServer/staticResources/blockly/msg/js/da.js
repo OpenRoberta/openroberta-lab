@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Gentag kodeord";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Spænding";
 Blockly.Msg.POPUP_ROBOT_NAME = "Navn";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du er nødt til at forbinde din robot først.";
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Tilstand";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "kører";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "ikke tilsluttet";

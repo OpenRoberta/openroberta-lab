@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repetir contraseña";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltaje";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nombre";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Primero tienes que establecer una conexión con tu robot.";
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Estado";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "ocupado";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "desconectado";

@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Toista salasana";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Jännite";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nimi";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Sinun täytyy ensin muodostaa yhteys robottiisi.";
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Tila";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "busy";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "yhteys katkaistu";

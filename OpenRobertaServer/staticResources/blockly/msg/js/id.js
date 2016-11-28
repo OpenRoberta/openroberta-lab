@@ -824,6 +824,7 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repeat password";  // untranslated
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltage";  // untranslated
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";  // untranslated
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "You have to make a connection to your robot first.";  // untranslated
+Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "State";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "busy";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "disconnected";  // untranslated
