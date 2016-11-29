@@ -26,6 +26,7 @@ public class CppCodeGeneratorVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
+        @SuppressWarnings("rawtypes")
         Configuration.Builder configuration = new CalliopeConfiguration.Builder();
         brickConfiguration = (CalliopeConfiguration) configuration.build();
     }

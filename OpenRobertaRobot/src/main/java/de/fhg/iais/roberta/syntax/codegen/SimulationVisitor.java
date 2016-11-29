@@ -3,8 +3,13 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.syntax.MotorDuration;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -17,6 +22,7 @@ import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -619,7 +625,7 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitMethodVoid(MethodVoid<V> methodVoid) {
-        this.sb.append("var method" + this.methodsNumber + " = createMethodV('" + methodVoid.getMethodName() + "', [");
+        this.sb.append("var method" + this.methodsNumber + " = createMethodVoid('" + methodVoid.getMethodName() + "', [");
         methodVoid.getParameters().visit(this);
         this.sb.append("], [");
         addInStmt();
@@ -692,6 +698,16 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+        return null;
+    }
+
+    @Override
+    public V visitConnectConst(ConnectConst<V> connectConst) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
         return null;
     }
 
@@ -819,5 +835,70 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
         if ( isInStmt() ) {
             this.sb.setLength(this.sb.length() - 2);
         }
+    }
+
+    protected void appendDuration(MotorDuration<V> duration) {
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
+        }
+    }
+
+    protected DriveDirection getDriveDirection(boolean isReverse) {
+        if ( isReverse ) {
+            return DriveDirection.BACKWARD;
+        }
+        return DriveDirection.FOREWARD;
+    }
+
+    protected TurnDirection getTurnDirection(boolean isReverse) {
+        if ( isReverse ) {
+            return TurnDirection.RIGHT;
+        }
+        return TurnDirection.LEFT;
+    }
+
+    protected void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<V>>> phrasesSet) {
+        for ( ArrayList<Phrase<V>> phrases : phrasesSet ) {
+            for ( Phrase<V> phrase : phrases ) {
+                phrase.visit(this);
+            }
+        }
+        appendProgramInitialization(this);
+    }
+
+    private void appendStmtsInitialization(SimulationVisitor<V> astVisitor) {
+        astVisitor.sb.append("'programStmts': [");
+        if ( astVisitor.stmtsNumber > 0 ) {
+            for ( int i = 0; i < astVisitor.stmtsNumber; i++ ) {
+                astVisitor.sb.append("stmt" + i);
+                if ( i != astVisitor.stmtsNumber - 1 ) {
+                    astVisitor.sb.append(",");
+                }
+
+            }
+        }
+        astVisitor.sb.append("]");
+    }
+
+    private void appendMethodsInitialization(SimulationVisitor<V> astVisitor) {
+        if ( astVisitor.methodsNumber > 0 ) {
+            astVisitor.sb.append("'programMethods': [");
+            for ( int i = 0; i < astVisitor.methodsNumber; i++ ) {
+                astVisitor.sb.append("method" + i);
+                if ( i != astVisitor.methodsNumber - 1 ) {
+                    astVisitor.sb.append(",");
+                } else {
+                    astVisitor.sb.append("], ");
+                }
+            }
+        }
+    }
+
+    private void appendProgramInitialization(SimulationVisitor<V> astVisitor) {
+        astVisitor.sb.append("var blocklyProgram = {");
+        appendMethodsInitialization(astVisitor);
+        appendStmtsInitialization(astVisitor);
+        astVisitor.sb.append("};");
     }
 }

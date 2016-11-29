@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class CompassSensor<V> extends Sensor<V> {
-    private int port;
+    private final int port;
 
     private CompassSensor(int port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
@@ -38,6 +38,10 @@ public class CompassSensor<V> extends Sensor<V> {
      */
     public static <V> CompassSensor<V> make(int port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new CompassSensor<>(port, properties, comment);
+    }
+
+    public int getPort() {
+        return this.port;
     }
 
     /**

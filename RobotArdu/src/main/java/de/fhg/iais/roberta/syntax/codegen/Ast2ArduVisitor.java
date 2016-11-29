@@ -239,8 +239,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 return "String";
             case CONNECTION:
                 return "int";
+            default:
+                throw new IllegalArgumentException("unhandled type");
         }
-        throw new IllegalArgumentException("unhandled type");
     }
 
     private static String getEnumCode(IMode value) {
@@ -639,13 +640,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        switch ( (BlinkMode) lightAction.getBlinkMode() ) {
+        BlinkMode blinkingMode = (BlinkMode) lightAction.getBlinkMode();
+
+        switch ( blinkingMode ) {
             case ON:
                 this.sb.append("one.led(HIGH);");
                 break;
             case OFF:
                 this.sb.append("one.led(LOW);");
                 break;
+            default:
+                throw new DbcException("Invalide blinking mode: " + blinkingMode);
         }
         return null;
 
@@ -675,9 +680,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         IColorSensorMode mode = null;
         Expr<Void> tt = showTextAction.getMsg();
         if ( tt.getKind().hasName("SENSOR_EXPR") ) {
-            de.fhg.iais.roberta.syntax.sensor.Sensor sens = ((SensorExpr) tt).getSens();
+            de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
             if ( sens.getKind().hasName("COLOR_SENSING") ) {
-                mode = ((ColorSensor) sens).getMode();
+                mode = ((ColorSensor<Void>) sens).getMode();
             }
         }
 
