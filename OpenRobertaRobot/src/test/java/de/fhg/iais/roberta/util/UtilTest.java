@@ -42,7 +42,6 @@ public class UtilTest {
         assertEquals(1, Util1.getRobotNumberFromProperty("ev3"));
         assertEquals(2, Util1.getRobotNumberFromProperty("nxt"));
         assertEquals(3, Util1.getRobotNumberFromProperty("ardu"));
-        assertEquals(4, Util1.getRobotNumberFromProperty("oraSim"));
     }
 
     @Test(expected = DbcException.class)
