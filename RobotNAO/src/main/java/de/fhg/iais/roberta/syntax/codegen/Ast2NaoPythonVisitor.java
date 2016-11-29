@@ -14,9 +14,15 @@ import de.fhg.iais.roberta.mode.action.nao.Posture;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.nao.Camera;
 import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nao.Coordinates;
 import de.fhg.iais.roberta.mode.sensor.nao.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.nao.Part;
+import de.fhg.iais.roberta.mode.sensor.nao.Position;
+import de.fhg.iais.roberta.mode.sensor.nao.Resolution;
+import de.fhg.iais.roberta.mode.sensor.nao.Side;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -43,6 +49,8 @@ import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Blink;
+import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.LookAt;
@@ -125,6 +133,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.HeadTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecordVideo;
+import de.fhg.iais.roberta.syntax.sensor.nao.SelectCamera;
+import de.fhg.iais.roberta.syntax.sensor.nao.SensorTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
+import de.fhg.iais.roberta.syntax.sensor.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -1762,29 +1779,145 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitGetVolume(GetVolume<Void> getVolume) {
+        this.sb.append("h.getVolume()");
+        return null;
+    }
+
+    @Override
+    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+        this.sb.append("h.getLanguage()");
+        return null;
+    }
+
+    @Override
+    public Void visitHeadTouched(HeadTouched<Void> headTouched) {
+        this.sb.append("h.headsensors(");
+        if ( headTouched.getPosition() == Position.FRONT ) {
+            this.sb.append("\"Front\")");
+        } else if ( headTouched.getPosition() == Position.MIDDLE ) {
+            this.sb.append("\"Middle\")");
+        } else if ( headTouched.getPosition() == Position.REAR ) {
+            this.sb.append("\"Rear\")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSensorTouched(SensorTouched<Void> sensorTouched) {
+        this.sb.append("h.touchsensors(");
+        if ( sensorTouched.getPart() == Part.BUMPER ) {
+            this.sb.append("Bumper, ");
+        } else if ( sensorTouched.getPart() == Part.HAND ) {
+            this.sb.append("Hand");
+        }
+        if ( sensorTouched.getSide() == Side.LEFT ) {
+            this.sb.append("Left)");
+        } else if ( sensorTouched.getSide() == Side.RIGHT ) {
+            this.sb.append("Right)");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitNaoMark(NaoMark<Void> naoMark) {
+        this.sb.append("h.naoMark()");
+        return null;
+    }
+
+    @Override
+    public Void visitSonar(Sonar<Void> sonar) {
+        this.sb.append("h.sonar()");
+        return null;
+    }
+
+    @Override
+    public Void visitSelectCamera(SelectCamera<Void> selectCamera) {
+        this.sb.append("h.selectCamera(");
+        if ( selectCamera.getCamera() == Camera.BOTTOM ) {
+            this.sb.append("Bottom");
+        } else if ( selectCamera.getCamera() == Camera.TOP ) {
+            this.sb.append("Top");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTakePicture(TakePicture<Void> takePicture) {
+        this.sb.append("h.takePicture()");
+        return null;
+    }
+
+    @Override
+    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+        this.sb.append("h.recordVideo");
+        if ( recordVideo.getResolution() == Resolution.LOW ) {
+            this.sb.append("0, ");
+        } else if ( recordVideo.getResolution() == Resolution.MED ) {
+            this.sb.append("1, ");
+        } else if ( recordVideo.getResolution() == Resolution.HIGH ) {
+            this.sb.append("2, ");
+        }
+        if ( recordVideo.getCamera() == Camera.TOP ) {
+            this.sb.append("Top, ");
+        } else if ( recordVideo.getCamera() == Camera.BOTTOM ) {
+            this.sb.append("Bottom, ");
+        }
+        recordVideo.getDuration().visit(this);
+
+        return null;
+    }
+
+    @Override
+    public Void visitGyrometer(Gyrometer<Void> gyrometer) {
+        this.sb.append("h.gyrometer(");
+        if ( gyrometer.getCoordinate() == Coordinates.X ) {
+            this.sb.append("X)");
+        } else if ( gyrometer.getCoordinate() == Coordinates.Y ) {
+            this.sb.append("Y)");
+        } else if ( gyrometer.getCoordinate() == Coordinates.Z ) {
+            this.sb.append("Z)");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.sb.append("h.accelerometer(");
+        if ( accelerometer.getCoordinate() == Coordinates.X ) {
+            this.sb.append("X)");
+        } else if ( accelerometer.getCoordinate() == Coordinates.Y ) {
+            this.sb.append("Y)");
+        } else if ( accelerometer.getCoordinate() == Coordinates.Z ) {
+            this.sb.append("Z)");
+        }
+        return null;
+    }
+
     /*Methods for new Blocks
     //Move
-    
+
     public void visitStandUp(StandUp<Void> standUp) {
     	this.sb.append("hal.standUp()");
     }
-    
+
     public void visitSitDown(SitDown<Void> sitDown) {
     	this.sb.append("hal.sitDown()");
     }
-    
+
     public void visitTaiChi(TaiChi<Void> taiChi) {
     	this.sb.append("hal.taiChi()");
     }
-    
+
     public void visitWave(Wave<Void> wave) {
     	this.sb.append("hal.wave()");
     }
-    
+
     public void visitWipeForehead(WipeForehead<Void> wipeForehead) {
     	this.sb.append("hal.wipeForehead()");
     }
-    
+
     public void visitApplyPosture(ApplyPosture<Void> applyPosture) {
     	this.sb.append("hal.applyPosture(");
     	switch ( ApplyPosture.getPoseName() ) {
@@ -1799,7 +1932,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	break;
     	}
     }
-    
+
     public void visitPointAt(PointAt<Void> pointAt) {
     this.sb.append("hal.pointAt(");
     visitPointAt.getX().visit(this);
@@ -1812,7 +1945,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     visitPointAt.getSpeed().visit(this);
     this.sb.append(" )");
     }
-    
+
     public void visitLookAt(LookAt<Void> lookAt) {
     this.sb.append("hal.lookAt(");
     visitLookAt.getX().visit(this);
@@ -1825,15 +1958,15 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     visitLookAt.getSpeed().visit(this);
     this.sb.append(" )");
     }
-    
+
     public void visitStiffnessOn(StiffnessOn<Void> stiffnessOn) {
     	this.sb.append("hal.stiffnessOn()");
     }
-    
+
     public void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
     	this.sb.append("hal.stiffnessOff()");
     }
-    
+
     public void visitPartialStiffnessOn(PartialstiffnessOn<Void> partialStifnessOn) {
     	this.sb.append("hal.partialStiffnessOn(");
     	switch ( PartialStiffnessOn.getBodyName() ) {
@@ -1848,7 +1981,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	break;
     	}
     }
-    
+
     public void visitPartialStiffnessOff(PartialstiffnessOff<Void> partialStiffnessOff) {
     	this.sb.append("hal.partialStiffnessOff(");
     	switch ( PartialStiffnessOff.getBodyName() ) {
@@ -1863,15 +1996,15 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	break;
     	}
     }
-    
+
     //Walk
-    
+
     public void visitWalk(Walk<Void> walk) {
     	this.sb.append("hal.walk(");
     visitWalk.getPower().visit(this);
     this.sb.append(", 0, 0)");
     }
-    
+
     public void visitWalkTo(WalkTo<Void> walkTo) {
     	this.sb.append("hal.walk(");
     visitWalkTo.getX().visit(this);
@@ -1881,53 +2014,53 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     visitWalkTo.getTheta().visit(this);
     this.sb.append(" )");
     }
-    
+
     public void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
     	this.sb.append("hal.stiffnessOff()");
     }
-    
+
     //Sounds
-    
+
     public void visitSetVolume(SetVolume<Void> setVolume) {
     	this.sb.append("hal.setVolume(");
     	setVolume.getVolume().visit(this);
     	this.sb.append(")");
     }
-    
+
     public void visitGetVolume(GetVolume<Void> getVolume) {
     	this.sb.append("hal.getVolume()");
     }
-    
+
     public void visitGetLanguage(GetLanguage<Void> getLanguage) {
     	this.sb.append("hal.getLanguage()");
     }
-    
+
     //TODO: add more languages
     public void visitSetLanguage(SetLanguage<Void> setLanguage) {
     	this.sb.append("hal.setLanguage(");
     	this.sb.append(setLanguage.getLanguageName().toString() + ")");
     }
-    
+
     public void visitSayText(SayText<Void> sayText) {
     	this.sb.append("hal.say(");
     	this.sb.append("str(");
     sayText.getMsg().visit(this);
     this.sb.append(")");
     }
-    
+
     //LEDs
-    
+
     public void visitSetEyeColor(SetEyeColor<Void> setEyeColor) {
     	this.sb.append("hal.setEyeColor(");
     	this.sb.append(getEnumCode(setEyeColor.getColor()) + ")");
     }
-    
+
     public void visitSetEarIntensity(SetEarIntensity<Void> setEarIntensity) {
     	this.sb.append("hal.setEarIntensity(");
     	visitSetEarIntensity.getIntensity.visit(this);
     	this.sb.append(")");
     }
-    
+
     //TODO: add complete List of LEDs as case
     public void visitSetSingleLed(SetSingleLed<Void> setSingleLed) {
     	this.sb.append("hal.setSingleLed(");
@@ -1938,62 +2071,62 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	}
     	this.sb.append(", " + getEnumCode(setEyeColor.getColor()) + ")");
     }
-    
+
     public void visitBlink(Blink<Void> blink) {
     	this.sb.append("hal.blink()");
     }
-    
+
     public void visitLedOff(LedOff<Void> ledOff) {
     	this.sb.append("hal.ledOff()");
     }
-    
+
     public void visitLedReset(LedReset<Void> ledReset) {
     	this.sb.append("hal.ledReset()");
     }
-    
+
     public void visitRandomEyes(RandomEyes<Void> randomEyes) {
     	this.sb.append("hal.randomEyes(");
     	visitRandomEyes.getTime().visit(this);
     	this.sb.append(")");
     }
-    
+
     public void visitRasta(Rasta<Void> rasta) {
     	this.sb.append("hal.rasta(");
     	visitRasta.getTime().visit(this);
     	this.sb.append(")");
     }
-    
+
     //Sensors
-    
+
     public void visitAccelerometer(Accelerometer<Void> accelerometer) {
     	this.sb.append("hal.accelerometer(");
     	visitAccelerometer.getTime().visit(this);
     	this.sb.append(accelerometer.getCoordinate().toString() + ")");
     }
-    
+
     public void visitTouchsensor(Touchsensor<Void> touchsensor) {
     	this.sb.append(touchsensor.getPosition().toString() + ", ");
     	this.sb.append(touchsensor.getSide().toString() + ")");
     }
-    
+
     public void visitGyrometer(Gyrometer<Void> gyrometer) {
     	this.sb.append("hal.gyrometer(");
     	this.sb.append(visitGyrometer.getCoordinate().toString() + ")");
     }
-    
+
     public void visitSonar(Sonar<Void> sonar) {
     	this.sb.append("hal.sonar()");
     }
-    
+
     public void visitFsr(Fsr<Void> fsr) {
     	this.sb.append("hal.fsr(");
     	this.sb.append(visitFsr.getSide().toString() + ")");
     }
-    
+
     public void visitnaoMark(NaoMark<Void> naomark) {
     	this.sb.append("hal.naoMark()");
     }
-    
+
     public void visitRecordVideo(RecordVideo<Void> recordvideo) {
     	this.sb.append("hal.recordVideo(");
     	visitRecordVideo.getResolution().visit(this);
@@ -2002,17 +2135,17 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     	this.sb.append(")");
     	this.sb.append(setLanguage.getLanguageName().toString() + ")");
     }
-    
+
     public void visitTakePicture(TakePicture<Void> takepicture) {
     	this.sb.append("hal.takePicture()");
     }
-    
+
     public void visitSelectCamera(SelectCamera<Void> selectcamera) {
     	this.sb.append("hal.selectCamera(");
     	visitSelectCamera.getId().visit(this);
     	this.sb.append(")");
     }
-    
+
     public void visitHeadsensor(Headsensor<Void> headsensor) {
     	this.sb.append("hal.headSensor(");
     	this.sb.append(Headsensor.getPosition().toString() + ")");

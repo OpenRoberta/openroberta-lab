@@ -275,5 +275,11 @@ public final class BlocklyConstants {
     public static final String Theta = "Theta";
     public static final String INTENSITY = "Intensity";
     public static final String LANGUAGE = "LANGUAGE";
+    public static final String POSITION = "POSITION";
+    public static final String PART = "PART";
+    public static final String SIDE = "SIDE";
+    public static final String CAMERA = "CAMERA";
+    public static final String RESOLUTION = "RESOLUTION";
+    public static final String COORDINATE = "COORDINATE";
 
 }
