@@ -229,6 +229,11 @@ function _updateLejos {
   $run
 }
 
+function _resetdb {
+  rm -rf OpenRobertaServer/db
+  cp -a OpenRobertaServer/dbBase OpenRobertaServer/db
+}
+
 # ---------------------------------------- begin of the script ----------------------------------------------------
 cmd="$1"; shift
 if [[ "$cmd" == '' || "$cmd" == '--help' || "$cmd" == '-h' ]]
@@ -257,7 +262,7 @@ then
    exit 0
 fi
 case "$cmd" in
---reset-db)         git checkout HEAD -- OpenRobertaServer/db ;;
+--reset-db)         _resetdb ;;
 --sqlclient)        if [ -d OpenRobertaServer ]
                     then
                       echo "RUNNING THE SQL CLIENT FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
