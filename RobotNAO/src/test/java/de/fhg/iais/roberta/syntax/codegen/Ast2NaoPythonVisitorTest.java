@@ -335,6 +335,16 @@ public class Ast2NaoPythonVisitorTest {
         assertCodeIsOk(expectedResult, "/action/setLanguage_English.xml");
     }
 
+    @Test
+    public void visitSayText_ByDefault_ReturnsSayTextHelloPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "    h.say(\"Hello\")\n"
+            + SUFFIX;
+
+        assertCodeIsOk(expectedResult, "/action/sayText.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = Helper.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);

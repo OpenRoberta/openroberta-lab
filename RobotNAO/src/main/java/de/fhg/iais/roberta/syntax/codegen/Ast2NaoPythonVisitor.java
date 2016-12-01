@@ -59,6 +59,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
 import de.fhg.iais.roberta.syntax.action.nao.PointAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
@@ -1892,6 +1893,14 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         } else if ( accelerometer.getCoordinate() == Coordinates.Z ) {
             this.sb.append("Z)");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitSayText(SayText<Void> sayText) {
+        this.sb.append("h.say(");
+        sayText.getMsg().visit(this);
+        this.sb.append(")");
         return null;
     }
 

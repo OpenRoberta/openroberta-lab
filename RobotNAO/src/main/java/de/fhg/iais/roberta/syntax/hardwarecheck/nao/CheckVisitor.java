@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
 import de.fhg.iais.roberta.syntax.action.nao.PointAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
@@ -880,4 +881,9 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitSayText(SayText<Void> sayText) {
+        sayText.getMsg().visit(this);
+        return null;
+    }
 }
