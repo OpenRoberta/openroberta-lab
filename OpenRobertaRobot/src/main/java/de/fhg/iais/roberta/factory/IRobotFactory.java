@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.inject.AbstractModule;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -31,6 +32,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 
 public interface IRobotFactory {
     /**
@@ -354,5 +356,7 @@ public interface IRobotFactory {
     Boolean isBeta();
 
     Boolean isAutoconnected();
+
+    SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
 
 }

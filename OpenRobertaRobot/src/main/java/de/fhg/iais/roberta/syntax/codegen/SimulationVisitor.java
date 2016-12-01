@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -190,6 +191,17 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
         binary.getLeft().visit(this);
         this.sb.append(", ");
         binary.getRight().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitToneAction(ToneAction<V> toneAction) {
+        String end = createClosingBracket();
+        this.sb.append("createToneAction(");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(", ");
+        toneAction.getDuration().visit(this);
         this.sb.append(end);
         return null;
     }

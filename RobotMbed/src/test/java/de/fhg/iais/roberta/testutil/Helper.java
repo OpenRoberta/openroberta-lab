@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.factory.CalliopeFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.codegen.Ast2MbedSimVisitor;
 import de.fhg.iais.roberta.syntax.codegen.CppCodeGenerationVisitor;
 import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
@@ -33,6 +34,21 @@ import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
  */
 public class Helper {
     public static CalliopeFactory factory = new CalliopeFactory(null);
+
+    /**
+     * Generate java script code as string from a given program .
+     *
+     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
+     * @return the code as string
+     * @throws Exception
+     */
+    public static String generateJavaScript(String pathToProgramXml) throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
+        String code = Ast2MbedSimVisitor.generate(brickConfiguration, transformer.getTree());
+        // System.out.println(code); // only needed for EXTREME debugging
+        return code;
+    }
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.

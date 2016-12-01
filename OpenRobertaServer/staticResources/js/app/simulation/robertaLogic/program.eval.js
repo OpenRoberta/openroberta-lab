@@ -90,8 +90,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     evalShowPictureAction(internal(this), stmt);
                     break;
 
+                case CONSTANTS.DISPLAY_IMAGE_ACTION:
+                    evalDisplayImageAction(internal(this), stmt);
+                    break;
+
                 case CONSTANTS.SHOW_TEXT_ACTION:
                     evalShowTextAction(internal(this), stmt);
+                    break;
+
+                case CONSTANTS.DISPLAY_TEXT_ACTION:
+                    evalDisplayTextAction(internal(this), stmt);
                     break;
 
                 case CONSTANTS.CLEAR_DISPLAY_ACTION:
@@ -111,11 +119,12 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     break;
 
                 case CONSTANTS.TURN_LIGHT:
-                    evalLedOnAction(internal(this), simulationData, stmt);
+                case CONSTANTS.LED_ON_ACTION:
+                    evalLedOnAction(internal(this), stmt);
                     break;
 
                 case CONSTANTS.LIGHT_ACTION:
-                    evalLightSensorAction(internal(this), simulationData, stmt);
+                    evalLightSensorAction(internal(this), stmt);
                     break;
 
                 case CONSTANTS.STOP_DRIVE:
@@ -236,16 +245,18 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.program.setTimer(evalExpr(obj, stmt.time));
     };
 
-    var evalLightSensorAction = function(obj, simulationData, stmt) {
+    var evalLightSensorAction = function(obj, stmt) {
         obj.outputCommands.led = {}
         obj.outputCommands.led.color = stmt.color;
         obj.outputCommands.led.mode = stmt.mode;
     };
 
-    var evalLedOnAction = function(obj, simulationData, stmt) {
+    var evalLedOnAction = function(obj, stmt) {
         obj.outputCommands.led = {}
         obj.outputCommands.led.color = stmt.color;
-        obj.outputCommands.led.mode = stmt.mode;
+        if (stmt.mode) {
+            obj.outputCommands.led.mode = stmt.mode;
+        }
     };
 
     var evalLedStatusAction = function(obj, stmt) {
@@ -263,12 +274,23 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
 
+    var evalDisplayImageAction = function(obj, stmt) {
+        obj.outputCommands.display = {};
+        obj.outputCommands.display.picture = evalExpr(obj, stmt.image);
+    };
+
     var evalShowTextAction = function(obj, stmt) {
         obj.outputCommands.display = {};
         var val = evalExpr(obj, stmt.text);
         obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
         obj.outputCommands.display.x = evalExpr(obj, stmt.x);
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
+    };
+
+    var evalDisplayTextAction = function(obj, stmt) {
+        obj.outputCommands.display = {};
+        var val = evalExpr(obj, stmt.text);
+        obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
     };
 
     var roundIfSensorData = function(val, exprType) {
@@ -502,6 +524,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalExpr = function(obj, expr) {
         switch (expr.expr) {
             case CONSTANTS.NUM_CONST:
+            case CONSTANTS.LED_COLOR_CONST:
             case CONSTANTS.BOOL_CONST:
             case CONSTANTS.COLOR_CONST:
             case CONSTANTS.STRING_CONST:
@@ -561,6 +584,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 return evalGetVolume(obj);
             case CONSTANTS.METHOD_CALL_RETURN:
                 return evalMethodCallReturn(obj, expr.name, expr.parameters, expr.values);
+            case CONSTANTS.RGB_COLOR_CONST:
+                return evalRgbColorConst(obj, expr.value);
             default:
                 throw "Invalid Expression Type!";
         }
@@ -603,6 +628,13 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var evalGetVolume = function(obj) {
         return obj.simulationData[CONSTANTS.VOLUME];
+    };
+
+    var evalRgbColorConst = function(obj, value) {
+        var red = evalExpr(obj, value[0]);
+        var green = evalExpr(obj, value[1]);
+        var blue = evalExpr(obj, value[2]);
+        return [red, green, blue];
     };
 
     var evalBinary = function(obj, op, left, right) {

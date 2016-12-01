@@ -137,12 +137,41 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
+    function createDisplayImageAction(mode, image) {
+        var result = {};
+        result[CONST.STMT] = CONST.DISPLAY_IMAGE_ACTION;
+        result[CONST.MODE] = mode;
+        result[CONST.IMAGE] = image;
+        return result;
+    }
+
+    function createRgbColor(rgbColor) {
+        var result = {};
+        result[CONST.EXPR] = CONST.RGB_COLOR_CONST;
+        result[CONST.VALUE] = rgbColor;
+        return result;
+    }
+
+    function createLedOnAction(ledColor) {
+        var result = {};
+        result[CONST.STMT] = CONST.LED_ON_ACTION;
+        result[CONST.LED_COLOR_CONST] = ledColor;
+        return result;
+    }
+
     function createShowTextAction(text, x, y) {
         var result = {};
         result[CONST.STMT] = CONST.SHOW_TEXT_ACTION;
         result[CONST.TEXT] = text;
         result[CONST.X] = x;
         result[CONST.Y] = y;
+        return result;
+    }
+
+    function createDisplayTextAction(text) {
+        var result = {};
+        result[CONST.STMT] = CONST.DISPLAY_TEXT_ACTION;
+        result[CONST.TEXT] = text;
         return result;
     }
 
@@ -334,6 +363,7 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
 
         return result;
     }
+
 
     function createIfStmt(exprList, thenList, elseStmts) {
         if (!Array.isArray(exprList)) {

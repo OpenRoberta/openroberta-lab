@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -234,17 +233,6 @@ public class Ast2NxtSimVisitor extends SimulationVisitor<Void> {
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         String end = createClosingBracket();
         this.sb.append("createStopDrive(");
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        String end = createClosingBracket();
-        this.sb.append("createToneAction(");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
         this.sb.append(end);
         return null;
     }

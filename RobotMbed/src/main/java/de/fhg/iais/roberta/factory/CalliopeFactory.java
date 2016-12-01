@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -25,13 +26,16 @@ import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class CalliopeFactory extends AbstractRobotFactory {
 
-    private CalliopeCompilerWorkflow compilerWorkflow;
+    private final CalliopeCompilerWorkflow compilerWorkflow;
+    private final CalliopeSimCompilerWorkflow calliopeSimCompilerWorkflow;
     private final Properties calliopeProperties;
 
     public CalliopeFactory(RobotCommunicator unusedForArdu) {
@@ -43,6 +47,7 @@ public class CalliopeFactory extends AbstractRobotFactory {
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
+        this.calliopeSimCompilerWorkflow = new CalliopeSimCompilerWorkflow();
         addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);
     }
 
@@ -296,8 +301,7 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.calliopeSimCompilerWorkflow;
     }
 
     @Override
@@ -348,5 +352,10 @@ public class CalliopeFactory extends AbstractRobotFactory {
     @Override
     public Boolean isAutoconnected() {
         return this.calliopeProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return new CalliopeSimProgramCheckVisitor(brickConfiguration);
     }
 }

@@ -30,7 +30,7 @@ public class LedColor<V> extends Expr<V> {
     private final String value;
 
     private LedColor(String color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LED_COLOR"), properties, comment);
+        super(BlockTypeContainer.getByName("LED_COLOR_CONST"), properties, comment);
         Assert.notNull(color);
         this.value = color;
         setReadOnly();

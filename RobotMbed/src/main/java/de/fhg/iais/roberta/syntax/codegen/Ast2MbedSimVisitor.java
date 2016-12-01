@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -27,6 +26,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
@@ -67,266 +67,297 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     }
 
     @Override
+    public Void visitMainTask(MainTask<Void> mainTask) {
+        mainTask.getVariables().visit(this);
+        return null;
+    }
+
+    @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        String end = createClosingBracket();
+        this.sb.append("createStatusLight(CONST." + lightStatusAction.getStatus());
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+        String end = createClosingBracket();
+        this.sb.append("createClearDisplayAction(");
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getKey() + ")");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("createGetSample(CONST.COMPASS)");
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        // TODO Auto-generated method stub
+        String end = createClosingBracket();
+        this.sb.append("createDisplayTextAction(");
+        displayTextAction.getMsg().visit(this);
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        // TODO Auto-generated method stub
+        this.sb.append("'" + predefinedImage.getImageName().getImageString() + "'");
         return null;
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        // TODO Auto-generated method stub
+        String end = createClosingBracket();
+        this.sb.append("createDisplayImageAction(CONST.");
+        this.sb.append(displayImageAction.getDisplayImageMode() + ", ");
+        displayImageAction.getValuesToDisplay().visit(this);
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        // TODO Auto-generated method stub
+        String end = createClosingBracket();
+        this.sb.append("createToneAction(");
+        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getFrequency() + ")");
+        this.sb.append(", ");
+        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getDuration() + ")");
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        // TODO Auto-generated method stub
         return null;
+    }
+
+    private int map(int x, int in_min, int in_max, int out_min, int out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     @Override
     public Void visitImage(Image<Void> image) {
-        // TODO Auto-generated method stub
+        String imageString = "";
+        for ( int i = 0; i < 5; i++ ) {
+            imageString += "[";
+            for ( int j = 0; j < 5; j++ ) {
+                String pixel = image.getImage()[i][j].trim();
+                if ( pixel.equals("#") ) {
+                    pixel = "9";
+                } else if ( pixel.equals("") ) {
+                    pixel = "0";
+                }
+                imageString += map(Integer.parseInt(pixel), 0, 9, 0, 255);
+                if ( j < 4 ) {
+                    imageString += ",";
+                }
+            }
+            imageString += "]";
+            if ( i < 4 ) {
+                imageString += ",";
+            }
+        }
+
+        this.sb.append("createConstant(CONST." + image.getKind().getName() + ", [" + imageString + "])");
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("createGetSample(CONST.GESTURE, CONST." + gestureSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("createGetSample(CONST.TEMPERATURE)");
         return null;
     }
 
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
-        // TODO Auto-generated method stub
+        this.sb.append(
+            "createConstant(CONST."
+                + ledColor.getKind().getName()
+                + ", ["
+                + ledColor.getRedChannel()
+                + ", "
+                + ledColor.getGreenChannel()
+                + ", "
+                + ledColor.getBlueChannel()
+                + "])");
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
+        String end = createClosingBracket();
+        this.sb.append("createLedOnAction(");
+        ledOnAction.getLedColor().visit(this);
+        this.sb.append(end);
         return null;
     }
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
-        // TODO Auto-generated method stub
+        getSampleSensor.getSensor().visit(this);
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        // TODO Auto-generated method stub
+        this.sb.append("createRgbColor([");
+        rgbColor.getR().visit(this);
+        this.sb.append(", ");
+        rgbColor.getG().visit(this);
+        this.sb.append(", ");
+        rgbColor.getB().visit(this);
+        this.sb.append("])");
         return null;
     }
 }

@@ -66,6 +66,8 @@ define({
 
     SHOW_PICTURE_ACTION: "ShowPictureAction",
 
+    DISPLAY_IMAGE_ACTION: "DisplayImageAction",
+
     CLEAR_DISPLAY_ACTION: "ClearDisplay",
 
     CREATE_DEBUG_ACTION: "CreateDebugAction",
@@ -81,6 +83,8 @@ define({
     SET_VOLUME_ACTION: "SetVolumeAction",
 
     VOLUME: "volume",
+
+    IMAGE: "image",
 
     PLAY_FILE_ACTION: "PlayFileAction",
 
@@ -256,9 +260,17 @@ define({
 
     COLOUR: "colorValue",
 
+    LED_COLOR_CONST: "ledColor",
+    
+    RGB_COLOR_CONST: "rgbColor",
+
+    LED_ON_ACTION: "ledOnAction",
+
     GREEN: "GREEN",
 
     RED: "red",
+
+    ANIMATION: "animation",
 
     SUM: "sum",
 
@@ -277,6 +289,8 @@ define({
     STATUS_LIGHT_ACTION: "statusLightAction",
 
     AMBIENTLIGHT: "ambientlight",
+
+    DISPLAY_TEXT_ACTION: "displayTextAction",
 
     TIMES: "TIMES",
 
@@ -385,6 +399,16 @@ define({
     INSERT: "insert",
 
     LIGHT: "light",
+
+    BUTTON_A: "button_a",
+
+    BUTTON_B: "button_b",
+
+    COMPASS: "compass",
+
+    GESTURE: "gesture",
+
+    TEMPERATURE: "temperature",
 
     COLOR_ENUM: {
         NONE: "NONE",
