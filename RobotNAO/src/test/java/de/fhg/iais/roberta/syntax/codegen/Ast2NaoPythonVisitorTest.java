@@ -269,7 +269,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitSetEarIntensity_ByDefault_ReturnsSetEarIntensityPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.setEarIntensity(0)\n"
+            + "    h.setEarIntensity(50)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/setEarIntensity.xml");

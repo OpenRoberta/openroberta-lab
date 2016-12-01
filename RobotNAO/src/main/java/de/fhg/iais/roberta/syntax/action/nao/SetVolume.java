@@ -30,7 +30,7 @@ public final class SetVolume<V> extends Action<V> {
     private final Expr<V> volume;
 
     private SetVolume(Expr<V> volume, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("WALK_DISTANCE"), properties, comment);
+        super(BlockTypeContainer.getByName("SET_VOLUME"), properties, comment);
         this.volume = volume;
         setReadOnly();
     }

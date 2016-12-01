@@ -273,7 +273,7 @@ public final class BlocklyConstants {
     public static final String Z = "Z";
     public static final String Speed = "Speed";
     public static final String Theta = "Theta";
-    public static final String INTENSITY = "Intensity";
+    public static final String INTENSITY = "INTENSITY";
     public static final String LANGUAGE = "LANGUAGE";
     public static final String POSITION = "POSITION";
     public static final String PART = "PART";
