@@ -1493,7 +1493,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("import math\n");
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
-        this.sb.append("h = Hal()");
+        this.sb.append("h = Hal()\n");
     }
 
     private void generateSuffix(boolean withWrapping) {

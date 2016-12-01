@@ -15,7 +15,7 @@ public class Ast2NaoPythonVisitorTest {
         + "import math\n"
         + "import time\n"
         + "from hal import Hal\n"
-        + "h = Hal()\n"
+        + "h = Hal()\n\n"
         + "def run():\n";
 
     private static final String SUFFIX = "" //
