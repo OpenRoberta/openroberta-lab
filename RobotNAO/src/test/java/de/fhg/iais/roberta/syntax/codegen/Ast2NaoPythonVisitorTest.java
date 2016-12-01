@@ -23,7 +23,7 @@ public class Ast2NaoPythonVisitorTest {
         + "    try:\n"
         + "        run()\n"
         + "    except Exception as e:\n"
-        + "        h.sayText(\"Error!\")\n\n"
+        + "        h.say(\"Error!\")\n\n"
         + "if __name__ == \"__main__\":\n"
         + "    main()";
 
