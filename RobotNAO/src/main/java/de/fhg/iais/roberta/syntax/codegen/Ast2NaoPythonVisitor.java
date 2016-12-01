@@ -1564,12 +1564,12 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        this.sb.append("h.turn(0,");
-        if ( turnDegrees.getTurnDirection() == TurnDirection.LEFT ) {
+        this.sb.append("h.walk(0,0,");
+        if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
         turnDegrees.getDegreesToTurn().visit(this);
-        this.sb.append(",0)");
+        this.sb.append(")");
         return null;
     }
 
