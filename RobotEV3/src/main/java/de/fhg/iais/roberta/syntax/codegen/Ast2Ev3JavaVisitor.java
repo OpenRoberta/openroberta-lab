@@ -172,7 +172,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
         UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
         Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), withWrapping ? 1 : 0);
-        astVisitor.generatePrefix(withWrapping);
+        astVisitor.generatePrefix(withWrapping, phrasesSet);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
 
@@ -183,21 +183,24 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         boolean mainBlock = false;
         boolean debugging = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                if ( mainBlock && phrase.getKind().hasName("MAIN_TASK") ) {
-                    debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                    if ( mainBlock && phrase.getKind().hasName("MAIN_TASK") ) {
+                        debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
+                    }
+                    phrase.visit(astVisitor);
                 }
-                phrase.visit(astVisitor);
-            }
-            if ( mainBlock ) {
-                astVisitor.sb.append("\n");
-                // for testing
-                if ( debugging ) {
-                    astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                if ( mainBlock ) {
+                    astVisitor.sb.append("\n");
+                    // for testing
+                    if ( debugging ) {
+                        astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                    }
+                    astVisitor.sb.append("\n").append(INDENT).append("}");
+                    mainBlock = false;
                 }
-                astVisitor.sb.append("\n").append(INDENT).append("}");
-                mainBlock = false;
             }
         }
         generateSuffix(withWrapping, astVisitor);
@@ -1545,7 +1548,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void generatePrefix(boolean withWrapping) {
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         if ( !withWrapping ) {
             return;
         }
@@ -1555,7 +1558,9 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
-        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
+        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n");
+        generateUserDefinedMethods(phrasesSet);
+        this.sb.append("\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
@@ -1709,6 +1714,24 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        //TODO: too many nested loops and condition there must be a better way this to be done
+        if ( phrasesSet.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+                    if ( isCreateMethodPhrase ) {
+                        this.incrIndentation();
+                        phrase.visit(this);
+                        this.sb.append("\n");
+                        this.decrIndentation();
+                    }
+
+                }
+            }
+        }
     }
 
 }

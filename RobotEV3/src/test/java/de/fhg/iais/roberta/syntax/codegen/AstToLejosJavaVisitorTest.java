@@ -50,8 +50,9 @@ public class AstToLejosJavaVisitorTest {
 
     private static final String USED_SENSORS_DECL = "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();\n";
 
+    private static final String HAL = "" + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n";
+
     private static final String MAIN_METHOD = ""
-        + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n"
         + "    public static void main(String[] args) {\n"
         + "        try {\n"
         + BRICK_CONFIGURATION
@@ -82,6 +83,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        hal.drawText(\"Hallo\", 0, 3);\n"
@@ -100,6 +102,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
@@ -120,6 +123,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR)));\n"
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
@@ -150,6 +154,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE)));\n"
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
@@ -181,6 +186,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S4, SensorType.INFRARED, InfraredSensorMode.DISTANCE), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE), new UsedSensor(SensorPort.S2, SensorType.GYRO, GyroSensorMode.RESET)"
             + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));\n"
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
@@ -215,6 +221,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
 
@@ -238,6 +245,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
 
@@ -257,6 +265,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
 
@@ -277,6 +286,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "        float item = 10;\n"
             + "        String item2 = \"TTTT\";\n"
@@ -301,6 +311,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "        float variablenName = 0;\n"
             + "    public void run() throwsException {\n"
@@ -322,6 +333,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "        floatitem=0;"
             + "        Stringitem2=\"ss\";"
@@ -348,14 +360,15 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
+            + "    private void macheEtwas(float x, float x2) {\n"
+            + "        hal.drawPicture(ShowPicture.OLDGLASSES, x, x2);\n"
+            + "    }"
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
             + "        macheEtwas(10, 10);"
             + "    }\n\n"
-            + "    private void macheEtwas(float x, float x2) {\n"
-            + "        hal.drawPicture(ShowPicture.OLDGLASSES, x, x2);\n"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_1.xml");
@@ -369,13 +382,14 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
+            + "    private void test() {\n"
+            + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+            + "    }"
             + MAIN_METHOD
             + "    public void run() throwsException {\n"
             + "        test();"
             + "    }\n\n"
-            + "    private void test() {\n"
-            + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
@@ -389,14 +403,15 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
-            + MAIN_METHOD
-            + "    public void run() throwsException {\n"
-            + "        test(true);"
-            + "    }\n\n"
+            + HAL
             + "    private void test(boolean x) {\n"
             + "        if (x) return;"
             + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "    }"
+            + MAIN_METHOD
+            + "    public void run() throwsException {\n"
+            + "        test(true);"
+            + "    }\n\n"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_if_return_1.xml");
@@ -410,13 +425,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
-            + MAIN_METHOD
-            + "    float variablenName=0;\n"
-            + "    boolean variablenName2=true;\n"
-            + "    public void run() throwsException {\n"
-            + "        test1(0, 0);"
-            + "        test2();"
-            + "    }\n\n"
+            + HAL
             + "    private void test1(float x, float x2) {\n"
             + "        hal.drawText(\"Hallo\", x, x2);\n"
             + "    }\n\n"
@@ -424,6 +433,13 @@ public class AstToLejosJavaVisitorTest {
             + "        if (variablenName2) return;"
             + "        hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "    }"
+            + MAIN_METHOD
+            + "    float variablenName=0;\n"
+            + "    boolean variablenName2=true;\n"
+            + "    public void run() throwsException {\n"
+            + "        test1(0, 0);"
+            + "        test2();"
+            + "    }\n\n"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
@@ -437,15 +453,16 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
+            + "    private float test(float x, ArrayList<String> x2) {\n"
+            + "        hal.drawText(String.valueOf(x2), x, 0);\n"
+            + "        return x;\n"
+            + "    }"
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
             + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test(0, variablenName)), 0, 0);"
             + "    }\n\n"
-            + "    private float test(float x, ArrayList<String> x2) {\n"
-            + "        hal.drawText(String.valueOf(x2), x, 0);\n"
-            + "        return x;\n"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_return_1.xml");
@@ -459,15 +476,16 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
+            + "    private PickColor test() {\n"
+            + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
+            + "        return PickColor.NONE;\n"
+            + "    }"
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
             + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
             + "    }\n\n"
-            + "    private PickColor test() {\n"
-            + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
-            + "        return PickColor.NONE;\n"
-            + "    }"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_return_2.xml");
@@ -481,16 +499,17 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
-            + MAIN_METHOD
-            + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
-            + "    public void run() throwsException {\n"
-            + "        hal.drawText(String.valueOf(test()), 0, 0);"
-            + "    }\n\n"
+            + HAL
             + "    private PickColor test() {\n"
             + "        if (true) return PickColor.RED;\n"
             + "        hal.drawText(String.valueOf(variablenName), 0, 0);\n"
             + "        return PickColor.NONE;\n"
             + "    }"
+            + MAIN_METHOD
+            + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
+            + "    public void run() throwsException {\n"
+            + "        hal.drawText(String.valueOf(test()), 0, 0);"
+            + "    }\n\n"
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_if_return_2.xml");
@@ -504,6 +523,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    String message=\"exit\";\n"
             + "    public void run() throwsException {\n"
@@ -523,6 +543,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "    float item=0;\n"
             + "    String item2=\"cc\";\n"
@@ -540,6 +561,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
+            + HAL
             + MAIN_METHOD
             + "ArrayList<PickColor>variablenName=BlocklyMethods.createListWithColour(PickColor.NONE,PickColor.RED,PickColor.BLUE);\n"
             + "    public void run() throwsException {\n"
