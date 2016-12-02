@@ -355,16 +355,6 @@ public class Ast2NaoPythonVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/takePicture.xml");
     }
 
-    @Test
-    public void visitSelectCamera_ByDefault_ReturnsSelectCameraTopPythonScript() throws Exception {
-        String expectedResult = "" //
-            + IMPORTS
-            + "    h.selectCamera(\"Top\")\n"
-            + SUFFIX;
-
-        assertCodeIsOk(expectedResult, "/sensor/selectCamera.xml");
-    }
-
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = Helper.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);
