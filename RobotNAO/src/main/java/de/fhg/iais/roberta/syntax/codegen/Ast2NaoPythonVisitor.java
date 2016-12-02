@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
+import de.fhg.iais.roberta.mode.action.nao.Frame;
 import de.fhg.iais.roberta.mode.action.nao.Language;
 import de.fhg.iais.roberta.mode.action.nao.Posture;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
@@ -1575,7 +1576,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
-        this.sb.append("h.walkTo(");
+        this.sb.append("h.walk(");
         walkTo.getWalkToX().visit(this);
         this.sb.append(",");
         walkTo.getWalkToY().visit(this);
@@ -1662,7 +1663,13 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(", ");
         lookAt.getlookZ().visit(this);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(lookAt.getFrame()) + ", ");
+        if ( lookAt.getFrame() == Frame.TORSO ) {
+            this.sb.append("0,");
+        } else if ( lookAt.getFrame() == Frame.WORLD ) {
+            this.sb.append("1,");
+        } else if ( lookAt.getFrame() == Frame.ROBOT ) {
+            this.sb.append("2,");
+        }
         lookAt.getSpeed().visit(this);
         this.sb.append(")");
         return null;
@@ -1677,7 +1684,13 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(", ");
         pointAt.getpointZ().visit(this);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(pointAt.getFrame()) + ", ");
+        if ( pointAt.getFrame() == Frame.TORSO ) {
+            this.sb.append("0,");
+        } else if ( pointAt.getFrame() == Frame.WORLD ) {
+            this.sb.append("1,");
+        } else if ( pointAt.getFrame() == Frame.ROBOT ) {
+            this.sb.append("2,");
+        }
         pointAt.getSpeed().visit(this);
         this.sb.append(")");
         return null;
