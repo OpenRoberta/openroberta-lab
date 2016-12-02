@@ -1837,10 +1837,11 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitSelectCamera(SelectCamera<Void> selectCamera) {
         this.sb.append("h.selectCamera(");
         if ( selectCamera.getCamera() == Camera.BOTTOM ) {
-            this.sb.append("Bottom");
+            this.sb.append("\"Bottom\"");
         } else if ( selectCamera.getCamera() == Camera.TOP ) {
-            this.sb.append("Top");
+            this.sb.append("\"Top\"");
         }
+        this.sb.append(")");
         return null;
     }
 
@@ -1852,7 +1853,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
-        this.sb.append("h.recordVideo");
+        this.sb.append("h.recordVideo(");
         if ( recordVideo.getResolution() == Resolution.LOW ) {
             this.sb.append("0, ");
         } else if ( recordVideo.getResolution() == Resolution.MED ) {
@@ -1866,6 +1867,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("Bottom, ");
         }
         recordVideo.getDuration().visit(this);
+        this.sb.append(")");
 
         return null;
     }

@@ -59,7 +59,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitTurnDegrees_ByDefault_ReturnsTurnForTwentyDegreesLeftPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.turn(0,-20,0)\n"
+            + "    h.walk(0,0,20)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/turn_left.xml");
@@ -69,7 +69,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitTurnDegrees_ByMissingNumber_ReturnsTurnForTwentyDegreesRightPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.turn(0,0,0)\n"
+            + "    h.walk(0,0,-0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/turn_right_missing_degrees.xml");
@@ -343,6 +343,26 @@ public class Ast2NaoPythonVisitorTest {
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/sayText.xml");
+    }
+
+    @Test
+    public void visitTakePicture_ByDefault_ReturnsTakePciturePythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "    h.takePicture()\n"
+            + SUFFIX;
+
+        assertCodeIsOk(expectedResult, "/sensor/takePicture.xml");
+    }
+
+    @Test
+    public void visitSelectCamera_ByDefault_ReturnsSelectCameraTopPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "    h.selectCamera(\"Top\")\n"
+            + SUFFIX;
+
+        assertCodeIsOk(expectedResult, "/sensor/selectCamera.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
