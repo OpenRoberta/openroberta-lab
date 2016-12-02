@@ -79,7 +79,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWalkTo_ByDefault_ReturnsWalkToZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.walkTo(0,0,0)\n"
+            + "    h.walk(0,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/walk_to.xml");
@@ -89,7 +89,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitWalkTo_ByMissingNumber_ReturnsWalkToMissingCoordinatesPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.walkTo(0,0,0)\n"
+            + "    h.walk(0,0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/walk_to_missing_coordinates.xml");
@@ -189,7 +189,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitLookAt_ByDefault_ReturnsLookAtTorsoZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.lookAt(0, 0, 0, \'torso\', 0)\n"
+            + "    h.lookAt(0, 0, 0, 0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/lookAt_torso.xml");
@@ -199,7 +199,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitLookAt_ByMissingNumber_ReturnsLookAtWorldZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.lookAt(0, 0, 0, \'world\', 0)\n"
+            + "    h.lookAt(0, 0, 0, 1,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/lookAt_world_missing_coordinates.xml");
@@ -209,7 +209,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitpointAt_ByDefault_ReturnsLookAtTorsoZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.pointAt(0, 0, 0, \'torso\', 0)\n"
+            + "    h.pointAt(0, 0, 0, 0,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/pointAt_torso.xml");
@@ -219,7 +219,7 @@ public class Ast2NaoPythonVisitorTest {
     public void visitpointAt_ByMissingNumber_ReturnsLookAtWorldZeroZeroZeroZeroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "    h.pointAt(0, 0, 0, \'world\', 0)\n"
+            + "    h.pointAt(0, 0, 0, 1,0)\n"
             + SUFFIX;
 
         assertCodeIsOk(expectedResult, "/action/pointAt_world_missing_coordinates.xml");
