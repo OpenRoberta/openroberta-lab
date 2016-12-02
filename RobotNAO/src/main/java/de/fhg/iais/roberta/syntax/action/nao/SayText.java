@@ -20,9 +20,8 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
 /**
  * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code making the robot say the text.<br>
+ * Object from this class will generate code for making the robot say the text.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>
  */
 public class SayText<V> extends Action<V> {
@@ -38,7 +37,7 @@ public class SayText<V> extends Action<V> {
     /**
      * Creates instance of {@link DisplayTextAction}. This instance is read only and can not be modified.
      *
-     * @param msg that will be printed on the display of the brick; must be <b>not</b> null,
+     * @param msg {@link msg} that will be printed on the display of the brick; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
