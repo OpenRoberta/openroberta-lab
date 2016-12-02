@@ -89,7 +89,7 @@ public final class PointAt<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "LookAt [" + this.frame + ", " + this.pointX + ", " + this.pointY + ", " + this.pointZ + ", " + this.speed + "]";
+        return "PointAt [" + this.frame + ", " + this.pointX + ", " + this.pointY + ", " + this.pointZ + ", " + this.speed + "]";
     }
 
     @Override

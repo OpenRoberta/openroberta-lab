@@ -27,6 +27,11 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class SelectCamera<V> extends Action<V> {
 
+    @Override
+    public String toString() {
+        return "SelectCamera [" + this.camera + "]";
+    }
+
     private final Camera camera;
 
     private SelectCamera(Camera camera, BlocklyBlockProperties properties, BlocklyComment comment) {

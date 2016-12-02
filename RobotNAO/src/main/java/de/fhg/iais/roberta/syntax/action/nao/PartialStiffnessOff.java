@@ -29,6 +29,11 @@ public final class PartialStiffnessOff<V> extends Action<V> {
 
     private final BodyPart bodyPart;
 
+    @Override
+    public String toString() {
+        return "PartialStiffnessOff [" + this.bodyPart + "]";
+    }
+
     private PartialStiffnessOff(BodyPart bodyPart, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PARTIAL_STIFFNESS_OFF"), properties, comment);
         Assert.notNull(bodyPart, "Missing body part in PartialStiffnessOff block!");

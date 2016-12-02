@@ -36,6 +36,11 @@ public final class SetLanguage<V> extends Action<V> {
         setReadOnly();
     }
 
+    @Override
+    public String toString() {
+        return "SetLanguage [" + this.language + "]";
+    }
+
     /**
      * Creates instance of {@link SetLanguage}. This instance is read only and can not be modified.
      *

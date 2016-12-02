@@ -20,10 +20,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
 /**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
+ * This class represents the <b>naoActions_applyPosture</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for applying a posture<br/>
  * <br/>
- * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
+ * The client must provide the {@link Posture} (name of posture).
  */
 public final class ApplyPosture<V> extends Action<V> {
 
@@ -51,6 +51,11 @@ public final class ApplyPosture<V> extends Action<V> {
 
     public Posture getPosture() {
         return this.posture;
+    }
+
+    @Override
+    public String toString() {
+        return "ApplyPosture [" + this.posture + "]";
     }
 
     @Override

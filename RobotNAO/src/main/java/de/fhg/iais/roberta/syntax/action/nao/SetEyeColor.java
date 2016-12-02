@@ -36,6 +36,11 @@ public final class SetEyeColor<V> extends Action<V> {
         setReadOnly();
     }
 
+    @Override
+    public String toString() {
+        return "SetEyeColor [" + this.color + "]";
+    }
+
     /**
      * Creates instance of {@link SetEyeColor}. This instance is read only and can not be modified.
      *
@@ -78,7 +83,7 @@ public final class SetEyeColor<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.color.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COLOR, this.color.toString());
 
         return jaxbDestination;
     }

@@ -27,6 +27,11 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class RastaDuration<V> extends Action<V> {
 
+    @Override
+    public String toString() {
+        return "RastaDuration [" + this.duration + "]";
+    }
+
     private final Expr<V> duration;
 
     private RastaDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
 
-public class StiDownTest {
+public class SitDownTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSitDownActionClass() throws Exception {

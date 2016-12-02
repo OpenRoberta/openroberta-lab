@@ -31,6 +31,11 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class RecordVideo<V> extends Action<V> {
 
+    @Override
+    public String toString() {
+        return "RecordVideo [" + this.resolution + ", " + this.camera + ", " + this.duration + "]";
+    }
+
     private final Resolution resolution;
     private final Camera camera;
     private final Expr<V> duration;

@@ -36,6 +36,11 @@ public final class PartialStiffnessOn<V> extends Action<V> {
         setReadOnly();
     }
 
+    @Override
+    public String toString() {
+        return "PartialStiffnessOn [" + this.bodyPart + "]";
+    }
+
     /**
      * Creates instance of {@link PartialStiffnessOn}. This instance is read only and can not be modified.
      *

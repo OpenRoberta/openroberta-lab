@@ -27,6 +27,11 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class RandomEyesDuration<V> extends Action<V> {
 
+    @Override
+    public String toString() {
+        return "RandomEyesDuration [" + this.duration + "]";
+    }
+
     private final Expr<V> duration;
 
     private RandomEyesDuration(Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {

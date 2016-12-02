@@ -54,7 +54,7 @@ public final class SetEarIntensity<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "SetVolume [" + this.intensity + "]";
+        return "SetEarIntensity [" + this.intensity + "]";
     }
 
     @Override
