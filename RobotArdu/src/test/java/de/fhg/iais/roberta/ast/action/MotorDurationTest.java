@@ -7,11 +7,14 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class MotorDurationTest {
+    Helper helper = new Helper();
 
     @Test
     public void clearDisplay() throws Exception {
+
         NumConst<Void> numConst = NumConst.make("0", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         MotorDuration<Void> motorDuration = new MotorDuration<Void>(MotorMoveMode.DEGREE, numConst);
         String a = "MotorDuration [type=DEGREE, value=NumConst [0]]";
