@@ -219,6 +219,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (speeds.right) {
             obj.outputCommands.motors.powerRight = speeds.right;
         }
+        console.log('left: %s; right: %s', obj.outputCommands.motors.powerLeft, obj.outputCommands.motors.powerRight);
     };
 
     var evalResetEncoderSensor = function(obj, stmt) {

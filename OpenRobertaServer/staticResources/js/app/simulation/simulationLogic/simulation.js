@@ -27,7 +27,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var timerStep = 0;
     var ready;
     var canceled;
-    
+
     var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg',
             '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg',
             '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg',
@@ -509,13 +509,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             if ($(window).width() < 768) {// extra small devices
                 scale = 0.5
             } else if ($(window).width() < 1024) {
-                // medium and large devices     
+                // medium and large devices
                 scale = 0.7;
             } else if ($(window).width() < 1280) {
-                // medium and large devices     
+                // medium and large devices
                 scale = 0.8;
             } else if ($(window).width() >= 1920) {
-                // medium and large devices     
+                // medium and large devices
                 scale = 1.5;
             }
             ground.w = scene.playground.w / scale;
