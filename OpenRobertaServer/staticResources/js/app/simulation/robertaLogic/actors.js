@@ -272,22 +272,12 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
     Actors.prototype.speedCorrection = function(nextFrameTimeDuration, motor, motorSide) {
         var roundUP = 3;
         var correctedSpeed;
-        // var nextFrameDistanceL = Math.abs(motor.getPower()) * CONSTANTS.MAXPOWER * nextFrameTimeDuration / 3.0;
-        // var nextFrameRotationsL = this.distanceToRotations(nextFrameDistanceL);
         var nextFrameRotations = Math.abs(motor.getPower()) * 0.02 * nextFrameTimeDuration;
-        // if (motorSide == CONSTANTS.MOTOR_LEFT) {
-        //   nextFrameRotations = nextFrameRotationsL.left;
-        // } else {
-        //   nextFrameRotations = nextFrameRotationsL.right;
-        // }
         if (UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotations > UTIL.round(motor.getGoalRotations(), roundUP)) {
             var dRotations = motor.getGoalRotations() - motor.getCurrentRotations();
-            // var dDistance = rotationsToDistance(dRotations);
-            // console.log("Motor Power: " + motor.getPower());
-            // correctedSpeed = (3 * dDistance) / (CONSTANTS.MAXPOWER * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
             correctedSpeed = (dRotations) / (0.02 * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
-            console.log("Next Frame Rotatoins: %s; Correct Power: %s; CurrentRotations: %s; Goal Rotations: %s; Diff. Rotations: %s; Frame Duration: %s; Total Next Frame: %s",  nextFrameRotations,
-                        correctedSpeed, motor.getCurrentRotations(), motor.getGoalRotations(), dRotations, nextFrameTimeDuration, UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotations);
+            // console.log("Next Frame Rotatoins: %s; Correct Power: %s; CurrentRotations: %s; Goal Rotations: %s; Diff. Rotations: %s; Frame Duration: %s; Total Next Frame: %s",  nextFrameRotations,
+            //             correctedSpeed, motor.getCurrentRotations(), motor.getGoalRotations(), dRotations, nextFrameTimeDuration, UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotations);
         }
         return correctedSpeed;
     };

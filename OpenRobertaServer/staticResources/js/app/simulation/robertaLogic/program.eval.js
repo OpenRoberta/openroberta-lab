@@ -206,7 +206,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.gyro.update(simulationData.gyro.angle);
         obj.gyro.setRate(simulationData.gyro.rate);
         obj.program.getTimer().setCurrentTime(simulationData.time);
-        obj.program.setNextFrameTimeDuration(simulationData.frameTime);
+        // We multiply the next frame by two because of the unstable framre rate
+        obj.program.setNextFrameTimeDuration(simulationData.frameTime * 2.);
     };
 
     var outputSpeeds = function(obj, speeds) {
