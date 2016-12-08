@@ -667,6 +667,21 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
     }
 
+    @Test
+    public void visitMainTask_EmptyProgram_CorrectPythonScript() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    pass\n"
+            + "    \n"
+            + "def doSomething():\n"
+            + "    pass\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/code_generator/empty_program_with_empty_procedure.xml");
+    }
+
     // TODO: add tests for files from "/syntax/text/*.xml"
 
     private String make_globals(String motors, String sensors) {

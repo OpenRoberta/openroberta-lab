@@ -1101,7 +1101,13 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
-        methodVoid.getBody().visit(this);
+        boolean isMethodBodyEmpty = methodVoid.getBody().get().size() != 0;
+        if ( isMethodBodyEmpty ) {
+            methodVoid.getBody().visit(this);
+        } else {
+            nlIndent();
+            this.sb.append("pass");
+        }
         return null;
     }
 
@@ -1110,10 +1116,16 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
-        methodReturn.getBody().visit(this);
-        this.nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
+        boolean isMethodBodyEmpty = methodReturn.getBody().get().size() != 0;
+        if ( isMethodBodyEmpty ) {
+            methodReturn.getBody().visit(this);
+            nlIndent();
+            this.sb.append("return ");
+            methodReturn.getReturnValue().visit(this);
+        } else {
+            nlIndent();
+            this.sb.append("pass");
+        }
         return null;
     }
 
