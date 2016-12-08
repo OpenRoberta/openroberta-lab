@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.persistence;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -68,8 +70,15 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     public void createUser(String account, String password, String userName, String roleAsString, String email, String tags) throws Exception {
+        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+        Matcher acc_symbols = p.matcher(account);
+        boolean account_check = acc_symbols.find();
+        Matcher userName_symbols = p.matcher(userName);
+        boolean userName_check = userName_symbols.find();
         if ( account == null || account.equals("") || password == null || password.equals("") ) {
             setError(Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, account);
+        } else if ( account_check || account.length() > 15 || userName_check || userName.length() > 15 ) {
+            setError(Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, account, userName);
         } else {
             if ( !isMailUsed(account, email) ) {
                 UserDao userDao = new UserDao(this.dbSession);
