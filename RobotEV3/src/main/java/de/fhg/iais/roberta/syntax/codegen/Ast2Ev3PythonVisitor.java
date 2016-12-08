@@ -192,7 +192,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 }
                 mainBlock = isMainBlock(phrase);
                 if ( mainBlock ) {
-                    astVisitor.setProgramIsEmpty(checkIsProgramEmpty(phrases, phrase));
+                    astVisitor.setProgramIsEmpty(checkIsProgramEmpty(phrases));
                 }
                 phrase.visit(astVisitor);
             }
@@ -200,8 +200,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
     }
 
-    private static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases, Phrase<Void> phrase) {
-        return phrases.size() == 2 && ((MainTask<Void>) phrase).getVariables().get().size() == 0;
+    private static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
+        return phrases.size() == 2;
     }
 
     private static boolean isMainBlock(Phrase<Void> phrase) {
@@ -915,10 +915,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         variables.visit(this);
         this.sb.append("\n").append("def run():");
         incrIndentation();
-        if ( this.isProgramEmpty ) {
-            nlIndent();
-            this.sb.append("pass");
-        }
         List<Stmt<Void>> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
             nlIndent();
@@ -940,6 +936,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                     this.sb.append(", ");
                 }
                 this.sb.append(vd.getName());
+            }
+        } else {
+            if ( this.isProgramEmpty ) {
+                nlIndent();
+                this.sb.append("pass");
             }
         }
         return null;
