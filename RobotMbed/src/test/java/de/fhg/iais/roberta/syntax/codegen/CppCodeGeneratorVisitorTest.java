@@ -61,14 +61,25 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
     }
 
-    @Ignore
+    @Test
     public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsCppProgramWithDisplayImageAndAnimation() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.print(MicroBitImage(\"0,255,0,1,0\\n1,1,1,1,1\\n1,1,1,1,1\\n0,1,1,1,0\\n0,0,1,0,0\\n\"));"
+            + "uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n"
+            + "255,255,255,255,255\\n"
+            + "255,255,255,255,255\\n"
+            + "0,255,255,255,0\\n"
+            + "0,0,255,0,0\\n\"));"
+            + "uBit.display.animateImages({MicroBitImage(\"0,0,0,0,0\\n"
+            + "0,255,0,255,0\\n"
+            + "0,255,255,255,0\\n"
+            + "0,0,255,0,0\\n"
+            + "0,0,0,0,0\\n\"), MicroBitImage(\"0,0,0,0,0\\n"
+            + "255,255,0,255,255\\n"
+            + "0,0,0,0,0\\n"
+            + "0,255,255,255,0\\n"
+            + "0,0,0,0,0\\n\")}, 200);"
             + END;
-        //+ "\n"
-        //+ "display.show([Image.HEART_SMALL, Image.ASLEEP])";
 
         assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");
     }
