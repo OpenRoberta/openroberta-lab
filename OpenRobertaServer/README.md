@@ -1,20 +1,19 @@
-This project folder contains the server part
+The project OpenRobertaServer contains the server logic, that accesses
+- a database with Hibernate-based DAO objects
+- plugins for various robots which are supported in OpenRoberta
+- services for browser-based clients
+- services for robots connected to the lab either by Wifi or USB
+
+The server is made of
 - an embedded jetty server exposing REST services
 - the services are based on jersey
-- it is expected that the POST method is used, JSON/XML/Plain text is sent by a client and JSON is returned by the server
+- JSON (sometimes XML or plain text) is sent by a browser client and JSON is returned by the server
+- JSON (sometimes XML or plain text) is sent by a robot and JSON or binary data is returned by the server
 
-This repository contains on the client side (in directory staticResources, usable by almost all browsers)
-- HTML and CSS for a simple application
-- a small Javascript library based on jquery 2.0.3 and jquery-ui v1.10.3 with modules (as self-executing functions) for
+Furthermore, this project contains in directory staticResources for the browser client
+- HTML and CSS
+- Javascript libraries based on jquery and bootstrap for
   - assertions (DBC)
   - ajax-based server calls (COMM)
-  - logging (LOG), see below
-  - the javascript resources for blockly (see: http://code.google.com/p/blockly/)
-
-This repository contains
-- a Junit test case based on Selenium to test the Javascript library
-- corresponding HTML, CSS and Javascript to support the test case
-
-When the client side running in a browser accesses the server using JSON,
-logging data assembled in the browser since the last server contact is sent to the server
-automatically.
+  - logging (LOG) and
+  - javascript resources for blockly (see: http://code.google.com/p/blockly/)

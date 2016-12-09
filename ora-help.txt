@@ -9,13 +9,16 @@ The application uses a hsqldb database. The database may be used in embedded or 
   --export {-createemptydb} INSTALLATION-DIR  create a self-contained installation with an empty database (-createemptydb).
                            If the database is not created, you are responsible to copy a usable database into directory 'db'. 
 			                     The installation dir must NOT exist.
-  --sqlclient              start a sql client. Use as default the variable 'databaseurl' to address the database (see its
+  --sqlclient              start a sql client. Uses as default the variable 'databaseurl' to address the database (see its
                            value in 'ora.sh').
                            If the database is run in 'standalone' mode, this command fails if the openroberta server is running.
                            If the database is run in 'server' mode, you get access to the database used by
-                           the server at the same time. Make SURE, that you
-                           - DONT block the server (e.g. by issuing insert/updates without committing immediately afterwards)
-                           - DONT terminate the database server by issuing a SHUTDOWN command
+                           the server at the same time.
+                           - better set autocommit to off and DON'T terminate the database server with SHUTDOWN by mistake
+                           - DON'T block the server (e.g. by issuing insert/updates without committing immediately afterwards)
+                           - Backup of a running server can be done with (read the manual about blocking/not blocking)
+                             BACKUP DATABASE to 'single-quoted-directory-path-terminated-with-/' {NOT} BLOCKING
+                           - from time to time issue a CHECKPOINT statement to reduce the resource usage and the startup time.
 
   --start-from-git {-reset} if a developer wants to start the server from a Git working tree in embedded mode (that is fine for
                            test/debug), use this command. Note, that running the server from eclipse is preferred.
