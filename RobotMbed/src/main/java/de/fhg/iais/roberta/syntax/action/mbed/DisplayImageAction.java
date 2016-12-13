@@ -93,13 +93,10 @@ public class DisplayImageAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 1);
-
         String mode = helper.extractField(fields, BlocklyConstants.TYPE);
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, String.class));
-
         return DisplayImageAction
             .make(DisplayImageMode.get(mode), helper.convertPhraseToExpr(image), helper.extractBlockProperties(block), helper.extractComment(block));
-
     }
 
     @Override

@@ -32,7 +32,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
     Scene.prototype.updateBackgrounds = function() {
         this.drawBackground(1, this.uCtx);
         this.drawBackground();
-    };
+    }
 
     Scene.prototype.drawBackground = function(option_scale, option_context) {
         var ctx = option_context || this.bCtx;
@@ -42,10 +42,13 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            ctx.drawImage(this.backgroundImg, 0, 0);
-            
+            if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {
+                ctx.drawImage(this.backgroundImg, this.playground.w/2 - 452/2, this.playground.h/2 - 452/2, 452,452);
+            } else {
+                ctx.drawImage(this.backgroundImg, 0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);     
+            }       
         }
-    };
+    }
 
     Scene.prototype.drawRuler = function() {
         this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20, this.ruler.wOld + 40, this.ruler.hOld + 40);
@@ -59,7 +62,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         if (this.ruler.img) {
             this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
         }
-    };
+    }
 
     Scene.prototype.drawObjects = function() {
         this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
@@ -77,18 +80,35 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.oCtx.shadowBlur = 5;
             this.oCtx.shadowColor = "black";
             this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-//            this.oCtx.beginPath();
-//            this.oCtx.strokeStyle = "black";     
-//            this.oCtx.lineWidth = "1";
-//            this.oCtx.rect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-//            this.oCtx.stroke();
-//            this.oCtx.shadowBlur = 0;
-//            this.oCtx.shadowOffsetX = 0;
         }
-    };
-
+    }
+    
+    Scene.prototype.drawMbed = function() {   
+        this.rCtx.setTransform(1,0,0,1,0,0);
+        this.rCtx.clearRect(0,0,this.rCtx.canvas.width,this.rCtx.canvas.height);
+        this.rCtx.restore();
+        
+        this.rCtx.save();
+        this.rCtx.translate(this.playground.w/2, this.playground.h/2);
+        this.rCtx.scale(SIM.getScale(), SIM.getScale());
+        this.rCtx.save();
+        
+       // this.rCtx.rotate(SIMATH.toRadians(SIMATH.toDegree(this.robot.pose.theta) - 90));
+        this.rCtx.scale(1, -1);
+         for (var prop in this.robot) {
+            if (this.robot[prop].draw != undefined && this.rCtx) {
+                this.robot[prop].draw(this.rCtx);
+                } 
+               }
+        this.rCtx.restore();      
+    }
+    
     Scene.prototype.drawRobot = function() {
-        this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
+        if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {
+            this.drawMbed();
+            return;
+        }
+        this.rCtx.clearRect(0, 0);
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information   
@@ -97,7 +117,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var endValue = this.playground.w - 5;
             var line = 20;
             this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
-            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
+              this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
             this.rCtx.textAlign = "end";
             this.rCtx.font = "10px Arial";
             var x, y;
@@ -281,7 +301,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.robot.pose.xOld = this.robot.pose.x;
             this.robot.pose.yOld = this.robot.pose.y;
         }
-    };
+    }
 
     Scene.prototype.updateSensorValues = function(running) {
         var values = {};
@@ -522,6 +542,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         if (this.robot.buttons) {
             values.buttons = {};
             values.buttons.any = false;
+            values.buttons.Reset = false;
             var i = 0
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
@@ -534,9 +555,15 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         if (this.robot.sound) {
             values.sound = UTIL.round(this.robot.sound.volume * 100, 0);
         }
+        if (this.robot.display) {
+            values.ambientlight = this.robot.display.lightLevel;
+        }
+        if (this.robot.temperature) {
+            values.temperature = this.robot.temperature.degree;
+        }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();
         return values;
-    };
+    }
     return Scene;
 });

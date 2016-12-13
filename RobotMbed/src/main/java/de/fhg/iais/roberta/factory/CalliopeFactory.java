@@ -23,19 +23,19 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class CalliopeFactory extends AbstractRobotFactory {
 
     private final CalliopeCompilerWorkflow compilerWorkflow;
-    private final CalliopeSimCompilerWorkflow calliopeSimCompilerWorkflow;
+    private final MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
     private final Properties calliopeProperties;
 
     public CalliopeFactory(RobotCommunicator unusedForArdu) {
@@ -47,7 +47,7 @@ public class CalliopeFactory extends AbstractRobotFactory {
                 Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
-        this.calliopeSimCompilerWorkflow = new CalliopeSimCompilerWorkflow();
+        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);
     }
 

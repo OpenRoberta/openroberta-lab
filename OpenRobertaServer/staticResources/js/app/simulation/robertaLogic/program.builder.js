@@ -1,4 +1,4 @@
-define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
+define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
 
     function build(program) {
         eval(program);
@@ -155,7 +155,7 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
     function createLedOnAction(ledColor) {
         var result = {};
         result[CONST.STMT] = CONST.LED_ON_ACTION;
-        result[CONST.LED_COLOR_CONST] = ledColor;
+        result[CONST.RGB_COLOR_CONST] = ledColor;
         return result;
     }
 
@@ -297,7 +297,6 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
-
     function createStatusLight(mode) {
         var result = {};
         result[CONST.STMT] = CONST.STATUS_LIGHT_ACTION;
@@ -363,7 +362,6 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
 
         return result;
     }
-
 
     function createIfStmt(exprList, thenList, elseStmts) {
         if (!Array.isArray(exprList)) {

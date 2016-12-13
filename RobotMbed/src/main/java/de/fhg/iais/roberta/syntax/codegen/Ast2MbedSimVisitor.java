@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
@@ -226,7 +227,16 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        this.sb.append("'" + predefinedImage.getImageName().getImageString() + "'");
+        String image = predefinedImage.getImageName().getImageString();
+        String[] imageArray = image.split("\\\\n");
+        String predefinedImageArray = "createConstant(CONST.IMAGE, [";
+        for ( int i = 0; i < imageArray.length; i++ ) {
+            predefinedImageArray += "[";
+            predefinedImageArray += imageArray[i];
+            predefinedImageArray += "],";
+        }
+        predefinedImageArray += "])";
+        this.sb.append(predefinedImageArray);
         return null;
     }
 
@@ -235,8 +245,13 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
         String end = createClosingBracket();
         this.sb.append("createDisplayImageAction(CONST.");
         this.sb.append(displayImageAction.getDisplayImageMode() + ", ");
-        displayImageAction.getValuesToDisplay().visit(this);
+        if ( displayImageAction.getDisplayImageMode() == DisplayImageMode.ANIMATION ) {
+            displayImageAction.getValuesToDisplay().visit(this);
+        } else {
+            displayImageAction.getValuesToDisplay().visit(this);
+        }
         this.sb.append(end);
+        System.out.println(this.sb.toString());
         return null;
     }
 
@@ -330,6 +345,7 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
+        this.sb.append("createGetSample(CONST.AMBIENTLIGHT)");
         return null;
     }
 

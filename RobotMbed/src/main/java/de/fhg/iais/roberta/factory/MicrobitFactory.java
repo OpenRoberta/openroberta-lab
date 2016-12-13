@@ -26,12 +26,14 @@ import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.MicrobitSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class MicrobitFactory extends AbstractRobotFactory {
 
     private MicrobitCompilerWorkflow compilerWorkflow;
+    private final MbedSimCompilerWorkflow microbitSimCompilerWorkflow;
     private final Properties calliopeProperties;
 
     public MicrobitFactory(RobotCommunicator unusedForArdu) {
@@ -42,6 +44,7 @@ public class MicrobitFactory extends AbstractRobotFactory {
                 Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Microbit.properties");
+        this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Microbit.properties", this.calliopeProperties);
     }
 
@@ -267,8 +270,7 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        // TODO Auto-generated method stub
-        return null;
+        return this.microbitSimCompilerWorkflow;
     }
 
     @Override
@@ -323,6 +325,6 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
-        return null;
+        return new MicrobitSimProgramCheckVisitor(brickConfiguration);
     }
 }

@@ -171,6 +171,10 @@ define({
     BOOL_CONST: "BoolConst",
 
     STRING_CONST: "StringConst",
+    
+    IMAGE_CONST: "image",
+    
+    ANIMATION: "animation",
 
     STRING: "STRING",
 
@@ -191,6 +195,8 @@ define({
     ARRAY_BOOLEAN: "Array_Boolean",
 
     ARRAY_COLOUR: "Array_Colour",
+    
+    ARRAY_IMAGE: "Array_Image",
 
     ADD: "ADD",
 
@@ -400,9 +406,9 @@ define({
 
     LIGHT: "light",
 
-    BUTTON_A: "button_a",
+    BUTTON_A: "A",
 
-    BUTTON_B: "button_b",
+    BUTTON_B: "B",
 
     COMPASS: "compass",
 

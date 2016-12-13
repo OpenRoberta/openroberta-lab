@@ -12,13 +12,9 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 
-public class CalliopeSimCompilerWorkflow implements ICompilerWorkflow {
+public class MbedSimCompilerWorkflow implements ICompilerWorkflow {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CalliopeSimCompilerWorkflow.class);
-
-    public CalliopeSimCompilerWorkflow() {
-
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(MbedSimCompilerWorkflow.class);
 
     /**
      * - load the program from the database<br>
@@ -65,7 +61,7 @@ public class CalliopeSimCompilerWorkflow implements ICompilerWorkflow {
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2MbedSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
-        CalliopeSimCompilerWorkflow.LOG.info("generating javascript code");
+        MbedSimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;
     }

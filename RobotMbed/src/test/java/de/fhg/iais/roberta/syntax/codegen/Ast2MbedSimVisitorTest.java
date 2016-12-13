@@ -59,8 +59,8 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsCppProgramWithDisplayImageAndAnimation() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayImageAction(CONST.IMAGE, '0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n');\n"
-            + "var stmt1 = createDisplayImageAction(CONST.ANIMATION, createCreateListWith(CONST.ARRAY_IMAGE, ['0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n', '0,0,0,0,0\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,255,255,0\\n0,0,0,0,0\\n']));\n"
+            + "var stmt0 = createDisplayImageAction(CONST.IMAGE, createConstant(CONST.IMAGE, [[0,255,0,255,0],[255,255,255,255,255],[255,255,255,255,255],[0,255,255,255,0],[0,0,255,0,0],]));\n"
+            + "var stmt1 = createDisplayImageAction(CONST.ANIMATION, createCreateListWith(CONST.ARRAY_IMAGE, [createConstant(CONST.IMAGE, [[0,0,0,0,0],[0,255,0,255,0],[0,255,255,255,0],[0,0,255,0,0],[0,0,0,0,0],]), createConstant(CONST.IMAGE, [[0,0,0,0,0],[255,255,0,255,255],[0,0,0,0,0],[0,255,255,255,0],[0,0,0,0,0],])]));\n"
             + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");

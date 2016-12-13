@@ -15,7 +15,7 @@ require.config({
         'jquery-validate' : 'jquery/jquery.validate.min',
         'prettify' : 'code-prettify/prettify',
         'volume-meter' : 'sound/volume-meter',
-
+      
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
         'configuration.model' : '../app/roberta/models/configuration.model',
@@ -46,6 +46,9 @@ require.config({
         'simulation.program.eval' : '../app/simulation/robertaLogic/program.eval',
         'simulation.robot' : '../app/simulation/simulationLogic/robot',
         'simulation.robot.draw' : '../app/simulation/simulationLogic/robot.draw',
+        'simulation.robot.mbed' : '../app/simulation/simulationLogic/robot.mbed',
+        'simulation.robot.calliope' : '../app/simulation/simulationLogic/robot.calliope',
+        'simulation.robot.microbit' : '../app/simulation/simulationLogic/robot.microbit',
         'simulation.robot.math' : '../app/simulation/simulationLogic/robot.math',
         'simulation.robot.rescue' : '../app/simulation/simulationLogic/robot.rescue',
         'simulation.robot.roberta' : '../app/simulation/simulationLogic/robot.roberta',

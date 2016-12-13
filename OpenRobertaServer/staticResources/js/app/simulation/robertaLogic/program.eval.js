@@ -29,7 +29,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Initialize the program that is executed in the simulation.
-     *
+     * 
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -43,7 +43,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Function that executes one step of the program.
-     *
+     * 
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -91,7 +91,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     break;
 
                 case CONSTANTS.DISPLAY_IMAGE_ACTION:
-                    evalDisplayImageAction(internal(this), stmt);
+                    evalDisplayImageAction(internal(this), simulationData, stmt);
                     break;
 
                 case CONSTANTS.SHOW_TEXT_ACTION:
@@ -99,7 +99,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     break;
 
                 case CONSTANTS.DISPLAY_TEXT_ACTION:
-                    evalDisplayTextAction(internal(this), stmt);
+                    evalDisplayTextAction(internal(this),simulationData, stmt);
                     break;
 
                 case CONSTANTS.CLEAR_DISPLAY_ACTION:
@@ -119,6 +119,9 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     break;
 
                 case CONSTANTS.TURN_LIGHT:
+                    evalTurnLightAction(internal(this), stmt);
+                    break;
+                    
                 case CONSTANTS.LED_ON_ACTION:
                     evalLedOnAction(internal(this), stmt);
                     break;
@@ -184,7 +187,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         newSpeeds = internal(this).actors.checkCoveredDistanceAndCorrectSpeed(internal(this).program, internal(this).simulationData.correctDrive);
         internal(this).program.handleWaitTimer();
         outputSpeeds(internal(this), newSpeeds);
-        // internal(this).outputCommands.terminated = internal(this).program.isTerminated();
+        internal(this).outputCommands.terminated = internal(this).program.isTerminated();
         return internal(this).outputCommands;
 
     };
@@ -201,10 +204,13 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var setSensorActorValues = function(obj, simulationData) {
         obj.simulationData = simulationData;
+        if (simulationData.encoder){
         obj.actors.getLeftMotor().setCurrentRotations(simulationData.encoder.left);
-        obj.actors.getRightMotor().setCurrentRotations(simulationData.encoder.right);
+        obj.actors.getRightMotor().setCurrentRotations(simulationData.encoder.right);}
+        if (simulationData.gyro){
         obj.gyro.update(simulationData.gyro.angle);
         obj.gyro.setRate(simulationData.gyro.rate);
+        }
         obj.program.getTimer().setCurrentTime(simulationData.time);
         // We multiply the next frame by two because of the unstable framre rate
         obj.program.setNextFrameTimeDuration(simulationData.frameTime * 2.);
@@ -220,7 +226,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (speeds.right) {
             obj.outputCommands.motors.powerRight = speeds.right;
         }
-        console.log('left: %s; right: %s', obj.outputCommands.motors.powerLeft, obj.outputCommands.motors.powerRight);
+        //console.log('left: %s; right: %s', obj.outputCommands.motors.powerLeft, obj.outputCommands.motors.powerRight);
     };
 
     var evalResetEncoderSensor = function(obj, stmt) {
@@ -253,12 +259,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands.led.mode = stmt.mode;
     };
 
-    var evalLedOnAction = function(obj, stmt) {
+    var evalTurnLightAction = function(obj, stmt) {
         obj.outputCommands.led = {}
         obj.outputCommands.led.color = stmt.color;
-        if (stmt.mode) {
             obj.outputCommands.led.mode = stmt.mode;
-        }
+    };
+    
+    var evalLedOnAction = function(obj, stmt) {
+        obj.outputCommands.led = {}
+        obj.outputCommands.led.color = evalExpr(obj, stmt.rgbColor);
     };
 
     var evalLedStatusAction = function(obj, stmt) {
@@ -276,9 +285,18 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
 
-    var evalDisplayImageAction = function(obj, stmt) {
+    var evalDisplayImageAction = function(obj, simulationData, stmt) {
         obj.outputCommands.display = {};
-        obj.outputCommands.display.picture = evalExpr(obj, stmt.image);
+        obj.outputCommands.display.mode = stmt.mode;
+        if (stmt.mode == CONSTANTS.IMAGE) {
+            obj.outputCommands.display.picture = evalExpr(obj, stmt.image);
+        } else if (stmt.mode == CONSTANTS.ANIMATION) {
+            obj.outputCommands.display.picture = evalExpr(obj, stmt.image);
+            obj.program.setIsRunningTimer(true);
+            obj.program.resetTimer(simulationData.time);
+            var duration = obj.outputCommands.display.picture.length * 200;
+            obj.program.setTimer(duration);         
+        }
     };
 
     var evalShowTextAction = function(obj, stmt) {
@@ -289,10 +307,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
 
-    var evalDisplayTextAction = function(obj, stmt) {
+    var evalDisplayTextAction = function(obj, simulationData, stmt) {
         obj.outputCommands.display = {};
         var val = evalExpr(obj, stmt.text);
         obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
+        obj.program.setIsRunningTimer(true);
+        obj.program.resetTimer(simulationData.time);
+        // TODO get the time needed to display this specific string from the simulation or a finish flag.
+        var duration = (obj.outputCommands.display.text.length + 1) * 7 * 150;
+        obj.program.setTimer(duration);   
     };
 
     var roundIfSensorData = function(val, exprType) {
@@ -363,16 +386,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var evalMethodCallReturn = function(obj, name, paramters, values) {
-        //        var method = obj.program.getMethod(name);
-        //        for (var i = 0; i < parameters.length; i++) {
-        //            var parameter = parameters[i];
-        //            var value = values[i]
-        //            if (obj.memory.get(parameter.name) == undefined) {
-        //                obj.memory.decl(parameter.name, evalExpr(obj, value))
-        //            } else {
-        //                obj.memory.assign(parameter.name, evalExpr(obj, value));
-        //            }
-        //        }
+//                var method = obj.program.getMethod(name);
+//                for (var i = 0; i < parameters.length; i++) {
+//                    var parameter = parameters[i];
+//                    var value = values[i]
+//                    if (obj.memory.get(parameter.name) == undefined) {
+//                        obj.memory.decl(parameter.name, evalExpr(obj, value))
+//                    } else {
+//                        obj.memory.assign(parameter.name, evalExpr(obj, value));
+//                    }
+//                }
     };
 
     var evalTurnAction = function(obj, stmt) {
@@ -530,13 +553,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.BOOL_CONST:
             case CONSTANTS.COLOR_CONST:
             case CONSTANTS.STRING_CONST:
+            case CONSTANTS.IMAGE_CONST:
                 return expr.value;
             case CONSTANTS.NULL_CONST:
                 return null;
             case CONSTANTS.ARRAY_NUMBER:
             case CONSTANTS.ARRAY_STRING:
             case CONSTANTS.ARRAY_COLOUR:
-            case CONSTANTS.ARRAY_BOOLEAN:
+            case CONSTANTS.ARRAY_BOOLEAN: 
+            case CONSTANTS.ARRAY_IMAGE:                
                 return evalArray(obj, expr.value);
             case CONSTANTS.CREATE_LIST_WITH_ITEM:
                 return evalCreateArrayWithItem(obj, expr.size, expr.value);
