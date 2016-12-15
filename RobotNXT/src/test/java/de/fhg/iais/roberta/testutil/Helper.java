@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxtSimVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 /**
@@ -42,7 +43,7 @@ public class Helper {
 
     static {
         Properties properties = Util1.loadProperties(null);
-        Util1.setRobertaProperties(properties);
+        RobertaProperties.setRobertaProperties(properties);
         factory = new NxtFactory(null);
     }
 

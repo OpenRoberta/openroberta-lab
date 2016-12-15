@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.MicrobitSimProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -38,11 +39,11 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     public MicrobitFactory(RobotCommunicator unusedForArdu) {
 
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("microbit");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("microbit");
         this.compilerWorkflow =
             new MicrobitCompilerWorkflow(
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Microbit.properties");
         this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Microbit.properties", this.calliopeProperties);

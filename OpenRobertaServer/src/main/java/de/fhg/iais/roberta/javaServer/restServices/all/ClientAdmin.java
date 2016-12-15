@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -52,7 +53,7 @@ public class ClientAdmin {
             response.put("cmd", cmd);
             if ( cmd.equals("init") ) {
                 JSONObject server = new JSONObject();
-                server.put("defaultRobot", Util1.getStringProperty("robot.type.default"));
+                server.put("defaultRobot", RobertaProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();
                 Collection<String> availableRobots = httpSessionState.getAllRobotsPluggedIn();
                 for ( String robot : availableRobots ) {

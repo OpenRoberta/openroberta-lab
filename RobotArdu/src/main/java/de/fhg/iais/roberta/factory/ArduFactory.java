@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -52,12 +53,12 @@ public class ArduFactory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("ardu");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ardu");
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
         addBlockTypesFromProperties("Ardu.properties", this.arduProperties);
     }

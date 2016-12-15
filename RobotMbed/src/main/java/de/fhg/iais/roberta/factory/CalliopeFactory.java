@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -40,12 +41,12 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     public CalliopeFactory(RobotCommunicator unusedForArdu) {
 
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("calliope");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("calliope");
         this.compilerWorkflow =
             new CalliopeCompilerWorkflow(
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
         this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);

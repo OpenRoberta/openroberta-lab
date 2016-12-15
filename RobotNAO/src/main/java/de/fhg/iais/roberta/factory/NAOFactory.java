@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.mode.sensor.nao.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -48,15 +49,15 @@ public class NAOFactory extends AbstractRobotFactory {
     private final Properties naoProperties;
 
     public NAOFactory(RobotCommunicator robotCommunicator) {
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("nao");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nao");
         this.naoProperties = Util1.loadProperties("classpath:NAO.properties");
 
         this.compilerWorkflow =
             new NAOCompilerWorkflow(
                 robotCommunicator,
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
         addBlockTypesFromProperties("NAO.properties", this.naoProperties);
     }
 
@@ -459,7 +460,7 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new NAOGuiceModule(Util1.getRobertaProperties());
+        return new NAOGuiceModule(RobertaProperties.getRobertaProperties());
     }
 
     @Override

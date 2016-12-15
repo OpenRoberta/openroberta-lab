@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 /**
@@ -39,7 +40,7 @@ public class Helper {
 
     static {
         Properties properties = Util1.loadProperties(null);
-        Util1.setRobertaProperties(properties);
+        RobertaProperties.setRobertaProperties(properties);
         factory = new CalliopeFactory(null);
     }
 

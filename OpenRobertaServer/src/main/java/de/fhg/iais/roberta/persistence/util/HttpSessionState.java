@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
@@ -29,7 +28,7 @@ public class HttpSessionState {
 
     public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
         this.robotPluginMap = robotPluginMap;
-        this.robotName = Util1.getStringProperty("robot.type.default");
+        this.robotName = RobertaProperties.getDefaultRobot();
     }
 
     public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
@@ -113,16 +112,11 @@ public class HttpSessionState {
     }
 
     public Collection<String> getAllRobotsPluggedIn() {
-        return Collections.unmodifiableSet(this.robotPluginMap.keySet());
+        return RobertaProperties.getRobotWhitelist();
     }
 
     public IRobotFactory getRobotFactory() {
-        IRobotFactory robotFactory = this.robotPluginMap.get(this.robotName);
-        if ( robotFactory == null ) {
-            LOG.error("robot factory for robot \"" + this.robotName + "\" not found. Fallback is \"ev3\"");
-            robotFactory = this.robotPluginMap.get("ev3");
-        }
-        return robotFactory;
+        return this.robotPluginMap.get(this.robotName);
     }
 
     public IRobotFactory getRobotFactory(String robotName) {

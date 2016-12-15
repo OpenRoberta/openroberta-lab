@@ -14,11 +14,11 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class represents the <b>variables_set</b> and <b>variables_get</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for creating a variable.<br/>
+ * This class represents the <b>variables_set</b> and <b>variables_get</b> blocks from Blockly into the AST (abstract syntax tree). Object from this class will
+ * generate code for creating a variable.<br/>
  * <br>
- * User must provide name of the variable and type of the variable, if the variable is created before in the code TypeVar should be <b>NONE</b>.
- * To create an instance from this class use the method {@link #make(BlocklyType, String, boolean, String)}.<br>
+ * User must provide name of the variable and type of the variable, if the variable is created before in the code TypeVar should be <b>NONE</b>. To create an
+ * instance from this class use the method {@link #make(BlocklyType, String, boolean, String)}.<br>
  */
 public class Var<V> extends Expr<V> {
     private final BlocklyType typeVar;

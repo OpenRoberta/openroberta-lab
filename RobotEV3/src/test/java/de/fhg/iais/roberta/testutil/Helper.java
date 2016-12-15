@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
 import de.fhg.iais.roberta.syntax.codegen.AstToEv3TextlyVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 /**
@@ -45,7 +46,7 @@ public class Helper {
 
     static {
         Properties properties = Util1.loadProperties(null);
-        Util1.setRobertaProperties(properties);
+        RobertaProperties.setRobertaProperties(properties);
         robotModeFactory = new EV3Factory(null);
     }
 

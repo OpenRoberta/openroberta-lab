@@ -67,6 +67,8 @@ public class BlockTypeContainer {
      * @return the block type value, never null
      */
     public static BlockType getByName(String name) {
+        System.out.println("*** BlockTypeContainer.blockTypesByName.size(): " + BlockTypeContainer.blockTypesByName.size());
+
         Assert.notNull(name);
         BlockType blockType = blockTypesByName.get(name.toLowerCase());
         Assert.notNull(blockType);
@@ -86,8 +88,8 @@ public class BlockTypeContainer {
     }
 
     /**
-     * Registers a property file to avoid loading property files more than once.
-     * Properties are not loaded by calling this method use the {@link #add(String, Category, Class, String...)}
+     * Registers a property file to avoid loading property files more than once. Properties are not loaded by calling this method use the
+     * {@link #add(String, Category, Class, String...)}
      *
      * @param propertyFileName
      * @return true if the property file was already loaded or false otherwise

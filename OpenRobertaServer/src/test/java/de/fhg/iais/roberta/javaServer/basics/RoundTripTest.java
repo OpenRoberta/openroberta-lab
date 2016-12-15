@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -176,7 +177,7 @@ public class RoundTripTest {
 
     private static void initialize() {
         Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
-        Util1.setRobertaProperties(properties);
+        RobertaProperties.setRobertaProperties(properties);
         buildXml = properties.getProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
         crosscompilerBasedir = properties.getProperty("robot.plugin.1.generated.programs.dir");

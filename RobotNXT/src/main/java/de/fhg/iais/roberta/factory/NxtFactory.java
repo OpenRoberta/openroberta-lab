@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -52,11 +53,11 @@ public class NxtFactory extends AbstractRobotFactory {
 
     public NxtFactory(RobotCommunicator unusedForNxt) {
 
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("nxt");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nxt");
         this.robotCompilerWorkflow =
             new NxtCompilerWorkflow(
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
 
         this.simCompilerWorkflow = new NxtSimCompilerWorkflow();

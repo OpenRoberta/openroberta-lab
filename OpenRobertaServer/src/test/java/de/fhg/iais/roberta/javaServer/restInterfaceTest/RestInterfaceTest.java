@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 /**
@@ -80,7 +81,7 @@ public class RestInterfaceTest {
     @Before
     public void setup() throws Exception {
         Properties robertaProperties = Util1.loadProperties(null);
-        Util1.setRobertaProperties(robertaProperties);
+        RobertaProperties.setRobertaProperties(robertaProperties);
 
         Properties properties = Util1.loadProperties("classpath:restInterfaceTest.properties");
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
