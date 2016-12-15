@@ -134,7 +134,7 @@ function _exportApplication {
   cp -r */resources/* "${exportpath}/resources"
 # -------------- begin of here documents --------------------------------------------------------------
   cat >"${exportpath}/start-server.sh" <<.eof
-java -cp resources/\* de.fhg.iais.roberta.main.ServerStarter -d server.ip=localhost -d server.port=1999 -d hibernate.connection.url=${databaseurl}
+java -cp resources/\* de.fhg.iais.roberta.main.ServerStarter -d hibernate.connection.url=${databaseurl} \$*
 .eof
   cat >"${exportpath}/start-db.sh" <<.eof
 java -cp resources/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db/openroberta-db --dbname.0 $databaseName
