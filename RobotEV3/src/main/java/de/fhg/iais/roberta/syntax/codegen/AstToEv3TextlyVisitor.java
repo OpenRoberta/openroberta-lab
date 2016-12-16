@@ -296,15 +296,6 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> funct) {
-        //        switch ( funct.getFunctName() ) {
-        //            case PRINT:
-        //                this.sb.append("System.out.println(");
-        //                funct.getParam().get(0).visit(this);
-        //                this.sb.append(")");
-        //                break;
-        //            default:
-        //                break;
-        //        }
         return null;
     }
 

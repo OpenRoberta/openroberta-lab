@@ -54,7 +54,7 @@ public class EV3Factory extends AbstractRobotFactory {
         this.robotCompilerWorkflow =
             new Ev3CompilerWorkflow(
                 robotCommunicator,
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
 

@@ -64,10 +64,7 @@ public class RestInterfaceTest {
     private HttpSessionState sMinscha; // reference user 2 is "minscha"
 
     // objects for specialized user stories
-    private String buildXml;
     private String connectionUrl;
-    private String crosscompilerBasedir;
-    private String crossCompilerResourcesDir;
 
     private RobotCommunicator brickCommunicator;
 
@@ -83,17 +80,11 @@ public class RestInterfaceTest {
         Properties robertaProperties = Util1.loadProperties(null);
         RobertaProperties.setRobertaProperties(robertaProperties);
 
-        Properties properties = Util1.loadProperties("classpath:restInterfaceTest.properties");
-        this.buildXml = properties.getProperty("crosscompiler.build.xml");
-        this.connectionUrl = properties.getProperty("hibernate.connection.url");
-        this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        this.crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
-
+        this.connectionUrl = "jdbc:hsqldb:mem:performanceInMemoryDb";
         this.brickCommunicator = new RobotCommunicator();
-
         this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
-        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator, this.crosscompilerBasedir);
+        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator);
         this.brickCommand = new RobotCommand(this.brickCommunicator);
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);

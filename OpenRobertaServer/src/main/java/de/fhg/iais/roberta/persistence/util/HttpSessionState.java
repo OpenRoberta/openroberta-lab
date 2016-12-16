@@ -111,10 +111,6 @@ public class HttpSessionState {
         this.toolbox = toolbox;
     }
 
-    public Collection<String> getAllRobotsPluggedIn() {
-        return RobertaProperties.getRobotWhitelist();
-    }
-
     public IRobotFactory getRobotFactory() {
         return this.robotPluginMap.get(this.robotName);
     }

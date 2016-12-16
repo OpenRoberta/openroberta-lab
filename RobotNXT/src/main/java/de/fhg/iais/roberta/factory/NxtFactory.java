@@ -56,7 +56,7 @@ public class NxtFactory extends AbstractRobotFactory {
         int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nxt");
         this.robotCompilerWorkflow =
             new NxtCompilerWorkflow(
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
 

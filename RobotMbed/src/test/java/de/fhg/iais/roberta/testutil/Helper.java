@@ -199,7 +199,7 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 

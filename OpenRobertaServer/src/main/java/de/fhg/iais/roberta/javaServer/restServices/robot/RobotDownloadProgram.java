@@ -17,11 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -35,9 +35,9 @@ public class RobotDownloadProgram {
     private final String pathToCrosscompilerBaseDir;
 
     @Inject
-    public RobotDownloadProgram(RobotCommunicator brickCommunicator, @Named("robot.plugin.1.generated.programs.dir") String pathToCrosscompilerBaseDir) {
+    public RobotDownloadProgram(RobotCommunicator brickCommunicator) {
         this.brickCommunicator = brickCommunicator;
-        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
+        this.pathToCrosscompilerBaseDir = RobertaProperties.getTempDirForUserProjects();
     }
 
     @POST

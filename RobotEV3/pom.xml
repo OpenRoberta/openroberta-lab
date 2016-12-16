@@ -101,7 +101,7 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/updateResources</outputDirectory>
+							<outputDirectory>resources/updateResources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
@@ -158,7 +158,7 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/crossCompilerResources</outputDirectory>
+							<outputDirectory>resources/crossCompilerResources</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>

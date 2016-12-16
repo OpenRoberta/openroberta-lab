@@ -56,7 +56,7 @@ public class ArduFactory extends AbstractRobotFactory {
         int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ardu");
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");

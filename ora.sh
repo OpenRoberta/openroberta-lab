@@ -1,11 +1,21 @@
 #!/bin/bash
 
 lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
-# --------------------------------- server mode -----------------------------------------------
-databaseName=oradb                               # the name of the database
-databaseurl='jdbc:hsqldb:hsql://localhost/'${databaseName}
-# --------------------------------- embedded mode ---------------------------------------------
-# databaseurl='jdbc:hsqldb:file:db/openroberta-db' # this is embedded mode
+
+databaseName=openroberta-db                      # the name of the database
+databaseurlEmbedded=jdbc:hsqldb:file:db/${databaseName}
+databaseurlServer=jdbc:hsqldb:hsql://localhost/${databaseName}
+
+databaseurl=$databaseurlServer                   # HERE the database type is selected: either server or embedded
+
+function mkAndCheckDir {
+  mkdir "$1"
+  if [ $? -ne 0 ]
+  then
+    echo "creating the directory \"$1\" failed - exit 4"
+    exit 4
+  fi
+}
 
 function _aliveFn {
   serverurl="$1"
@@ -105,39 +115,36 @@ function _exportApplication {
      exit 4
   fi
   echo "creating the target directory \"$exportpath\""
-  mkdir "$exportpath"
-  if [ $? -ne 0 ]
-  then
-    echo "creating the directory \"$exportpath\" failed - exit 4"
-    exit 4
-  fi
+  mkAndCheckDir "$exportpath"
   if [[ "$dbOption" == '-createemptydb' ]]
   then
     echo "creating an empty data base"
-    $0 --createemptydb "${exportpath}/db/openroberta-db"
+    $0 --createemptydb "${exportpath}/db/${databaseName}"
   else
     echo; echo "YOU ARE RESPONSIBLE TO COPY THE DATABASE TO DIRECTORY db"; echo
   fi
   echo "copying all jars"
-  mkdir "${exportpath}/resources"
-  cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
+  mkAndCheckDir "${exportpath}/lib"
+  cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
 
-  echo 'EV3 specific: creating directories and copy resources'
-  mkdir "${exportpath}/userProjects"
-  mkdir "${exportpath}/updateResources"
-  mkdir "${exportpath}/crossCompilerResources"
-  cp RobotEV3/crosscompiler-ev3-build.xml "${exportpath}"
-  cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
-  cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
-
-  echo "copying resources for all other robots"
-  cp -r */resources/* "${exportpath}/resources"
+  echo "copying resources for all robot plugins"
+  set *
+  for Robot do
+    if [[ -d "$Robot" && -e "$Robot/resources" ]]
+    then
+      echo "  $Robot"
+      mkAndCheckDir "${exportpath}/$Robot"
+      cd $Robot
+      cp -r --parents resources "${exportpath}/$Robot"
+      cd ..
+    fi
+  done
 # -------------- begin of here documents --------------------------------------------------------------
   cat >"${exportpath}/start-server.sh" <<.eof
-java -cp resources/\* de.fhg.iais.roberta.main.ServerStarter -d hibernate.connection.url=${databaseurl} \$*
+java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d hibernate.connection.url=${databaseurl} \$*
 .eof
   cat >"${exportpath}/start-db.sh" <<.eof
-java -cp resources/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db/openroberta-db --dbname.0 $databaseName
+java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db/${databaseName} --dbname.0 $databaseName
 .eof
 # -------------- end of here documents ----------------------------------------------------------------
   chmod ugo+x "${exportpath}/start-server.sh" "${exportpath}/start-db.sh"
@@ -173,15 +180,10 @@ cmd="$1"
 shift
 case "$cmd" in
 --export)         _exportApplication $* ;;
---start-from-git) if [[ "$1" == '-reset' ]]
-                  then
-                    echo; echo "starting the server from a Git working tree. The database is RESET to dbBase and used in embedded mode"; echo
-                    $0 --reset-db
-                  else
-                    echo; echo "starting the server from a Git working tree. The database is used in embedded mode"; echo
-                  fi
+--start-from-git) $0 --reset-db
                   java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
-                       -d hibernate.connection.url=jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db ;;
+                       -d hibernate.connection.url=jdbc:hsqldb:file:OpenRobertaServer/db/${databaseName} \
+                       $* ;;
 --sqlclient)      dir="OpenRobertaServer/target/resources"
                   java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
 

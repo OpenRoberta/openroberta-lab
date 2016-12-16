@@ -14,9 +14,13 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class RobertaProperties {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaProperties.class);
     public static final String NAME_OF_SIM = "sim";
+    public static final String ROBOT_WHITE_LIST_PROPERTY_KEY = "robot.whitelist";
+    public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
+    public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
     private static Properties robertaProperties = null;
     private static String defaultRobot = null;
     private static List<String> robotsOnWhiteList = null;
+    private static String tempDir = null;
 
     private RobertaProperties() {
         // no objects
@@ -33,17 +37,34 @@ public class RobertaProperties {
      */
     public static void setRobertaProperties(Properties properties) {
         robertaProperties = properties;
-        String whiteList = getStringProperty("robot.whitelist");
-        Assert.notNull(whiteList, "Property \"robot.whitelist\" not found");
+
+        // process the white list and get the default robot
+        String whiteList = getStringProperty(ROBOT_WHITE_LIST_PROPERTY_KEY);
+        Assert.notNull(whiteList, "Property \"" + ROBOT_WHITE_LIST_PROPERTY_KEY + "\" not found");
         String[] whiteListItems = whiteList.split("\\s*,\\s*");
-        Assert.isTrue(whiteListItems.length >= 1, "Property \"robot.whitelist\" must contain at least one robot");
+        Assert.isTrue(whiteListItems.length >= 1, "Property \"" + ROBOT_WHITE_LIST_PROPERTY_KEY + "\" must contain at least one real robot");
         if ( whiteListItems[0].equals(NAME_OF_SIM) ) {
-            Assert.isTrue(whiteListItems.length >= 2, "Property \"robot.whitelist\" must contain at least one robot different from \"" + NAME_OF_SIM + "\"");
+            Assert.isTrue(
+                whiteListItems.length >= 2,
+                "Property \"" + ROBOT_WHITE_LIST_PROPERTY_KEY + "\" must contain at least one robot different from \"" + NAME_OF_SIM + "\"");
             defaultRobot = whiteListItems[1];
         } else {
             defaultRobot = whiteListItems[0];
         }
         robotsOnWhiteList = Collections.unmodifiableList(Arrays.asList(whiteListItems));
+        robertaProperties.put(ROBOT_DEFAULT_PROPERTY_KEY, defaultRobot);
+
+        // made a robust choice about the temporary directory
+        tempDir = getStringProperty(PLUGIN_TEMPDIR_PROPERTY_KEY);
+        if ( tempDir == null ) {
+            tempDir = System.getProperty("java.io.tmpdir");
+            Assert.notNull(tempDir, "could not allocate a temporary directory");
+        }
+        if ( !(tempDir.endsWith("/") || tempDir.endsWith("\\")) ) {
+            tempDir = tempDir + "/";
+        }
+        robertaProperties.put(PLUGIN_TEMPDIR_PROPERTY_KEY, tempDir);
+        LOG.info("As temporary directory " + tempDir + " will be used");
     }
 
     public static Properties getRobertaProperties() {
@@ -83,4 +104,17 @@ public class RobertaProperties {
     public static String getDefaultRobot() {
         return defaultRobot;
     }
+
+    public static String getTempDir() {
+        return tempDir;
+    }
+
+    public static String getTempDirFor(String kindOfTempDir) {
+        return tempDir + kindOfTempDir + "/";
+    }
+
+    public static String getTempDirForUserProjects() {
+        return getTempDirFor("userProjects");
+    }
+
 }

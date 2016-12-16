@@ -55,7 +55,7 @@ public class ClientAdmin {
                 JSONObject server = new JSONObject();
                 server.put("defaultRobot", RobertaProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();
-                Collection<String> availableRobots = httpSessionState.getAllRobotsPluggedIn();
+                Collection<String> availableRobots = RobertaProperties.getRobotWhitelist();
                 int i = 0;
                 for ( String robot : availableRobots ) {
                     JSONObject robotDescription = new JSONObject();
@@ -110,7 +110,7 @@ public class ClientAdmin {
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
-                if ( robot != null && httpSessionState.getAllRobotsPluggedIn().contains(robot) ) {
+                if ( robot != null && RobertaProperties.getRobotWhitelist().contains(robot) ) {
                     Util.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot

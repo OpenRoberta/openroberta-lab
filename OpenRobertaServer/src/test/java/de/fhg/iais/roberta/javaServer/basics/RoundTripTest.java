@@ -180,7 +180,7 @@ public class RoundTripTest {
         RobertaProperties.setRobertaProperties(properties);
         buildXml = properties.getProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
-        crosscompilerBasedir = properties.getProperty("robot.plugin.1.generated.programs.dir");
+        crosscompilerBasedir = RobertaProperties.getTempDirForUserProjects();
         crossCompilerResourcesDir = properties.getProperty("robot.plugin.1.compiler.resources.dir");
         browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
 

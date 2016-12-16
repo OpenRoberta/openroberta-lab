@@ -48,10 +48,7 @@ public class PerformanceUserInteractionTest {
     private DbSetup memoryDbSetup;
     private RobotCommunicator brickCommunicator;
 
-    private String buildXml;
     private String connectionUrl;
-    private String crosscompilerBasedir;
-    private String crossCompilerResourcesDir;
 
     private ClientUser restUser;
     private ClientProgram restProgram;
@@ -65,10 +62,7 @@ public class PerformanceUserInteractionTest {
     @Before
     public void setup() throws Exception {
         Properties properties = Util1.loadProperties("classpath:performanceUserInteraction.properties");
-        this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
-        this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        this.crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
         this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
@@ -78,7 +72,7 @@ public class PerformanceUserInteractionTest {
         this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
-        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator, this.crosscompilerBasedir);
+        this.downloadJar = new RobotDownloadProgram(this.brickCommunicator);
         this.brickCommand = new RobotCommand(this.brickCommunicator);
         this.theProgramOfAllUserLol =
             Resources.toString(PerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);

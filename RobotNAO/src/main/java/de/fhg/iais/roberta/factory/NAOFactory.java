@@ -55,7 +55,7 @@ public class NAOFactory extends AbstractRobotFactory {
         this.compilerWorkflow =
             new NAOCompilerWorkflow(
                 robotCommunicator,
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
+                RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
         addBlockTypesFromProperties("NAO.properties", this.naoProperties);

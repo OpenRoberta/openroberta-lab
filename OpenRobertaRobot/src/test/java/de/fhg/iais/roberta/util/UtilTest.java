@@ -54,7 +54,7 @@ public class UtilTest {
     @Test
     public void testMissingProperty() {
         RobertaProperties.setRobertaProperties(Util1.loadProperties(null));
-        boolean browserVisibility = Boolean.parseBoolean(RobertaProperties.getStringProperty("browser.visibility"));
+        boolean browserVisibility = Boolean.parseBoolean(RobertaProperties.getStringProperty("does.not.exist"));
         assertEquals(false, browserVisibility);
     }
 }

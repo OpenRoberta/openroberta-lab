@@ -63,9 +63,6 @@ public class Helper {
                 .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
                 .build();
         String code = Ast2ArduVisitor.generate((ArduConfiguration) brickConfiguration, transformer.getTree(), false);
-        // System.out.println(javaCode); // only needed for EXTREME debugging
-        // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
-        // System.out.println(textlyCode); // only needed for EXTREME debugging
         return code;
     }
 
@@ -192,7 +189,7 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //      System.out.println(diff.toString()); // only needed for EXTREME debugging
+        // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 
