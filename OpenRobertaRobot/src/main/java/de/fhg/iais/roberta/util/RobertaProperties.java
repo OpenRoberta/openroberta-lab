@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobertaProperties {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaProperties.class);
+    public static final String NAME_OF_SIM = "sim";
     private static Properties robertaProperties = null;
     private static String defaultRobot = null;
     private static List<String> robotsOnWhiteList = null;
@@ -36,7 +37,12 @@ public class RobertaProperties {
         Assert.notNull(whiteList, "Property \"robot.whitelist\" not found");
         String[] whiteListItems = whiteList.split("\\s*,\\s*");
         Assert.isTrue(whiteListItems.length >= 1, "Property \"robot.whitelist\" must contain at least one robot");
-        defaultRobot = whiteListItems[0];
+        if ( whiteListItems[0].equals(NAME_OF_SIM) ) {
+            Assert.isTrue(whiteListItems.length >= 2, "Property \"robot.whitelist\" must contain at least one robot different from \"" + NAME_OF_SIM + "\"");
+            defaultRobot = whiteListItems[1];
+        } else {
+            defaultRobot = whiteListItems[0];
+        }
         robotsOnWhiteList = Collections.unmodifiableList(Arrays.asList(whiteListItems));
     }
 
