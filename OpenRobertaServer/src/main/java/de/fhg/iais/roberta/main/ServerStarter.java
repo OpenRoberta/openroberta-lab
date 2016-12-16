@@ -224,6 +224,8 @@ public class ServerStarter {
                 if ( pluginName == null ) {
                     throw new DbcException("robot plugin with number " + pluginNumber + " is invalid. Check the properties. Server does NOT start");
                 }
+                if ( robotToUse.equals("sim") )
+                    continue whitelist;
                 if ( robotToUse.equals(pluginName) ) {
                     String pluginFactory = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".factory");
                     if ( pluginFactory == null ) {

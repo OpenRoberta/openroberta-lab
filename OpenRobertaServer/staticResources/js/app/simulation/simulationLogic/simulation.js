@@ -27,7 +27,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var ready;
     var canceled;
 
-    var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg', '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg', '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg', '/js/app/simulation/simBackgrounds/calliopeBackground.svg', '/js/app/simulation/simBackgrounds/ruler.svg' ];
+    var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg', '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg', '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg', '/js/app/simulation/simBackgrounds/calliopeBackground.svg', '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/ruler.svg' ];
     var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/simpleBackground.png', '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png', '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png', '/js/app/simulation/simBackgrounds/ruler.png' ];
     var imgObjectList = [];
 
@@ -259,10 +259,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = false;
         simRobotType = robotType;
         userProgram = program;
-        if (robotType === 'calliope' || robotType === 'microbit')
+        if (robotType === 'calliope')
             currentBackground = 6;
+        else if (robotType === 'microbit')
+            currentBackground = 7;
         else
-            if (currentBackground == 6)
+            if (currentBackground == 6 || currentBackground == 7)
                 currentBackground = 1;
         var blocklyProgram = BUILDER.build(userProgram);
         programEval.initProgram(blocklyProgram);
@@ -417,7 +419,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             ruler.y = 380;
             ruler.w = 300;
             ruler.h = 30;
-            ruler.img = imgObjectList[7];
+            ruler.img = imgObjectList[8];
             ruler.color = null;
         } else {
             // All other scenes currently don't have a movable ruler.

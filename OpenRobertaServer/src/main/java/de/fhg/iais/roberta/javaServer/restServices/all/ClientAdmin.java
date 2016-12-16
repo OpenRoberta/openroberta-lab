@@ -10,7 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONObject;
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +54,9 @@ public class ClientAdmin {
             if ( cmd.equals("init") ) {
                 JSONObject server = new JSONObject();
                 server.put("defaultRobot", RobertaProperties.getDefaultRobot());
-                JSONArray robots = new JSONArray();
+                JSONObject robots = new JSONObject();
                 Collection<String> availableRobots = httpSessionState.getAllRobotsPluggedIn();
+                int i = 0;
                 for ( String robot : availableRobots ) {
                     JSONObject robotDescription = new JSONObject();
                     robotDescription.put("name", robot);
@@ -65,7 +65,8 @@ public class ClientAdmin {
                         robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
                         robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
                     }
-                    robots.put(robotDescription);
+                    robots.put("" + i, robotDescription);
+                    i++;
                 }
                 server.put("robots", robots);
                 response.put("server", server);

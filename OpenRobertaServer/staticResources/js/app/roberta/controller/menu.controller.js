@@ -32,33 +32,50 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
     function initMenu() {
         var proto = $('.robotType');
         var robots = GUISTATE_C.getRobots();
-        for ( var robot in robots) {
-            if (robot == 'oraSim') {
-                continue;
+        var length = Object.keys(robots).length
+        for (var i = 0; i < length; i++) {
+            if (robots[i].name == 'sim') {
+               i++;
             }
             var clone = proto.clone();
-            clone.find('.typcn').addClass('typcn-' + robot);
-            clone.find('.typcn').text(robots[robot].realName);
-            clone.find('.typcn').attr('id', 'menu-' + robot);
-            clone.attr('data-type', robot);
-            clone.addClass(robot);
+            clone.find('.typcn').addClass('typcn-' + robots[i].name);
+            clone.find('.typcn').text(robots[i].realName);
+            clone.find('.typcn').attr('id', 'menu-' + robots[i].name);
+            clone.attr('data-type', robots[i].name);
+            clone.addClass(robots[i].name);
             $("#navigation-robot>.anchor").before(clone);
         }
+//        for ( var robot in robots) {
+//            if (robot == 'oraSim') {
+//                continue;
+//            }
+//            var clone = proto.clone();
+//            clone.find('.typcn').addClass('typcn-' + robot);
+//            clone.find('.typcn').text(robots[robot].realName);
+//            clone.find('.typcn').attr('id', 'menu-' + robot);
+//            clone.attr('data-type', robot);
+//            clone.addClass(robot);
+//            $("#navigation-robot>.anchor").before(clone);
+//        }
         proto.remove();
         proto = $('#popup-sim');
-        for ( var robot in robots) {
-            if (robot == 'oraSim') {
-                continue;
+        for (var i = 0; i < length; i++) {
+            if (robots[i].name == 'sim') {
+                i++;
+                proto.attr('data-type', robots[i].name);
             }
-            var clone = proto.clone().prop('id', 'menu-' + robot);
+            var clone = proto.clone().prop('id', 'menu-' + robots[i].name);
             clone.find('span:eq( 0 )').removeClass('typcn-open');
-            clone.find('span:eq( 0 )').addClass('typcn-' + robot);
-            clone.find('span:eq( 1 )').text(robots[robot].realName);
-            clone.attr('data-type', robot);
-            if (!robots[robot].beta) {
+            clone.find('span:eq( 0 )').addClass('typcn-' + robots[i].name);
+            clone.find('span:eq( 1 )').text(robots[i].realName);
+            clone.attr('data-type', robots[i].name);
+            if (!robots[i].beta) {
                 clone.find('img').css('visibility', 'hidden');
             }
             $("#show-startup-message .modal-footer").append(clone);
+        }
+        if (robots[0].name != 'sim') {
+            proto.remove();
         }
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
