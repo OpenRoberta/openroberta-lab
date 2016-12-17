@@ -69,7 +69,8 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         IRobotFactory factory = helper.getModeFactory();
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON)
             || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON)
-            || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_ARDU) ) {
+            || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_ARDU)
+            || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_MBED) ) {
             fields = helper.extractFields(block, (short) 1);
             values = helper.extractValues(block, (short) 1);
             port = helper.extractField(fields, BlocklyConstants.MOTORPORT);
@@ -135,7 +136,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
-
+        System.out.println(getParam().getDuration());
         if ( getParam().getDuration() != null ) {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getDurationValue());

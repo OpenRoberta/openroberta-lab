@@ -105,6 +105,12 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        String end = createClosingBracket();
+        this.sb.append("createMotorOnAction(");
+        motorOnAction.getParam().getSpeed().visit(this);
+        this.sb.append(", " + "CONST.MOTOR_X" + motorOnAction.getPort());
+
+        this.sb.append(end);
         return null;
     }
 
@@ -115,6 +121,10 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        String end = createClosingBracket();
+        this.sb.append("createStopMotorAction(");
+        this.sb.append("CONST.MOTOR_X" + motorStopAction.getPort());
+        this.sb.append(end);
         return null;
     }
 

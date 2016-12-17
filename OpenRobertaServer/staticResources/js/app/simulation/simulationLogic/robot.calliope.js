@@ -1,4 +1,4 @@
-define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbed'], function(SIM, CONSTANTS, Mbed) {
+define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbed' ], function(SIM, CONSTANTS, Mbed) {
 
     /**
      * Creates a new Calliope device for a simulation.
@@ -10,25 +10,34 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbe
      */
     function Calliope(pose) {
         Mbed.call(this, pose);
-        this.once=true;
     }
     Calliope.prototype = Object.create(Mbed.prototype);
     Calliope.prototype.constructor = Calliope;
 
+    Calliope.prototype.endless = true;
+
+    Calliope.prototype.reset = function() {
+        Mbed.prototype.reset.call(this);
+        this.motorA.power = 0;
+        this.motorB.power = 0;
+        clearTimeout(this.motorB.timeout);
+        clearTimeout(this.motorA.timeout);
+    }
+
     Calliope.prototype.button = {
-        xA: -130,
-        yA: 55,
-        rA: 15,
-        colorA: 'blue',
-        xB: 130,
-        yB: 55,
-        rB: 15,
-        colorB: 'red',
-        xReset: 0,
-        yReset: 140,
-        rReset: 10,
-        colorReset: '#ffffff',
-        draw: function(canvas) {
+        xA : -130,
+        yA : 55,
+        rA : 15,
+        colorA : 'blue',
+        xB : 130,
+        yB : 55,
+        rB : 15,
+        colorB : 'red',
+        xReset : 0,
+        yReset : 140,
+        rReset : 10,
+        colorReset : '#ffffff',
+        draw : function(canvas) {
             // draw button A
             canvas.beginPath();
             canvas.fillStyle = this.colorA;
@@ -48,11 +57,11 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbe
     }
 
     Calliope.prototype.led = {
-        color: 'grey',
-        x: 0,
-        y: -90,
-        r: 10,
-        draw: function(canvas) {
+        color : 'grey',
+        x : 0,
+        y : -90,
+        r : 10,
+        draw : function(canvas) {
             canvas.fillStyle = 'white';
             canvas.beginPath();
             canvas.rect(this.x - this.r, this.y - this.r, 2 * this.r, 2 * this.r);
@@ -107,24 +116,36 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbe
             }
         }
         // update motors
-        // prototype to animate motors, not working yet
-//        if (this.once){
-//        var that = this.__proto__;
-//        var speed = 50; // Should come from user blocks
-//        function f(speed, that) {
-//            that.motorA.theta += Math.PI*speed/1000; 
-//            that.motorA.theta = that.motorA.theta % pi2;
-//            that.motorA.timeout = setTimeout(f, 150, speed, that);
-//        }
-//        f(speed, that);
-//        this.once = false;
+        if (actions.motors) {
+            function f(speed, that) {
+                that.theta += Math.PI * speed / 1000;
+                that.theta = that.theta % pi2;
+                that.timeout = setTimeout(f, 150, speed, that);
+            }
+            if (this.motorA.power != actions.motors.powerLeft) {
+                this.motorA.power = actions.motors.powerLeft;
+                clearTimeout(this.motorA.timeout);
+                var leftSpeed = actions.motors.powerLeft > 100 ? 100 : actions.motors.powerLeft;
+                if (leftSpeed > 0) {
+                    that = this.__proto__.motorA;
+                    f(leftSpeed, that);
+                }
+            }
+            if (this.motorB.power != actions.motors.powerRight) {
+                this.motorB.power = actions.motors.powerRight;
+                clearTimeout(this.motorB.timeout);
+                var RightSpeed = actions.motors.powerRight > 100 ? 100 : actions.motors.powerRight;
+                if (RightSpeed > 0) {
+                    that = this.__proto__.motorB;
+                    f(RightSpeed, that);
+                }
+            }
+        } 
     }
-    
+
     var AudioContext = window.AudioContext // Default
-        ||
-        window.webkitAudioContext // Safari and old versions of Chrome
-        ||
-        false;
+            || window.webkitAudioContext // Safari and old versions of Chrome
+            || false;
 
     if (AudioContext) {
         var context = new AudioContext();
@@ -140,50 +161,48 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbe
 
     } else {
         var context = null;
-        alert(
-            "Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox"
-        );
+        alert("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
     }
 
     Calliope.prototype.webAudio = {
-        context: context,
-        oscillator: oscillator,
-        gainNode: gainNode,
-        volume: 0.5,
+        context : context,
+        oscillator : oscillator,
+        gainNode : gainNode,
+        volume : 0.5,
     }
 
     var notches = 7, // num. of notches
-        radiusO = 20, // outer radius
-        radiusI = 15, // inner radius
-        radiusH = 10, // hole radius
-        taperO = 50, // outer taper %
-        taperI = 30, // inner taper %
+    radiusO = 20, // outer radius
+    radiusI = 15, // inner radius
+    radiusH = 10, // hole radius
+    taperO = 50, // outer taper %
+    taperI = 30, // inner taper %
 
-        pi2 = 2 * Math.PI, // cache 2xPI (360deg)
-        angle = pi2 / (notches * 2), // angle between notches
-        taperAI = angle * taperI * 0.005, // inner taper offset
-        taperAO = angle * taperO * 0.005, // outer taper offset
-        a = angle, // iterator (angle)
-        toggle = false; // notch radis (i/o)
+    pi2 = 2 * Math.PI, // cache 2xPI (360deg)
+    angle = pi2 / (notches * 2), // angle between notches
+    taperAI = angle * taperI * 0.005, // inner taper offset
+    taperAO = angle * taperO * 0.005, // outer taper offset
+    a = angle, // iterator (angle)
+    toggle = false; // notch radis (i/o)
 
     Calliope.prototype.motorA = {
         // Copyright (C) Ken Fyrstenberg / Epistemex
         // MIT license (header required)
-        cx: -45, // center x
-        cy: -130, // center y
-        theta: 0,
-        color: 'grey',
+        cx : -45, // center x
+        cy : -130, // center y
+        theta : 0,
+        color : 'grey',
 
-        draw: function(canvas) {
+        draw : function(canvas) {
 
             // starting point
             canvas.save();
             canvas.beginPath();
             canvas.translate(this.cx, this.cy);
-            canvas.rotate(this.theta);
+            canvas.rotate(-this.theta);
             canvas.beginPath();
             canvas.moveTo(radiusO * Math.cos(taperAO), radiusO * Math.sin(taperAO));
-            
+
             // loop
             toogle = false;
             a = angle;
@@ -226,14 +245,14 @@ define(['simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mbe
             canvas.restore();
         }
     }
-    
-    Calliope.prototype.motorB = {
-            cx: 45, // center x
-            cy: -130, // center y
-            theta: 0,
-            color: 'grey',
 
-            draw: Calliope.prototype.motorA.draw
+    Calliope.prototype.motorB = {
+        cx : 45, // center x
+        cy : -130, // center y
+        theta : 0,
+        color : 'grey',
+
+        draw : Calliope.prototype.motorA.draw
     }
 
     return Calliope;

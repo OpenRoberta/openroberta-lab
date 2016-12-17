@@ -421,9 +421,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
             obj.actors.initLeftTachoMotor(obj.simulationData.encoder.left);
             obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
-        } else {
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_RIGHT) {
             obj.actors.initRightTachoMotor(obj.simulationData.encoder.right);
             obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XA) {
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XB) {
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XAB) {
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
         }
         setDurationToCover(obj, stmt);
     };
@@ -439,7 +446,14 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalMotorStopAction = function(obj, stmt) {
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
             obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
-        } else {
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_RIGHT) {
+            obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XA) {
+            obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XB) {
+            obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XAB) {
+            obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
             obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
         }
     };

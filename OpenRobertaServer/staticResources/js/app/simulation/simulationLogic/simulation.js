@@ -49,15 +49,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             setObstacle();
             setRuler();
             scene = new Scene(imgObjectList[currentBackground], layers, robot, obstacle, ruler);
-            resizeAll();
             scene.updateBackgrounds();
             scene.drawObjects();
             scene.drawRuler();
             reloadProgram();
-            window.addEventListener("resize", resizeAll);
+
             return currentBackground;
         }
-        window.removeEventListener("resize", resizeAll);
         setPause(true);
         ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         if (num === 0) {
@@ -263,15 +261,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             currentBackground = 6;
         else if (robotType === 'microbit')
             currentBackground = 7;
-        else
-            if (currentBackground == 6 || currentBackground == 7)
-                currentBackground = 1;
+        else if (currentBackground == 6 || currentBackground == 7)
+            currentBackground = 1;
         var blocklyProgram = BUILDER.build(userProgram);
         programEval.initProgram(blocklyProgram);
         if (refresh) {
             require([ 'simulation.robot.' + simRobotType ], function(reqRobot) {
-                robot = new reqRobot(
-                        {
+                robot = new reqRobot({
                     x : 240,
                     y : 200,
                     theta : 0,
@@ -279,8 +275,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                     yOld : 200,
                     transX : 0,
                     transY : 0
-                }
-                );
+                });
                 robot.reset();
                 robot.resetPose();
                 ready = false;
@@ -298,6 +293,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 
         } else {
             robot.debug = false;
+            if (robot.endless)
+                robot.reset();
             reloadProgram();
         }
     }
@@ -307,7 +304,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         $(window).off("resize");
         canceled = true;
         removeMouseEvents();
-        destroyLayers();         
+        destroyLayers();
     }
     exports.cancel = cancel;
 
@@ -334,32 +331,31 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
 //                setPause(true);
 //            }
             actionValues = programEval.step(sensorValues);
-            
-        } else if (programEval.getProgram().isTerminated() && !pause) {
+
+        } else if (programEval.getProgram().isTerminated() && !pause && !robot.endless) {
             setPause(true);
             robot.reset();
             ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
-        } else if (reset && !pause) {             
+        } else if (reset && !pause) {
+            reset = false;
+            robot.buttons.Reset = false;
             removeMouseEvents();
-            setPause(true);  
+            setPause(true);
             robot.reset();
             scene.drawRobot();
             // some time to cancel all timeouts
-            setTimeout(function() { 
-                
+            setTimeout(function() {
                 init(userProgram, false, simRobotType);
                 addMouseEvents();
-            }, 205);                        
+            }, 205);
             setTimeout(function() {
-                delete robot.button.Reset;
+                //delete robot.button.Reset;
                 setPause(false);
-                reset = false;
             }, 1000);
         }
         robot.update(actionValues);
         sensorValues = scene.updateSensorValues(!pause);
         reset = sensorValues.buttons.Reset;
-
         scene.drawRobot();
     }
 
@@ -528,7 +524,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             canvasOffset = $("#backgroundDiv").offset();
             offsetX = canvasOffset.left;
             offsetY = canvasOffset.top;
-            scene.playground.w = $('#simDiv').width();
+            scene.playground.w = $('#simDiv').outerWidth();
             scene.playground.h = $(window).height() - offsetY;
             var oldScale = scale;
             scale = 1;
@@ -555,52 +551,52 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     function addMouseEvents() {
         $("#robotLayer").mousedown(function(e) {
             if (robot.handleMouseDown)
-                robot.handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w/2, scene.playground.h/2);
+                robot.handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseDown(e);
         });
         $("#robotLayer").mousemove(function(e) {
             if (robot.handleMouseMove)
-                robot.handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w/2, scene.playground.h/2);
+                robot.handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseMove(e);
         });
         $("#robotLayer").mouseup(function(e) {
             if (robot.handleMouseUp)
-                robot.handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w/2, scene.playground.h/2);
+                robot.handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseUp(e);
         });
         $("#robotLayer").mouseout(function(e) {
-            if(robot.handleMouseOut)
+            if (robot.handleMouseOut)
                 robot.handleMouseOut(e, offsetX, offsetY);
             else
                 handleMouseOut(e);
         });
         $("#robotLayer").bind('touchmove', function(e) {
-            if (robot.handleMouseMove) 
-                robot.handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w/2, scene.playground.h/2);
+            if (robot.handleMouseMove)
+                robot.handleMouseMove(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseMove(e);
         });
-        $("#robotLayer").bind('touchleave', function(e) {
-            if(robot.handleMouseOut)
-                robot.handleMouseOut(e, offsetX, offsetY, scene.playground.w/2, scene.playground.h/2);
+        $("#robotLayer").bind('touchcancel', function(e) {
+            if (robot.handleMouseOut)
+                robot.handleMouseOut(e, offsetX, offsetY, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseOut(e);
         });
         $("#robotLayer").bind('touchstart', function(e) {
             if (robot.handleMouseDown)
-                robot.handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w/2, scene.playground.h/2);
+                robot.handleMouseDown(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseDown(e);
         });
-        $("#robotLayer").bind('touchend', function(e) {
-            if (robot.handleMouseUp)
-                robot.handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w/2, scene.playground.h/2);
-            else
-                handleMouseUp(e);
-        });
+//        $("#robotLayer").bind('touchend', function(e) {
+//            if (robot.handleMouseUp)
+//                robot.handleMouseUp(e, offsetX, offsetY, scale, scene.playground.w / 2, scene.playground.h / 2);
+//            else
+//                handleMouseUp(e);
+//        });
     }
 
     function removeMouseEvents() {
@@ -621,8 +617,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         scene.drawRobot();
         addMouseEvents();
         ready = true;
-        $(window).on("resize", resizeAll);
         resizeAll();
+        $(window).on("resize", resizeAll);
         render();
     }
 

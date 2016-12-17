@@ -317,6 +317,12 @@ define({
     MOTOR_LEFT: "C",
 
     MOTOR_RIGHT: "B",
+    
+    MOTOR_XA: "XA",
+    
+    MOTOR_XB: "XB",
+    
+    MOTOR_XAB: "XAB",
 
     MOTOR_SIDE: "motorSide",
 

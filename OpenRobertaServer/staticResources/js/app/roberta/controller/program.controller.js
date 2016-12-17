@@ -416,9 +416,18 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             }
                             GUISTATE_C.setAutoConnectedBusy(false);
                         });
+                        var robotRealName;
+                        var list = GUISTATE_C.getRobots();
+                        
+                        for (var robot in list) {
+                            if (!list.hasOwnProperty(robot)) continue;
+                            if (list[robot].name == GUISTATE_C.getGuiRobot()) {
+                              robotRealName = list[robot].realName;
+                            }
+                          }
                         // fix header$(selector).attr(attribute)
                         textH = $("#popupDownloadHeader").text();
-                        $("#popupDownloadHeader").text(textH.replace("$", $.trim(GUISTATE_C.getRobots()[GUISTATE_C.getGuiRobot()].realName)));
+                        $("#popupDownloadHeader").text(textH.replace("$", $.trim(robotRealName)));
                         textC = $("#download-instructions").find("tr").eq(2).find("td").eq(1).html();
                         $("#download-instructions").find("tr").eq(2).find("td").eq(1).html(textC.replace("$", usb));
                         $('#save-client-compiled-program').modal('show');
@@ -491,6 +500,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             if (smallScreen) {
                                 $('.blocklyToolboxDiv').css('display', 'none');
                             }
+                            $(window).resize();
                             blocklyWorkspace.robControls.toogleSim();
                             Blockly.svgResize(blocklyWorkspace);
                             if (TOUR_C.getInstance()) {

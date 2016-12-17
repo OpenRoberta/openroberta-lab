@@ -12,11 +12,13 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         this.pose = pose;       
     }
     
+    Mbed.prototype.endless = true;
+    
     Mbed.prototype.reset = function() {
         for ( var property in this.buttons) {
             property = false;
         }
-        this.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
+        this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
         clearTimeout(this.display.timeout);
     }
     
@@ -289,16 +291,15 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         this.buttons.Reset = false;
         this.display.lightLevel = 100;
         if (A || B || Reset || Display) {
+            if (e.type === 'mouseup' && Reset) {
+                this.buttons.Reset = true;
+            }
             if (e.type === 'mousedown') {
                 if (A) {
                     this.buttons.A = true;
                 }
                 if (B) {
                     this.buttons.B = true;
-                }
-                if (Reset && !this.button.Reset) {
-                    this.buttons.Reset = true;
-                    this.button.Reset = true;
                 }
                 if (Display) {
                     this.display.lightLevel = 150;
