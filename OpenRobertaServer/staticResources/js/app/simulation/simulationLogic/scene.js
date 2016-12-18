@@ -622,6 +622,15 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         if (this.robot.temperature) {
             values.temperature = this.robot.temperature.degree;
         }
+        if (this.robot.gesture) {
+            values.gesture = {};
+            for ( var mode in this.robot.gesture) {
+                values.gesture[mode] = this.robot.gesture[mode];
+            }
+        }
+        if (this.robot.compass) {
+            values.compass = this.robot.compass.degree;
+        }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();
         return values;

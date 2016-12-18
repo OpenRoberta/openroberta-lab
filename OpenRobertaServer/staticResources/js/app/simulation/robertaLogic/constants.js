@@ -23,6 +23,14 @@ define({
     ANY: "any",
 
     ESCAPE: "escape",
+    
+    SHAKE: "shake",
+    
+    FREEFALL: "freefall",
+    
+    FACE_UP: "face_up",
+    
+    FACE_DOWN: "face_down",
 
     BINARY: "Binary",
 
@@ -419,7 +427,7 @@ define({
     COMPASS: "compass",
 
     GESTURE: "gesture",
-
+    
     TEMPERATURE: "temperature",
 
     COLOR_ENUM: {

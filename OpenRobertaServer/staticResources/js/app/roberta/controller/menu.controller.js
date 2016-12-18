@@ -1,6 +1,4 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
-        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
-        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -35,7 +33,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         var length = Object.keys(robots).length
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
-               i++;
+                i++;
             }
             var clone = proto.clone();
             clone.find('.typcn').addClass('typcn-' + robots[i].name);
@@ -304,7 +302,21 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('#simRobot').onWrap('click', function(event) {
             $("#simRobotModal").modal("toggle");
-            $('#simRobotModal').draggable();
+            var robot = GUISTATE_C.getRobot();
+            if (robot == 'calliope' || robot == 'microbit') {
+                var position = $("#simDiv").position();
+                position.left = $("#blocklyDiv").width();
+                $("#simRobotModal").css({
+                    top : position.top,
+                    left : position.left
+                });
+            } else {
+                $("#simRobotModal").css({
+                    top : 100,
+                    left : 50,
+                });
+                $('#simRobotModal').draggable();
+            }
             $("#simButtonsCollapse").collapse('hide');
         }, 'simRobot clicked');
 
@@ -426,8 +438,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('.popup-robot').onWrap('click', function(event) {
             event.preventDefault();
-            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
-                    || event.target.dataset.type;
+            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type || event.target.dataset.type;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {

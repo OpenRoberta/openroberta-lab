@@ -357,6 +357,15 @@ body.blocklyMinimalBody  * {
 	position: absolute;
 	z-index: 99;
 }
+.btn-group-vertical>.btn.simbtn {
+    margin: 8px;
+    padding-left: 0px;
+}
+
+.simbtn.btn:hover, .simbtn.btn:active:focus, .simbtn.btn:focus, .simbtn.btn.focus, .simbtn.btn:active, .simbtn.btn.active, .open>.dropdown-toggle.simbtn.btn {
+    background-color: #f29400;
+}
+
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tab-content

@@ -346,11 +346,11 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
-    function createGetSampleEncoderSensor(motorSide, senorMode) {
+    function createGetSampleEncoderSensor(motorSide, sensorMode) {
         var result = {};
         result[CONST.EXPR] = CONST.ENCODER_SENSOR_SAMPLE;
         result[CONST.MOTOR_SIDE] = motorSide;
-        result[CONST.SENSOR_MODE] = senorMode;
+        result[CONST.SENSOR_MODE] = sensorMode;
 
         return result;
     }

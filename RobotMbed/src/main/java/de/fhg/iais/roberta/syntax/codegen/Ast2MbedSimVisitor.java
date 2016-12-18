@@ -261,7 +261,6 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
             displayImageAction.getValuesToDisplay().visit(this);
         }
         this.sb.append(end);
-        System.out.println(this.sb.toString());
         return null;
     }
 
@@ -319,6 +318,7 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
+        System.out.println(gestureSensor.getMode());
         this.sb.append("createGetSample(CONST.GESTURE, CONST." + gestureSensor.getMode() + ")");
         return null;
     }
