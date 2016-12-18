@@ -22,6 +22,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         this.motorB.power = 0;
         clearTimeout(this.motorB.timeout);
         clearTimeout(this.motorA.timeout);
+        this.led.color = 'grey';
     }
 
     Calliope.prototype.button = {

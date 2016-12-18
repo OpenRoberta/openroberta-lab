@@ -9,19 +9,20 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
      * @class
      */
     function Mbed(pose) {
-        this.pose = pose;       
+        this.pose = pose;
     }
-    
+
     Mbed.prototype.endless = true;
-    
+
     Mbed.prototype.reset = function() {
         for ( var property in this.buttons) {
             property = false;
         }
         this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
         clearTimeout(this.display.timeout);
+        $("#simRobotContent").html('');
     }
-    
+
     Mbed.prototype.resetPose = function() {
     }
 
@@ -40,7 +41,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             canvas.beginPath();
             canvas.fillStyle = '#ffffff';
             canvas.globalAlpha = this.lightLevel / 800;
-            canvas.rect(this.x - this.dx/2, this.y + this.dy/2, 5 * this.dx, -5 * this.dy);
+            canvas.rect(this.x - this.dx / 2, this.y + this.dy / 2, 5 * this.dx, -5 * this.dy);
             canvas.fill();
             canvas.beginPath();
             canvas.globalAlpha = 1;
@@ -269,6 +270,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     var startY;
 
     Mbed.prototype.handleMouse = function(e, offsetX, offsetY, scale, w, h) {
+        w = w / scale;
+        h = h / scale;
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         startX = (parseInt(X - offsetX, 10)) / scale;
@@ -332,5 +335,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     Mbed.prototype.handleMouseDown = function(e, offsetX, offsetY, scale, w, h) {
         this.handleMouse(e, offsetX, offsetY, scale, w, h);
     }
+
     return Mbed;
 });

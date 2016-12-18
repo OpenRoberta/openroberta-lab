@@ -10,7 +10,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
      * @constructor
      */
     function Scene(backgroundImg, layers, robot, obstacle, ruler) {
-        
+
         this.backgroundImg = backgroundImg;
         this.robot = robot;
         this.obstacle = obstacle;
@@ -40,17 +40,17 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         ctx.restore();
         ctx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         // make sure backgroundimages have a white background
-        ctx.rect(0,0,CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
-        ctx.fillStyle='#fff';
+        ctx.rect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
+        ctx.fillStyle = '#fff';
         ctx.fill();
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {                
-                ctx.drawImage(this.backgroundImg, this.playground.w/2 - 452/2, this.playground.h/2 - 452/2, 452,452);
+            if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {
+                ctx.drawImage(this.backgroundImg, this.playground.w / 2 / sc - 452 / 2, this.playground.h / 2 / sc - 452 / 2, 452, 452);
             } else {
-                ctx.drawImage(this.backgroundImg, 0, 0);     
-            }       
+                ctx.drawImage(this.backgroundImg, 0, 0);
+            }
         }
     }
 
@@ -86,8 +86,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
         }
     }
-    
-    Scene.prototype.drawMbed = function() {   
+
+    Scene.prototype.drawMbed = function() {
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         this.rCtx.restore();
         this.rCtx.save();
@@ -156,17 +156,17 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 //        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
-        
-        this.rCtx.translate(this.playground.w/2, this.playground.h/2);
+
+        this.rCtx.translate(this.playground.w / 2 / SIM.getScale(), this.playground.h / 2 / SIM.getScale());
         this.rCtx.scale(1, -1);
-        for (var prop in this.robot) {
+        for ( var prop in this.robot) {
             if (this.robot[prop].draw != undefined && this.rCtx) {
                 this.robot[prop].draw(this.rCtx);
-            } 
+            }
         }
-        this.rCtx.restore(); 
+        this.rCtx.restore();
     }
-    
+
     Scene.prototype.drawRobot = function() {
         if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {
             this.drawMbed();
@@ -181,7 +181,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             var endValue = this.playground.w - 5;
             var line = 20;
             this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
-              this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
+            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
             this.rCtx.textAlign = "end";
             this.rCtx.font = "10px Arial";
             var x, y;
@@ -236,7 +236,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.rCtx.rect(endValue, line, -10, -10);
             this.rCtx.stroke();
             this.rCtx.fill();
-            
+
         }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
@@ -275,8 +275,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w - 2.5, this.robot.geom.y);
         this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y, this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + 2.5);
         this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h - 2.5);
-        this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x + this.robot.geom.w - 2.5, this.robot.geom.y
-                + this.robot.geom.h);
+        this.rCtx.quadraticCurveTo(this.robot.geom.x + this.robot.geom.w, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x + this.robot.geom.w - 2.5, this.robot.geom.y + this.robot.geom.h);
         this.rCtx.lineTo(this.robot.geom.x + 2.5, this.robot.geom.y + this.robot.geom.h);
         this.rCtx.quadraticCurveTo(this.robot.geom.x, this.robot.geom.y + this.robot.geom.h, this.robot.geom.x, this.robot.geom.y + this.robot.geom.h - 2.5);
         this.rCtx.lineTo(this.robot.geom.x, this.robot.geom.y + 2.5);
@@ -337,7 +336,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         for (var i = 0; i < this.robot.ultraSensor.u.length; i++) {
             this.rCtx.moveTo(this.robot.ultraSensor.rx, this.robot.ultraSensor.ry);
             if (this.robot.ultraSensor.u[i]) {
-                this.rCtx.lineTo(this.robot.ultraSensor.u[i].x, this.robot.ultraSensor.u[i].y);}
+                this.rCtx.lineTo(this.robot.ultraSensor.u[i].x, this.robot.ultraSensor.u[i].y);
+            }
         }
         this.rCtx.stroke();
         this.rCtx.beginPath();
@@ -403,8 +403,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                             x : obstacleLines[k].x2,
                             y : obstacleLines[k].y2
                         });
-                        if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
-                                * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
+                        if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
                             this.robot.frontLeft.bumped = true;
                             this.robot.frontRight.bumped = true;
                             this.robot.touchSensor.value = 1;
@@ -432,8 +431,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                                     x : obstacleLines[k].x2,
                                     y : obstacleLines[k].y2
                                 });
-                                if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt()
-                                        * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
+                                if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
                                     this.robot.backLeft.bumped = true;
                                     this.robot.backRight.bumped = true;
                                 }
@@ -549,8 +547,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                     for (var j = 0; j < uA.length; j++) {
                         var interPoint = SIMATH.getIntersectionPoint(uA[j], obstacleLines[k]);
                         if (interPoint) {
-                            var dis = Math.sqrt((interPoint.x - this.robot.ultraSensor.rx) * (interPoint.x - this.robot.ultraSensor.rx)
-                                    + (interPoint.y - this.robot.ultraSensor.ry) * (interPoint.y - this.robot.ultraSensor.ry));
+                            var dis = Math.sqrt((interPoint.x - this.robot.ultraSensor.rx) * (interPoint.x - this.robot.ultraSensor.rx) + (interPoint.y - this.robot.ultraSensor.ry) * (interPoint.y - this.robot.ultraSensor.ry));
                             if (dis < this.robot.ultraSensor.distance) {
                                 this.robot.ultraSensor.distance = dis;
                                 this.robot.ultraSensor.cx = interPoint.x;
