@@ -289,16 +289,19 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
         startX = (parseInt(X - offsetX, 10)) / scale;
         startY = (parseInt(Y - offsetY, 10)) / scale;
+        var scsq = 1;
+        if (scale < 1)
+            scsq = scale * scale;
         var dxA = startX - this.button.xA - w;
         var dyA = startY + this.button.yA - h;
-        var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA);
+        var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA / scsq);
         var dxB = startX - this.button.xB - w;
         var dyB = startY + this.button.yB - h;
-        var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB);
+        var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB / scsq);
         var dxReset = startX - this.button.xReset - w;
         var dyReset = startY + this.button.yReset - h;
-        var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset);
-        // special case, display (center: 0,0) is represents light level
+        var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
+        // special case, display (center: 0,0) represents light level
         var dxDisplay = startX - w;
         var dyDisplay = startY - h + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //
@@ -358,7 +361,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
-        '<label style="margin: 8px;margin-top: 12px">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin: 8px;margin-top: 12px" id="range">0</span>' + '<div style="margin:8px"><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div></div>');
+        '<label style="margin: 8px;margin-top: 12px">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; margin-left:8px"><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div></div>');
     }
 
     Mbed.prototype.gesture = {

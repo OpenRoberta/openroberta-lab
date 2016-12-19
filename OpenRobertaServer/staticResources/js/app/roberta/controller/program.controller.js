@@ -9,6 +9,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      */
     function init() {
         initView();
+        initHelp();
         initProgramEnvironment();
         initEvents();
         initProgramForms();
@@ -61,10 +62,43 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             var xml = Blockly.Xml.domToText(dom);
             GUISTATE_C.setProgramXML(xml);
         });
+        $('#progHelp').on('click touchend', function(event) {
+            toggleHelp();
+            return false;
+        });
         bindControl();
         blocklyWorkspace.addChangeListener(function(event) {
             if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
                 GUISTATE_C.setProgramSaved(false);
+            }
+            $('.selectedHelp').removeClass('selectedHelp');
+            if (Blockly.selected) {
+                var block = Blockly.selected.type;
+                $('#' + block).addClass('selectedHelp');
+                $('#helpContent').scrollTo('#' + block, 1000, {
+                    offset : -10,
+                });
+            }
+            return false;
+        });
+    }
+
+    function initHelp() {
+        $('#helpContent').remove();
+        var url = '../help/progHelp_' + GUISTATE_C.getRobot() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
+        $('#helpDiv').load(url, function(response, status, xhr) {
+            if (status == "error") {
+                url = '../help/progHelp_' + GUISTATE_C.getRobot() + '_de.html';
+//                url = 'progHelp_en.html';
+                $('#helpDiv').load(url, function(response, status, xhr) {
+                    if (status == "error") {
+                        $('#rightMenuDiv').hide();
+                    } else {
+                        $('#rightMenuDiv').show();
+                    }
+                })
+            } else {
+                $('#rightMenuDiv').show();
             }
         });
     }
@@ -418,13 +452,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         });
                         var robotRealName;
                         var list = GUISTATE_C.getRobots();
-                        
-                        for (var robot in list) {
-                            if (!list.hasOwnProperty(robot)) continue;
+
+                        for ( var robot in list) {
+                            if (!list.hasOwnProperty(robot))
+                                continue;
                             if (list[robot].name == GUISTATE_C.getGuiRobot()) {
-                              robotRealName = list[robot].realName;
+                                robotRealName = list[robot].realName;
                             }
-                          }
+                        }
                         // fix header$(selector).attr(attribute)
                         textH = $("#popupDownloadHeader").text();
                         $("#popupDownloadHeader").text(textH.replace("$", $.trim(robotRealName)));
@@ -488,6 +523,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         smallScreen = false;
                         width = '30%';
                     }
+                    $('#rightMenuDiv').animate({
+                        right : '0px',
+                    }, {
+                        duration : 750
+                    });
                     $('#blocklyDiv').animate({
                         width : width
                     }, {
@@ -524,6 +564,77 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     }
     exports.runInSim = runInSim;
 
+    function toggleHelp(callback, data) {
+        if ($('#blocklyDiv').hasClass('helpActive')) {
+            $('.nav > li > ul > .robotType').removeClass('disabled');
+            $('#menuShowCode').parent().removeClass('disabled');
+            $('.blocklyToolboxDiv').css('display', 'inherit');
+            Blockly.svgResize(blocklyWorkspace);
+            $('#rightMenuDiv').animate({
+                right : '0px',
+            }, {
+                duration : 750
+            });
+            $('#blocklyDiv').animate({
+                width : '100%'
+            }, {
+                duration : 750,
+                step : function() {
+                    $(window).resize();
+                    Blockly.svgResize(blocklyWorkspace);
+                },
+                done : function() {
+                    $('#blocklyDiv').removeClass('helpActive');
+                    $('#helpDiv').removeClass('helpActive');
+                    $('.nav > li > ul > .robotType').removeClass('disabled');
+                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
+                    $(window).resize();
+                    Blockly.svgResize(blocklyWorkspace);
+                }
+            });
+        } else {
+            $('#blocklyDiv').addClass('helpActive');
+            $('#helpDiv').addClass('helpActive');
+            $('.nav > li > ul > .robotType').addClass('disabled');
+            $('#menuShowCode').parent().addClass('disabled');
+            if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
+                $('.help.expert').hide();
+            } else {
+                $('.help.expert').show();
+            }
+            var width;
+            var smallScreen;
+            if ($(window).width() < 768) {
+                smallScreen = true;
+                width = '52px';
+            } else {
+                smallScreen = false;
+                width = $('#blocklyDiv').width() * 0.7;
+            }
+            $('#rightMenuDiv').animate({
+                right : $('#blocklyDiv').width() - width + 4,
+            }, {
+                duration : 750
+            });
+            $('#blocklyDiv').animate({
+                width : width
+            }, {
+                duration : 750,
+                step : function() {
+                    $(window).resize();
+                    Blockly.svgResize(blocklyWorkspace);
+                },
+                done : function() {
+                    if (smallScreen) {
+                        $('.blocklyToolboxDiv').css('display', 'none');
+                    }
+                    $(window).resize();
+                    Blockly.svgResize(blocklyWorkspace);
+                }
+            });
+        }
+    }
+
     function getBlocklyWorkspace() {
         return blocklyWorkspace;
     }
@@ -533,6 +644,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     function updateRobControls() {
         blocklyWorkspace.updateRobControls();
         bindControl();
+
     }
     exports.updateRobControls = updateRobControls;
 
@@ -591,6 +703,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
+        initHelp();
     }
     exports.resetView = resetView;
 
@@ -600,6 +713,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         var xml = GUISTATE_C.getToolbox(level);
         if (xml) {
             blocklyWorkspace.updateToolbox(xml);
+        }
+        if (toolbox === 'beginner') {
+            $('.help.expert').hide();
+        } else {
+            $('.help.expert').show();
         }
     }
     exports.loadToolbox = loadToolbox;

@@ -257,12 +257,16 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = false;
         simRobotType = robotType;
         userProgram = program;
-        if (robotType === 'calliope')
+        if (robotType === 'calliope') {
             currentBackground = 6;
-        else if (robotType === 'microbit')
+            $('.dropdown.sim, .simScene').hide();
+        } else if (robotType === 'microbit') {
+            $('.dropdown.sim,.simScene').hide();
             currentBackground = 7;
-        else if (currentBackground == 6 || currentBackground == 7)
+        } else if (currentBackground == 6 || currentBackground == 7) {
             currentBackground = 1;
+            $('.dropdown.sim,.simScene').show();
+        }
         var blocklyProgram = BUILDER.build(userProgram);
         programEval.initProgram(blocklyProgram);
         if (refresh) {
