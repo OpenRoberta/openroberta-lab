@@ -28,7 +28,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var canceled;
 
     var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg', '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg', '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg', '/js/app/simulation/simBackgrounds/calliopeBackground.svg', '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/ruler.svg' ];
-    var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/simpleBackground.png', '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png', '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png', '/js/app/simulation/simBackgrounds/ruler.png' ];
+    var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/simpleBackground.png', '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png', '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png', '/js/app/simulation/simBackgrounds/calliopeBackground.png', '/js/app/simulation/simBackgrounds/microbitBackground.png', '/js/app/simulation/simBackgrounds/ruler.png' ];
     var imgObjectList = [];
 
     function preloadImages() {
@@ -296,7 +296,6 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             });
 
         } else {
-            robot.debug = false;
             if (robot.endless)
                 robot.reset();
             reloadProgram();
@@ -398,6 +397,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.h = 0;
             obstacle.color = null;
         } else if (currentBackground == 6) {
+            obstacle.x = 0;
+            obstacle.y = 0;
+            obstacle.w = 0;
+            obstacle.h = 0;
+            obstacle.color = null;
+        } else if (currentBackground == 7) {
             obstacle.x = 0;
             obstacle.y = 0;
             obstacle.w = 0;

@@ -13,6 +13,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     }
 
     Mbed.prototype.endless = true;
+    Mbed.prototype.debug = true;
+    Mbed.prototype.idle = true;
 
     Mbed.prototype.reset = function() {
         for ( var property in this.buttons) {
@@ -30,6 +32,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             that.gesture = {};
             that.gesture[e.currentTarget.id] = true;
         });
+        this.compass.degree = 0;
         $('#slider').change(function() {
             $('#range').html($('#slider').val());
             that.compass.degree = $('#slider').val();
@@ -353,15 +356,15 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     }
 
     Mbed.prototype.controle = function() {
-        $('#simRobotContent').append('<div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
-        '<label style="margin: 8px;margin-top: 12px">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
+        $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
+        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
         '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' + Blockly.Msg.SENSOR_GESTURE_UP + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_DOWN + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_UP + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
-        '<label style="margin: 8px;margin-top: 12px">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; margin-left:8px"><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div></div>');
+        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div></div></div>');
     }
 
     Mbed.prototype.gesture = {

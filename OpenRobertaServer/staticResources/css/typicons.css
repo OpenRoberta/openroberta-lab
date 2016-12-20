@@ -77,13 +77,13 @@
 .typcn-nxt:before {
   content: "\e914";
 }
-.typcn-bayduino:before {
+.typcn-nao:before {
   content: "\e916";
 }
 .typcn-open:before {
   content: "\e90a";
 }
-.typcn-botnroll:before {
+.typcn-ardu:before {
   content: "\e90b";
 }
 .typcn-microduino:before {

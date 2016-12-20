@@ -39,7 +39,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         rReset : 10,
         colorReset : '#ffffff',
         draw : function(canvas) {
-            // draw button A
+            // draw button A            
             canvas.beginPath();
             canvas.fillStyle = this.colorA;
             canvas.arc(this.xA, this.yA, this.rA, 0, Math.PI * 2);

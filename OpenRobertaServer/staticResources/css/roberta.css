@@ -315,6 +315,8 @@ body.blocklyMinimalBody  * {
 
 #helpContent h3, #helpContent h2 {
 	padding-left: 10px;
+    padding-top: 25px;
+    border-top: 1px solid #F29400;
 }
 
 #helpContent p, #helpContent h4{
@@ -334,6 +336,24 @@ body.blocklyMinimalBody  * {
     position: absolute;
     top: 102px;
     right: 0;
+}
+
+.rightMenuButton.help :before {
+	font-family: 'Roboto', sans-serif;
+    content: "?";
+    font-weight: 900;
+    font-size: 24px;
+    color: #E2001A;
+    position: relative;
+    top: 4px;
+    left: 12px;
+}
+
+#mbedContent {
+	background-color: #fff;
+	border: solid #333;
+	padding: 12px;
+	border-radius: 2px;
 }
 
 .rightMenuButton {
@@ -357,7 +377,7 @@ body.blocklyMinimalBody  * {
     border-bottom: 5px solid transparent;
 }
 
-div.rightMenuButton:before, .rightMenuButton:active {
+div.rightMenuButton:hover, .rightMenuButton:active {
 	cursor: pointer;
 }
 	
@@ -471,7 +491,7 @@ position: relative;
 	z-index: 99;
 }
 .btn-group-vertical>.btn.simbtn {
-    margin: 8px;
+    margin: 8px 0;
     padding-left: 0px;
 }
 

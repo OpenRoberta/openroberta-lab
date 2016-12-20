@@ -92,68 +92,39 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information   
-//        if (SIM.getInfo() || this.robot.debug) {
-//            var endLabel = this.playground.w - 40;
-//            var endValue = this.playground.w - 5;
-//            var line = 20;
-//            this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
-//              this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
-//            this.rCtx.textAlign = "end";
-//            this.rCtx.font = "10px Arial";
-//            var x, y;
-//            if (SIM.getBackground() === 5) {
-//                x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
-//                y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
-//                this.rCtx.fillStyle = "#ffffff";
-//
-//            } else {
-//                x = this.robot.pose.x + this.robot.pose.transX;
-//                y = +this.robot.pose.y + this.robot.pose.transY;
-//                this.rCtx.fillStyle = "#333333";
-//            }
-//            this.rCtx.fillText("FPS", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Time", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Robot X", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(x, 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Robot Y", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(y, 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Robot θ", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0), endValue, line);
-//            line += 25;
-//            this.rCtx.fillText("Motor left", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Motor right", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Touch Sensor", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Light Sensor", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(this.robot.colorSensor.lightValue, 0), endValue, line);
-//            line += 15;
-//            this.rCtx.fillText("Ultra Sensor", endLabel, line);
-//            this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
-//            if (this.robot.sound) {
-//                line += 15;
-//                this.rCtx.fillText("Sound Sensor", endLabel, line);
-//                this.rCtx.fillText(UTIL.round(this.robot.sound.volume * 100, 0), endValue, line);
-//            }
-//            line += 15;
-//            this.rCtx.fillText("Color Sensor", endLabel, line);
-//            this.rCtx.beginPath();
-//            this.rCtx.fillStyle = this.robot.colorSensor.color;
-//            this.rCtx.rect(endValue, line, -10, -10);
-//            this.rCtx.stroke();
-//            this.rCtx.fill();
-//            
-//        }
+        if (SIM.getInfo() || this.robot.debug) {
+            var endLabel = this.playground.w - 60;
+            var endValue = this.playground.w - 5;
+            var line = 20;
+            this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
+            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
+            this.rCtx.textAlign = "end";
+            this.rCtx.font = "10px Arial";
+            this.rCtx.fillStyle = "#333333";
+            var x, y;
+            this.rCtx.fillText("FPS", endLabel, line);
+            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
+            line += 15;
+            this.rCtx.fillText("Time", endLabel, line);
+            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
+            line += 15;
+            this.rCtx.fillText("Compass °", endLabel, line);
+            this.rCtx.fillText(UTIL.round(this.robot.compass.degree, 0), endValue, line);
+            line += 15;
+            this.rCtx.fillText("Light Sensor", endLabel, line);
+            this.rCtx.fillText(UTIL.round(this.robot.display.lightLevel, 0), endValue, line);
+            line += 15;
+            this.rCtx.fillText("Temperature", endLabel, line);
+            this.rCtx.fillText(UTIL.round(this.robot.temperature.degree, 2), endValue, line);
+            line += 15;
+            this.rCtx.fillText("Gesture", endLabel, line);
+            var gesture;
+            for ( var i in this.robot.gesture) {
+                gesture = i;
+                break;
+            }
+            this.rCtx.fillText(gesture, endValue, line);
+        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
 
@@ -168,7 +139,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
     }
 
     Scene.prototype.drawRobot = function() {
-        if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {
+        if (this.robot.idle) {
             this.drawMbed();
             return;
         }

@@ -72,7 +72,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 GUISTATE_C.setProgramSaved(false);
             }
             $('.selectedHelp').removeClass('selectedHelp');
-            if (Blockly.selected) {
+            if (Blockly.selected && $('#blocklyDiv').hasClass('helpActive')) {
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {
@@ -630,6 +630,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     }
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
+                    $('.selectedHelp').removeClass('selectedHelp');
+                    if (Blockly.selected) {
+                        var block = Blockly.selected.type;
+                        $('#' + block).addClass('selectedHelp');
+                        $('#helpContent').scrollTo('#' + block, 1000, {
+                            offset : -10,
+                        });
+                    }
                 }
             });
         }
