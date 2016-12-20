@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Ebene_3_1_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="452" height="452"  viewBox="0 0 452 452" style="enable-background:new 0 0 452 452;" xml:space="preserve">
+<svg version="1.1" id="Ebene_3_1_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" 
+     width="452" height="452" viewBox="0 0 452 452" style="enable-background:new 0 0 452 452;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#034854;}
 	.st1{display:none;}
@@ -283,6 +283,10 @@
 		c16,0,28.9-13,28.9-28.9L452,56.6L452,56.6z M13,215.2c-2.4,0-4.4-2-4.4-4.4c0-2.4,2-4.4,4.4-4.4c2.4,0,4.4,2,4.4,4.4
 		C17.4,213.3,15.4,215.2,13,215.2z M441.3,215.2c-2.4,0-4.4-2-4.4-4.4c0-2.5,0.2-4.4,4.4-4.4c2.4,0,4.4,2,4.4,4.4
 		C445.7,213.3,443.7,215.2,441.3,215.2z"/>
+	<circle class="st4" cx="126.2" cy="337.7" r="19.2"/>
+	<circle class="st4" cx="226" cy="337.7" r="19.2"/>
+	<circle class="st4" cx="327" cy="337.7" r="19.2"/>
+	<circle class="st4" cx="415.7" cy="337.7" r="19.2"/>
 	<path class="st1" d="M303,325.2H150.5c-7.5,0-13.6-6.1-13.6-13.6V159.3c0-7.5,6.1-13.6,13.6-13.6h152.3c7.5,0,13.6,6.1,13.6,13.6
 		v152.3C316.6,319.2,310.5,325.2,303,325.2z"/>
 	<polygon class="st6" points="104.4,79.1 157.1,27.6 104.4,27.6 	"/>
@@ -453,6 +457,7 @@
 			"/>
 		<path class="st6" d="M244.8,100.5c2.6,0,4.8-2.2,4.8-4.8s-2.2-4.8-4.8-4.8c-2.6,0-4.8,2.2-4.8,4.8S242.2,100.5,244.8,100.5"/>
 	</g>
+	<circle class="st4" cx="36.5" cy="337.7" r="19.2"/>
 	
 		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-1862.2386" y1="875.9787" x2="-1862.2386" y2="876.6004" gradientTransform="matrix(69.4493 0 0 128.9774 129367.6953 -112665.625)">
 		<stop  offset="0" style="stop-color:#D4AF37"/>
@@ -729,6 +734,15 @@
 	</g>
 	<path class="st1" d="M420.2,228.3c0,7.9-6.3,14.2-14.2,14.2s-14.2-6.3-14.2-14.2c0-7.9,6.3-14.2,14.2-14.2S420.2,220.5,420.2,228.3
 		"/>
+	<g>
+		<path class="st37" d="M485.6,334.2h43.7c2,0,3.6,1.6,3.6,3.6v43.7c0,2-1.6,3.6-3.6,3.6h-43.7c-2,0-3.6-1.6-3.6-3.6v-43.7
+			C482,335.8,483.6,334.2,485.6,334.2z"/>
+		<circle class="st38" cx="491.1" cy="343.2" r="5.5"/>
+		<circle class="st38" cx="491.1" cy="376.1" r="5.5"/>
+		<circle class="st38" cx="523.9" cy="376.1" r="5.5"/>
+		<circle class="st38" cx="523.9" cy="343.2" r="5.5"/>
+	</g>
+	<circle class="st1" cx="508.3" cy="359.5" r="15"/>
 	<path d="M32.4,369.3c0-2.6,1.9-4.6,5-4.6c3,0,5,2.2,5,4.6v4.3c0,2.6-2,4.6-5,4.6c-3,0-5-2.2-5-4.6V369.3z M39.3,369.3
 		c0-1.2-0.7-2.1-2-2.1c-1.2,0-1.9,1-1.9,2.1v4.3c0,1.1,0.7,2.1,1.9,2.1c1.2,0,2-1,2-2.1V369.3z"/>
 	<path d="M123.6,367.2c2.6,0,3.1-0.7,3.1-2.2h2.6v12.9h-3.1v-8.6h-2.7v-2.1L123.6,367.2L123.6,367.2z"/>

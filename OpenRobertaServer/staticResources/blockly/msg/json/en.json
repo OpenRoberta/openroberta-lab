@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-11-28 10:32:20.869810",
+		"lastupdated": "2016-12-20 20:41:24.764940",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -782,6 +782,7 @@
 	"ORA_USER_TO_SHARE_DOES_NOT_EXIST": "The user with which you would like to share the program does not exist. <br />Try it again!",
 	"ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER": "You cannot share any programs with yourself.",
 	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Check all required input fields have been filled out.",
+	"ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS": "Name or username format is not valid.",
 	"ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL": "This email address is unknown, maybe you have spelled it wrong!",
 	"ORA_SERVER_ERROR": "Server-Error",
 	"CONFIGURATION_ERROR_SENSOR_MISSING": "This sensor is not set to the port!",
@@ -860,8 +861,8 @@
 	"CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS": "You have multiple right motors assigned to your configuration!",
 	"CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS": "You have multiple left motors assigned to your configuration!",
 	"WAIT_TIME_TOOLTIP": "Waits for a certain time in milliseconds.",
-	"POPUP_RELEASE": "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>",
-	"POPUP_NEW_RELEASE": "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li><li>Improved Open Roberta Lab performance</ul>",
+	"POPUP_2_1_3": "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>",
+	"POPUP_OLD_RELEASE": "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>",
 	"ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE": "You are trying to connect a robot of a different type as selected in the menu. <br> Please switch the robot type in the robot's menu and try to connect again!",
 	"ORA_USER_ERROR_EMAIL_USED": "There is already an account with this email address registered. Please enter another email adress!",
 	"ORA_USER_PASSWORD_RECOVERY_EXPIRED_URL": "The link is not valid anymore. Please ask for resetting your password again, if you still cannot remember it!",
@@ -965,7 +966,6 @@
 	"POPUP_DOWNLOAD_CHECK": "Okay, I've changed the download folder of my browser permanently. Don't show this popup again and download my programs directly.",
 	"POPUP_DOWNLOAD_SAVE_AS": "Save link as ...",
 	"POPUP_DOWNLOAD_SAVE": "Save",
-	"POPUP_2_0_1": "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>",
 	"POPUP_ROBOT_SIM": "Open Roberta Sim",
 	"NAO_BRICK_IPADDRESS": "Ip Address",
 	"NAO_BRICK_PORT": "Port number",

@@ -751,6 +751,7 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Si è verificato un errore durante il salv
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Si è verificato un errore durante il salvataggio della configurazione nel database.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Toolbox salvata";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Name or username format is not valid.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Controlla che tutti gli campi di input richiesti sono stati compilati.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Il nome utente esiste già nel database.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Il utente è stato creato";
@@ -786,7 +787,7 @@ Blockly.Msg.PLAY_TONE = "suono/tuono";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Riproduce un suono.";
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_1_3 = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Voglio aiutare";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Il Open Roberta Lab è un ambiente di programmazione integrato, basato su cloud, che permette a bambini e adolescenti di imparare a programmare facilmente con robot di Lego Mindstorms EV3. Questa piattaforma é completamente open source (fonte aperta), quindi la partecipazione è vantaggiosa! La software e gli strumenti di sviluppo open source (a fonte aperta) sono disponibili tramite i server di Fraunhofer.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Il Open Roberta Lab è una piattaforma a fonte aperta (open source) di programmazione, sviluppata dal Fraunhofer IAIS nell'ambito della initiativa <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";
@@ -813,13 +814,12 @@ Blockly.Msg.POPUP_EMAIL = "E-mail";
 Blockly.Msg.POPUP_EMAIL_SEND = "Invia adesso";
 Blockly.Msg.POPUP_NAME = "Nome";
 Blockly.Msg.POPUP_NEW_PASSWORD = "Nuova password";
-Blockly.Msg.POPUP_NEW_RELEASE = "Versione beta 1.4.  <ul class='NonIcon'> Crea un programma per il robot reale e per quello simolato. Attualiza blockly per prestazioni migliori e la funzione zoom.";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Vecchia passoword";
+Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Password";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "risetta password...";
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "La esecuzione del programma sul robot ha terminato in modo imprevisto.";
 Blockly.Msg.POPUP_REGISTER_USER = "Registra adesso (registrati?)";
-Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon'><li>correggi il timestamp bug per salvare il programma</li></ul>Version beta 1.3.1 <ul class='NonIcon'><li>Adesso è anche disponibile in spagnolo!</li><li>Corretto i bug</li></ul>Version beta 1.3.0 <ul class='NonIcon'><li>Simola un robot!</li><li>Condividi il tuo programma con un amico</li><li>Attualiza la firmware del robot Over-the-Air (nell'aria???!!)</li><li>cavo USB di sopporto per Chromebooks</li><li>Corretto altri bug</li></ul></br>.";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Ripeti password";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltaggio";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nome";

@@ -751,6 +751,7 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Wystąpił błąd podczas zapisywania Przy
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Błąd wystąpił błąd podczas zapisywania konfiguracji w bazie danych.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Przybornik został zapisany";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Name or username format is not valid.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Sprawdź czy wszystkie wymagane pola wejściowe zostały wypełnione.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Podana nazwa użytkownika już istnieje w bazie danych, wybierz inną nazwę użytkownika.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Użytkownik został utworzony";
@@ -786,7 +787,7 @@ Blockly.Msg.PLAY_TONE = "tone";  // untranslated
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Plays a tone.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "volume";  // untranslated
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_1_3 = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "I want to help";  // untranslated
 Blockly.Msg.POPUP_ABOUT_TEXT = "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.";  // untranslated
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";  // untranslated
@@ -813,13 +814,12 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";  // untranslated
 Blockly.Msg.POPUP_EMAIL_SEND = "Send now";  // untranslated
 Blockly.Msg.POPUP_NAME = "Name";  // untranslated
 Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
-Blockly.Msg.POPUP_NEW_RELEASE = "Version beta 2.0 <ul class='NonIcon'><li>NXT - create programs for LEGO Mindstorms NXT</li><li>Bot'n Roll - create programs for the educational robotic kit botnroll.com®compatible with Arduino™</li><li>Start programming with the new welcome tour</li><li>Improved Open Roberta Lab performance</ul>";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
+Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "reset password ...";  // untranslated
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "The execution of the program on the robot has terminated unexpectedly!";  // untranslated
 Blockly.Msg.POPUP_REGISTER_USER = "Register now";  // untranslated
-Blockly.Msg.POPUP_RELEASE = "Version beta 1.4 <ul class='NonIcon'><li>Create one program for the real robot <strong>and</strong> for the simulated robot</li><li>Update blockly for better performance and zoom function</li></ul>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repeat password";  // untranslated
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltage";  // untranslated
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";  // untranslated

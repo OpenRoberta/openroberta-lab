@@ -751,6 +751,7 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Ocorreu um erro ao guardar a caixa de ferr
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Ocorreu um erro ao guardar a configuração na base de dados.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Caixa de ferramentas guardada";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Name or username format is not valid.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Verifica que preencheste todos os campos necessários.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "O nome de utilizador já existe na base de dados, escolhe outro nome de utilizador por favor.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Utilizador criado com sucesso";
@@ -786,7 +787,7 @@ Blockly.Msg.PLAY_TONE = "tom";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Reproduzir tom.";
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_0_1 = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_1_3 = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Quero ajudar";
 Blockly.Msg.POPUP_ABOUT_TEXT = "O Open Roberta Lab é um ambiente de programação baseado em nuvem que que possibilita às crianças e adolescentes a programação de diferentes sistemas robóticos de uma forma simples. Esta plataforma é open-source e a tua participação é bem-vinda! Tanto o software como as ferramentas de desenvolvimento open-source estão disponiveis nos servidores do Instituto Fraunhofer.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "O Open Roberta Lab é uma plataforma de programação open-source desenvolvida por Fraunhofer IAIS no âmbito da iniciativa <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";
@@ -813,13 +814,12 @@ Blockly.Msg.POPUP_EMAIL = "Correio-eletrónico";
 Blockly.Msg.POPUP_EMAIL_SEND = "Enviar agora";
 Blockly.Msg.POPUP_NAME = "Nome";
 Blockly.Msg.POPUP_NEW_PASSWORD = "Nova palavra-passe";
-Blockly.Msg.POPUP_NEW_RELEASE = "Versão beta 2.0 <ul class='NonIcon'><li>NXT - criar programas para LEGO Mindstorms NXT</li><li>Bot'n Roll - criar programas para o kit robótico educacional Bot'n Roll ONE A da botnroll.com® compatível com Arduino™</li><li>Começa a programar com a nova apresentação de boas-vindas</li><li>Open Roberta Lab com performance melhorada</ul>";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Palavra-passe antiga";
+Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Palavra-passe";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "repor palavra-passe …";
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "A execução do programa no robô terminou de forma inesperada!";
 Blockly.Msg.POPUP_REGISTER_USER = "Registar agora";
-Blockly.Msg.POPUP_RELEASE = "Versão beta 1.4 <ul class='NonIcon'><li>Criar um programa para o robô real <strong>e</strong> para o robô virtual</li><li>Blockly atualizado para melhor performance e função zoom</li></ul>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repetir palavra-passe";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Tensão";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nome";
