@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2014, 2015 The Open Roberta project. See the NOTICE file distributed with this work for additional information regarding copyright ownership. Licensed 
-	under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
-	Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-	OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright 2014, 2015 The Open Roberta project. See the NOTICE file distributed 
+	with this work for additional information regarding copyright ownership. 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.3-SNAPSHOT</version>
 		<relativePath>../OpenRobertaParent</relativePath>
 	</parent>
 	<artifactId>OpenRobertaServer</artifactId>
@@ -155,18 +161,11 @@
 								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>RobotSIM</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
 									<artifactId>RobotMbed</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
-								</artifactItem>								
+								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
 									<artifactId>RobotNAO</artifactId>
@@ -288,7 +287,8 @@
 		</resources>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -330,7 +330,8 @@
 			</activation>
 			<build>
 				<plugins>
-					<!-- Clean out compressed files that may have been added by a release build. -->
+					<!-- Clean out compressed files that may have been added by a release 
+						build. -->
 					<plugin>
 						<artifactId>maven-clean-plugin</artifactId>
 						<version>3.0.0</version>
@@ -376,8 +377,10 @@
 						</executions>
 						<configuration>
 							<nosuffix>true</nosuffix>
-							<!-- Disable javascript compression - just use this plugin for gzip. If we want to use javascript compression we should execute this plugin twice, so we can 
-								exclude already-compressed files from the JS-compression but not from gzip-compression. -->
+							<!-- Disable javascript compression - just use this plugin for gzip. 
+								If we want to use javascript compression we should execute this plugin twice, 
+								so we can exclude already-compressed files from the JS-compression but not 
+								from gzip-compression. -->
 							<nocompress>true</nocompress>
 							<force>true</force>
 							<gzip>true</gzip>

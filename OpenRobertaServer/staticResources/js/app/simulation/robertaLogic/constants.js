@@ -23,6 +23,14 @@ define({
     ANY: "any",
 
     ESCAPE: "escape",
+    
+    SHAKE: "shake",
+    
+    FREEFALL: "freefall",
+    
+    FACE_UP: "face_up",
+    
+    FACE_DOWN: "face_down",
 
     BINARY: "Binary",
 
@@ -66,6 +74,8 @@ define({
 
     SHOW_PICTURE_ACTION: "ShowPictureAction",
 
+    DISPLAY_IMAGE_ACTION: "DisplayImageAction",
+
     CLEAR_DISPLAY_ACTION: "ClearDisplay",
 
     CREATE_DEBUG_ACTION: "CreateDebugAction",
@@ -81,6 +91,8 @@ define({
     SET_VOLUME_ACTION: "SetVolumeAction",
 
     VOLUME: "volume",
+
+    IMAGE: "image",
 
     PLAY_FILE_ACTION: "PlayFileAction",
 
@@ -167,6 +179,10 @@ define({
     BOOL_CONST: "BoolConst",
 
     STRING_CONST: "StringConst",
+    
+    IMAGE_CONST: "image",
+    
+    ANIMATION: "animation",
 
     STRING: "STRING",
 
@@ -187,6 +203,8 @@ define({
     ARRAY_BOOLEAN: "Array_Boolean",
 
     ARRAY_COLOUR: "Array_Colour",
+    
+    ARRAY_IMAGE: "Array_Image",
 
     ADD: "ADD",
 
@@ -256,9 +274,17 @@ define({
 
     COLOUR: "colorValue",
 
+    LED_COLOR_CONST: "ledColor",
+    
+    RGB_COLOR_CONST: "rgbColor",
+
+    LED_ON_ACTION: "ledOnAction",
+
     GREEN: "GREEN",
 
     RED: "red",
+
+    ANIMATION: "animation",
 
     SUM: "sum",
 
@@ -277,6 +303,8 @@ define({
     STATUS_LIGHT_ACTION: "statusLightAction",
 
     AMBIENTLIGHT: "ambientlight",
+
+    DISPLAY_TEXT_ACTION: "displayTextAction",
 
     TIMES: "TIMES",
 
@@ -297,6 +325,12 @@ define({
     MOTOR_LEFT: "C",
 
     MOTOR_RIGHT: "B",
+    
+    MOTOR_XA: "XA",
+    
+    MOTOR_XB: "XB",
+    
+    MOTOR_XAB: "XAB",
 
     MOTOR_SIDE: "motorSide",
 
@@ -385,6 +419,16 @@ define({
     INSERT: "insert",
 
     LIGHT: "light",
+
+    BUTTON_A: "A",
+
+    BUTTON_B: "B",
+
+    COMPASS: "compass",
+
+    GESTURE: "gesture",
+    
+    TEMPERATURE: "temperature",
 
     COLOR_ENUM: {
         NONE: "NONE",

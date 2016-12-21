@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.testutil;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -28,14 +29,44 @@ import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2NxtSimVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    static NxtFactory factory = new NxtFactory(null);
+    static NxtFactory factory;
+
+    static {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+        factory = new NxtFactory(null);
+    }
+
+    /**
+     * Generate java script code as string from a given program .
+     *
+     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
+     * @return the code as string
+     * @throws Exception
+     */
+    public static String generateJavaScript(String pathToProgramXml) throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Configuration brickConfiguration =
+            new NxtConfiguration.Builder()
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
+                .build();
+        String code = Ast2NxtSimVisitor.generate(brickConfiguration, transformer.getTree());
+        // System.out.println(code); // only needed for EXTREME debugging
+        return code;
+    }
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.

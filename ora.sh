@@ -1,69 +1,42 @@
 #!/bin/bash
 
-ip='0.0.0.0' # The ip default. For servers, 0.0.0.0 means "all IPv4 addresses on the local machine". (see: https://en.wikipedia.org/wiki/0.0.0.0)
-port='1999'  # the port default.
 lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
-oraversion='1.4.0-SNAPSHOT'                      # version for the export command (goes into openRoberta.properties). BE CAREFUL !!!
-#databaseurl='jdbc:hsqldb:hsql://localhost/oradb'# server mode for the database. This setting should be used for production.
-                                                 # embedded would be, e.g. jdbc:hsqldb:file:db/openroberta-db
-databaseurl='jdbc:hsqldb:file:db/openroberta-db' # BUT: actually THIS is used for production, too.
 
-scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+databaseName=openroberta-db                      # the name of the database
+databaseurlEmbedded=jdbc:hsqldb:file:db/${databaseName}
+databaseurlServer=jdbc:hsqldb:hsql://localhost/${databaseName}
 
-function _helpFn {
-  # be careful with file ora-help.txt . All words starting with "--" are extracted by compgen and considered COMMANDS used for completion
-  echo 'THIS SCRIPT IS FOR DEVELOPERS. It is stored in directory '"$scriptdir"
-  echo 'IF you execute ". '"$scriptdir"'/ora-please-source.sh", you get parameter completion when you type TAB (as usual ...)'
-  echo ''
-  $0 --java
-  echo 'you may customize the script by editing it and defining new default values for properties. Actual values of the properties are:'
-  echo 'oraversion='"$oraversion"
-  echo 'port='"$port"
-  echo 'databaseurl='"$databaseurl"
-  echo 'lejosipaddr='"$lejosipaddr"' # only needed for updating a lejos based ev3'
-  cat "$scriptdir/ora-help.txt"
-}
+databaseurl=$databaseurlServer                   # HERE the database type is selected: either server or embedded
 
-function _startServerFn {
-  _checkJava
-  main='de.fhg.iais.roberta.main.ServerStarter'
-  if [ -d OpenRobertaServer ]
+function mkAndCheckDir {
+  mkdir "$1"
+  if [ $? -ne 0 ]
   then
-    echo "RUNNING OPEN ROBERTA LAB FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
-    cd OpenRobertaServer
-    run="java -cp target/resources/\* ${main} --port ${port}"
-  else
-    echo "RUNNING OPEN ROBERTA LAB FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
-    run="java -cp resources/\* ${main} --properties ${propfile} --ip ${ip} --port ${port}"
+    echo "creating the directory \"$1\" failed - exit 4"
+    exit 4
   fi
-  echo "executing: $run"
-  eval $run
-}
-
-function _startDatabaseFn {
-  echo "directory in which the database resides (parameter 1) is $dbLocation"
-  echo "database name (parameter 2) is $dbName"
-  if [ -d OpenRobertaServer ]
-  then
-    echo "RUNNING THE DATABASE SERVER FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
-    dir="OpenRobertaServer/target/resources"
-  else
-    echo "RUNNING OPEN ROBERTA LAB FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
-    dir="resources"
-  fi
-  run="java -cp $dir/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:$dbLocation --dbname.0 $dbName --address ${ip} --port ${port}"
-  run="java -cp $dir/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:$dbLocation --dbname.0 $dbName"
-  echo "executing: $run"
-  eval $run
 }
 
 function _aliveFn {
+  serverurl="$1"
+  shift
+  if [[ "$1" == '-q' ]]
+  then
+    quiet='true'
+    shift
+  else
+    quiet='false'
+  fi
+  every="${1:-60}"
+  timeout="${2:-30}"
+  mail="${3:-no}"
+
   echo "checking for a server crash of server $serverurl every $every sec with $timeout sec timeout."
   if [[ "$mail" == 'no' ]]
   then
-     echo "no mail will be sent if a crash is suspected"
+     echo "no mail will be sent if a crash is detected"
   else
-     echo "mail will be sent using the script \"$mail\" if a crash is suspected"
+     echo "mail will be sent using the script \"$mail\" if a crash is detected"
   fi
   while :; do
     if [[ "$quiet" == 'true' ]]
@@ -75,7 +48,7 @@ function _aliveFn {
        rc=$?
        if [[ $rc == 0 ]]
        then
-          echo ''
+          echo "ok `date`"
        fi
     fi
     if [[ $rc != 0 ]]
@@ -94,12 +67,16 @@ function _aliveFn {
 # variable checkJava contains debug information
 function _checkJava {
   checkJava=''
-  which java > /dev/null
+  if [[ "$JAVA_HOME" == '' ]]
+  then
+     checkJava=${checkJava}$'  JAVA_HOME is undefined.\n'
+  fi
+  which java 2>/dev/null 1>/dev/null
   if [[ $? != 0 ]]
   then
-     checkJava=$'  java was NOT found on the PATH.\n'
+     checkJava=${checkJava}$'  java was NOT found on the PATH.\n'
   fi
-  which javac > /dev/null
+  which javac 2>/dev/null 1>/dev/null
   if [[ $? != 0 ]]
   then
      checkJava=${checkJava}$'  javac was NOT found on the PATH.\n'
@@ -117,98 +94,60 @@ function _checkJava {
   esac
   if [[ "$checkJava" != '' ]]
   then
-     echo "if you experience problems when trying to start the server, have a look at these hints:"
+     echo
+     echo "if the server fails to start, have a look at these hints:"
      echo "$checkJava"
   fi
   echo 'you are using the following java runtime:'
-  echo $javaversion
+  echo "$javaversion"
 }
 
 function _exportApplication {
-  if [[ "$dbOption" != '-e' &&  "$dbOption" != '-i' ]]
+  if [[ "$1" == '-createemptydb' ]]
   then
-    echo 'database option (first parameter) must be either -e or -i - exit 4'
-    exit 4
+    dbOption=$1
+    shift
   fi
+  exportpath="$1"
   if [[ -e "$exportpath" ]]
   then
      echo "target directory \"$exportpath\" already exists - exit 4"
      exit 4
   fi
   echo "creating the target directory \"$exportpath\""
-  mkdir "$exportpath"
-  if [ $? -ne 0 ]
-  then
-    echo "creating the directory \"$exportpath\" failed - exit 4"
-    exit 4
-  fi
-  if [[ "$dbOption" == '-e' ]]
+  mkAndCheckDir "$exportpath"
+  if [[ "$dbOption" == '-createemptydb' ]]
   then
     echo "creating an empty data base"
-    $0 --createemptydb "${exportpath}/db/openroberta-db"
+    $0 --createemptydb "${exportpath}/db/${databaseName}"
   else
-    echo "no database setup"
+    echo; echo "YOU ARE RESPONSIBLE TO COPY THE DATABASE TO DIRECTORY db"; echo
   fi
-  echo "copying OpenRobertaServer JARs"
-  mkdir "${exportpath}/resources"
-  cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
+  echo "copying all jars"
+  mkAndCheckDir "${exportpath}/lib"
+  cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
 
-  echo 'EV3 specific: creating directories for user programs and resources'
-  mkdir "${exportpath}/userProjects"
-  mkdir "${exportpath}/updateResources"
-  mkdir "${exportpath}/crossCompilerResources"
-  echo "EV3 specific: copying resources"
-  cp RobotEV3/crosscompiler-ev3-build.xml "${exportpath}"
-  cp RobotEV3/target/updateResources/*.jar "$exportpath/updateResources"
-  cp RobotEV3/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
-  echo "NXT specific: copying resources"
-  cp RobotNXT/resources/* "${exportpath}/resources"
-  echo "Arduino specific: copying resources"
-  cp ora.sh "$exportpath"
-
-# -------------- begin of a here document -------------------------------------------------------------
-  cat >"${exportpath}/openRoberta.properties" <<.eof
-version = ${oraversion}
-validversionrange.From = ${oraversion}
-validversionrange.To = ${oraversion}
-hibernate.connection.url = ${databaseurl}
-
-robot.type.default = ev3
-
-robot.plugin.1.name = ev3
-robot.plugin.1.id = 42
-robot.plugin.1.factory = de.fhg.iais.roberta.factory.EV3Factory
-robot.plugin.1.generated.programs.dir  = userProjects/
-robot.plugin.1.generated.programs.build.xml  = crosscompiler-ev3-build.xml
-robot.plugin.1.compiler.resources.dir = crossCompilerResources
-robot.plugin.1.updateResources.dir = updateResources
-
-robot.plugin.2.name = nxt
-robot.plugin.2.id = 43
-robot.plugin.2.factory = de.fhg.iais.roberta.factory.NxtFactory
-robot.plugin.2.generated.programs.dir  = userProjects/
-robot.plugin.2.compiler.resources.dir = resources
-
-robot.plugin.3.name = ardu
-robot.plugin.3.id = 44
-robot.plugin.3.factory = de.fhg.iais.roberta.factory.ArduFactory
-robot.plugin.3.generated.programs.dir  = userProjects/
-
-
-robot.plugin.4.name = oraSim
-robot.plugin.4.id = 99
-robot.plugin.4.factory = de.fhg.iais.roberta.factory.SimFactory
-	
+  echo "copying resources for all robot plugins"
+  set *
+  for Robot do
+    if [[ -d "$Robot" && -e "$Robot/resources" ]]
+    then
+      echo "  $Robot"
+      mkAndCheckDir "${exportpath}/$Robot"
+      cd $Robot
+      cp -r --parents resources "${exportpath}/$Robot"
+      cd ..
+    fi
+  done
+# -------------- begin of here documents --------------------------------------------------------------
+  cat >"${exportpath}/start-server.sh" <<.eof
+java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d hibernate.connection.url=${databaseurl} \$*
 .eof
-# -------------- end of a here document ---------------------------------------------------------------
-}
-
-function _createemptydb {
-  dbpath="$1"
-  main='de.fhg.iais.roberta.main.Administration'
-  run='java -cp "OpenRobertaServer/target/resources/*" '"${main} createemptydb ${dbpath}"
-  echo "executing: $run"
-  eval $run
+  cat >"${exportpath}/start-db.sh" <<.eof
+java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db/${databaseName} --dbname.0 $databaseName
+.eof
+# -------------- end of here documents ----------------------------------------------------------------
+  chmod ugo+x "${exportpath}/start-server.sh" "${exportpath}/start-db.sh"
 }
 
 function _updateLejos {
@@ -230,96 +169,45 @@ function _updateLejos {
 }
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
-cmd="$1"; shift
-if [[ "$cmd" == '' || "$cmd" == '--help' || "$cmd" == '-h' ]]
+if [ -d OpenRobertaServer ]
 then
-   _helpFn
-   exit 0
-elif [[ "$cmd" == '--java' ]]
-then
-   _checkJava
-   exit 0
+  :
+else
+  echo "please start this script from the root of the Git working tree - exit 4"
+  exit 4
 fi
-
-continueReadingProperties='true'
-while [[ "$continueReadingProperties" == 'true' ]]; do
-   case "$cmd" in
-      --lejosipaddr) lejosipaddr="$1"; shift;   cmd="$1"; shift ;;
-      --ip)          ip="$1"; shift;            cmd="$1"; shift ;;
-      --port)        port="$1"; shift;          cmd="$1"; shift ;;
-      --version)     oraversion="$1"; shift;    cmd="$1"; shift ;;
-      --databaseurl) databaseurl="$1"; shift;   cmd="$1"; shift ;;
-      *)             continueReadingProperties='false'        ;;
-   esac
-done
-if [[ "$cmd" == '' ]]
-then
-   exit 0
-fi
+cmd="$1"
+shift
 case "$cmd" in
---reset-db)         git checkout HEAD -- OpenRobertaServer/db ;;
---sqlclient)        if [ -d OpenRobertaServer ]
-                    then
-                      echo "RUNNING THE SQL CLIENT FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
-                      dir="OpenRobertaServer/target/resources"
-                    else
-                      echo "RUNNING THE SQL CLIENT FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
-                      dir="resources"
-                    fi
-                    java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
---update-lejos)     serverurl="$1"
-                    if [[ "$serverurl" == '' ]]
-                    then
-                      echo "the first parameter with the server address is missing. Exit 4"
-                      exit 4
-                    fi
-                    _updateLejos ;;
---createemptydb)    dbpath="$1"
-                    _createemptydb "$dbpath" ;;
---export)           if [ -d OpenRobertaServer ]
-                    then
-                      echo "Running the export from a git repository. This is ok!"
-                    else
-                      echo "NO GIT REPOSITORY FOUND. IMPOSSIBLE TO EXPORT (exit 4)!"
-                      exit 4
-                    fi 
-                    dbOption=${1:--e}
-                    exportpath="$2"
-                    _exportApplication ;;
---start-server)     propfile="$1"
-                    if [[ "$propfile" != '' ]] # property file given explicitly
-                    then
-                       propfile="file:$propfile"
-                       echo "starting the server using supplied openRoberta.properties from $propFile"
-                    else
-                       if [ -d OpenRobertaServer ]
-                       then
-                         echo "starting the server from a git repository. Using openRoberta.properties from the classpath"
-                       else
-                         echo "starting the server from a installation directory (probably created by an --export command)"
-                         echo "Using file \"openRoberta.properties\" from the base directory"
-                         propfile="file:openRoberta.properties"
-                       fi
-                    fi
-                    _startServerFn ;;
---start-db)         dbLocation="${1:-db/openroberta-db}"
-                    dbName="${2:-oradb}"
-                    _startDatabaseFn ;;
---alive)            serverurl="$1"
-                    shift
-                    if [[ "$1" == '-q' ]]
-                    then
-                       quiet='true'
-                       shift
-                    else
-                       quiet='false'
-                    fi
-                    every="${1:-60}"
-                    timeout="${2:-30}"
-                    mail="${3:-no}"
-                    _aliveFn ;;
-*)                  echo 'invalid command: "'"$cmd"'"'
-                    exit 4 ;;
+--export)         _exportApplication $* ;;
+--start-from-git) $0 --reset-db
+                  java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
+                       -d hibernate.connection.url=jdbc:hsqldb:file:OpenRobertaServer/db/${databaseName} \
+                       $* ;;
+--sqlclient)      dir="OpenRobertaServer/target/resources"
+                  java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
+
+''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" may be used by compgen for completion
+                  $0 --java
+                  echo ''
+                  cat ora-help.txt ;;
+--java)           _checkJava ;;
+
+--update-lejos)   serverurl="$1"
+                  if [[ "$serverurl" == '' ]]
+                  then
+                    echo "the first parameter with the server address is missing. Exit 4"
+                    exit 4
+                  fi
+                  _updateLejos ;;
+--reset-db)       rm -rf OpenRobertaServer/db
+                  cp -a OpenRobertaServer/dbBase OpenRobertaServer/db ;;
+--createemptydb)  dbpath="$1"
+                  main='de.fhg.iais.roberta.main.Administration'
+                  java -cp 'OpenRobertaServer/target/resources/*' "${main}" createemptydb "${dbpath}" ;;
+--alive)          _aliveFn $* ;;
+*)                echo "invalid command: $cmd"
+                  exit 4 ;;
 esac
 
 exit 0

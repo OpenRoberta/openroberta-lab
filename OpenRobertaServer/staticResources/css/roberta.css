@@ -236,17 +236,33 @@ body.blocklyMinimalBody  * {
 	visibility: hidden;
 }
 
+#helpDiv {
+	position: relative;
+	visibility: hidden;
+	height: 0;
+}
+
 .codeActive>pre {
 	width: 100%;
 	height: 100%;
 	word-wrap: inherit;
 }
 
-#blocklyDiv.simActive, #blocklyDiv.codeActive {
+#blocklyDiv {
 	float: left;
+	border-right: 4px solid #bbb;
 }
 
 #simDiv.simActive {
+	height: 100%;
+	overflow: hidden;
+	background-color: #fff;
+	visibility: visible;
+	position: relative;
+	z-index: 9;
+}
+
+#helpDiv.helpActive {
 	height: 100%;
 	overflow: hidden;
 	background-color: #fff;
@@ -256,16 +272,133 @@ body.blocklyMinimalBody  * {
 
 #codeDiv.codeActive {
 	height: 100%;
-	overflow: hidden;
+	overflow-y: auto;
 	background-color: #fff;
 	visibility: visible;
 	position: relative;
+	z-index: 9;
+}
+#codeContainer {
+    overflow-y: auto;
+    height: 100%;
+}
+#codeContent {
+    overflow: hidden;
+    padding-bottom: 60px;
 }
 
-#codeContent {
-    overflow-y:auto;
-    height: 100%;
-    padding-bottom: 60px;
+#helpDiv ul{
+    list-style-type:none;
+    display: table;
+}
+
+#helpDiv li{
+    display: table-row;
+}
+
+#helpDiv li:before{
+    display: table-cell;
+    padding-right: 6px;
+}
+
+#helpContent {
+	padding: 10px 0;
+	overflow-y: auto;
+	height: 100%;
+      -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;    
+}
+
+#helpContent h3, #helpContent h2 {
+	padding-left: 10px;
+    padding-top: 25px;
+    border-top: 1px solid #F29400;
+}
+
+#helpContent p, #helpContent h4{
+    margin-left: 8px;
+    margin-right:12px;
+}
+
+#helpContent h4{
+    margin-top: 18px;
+}
+    
+.selectedHelp {
+	background-color: #f0f0f0;
+}
+
+#rightMenuDiv {
+    position: absolute;
+    top: 102px;
+    right: 0;
+}
+
+.rightMenuButton.help :before {
+	font-family: 'Roboto', sans-serif;
+    content: "?";
+    font-weight: 900;
+    font-size: 24px;
+    color: #E2001A;
+    position: relative;
+    top: 4px;
+    left: 12px;
+}
+
+#mbedContent {
+	background-color: #fff;
+	border: solid #333;
+	padding: 12px;
+	border-radius: 2px;
+}
+
+.rightMenuButton {
+   width: 40px;
+   height: 40px;
+   background: #C0C0C0;
+   position: relative;
+   -moz-border-radius:    2px;
+   -webkit-border-radius: 2px;
+   border-radius:         2px;
+}
+.rightMenuButton:before {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 14px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-right: 6px solid #C0C0C0;
+    border-bottom: 5px solid transparent;
+}
+
+div.rightMenuButton:hover, .rightMenuButton:active {
+	cursor: pointer;
+}
+	
+.rightMenuButton>.typcn {
+position: relative;
+    top: 8px;
+    font-size: 24px;
+    left: 7px;
+}
+
+.rightMenuButton.help>.typcn {
+	color: #e2001a;
+}
+
+
+.menu-icons {
+    font-size: 24px;
+    line-height: 24px;
+    color: #fff;
+    border: 0;
+    margin: 0;
 }
 
 #toastContainer {
@@ -357,6 +490,15 @@ body.blocklyMinimalBody  * {
 	position: absolute;
 	z-index: 99;
 }
+.btn-group-vertical>.btn.simbtn {
+    margin: 8px 0;
+    padding-left: 0px;
+}
+
+.simbtn.btn:hover, .simbtn.btn:active:focus, .simbtn.btn:focus, .simbtn.btn.focus, .simbtn.btn:active, .simbtn.btn.active, .open>.dropdown-toggle.simbtn.btn {
+    background-color: #f29400;
+}
+
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tab-content
@@ -1096,6 +1238,95 @@ background-color
 
 
 }
+
+input[type=range] {
+  -webkit-appearance: none;
+  margin: 10px 0;
+  width: 100%;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #BACC1E;
+  border-radius: 2px;
+  border: 0px solid #000000;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #333333;
+  height: 24px;
+  width: 12px;
+  border-radius: 2px;
+  background: #FFFFFF;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -8.5px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #BACC1E;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: #BACC1E;
+  border-radius: 2px;
+  border: 0px solid #000000;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #333333;
+  height: 24px;
+  width: 12px;
+  border-radius: 2px;
+  background: #FFFFFF;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #BACC1E;
+  border: 0px solid #000000;
+  border-radius: 4px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type=range]::-ms-fill-upper {
+  background: #BACC1E;
+  border: 0px solid #000000;
+  border-radius: 4px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 0px 0px 0px #000000;
+  border: 1px solid #333333;
+  height: 24px;
+  width: 12px;
+  border-radius: 2px;
+  background: #FFFFFF;
+  cursor: pointer;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #BACC1E;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #BACC1E;
+}
+
 #progList table thead, #confList table thead, #show-relations table thead, #logList table thead
 	{
 	text-transform: uppercase;

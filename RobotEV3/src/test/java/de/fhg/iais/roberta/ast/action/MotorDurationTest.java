@@ -7,8 +7,10 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class MotorDurationTest {
+    Helper helper = new Helper();
 
     @Test
     public void clearDisplay() throws Exception {

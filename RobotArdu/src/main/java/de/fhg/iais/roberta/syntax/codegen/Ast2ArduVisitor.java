@@ -18,11 +18,9 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -241,8 +239,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 return "String";
             case CONNECTION:
                 return "int";
+            default:
+                throw new IllegalArgumentException("unhandled type");
         }
-        throw new IllegalArgumentException("unhandled type");
     }
 
     private static String getEnumCode(IMode value) {
@@ -641,13 +640,17 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        switch ( (BlinkMode) lightAction.getBlinkMode() ) {
+        BlinkMode blinkingMode = (BlinkMode) lightAction.getBlinkMode();
+
+        switch ( blinkingMode ) {
             case ON:
                 this.sb.append("one.led(HIGH);");
                 break;
             case OFF:
                 this.sb.append("one.led(LOW);");
                 break;
+            default:
+                throw new DbcException("Invalide blinking mode: " + blinkingMode);
         }
         return null;
 
@@ -677,9 +680,9 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         IColorSensorMode mode = null;
         Expr<Void> tt = showTextAction.getMsg();
         if ( tt.getKind().hasName("SENSOR_EXPR") ) {
-            de.fhg.iais.roberta.syntax.sensor.Sensor sens = ((SensorExpr) tt).getSens();
+            de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
             if ( sens.getKind().hasName("COLOR_SENSING") ) {
-                mode = ((ColorSensor) sens).getMode();
+                mode = ((ColorSensor<Void>) sens).getMode();
             }
         }
 
@@ -1461,7 +1464,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        if (methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn")){
+        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
         return null;
@@ -1523,27 +1526,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     private String whitespace() {
         return " ";
-    }
-
-    private boolean isStringExpr(Expr<Void> e) {
-        switch ( e.getKind().getName() ) {
-            case "STRING_CONST":
-                return true;
-            case "VAR":
-                return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
-            case "FUNCTION_EXPR":
-                final BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
-                return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
-            case "METHOD_EXPR":
-                final MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
-                return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
-            case "ACTION_EXPR":
-                final Action<?> action = ((ActionExpr<?>) e).getAction();
-                return action.getKind().hasName("BLUETOOTH_RECEIVED_ACTION");
-
-            default:
-                return false;
-        }
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {

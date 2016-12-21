@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
- * DAO class to load and store toolbox objects. A DAO object is always bound to a session. This session defines the transactional context, in which the
- * database access takes place.
+ * DAO class to load and store toolbox objects. A DAO object is always bound to a session. This session defines the transactional context, in which the database
+ * access takes place.
  *
  * @author rbudde
  */
@@ -76,7 +76,6 @@ public class ToolboxDao extends AbstractDao<Toolbox> {
         }
         @SuppressWarnings("unchecked")
         List<Toolbox> il = hql.list();
-        // System.out.println(il.get(0));
         Assert.isTrue(il.size() <= 1);
         return il.size() == 0 ? null : il.get(0);
     }

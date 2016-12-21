@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -22,27 +23,32 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class CalliopeFactory extends AbstractRobotFactory {
 
-    private CalliopeCompilerWorkflow compilerWorkflow;
+    private final CalliopeCompilerWorkflow compilerWorkflow;
+    private final MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
     private final Properties calliopeProperties;
 
     public CalliopeFactory(RobotCommunicator unusedForArdu) {
 
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("calliope");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("calliope");
         this.compilerWorkflow =
             new CalliopeCompilerWorkflow(
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                RobertaProperties.getTempDirForUserProjects(),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
+        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);
     }
 
@@ -254,11 +260,6 @@ public class CalliopeFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -292,6 +293,16 @@ public class CalliopeFactory extends AbstractRobotFactory {
     public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.compilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        return this.calliopeSimCompilerWorkflow;
     }
 
     @Override
@@ -342,5 +353,10 @@ public class CalliopeFactory extends AbstractRobotFactory {
     @Override
     public Boolean isAutoconnected() {
         return this.calliopeProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return new CalliopeSimProgramCheckVisitor(brickConfiguration);
     }
 }

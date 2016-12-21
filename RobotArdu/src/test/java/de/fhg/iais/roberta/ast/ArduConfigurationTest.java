@@ -38,7 +38,6 @@ public class ArduConfigurationTest {
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
         Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
         Configuration b = transformer.transform(project);
-        System.out.println(b.generateText("test"));
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 

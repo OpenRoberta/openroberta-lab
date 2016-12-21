@@ -9,7 +9,7 @@ public class LedResetTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfLedResetActionClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=163, y=63], " + "MainTask [], " + "LedOff []]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=163, y=63], " + "MainTask [], " + "LedReset []]]]";
 
         String result = Helper.generateTransformerString("/action/ledReset.xml");
 

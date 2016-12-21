@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -20,7 +21,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
@@ -33,28 +33,33 @@ import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class EV3Factory extends AbstractRobotFactory {
-    private final Ev3CompilerWorkflow compilerWorkflow;
+    private final Ev3CompilerWorkflow robotCompilerWorkflow;
+    private final Ev3SimCompilerWorkflow simCompilerWorkflow;
     private final Properties ev3Properties;
 
     public EV3Factory(RobotCommunicator robotCommunicator) {
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("ev3");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ev3");
         this.ev3Properties = Util1.loadProperties("classpath:EV3.properties");
 
-        this.compilerWorkflow =
+        this.robotCompilerWorkflow =
             new Ev3CompilerWorkflow(
                 robotCommunicator,
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
+                RobertaProperties.getTempDirForUserProjects(),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
+
+        this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
+
         addBlockTypesFromProperties("EV3.properties", this.ev3Properties);
     }
 
@@ -284,31 +289,6 @@ public class EV3Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
-        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
-            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-        }
-        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
-        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
-            if ( timerSens.toString().equals(sUpper) ) {
-                return timerSens;
-            }
-            for ( String value : timerSens.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return timerSens;
-                }
-            }
-        }
-        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-    }
-
-    @Override
-    public List<ITimerSensorMode> getTimerSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
         if ( motorTachoMode == null || motorTachoMode.isEmpty() ) {
             throw new DbcException("Invalid Motor Tacho Mode: " + motorTachoMode);
@@ -409,13 +389,18 @@ public class EV3Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.robotCompilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        return this.simCompilerWorkflow;
     }
 
     @Override
     public AbstractModule getGuiceModule() {
-        return new Ev3GuiceModule(Util1.getRobertaProperties());
+        return new Ev3GuiceModule(RobertaProperties.getRobertaProperties());
     }
 
     @Override
@@ -502,5 +487,10 @@ public class EV3Factory extends AbstractRobotFactory {
     @Override
     public Boolean isAutoconnected() {
         return this.ev3Properties.getProperty("robot.connection.server") != null ? true : false;
+    }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return new SimulationProgramCheckVisitor(brickConfiguration);
     }
 }

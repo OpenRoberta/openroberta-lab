@@ -62,16 +62,23 @@ A successful build looks like:
     [INFO] ------------------------------------------------------------------------
     [INFO] Reactor Summary:
     [INFO] 
-    [INFO] RobertaParent ...................................... SUCCESS [  3.858 s]
-    [INFO] Resources .......................................... SUCCESS [  0.036 s]
-    [INFO] OpenRobertaRobot ................................... SUCCESS [ 21.395 s]
-    [INFO] RobotSIM ........................................... SUCCESS [  6.521 s]
-    [INFO] RobotEV3 ........................................... SUCCESS [ 20.394 s]
-    [INFO] RobotNXT ........................................... SUCCESS [ 19.531 s]
-    [INFO] RobotArdu .......................................... SUCCESS [ 19.677 s]
-    [INFO] OpenRobertaServer .................................. SUCCESS [ 33.178 s]
+    [INFO] RobertaParent ...................................... SUCCESS [  1.323 s]
+    [INFO] Resources .......................................... SUCCESS [  0.033 s]
+    [INFO] OpenRobertaRobot ................................... SUCCESS [ 16.520 s]
+    [INFO] RobotEV3 ........................................... SUCCESS [ 19.235 s]
+    [INFO] RobotNXT ........................................... SUCCESS [ 17.004 s]
+    [INFO] RobotArdu .......................................... SUCCESS [ 17.060 s]
+    [INFO] RobotNAO ........................................... SUCCESS [  7.106 s]
+    [INFO] RobotMbed .......................................... SUCCESS [  7.271 s]
+    [INFO] OpenRobertaServer .................................. SUCCESS [01:52 min]
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Total time: 03:18 min
+    [INFO] Finished at: 2016-12-21T16:52:55+01:00
+    [INFO] Final Memory: 52M/414M
+    [INFO] ------------------------------------------------------------------------
+    
     
 #### Step 2: Make sure you have a database
 If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db** with the database inside. You can either 
@@ -82,17 +89,12 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
     
 If you update the server with git pull, your database will not be changed. 
 
-#### Step 3a: Starting your own server instance using a unix-like shell (on either lin* or win*).
+#### Step 3: Starting your own server instance using a unix-like shell (on either lin* or win*).
 
     cd .. # return to the root folder
-    ./ora.sh --start-server # start the server using default properties
+    ./ora.sh --start-from-git # start the server using default properties
 
 You can also run `./ora.sh --help` for more options.
-
-#### Step 3b: Starting your own server instance without using the shell script
-
-    cd ../OpenRobertaServer # go to the folder of the server resources and the database
-    java -cp target/resources/\* de.fhg.iais.roberta.main.ServerStarter --properties  --ip 0.0.0.0 --port 1999
 
 #### Step 4: Accessing your programming environment
 

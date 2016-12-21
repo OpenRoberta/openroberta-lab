@@ -17,11 +17,11 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -128,17 +128,16 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-@SuppressWarnings("rawtypes")
 public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
     private final Configuration brickConfiguration;
-    private final String programName;
     private final StringBuilder sb = new StringBuilder();
     private final Set<UsedSensor> usedSensors;
     private final Set<UsedActor> usedActors;
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
+    private boolean isProgramEmpty = false;
 
     /**
      * initialize the Python code generator visitor.
@@ -149,7 +148,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     Ast2Ev3PythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, Set<UsedActor> usedActors, int indentation) {
-        this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.usedSensors = usedSensors;
@@ -188,22 +186,33 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                if ( phrase.getKind().getCategory() != Category.TASK ) {
+                    astVisitor.nlIndent();
+                }
+                mainBlock = isMainBlock(phrase);
+                if ( mainBlock ) {
+                    astVisitor.setProgramIsEmpty(checkIsProgramEmpty(phrases));
+                }
                 phrase.visit(astVisitor);
             }
-            if ( mainBlock ) {
-                mainBlock = false;
-            }
+            mainBlock = mainBlock ? !mainBlock : mainBlock;
         }
     }
 
-    private static boolean handleMainBlocks(Ast2Ev3PythonVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().getName().equals("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
+    private static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
+        return phrases.size() == 2;
+    }
+
+    private static boolean isMainBlock(Phrase<Void> phrase) {
+        return phrase.getKind().getName().equals("MAIN_TASK");
+    }
+
+    public boolean isProgramEmpty() {
+        return this.isProgramEmpty;
+    }
+
+    public void setProgramIsEmpty(boolean isEmpty) {
+        this.isProgramEmpty = isEmpty;
     }
 
     /**
@@ -927,6 +936,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 }
                 this.sb.append(vd.getName());
             }
+        } else {
+            if ( this.isProgramEmpty ) {
+                nlIndent();
+                this.sb.append("pass");
+            }
         }
         return null;
     }
@@ -1287,7 +1301,13 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
-        methodVoid.getBody().visit(this);
+        boolean isMethodBodyEmpty = methodVoid.getBody().get().size() != 0;
+        if ( isMethodBodyEmpty ) {
+            methodVoid.getBody().visit(this);
+        } else {
+            nlIndent();
+            this.sb.append("pass");
+        }
         return null;
     }
 
@@ -1296,10 +1316,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
-        methodReturn.getBody().visit(this);
-        this.nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
+        boolean isMethodBodyEmpty = methodReturn.getBody().get().size() != 0;
+        if ( isMethodBodyEmpty ) {
+            methodReturn.getBody().visit(this);
+            this.nlIndent();
+            this.sb.append("return ");
+            methodReturn.getReturnValue().visit(this);
+        } else {
+            nlIndent();
+            this.sb.append("pass");
+        }
         return null;
     }
 

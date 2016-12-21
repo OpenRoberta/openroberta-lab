@@ -39,13 +39,15 @@ import de.fhg.iais.roberta.util.Option;
 public class ArduConfigurationParseTree2ArduConfigurationVisitor extends Ev3ConfigurationBaseVisitor<Void> {
     private static final Logger LOG = LoggerFactory.getLogger(ArduConfigurationParseTree2ArduConfigurationVisitor.class);
 
+    @SuppressWarnings("rawtypes")
     private final Configuration.Builder builder = new ArduConfiguration.Builder();
     private IRobotFactory factory;
     private IActorPort nextActorToAttach = null;
     private String parseErrorMessage = null;
 
     /**
-     * take a brick configuration program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create a configuration. <br>
+     * take a brick configuration program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create a configuration.
+     * <br>
      * Factory method
      */
     public static Option<Configuration> startWalkForVisiting(String stmt, IRobotFactory factory) {

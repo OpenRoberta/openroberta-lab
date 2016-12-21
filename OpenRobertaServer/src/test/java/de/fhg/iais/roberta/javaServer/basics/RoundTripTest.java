@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +39,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -174,9 +177,10 @@ public class RoundTripTest {
 
     private static void initialize() {
         Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
+        RobertaProperties.setRobertaProperties(properties);
         buildXml = properties.getProperty("robot.plugin.1.generated.programs.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
-        crosscompilerBasedir = properties.getProperty("robot.plugin.1.generated.programs.dir");
+        crosscompilerBasedir = RobertaProperties.getTempDirForUserProjects();
         crossCompilerResourcesDir = properties.getProperty("robot.plugin.1.compiler.resources.dir");
         browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
 
@@ -219,7 +223,8 @@ public class RoundTripTest {
     }
 
     private static void startServerAndLogin() throws IOException, InterruptedException {
-        server = new ServerStarter("classpath:openRoberta.properties").start("localhost", 1997);
+        List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
+        server = new ServerStarter("classpath:openRoberta.properties", addr).start();
         int port = server.getURI().getPort();
         baseUrl = "http://localhost:" + port;
         driver.get(baseUrl + "/");

@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Blink;
+import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.LookAt;
@@ -10,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
 import de.fhg.iais.roberta.syntax.action.nao.PointAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
@@ -25,6 +28,15 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.nao.Wave;
 import de.fhg.iais.roberta.syntax.action.nao.WipeForehead;
+import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.HeadTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecordVideo;
+import de.fhg.iais.roberta.syntax.sensor.nao.SelectCamera;
+import de.fhg.iais.roberta.syntax.sensor.nao.SensorTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
+import de.fhg.iais.roberta.syntax.sensor.nao.TakePicture;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
@@ -205,4 +217,87 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
      */
     V visitSetLanguage(SetLanguage<V> setLanguage);
 
+    /**
+     * visit a {@link GetVolume}.
+     *
+     * @param getVolume phrase to be visited
+     */
+    V visitGetVolume(GetVolume<V> getVolume);
+
+    /**
+     * visit a {@link GetLanguage}.
+     *
+     * @param getLanguage phrase to be visited
+     */
+    V visitGetLanguage(GetLanguage<V> getLanguage);
+
+    /**
+     * visit a {@link HeadTouched}.
+     *
+     * @param headtouched phrase to be visited
+     */
+    V visitHeadTouched(HeadTouched<V> headTouched);
+
+    /**
+     * visit a {@link HeadTouched}.
+     *
+     * @param headtouched phrase to be visited
+     */
+    V visitSensorTouched(SensorTouched<V> sensorTouched);
+
+    /**
+     * visit a {@link NaoMark}.
+     *
+     * @param naoMark phrase to be visited
+     */
+    V visitNaoMark(NaoMark<V> naoMark);
+
+    /**
+     * visit a {@link Sonar}.
+     *
+     * @param sonar phrase to be visited
+     */
+    V visitSonar(Sonar<V> sonar);
+
+    /**
+     * visit a {@link SelectCamera}.
+     *
+     * @param selectCamera phrase to be visited
+     */
+    V visitSelectCamera(SelectCamera<V> selectCamera);
+
+    /**
+     * visit a {@link TakePicture}.
+     *
+     * @param takePicture phrase to be visited
+     */
+    V visitTakePicture(TakePicture<V> takePicture);
+
+    /**
+     * visit a {@link TakePicture}.
+     *
+     * @param takePicture phrase to be visited
+     */
+    V visitRecordVideo(RecordVideo<V> recordVideo);
+
+    /**
+     * visit a {@link Gyrometer}.
+     *
+     * @param gyrometer phrase to be visited
+     */
+    V visitGyrometer(Gyrometer<V> gyrometer);
+
+    /**
+     * visit a {@link Accelerometer}.
+     *
+     * @param accelerometer phrase to be visited
+     */
+    V visitAccelerometer(Accelerometer<V> accelerometer);
+
+    /**
+     * visit a {@link SayText}.
+     *
+     * @param sayText phrase to be visited
+     */
+    V visitSayText(SayText<V> sayText);
 }

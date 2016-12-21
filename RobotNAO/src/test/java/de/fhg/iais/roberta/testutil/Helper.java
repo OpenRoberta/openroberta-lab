@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.testutil;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -26,12 +27,20 @@ import de.fhg.iais.roberta.syntax.codegen.Ast2NaoPythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NaoConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    public static NAOFactory factory = new NAOFactory(null);
+    public static NAOFactory factory;
+
+    static {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+        factory = new NAOFactory(null);
+    }
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
@@ -164,14 +173,14 @@ public class Helper {
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         final BlockSet blockSet = astToJaxb(transformer.getData());
-        //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        // m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         final StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         final String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 

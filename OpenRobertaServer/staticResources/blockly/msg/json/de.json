@@ -168,7 +168,7 @@
 	"MATH_ONLIST_OPERATOR_STD_DEV": "Standardabweichung einer Liste",
 	"MATH_ONLIST_TOOLTIP_STD_DEV": "Ist die standardisierte Standardabweichung aller Werte in der Liste",
 	"MATH_ONLIST_OPERATOR_RANDOM": "Zufallswert einer Liste",
-	"MATH_ONLIST_TOOLTIP_RANDOM": "Gebe einen zufälligen Wert aus der Liste zurück.",
+	"MATH_ONLIST_TOOLTIP_RANDOM": "Gib einen zufälligen Wert aus der Liste zurück.",
 	"MATH_MODULO_HELPURL": "https://de.wikipedia.org/wiki/Modulo",
 	"MATH_MODULO_TITLE": "Rest von %1 ÷ %2",
 	"MATH_MODULO_TOOLTIP": "Der Rest nach einer Division.",
@@ -333,7 +333,7 @@
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Ein Funktionsblock ohne Rückgabewert.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Beschreibe diese Funktion …",
 	"PROCEDURES_DEFRETURN_HELPURL": "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29",
-	"PROCEDURES_DEFRETURN_RETURN": "gebe zurück",
+	"PROCEDURES_DEFRETURN_RETURN": "gib zurück",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Ein Funktionsblock mit Rückgabewert.",
 	"PROCEDURES_ALLOW_STATEMENTS": "Aussagen erlauben",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Warnung: dieser Funktionsblock hat zwei gleich benannte Parameter.",
@@ -347,7 +347,7 @@
 	"PROCEDURES_MUTATORARG_TOOLTIP": "Eine Eingabe zur Funktion hinzufügen.",
 	"PROCEDURES_HIGHLIGHT_DEF": "Markiere Funktionsblock",
 	"PROCEDURES_CREATE_DO": "Erzeuge \"Aufruf %1\"",
-	"PROCEDURES_IFRETURN_TOOLTIP": "Wenn der erste Wert wahr (true) ist, Gebe den zweiten Wert zurück.",
+	"PROCEDURES_IFRETURN_TOOLTIP": "Wenn der erste Wert wahr (true) ist, gib den zweiten Wert zurück.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblock genutzt werden."
 }

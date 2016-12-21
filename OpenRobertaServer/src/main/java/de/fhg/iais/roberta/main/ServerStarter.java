@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -39,7 +40,9 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
@@ -59,7 +62,6 @@ import joptsimple.OptionSpec;
 public class ServerStarter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerStarter.class);
 
-    private final Properties properties;
     private Injector injector;
 
     /**
@@ -73,15 +75,13 @@ public class ServerStarter {
     public static void main(String[] args) throws Exception {
         OptionParser parser = new OptionParser();
         OptionSpec<String> propertiesOpt = parser.accepts("properties").withOptionalArg().ofType(String.class);
-        OptionSpec<String> ipOpt = parser.accepts("ip").withRequiredArg().ofType(String.class);
-        OptionSpec<Integer> portOpt = parser.accepts("port").withRequiredArg().ofType(Integer.class);
+        OptionSpec<String> defineOpt = parser.accepts("d").withRequiredArg().ofType(String.class);
         OptionSet options = parser.parse(args);
-        String properties = propertiesOpt.value(options);
-        String ip = ipOpt.value(options);
-        Integer port = portOpt.value(options);
-        ServerStarter serverStarter = new ServerStarter(properties);
-        Server server = serverStarter.start(ip != null ? ip : "0.0.0.0", port != null ? port : 1999);
-        ServerStarter.LOG.info("*** server started using URI: " + server.getURI() + " ***");
+        String propertyPath = propertiesOpt.value(options);
+        List<String> defines = defineOpt.values(options);
+
+        ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
+        Server server = serverStarter.start();
         serverStarter.checkRobotPluginsDB();
         serverStarter.logTheNumberOfStoredPrograms();
         server.join();
@@ -92,19 +92,27 @@ public class ServerStarter {
      * create the starter. Load the properties.
      *
      * @param propertyPath optional URI to properties resource. May be null.
+     * @param defines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
      */
-    public ServerStarter(String propertyPath) {
+    public ServerStarter(String propertyPath, List<String> defines) {
         Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
-        Properties tmpProperties = Util1.loadProperties(propertyPath);
-        Util1.setSystemDefaultProperty(propertyPath);
-        this.properties = mergeProperties(mailProperties, tmpProperties);
-    }
-
-    private Properties mergeProperties(Properties mailProperties, Properties tmpProperties) {
+        Properties robertaProperties = Util1.loadProperties(propertyPath);
         if ( mailProperties != null ) {
-            tmpProperties.putAll(mailProperties);
+            robertaProperties.putAll(mailProperties);
         }
-        return tmpProperties;
+        if ( defines != null ) {
+            for ( String define : defines ) {
+                String[] property = define.split("\\s*=\\s*");
+                if ( property.length == 2 ) {
+                    LOG.info("new property from command line: " + define);
+                    robertaProperties.put(property[0], property[1]);
+                } else {
+                    LOG.info("command line property is invalid and thus ignored: " + define);
+
+                }
+            }
+        }
+        RobertaProperties.setRobertaProperties(robertaProperties);
     }
 
     /**
@@ -112,12 +120,14 @@ public class ServerStarter {
      *
      * @return the server
      */
-    public Server start(String host, int port) throws IOException {
-        String versionFrom = this.properties.getProperty("validversionrange.From", "?");
-        String versionTo = this.properties.getProperty("validversionrange.To", "?");
-        //        Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
+    public Server start() throws IOException {
+        // String versionFrom = this.properties.getProperty("validversionrange.From", "?");
+        // String versionTo = this.properties.getProperty("validversionrange.To", "?");
+        // Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
         Server server = new Server();
         ServerConnector http = new ServerConnector(server);
+        String host = RobertaProperties.getStringProperty("server.ip");
+        int port = RobertaProperties.getIntProperty("server.port");
         http.setHost(host);
         http.setPort(port);
         server.setConnectors(new ServerConnector[] {
@@ -127,7 +137,8 @@ public class ServerStarter {
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
         Map<String, IRobotFactory> robotPluginMap = configureRobotPlugins(robotCommunicator);
-        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(this.properties, robotPluginMap, robotCommunicator);
+        RobertaGuiceServletConfig robertaGuiceServletConfig =
+            new RobertaGuiceServletConfig(RobertaProperties.getRobertaProperties(), robotPluginMap, robotCommunicator);
 
         // REST API with /rest/<version>/ prefix
         ServletContextHandler versionedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -175,6 +186,7 @@ public class ServerStarter {
 
         try {
             server.start();
+            ServerStarter.LOG.info("server started at " + server.getURI());
         } catch ( Exception e ) {
             ServerStarter.LOG.error("Could not start the server at " + host + ":" + port, e);
             System.exit(16);
@@ -186,48 +198,56 @@ public class ServerStarter {
     }
 
     /**
-     * detect all robot plugins (at least EV3, NXT and SIM), that may be used with this server. Uses the declarations from the openroberta.properties file.
-     * Autodetection would be great ... .
+     * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
      *
      * @param robotCommunicator
-     * @param injector
      * @return the mapping from robot names to the factory, that supplies all robot-specific data
      */
     private Map<String, IRobotFactory> configureRobotPlugins(RobotCommunicator robotCommunicator) {
+        if ( robotCommunicator == null ) {
+            LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
+        }
         Set<String> pluginNumbers = new HashSet<>();
         Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
-        for ( String key : this.properties.stringPropertyNames() ) {
+        Properties robertaProperties = RobertaProperties.getRobertaProperties();
+        for ( String key : robertaProperties.stringPropertyNames() ) {
             Matcher keyMatcher = pluginPattern.matcher(key);
             if ( keyMatcher.matches() ) {
                 pluginNumbers.add(keyMatcher.group(1));
             }
         }
+        List<String> robotWhitelist = RobertaProperties.getRobotWhitelist();
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
-        if ( robotCommunicator == null ) {
-            LOG.error("the robot communicator object was not found. This is a severe error. The system will crash!");
-        }
-        for ( String pluginNumber : pluginNumbers ) {
-            String pluginName = this.properties.getProperty("robot.plugin." + pluginNumber + ".name");
-            String pluginFactory = this.properties.getProperty("robot.plugin." + pluginNumber + ".factory");
-            System.out.println(pluginFactory);
-            if ( pluginName == null || pluginFactory == null ) {
-                LOG.error("the robot plugin with number " + pluginNumber + " is invalid and thus ignored. Check openRoberta.properties");
-            } else {
-                try {
-                    @SuppressWarnings("unchecked")
-                    Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                    Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
-                    robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator));
-                } catch ( Exception e ) {
-                    LOG.error(
-                        "the robot plugin " + pluginName + " has no valid factory is thus ignored. Check openRoberta.properties and the factory class",
-                        e);
+        whitelist: for ( String robotToUse : robotWhitelist ) {
+            for ( String pluginNumber : pluginNumbers ) {
+                String pluginName = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".name");
+                if ( pluginName == null ) {
+                    throw new DbcException("robot plugin with number " + pluginNumber + " is invalid. Check the properties. Server does NOT start");
+                }
+                if ( robotToUse.equals("sim") )
+                    continue whitelist;
+                if ( robotToUse.equals(pluginName) ) {
+                    String pluginFactory = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".factory");
+                    if ( pluginFactory == null ) {
+                        throw new DbcException("robot plugin " + pluginName + " has no factory. Check the properties. Server does NOT start");
+                    } else {
+                        try {
+                            @SuppressWarnings("unchecked")
+                            Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
+                            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
+                            robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator));
+                        } catch ( Exception e ) {
+                            throw new DbcException("robot plugin " + pluginName + " has an invalid factory. Check the properties. Server does NOT start", e);
+                        }
+                    }
+                    continue whitelist;
                 }
             }
+            throw new DbcException("robot plugin " + robotToUse + " not found. Check the properties. Server does NOT start");
         }
         StringBuilder sb = new StringBuilder();
         sb.append("ROBOT PLUGINS: ").append(robotPlugins.size()).append(" plugins are found: ");
-        for ( String pluginName : robotPlugins.keySet() ) {
+        for ( String pluginName : robotWhitelist ) {
             sb.append(pluginName).append(" ");
         }
         LOG.info(sb.toString());
@@ -247,8 +267,8 @@ public class ServerStarter {
         try {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             ProgramDao projectDao = new ProgramDao(session);
-            int numberOfPrograms = projectDao.loadAll().size();
-            ServerStarter.LOG.info("There are " + numberOfPrograms + " programs stored in the database");
+            int numOfProgs = projectDao.loadAll().size();
+            ServerStarter.LOG.info("Number of programs stored in the database: " + numOfProgs);
             session.close();
         } catch ( Exception e ) {
             ServerStarter.LOG.error("Server was started, but could not connect to the database", e);
@@ -267,15 +287,14 @@ public class ServerStarter {
     }
 
     /**
-     * @deprecated
-     *             This method shouldn't be called anymore when the robot type is no longer stored in the database.
+     * @deprecated This method shouldn't be called anymore when the robot type is no longer stored in the database.
      */
     @Deprecated
     private void checkRobotPluginsDB() {
-
+        Properties robertaProperties = RobertaProperties.getRobertaProperties();
         Set<String> pluginNumbers = new HashSet<>();
         Pattern pluginPattern = Pattern.compile("robot\\.plugin\\.(\\d+)\\..*");
-        for ( String key : this.properties.stringPropertyNames() ) {
+        for ( String key : robertaProperties.stringPropertyNames() ) {
             Matcher keyMatcher = pluginPattern.matcher(key);
             if ( keyMatcher.matches() ) {
                 pluginNumbers.add(keyMatcher.group(1));
@@ -285,7 +304,7 @@ public class ServerStarter {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             RobotDao robotDao = new RobotDao(session);
             for ( String pluginNumber : pluginNumbers ) {
-                String pluginName = this.properties.getProperty("robot.plugin." + pluginNumber + ".name");
+                String pluginName = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".name");
                 Robot pluginRobot = robotDao.loadRobot(pluginName);
                 if ( pluginRobot == null ) {
                     // add missing robot type to database

@@ -1,0 +1,20 @@
+# /lib/systemd/system/ora.service
+
+[Unit]
+Description=OpenRoberta Lab Server
+After=network.target
+
+[Service]
+ExecStartPre=/usr/bin/touch /var/log/ora.log
+ExecStartPre=/bin/chown pi: /var/log/ora.log
+ExecStartPre=/sbin/iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 1999
+ExecStart=/bin/bash -c '/opt/robertalab/ora.sh --start-server >/var/log/ora.log 2>&1'
+WorkingDirectory=/opt/robertalab
+StandardOutput=inherit
+StandardError=inherit
+PermissionsStartOnly=true
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target

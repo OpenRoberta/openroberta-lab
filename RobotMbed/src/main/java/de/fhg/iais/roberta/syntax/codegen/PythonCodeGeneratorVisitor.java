@@ -181,7 +181,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         Assert.isTrue(phrasesSet.size() >= 1);
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
         PythonCodeGeneratorVisitor astVisitor = new PythonCodeGeneratorVisitor(brickConfiguration, usedHardwareVisitor, 0);
-        astVisitor.generatePrefix(withWrapping);
+        astVisitor.generatePrefix(withWrapping, phrasesSet);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
 
@@ -1101,7 +1101,13 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
-        methodVoid.getBody().visit(this);
+        boolean isMethodBodyEmpty = methodVoid.getBody().get().size() != 0;
+        if ( isMethodBodyEmpty ) {
+            methodVoid.getBody().visit(this);
+        } else {
+            nlIndent();
+            this.sb.append("pass");
+        }
         return null;
     }
 
@@ -1110,10 +1116,16 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
-        methodReturn.getBody().visit(this);
-        this.nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
+        boolean isMethodBodyEmpty = methodReturn.getBody().get().size() != 0;
+        if ( isMethodBodyEmpty ) {
+            methodReturn.getBody().visit(this);
+            nlIndent();
+            this.sb.append("return ");
+            methodReturn.getReturnValue().visit(this);
+        } else {
+            nlIndent();
+            this.sb.append("pass");
+        }
         return null;
     }
 
@@ -1199,13 +1211,17 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, PythonCodeGeneratorVisitor astVisitor) {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                phrase.visit(astVisitor);
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                    phrase.visit(astVisitor);
+                }
+                if ( mainBlock ) {
+                    mainBlock = false;
+                }
             }
-            if ( mainBlock ) {
-                mainBlock = false;
-            }
+
         }
     }
 
@@ -1320,7 +1336,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("):");
     }
 
-    private void generatePrefix(boolean withWrapping) {
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         if ( !withWrapping ) {
             return;
         }
@@ -1335,6 +1351,8 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
             nlIndent();
         }
         this.sb.append("timer1 = running_time()\n");
+        generateUserDefinedMethods(phrasesSet);
+
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1418,6 +1436,24 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         return null;
+    }
+
+    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        //TODO: too many nested loops and condition there must be a better way this to be done
+        if ( phrasesSet.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+                    if ( isCreateMethodPhrase ) {
+                        this.incrIndentation();
+                        phrase.visit(this);
+                        this.sb.append("\n");
+                        this.decrIndentation();
+                    }
+
+                }
+            }
+        }
     }
 
 }

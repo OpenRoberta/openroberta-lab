@@ -127,10 +127,8 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
         var roundUP = 3;
         var corectedSpeeds = {}
 
-        var isLeftMotorFinished = UTIL.round(internal(this).leftMotor.getCurrentRotations(), roundUP) >= UTIL.round(
-            internal(this).leftMotor.getGoalRotations(), roundUP);
-        var isRightMotorFinished = UTIL.round(internal(this).rightMotor.getCurrentRotations(), roundUP) >= UTIL.round(internal(this).rightMotor
-            .getGoalRotations(), roundUP);
+        var isLeftMotorFinished = UTIL.round(internal(this).leftMotor.getCurrentRotations(), roundUP) >= UTIL.round(internal(this).leftMotor.getGoalRotations(), roundUP);
+        var isRightMotorFinished = UTIL.round(internal(this).rightMotor.getCurrentRotations(), roundUP) >= UTIL.round(internal(this).rightMotor.getGoalRotations(), roundUP);
 
         if (internal(this).distanceToCover) {
             switch (internal(this).driveMode) {
@@ -141,8 +139,8 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
                         internal(this).distanceToCover = false;
                         program.setNextStatement(true);
                     } else if (isCorrectSpeed) {
-                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
-                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
+                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor, CONSTANTS.MOTOR_LEFT);
+                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor, CONSTANTS.MOTOR_RIGHT);
                     }
                     break;
 
@@ -152,7 +150,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
                         internal(this).distanceToCover = false;
                         program.setNextStatement(true);
                     } else if (isCorrectSpeed) {
-                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor);
+                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor, CONSTANTS.MOTOR_LEFT);
                     }
                     break;
 
@@ -162,7 +160,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
                         internal(this).distanceToCover = false;
                         program.setNextStatement(true);
                     } else if (isCorrectSpeed) {
-                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor);
+                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor, CONSTANTS.MOTOR_RIGHT);
                     }
                     break;
             }
@@ -271,16 +269,15 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
      *            {Number} - duration of the next frame in seconds
      * @returns {Number} - corrected motor speed
      */
-    Actors.prototype.speedCorrection = function(nextFrameTimeDuration, motor) {
+    Actors.prototype.speedCorrection = function(nextFrameTimeDuration, motor, motorSide) {
         var roundUP = 3;
         var correctedSpeed;
-        var nextFrameDistanceL = Math.abs(motor.getPower()) * CONSTANTS.MAXPOWER * nextFrameTimeDuration / 3.0;
-        var nextFrameRotationsL = this.distanceToRotations(nextFrameDistanceL);
-
-        if (UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotationsL > UTIL.round(motor.getGoalRotations(), roundUP)) {
+        var nextFrameRotations = Math.abs(motor.getPower()) * 0.02 * nextFrameTimeDuration;
+        if (UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotations > UTIL.round(motor.getGoalRotations(), roundUP)) {
             var dRotations = motor.getGoalRotations() - motor.getCurrentRotations();
-            var dDistance = rotationsToDistance(dRotations);
-            correctedSpeed = (3 * dDistance) / (CONSTANTS.MAXPOWER * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
+            correctedSpeed = (dRotations) / (0.02 * nextFrameTimeDuration) * UTIL.sgn(motor.getPower());
+            // console.log("Next Frame Rotatoins: %s; Correct Power: %s; CurrentRotations: %s; Goal Rotations: %s; Diff. Rotations: %s; Frame Duration: %s; Total Next Frame: %s",  nextFrameRotations,
+            //             correctedSpeed, motor.getCurrentRotations(), motor.getGoalRotations(), dRotations, nextFrameTimeDuration, UTIL.round(motor.getCurrentRotations(), roundUP) + nextFrameRotations);
         }
         return correctedSpeed;
     };
@@ -302,6 +299,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
             rotations.right = distance / robotCircumference;
             return rotations;
         }
+
         var ratio = (2.0 * distance) / (speedL + speedR);
 
         rotations.left = Math.abs(speedL * ratio) / robotCircumference;

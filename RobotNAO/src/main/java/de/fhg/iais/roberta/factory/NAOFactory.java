@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import com.google.inject.AbstractModule;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -38,6 +39,8 @@ import de.fhg.iais.roberta.mode.sensor.nao.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -46,15 +49,15 @@ public class NAOFactory extends AbstractRobotFactory {
     private final Properties naoProperties;
 
     public NAOFactory(RobotCommunicator robotCommunicator) {
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("nao");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nao");
         this.naoProperties = Util1.loadProperties("classpath:NAO.properties");
 
         this.compilerWorkflow =
             new NAOCompilerWorkflow(
                 robotCommunicator,
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
+                RobertaProperties.getTempDirForUserProjects(),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
         addBlockTypesFromProperties("NAO.properties", this.naoProperties);
     }
 
@@ -409,16 +412,6 @@ public class NAOFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
-    public AbstractModule getGuiceModule() {
-        return new NAOGuiceModule(Util1.getRobertaProperties());
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -452,6 +445,22 @@ public class NAOFactory extends AbstractRobotFactory {
     public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.compilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public AbstractModule getGuiceModule() {
+        return new NAOGuiceModule(RobertaProperties.getRobertaProperties());
     }
 
     @Override
@@ -502,5 +511,10 @@ public class NAOFactory extends AbstractRobotFactory {
     @Override
     public Boolean isAutoconnected() {
         return this.naoProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
     }
 }

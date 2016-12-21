@@ -179,6 +179,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_LIGHT_SENSOR_LIGHT_OFF = "robActions_sensorLight_off";
     public static final String ROB_ACTIONS_DISPLAY_CLEAR = "robActions_display_clear";
     public static final String ROB_ACTIONS_MOTOR_ON_FOR = "robActions_motor_on_for";
+    public static final String ROB_ACTIONS_MOTOR_ON_FOR_MBED = "mbedActions_motor_on";
     public static final String ROB_ACTIONS_MOTOR_ON_FOR_ARDU = "robActions_motor_on_for_ardu";
     public static final String ROB_ACTIONS_MOTOR_GET_POWER = "robActions_motor_getPower";
     public static final String ROB_ACTIONS_MOTOR_SET_POWER = "robActions_motor_setPower";
@@ -273,7 +274,13 @@ public final class BlocklyConstants {
     public static final String Z = "Z";
     public static final String Speed = "Speed";
     public static final String Theta = "Theta";
-    public static final String INTENSITY = "Intensity";
+    public static final String INTENSITY = "INTENSITY";
     public static final String LANGUAGE = "LANGUAGE";
+    public static final String POSITION = "POSITION";
+    public static final String PART = "PART";
+    public static final String SIDE = "SIDE";
+    public static final String CAMERA = "CAMERA";
+    public static final String RESOLUTION = "RESOLUTION";
+    public static final String COORDINATE = "COORDINATE";
 
 }

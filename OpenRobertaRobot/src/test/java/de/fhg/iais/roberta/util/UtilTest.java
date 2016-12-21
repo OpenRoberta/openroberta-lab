@@ -39,14 +39,22 @@ public class UtilTest {
 
     @Test
     public void testGetRobotNumberFromProperty() {
-        assertEquals(1, Util1.getRobotNumberFromProperty("ev3"));
-        assertEquals(2, Util1.getRobotNumberFromProperty("nxt"));
-        assertEquals(3, Util1.getRobotNumberFromProperty("ardu"));
-        assertEquals(4, Util1.getRobotNumberFromProperty("oraSim"));
+        RobertaProperties.setRobertaProperties(Util1.loadProperties(null));
+        assertEquals(1, RobertaProperties.getRobotNumberFromProperty("ev3"));
+        assertEquals(2, RobertaProperties.getRobotNumberFromProperty("nxt"));
+        assertEquals(3, RobertaProperties.getRobotNumberFromProperty("ardu"));
     }
 
     @Test(expected = DbcException.class)
     public void testGetRobotNumberFromPropertyWrong() {
-        Util1.getRobotNumberFromProperty("ev31");
+        RobertaProperties.setRobertaProperties(Util1.loadProperties(null));
+        RobertaProperties.getRobotNumberFromProperty("ev31");
+    }
+
+    @Test
+    public void testMissingProperty() {
+        RobertaProperties.setRobertaProperties(Util1.loadProperties(null));
+        boolean browserVisibility = Boolean.parseBoolean(RobertaProperties.getStringProperty("does.not.exist"));
+        assertEquals(false, browserVisibility);
     }
 }

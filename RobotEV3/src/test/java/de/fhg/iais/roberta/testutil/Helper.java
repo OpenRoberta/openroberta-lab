@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.testutil;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -29,16 +30,46 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
 import de.fhg.iais.roberta.syntax.codegen.AstToEv3TextlyVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
 
-    static EV3Factory robotModeFactory = new EV3Factory(null);
+    static EV3Factory robotModeFactory;
+
+    static {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+        robotModeFactory = new EV3Factory(null);
+    }
+
+    /**
+     * Generate java script code as string from a given program .
+     *
+     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
+     * @return the code as string
+     * @throws Exception
+     */
+    public static String generateJavaScript(String pathToProgramXml) throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Configuration brickConfiguration =
+            new EV3Configuration.Builder()
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .build();
+        String code = Ast2Ev3SimVisitor.generate(brickConfiguration, transformer.getTree());
+        // System.out.println(code); // only needed for EXTREME debugging
+        return code;
+    }
 
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
@@ -214,7 +245,7 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 

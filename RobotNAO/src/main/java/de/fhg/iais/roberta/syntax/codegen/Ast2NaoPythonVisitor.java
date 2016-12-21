@@ -9,14 +9,21 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
+import de.fhg.iais.roberta.mode.action.nao.Frame;
 import de.fhg.iais.roberta.mode.action.nao.Language;
 import de.fhg.iais.roberta.mode.action.nao.Posture;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.nao.Camera;
 import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nao.Coordinates;
 import de.fhg.iais.roberta.mode.sensor.nao.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.nao.Part;
+import de.fhg.iais.roberta.mode.sensor.nao.Position;
+import de.fhg.iais.roberta.mode.sensor.nao.Resolution;
+import de.fhg.iais.roberta.mode.sensor.nao.Side;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -43,6 +50,8 @@ import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Blink;
+import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.LookAt;
@@ -51,6 +60,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
 import de.fhg.iais.roberta.syntax.action.nao.PointAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
@@ -125,6 +135,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.HeadTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecordVideo;
+import de.fhg.iais.roberta.syntax.sensor.nao.SelectCamera;
+import de.fhg.iais.roberta.syntax.sensor.nao.SensorTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
+import de.fhg.iais.roberta.syntax.sensor.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -1475,7 +1494,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("import math\n");
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
-        this.sb.append("h = Hal()");
+        this.sb.append("h = Hal()\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1487,7 +1506,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(INDENT).append("try:\n");
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("h.sayText(\"Error!\")\n");
+        this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\")\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
@@ -1546,18 +1565,18 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        this.sb.append("h.turn(0,");
-        if ( turnDegrees.getTurnDirection() == TurnDirection.LEFT ) {
+        this.sb.append("h.walk(0,0,");
+        if ( turnDegrees.getTurnDirection() == TurnDirection.RIGHT ) {
             this.sb.append("-");
         }
         turnDegrees.getDegreesToTurn().visit(this);
-        this.sb.append(",0)");
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
-        this.sb.append("h.walkTo(");
+        this.sb.append("h.walk(");
         walkTo.getWalkToX().visit(this);
         this.sb.append(",");
         walkTo.getWalkToY().visit(this);
@@ -1644,7 +1663,13 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(", ");
         lookAt.getlookZ().visit(this);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(lookAt.getFrame()) + ", ");
+        if ( lookAt.getFrame() == Frame.TORSO ) {
+            this.sb.append("0,");
+        } else if ( lookAt.getFrame() == Frame.WORLD ) {
+            this.sb.append("1,");
+        } else if ( lookAt.getFrame() == Frame.ROBOT ) {
+            this.sb.append("2,");
+        }
         lookAt.getSpeed().visit(this);
         this.sb.append(")");
         return null;
@@ -1659,7 +1684,13 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(", ");
         pointAt.getpointZ().visit(this);
         this.sb.append(", ");
-        this.sb.append(getEnumCode(pointAt.getFrame()) + ", ");
+        if ( pointAt.getFrame() == Frame.TORSO ) {
+            this.sb.append("0,");
+        } else if ( pointAt.getFrame() == Frame.WORLD ) {
+            this.sb.append("1,");
+        } else if ( pointAt.getFrame() == Frame.ROBOT ) {
+            this.sb.append("2,");
+        }
         pointAt.getSpeed().visit(this);
         this.sb.append(")");
         return null;
@@ -1759,6 +1790,132 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         } else if ( setLanguage.getLanguage() == Language.FRENCH ) {
             this.sb.append("\"French\")");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitGetVolume(GetVolume<Void> getVolume) {
+        this.sb.append("h.getVolume()");
+        return null;
+    }
+
+    @Override
+    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+        this.sb.append("h.getLanguage()");
+        return null;
+    }
+
+    @Override
+    public Void visitHeadTouched(HeadTouched<Void> headTouched) {
+        this.sb.append("h.headsensors(");
+        if ( headTouched.getPosition() == Position.FRONT ) {
+            this.sb.append("\"Front\")");
+        } else if ( headTouched.getPosition() == Position.MIDDLE ) {
+            this.sb.append("\"Middle\")");
+        } else if ( headTouched.getPosition() == Position.REAR ) {
+            this.sb.append("\"Rear\")");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSensorTouched(SensorTouched<Void> sensorTouched) {
+        this.sb.append("h.touchsensors(");
+        if ( sensorTouched.getPart() == Part.BUMPER ) {
+            this.sb.append("Bumper, ");
+        } else if ( sensorTouched.getPart() == Part.HAND ) {
+            this.sb.append("Hand");
+        }
+        if ( sensorTouched.getSide() == Side.LEFT ) {
+            this.sb.append("Left)");
+        } else if ( sensorTouched.getSide() == Side.RIGHT ) {
+            this.sb.append("Right)");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitNaoMark(NaoMark<Void> naoMark) {
+        this.sb.append("h.naoMark()");
+        return null;
+    }
+
+    @Override
+    public Void visitSonar(Sonar<Void> sonar) {
+        this.sb.append("h.sonar()");
+        return null;
+    }
+
+    @Override
+    public Void visitSelectCamera(SelectCamera<Void> selectCamera) {
+        this.sb.append("h.selectCamera(");
+        if ( selectCamera.getCamera() == Camera.BOTTOM ) {
+            this.sb.append("\"Bottom\"");
+        } else if ( selectCamera.getCamera() == Camera.TOP ) {
+            this.sb.append("\"Top\"");
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitTakePicture(TakePicture<Void> takePicture) {
+        this.sb.append("h.takePicture()");
+        return null;
+    }
+
+    @Override
+    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+        this.sb.append("h.recordVideo(");
+        if ( recordVideo.getResolution() == Resolution.LOW ) {
+            this.sb.append("0, ");
+        } else if ( recordVideo.getResolution() == Resolution.MED ) {
+            this.sb.append("1, ");
+        } else if ( recordVideo.getResolution() == Resolution.HIGH ) {
+            this.sb.append("2, ");
+        }
+        if ( recordVideo.getCamera() == Camera.TOP ) {
+            this.sb.append("Top, ");
+        } else if ( recordVideo.getCamera() == Camera.BOTTOM ) {
+            this.sb.append("Bottom, ");
+        }
+        recordVideo.getDuration().visit(this);
+        this.sb.append(")");
+
+        return null;
+    }
+
+    @Override
+    public Void visitGyrometer(Gyrometer<Void> gyrometer) {
+        this.sb.append("h.gyrometer(");
+        if ( gyrometer.getCoordinate() == Coordinates.X ) {
+            this.sb.append("X)");
+        } else if ( gyrometer.getCoordinate() == Coordinates.Y ) {
+            this.sb.append("Y)");
+        } else if ( gyrometer.getCoordinate() == Coordinates.Z ) {
+            this.sb.append("Z)");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.sb.append("h.accelerometer(");
+        if ( accelerometer.getCoordinate() == Coordinates.X ) {
+            this.sb.append("X)");
+        } else if ( accelerometer.getCoordinate() == Coordinates.Y ) {
+            this.sb.append("Y)");
+        } else if ( accelerometer.getCoordinate() == Coordinates.Z ) {
+            this.sb.append("Z)");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitSayText(SayText<Void> sayText) {
+        this.sb.append("h.say(");
+        sayText.getMsg().visit(this);
+        this.sb.append(")");
         return null;
     }
 

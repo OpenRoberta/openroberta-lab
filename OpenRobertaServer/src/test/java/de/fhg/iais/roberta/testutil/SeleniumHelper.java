@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.testutil;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -35,8 +37,9 @@ public class SeleniumHelper {
     public SeleniumHelper(String baseUrl) throws Exception {
         Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
-        this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
-        this.server = this.serverStarter.start("localhost", 1998);
+        List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
+        this.serverStarter = new ServerStarter("classpath:openRoberta.properties", addr);
+        this.server = this.serverStarter.start();
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
         new DbSetup(session).runDefaultRobertaSetup();
         this.driver = SeleniumHelper.runBrowser(this.browserVisibility);

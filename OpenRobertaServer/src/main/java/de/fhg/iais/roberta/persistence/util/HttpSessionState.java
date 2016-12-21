@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.persistence.util;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
@@ -25,13 +24,11 @@ public class HttpSessionState {
     private String configuration;
     private String toolboxName;
     private String toolbox;
-    private final RobotCommunicator robotCommunicator;
     private Map<String, IRobotFactory> robotPluginMap;
 
     public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
-        this.robotCommunicator = robotCommunicator;
         this.robotPluginMap = robotPluginMap;
-        this.robotName = Util1.getRobertaProperty("robot.type.default");
+        this.robotName = RobertaProperties.getDefaultRobot();
     }
 
     public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
@@ -114,28 +111,11 @@ public class HttpSessionState {
         this.toolbox = toolbox;
     }
 
-    public IRobotFactory getSimulationFactory() {
-        IRobotFactory robotFactory = robotPluginMap.get("oraSim");
-        if ( robotFactory == null ) {
-            LOG.error("robot factory for simulation not found. This is a severe error. Simluation wil not work.");
-        }
-        return robotFactory;
-    }
-
-    public Collection<String> getAllRobotsPluggedIn() {
-        return Collections.unmodifiableSet(robotPluginMap.keySet());
-    }
-
     public IRobotFactory getRobotFactory() {
-        IRobotFactory robotFactory = robotPluginMap.get(this.robotName);
-        if ( robotFactory == null ) {
-            LOG.error("robot factory for robot \"" + this.robotName + "\" not found. Fallback is \"ev3\"");
-            robotFactory = robotPluginMap.get("ev3");
-        }
-        return robotFactory;
+        return this.robotPluginMap.get(this.robotName);
     }
 
     public IRobotFactory getRobotFactory(String robotName) {
-        return robotPluginMap.get(robotName);
+        return this.robotPluginMap.get(robotName);
     }
 }

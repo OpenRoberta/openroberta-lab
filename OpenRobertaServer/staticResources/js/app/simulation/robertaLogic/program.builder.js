@@ -1,4 +1,4 @@
-define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
+define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
 
     function build(program) {
         eval(program);
@@ -137,12 +137,41 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
+    function createDisplayImageAction(mode, image) {
+        var result = {};
+        result[CONST.STMT] = CONST.DISPLAY_IMAGE_ACTION;
+        result[CONST.MODE] = mode;
+        result[CONST.IMAGE] = image;
+        return result;
+    }
+
+    function createRgbColor(rgbColor) {
+        var result = {};
+        result[CONST.EXPR] = CONST.RGB_COLOR_CONST;
+        result[CONST.VALUE] = rgbColor;
+        return result;
+    }
+
+    function createLedOnAction(ledColor) {
+        var result = {};
+        result[CONST.STMT] = CONST.LED_ON_ACTION;
+        result[CONST.RGB_COLOR_CONST] = ledColor;
+        return result;
+    }
+
     function createShowTextAction(text, x, y) {
         var result = {};
         result[CONST.STMT] = CONST.SHOW_TEXT_ACTION;
         result[CONST.TEXT] = text;
         result[CONST.X] = x;
         result[CONST.Y] = y;
+        return result;
+    }
+
+    function createDisplayTextAction(text) {
+        var result = {};
+        result[CONST.STMT] = CONST.DISPLAY_TEXT_ACTION;
+        result[CONST.TEXT] = text;
         return result;
     }
 
@@ -268,7 +297,6 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
-
     function createStatusLight(mode) {
         var result = {};
         result[CONST.STMT] = CONST.STATUS_LIGHT_ACTION;
@@ -318,11 +346,11 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
-    function createGetSampleEncoderSensor(motorSide, senorMode) {
+    function createGetSampleEncoderSensor(motorSide, sensorMode) {
         var result = {};
         result[CONST.EXPR] = CONST.ENCODER_SENSOR_SAMPLE;
         result[CONST.MOTOR_SIDE] = motorSide;
-        result[CONST.SENSOR_MODE] = senorMode;
+        result[CONST.SENSOR_MODE] = sensorMode;
 
         return result;
     }

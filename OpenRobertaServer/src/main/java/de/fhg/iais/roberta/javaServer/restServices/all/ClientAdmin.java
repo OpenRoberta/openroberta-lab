@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RandomUrlPostfix;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -52,15 +53,20 @@ public class ClientAdmin {
             response.put("cmd", cmd);
             if ( cmd.equals("init") ) {
                 JSONObject server = new JSONObject();
-                server.put("defaultRobot", Util1.getRobertaProperty("robot.type.default"));
+                server.put("defaultRobot", RobertaProperties.getDefaultRobot());
                 JSONObject robots = new JSONObject();
-                Collection<String> availableRobots = httpSessionState.getAllRobotsPluggedIn();
+                Collection<String> availableRobots = RobertaProperties.getRobotWhitelist();
+                int i = 0;
                 for ( String robot : availableRobots ) {
                     JSONObject robotDescription = new JSONObject();
-                    robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
-                    robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
-                    robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
-                    robots.put(robot, robotDescription);
+                    robotDescription.put("name", robot);
+                    if ( !RobertaProperties.NAME_OF_SIM.equals(robot) ) {
+                        robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
+                        robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
+                        robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
+                    }
+                    robots.put("" + i, robotDescription);
+                    i++;
                 }
                 server.put("robots", robots);
                 response.put("server", server);
@@ -104,7 +110,7 @@ public class ClientAdmin {
                 }
             } else if ( cmd.equals("setRobot") ) {
                 String robot = request.getString("robot");
-                if ( robot != null && httpSessionState.getAllRobotsPluggedIn().contains(robot) ) {
+                if ( robot != null && RobertaProperties.getRobotWhitelist().contains(robot) ) {
                     Util.addSuccessInfo(response, Key.ROBOT_SET_SUCCESS);
                     if ( httpSessionState.getRobotName() != robot ) {
                         // disconnect previous robot

@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -109,7 +110,6 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -751,7 +751,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-
         return null;
     }
 
@@ -1247,7 +1246,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        if (methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn")){
+        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
         return null;
@@ -1470,25 +1469,16 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+        String end = ");";
+        this.sb.append("uBit.display.");
         if ( displayImageAction.getDisplayImageMode().name().equals("ANIMATION") ) {
-            this.sb.append("for ( int i = 0; i < ");
-            displayImageAction.getValuesToDisplay().visit(this);
-            this.sb.append(".size(); i++) {");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("uBit.display.print(");
-            displayImageAction.getValuesToDisplay().visit(this);
-            this.sb.append("[i]);");
-            nlIndent();
-            this.sb.append("uBit.sleep(200);");
-            decrIndentation();
-            nlIndent();
-            this.sb.append("}");
+            this.sb.append("animateImages(");
+            end = ", 200);";
         } else {
-            this.sb.append("uBit.display.print(");
-            displayImageAction.getValuesToDisplay().visit(this);
-            this.sb.append(");");
+            this.sb.append("print(");
         }
+        displayImageAction.getValuesToDisplay().visit(this);
+        this.sb.append(end);
         return null;
     }
 

@@ -1,5 +1,4 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery',
-        'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
 
     var $formSingleModal;
 
@@ -10,7 +9,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
 
         var ready = $.Deferred();
         $.when(ROBOT.setRobot(GUISTATE_C.getRobot(), function(result) {
-            if (result.rc == 'ok'){GUISTATE_C.setRobot(GUISTATE_C.getRobot(), result, true);}
+            if (result.rc == 'ok') {
+                GUISTATE_C.setRobot(GUISTATE_C.getRobot(), result, true);
+            }
         })).then(function() {
             initRobotForms();
             LOG.info('init robot forms');
@@ -67,7 +68,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             $('#singleModalInput').addClass('capitalLetters');
             $('#single-modal a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
             $('#single-modal a[href]').attr("href", "https://wiki.open-roberta.org");
-         }, function() {
+        }, function() {
             setToken($('#singleModalInput').val().toUpperCase());
         }, function() {
             $('#singleModalInput').removeClass('capitalLetters');
@@ -143,13 +144,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
         var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
         if (mainversionServer > mainversionRobot) {
-            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '"
-                    + GUISTATE_C.getRobotVersion() + "' on the robot");
+            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '" + GUISTATE_C.getRobotVersion() + "' on the robot");
             $("#confirmUpdateFirmware").modal('show');
             return true;
         } else if (mainversionServer < mainversionRobot) {
-            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is older than the firmware version '"
-                    + GUISTATE_C.getRobotVersion() + "' on the robot");
+            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is older than the firmware version '" + GUISTATE_C.getRobotVersion() + "' on the robot");
             MSG.displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
             return true;
         }

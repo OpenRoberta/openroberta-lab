@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -24,22 +25,27 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.MicrobitSimProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class MicrobitFactory extends AbstractRobotFactory {
 
     private MicrobitCompilerWorkflow compilerWorkflow;
+    private final MbedSimCompilerWorkflow microbitSimCompilerWorkflow;
     private final Properties calliopeProperties;
 
     public MicrobitFactory(RobotCommunicator unusedForArdu) {
 
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("microbit");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("microbit");
         this.compilerWorkflow =
             new MicrobitCompilerWorkflow(
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Microbit.properties");
+        this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Microbit.properties", this.calliopeProperties);
     }
 
@@ -223,11 +229,6 @@ public class MicrobitFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -261,6 +262,16 @@ public class MicrobitFactory extends AbstractRobotFactory {
     public List<IWorkingState> getWorkingStates() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.compilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        return this.microbitSimCompilerWorkflow;
     }
 
     @Override
@@ -311,5 +322,10 @@ public class MicrobitFactory extends AbstractRobotFactory {
     @Override
     public Boolean isAutoconnected() {
         return this.calliopeProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return new MicrobitSimProgramCheckVisitor(brickConfiguration);
     }
 }

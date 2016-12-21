@@ -28,7 +28,7 @@ limitations under the License.
 <link rel="stylesheet" type="text/css"
 	href="js/libs/code-prettify/prettify.css"></link>
 <link href="/css/enjoyhint.css" rel="stylesheet">
-	<!-- Make sure css files are loaded before js files -->
+<!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico"
@@ -385,13 +385,16 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
 					<button id="simRobot" type="button"
-						class="simRobot blbtn typcn typcn-ev3"
+						class="simRobot blbtn typcn"
 						lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
 				</div>
 			</div>
+			<div id="helpDiv"></div>
 			<div id="codeDiv">
-				<div id="codeContent"></div>
+				<div id="codeContainer">
+					<div id="codeContent"></div>
+				</div>
 				<div id="codeButtons" class="code">
 					<button id="codeBack" type="button"
 						class="codeBack blbtn typcn typcn-arrow-left-thick"
@@ -401,10 +404,16 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						data-toggle="collapse"></button>
 				</div>
 			</div>
+
+			<div id="rightMenuDiv">
+				<div href="#" id="progHelp" class="rightMenuButton help"
+					lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip"
+					data-original-title="" title="">
+					<span id="" class="progHelp"></span>
+				</div>
+			</div>
 		</div>
 		<div id="progList" class="tab-pane fade">
-			<!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
- -->
 			<div id="progListToolbar">
 				<button id="backProgList" class="btn">
 					<i class="typcn typcn-arrow-left"></i>
@@ -858,11 +867,11 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						<div class="row">
 							<div class="border-dotted col-md-5 with-devider">
 								<h4 lkey="Blockly.Msg.POPUP_STARTUP_NEW">What's new?</h4>
-								<div lkey="Blockly.Msg.POPUP_2_0_1"></div>
+								<div lkey="Blockly.Msg.POPUP_2_1_3"></div>
 								<button id='moreReleases' type='button' class='btn-link'
 									lkey="Blockly.Msg.BUTTON_MORE">more</button>
 								<div id="oldReleases" style="display: none; color: #bbb"
-									lkey="Blockly.Msg.POPUP_NEW_RELEASE"></div>
+									lkey="Blockly.Msg.POPUP_OLD_RELEASE"></div>
 							</div>
 							<div class="col-md-4 with-devider">
 								<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
@@ -886,8 +895,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 									<div id="takeATour" class="hidden-xs robot-container"
 										data-dismiss="modal"
 										style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
-										<br>
-										<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
+										<br> <span lkey="Blockly.Msg.POPUP_TOUR"
+											class="robot-label"></span>
 									</div>
 								</div>
 							</div>
@@ -897,12 +906,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<div class="modal-footer" style="text-align: center">
 						<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your
 							system!</h4>
-						<div id="popup-sim" href="#" class="popup-robot robot-container"
-							data-type="ev3">
-							<span href="#" class='typcn typcn-open robot-icon'></span><span lkey="Blockly.Msg.POPUP_ROBOT_SIM"
-								class="robot-label">I don't have a robot!</span> <img
-								class="img-beta" src="/css/img/beta.png" alt="beta" /> <a
-								href="#" target="_blank" style="display: inline;"> <span
+						<div id="popup-sim" href="#" class="popup-robot robot-container">
+							<span href="#" class='typcn typcn-open robot-icon'></span><span
+								lkey="Blockly.Msg.POPUP_ROBOT_SIM" class="robot-label">I
+								don't have a robot!</span> <img class="img-beta"
+								src="/css/img/beta.png" alt="beta" /> <a href="#"
+								target="_blank" style="display: inline;"> <span
 								class='robot-info typcn typcn-info-large'></span>
 							</a>
 						</div>
@@ -1035,9 +1044,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					</ul> -->
 					<div id='downloadLink'></div>
 					<div id='programHint' class='download-checkbox'>
-						<br>
-						<input type='checkbox' name='checkbox' id='label-checkbox'
-							value='value' /><label for='label-checkbox'
+						<br> <input type='checkbox' name='checkbox'
+							id='label-checkbox' value='value' /><label for='label-checkbox'
 							lkey="Blockly.Msg.POPUP_DOWNLOAD_CHECK">Okay, I changed
 							the download folder of my browser permanently. Don't show this
 							popup again and download my programs directly.</label>
@@ -1049,5 +1057,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
 </body>
 </html>

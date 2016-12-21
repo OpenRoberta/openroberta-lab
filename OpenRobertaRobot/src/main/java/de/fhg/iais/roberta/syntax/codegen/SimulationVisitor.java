@@ -1,0 +1,916 @@
+package de.fhg.iais.roberta.syntax.codegen;
+
+import java.util.ArrayList;
+
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.syntax.MotorDuration;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
+import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
+import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.expr.ActionExpr;
+import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.syntax.expr.BoolConst;
+import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.syntax.expr.ExprList;
+import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.expr.MathConst;
+import de.fhg.iais.roberta.syntax.expr.MethodExpr;
+import de.fhg.iais.roberta.syntax.expr.NullConst;
+import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
+import de.fhg.iais.roberta.syntax.expr.StmtExpr;
+import de.fhg.iais.roberta.syntax.expr.StringConst;
+import de.fhg.iais.roberta.syntax.expr.Unary;
+import de.fhg.iais.roberta.syntax.expr.Var;
+import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.methods.MethodCall;
+import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
+import de.fhg.iais.roberta.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
+import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
+import de.fhg.iais.roberta.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
+import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
+import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
+import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.AstVisitor;
+
+public abstract class SimulationVisitor<V> implements AstVisitor<V> {
+
+    protected int stmtsNumber = 0;
+    protected int methodsNumber = 0;
+    private ArrayList<Boolean> inStmt = new ArrayList<>();
+
+    protected final StringBuilder sb = new StringBuilder();
+    protected final Configuration brickConfiguration;
+
+    protected SimulationVisitor(Configuration brickConfiguration) {
+        this.brickConfiguration = brickConfiguration;
+    }
+
+    @Override
+    public V visitNumConst(NumConst<V> numConst) {
+        this.sb.append("createConstant(CONST." + numConst.getKind().getName() + ", " + numConst.getValue() + ")");
+        return null;
+    }
+
+    @Override
+    public V visitMathConst(MathConst<V> mathConst) {
+        this.sb.append("createMathConstant('" + mathConst.getMathConst() + "')");
+        return null;
+    }
+
+    @Override
+    public V visitBoolConst(BoolConst<V> boolConst) {
+        this.sb.append("createConstant(CONST." + boolConst.getKind().getName() + ", " + boolConst.isValue() + ")");
+        return null;
+    }
+
+    @Override
+    public V visitStringConst(StringConst<V> stringConst) {
+        this.sb.append("createConstant(CONST." + stringConst.getKind().getName() + ", '" + stringConst.getValue() + "')");
+        return null;
+    }
+
+    @Override
+    public V visitNullConst(NullConst<V> nullConst) {
+        this.sb.append("createConstant(CONST." + nullConst.getKind().getName() + ", undefined)");
+        return null;
+    }
+
+    @Override
+    public V visitColorConst(ColorConst<V> colorConst) {
+        this.sb.append("createConstant(CONST." + colorConst.getKind().getName() + ", CONST.COLOR_ENUM." + colorConst.getValue() + ")");
+        return null;
+    }
+
+    @Override
+    public V visitShadowExpr(ShadowExpr<V> shadowExpr) {
+        if ( shadowExpr.getBlock() != null ) {
+            shadowExpr.getBlock().visit(this);
+        } else {
+            shadowExpr.getShadow().visit(this);
+        }
+        return null;
+    }
+
+    @Override
+    public V visitVar(Var<V> var) {
+        this.sb.append("createVarReference(CONST." + var.getTypeVar() + ", \"" + var.getValue() + "\")");
+        return null;
+    }
+
+    @Override
+    public V visitVarDeclaration(VarDeclaration<V> var) {
+        this.sb.append("createVarDeclaration(CONST." + var.getTypeVar() + ", \"" + var.getName() + "\", ");
+        if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
+            ExprList<V> list = (ExprList<V>) var.getValue();
+            if ( list.get().size() == 2 ) {
+                list.get().get(1).visit(this);
+            } else {
+                list.get().get(0).visit(this);
+            }
+        } else {
+            var.getValue().visit(this);
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitUnary(Unary<V> unary) {
+        this.sb.append("createUnaryExpr(CONST." + unary.getOp() + ", ");
+        unary.getExpr().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitBinary(Binary<V> binary) {
+        String method = "createBinaryExpr(CONST." + binary.getOp() + ", ";
+        String end = ")";
+        // FIXME: The math change should be removed from the binary expression since it is a statement
+        switch ( binary.getOp() ) {
+            case MATH_CHANGE:
+                method = "createMathChange(";
+                //                end = createClosingBracket();
+                break;
+            case TEXT_APPEND:
+                method = "createTextAppend(";
+                end = createClosingBracket();
+                break;
+            default:
+                break;
+        }
+        this.sb.append(method);
+        binary.getLeft().visit(this);
+        this.sb.append(", ");
+        binary.getRight().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitToneAction(ToneAction<V> toneAction) {
+        String end = createClosingBracket();
+        this.sb.append("createToneAction(");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(", ");
+        toneAction.getDuration().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct) {
+        this.sb.append("createBinaryExpr(CONST." + mathPowerFunct.getFunctName() + ", ");
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitActionExpr(ActionExpr<V> actionExpr) {
+        actionExpr.getAction().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitSensorExpr(SensorExpr<V> sensorExpr) {
+        sensorExpr.getSens().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitMethodExpr(MethodExpr<V> methodExpr) {
+        methodExpr.getMethod().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitEmptyList(EmptyList<V> emptyList) {
+        return null;
+    }
+
+    @Override
+    public V visitEmptyExpr(EmptyExpr<V> emptyExpr) {
+        switch ( emptyExpr.getDefVal().getName() ) {
+            case "java.lang.String":
+                this.sb.append("createConstant(CONST.STRING_CONST, '')");
+                break;
+            case "java.lang.Boolean":
+                this.sb.append("createConstant(CONST.BOOL_CONST, true)");
+                break;
+            case "java.lang.Integer":
+                this.sb.append("createConstant(CONST.NUM_CONST, 0)");
+                break;
+            case "java.util.ArrayList":
+                this.sb.append("[]");
+                break;
+            case "de.fhg.iais.roberta.syntax.expr.NullConst":
+                this.sb.append("createConstant(CONST.NULL_CONST, null)");
+                break;
+            default:
+                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public V visitExprList(ExprList<V> exprList) {
+        boolean first = true;
+        for ( Expr<V> expr : exprList.get() ) {
+            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
+                if ( first ) {
+                    first = false;
+                } else {
+                    this.sb.append(", ");
+                }
+                expr.visit(this);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public V visitStmtExpr(StmtExpr<V> stmtExpr) {
+        stmtExpr.getStmt().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitActionStmt(ActionStmt<V> actionStmt) {
+        actionStmt.getAction().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitAssignStmt(AssignStmt<V> assignStmt) {
+        String end = createClosingBracket();
+        this.sb.append("createAssignStmt(\"" + assignStmt.getName().getValue());
+        this.sb.append("\", ");
+        assignStmt.getExpr().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitExprStmt(ExprStmt<V> exprStmt) {
+        String end = "";
+        if ( !isInStmt() ) {
+            this.sb.append("var stmt" + this.stmtsNumber + " = ");
+            increaseStmt();
+            end = ";";
+        }
+        exprStmt.getExpr().visit(this);
+        this.sb.append(end);
+
+        return null;
+    }
+
+    @Override
+    public V visitIfStmt(IfStmt<V> ifStmt) {
+        if ( ifStmt.isTernary() ) {
+            this.sb.append("createTernaryExpr(");
+            ifStmt.getExpr().get(0).visit(this);
+            this.sb.append(", ");
+            ((ExprStmt<V>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+            this.sb.append(", ");
+            ((ExprStmt<V>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+            this.sb.append(")");
+        } else {
+            String end = createClosingBracket();
+            this.sb.append("createIfStmt([");
+            appendIfStmtConditions(ifStmt);
+            this.sb.append("], [");
+            appendThenStmts(ifStmt);
+            this.sb.append("], [");
+            appendElseStmt(ifStmt);
+            this.sb.append("]");
+
+            this.sb.append(end);
+        }
+        return null;
+    }
+
+    @Override
+    public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
+        String end = createClosingBracket();
+        appendRepeatStmtCondition(repeatStmt);
+        addInStmt();
+        appendRepeatStmtStatements(repeatStmt);
+        this.sb.append("]");
+        this.sb.append(end);
+        removeInStmt();
+        return null;
+    }
+
+    @Override
+    public V visitSensorStmt(SensorStmt<V> sensorStmt) {
+        sensorStmt.getSensor().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
+        return null;
+    }
+
+    @Override
+    public V visitStmtList(StmtList<V> stmtList) {
+        if ( stmtList.get().size() == 0 ) {
+            return null;
+        }
+        String symbol = isInStmt() ? ", " : "\n";
+        for ( int i = 0; i < stmtList.get().size(); i++ ) {
+            stmtList.get().get(i).visit(this);
+            this.sb.append(symbol);
+        }
+        removeLastComma();
+        return null;
+    }
+
+    @Override
+    public V visitTimerSensor(TimerSensor<V> timerSensor) {
+        switch ( (TimerSensorMode) timerSensor.getMode() ) {
+            case GET_SAMPLE:
+                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getTimer() + "')");
+                break;
+            case RESET:
+                String end = createClosingBracket();
+                this.sb.append("createResetTimer('timer" + timerSensor.getTimer() + "'");
+                this.sb.append(end);
+                break;
+            default:
+                throw new DbcException("Invalid Time Mode!");
+        }
+        return null;
+    }
+
+    @Override
+    public V visitGetSampleSensor(GetSampleSensor<V> sensorGetSample) {
+        sensorGetSample.getSensor().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitMainTask(MainTask<V> mainTask) {
+        if ( mainTask.getDebug().equals("TRUE") ) {
+            String end = createClosingBracket();
+            this.sb.append("createDebugAction(");
+            this.sb.append(end);
+        }
+        mainTask.getVariables().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitActivityTask(ActivityTask<V> activityTask) {
+        return null;
+    }
+
+    @Override
+    public V visitStartActivityTask(StartActivityTask<V> startActivityTask) {
+        return null;
+    }
+
+    @Override
+    public V visitWaitStmt(WaitStmt<V> waitStmt) {
+        String end = createClosingBracket();
+        this.sb.append("createWaitStmt([");
+        addInStmt();
+        visitStmtList(waitStmt.getStatements());
+        removeInStmt();
+        this.sb.append("]");
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitWaitTimeStmt(WaitTimeStmt<V> waitTimeStmt) {
+        String end = createClosingBracket();
+        this.sb.append("createWaitTimeStmt(");
+        waitTimeStmt.getTime().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitLocation(Location<V> location) {
+        return null;
+    }
+
+    @Override
+    public V visitTextPrintFunct(TextPrintFunct<V> textPrintFunct) {
+        return null;
+    }
+
+    @Override
+    public V visitFunctionStmt(FunctionStmt<V> functionStmt) {
+        return null;
+    }
+
+    @Override
+    public V visitFunctionExpr(FunctionExpr<V> functionExpr) {
+        functionExpr.getFunction().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitGetSubFunct(GetSubFunct<V> getSubFunct) {
+        this.sb.append("createGetSubList({list: ");
+        getSubFunct.getParam().get(0).visit(this);
+        this.sb.append(", where1: CONST.");
+        IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
+        this.sb.append(where1);
+        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+            this.sb.append(", at1: ");
+            getSubFunct.getParam().get(1).visit(this);
+        }
+        this.sb.append(", where2: CONST.");
+        IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
+        this.sb.append(where2);
+        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+            this.sb.append(", at2: ");
+            if ( getSubFunct.getParam().size() == 3 ) {
+                getSubFunct.getParam().get(2).visit(this);
+            } else {
+                getSubFunct.getParam().get(1).visit(this);
+            }
+        }
+        this.sb.append("})");
+        return null;
+    }
+
+    @Override
+    public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct) {
+        this.sb.append("createListFindItem(CONST." + indexOfFunct.getLocation() + ", ");
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<V> lengthOfIsEmptyFunct) {
+        String methodName = "createListLength(";
+        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            methodName = "createListIsEmpty(";
+        }
+        this.sb.append(methodName);
+        lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitListCreate(ListCreate<V> listCreate) {
+        this.sb.append("createCreateListWith(CONST.ARRAY_" + listCreate.getTypeVar() + ", [");
+        listCreate.getValue().visit(this);
+        this.sb.append("])");
+        return null;
+    }
+
+    @Override
+    public V visitListSetIndex(ListSetIndex<V> listSetIndex) {
+        String end = createClosingBracket();
+        this.sb.append("createListsSetIndex(");
+        listSetIndex.getParam().get(0).visit(this);
+        this.sb.append(", CONST.");
+        this.sb.append(listSetIndex.getElementOperation());
+        this.sb.append(", ");
+        listSetIndex.getParam().get(1).visit(this);
+        this.sb.append(", CONST.");
+        this.sb.append(listSetIndex.getLocation());
+        if ( listSetIndex.getParam().size() == 3 ) {
+            this.sb.append(", ");
+            listSetIndex.getParam().get(2).visit(this);
+        }
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitListGetIndex(ListGetIndex<V> listGetIndex) {
+        String methodName = "createListsGetIndex(";
+        String end = ")";
+        if ( listGetIndex.getElementOperation().isStatment() ) {
+            methodName = "createListsGetIndexStmt(";
+            end = createClosingBracket();
+        }
+        this.sb.append(methodName);
+        listGetIndex.getParam().get(0).visit(this);
+        this.sb.append(", CONST.");
+        this.sb.append(listGetIndex.getElementOperation());
+        this.sb.append(", CONST.");
+        this.sb.append(listGetIndex.getLocation());
+        if ( listGetIndex.getParam().size() == 2 ) {
+            this.sb.append(", ");
+            listGetIndex.getParam().get(1).visit(this);
+        }
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitListRepeat(ListRepeat<V> listRepeat) {
+        this.sb.append("createCreateListWithItem(");
+        listRepeat.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        listRepeat.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct) {
+        this.sb.append("createMathConstrainFunct(");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct) {
+        this.sb.append("createMathPropFunct('" + mathNumPropFunct.getFunctName() + "', ");
+        mathNumPropFunct.getParam().get(0).visit(this);
+        if ( mathNumPropFunct.getFunctName() == FunctionNames.DIVISIBLE_BY ) {
+            this.sb.append(", ");
+            mathNumPropFunct.getParam().get(1).visit(this);
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct) {
+        this.sb.append("createMathOnList(CONST." + mathOnListFunct.getFunctName() + ", ");
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct) {
+        this.sb.append("createRandDouble()");
+        return null;
+    }
+
+    @Override
+    public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct) {
+        this.sb.append("createRandInt(");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathRandomIntFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct) {
+        this.sb.append("createSingleFunction('" + mathSingleFunct.getFunctName() + "', ");
+        mathSingleFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct) {
+        this.sb.append("createTextJoin([");
+        textJoinFunct.getParam().visit(this);
+        this.sb.append("])");
+        return null;
+    }
+
+    @Override
+    public V visitMethodVoid(MethodVoid<V> methodVoid) {
+        this.sb.append("var method" + this.methodsNumber + " = createMethodVoid('" + methodVoid.getMethodName() + "', [");
+        methodVoid.getParameters().visit(this);
+        this.sb.append("], [");
+        addInStmt();
+        methodVoid.getBody().visit(this);
+        removeInStmt();
+        this.sb.append("]);\n");
+        increaseMethods();
+        return null;
+    }
+
+    @Override
+    public V visitMethodReturn(MethodReturn<V> methodReturn) {
+        this.sb.append("var method" + this.methodsNumber + " = createMethodReturn('" + methodReturn.getMethodName() + "', [");
+        addInStmt();
+        methodReturn.getBody().visit(this);
+        this.sb.append("], ");
+        methodReturn.getReturnValue().visit(this);
+        this.sb.append(");\n");
+        removeInStmt();
+        increaseMethods();
+        return null;
+    }
+
+    @Override
+    public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
+        this.sb.append("createIfReturn(");
+        methodIfReturn.getCondition().visit(this);
+        this.sb.append(", ");
+        methodIfReturn.getReturnValue().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public V visitMethodStmt(MethodStmt<V> methodStmt) {
+        methodStmt.getMethod().visit(this);
+        return null;
+    }
+
+    @Override
+    public V visitMethodCall(MethodCall<V> methodCall) {
+        String end = ")";
+        String name = "createMethodCallReturn('";
+        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
+            name = "createMethodCallVoid('";
+            end = createClosingBracket();
+        }
+        this.sb.append(name + methodCall.getMethodName() + "', [");
+        methodCall.getParameters().visit(this);
+        this.sb.append("], [");
+        methodCall.getParametersValues().visit(this);
+        this.sb.append("]" + end);
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection) {
+        return null;
+    }
+
+    @Override
+    public V visitConnectConst(ConnectConst<V> connectConst) {
+        return null;
+    }
+
+    @Override
+    public V visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<V> bluetoothCheckConnectAction) {
+        return null;
+    }
+
+    protected void increaseStmt() {
+        this.stmtsNumber++;
+    }
+
+    protected void increaseMethods() {
+        this.methodsNumber++;
+    }
+
+    /**
+     * @return the inStmt
+     */
+    protected boolean isInStmt() {
+        if ( this.inStmt.size() == 0 ) {
+            return false;
+        }
+        return this.inStmt.get(this.inStmt.size() - 1);
+    }
+
+    /**
+     * @param inStmt the inStmt to set
+     */
+    protected void addInStmt() {
+        this.inStmt.add(true);
+    }
+
+    protected void removeInStmt() {
+        if ( this.inStmt.size() != 0 ) {
+            this.inStmt.remove(this.inStmt.size() - 1);
+        }
+    }
+
+    protected void appendIfStmtConditions(IfStmt<V> ifStmt) {
+        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+            ifStmt.getExpr().get(i).visit(this);
+            if ( i < ifStmt.getExpr().size() - 1 ) {
+                this.sb.append(", ");
+            }
+        }
+    }
+
+    protected void appendElseStmt(IfStmt<V> ifStmt) {
+        if ( ifStmt.getElseList().get().size() != 0 ) {
+            addInStmt();
+            ifStmt.getElseList().visit(this);
+            removeInStmt();
+        }
+    }
+
+    protected void appendThenStmts(IfStmt<V> ifStmt) {
+        for ( int i = 0; i < ifStmt.getThenList().size(); i++ ) {
+            addInStmt();
+            this.sb.append("[");
+            ifStmt.getThenList().get(i).visit(this);
+            boolean isLastStmt = i < ifStmt.getThenList().size() - 1;
+            this.sb.append("]");
+            if ( isLastStmt ) {
+                this.sb.append(", ");
+            }
+            removeInStmt();
+        }
+    }
+
+    protected void appendRepeatStmtStatements(RepeatStmt<V> repeatStmt) {
+        if ( repeatStmt.getMode() == Mode.WAIT ) {
+            if ( repeatStmt.getList().get().size() != 0 ) {
+                this.sb.append("[");
+                repeatStmt.getList().visit(this);
+                this.sb.append("]");
+            }
+        } else {
+            repeatStmt.getList().visit(this);
+        }
+    }
+
+    protected void appendRepeatStmtCondition(RepeatStmt<V> repeatStmt) {
+        switch ( repeatStmt.getMode() ) {
+            case WAIT:
+                this.sb.append("createIfStmt([");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append("], [");
+                break;
+            case TIMES:
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
+                ((NumConst<V>) ((ExprList<V>) repeatStmt.getExpr()).get().get(2)).visit(this);
+                this.sb.append(", [");
+                break;
+            case FOREVER:
+            case WHILE:
+            case UNTIL:
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append(", [");
+                break;
+            case FOR:
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", [");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append("], [");
+                break;
+            case FOR_EACH:
+                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append(", [");
+                break;
+
+            default:
+                throw new DbcException("Invalid repeat mode");
+
+        }
+    }
+
+    protected String createClosingBracket() {
+        String end = ")";
+        if ( !isInStmt() ) {
+            this.sb.append("var stmt" + this.stmtsNumber + " = ");
+            increaseStmt();
+            end = ");\n";
+        }
+        return end;
+    }
+
+    protected void removeLastComma() {
+        if ( isInStmt() ) {
+            this.sb.setLength(this.sb.length() - 2);
+        }
+    }
+
+    protected void appendDuration(MotorDuration<V> duration) {
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
+        }
+    }
+
+    protected DriveDirection getDriveDirection(boolean isReverse) {
+        if ( isReverse ) {
+            return DriveDirection.BACKWARD;
+        }
+        return DriveDirection.FOREWARD;
+    }
+
+    protected TurnDirection getTurnDirection(boolean isReverse) {
+        if ( isReverse ) {
+            return TurnDirection.RIGHT;
+        }
+        return TurnDirection.LEFT;
+    }
+
+    protected void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<V>>> phrasesSet) {
+        for ( ArrayList<Phrase<V>> phrases : phrasesSet ) {
+            for ( Phrase<V> phrase : phrases ) {
+                phrase.visit(this);
+            }
+        }
+        appendProgramInitialization(this);
+    }
+
+    private void appendStmtsInitialization(SimulationVisitor<V> astVisitor) {
+        astVisitor.sb.append("'programStmts': [");
+        if ( astVisitor.stmtsNumber > 0 ) {
+            for ( int i = 0; i < astVisitor.stmtsNumber; i++ ) {
+                astVisitor.sb.append("stmt" + i);
+                if ( i != astVisitor.stmtsNumber - 1 ) {
+                    astVisitor.sb.append(",");
+                }
+
+            }
+        }
+        astVisitor.sb.append("]");
+    }
+
+    private void appendMethodsInitialization(SimulationVisitor<V> astVisitor) {
+        if ( astVisitor.methodsNumber > 0 ) {
+            astVisitor.sb.append("'programMethods': [");
+            for ( int i = 0; i < astVisitor.methodsNumber; i++ ) {
+                astVisitor.sb.append("method" + i);
+                if ( i != astVisitor.methodsNumber - 1 ) {
+                    astVisitor.sb.append(",");
+                } else {
+                    astVisitor.sb.append("], ");
+                }
+            }
+        }
+    }
+
+    private void appendProgramInitialization(SimulationVisitor<V> astVisitor) {
+        astVisitor.sb.append("var blocklyProgram = {");
+        appendMethodsInitialization(astVisitor);
+        appendStmtsInitialization(astVisitor);
+        astVisitor.sb.append("};");
+    }
+}

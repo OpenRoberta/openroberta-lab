@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -40,22 +41,26 @@ import de.fhg.iais.roberta.mode.sensor.nxt.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class NxtFactory extends AbstractRobotFactory {
-
-    private NxtCompilerWorkflow compilerWorkflow;
+    private final NxtCompilerWorkflow robotCompilerWorkflow;
+    private final NxtSimCompilerWorkflow simCompilerWorkflow;
     private final Properties nxtProperties;
 
     public NxtFactory(RobotCommunicator unusedForNxt) {
 
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("nxt");
-        this.compilerWorkflow =
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nxt");
+        this.robotCompilerWorkflow =
             new NxtCompilerWorkflow(
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
+                RobertaProperties.getTempDirForUserProjects(),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
+
+        this.simCompilerWorkflow = new NxtSimCompilerWorkflow();
         addBlockTypesFromProperties("NXT.properties", this.nxtProperties);
     }
 
@@ -436,11 +441,6 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
-        return this.compilerWorkflow;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
@@ -503,6 +503,16 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.robotCompilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        return this.simCompilerWorkflow;
+    }
+
+    @Override
     public String getProgramToolboxBeginner() {
         return this.nxtProperties.getProperty("robot.program.toolbox.beginner");
     }
@@ -551,4 +561,10 @@ public class NxtFactory extends AbstractRobotFactory {
     public Boolean isAutoconnected() {
         return this.nxtProperties.getProperty("robot.connection.server") != null ? true : false;
     }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return new SimulationProgramCheckVisitor(brickConfiguration);
+    }
+
 }

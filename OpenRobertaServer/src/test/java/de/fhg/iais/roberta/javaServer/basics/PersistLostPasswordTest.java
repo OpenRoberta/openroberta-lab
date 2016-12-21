@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.hibernate.Session;
 import org.junit.After;
@@ -16,7 +15,6 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class PersistLostPasswordTest {
@@ -32,8 +30,7 @@ public class PersistLostPasswordTest {
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util1.loadProperties("classpath:persistTmpPasswordTest.properties");
-        this.connectionUrl = properties.getProperty("hibernate.connection.url");
+        this.connectionUrl = "jdbc:hsqldb:mem:passwordInMemoryDb";
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         this.nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(this.nativeSession);
@@ -60,9 +57,7 @@ public class PersistLostPasswordTest {
 
     @Test
     public void createUrls() throws Exception {
-
         List<User> userList = this.userDao.loadUserList("created", 0, "rwth");
-        System.out.println(userList.size());
         Assert.isTrue(userList.size() == 5);
 
         for ( int userNumber = 0; userNumber < PersistLostPasswordTest.TOTAL_USERS; userNumber++ ) {
@@ -74,7 +69,6 @@ public class PersistLostPasswordTest {
                 this.hSession.commit();
             }
         }
-
         Assert.notNull(this.lostPasswordDao.get(2));
         Assert.isNull(this.lostPasswordDao.get(8));
     }

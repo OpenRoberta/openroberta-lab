@@ -26,7 +26,6 @@ public class DbTest {
         int counter = 0;
         for ( Object[] object : resultSet ) {
             try {
-                //                System.out.println((int) object[0]);
                 Helper.assertXMLtransformation((String) object[1]);
             } catch ( Exception e ) {
                 System.out.println((int) object[0] + ": " + e);

@@ -51,24 +51,7 @@ public class RobotDao extends AbstractDao<Robot> {
                 return il;
             }
         } else {
-
-            //    		Query hql = this.session.createQuery("from Robot");
             Query hql = this.session.createQuery("from Robot where tags=:tag order by " + sortBy);
-            //
-            //    		("SELECT Name, Day FROM Customers LEFT JOIN Reservations "
-            //    				+ "ON Customers.CustomerId = Reservations.CustomerId where relation.program =: program;");
-
-            //    		Query hql = this.session.createQuery("select u.id, u.account, up.relation "
-            //    				+ "from Robot as u "
-            //    				+ "left join u.relation RobotProgram "
-            //    				+ "where up.program =: program order by "+sortBy);
-            //
-
-            //            List<Object[]> list = query.list();
-            //            for(Object[] arr : list){
-            //                System.out.println(Arrays.toString(arr));
-            //            }
-
             hql.setFirstResult(offset);
             hql.setMaxResults(10);
             hql.setString("tag", tagFilter);

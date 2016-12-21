@@ -121,7 +121,7 @@ public class ClientProgram {
                 String programText = request.getString("programText");
                 String configurationText = request.getString("configurationText");
                 String javaSource =
-                    httpSessionState.getRobotFactory().getCompilerWorkflow().generateSourceCode(
+                    httpSessionState.getRobotFactory().getRobotCompilerWorkflow().generateSourceCode(
                         httpSessionState.getRobotFactory(),
                         token,
                         programName,
@@ -234,7 +234,7 @@ public class ClientProgram {
                 }
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = httpSessionState.getRobotFactory().getCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
+                    messageKey = httpSessionState.getRobotFactory().getRobotCompilerWorkflow().execute(token, programName, programAndConfigTransformer);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {
@@ -258,7 +258,7 @@ public class ClientProgram {
 
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    ICompilerWorkflow compilerWorkflow = httpSessionState.getRobotFactory().getCompilerWorkflow();
+                    ICompilerWorkflow compilerWorkflow = httpSessionState.getRobotFactory().getRobotCompilerWorkflow();
                     messageKey = compilerWorkflow.execute(token, programName, programAndConfigTransformer);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         response.put("compiledCode", compilerWorkflow.getCompiledCode());
@@ -280,19 +280,19 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
-                IRobotFactory factory = httpSessionState.getSimulationFactory();
+                IRobotFactory factory = httpSessionState.getRobotFactory();
                 boolean wasRobotWaiting = false;
 
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 //TODO program checks should be in compiler workflow
-                SimulationProgramCheckVisitor programChecker = new SimulationProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                SimulationProgramCheckVisitor programChecker = factory.getProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                    String javaScriptCode = factory.getCompilerWorkflow().generateSourceCode(factory, token, programName, programText, configurationText);
+                    String javaScriptCode = factory.getSimCompilerWorkflow().generateSourceCode(factory, token, programName, programText, configurationText);
 
                     ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                     response.put("javaScriptProgram", javaScriptCode);

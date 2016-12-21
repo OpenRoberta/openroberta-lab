@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -20,7 +21,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
@@ -35,16 +35,16 @@ import de.fhg.iais.roberta.mode.sensor.arduino.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ArduFactory extends AbstractRobotFactory {
-
     private ArduCompilerWorkflow compilerWorkflow;
     private final Properties arduProperties;
 
@@ -53,12 +53,12 @@ public class ArduFactory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        int robotPropertyNumber = Util1.getRobotNumberFromProperty("ardu");
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ardu");
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                Util1.getRobertaProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
+                RobertaProperties.getTempDirForUserProjects(),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
         addBlockTypesFromProperties("Ardu.properties", this.arduProperties);
     }
@@ -315,31 +315,6 @@ public class ArduFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
-        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
-            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-        }
-        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
-        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
-            if ( timerSens.toString().equals(sUpper) ) {
-                return timerSens;
-            }
-            for ( String value : timerSens.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return timerSens;
-                }
-            }
-        }
-        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-    }
-
-    @Override
-    public List<ITimerSensorMode> getTimerSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
         if ( motorTachoMode == null || motorTachoMode.isEmpty() ) {
             throw new DbcException("Invalid Motor Tacho Mode: " + motorTachoMode);
@@ -440,8 +415,14 @@ public class ArduFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getCompilerWorkflow() {
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
         return this.compilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getSimCompilerWorkflow() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
@@ -528,5 +509,10 @@ public class ArduFactory extends AbstractRobotFactory {
     @Override
     public Boolean isAutoconnected() {
         return this.arduProperties.getProperty("robot.connection.server") != null ? true : false;
+    }
+
+    @Override
+    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
     }
 }

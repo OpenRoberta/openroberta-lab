@@ -29,7 +29,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Initialize the program that is executed in the simulation.
-     *
+     * 
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -43,7 +43,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Function that executes one step of the program.
-     *
+     * 
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -90,8 +90,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     evalShowPictureAction(internal(this), stmt);
                     break;
 
+                case CONSTANTS.DISPLAY_IMAGE_ACTION:
+                    evalDisplayImageAction(internal(this), simulationData, stmt);
+                    break;
+
                 case CONSTANTS.SHOW_TEXT_ACTION:
                     evalShowTextAction(internal(this), stmt);
+                    break;
+
+                case CONSTANTS.DISPLAY_TEXT_ACTION:
+                    evalDisplayTextAction(internal(this),simulationData, stmt);
                     break;
 
                 case CONSTANTS.CLEAR_DISPLAY_ACTION:
@@ -111,11 +119,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     break;
 
                 case CONSTANTS.TURN_LIGHT:
-                    evalLedOnAction(internal(this), simulationData, stmt);
+                    evalTurnLightAction(internal(this), stmt);
+                    break;
+                    
+                case CONSTANTS.LED_ON_ACTION:
+                    evalLedOnAction(internal(this), stmt);
                     break;
 
                 case CONSTANTS.LIGHT_ACTION:
-                    evalLightSensorAction(internal(this), simulationData, stmt);
+                    evalLightSensorAction(internal(this), stmt);
                     break;
 
                 case CONSTANTS.STOP_DRIVE:
@@ -175,7 +187,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         newSpeeds = internal(this).actors.checkCoveredDistanceAndCorrectSpeed(internal(this).program, internal(this).simulationData.correctDrive);
         internal(this).program.handleWaitTimer();
         outputSpeeds(internal(this), newSpeeds);
-        // internal(this).outputCommands.terminated = internal(this).program.isTerminated();
+        internal(this).outputCommands.terminated = internal(this).program.isTerminated();
         return internal(this).outputCommands;
 
     };
@@ -192,12 +204,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var setSensorActorValues = function(obj, simulationData) {
         obj.simulationData = simulationData;
+        if (simulationData.encoder){
         obj.actors.getLeftMotor().setCurrentRotations(simulationData.encoder.left);
-        obj.actors.getRightMotor().setCurrentRotations(simulationData.encoder.right);
+        obj.actors.getRightMotor().setCurrentRotations(simulationData.encoder.right);}
+        if (simulationData.gyro){
         obj.gyro.update(simulationData.gyro.angle);
         obj.gyro.setRate(simulationData.gyro.rate);
+        }
         obj.program.getTimer().setCurrentTime(simulationData.time);
-        obj.program.setNextFrameTimeDuration(simulationData.frameTime);
+        // We multiply the next frame by two because of the unstable framre rate
+        obj.program.setNextFrameTimeDuration(simulationData.frameTime * 2.);
     };
 
     var outputSpeeds = function(obj, speeds) {
@@ -210,6 +226,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (speeds.right) {
             obj.outputCommands.motors.powerRight = speeds.right;
         }
+        //console.log('left: %s; right: %s', obj.outputCommands.motors.powerLeft, obj.outputCommands.motors.powerRight);
     };
 
     var evalResetEncoderSensor = function(obj, stmt) {
@@ -236,16 +253,21 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.program.setTimer(evalExpr(obj, stmt.time));
     };
 
-    var evalLightSensorAction = function(obj, simulationData, stmt) {
+    var evalLightSensorAction = function(obj, stmt) {
         obj.outputCommands.led = {}
         obj.outputCommands.led.color = stmt.color;
         obj.outputCommands.led.mode = stmt.mode;
     };
 
-    var evalLedOnAction = function(obj, simulationData, stmt) {
+    var evalTurnLightAction = function(obj, stmt) {
         obj.outputCommands.led = {}
         obj.outputCommands.led.color = stmt.color;
-        obj.outputCommands.led.mode = stmt.mode;
+            obj.outputCommands.led.mode = stmt.mode;
+    };
+    
+    var evalLedOnAction = function(obj, stmt) {
+        obj.outputCommands.led = {}
+        obj.outputCommands.led.color = evalExpr(obj, stmt.rgbColor);
     };
 
     var evalLedStatusAction = function(obj, stmt) {
@@ -263,12 +285,37 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
     };
 
+    var evalDisplayImageAction = function(obj, simulationData, stmt) {
+        obj.outputCommands.display = {};
+        obj.outputCommands.display.mode = stmt.mode;
+        if (stmt.mode == CONSTANTS.IMAGE) {
+            obj.outputCommands.display.picture = evalExpr(obj, stmt.image);
+        } else if (stmt.mode == CONSTANTS.ANIMATION) {
+            obj.outputCommands.display.picture = evalExpr(obj, stmt.image);
+            obj.program.setIsRunningTimer(true);
+            obj.program.resetTimer(simulationData.time);
+            var duration = obj.outputCommands.display.picture.length * 200;
+            obj.program.setTimer(duration);         
+        }
+    };
+
     var evalShowTextAction = function(obj, stmt) {
         obj.outputCommands.display = {};
         var val = evalExpr(obj, stmt.text);
         obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
         obj.outputCommands.display.x = evalExpr(obj, stmt.x);
         obj.outputCommands.display.y = evalExpr(obj, stmt.y);
+    };
+
+    var evalDisplayTextAction = function(obj, simulationData, stmt) {
+        obj.outputCommands.display = {};
+        var val = evalExpr(obj, stmt.text);
+        obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
+        obj.program.setIsRunningTimer(true);
+        obj.program.resetTimer(simulationData.time);
+        // TODO get the time needed to display this specific string from the simulation or a finish flag.
+        var duration = (obj.outputCommands.display.text.length + 1) * 7 * 150;
+        obj.program.setTimer(duration);   
     };
 
     var roundIfSensorData = function(val, exprType) {
@@ -339,16 +386,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var evalMethodCallReturn = function(obj, name, paramters, values) {
-        //        var method = obj.program.getMethod(name);
-        //        for (var i = 0; i < parameters.length; i++) {
-        //            var parameter = parameters[i];
-        //            var value = values[i]
-        //            if (obj.memory.get(parameter.name) == undefined) {
-        //                obj.memory.decl(parameter.name, evalExpr(obj, value))
-        //            } else {
-        //                obj.memory.assign(parameter.name, evalExpr(obj, value));
-        //            }
-        //        }
+//                var method = obj.program.getMethod(name);
+//                for (var i = 0; i < parameters.length; i++) {
+//                    var parameter = parameters[i];
+//                    var value = values[i]
+//                    if (obj.memory.get(parameter.name) == undefined) {
+//                        obj.memory.decl(parameter.name, evalExpr(obj, value))
+//                    } else {
+//                        obj.memory.assign(parameter.name, evalExpr(obj, value));
+//                    }
+//                }
     };
 
     var evalTurnAction = function(obj, stmt) {
@@ -374,9 +421,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
             obj.actors.initLeftTachoMotor(obj.simulationData.encoder.left);
             obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
-        } else {
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_RIGHT) {
             obj.actors.initRightTachoMotor(obj.simulationData.encoder.right);
             obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XA) {
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XB) {
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XAB) {
+            obj.actors.setRightMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
+            obj.actors.setLeftMotorSpeed(evalExpr(obj, stmt.speed), CONSTANTS.FOREWARD);
         }
         setDurationToCover(obj, stmt);
     };
@@ -392,7 +446,14 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalMotorStopAction = function(obj, stmt) {
         if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_LEFT) {
             obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
-        } else {
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_RIGHT) {
+            obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XA) {
+            obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XB) {
+            obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
+        } else if (stmt[CONSTANTS.MOTOR_SIDE] == CONSTANTS.MOTOR_XAB) {
+            obj.actors.setLeftMotorSpeed(0, CONSTANTS.FOREWARD);
             obj.actors.setRightMotorSpeed(0, CONSTANTS.FOREWARD);
         }
     };
@@ -502,16 +563,19 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalExpr = function(obj, expr) {
         switch (expr.expr) {
             case CONSTANTS.NUM_CONST:
+            case CONSTANTS.LED_COLOR_CONST:
             case CONSTANTS.BOOL_CONST:
             case CONSTANTS.COLOR_CONST:
             case CONSTANTS.STRING_CONST:
+            case CONSTANTS.IMAGE_CONST:
                 return expr.value;
             case CONSTANTS.NULL_CONST:
                 return null;
             case CONSTANTS.ARRAY_NUMBER:
             case CONSTANTS.ARRAY_STRING:
             case CONSTANTS.ARRAY_COLOUR:
-            case CONSTANTS.ARRAY_BOOLEAN:
+            case CONSTANTS.ARRAY_BOOLEAN: 
+            case CONSTANTS.ARRAY_IMAGE:                
                 return evalArray(obj, expr.value);
             case CONSTANTS.CREATE_LIST_WITH_ITEM:
                 return evalCreateArrayWithItem(obj, expr.size, expr.value);
@@ -561,6 +625,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 return evalGetVolume(obj);
             case CONSTANTS.METHOD_CALL_RETURN:
                 return evalMethodCallReturn(obj, expr.name, expr.parameters, expr.values);
+            case CONSTANTS.RGB_COLOR_CONST:
+                return evalRgbColorConst(obj, expr.value);
             default:
                 throw "Invalid Expression Type!";
         }
@@ -603,6 +669,13 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var evalGetVolume = function(obj) {
         return obj.simulationData[CONSTANTS.VOLUME];
+    };
+
+    var evalRgbColorConst = function(obj, value) {
+        var red = evalExpr(obj, value[0]);
+        var green = evalExpr(obj, value[1]);
+        var blue = evalExpr(obj, value[2]);
+        return [red, green, blue];
     };
 
     var evalBinary = function(obj, op, left, right) {

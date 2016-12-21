@@ -24,6 +24,8 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Blink;
+import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.LookAt;
@@ -32,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
 import de.fhg.iais.roberta.syntax.action.nao.PointAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
@@ -104,6 +107,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.HeadTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecordVideo;
+import de.fhg.iais.roberta.syntax.sensor.nao.SelectCamera;
+import de.fhg.iais.roberta.syntax.sensor.nao.SensorTouched;
+import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
+import de.fhg.iais.roberta.syntax.sensor.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -813,4 +825,65 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitGetVolume(GetVolume<Void> getVolume) {
+        return null;
+    }
+
+    @Override
+    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+        return null;
+    }
+
+    @Override
+    public Void visitHeadTouched(HeadTouched<Void> headTouched) {
+        return null;
+    }
+
+    @Override
+    public Void visitSensorTouched(SensorTouched<Void> sensorTouched) {
+        return null;
+    }
+
+    @Override
+    public Void visitNaoMark(NaoMark<Void> naoMark) {
+        return null;
+    }
+
+    @Override
+    public Void visitSonar(Sonar<Void> sonar) {
+        return null;
+    }
+
+    @Override
+    public Void visitSelectCamera(SelectCamera<Void> selectCamera) {
+        return null;
+    }
+
+    @Override
+    public Void visitTakePicture(TakePicture<Void> takePicture) {
+        return null;
+    }
+
+    @Override
+    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+        recordVideo.getDuration().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitGyrometer(Gyrometer<Void> gyrometer) {
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayText(SayText<Void> sayText) {
+        sayText.getMsg().visit(this);
+        return null;
+    }
 }
