@@ -1,6 +1,7 @@
 language: java
 
 before_script:
+- ora.sh --reset-db
 - cd OpenRobertaParent
 
 after_success:
