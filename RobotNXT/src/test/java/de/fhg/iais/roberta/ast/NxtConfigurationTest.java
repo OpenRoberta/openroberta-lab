@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
-import de.fhg.iais.roberta.transformer.NxtConfigurationParseTree2NxtConfigurationVisitor;
 
 public class NxtConfigurationTest {
     NxtFactory factory = new NxtFactory(null);
@@ -21,9 +20,9 @@ public class NxtConfigurationTest {
 
     @Test
     public void testText2Text() throws Exception {
-        testText2Text("brick_configuration0", "craesy");
-        testText2Text("brick_configuration4", "craesy");
-        testText2Text("standard_ev3_configuration", "EV3basis");
+        testText2Text();
+        testText2Text();
+        testText2Text();
     }
 
     @Test
@@ -101,24 +100,6 @@ public class NxtConfigurationTest {
         //        Assert.assertEquals(bc2, bc3);
     }
 
-    /**
-     * TEST TEXT to TEXT TRANSFORMATION. Expects a textual representation of a configuration as text file.<br>
-     * <br>
-     * 1. make a String from a textual configuration file, call it text1<br>
-     * 2. generate a BrickConfiguration bc1 from text1<br>
-     * 3. from the BrickConfiguration bc1 generate text2<br>
-     * 4. check text1 against text2.<br>
-     * 5. generate a BrickConfiguration bc2 from text2<br>
-     * 6. check bc1 against bc2.<br>
-     */
-    private void testText2Text(String baseName, String name) throws Exception {
-        String text1 = resourceAsString(baseName + ".conf"); // 1.
-        Configuration bc1 = NxtConfigurationParseTree2NxtConfigurationVisitor.startWalkForVisiting(text1, this.factory).getVal(); // 2.
-        String text2 = bc1.generateText(name); // 3.
-        assertEq(text1, text2); // 4.
-        Configuration bc2 = NxtConfigurationParseTree2NxtConfigurationVisitor.startWalkForVisiting(text1, this.factory).getVal();
-        Assert.assertEquals(bc1, bc2);
-    }
 
     private String resourceAsString(String name) throws Exception {
         return IOUtils.toString(NxtConfigurationTest.class.getResourceAsStream("/ast/brickConfiguration/" + name), "UTF-8");

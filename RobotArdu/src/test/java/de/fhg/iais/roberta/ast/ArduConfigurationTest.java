@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.transformer.ArduConfigurationParseTree2ArduConfigurationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
 
 public class ArduConfigurationTest {
@@ -23,9 +22,9 @@ public class ArduConfigurationTest {
     @Ignore // currently there is only one fixed configuration allowed
     @Test
     public void testText2Text() throws Exception {
-        testText2Text("brick_configuration0", "craesy");
-        testText2Text("brick_configuration4", "craesy");
-        testText2Text("standard_ev3_configuration", "EV3basis");
+        testText2Text();
+        testText2Text();
+        testText2Text();
     }
 
     @Test
@@ -74,24 +73,7 @@ public class ArduConfigurationTest {
         //        Assert.assertEquals(bc2, bc3);
     }
 
-    /**
-     * TEST TEXT to TEXT TRANSFORMATION. Expects a textual representation of a configuration as text file.<br>
-     * <br>
-     * 1. make a String from a textual configuration file, call it text1<br>
-     * 2. generate a BrickConfiguration bc1 from text1<br>
-     * 3. from the BrickConfiguration bc1 generate text2<br>
-     * 4. check text1 against text2.<br>
-     * 5. generate a BrickConfiguration bc2 from text2<br>
-     * 6. check bc1 against bc2.<br>
-     */
-    private void testText2Text(String baseName, String name) throws Exception {
-        String text1 = resourceAsString(baseName + ".conf"); // 1.
-        Configuration bc1 = ArduConfigurationParseTree2ArduConfigurationVisitor.startWalkForVisiting(text1, this.factory).getVal(); // 2.
-        String text2 = bc1.generateText(name); // 3.
-        assertEq(text1, text2); // 4.
-        Configuration bc2 = ArduConfigurationParseTree2ArduConfigurationVisitor.startWalkForVisiting(text1, this.factory).getVal();
-        Assert.assertEquals(bc1, bc2);
-    }
+
 
     private String resourceAsString(String name) throws Exception {
         return IOUtils.toString(ArduConfigurationTest.class.getResourceAsStream("/ast/brickConfiguration/" + name), "UTF-8");
