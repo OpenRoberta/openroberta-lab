@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -17,7 +18,8 @@ public class NxtConfigurationTest {
     public void testRoundtrip() throws Exception {
         testRoundtrip("brick_configuration0");
     }
-
+    
+    @Ignore
     @Test
     public void testText2Text() throws Exception {
         testText2Text();
