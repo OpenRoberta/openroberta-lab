@@ -43,7 +43,7 @@ function _aliveFn {
     then
        curl --max-time $timeout "http://$serverurl/rest/alive" > /dev/null
        rc=$?
-    else 
+    else
        curl --max-time $timeout "http://$serverurl/rest/alive"
        rc=$?
        if [[ $rc == 0 ]]
@@ -151,15 +151,15 @@ java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db/${databaseN
 }
 
 function _updateLejos {
-  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
   run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="RobotEV3/target/updateResources/EV3Runtime.jar"
-  json='RobotEV3/target/updateResources/json.jar'
-  websocket='RobotEV3/target/updateResources/Java-WebSocket.jar'
+  runtime="RobotEV3/resources/updateResources/EV3Runtime.jar"
+  json='RobotEV3/resources/updateResources/json.jar'
+  websocket='RobotEV3/resources/updateResources/Java-WebSocket.jar'
   run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
