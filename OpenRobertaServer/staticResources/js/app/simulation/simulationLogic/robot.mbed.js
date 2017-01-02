@@ -107,37 +107,39 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
      * 
      */
     Mbed.prototype.update = function(actions) {
-        if (actions.display && actions.display.text) {
-            var that = Mbed.prototype;
-            var textArray = generate(actions.display.text);
-            function f(textArray, that) {
-                if (textArray && textArray.length >= 5) {
-                    var array = textArray.slice(0, 5);
-                    var newArray = array[0].map(function(col, i) {
-                        return array.map(function(row) {
-                            return row[i]
-                        })
-                    });
-                    that.display.leds = newArray;
-                    textArray.shift();
-                    that.display.timeout = setTimeout(f, 150, textArray, that);
-                }
-            }
-            f(textArray, that);
-        }
-        if (actions.display && actions.display.picture) {
-            if (actions.display.mode == 'animation') {
-                var animation = actions.display.picture;
-                var that = this;
-                function f(animation, index, that) {
-                    if (animation && animation.length > index) {
-                        that.display.leds = animation[index];
-                        that.display.timeout = setTimeout(f, 150, animation, index + 1, that);
+        if (actions.display) {
+            if (actions.display.text) {
+                var that = Mbed.prototype;
+                var textArray = generate(actions.display.text);
+                function f(textArray, that) {
+                    if (textArray && textArray.length >= 5) {
+                        var array = textArray.slice(0, 5);
+                        var newArray = array[0].map(function(col, i) {
+                            return array.map(function(row) {
+                                return row[i]
+                            })
+                        });
+                        that.display.leds = newArray;
+                        textArray.shift();
+                        that.display.timeout = setTimeout(f, 150, textArray, that);
                     }
                 }
-                f(animation, 0, that);
-            } else {
-                this.display.leds = actions.display.picture;
+                f(textArray, that);
+            }
+            if (actions.display.picture) {
+                if (actions.display.mode == 'animation') {
+                    var animation = actions.display.picture;
+                    var that = this;
+                    function f(animation, index, that) {
+                        if (animation && animation.length > index) {
+                            that.display.leds = animation[index];
+                            that.display.timeout = setTimeout(f, 150, animation, index + 1, that);
+                        }
+                    }
+                    f(animation, 0, that);
+                } else {
+                    this.display.leds = actions.display.picture;
+                }
             }
             if (actions.display.clear) {
                 this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
