@@ -34,6 +34,7 @@ public class MailManagement {
         this.props.put("mail.smtp.auth", auth);
         this.props.put("mail.smtp.starttls.enable", starttls);
         this.props.put("mail.smtp.host", host);
+        this.props.put("mail.smtp.ssl.trust", host);
         this.props.put("mail.smtp.port", port);
         this.props.put("reset.url", resetUrl);
         this.props.put("reset.text.de", resetTextDe);
