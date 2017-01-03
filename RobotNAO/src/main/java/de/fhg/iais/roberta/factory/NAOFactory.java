@@ -27,7 +27,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.nao.ActorPort;
 import de.fhg.iais.roberta.mode.action.nao.BlinkMode;
 import de.fhg.iais.roberta.mode.action.nao.BrickLedColor;
-import de.fhg.iais.roberta.mode.action.nao.ShowPicture;
 import de.fhg.iais.roberta.mode.sensor.nao.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.GyroSensorMode;
@@ -139,21 +138,7 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public IShowPicture getShowPicture(String picture) {
-        if ( picture == null || picture.isEmpty() ) {
-            throw new DbcException("Invalid Picture: " + picture);
-        }
-        String sUpper = picture.trim().toUpperCase(Locale.GERMAN);
-        for ( ShowPicture pic : ShowPicture.values() ) {
-            if ( pic.toString().equals(sUpper) ) {
-                return pic;
-            }
-            for ( String value : pic.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return pic;
-                }
-            }
-        }
-        throw new DbcException("Invalid Picture: " + picture);
+        return null;
     }
 
     @Override

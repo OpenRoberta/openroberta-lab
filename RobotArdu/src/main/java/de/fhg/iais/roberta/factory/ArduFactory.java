@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
 import de.fhg.iais.roberta.mode.action.arduino.BrickLedColor;
-import de.fhg.iais.roberta.mode.action.arduino.ShowPicture;
 import de.fhg.iais.roberta.mode.sensor.arduino.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.arduino.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.GyroSensorMode;
@@ -135,31 +134,6 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public List<IBrickLedColor> getBrickLedColors() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IShowPicture getShowPicture(String picture) {
-        if ( picture == null || picture.isEmpty() ) {
-            throw new DbcException("Invalid Picture: " + picture);
-        }
-        String sUpper = picture.trim().toUpperCase(Locale.GERMAN);
-        for ( ShowPicture pic : ShowPicture.values() ) {
-            if ( pic.toString().equals(sUpper) ) {
-                return pic;
-            }
-            for ( String value : pic.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return pic;
-                }
-            }
-        }
-        throw new DbcException("Invalid Picture: " + picture);
-    }
-
-    @Override
-    public List<IShowPicture> getShowPictures() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -513,6 +487,18 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
+    }
+
+    @Override
+    public IShowPicture getShowPicture(String picture) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IShowPicture> getShowPictures() {
+        // TODO Auto-generated method stub
         return null;
     }
 }

@@ -8,5 +8,5 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  * @author kcvejoski
  */
 public interface IShowPicture extends IMode {
-
+    public String getPicture();
 }
