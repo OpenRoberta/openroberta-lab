@@ -658,7 +658,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(r'").append(showPictureAction.getPicture().getPicture()).append("', ");
+        this.sb.append("hal.drawPicture(r'").append(showPictureAction.getPicture().getPixels()).append("', ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);

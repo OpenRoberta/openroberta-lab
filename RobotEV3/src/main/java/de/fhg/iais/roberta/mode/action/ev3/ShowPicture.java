@@ -38,7 +38,7 @@ public enum ShowPicture implements IShowPicture {
     }
 
     @Override
-    public String getPicture() {
+    public String getPixels() {
         return this.picture;
     }
 }
