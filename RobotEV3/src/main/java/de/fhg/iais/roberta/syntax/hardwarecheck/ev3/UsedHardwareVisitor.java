@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.SensorType;
@@ -119,7 +120,10 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorGetPowerAction.getPort());
+            this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
@@ -129,20 +133,29 @@ public class UsedHardwareVisitor extends CheckVisitor {
         if ( motorOnAction.getParam().getDuration() != null ) {
             motorOnAction.getDurationValue().visit(this);
         }
-        this.usedActors.add(new UsedActor(motorOnAction.getPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
+            this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         motorSetPowerAction.getPower().visit(this);
-        this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorSetPowerAction.getPort());
+            this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.usedActors.add(new UsedActor(motorStopAction.getPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorStopAction.getPort());
+            this.usedActors.add(new UsedActor(motorStopAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
@@ -159,7 +172,10 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        this.usedActors.add(new UsedActor(encoderSensor.getMotorPort(), ActorType.LARGE));
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(encoderSensor.getMotorPort());
+            this.usedActors.add(new UsedActor(encoderSensor.getMotorPort(), actor.getName()));
+        }
         return null;
     }
 
