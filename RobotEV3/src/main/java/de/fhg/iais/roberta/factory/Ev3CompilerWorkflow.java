@@ -4,14 +4,13 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.components.CompilerFeedback;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.JavaSourceCompiler;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
@@ -96,7 +95,7 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
         }
         switch ( lang ) {
             case JAVA:
-                Key messageKey = runBuild(token, programName, "generated.main");
+                Key messageKey = runBuild(programName, "generated.main", sourceCode);
                 if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                     Ev3CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
                 } else {
@@ -161,69 +160,20 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
      * 3. Compile .java files to .class.<br>
      * 4. Make jar from class files and add META-INF entries.<br>
      *
-     * @param token
      * @param mainFile
      * @param mainPackage
+     * @param sourceCode
      */
-    public Key runBuild(String token, String mainFile, String mainPackage) {
-        final StringBuilder sb = new StringBuilder();
-        try {
-            File buildFile = new File(this.pathToCrossCompilerBuildXMLResource);
-            org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
+    public Key runBuild(String mainFile, String mainPackage, String sourceCode) {
+        JavaSourceCompiler scp = new JavaSourceCompiler(mainPackage + mainFile, sourceCode);
+        CompilerFeedback feedback = scp.compile();
 
-            project.init();
-            project.setProperty("user.projects.dir", this.pathToCrosscompilerBaseDir);
-            project.setProperty("crosscompiler.resources.dir", this.crossCompilerResourcesDir);
-            project.setProperty("token.dir", token);
-            project.setProperty("main.name", mainFile);
-            project.setProperty("main.package", mainPackage);
-
-            ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
-            projectHelper.parse(project, buildFile);
-
-            project.addBuildListener(new BuildListener() {
-                @Override
-                public void taskStarted(BuildEvent event) {
-                }
-
-                @Override
-                public void taskFinished(BuildEvent event) {
-                }
-
-                @Override
-                public void targetStarted(BuildEvent event) {
-                    sb.append("targetStart: ").append(event.getTarget().getName()).append("\n");
-                }
-
-                @Override
-                public void targetFinished(BuildEvent event) {
-                    sb.append("targetEnd:   ").append(event.getTarget().getName()).append("\n");
-                }
-
-                @Override
-                public void messageLogged(BuildEvent event) {
-                    sb.append(event.getMessage()).append("\n");
-                }
-
-                @Override
-                public void buildStarted(BuildEvent event) {
-                }
-
-                @Override
-                public void buildFinished(BuildEvent event) {
-                }
-            });
-            project.executeTarget(project.getDefaultTarget());
-            // LOG.info("build ok. Messages from build script are:\n" + sb.toString());
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                Ev3CompilerWorkflow.LOG.error("exception when preparing the build", e);
-            }
+        if ( !feedback.isSuccess() ) {
+            Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + feedback.toString());
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
+
+        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     /**
