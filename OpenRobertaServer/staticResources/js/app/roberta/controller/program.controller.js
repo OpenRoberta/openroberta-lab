@@ -744,5 +744,5 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         setTimeout(function() {
             listenToBlocklyEvents = true;
         }, 500);
-    }
+   }
 });

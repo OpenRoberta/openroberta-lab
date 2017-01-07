@@ -1,4 +1,6 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
+        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
+        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -87,6 +89,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
     function initMenuEvents() {
         $('[rel="tooltip"]').tooltip({
             placement : "right"
+        });
+        // prevent Safari 10. from zooming
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
         });
 
         $('.modal').on('shown.bs.modal', function() {
@@ -222,27 +229,27 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             if (domId === 'menuSimSimple') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simSimple').parent().addClass('disabled');
-                SIM.setBackground(1, SIM.setBackground);
+                SIM.setBackground(2, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimDraw') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simDraw').parent().addClass('disabled');
-                SIM.setBackground(2, SIM.setBackground);
+                SIM.setBackground(3, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimRoberta') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simRoberta').parent().addClass('disabled');
-                SIM.setBackground(3, SIM.setBackground);
+                SIM.setBackground(4, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimRescue') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simRescue').parent().addClass('disabled');
-                SIM.setBackground(4, SIM.setBackground);
+                SIM.setBackground(5, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimMath') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simMath').parent().addClass('disabled');
-                SIM.setBackground(5, SIM.setBackground);
+                SIM.setBackground(6, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             }
         }, 'sim clicked');
@@ -315,10 +322,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                     top : 100,
                     left : 50,
                 });
-                $('#simRobotModal').draggable();
             }
+            $('#simRobotModal').draggable();
+
             $("#simButtonsCollapse").collapse('hide');
         }, 'simRobot clicked');
+
+        $('#simImport').onWrap('click', function(event) {
+            SIM.importImage();
+        }, 'simImport clicked');
 
         $('#menuTabProgram').onWrap('click', '', function(event) {
             if ($('#tabSimulation').hasClass('tabClicked')) {
@@ -383,21 +395,19 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'head navigation menu item clicked');
 
         $('#simRobotModal').removeClass("modal-backdrop");
-        // $('#simRobotModal').draggable();
-        //  $('#simRobotModal').resizable();
         $('.simScene').onWrap('click', function(event) {
-            SIM.setBackground(0, SIM.setBackground);
+            SIM.setBackground(-1, SIM.setBackground);
             var scene = $("#simButtonsCollapse").collapse('hide');
             $('.menuSim').parent().removeClass('disabled');
-            if (scene == 1) {
+            if (scene == 2) {
                 $('.simSimple').parent().addClass('disabled');
-            } else if (scene == 2) {
-                $('.simDraw').parent().addClass('disabled');
             } else if (scene == 3) {
-                $('.simRoberta').parent().addClass('disabled');
+                $('.simDraw').parent().addClass('disabled');
             } else if (scene == 4) {
-                $('.simRescue').parent().addClass('disabled');
+                $('.simRoberta').parent().addClass('disabled');
             } else if (scene == 5) {
+                $('.simRescue').parent().addClass('disabled');
+            } else if (scene == 6) {
                 $('.simMath').parent().addClass('disabled');
             }
         }, 'simScene clicked');
@@ -438,7 +448,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('.popup-robot').onWrap('click', function(event) {
             event.preventDefault();
-            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type || event.target.dataset.type;
+            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
+                    || event.target.dataset.type;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {

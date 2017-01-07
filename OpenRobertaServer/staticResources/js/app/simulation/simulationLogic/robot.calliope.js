@@ -162,7 +162,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
 
     } else {
         var context = null;
-        alert("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+        console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
     }
 
     Calliope.prototype.webAudio = {

@@ -31,12 +31,12 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
         var robot = this;
         $("#simRobotContent").html(this.svg);
         for ( var property in robot.buttons) {
-            $('#' + property).off('mousedown');
-            $('#' + property).on('mousedown', function() {
+            $('#' + property).off('mousedown touchstart');
+            $('#' + property).on('mousedown touchstart', function() {
                 robot.buttons[this.id] = true;
             });
-            $('#' + property).off('mouseup');
-            $('#' + property).on('mouseup', function() {
+            $('#' + property).off('mouseup touchend');
+            $('#' + property).on('mouseup touchend', function() {
                 robot.buttons[this.id] = false;
             });
         }
@@ -146,7 +146,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
 
     } else {
         var context = null;
-        alert("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
+        console.log("Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox");
     }
 
     Ev3.prototype.webAudio = {
@@ -336,23 +336,17 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
                 this.encoder.right = 0;
             }
         }
-
-        this.bumpedAready = false;
         if (this.frontLeft.bumped && this.left > 0) {
             this.left *= -1;
-            this.bumpedAready = true;
         }
         if (this.backLeft.bumped && this.left < 0) {
             this.left *= -1;
-            this.bumpedAready = true;
         }
         if (this.frontRight.bumped && this.right > 0) {
             this.right *= -1;
-            this.bumpedAready = true;
         }
         if (this.backRight.bumped && this.right < 0) {
             this.right *= -1;
-            this.bumpedAready = true;
         }
         if (this.right == this.left) {
             var moveXY = this.right * SIM.getDt();

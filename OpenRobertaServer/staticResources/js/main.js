@@ -11,7 +11,6 @@ require.config({
         'jquery' : 'jquery/jquery-2.1.4.min',
         'jquery-cookie' : 'jquery/jquery.cookie',
         'jquery-scrollto' : 'jquery/jquery.scrollTo.min',
-        'jquery-ui' : 'jquery/jquery-ui-1.10.4.custom.min',
         'jquery-validate' : 'jquery/jquery.validate.min',
         'prettify' : 'code-prettify/prettify',
         'volume-meter' : 'sound/volume-meter',
@@ -147,12 +146,12 @@ function init() {
         configurationController.init();
         programController.init();
         menuController.init();
-        $(".pace").fadeOut(500, function() {
-            $(".cover").fadeOut(500);
+        $(".cover").fadeOut(100, function(){
             if (guiStateController.noCookie()) {
                 $("#show-startup-message").modal("show");
             }
         });
+        $(".pace").fadeOut(500);
     });
 }
 

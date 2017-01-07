@@ -1,10 +1,17 @@
 /**
  * Module representing actors of the robot.
- *
+ * 
  * @module robertaLogic/actors
  */
-define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor, UTIL, CONSTANTS) {
-    var privateMem = new WeakMap();
+define([ 'robertaLogic.motor', 'util', 'robertaLogic.constants' ], function(Motor, UTIL, CONSTANTS) {
+
+    var privateMem;
+    try {
+        privateMem = new WeakMap();
+    } catch (err) {
+        alert(err + '\n\n' + 'Unfortunately you cannot use the Open Roberta Lab with this browser.\n' + 'Please, consider upgrading your browser to the latest version or downloading Google Chrome or Mozilla Firefox');
+        document.write('<script type="text/undefined">');
+    }
 
     var internal = function(object) {
         if (!privateMem.has(object)) {
@@ -15,7 +22,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * @constructor Create an instance of the class Actors.
-     *
+     * 
      * @alias module:robertaLogic/actors
      */
     var Actors = function() {
@@ -27,7 +34,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Get the left motor of the robot.
-     *
+     * 
      * @returns {Actors} - left motor of the robot
      */
     Actors.prototype.getLeftMotor = function() {
@@ -36,7 +43,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Get the right motor of the robot.
-     *
+     * 
      * @returns {Actors} - right motor of the robot
      */
     Actors.prototype.getRightMotor = function() {
@@ -45,7 +52,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Sets the speed of the actors on the robot.
-     *
+     * 
      * @param speed
      *            {Number} - in percentage [0-100]
      * @param direction
@@ -62,7 +69,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
     /**
      * Sets the angle speed of the actors on the robot for turning left and
      * right.
-     *
+     * 
      * @param speed
      *            {Number} - in percentage [0-100]
      * @param direction
@@ -80,7 +87,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Initialize the tacho sensor on the left motor
-     *
+     * 
      * @param value
      *            {Number} - number of rotations that we want the robot to make.
      */
@@ -91,7 +98,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Initialize the tacho sensor on the right motor
-     *
+     * 
      * @param value
      *            {Number} - number of rotations that we want the robot to make.
      */
@@ -102,7 +109,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Initialize the tacho sensor on the robot motors
-     *
+     * 
      * @param leftMotorValue
      *            {Number} - number of rotations that we want the robot to make
      *            on the left motor
@@ -119,7 +126,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
      * Calculate how much distance has the robot covered. If the required
      * distance is not covered block the execution of the next statement of the
      * program.
-     *
+     * 
      * @param program
      *            {Program}
      */
@@ -132,37 +139,37 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
         if (internal(this).distanceToCover) {
             switch (internal(this).driveMode) {
-                case CONSTANTS.PILOT:
-                    if (isLeftMotorFinished && isRightMotorFinished) {
-                        internal(this).leftMotor.setPower(0);
-                        internal(this).rightMotor.setPower(0);
-                        internal(this).distanceToCover = false;
-                        program.setNextStatement(true);
-                    } else if (isCorrectSpeed) {
-                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor, CONSTANTS.MOTOR_LEFT);
-                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor, CONSTANTS.MOTOR_RIGHT);
-                    }
-                    break;
+            case CONSTANTS.PILOT:
+                if (isLeftMotorFinished && isRightMotorFinished) {
+                    internal(this).leftMotor.setPower(0);
+                    internal(this).rightMotor.setPower(0);
+                    internal(this).distanceToCover = false;
+                    program.setNextStatement(true);
+                } else if (isCorrectSpeed) {
+                    corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor, CONSTANTS.MOTOR_LEFT);
+                    corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor, CONSTANTS.MOTOR_RIGHT);
+                }
+                break;
 
-                case CONSTANTS.MOTOR_LEFT:
-                    if (isLeftMotorFinished) {
-                        internal(this).leftMotor.setPower(0);
-                        internal(this).distanceToCover = false;
-                        program.setNextStatement(true);
-                    } else if (isCorrectSpeed) {
-                        corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor, CONSTANTS.MOTOR_LEFT);
-                    }
-                    break;
+            case CONSTANTS.MOTOR_LEFT:
+                if (isLeftMotorFinished) {
+                    internal(this).leftMotor.setPower(0);
+                    internal(this).distanceToCover = false;
+                    program.setNextStatement(true);
+                } else if (isCorrectSpeed) {
+                    corectedSpeeds.left = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).leftMotor, CONSTANTS.MOTOR_LEFT);
+                }
+                break;
 
-                case CONSTANTS.MOTOR_RIGHT:
-                    if (isRightMotorFinished) {
-                        internal(this).rightMotor.setPower(0);
-                        internal(this).distanceToCover = false;
-                        program.setNextStatement(true);
-                    } else if (isCorrectSpeed) {
-                        corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor, CONSTANTS.MOTOR_RIGHT);
-                    }
-                    break;
+            case CONSTANTS.MOTOR_RIGHT:
+                if (isRightMotorFinished) {
+                    internal(this).rightMotor.setPower(0);
+                    internal(this).distanceToCover = false;
+                    program.setNextStatement(true);
+                } else if (isCorrectSpeed) {
+                    corectedSpeeds.right = this.speedCorrection(program.getNextFrameTimeDuration(), internal(this).rightMotor, CONSTANTS.MOTOR_RIGHT);
+                }
+                break;
             }
 
         }
@@ -172,7 +179,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
     /**
      * Set the robot to cover an angle and block execution of the next statement
      * in the program.
-     *
+     * 
      * @param program
      * @param angle
      *            {Number} - angle we want to cover
@@ -189,7 +196,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
     /**
      * Set the robot to cover a distance and block execution of the next
      * statement in the program.
-     *
+     * 
      * @param program
      * @param distance
      *            {Number} - distance we want to cover
@@ -205,7 +212,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Set the speed of the motor.
-     *
+     * 
      * @param value
      *            {Number} - power of the motor in percent [0-100]
      */
@@ -218,7 +225,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Set the speed of the motor.
-     *
+     * 
      * @param value
      *            {Number} - power of the motor in percent [0-100]
      */
@@ -231,7 +238,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Set the motors to work until condition is met.
-     *
+     * 
      * @param program
      * @param durationType
      *            {String} -
@@ -264,7 +271,7 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
 
     /**
      * Correction of the speed of a motor.
-     *
+     * 
      * @param nextFrameTimeDuration
      *            {Number} - duration of the next frame in seconds
      * @returns {Number} - corrected motor speed
@@ -283,13 +290,12 @@ define(['robertaLogic.motor', 'util', 'robertaLogic.constants'], function(Motor,
     };
 
     Actors.prototype.toString = function() {
-        return JSON.stringify([internal(this).distanceToCover, internal(this).leftMotor, internal(this).rightMotor]);
+        return JSON.stringify([ internal(this).distanceToCover, internal(this).leftMotor, internal(this).rightMotor ]);
     };
 
     Actors.prototype.distanceToRotations = function(distance) {
         var rotations = {};
         var robotCircumference = CONSTANTS.WHEEL_DIAMETER * Math.PI
-
 
         var speedL = this.getLeftMotor().getPower();
         var speedR = this.getRightMotor().getPower();

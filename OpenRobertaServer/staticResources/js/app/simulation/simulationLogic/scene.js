@@ -1,25 +1,26 @@
 /**
  * @fileOverview Scene for a robot simulation
- * @author Beate Jost <beate.jost@iais.fraunhofer.de>
+ * @author canvasDiv Jost <canvasDiv.jost@iais.fraunhofer.de>
  */
-define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.constants' ], function(SIM, SIMATH, UTIL, CONSTANTS) {
+define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.constants', 'jquery' ], function(SIM, SIMATH, UTIL, CONSTANTS, $) {
 
     /**
      * Creates a new Scene.
      * 
      * @constructor
      */
-    function Scene(backgroundImg, layers, robot, obstacle, ruler) {
+    function Scene(backgroundImg, robot, obstacle, pattern, ruler) {
 
         this.backgroundImg = backgroundImg;
         this.robot = robot;
         this.obstacle = obstacle;
         this.ruler = ruler;
-        this.uCtx = layers[0]; // ? context
-        this.bCtx = layers[1]; // background context
-        this.oCtx = layers[2]; // object context
-        this.rCtx = layers[3]; // robot context
-        this.mCtx = layers[4]; // ruler == *m*easurement context
+        this.pattern = pattern;
+        this.uCtx = $('#unitBackgroundLayer')[0].getContext('2d'); // unit context
+        this.bCtx = $('#backgroundLayer')[0].getContext('2d'); // background context
+        this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
+        this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
+        this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context       
         this.playground = {
             x : 0,
             y : 0,
@@ -35,35 +36,54 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
     }
 
     Scene.prototype.drawBackground = function(option_scale, option_context) {
+        
         var ctx = option_context || this.bCtx;
         var sc = option_scale || SIM.getScale();
+        var left = (this.playground.w - (this.backgroundImg.width + 20) * sc) / 2.0;
+        var top = (this.playground.h - (this.backgroundImg.height + 20) * sc) / 2.0;
+        var w = (this.backgroundImg.width + 20) * sc;
+        var h = (this.backgroundImg.height + 20) * sc;
+        if (option_context) { //unified background
+            $('#unitBackgroundLayer').get(0).width = w;
+            $('#unitBackgroundLayer').get(0).height = h;
+        }
+        $('.canvasSim').each(function() {
+            $(this).get(0).width = w;
+            $(this).get(0).height = h;
+
+        });
+        $('#canvasDiv').css({
+            top : top + 'px',
+            left : left + 'px',
+        });
         ctx.restore();
-        ctx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
-        // make sure backgroundimages have a white background
-        ctx.rect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            if (this.robot.constructor.name == 'Calliope' || this.robot.constructor.name == 'Microbit') {
-                ctx.drawImage(this.backgroundImg, this.playground.w / 2 / sc - 452 / 2, this.playground.h / 2 / sc - 452 / 2, 452, 452);
-            } else {
-                ctx.drawImage(this.backgroundImg, 0, 0);
+            if (this.robot.constructor.name != 'Calliope' && this.robot.constructor.name != 'Microbit') {
+                ctx.beginPath();
+                if (this.pattern) {
+                    var patternImg = this.pattern;
+                    var pattern = ctx.createPattern(patternImg, 'repeat');
+                    ctx.strokeStyle = pattern;
+                }
+                ctx.lineWidth = 10;
+                ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
             }
+            ctx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
         }
     }
 
     Scene.prototype.drawRuler = function() {
         this.mCtx.clearRect(this.ruler.xOld - 20, this.ruler.yOld - 20, this.ruler.wOld + 40, this.ruler.hOld + 40);
-        this.ruler.xOld = this.ruler.x;
-        this.ruler.yOld = this.ruler.y;
-        this.ruler.wOld = this.ruler.w;
-        this.ruler.hOld = this.ruler.h;
         this.mCtx.restore();
         this.mCtx.save();
-        this.mCtx.scale(SIM.getScale(), SIM.getScale());
         if (this.ruler.img) {
+            this.ruler.xOld = this.ruler.x;
+            this.ruler.yOld = this.ruler.y;
+            this.ruler.wOld = this.ruler.w;
+            this.ruler.hOld = this.ruler.h;
+            this.mCtx.scale(SIM.getScale(), SIM.getScale());        
             this.mCtx.drawImage(this.ruler.img, this.ruler.x, this.ruler.y, this.ruler.w, this.ruler.h);
         }
     }
@@ -92,43 +112,43 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information   
-        if (SIM.getInfo() || this.robot.debug) {
-            var endLabel = this.playground.w - 60;
-            var endValue = this.playground.w - 5;
-            var line = 20;
-            this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
-            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
-            this.rCtx.textAlign = "end";
-            this.rCtx.font = "10px Arial";
-            this.rCtx.fillStyle = "#333333";
-            var x, y;
-            this.rCtx.fillText("FPS", endLabel, line);
-            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Time", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Compass °", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.compass.degree, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Light Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.display.lightLevel, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Temperature", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.temperature.degree, 2), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Gesture", endLabel, line);
-            var gesture;
-            for ( var i in this.robot.gesture) {
-                gesture = i;
-                break;
-            }
-            this.rCtx.fillText(gesture, endValue, line);
-        }
+//        if (SIM.getInfo() || this.robot.debug) {
+//            var endLabel = this.playground.w - 60;
+//            var endValue = this.playground.w - 5;
+//            var line = 20;
+//            this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
+//            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
+//            this.rCtx.textAlign = "end";
+//            this.rCtx.font = "10px Arial";
+//            this.rCtx.fillStyle = "#333333";
+//            var x, y;
+//            this.rCtx.fillText("FPS", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Time", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Compass °", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.compass.degree, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Light Sensor", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.display.lightLevel, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Temperature", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.temperature.degree, 2), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Gesture", endLabel, line);
+//            var gesture;
+//            for ( var i in this.robot.gesture) {
+//                gesture = i;
+//                break;
+//            }
+//            this.rCtx.fillText(gesture, endValue, line);
+//        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
 
-        this.rCtx.translate(this.playground.w / 2 / SIM.getScale(), this.playground.h / 2 / SIM.getScale());
+        this.rCtx.translate(this.backgroundImg.width / 2.0 + 10, this.backgroundImg.height / 2.0 + 10);
         this.rCtx.scale(1, -1);
         for ( var prop in this.robot) {
             if (this.robot[prop].draw != undefined && this.rCtx) {
@@ -147,68 +167,68 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.restore();
         this.rCtx.save();
         // provide new user information   
-        if (SIM.getInfo() || this.robot.debug) {
-            var endLabel = this.playground.w - 40;
-            var endValue = this.playground.w - 5;
-            var line = 20;
-            this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
-            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
-            this.rCtx.textAlign = "end";
-            this.rCtx.font = "10px Arial";
-            var x, y;
-            if (SIM.getBackground() === 5) {
-                x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
-                y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
-                this.rCtx.fillStyle = "#ffffff";
-
-            } else {
-                x = this.robot.pose.x + this.robot.pose.transX;
-                y = +this.robot.pose.y + this.robot.pose.transY;
-                this.rCtx.fillStyle = "#333333";
-            }
-            this.rCtx.fillText("FPS", endLabel, line);
-            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Time", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Robot X", endLabel, line);
-            this.rCtx.fillText(UTIL.round(x, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Robot Y", endLabel, line);
-            this.rCtx.fillText(UTIL.round(y, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Robot θ", endLabel, line);
-            this.rCtx.fillText(UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0), endValue, line);
-            line += 25;
-            this.rCtx.fillText("Motor left", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Motor right", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Touch Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Light Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.colorSensor.lightValue, 0), endValue, line);
-            line += 15;
-            this.rCtx.fillText("Ultra Sensor", endLabel, line);
-            this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
-            if (this.robot.sound) {
-                line += 15;
-                this.rCtx.fillText("Sound Sensor", endLabel, line);
-                this.rCtx.fillText(UTIL.round(this.robot.sound.volume * 100, 0), endValue, line);
-            }
-            line += 15;
-            this.rCtx.fillText("Color Sensor", endLabel, line);
-            this.rCtx.beginPath();
-            this.rCtx.fillStyle = this.robot.colorSensor.color;
-            this.rCtx.rect(endValue, line, -10, -10);
-            this.rCtx.stroke();
-            this.rCtx.fill();
-
-        }
+//        if (SIM.getInfo() || this.robot.debug) {
+//            var endLabel = this.playground.w - 40;
+//            var endValue = this.playground.w - 5;
+//            var line = 20;
+//            this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
+//            this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
+//            this.rCtx.textAlign = "end";
+//            this.rCtx.font = "10px Arial";
+//            var x, y;
+//            if (SIM.getBackground() === 5) {
+//                x = UTIL.round((this.robot.pose.x + this.robot.pose.transX) / 3, 1);
+//                y = UTIL.round((-this.robot.pose.y - this.robot.pose.transY) / 3, 1);
+//                this.rCtx.fillStyle = "#ffffff";
+//
+//            } else {
+//                x = this.robot.pose.x + this.robot.pose.transX;
+//                y = +this.robot.pose.y + this.robot.pose.transY;
+//                this.rCtx.fillStyle = "#333333";
+//            }
+//            this.rCtx.fillText("FPS", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(1 / SIM.getDt(), 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Time", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.time, 2), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Robot X", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(x, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Robot Y", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(y, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Robot θ", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(SIMATH.toDegree(this.robot.pose.theta), 0), endValue, line);
+//            line += 25;
+//            this.rCtx.fillText("Motor left", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.encoder.left * CONSTANTS.ENC, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Motor right", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.encoder.right * CONSTANTS.ENC, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Touch Sensor", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.touchSensor.value, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Light Sensor", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.colorSensor.lightValue, 0), endValue, line);
+//            line += 15;
+//            this.rCtx.fillText("Ultra Sensor", endLabel, line);
+//            this.rCtx.fillText(UTIL.round(this.robot.ultraSensor.distance / 3.0, 0), endValue, line);
+//            if (this.robot.sound) {
+//                line += 15;
+//                this.rCtx.fillText("Sound Sensor", endLabel, line);
+//                this.rCtx.fillText(UTIL.round(this.robot.sound.volume * 100, 0), endValue, line);
+//            }
+//            line += 15;
+//            this.rCtx.fillText("Color Sensor", endLabel, line);
+//            this.rCtx.beginPath();
+//            this.rCtx.fillStyle = this.robot.colorSensor.color;
+//            this.rCtx.rect(endValue, line, -10, -10);
+//            this.rCtx.stroke();
+//            this.rCtx.fill();
+//
+//        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
         this.rCtx.translate(this.robot.pose.x, this.robot.pose.y);
@@ -347,50 +367,70 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             this.robot.backLeft.bumped = false;
             this.robot.backRight.bumped = false;
 
-            for (var i = 0; i < SIM.obstacleList.length; i++) {
-                var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
-                for (var k = 0; k < obstacleLines.length; k++) {
-                    var interPoint = SIMATH.getIntersectionPoint({
-                        x1 : this.robot.frontLeft.rx,
-                        x2 : this.robot.frontRight.rx,
-                        y1 : this.robot.frontLeft.ry,
-                        y2 : this.robot.frontRight.ry
-                    }, obstacleLines[k]);
-                    if (interPoint) {
-                        if (Math.abs(this.robot.frontLeft.rx - interPoint.x) < Math.abs(this.robot.frontRight.rx - interPoint.x)) {
-                            this.robot.frontLeft.bumped = true;
-                        } else {
-                            this.robot.frontRight.bumped = true;
-                        }
+            for (var i = 0; i < SIM.obstacleList.length; i++) {               
+                var p = SIM.obstacleList[i];
+                if (i == 0) { 
+                    var x = this.robot.frontLeft.rx;
+                    var y = this.robot.frontLeft.ry;
+                    if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                        this.robot.frontLeft.bumped = true;
                         this.robot.touchSensor.value = 1;
-                    } else {
-                        var p = SIMATH.getDistanceToLine({
-                            x : this.robot.touchSensor.rx,
-                            y : this.robot.touchSensor.ry
-                        }, {
-                            x : obstacleLines[k].x1,
-                            y : obstacleLines[k].y1
-                        }, {
-                            x : obstacleLines[k].x2,
-                            y : obstacleLines[k].y2
-                        });
-                        if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
-                            this.robot.frontLeft.bumped = true;
-                            this.robot.frontRight.bumped = true;
-                            this.robot.touchSensor.value = 1;
-                        } else {
+                    } 
+                    x = this.robot.frontRight.rx;
+                    y = this.robot.frontRight.ry;
+                    if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                        this.robot.frontRight.bumped = true;
+                        this.robot.touchSensor.value = 1;
+                    } 
+                    x = this.robot.backLeft.rx;
+                    y = this.robot.backLeft.ry;
+                    if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                        this.robot.backLeft.bumped = true;
+                    } 
+                    x = this.robot.backRight.rx;
+                    y = this.robot.backRight.ry;
+                    if (x < p.x || x > p.x + p.w || y < p.y || y > p.y + p.h) {
+                        this.robot.backRight.bumped = true;
+                    } 
+                } else { 
+                    var x = this.robot.frontLeft.rx;
+                    var y = this.robot.frontLeft.ry;
+                    if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                        this.robot.frontLeft.bumped = true;
+                        this.robot.touchSensor.value = 1;
+                    } 
+                    x = this.robot.frontRight.rx;
+                    y = this.robot.frontRight.ry;
+                    if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                        this.robot.frontRight.bumped = true;
+                        this.robot.touchSensor.value = 1;
+                    } 
+                    x = this.robot.backLeft.rx;
+                    y = this.robot.backLeft.ry;
+                    if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                        this.robot.backLeft.bumped = true;
+                    } 
+                    x = this.robot.backRight.rx;
+                    y = this.robot.backRight.ry;
+                    if (x > p.x && x < p.x + p.w && y > p.y && y < p.y + p.h) {
+                        this.robot.backRight.bumped = true;
+                    } 
+                    if (this.robot.touchSensor.value == 0) {
+                        var obstacleLines = SIMATH.getLinesFromRect(SIM.obstacleList[i]);
+                        for (var k = 0; k < obstacleLines.length; k++) {
                             var interPoint = SIMATH.getIntersectionPoint({
-                                x1 : this.robot.backLeft.rx,
-                                x2 : this.robot.backRight.rx,
-                                y1 : this.robot.backLeft.ry,
-                                y2 : this.robot.backRight.ry
+                                x1 : this.robot.frontLeft.rx,
+                                x2 : this.robot.frontRight.rx,
+                                y1 : this.robot.frontLeft.ry,
+                                y2 : this.robot.frontRight.ry
                             }, obstacleLines[k]);
                             if (interPoint) {
-                                if (Math.abs(this.robot.backLeft.rx - interPoint.x) < Math.abs(this.robot.backRight.rx - interPoint.x)) {
-                                    this.robot.backLeft.bumped = true;
+                                if (Math.abs(this.robot.frontLeft.rx - interPoint.x) < Math.abs(this.robot.frontRight.rx - interPoint.x)) {
+                                    this.robot.frontLeft.bumped = true;
                                 } else {
-                                    this.robot.backRight.bumped = true;
+                                    this.robot.frontRight.bumped = true;
                                 }
+                                this.robot.touchSensor.value = 1;
                             } else {
                                 var p = SIMATH.getDistanceToLine({
                                     x : this.robot.touchSensor.rx,
@@ -402,17 +442,46 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                                     x : obstacleLines[k].x2,
                                     y : obstacleLines[k].y2
                                 });
-                                if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
-                                    this.robot.backLeft.bumped = true;
-                                    this.robot.backRight.bumped = true;
+                                if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
+                                    this.robot.frontLeft.bumped = true;
+                                    this.robot.frontRight.bumped = true;
+                                    this.robot.touchSensor.value = 1;
+                                } else {
+                                    var interPoint = SIMATH.getIntersectionPoint({
+                                        x1 : this.robot.backLeft.rx,
+                                        x2 : this.robot.backRight.rx,
+                                        y1 : this.robot.backLeft.ry,
+                                        y2 : this.robot.backRight.ry
+                                    }, obstacleLines[k]);
+                                    if (interPoint) {
+                                        if (Math.abs(this.robot.backLeft.rx - interPoint.x) < Math.abs(this.robot.backRight.rx - interPoint.x)) {
+                                            this.robot.backLeft.bumped = true;
+                                        } else {
+                                            this.robot.backRight.bumped = true;
+                                        }
+                                    } else {
+                                        var p = SIMATH.getDistanceToLine({
+                                            x : this.robot.touchSensor.rx,
+                                            y : this.robot.touchSensor.ry
+                                        }, {
+                                            x : obstacleLines[k].x1,
+                                            y : obstacleLines[k].y1
+                                        }, {
+                                            x : obstacleLines[k].x2,
+                                            y : obstacleLines[k].y2
+                                        });
+                                        if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt() * Math.max(Math.abs(this.robot.right), Math.abs(this.robot.left))) {
+                                            this.robot.backLeft.bumped = true;
+                                            this.robot.backRight.bumped = true;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            if (this.robot.touchSensor.value === 1 || this.robot.bumpedAready) {
-                this.robot.touchSensor.value = 1;
+            if (this.robot.touchSensor.value === 1) {
                 values.touch = true;
             } else {
                 values.touch = false;
@@ -575,10 +644,12 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             values.buttons = {};
             values.buttons.any = false;
             values.buttons.Reset = false;
-            var i = 0
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
                 values.buttons.any = (values.buttons.any || this.robot.buttons[key]);
+            }
+            for ( var key in this.robot.buttons) {
+                this.robot.buttons[key] = false;
             }
         }
         if (this.robot.webAudio) {
@@ -588,7 +659,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             values.sound = UTIL.round(this.robot.sound.volume * 100, 0);
         }
         if (this.robot.display) {
-            values.ambientlight = this.robot.display.lightLevel;
+            values.ambientlight = this.robot.display.lightLevel;           
         }
         if (this.robot.temperature) {
             values.temperature = this.robot.temperature.degree;

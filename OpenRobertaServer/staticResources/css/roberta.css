@@ -231,6 +231,20 @@ body.blocklyMinimalBody  * {
 	visibility: hidden;
 }
 
+.canvasSim {
+	position: absolute;
+	left: 0;
+	top: 0; 
+}
+
+#canvasDiv {
+	position: absolute;
+	left: 0;
+	top: 0; 
+	z-index: 1; 
+	width: 100%
+}
+
 #codeDiv {
 	position: relative;
 	visibility: hidden;
@@ -256,7 +270,7 @@ body.blocklyMinimalBody  * {
 #simDiv.simActive {
 	height: 100%;
 	overflow: hidden;
-	background-color: #fff;
+	background-color: #d8d8d8;
 	visibility: visible;
 	position: relative;
 	z-index: 9;
@@ -351,7 +365,7 @@ body.blocklyMinimalBody  * {
 
 #mbedContent {
 	background-color: #fff;
-	border: solid #333;
+	border: 2px solid #333;
 	padding: 12px;
 	border-radius: 2px;
 }
@@ -484,7 +498,6 @@ position: relative;
 }
 
 #simButtons, #codeButtons {
-	width: 160px;
 	left: 12px;
 	bottom: 12px;
 	position: absolute;
@@ -492,7 +505,6 @@ position: relative;
 }
 .btn-group-vertical>.btn.simbtn {
     margin: 8px 0;
-    padding-left: 0px;
 }
 
 .simbtn.btn:hover, .simbtn.btn:active:focus, .simbtn.btn:focus, .simbtn.btn.focus, .simbtn.btn:active, .simbtn.btn.active, .open>.dropdown-toggle.simbtn.btn {
@@ -1052,7 +1064,6 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 .robot-icon {
-    vertical-align: middle;
     font-size: 40px;
 }
 

@@ -33,9 +33,14 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             that.gesture[e.currentTarget.id] = true;
         });
         this.compass.degree = 0;
-        $('#slider').change(function() {
+        $('#slider').on("mousedown touchstart", function(e) {
+            e.stopPropagation();
+        });
+        $('#slider').change(function(e) {
+            e.preventDefault();
             $('#range').html($('#slider').val());
             that.compass.degree = $('#slider').val();
+            e.stopPropagation();
         });
     }
 
@@ -292,32 +297,28 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         h = h / scale;
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        startX = (parseInt(X - offsetX, 10)) / scale;
-        startY = (parseInt(Y - offsetY, 10)) / scale;
+        var top = $('#robotLayer').offset().top + $('#robotLayer').width()/2;
+        var left = $('#robotLayer').offset().left + $('#robotLayer').height()/2;
+        startX = (parseInt(X - left, 10)) / scale;
+        startY = (parseInt(Y - top, 10)) / scale;
         var scsq = 1;
         if (scale < 1)
             scsq = scale * scale;
-        var dxA = startX - this.button.xA - w;
-        var dyA = startY + this.button.yA - h;
+        var dxA = startX - this.button.xA;
+        var dyA = startY + this.button.yA;
         var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA / scsq);
-        var dxB = startX - this.button.xB - w;
-        var dyB = startY + this.button.yB - h;
+        var dxB = startX - this.button.xB;
+        var dyB = startY + this.button.yB;
         var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB / scsq);
-        var dxReset = startX - this.button.xReset - w;
-        var dyReset = startY + this.button.yReset - h;
+        var dxReset = startX - this.button.xReset;
+        var dyReset = startY + this.button.yReset;
         var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
         // special case, display (center: 0,0) represents light level
-        var dxDisplay = startX - w;
-        var dyDisplay = startY - h + 20;
-        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //
-        this.buttons.A = false;
-        this.buttons.B = false;
-        this.buttons.Reset = false;
+        var dxDisplay = startX;
+        var dyDisplay = startY + 20;
+        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //   
         this.display.lightLevel = 100;
-        if (A || B || Reset || Display) {
-            if (e.type === 'mouseup' && Reset) {
-                this.buttons.Reset = true;
-            }
+        if (A || B || Reset || Display) {          
             if (e.type === 'mousedown') {
                 if (A) {
                     this.buttons.A = true;
@@ -328,6 +329,9 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 if (Display) {
                     this.display.lightLevel = 150;
                 }
+                if (Reset) {
+                    this.buttons.Reset = true;
+                }
             } else if (e.type === 'mousemove' && Display) {
                 this.display.lightLevel = 50;
             }
@@ -337,9 +341,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 $("#robotLayer").css('cursor', 'pointer');
             }
         } else {
-            $("#robotLayer").css('cursor', 'auto');
-        }
-        e.stopPropagation();
+            $("#robotLayer").css('cursor', 'auto');        
+        }      
     }
 
     Mbed.prototype.handleMouseUp = function(e, offsetX, offsetY, scale, w, h) {
