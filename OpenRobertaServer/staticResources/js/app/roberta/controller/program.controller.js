@@ -739,7 +739,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         listenToBlocklyEvents = false;
         Blockly.hideChaff();
         blocklyWorkspace.clear();
-        Blockly.svgResize(blocklyWorkspace);
         var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
         setTimeout(function() {
