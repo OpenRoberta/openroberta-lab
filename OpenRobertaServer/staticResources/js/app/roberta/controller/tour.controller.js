@@ -50,6 +50,8 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
     }
     exports.getInstance = getInstance;
 
+    var offsetLeft = $('#blockly').width() * -0.15;
+    var offsetTop = $('#blockly').height() * -0.1;
     var welcome = [ {
         'event_type' : 'next',
         'selector' : '.logo',
@@ -123,9 +125,9 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#simDiv',
         'description' : 'TOUR1_DESCRIPTION15',
         'shape' : 'circle',
-        'radius' : 200,
-        'top' : -250,
-        'left' : -200,
+        'radius' : 100,
+        'top' : offsetTop,
+        'left' : offsetLeft,
         'showSkip' : false
     }, {
         'event' : 'click',
