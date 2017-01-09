@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.components;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +16,28 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class JavaSourceCompiler {
+    private static final Logger LOG = LoggerFactory.getLogger(JavaSourceCompiler.class);
+
     private CustomJavaFileManager fileManager;
+    private CompilerFeedback feedback;
     private final JavaCompiler compiler;
-    private final String fullName;
+    private final String programName;
     private final String sourceCode;
+    private final String packageName = "generated.main.";
 
     /**
-     * @param fullName
-     *        Full name of the class that will be compiled.
-     *        If class should be in some package, fullName should contain it too (ex. "generated.NEPOprog")
+     * @param programName
+     *        Name of the program
      * @param sourceCode
      *        Here we specify the source code of the class to be compiled
      */
-    public JavaSourceCompiler(String fullName, String sourceCode) {
-        this.fullName = fullName;
+    public JavaSourceCompiler(String programName, String sourceCode) {
+        this.programName = programName;
         this.sourceCode = sourceCode;
         this.compiler = ToolProvider.getSystemJavaCompiler();
         this.fileManager = initFileManager();
@@ -43,63 +50,100 @@ public class JavaSourceCompiler {
             this.fileManager = new CustomJavaFileManager(this.compiler.getStandardFileManager(null, null, null));
             return this.fileManager;
         }
-
     }
 
-    public CompilerFeedback compile() {
+    private Boolean compile() {
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+        List<JavaFileObject> javaFiles = getJavaFiles();
+        List<String> compilationOptions = getCompilerProperties();
+        CompilationTask task = this.compiler.getTask(null, this.fileManager, diagnostics, compilationOptions, null, javaFiles);
+        Boolean isSuccess = task.call();
+        this.feedback = new CompilerFeedback(isSuccess, diagnostics);
+        return isSuccess;
+    }
 
+    public boolean compileAndPackage(String pathToCrosscompilerBaseDir, String token) {
+        Boolean isSuccess = compile();
+        File jarFile;
+        if ( isSuccess ) {
+            ByteArrayOutputStream jarArchive = createJarArchive();
+            jarFile = new File(pathToCrosscompilerBaseDir + "/" + token + "/target/" + this.programName + ".jar");
+            try {
+                FileUtils.writeByteArrayToFile(jarFile, jarArchive.toByteArray());
+            } catch ( IOException e ) {
+                JavaSourceCompiler.LOG.error("build exception. Messages from the build script are:\n" + e);
+                return false;
+            }
+        }
+        return isSuccess;
+    }
+
+    private List<JavaFileObject> getJavaFiles() {
         List<JavaFileObject> javaFiles = new ArrayList<JavaFileObject>();
-        javaFiles.add(new SourceJavaFileObject(this.fullName, this.sourceCode));
+        javaFiles.add(new SourceJavaFileObject(this.packageName + this.programName, this.sourceCode));
+        return javaFiles;
+    }
 
+    private List<String> getCompilerProperties() {
         List<String> compilationOptions = new ArrayList<String>();
         compilationOptions.add("-source");
         compilationOptions.add("1.7");
         compilationOptions.add("-target");
         compilationOptions.add("1.7");
-
-        CompilationTask task = this.compiler.getTask(null, this.fileManager, diagnostics, compilationOptions, null, javaFiles);
-        Boolean isSuccess = task.call();
-        if ( isSuccess ) {
-            byte[] classToBeJared = this.fileManager.getClassJavaFileObject().getBytes();
-            ByteArrayOutputStream tt = createJarArchive(classToBeJared);
-
-            try {
-                FileOutputStream fw = new FileOutputStream("./NEPOProg.jar");
-                fw.write(tt.toByteArray());
-                fw.close();
-                tt.close();
-            } catch ( IOException e ) {
-                e.printStackTrace();
-            }
-        }
-        return new CompilerFeedback(isSuccess, diagnostics);
+        return compilationOptions;
     }
 
-    private ByteArrayOutputStream createJarArchive(byte[] tobeJared) {
-
+    private ByteArrayOutputStream createJarArchive() {
         // Open archive file
+        byte[] classToBeJared = this.fileManager.getClassJavaFileObject().getBytes();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         JarOutputStream out;
         try {
-            Manifest mf = new Manifest();
-            mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-            mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, "generated.main.NEPOprog.class");
-
+            Manifest mf = createManifest();
             out = new JarOutputStream(stream, mf);
             // Add archive entry
-            JarEntry jarAdd = new JarEntry("/generated/main/NEPOprog.class");
+            JarEntry jarAdd = new JarEntry("generated/main/" + this.programName + ".class");
             out.putNextEntry(jarAdd);
-            out.write(tobeJared);
+            out.write(classToBeJared);
             out.close();
             stream.close();
             return stream;
         } catch ( IOException e ) {
-
             e.printStackTrace();
         }
         return stream;
 
+    }
+
+    private Manifest createManifest() {
+        final String brickRuntime = "/home/root/lejos";
+        final String brickRoberta = "/home/roberta/lib";
+        Manifest mf = new Manifest();
+        mf.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+        mf.getMainAttributes().put(Attributes.Name.MAIN_CLASS, this.packageName + this.programName);
+        mf.getMainAttributes().put(
+            Attributes.Name.CLASS_PATH,
+            brickRuntime
+                + "/lib/ev3classes.jar "
+                + brickRuntime
+                + "/lib/dbusjava.jar "
+                + brickRuntime
+                + "/libjna/usr/share/java/jna.jar "
+                + brickRoberta
+                + "/EV3Runtime.jar "
+                + brickRoberta
+                + "/Java-WebSocket.jar "
+                + brickRoberta
+                + "/json.jar");
+        return mf;
+    }
+
+    public Boolean isSuccess() {
+        return this.feedback.isSuccess();
+    }
+
+    public String getCompilationMessages() {
+        return this.feedback.toString();
     }
 
     public byte[] getCompiledClass() {

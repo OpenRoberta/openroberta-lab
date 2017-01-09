@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.CompilerFeedback;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.JavaSourceCompiler;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
@@ -23,7 +22,6 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class Ev3CompilerWorkflow implements ICompilerWorkflow {
-
     private static final Logger LOG = LoggerFactory.getLogger(Ev3CompilerWorkflow.class);
     private final RobotCommunicator brickCommunicator;
     public final String pathToCrosscompilerBaseDir;
@@ -81,9 +79,7 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        RobotCommunicationData communicationData;
-        communicationData = this.brickCommunicator.getState(token);
-        Language lang = Language.fromCommunicationData(communicationData);
+        Language lang = getRobotProgrammingLanguage(token);
         String sourceCode = generateProgram(lang, programName, data);
 
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
@@ -95,7 +91,7 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
         }
         switch ( lang ) {
             case JAVA:
-                Key messageKey = runBuild(programName, "generated.main", sourceCode);
+                Key messageKey = runBuild(token, programName, sourceCode);
                 if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                     Ev3CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
                 } else {
@@ -108,6 +104,13 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
                 return Key.COMPILERWORKFLOW_SUCCESS;
         }
         return null;
+    }
+
+    private Language getRobotProgrammingLanguage(String token) {
+        RobotCommunicationData communicationData;
+        communicationData = this.brickCommunicator.getState(token);
+        Language lang = Language.fromCommunicationData(communicationData);
+        return lang;
     }
 
     /**
@@ -161,18 +164,15 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
      * 4. Make jar from class files and add META-INF entries.<br>
      *
      * @param mainFile
-     * @param mainPackage
      * @param sourceCode
      */
-    public Key runBuild(String mainFile, String mainPackage, String sourceCode) {
-        JavaSourceCompiler scp = new JavaSourceCompiler(mainPackage + mainFile, sourceCode);
-        CompilerFeedback feedback = scp.compile();
-
-        if ( !feedback.isSuccess() ) {
-            Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + feedback.toString());
+    public Key runBuild(String token, String mainFile, String sourceCode) {
+        JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode);
+        boolean isSuccess = scp.compileAndPackage(this.pathToCrosscompilerBaseDir, token);
+        if ( !isSuccess ) {
+            Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
-
         return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
@@ -192,7 +192,6 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        // TODO Auto-generated method stub
         return null;
     }
 

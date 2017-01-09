@@ -9,6 +9,6 @@ public class Ev3CompilerWorkflowTest {
     @Ignore
     public void test() throws Exception {
         // FIXME: this needs a property file with paths to pass instead of the nulls
-        new Ev3CompilerWorkflow(new RobotCommunicator(), null, null, null).runBuild("blinker2", "generated.main", "");
+        new Ev3CompilerWorkflow(new RobotCommunicator(), null, null, null).runBuild("", "blinker2", "");
     }
 }
