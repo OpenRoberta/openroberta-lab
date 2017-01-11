@@ -29,7 +29,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Initialize the program that is executed in the simulation.
-     * 
+     *
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -43,7 +43,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Function that executes one step of the program.
-     * 
+     *
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -121,7 +121,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 case CONSTANTS.TURN_LIGHT:
                     evalTurnLightAction(internal(this), stmt);
                     break;
-                    
+
                 case CONSTANTS.LED_ON_ACTION:
                     evalLedOnAction(internal(this), stmt);
                     break;
@@ -264,7 +264,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands.led.color = stmt.color;
             obj.outputCommands.led.mode = stmt.mode;
     };
-    
+
     var evalLedOnAction = function(obj, stmt) {
         obj.outputCommands.led = {}
         obj.outputCommands.led.color = evalExpr(obj, stmt.rgbColor);
@@ -295,7 +295,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.program.setIsRunningTimer(true);
             obj.program.resetTimer(simulationData.time);
             var duration = obj.outputCommands.display.picture.length * 200;
-            obj.program.setTimer(duration);         
+            obj.program.setTimer(duration);
         }
     };
 
@@ -315,7 +315,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.program.resetTimer(simulationData.time);
         // TODO get the time needed to display this specific string from the simulation or a finish flag.
         var duration = (obj.outputCommands.display.text.length + 1) * 7 * 150;
-        obj.program.setTimer(duration);   
+        obj.program.setTimer(duration);
     };
 
     var roundIfSensorData = function(val, exprType) {
@@ -574,8 +574,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.ARRAY_NUMBER:
             case CONSTANTS.ARRAY_STRING:
             case CONSTANTS.ARRAY_COLOUR:
-            case CONSTANTS.ARRAY_BOOLEAN: 
-            case CONSTANTS.ARRAY_IMAGE:                
+            case CONSTANTS.ARRAY_BOOLEAN:
+            case CONSTANTS.ARRAY_IMAGE:
                 return evalArray(obj, expr.value);
             case CONSTANTS.CREATE_LIST_WITH_ITEM:
                 return evalCreateArrayWithItem(obj, expr.size, expr.value);
@@ -973,8 +973,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (stmt.item) {
             it = evalExpr(obj, stmt.item);
         }
-        var newValue = stmt.value;
-        var insert = op == CONSTANTS.INSERT;
+        var newValue = evalExpr(obj, stmt.value);
+        var insert = stmt.op == CONSTANTS.INSERT;
         switch (stmt.position) {
             case CONSTANTS.FROM_START:
                 if (insert) {
