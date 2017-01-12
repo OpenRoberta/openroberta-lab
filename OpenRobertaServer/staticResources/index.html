@@ -288,6 +288,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a href="#" id="menuSimRescue"
 								class="simRescue menuSim typcn typcn-image "
 								lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+							<li><a href="#" id="menuSimWRO"
+								class="simWRO menuSim typcn typcn-image "
+								lkey="Blockly.Msg.MENU_SIM_WRO">WRO Scene</a></li>
 							<li><a href="#" id="menuSimMath"
 								class="simMath menuSim typcn typcn-image "
 								lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
@@ -368,11 +371,16 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<canvas id="unitBackgroundLayer" width=1 height=1></canvas>
 				</div>
 				<div id="canvasDiv">
-						<canvas id="backgroundLayer" class="canvasSim" style="z-index: 1" width=1 height=1></canvas>
-						<canvas id="rulerLayer" class="canvasSim" style="z-index: 2" width=1 height=1></canvas>
-						<canvas id="objectLayer" class="canvasSim" style="z-index: 3" width=1 height=1></canvas>
-						<canvas id="robotLayer" class="canvasSim" style="z-index: 4" width=1 height=1></canvas>
-					    <div id="infoDiv" width="100px" height="200px" style="position: absolute; right: 0; top: 0; z-index: 1"></div>
+					<canvas id="backgroundLayer" class="canvasSim" style="z-index: 1"
+						width=1 height=1></canvas>
+					<canvas id="rulerLayer" class="canvasSim" style="z-index: 2"
+						width=1 height=1></canvas>
+					<canvas id="objectLayer" class="canvasSim" style="z-index: 3"
+						width=1 height=1></canvas>
+					<canvas id="robotLayer" class="canvasSim" style="z-index: 4"
+						width=1 height=1></canvas>
+					<div id="infoDiv" width="100px" height="200px"
+						style="position: absolute; right: 0; top: 0; z-index: 1"></div>
 				</div>
 				<div id="simButtons">
 					<button id="simBack" type="button"
@@ -386,7 +394,12 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<button id="simRobot" type="button" class="simRobot blbtn typcn"
 						lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
-					<button id="simImport" type="button" class="simRobot blbtn typcn typcn-upload"
+					<button id="simValues" type="button"
+						class="simValues blbtn typcn typcn-sensor"
+						lkey="Blockly.Msg.MENU_SIM_VALUES_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
+					<button id="simImport" type="button"
+						class="simRobot blbtn typcn typcn-upload"
 						lkey="Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
 				</div>
@@ -410,7 +423,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<div href="#" id="progHelp" class="rightMenuButton help"
 					lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip"
 					data-original-title="" title="">
-					<span id="" class="progHelp"></span>
+					<span id="" class="progHelp typcn typcn-questionmark"></span>
 				</div>
 			</div>
 		</div>
@@ -1006,6 +1019,17 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			<div id="simRobotContent"></div>
 		</div>
 	</div>
+	<!-- Popup for simulation sensor data -->
+	<div id="simValuesModal" class="modal fade simRobotModal"
+		data-backdrop="false">
+		<div class="modal-dialog">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+			</div>
+			<div id="simValuesContent"><div id="valuesContent"></div></div>
+		</div>
+	</div>
 	<!--  Popup to show downloads for mbed -->
 	<div id="save-client-compiled-program" class="modal fade">
 		<div class="modal-dialog">
@@ -1062,7 +1086,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		</div>
 	</div>
 	<div id="device-size">
-        <div id="xs" class="visible-xs"></div>
-    </div>
+		<div id="xs" class="visible-xs"></div>
+	</div>
 </body>
 </html>

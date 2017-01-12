@@ -291,8 +291,11 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 $selected.offset({
                     top : pageY + pos_y - drg_h,
-                    left : pageX + pos_x - drg_w
+                    left : pageX + pos_x - drg_w                
                 });
+                $selected.css({
+                    right : 'auto',            
+                });               
             }).on("mouseup touchend", function() {
                 $(this).off("mousemove touchmove"); // Unbind events from document
                 if ($selected !== null) {

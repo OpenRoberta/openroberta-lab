@@ -352,22 +352,13 @@ body.blocklyMinimalBody  * {
     right: 0;
 }
 
-.rightMenuButton.help :before {
-	font-family: 'Roboto', sans-serif;
-    content: "?";
-    font-weight: 900;
-    font-size: 24px;
-    color: #E2001A;
-    position: relative;
-    top: 4px;
-    left: 12px;
-}
-
-#mbedContent {
+#mbedContent, #valuesContent {
 	background-color: #fff;
 	border: 2px solid #333;
 	padding: 12px;
+	padding-top: 40px;
 	border-radius: 2px;
+	display: inline-block;
 }
 
 .rightMenuButton {
@@ -396,7 +387,7 @@ div.rightMenuButton:hover, .rightMenuButton:active {
 }
 	
 .rightMenuButton>.typcn {
-position: relative;
+    position: relative;
     top: 8px;
     font-size: 24px;
     left: 7px;
@@ -405,7 +396,6 @@ position: relative;
 .rightMenuButton.help>.typcn {
 	color: #e2001a;
 }
-
 
 .menu-icons {
     font-size: 24px;
@@ -436,6 +426,7 @@ position: relative;
 	white-space: nowrap;
 	background-color: #fff;
 	padding: 8px;
+	width: 100px;
 }
 
 #show-startup-message {
@@ -836,16 +827,57 @@ table#download-instructions
 	bottom: inherit;
 }
 
-.modal.simRobotModal button.close {
+.modal#simValuesModal {
+	right: 12px;
+	top: 100px;
+	left: initial;
+	bottom: inherit;
+}
+
+.modal#simRobotModal button.close {
     margin-right: -10px;
     margin-top: -14px;
     color: #f1f1f1;
 }
 
-.modal.simRobotModal button.close:hover{
+.modal#simValuesModal button.close {
+    margin-right: -10px;
+    margin-top: -14px;
+    color: #bbb;
+}
+
+#simValuesContent label{
+    display: inline-block;
+    float: left;
+    clear: left;
+    width: 100px;
+    text-align: right;
+    margin-right: 6px;
+}
+
+#simValuesContent div > div {
+	white-space: nowrap;
+	overflow: hidden;
+	min-width: 166px;
+}
+
+#simValuesContent span{
+  display: inline-block;
+  float: left;
+  padding: 0 6px;
+  width: 60px;
+}
+
+.modal#simRobotModal button.close:hover {
     margin-right: -10px;
     margin-top: -14px;
     color: #ffffff;
+}
+
+.modal#simValuesModal button.close:hover {
+    margin-right: -10px;
+    margin-top: -14px;
+    color: #333;
 }
     
 .bigNumber {

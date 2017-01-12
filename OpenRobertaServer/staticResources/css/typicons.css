@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'typicons';
-  src:  url('fonts/typicons.eot?2hynux');
-  src:  url('fonts/typicons.eot?2hynux#iefix') format('embedded-opentype'),
-    url('fonts/typicons.ttf?2hynux') format('truetype'),
-    url('fonts/typicons.woff?2hynux') format('woff'),
-    url('fonts/typicons.svg?2hynux#typicons') format('svg');
+  src:  url('fonts/typicons.eot?gj3obr');
+  src:  url('fonts/typicons.eot?gj3obr#iefix') format('embedded-opentype'),
+    url('fonts/typicons.ttf?gj3obr') format('truetype'),
+    url('fonts/typicons.woff?gj3obr') format('woff'),
+    url('fonts/typicons.svg?gj3obr#typicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,6 +23,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.typcn-nao:before {
+  content: "\ea63";
+}
+.typcn-questionmark:before {
+  content: "\ea64";
+}
 .typcn-microbit:before {
   content: "\ea61";
 }
@@ -77,7 +83,7 @@
 .typcn-nxt:before {
   content: "\e914";
 }
-.typcn-nao:before {
+.typcn-bayduino:before {
   content: "\e916";
 }
 .typcn-open:before {

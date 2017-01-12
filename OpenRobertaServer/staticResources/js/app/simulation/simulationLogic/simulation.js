@@ -35,12 +35,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.svg', 
         '/js/app/simulation/simBackgrounds/microbitBackground.svg' , '/js/app/simulation/simBackgrounds/simpleBackground.svg', 
         '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg', 
-        '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg'];
+        '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/wroBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg'];
     var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/ruler.png', 
         '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.png', 
         '/js/app/simulation/simBackgrounds/microbitBackground.png' , '/js/app/simulation/simBackgrounds/simpleBackground.png', 
         '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png', 
-        '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png'];
+        '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/wroBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png'];
     var imgObjectList = [];
 
     function preloadImages() {
@@ -123,10 +123,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             } else if (currentBackground == 4) {
                 robot = new ROBOT({
                     x : 70,
-                    y : 94,
+                    y : 104,
                     theta : 0,
                     xOld : 70,
-                    yOld : 94,
+                    yOld : 104,
                     transX : 0,
                     transY : 0
                 });
@@ -143,6 +143,17 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 });
                 robot.canDraw = false;
             } else if (currentBackground == 6) {
+                robot = new ROBOT({
+                    x : 800,
+                    y : 440,
+                    theta : -Math.PI/2,
+                    xOld : 800,
+                    yOld : 440,
+                    transX : 0,
+                    transY : 0
+                });
+                robot.canDraw = false;
+            } else if (currentBackground == 7) {
                 var cx = imgObjectList[currentBackground].width / 2.0 + 10;
                 var cy = imgObjectList[currentBackground].height / 2.0 + 10;             
                 robot = new ROBOT({
@@ -434,12 +445,12 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.color = "#33B8CA";
         } else if (currentBackground == 4) {
             obstacle.x = 500;
-            obstacle.y = 250;
+            obstacle.y = 260;
             obstacle.w = 100;
             obstacle.h = 100;
             obstacle.img = imgObstacle1;
             obstacle.color = null;
-        } else if (currentBackground == 6) {
+        } else if (currentBackground == 7) {
             obstacle.x = 0;
             obstacle.y = 0;
             obstacle.w = 0;
@@ -466,6 +477,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.h = 20;
             obstacle.color = "#33B8CA";
             obstacle.img = null;
+        } else if (currentBackground == 6) {
+            obstacle.x = 425;
+            obstacle.y = 254;
+            obstacle.w = 50;
+            obstacle.h = 50;
+            obstacle.color = "#009EE3";
+            obstacle.img = null;
         } else {
             var x = imgObjectList[currentBackground].width -50;
             var y = imgObjectList[currentBackground].height -50;
@@ -481,7 +499,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     function setRuler() {
         if (currentBackground == 4) {
             ruler.x = 430;
-            ruler.y = 380;
+            ruler.y = 400;
             ruler.w = 300;
             ruler.h = 30;
             ruler.img = imgRuler;
@@ -745,13 +763,21 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 var img = new Image();
                 img.onload = function() {
                     var canvas = document.createElement("canvas");
-                    canvas.width = img.width;
-                    canvas.height = img.height;
+                    var scale = 1;
+                    if (img.height > 800) {
+                        scale = 800.0 / img.height;
+                    }
+                    canvas.width = img.width * scale;
+                    canvas.height = img.height * scale;
                     var ctx = canvas.getContext("2d");
+                    ctx.scale(scale, scale);
                     ctx.drawImage(img, 0, 0);
                     var dataURL = canvas.toDataURL("image/png");
                     localStorage.setItem("customBackground", dataURL.replace(/^data:image\/(png|jpg);base64,/, ""));
-                    imgObjectList[imgObjectList.length] = this; 
+                    var dataImage = localStorage.getItem('customBackground');
+                    var image = new Image();
+                    image.src = "data:image/png;base64," + dataImage;
+                    imgObjectList[imgObjectList.length] = image; 
                     setBackground(imgObjectList.length-1,setBackground);
                     initScene();       
                 }

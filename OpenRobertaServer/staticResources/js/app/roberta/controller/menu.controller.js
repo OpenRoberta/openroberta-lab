@@ -45,18 +45,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             clone.addClass(robots[i].name);
             $("#navigation-robot>.anchor").before(clone);
         }
-//        for ( var robot in robots) {
-//            if (robot == 'oraSim') {
-//                continue;
-//            }
-//            var clone = proto.clone();
-//            clone.find('.typcn').addClass('typcn-' + robot);
-//            clone.find('.typcn').text(robots[robot].realName);
-//            clone.find('.typcn').attr('id', 'menu-' + robot);
-//            clone.attr('data-type', robot);
-//            clone.addClass(robot);
-//            $("#navigation-robot>.anchor").before(clone);
-//        }
         proto.remove();
         proto = $('#popup-sim');
         for (var i = 0; i < length; i++) {
@@ -246,10 +234,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 $('.simRescue').parent().addClass('disabled');
                 SIM.setBackground(5, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
+            } else if (domId === 'menuSimWRO') {
+                $('.menuSim').parent().removeClass('disabled');
+                $('.simWRO').parent().addClass('disabled');
+                SIM.setBackground(6, SIM.setBackground);
+                $("#simButtonsCollapse").collapse('hide');
             } else if (domId === 'menuSimMath') {
                 $('.menuSim').parent().removeClass('disabled');
                 $('.simMath').parent().addClass('disabled');
-                SIM.setBackground(6, SIM.setBackground);
+                SIM.setBackground(7, SIM.setBackground);
                 $("#simButtonsCollapse").collapse('hide');
             }
         }, 'sim clicked');
@@ -267,12 +260,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 width : '100%'
             }, {
                 duration : 750,
+                start: function() {
+                    $(".modal").modal("hide"); 
+                },
                 step : function() {
                     $(window).resize();
                     Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 },
-                done : function() {
-                    $("#simRobotModal").modal("hide");
+                done : function() {                   
                     $('#simDiv').removeClass('simActive');
                     $('#menuSim').parent().addClass('disabled');
                     $('.nav > li > ul > .robotType').removeClass('disabled');
@@ -327,6 +322,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
             $("#simButtonsCollapse").collapse('hide');
         }, 'simRobot clicked');
+        
+        $('#simValues').onWrap('click', function(event) {
+            $("#simValuesModal").modal("toggle");
+            $('#simValuesModal').draggable();
+
+            $("#simButtonsCollapse").collapse('hide');
+        }, 'simValues clicked');
 
         $('#simImport').onWrap('click', function(event) {
             SIM.importImage();
@@ -408,6 +410,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             } else if (scene == 5) {
                 $('.simRescue').parent().addClass('disabled');
             } else if (scene == 6) {
+                $('.simWRO').parent().addClass('disabled');
+            } else if (scene == 7) {
                 $('.simMath').parent().addClass('disabled');
             }
         }, 'simScene clicked');
