@@ -840,7 +840,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("P" + pinTouchSensor.getPinNumber() + ".isTouched()");
+        this.sb.append("uBit.io.P" + pinTouchSensor.getPinNumber() + ".isTouched()");
         return null;
     }
 
@@ -850,7 +850,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( pinValueSensor.getValueType() == ValueType.DIGITAL ) {
             valueType = "DigitalValue()";
         }
-        this.sb.append("P" + pinValueSensor.getPinNumber() + ".get" + valueType);
+        this.sb.append("uBit.io.P" + pinValueSensor.getPinNumber() + ".get" + valueType);
         return null;
     }
 
@@ -860,7 +860,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
             valueType = "DigitalValue(";
         }
-        this.sb.append("P" + pinWriteValueSensor.getPinNumber() + ".set" + valueType);
+        this.sb.append("uBit.io.P" + pinWriteValueSensor.getPinNumber() + ".set" + valueType);
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(");");
         return null;
@@ -1430,9 +1430,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     private void addConstants() {
         this.sb.append("#include \"MicroBit.h\" \n");
-        if ( !this.usedHardwareVisitor.getUsedPins().isEmpty() ) {
-            this.sb.append("#include \"MicroBitPin.h\" \n");
-        }
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit uBit; \n \n");
@@ -1466,12 +1463,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             nlIndent();
             this.sb.append("uBit.accelerometer.updateSample();");
         }
-
-        for ( Integer usedPin : this.usedHardwareVisitor.getUsedPins() ) {
-            nlIndent();
-            this.sb.append(String.format("MicroBitPin P%s(MICROBIT_ID_IO_P%s, MICROBIT_PIN_P%s, PIN_CAPABILITY_ALL);", usedPin, usedPin, usedPin));
-        }
-
     }
 
     private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {

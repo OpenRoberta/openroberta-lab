@@ -19,15 +19,6 @@ public class CppCodeGeneratorVisitorTest {
             + "int main() {"
             + "uBit.init();"
             + "int initTime=uBit.systemTime();";
-    private static final String IMPORTS_PIN = //
-        "#include \"MicroBit.h\"" //
-            + "#include \"MicroBitPin.h\""
-            + "#include <array>\n"
-            + "#include <stdlib.h>\n"
-            + "MicroBituBit;"
-            + "int main() {"
-            + "uBit.init();"
-            + "int initTime=uBit.systemTime();";
 
     private static final String END = "release_fiber();}";
 
@@ -411,11 +402,9 @@ public class CppCodeGeneratorVisitorTest {
     @Test
     public void visitPinTouchSensor_DisplayIfPin0andPin3areTouched_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
-            + IMPORTS_PIN
-            + "MicroBitPin P0(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_ALL);\n"
-            + "MicroBitPin P3(MICROBIT_ID_IO_P3, MICROBIT_PIN_P3, PIN_CAPABILITY_ALL); "
-            + "uBit.display.scroll(ManagedString(P0.isTouched()));\n"
-            + "uBit.display.scroll(ManagedString(P3.isTouched()));"
+            + IMPORTS
+            + "uBit.display.scroll(ManagedString(uBit.io.P0.isTouched()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.io.P3.isTouched()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
@@ -424,11 +413,9 @@ public class CppCodeGeneratorVisitorTest {
     @Test
     public void visitPinValueSensor_DisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
-            + IMPORTS_PIN
-            + "MicroBitPin P0(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_ALL);\n"
-            + "MicroBitPin P2(MICROBIT_ID_IO_P2, MICROBIT_PIN_P2, PIN_CAPABILITY_ALL); "
-            + "uBit.display.scroll(ManagedString(P0.getAnalogValue()));\n"
-            + "uBit.display.scroll(ManagedString(P2.getDigitalValue()));"
+            + IMPORTS
+            + "uBit.display.scroll(ManagedString(uBit.io.P0.getAnalogValue()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.io.P2.getDigitalValue()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
@@ -437,11 +424,10 @@ public class CppCodeGeneratorVisitorTest {
     @Test
     public void visitPinValueSensor_SetAnalogPin0andDigitalPin2To0_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
-            + IMPORTS_PIN
-            + "MicroBitPin P0(MICROBIT_ID_IO_P0, MICROBIT_PIN_P0, PIN_CAPABILITY_ALL);\n"
-            + "MicroBitPin P2(MICROBIT_ID_IO_P2, MICROBIT_PIN_P2, PIN_CAPABILITY_ALL); "
-            + "P0.setAnalogValue(0);\n"
-            + "P2.setDigitalValue(0);"
+            + IMPORTS
+
+            + "uBit.io.P0.setAnalogValue(0);\n"
+            + "uBit.io.P2.setDigitalValue(0);"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/write_value_to_pin.xml");
