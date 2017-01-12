@@ -314,6 +314,8 @@
                 </value>
             </block>
             <block type='mbedActions_motor_stop'></block>
+            <block type='mbedActions_write_to_pin'>
+            </block>
             </category>
             <category name='TOOLBOX_SOUND' svg="true">
                <block type='mbedActions_play_tone'>
@@ -321,7 +323,7 @@
                 <block type='mbedActions_play_note'>
                 </block>
             </category>
-            <category name='TOOLBOX_LIGHT' svg="true">
+                  <category name='TOOLBOX_LIGHT' svg="true">
                 <block type='mbedActions_leds_on'><value name="COLOR">
         <block type="mbedColour_picker">
           <field name="COLOUR">#ff0000</field>
@@ -344,6 +346,10 @@
             <block type='mbedSensors_temperature_getSample'>
             </block>
             <block type='mbedSensors_ambientLight_getSample'>
+            </block>
+            <block type='mbedSensors_pin_getSample'>
+            </block>
+            <block type='mbedSensors_pin_isTouched'>
             </block>
         </category>
         <category name='TOOLBOX_CONTROL' svg="true">

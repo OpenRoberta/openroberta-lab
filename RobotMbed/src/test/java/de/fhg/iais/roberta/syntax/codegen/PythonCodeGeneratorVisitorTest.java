@@ -167,13 +167,35 @@ public class PythonCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCoorectMicroPythonScript() throws Exception {
+    public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
             + "display.scroll(str(temperature()))";
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
+    }
+
+    @Test
+    public void visitPinTouchSensor_ScriptDisplayPin0andPin3areTouched_ReturnsCorrectMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.scroll(str(pin0.read_digital()))\n"
+            + "display.scroll(str(pin3.read_digital()))";
+
+        assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
+    }
+
+    @Test
+    public void visitPinValueSensor_ScriptDisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "display.scroll(str(pin0.read_analog()))\n"
+            + "display.scroll(str(pin2.read_digital()))";
+
+        assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
     }
 
     //    @Test

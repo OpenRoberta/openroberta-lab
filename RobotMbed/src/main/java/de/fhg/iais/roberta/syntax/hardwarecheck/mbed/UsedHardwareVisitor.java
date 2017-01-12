@@ -1,17 +1,22 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.mbed;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -24,6 +29,8 @@ public class UsedHardwareVisitor extends CheckVisitor {
     private boolean radioUsed;
     private boolean accelerometerUsed;
     private boolean greyScale;
+
+    private Set<Integer> pinsUsed = new HashSet<Integer>();
 
     public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         check(phrasesSet);
@@ -48,6 +55,10 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     public boolean isGreyScale() {
         return this.greyScale;
+    }
+
+    public Set<Integer> getUsedPins() {
+        return this.pinsUsed;
     }
 
     @Override
@@ -104,6 +115,24 @@ public class UsedHardwareVisitor extends CheckVisitor {
         rgbColor.getR().visit(this);
         rgbColor.getG().visit(this);
         rgbColor.getB().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+        this.pinsUsed.add(pinTouchSensor.getPinNumber());
+        return null;
+    }
+
+    @Override
+    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
+        this.pinsUsed.add(pinValueSensor.getPinNumber());
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+        this.pinsUsed.add(pinWriteValueSensor.getPinNumber());
         return null;
     }
 

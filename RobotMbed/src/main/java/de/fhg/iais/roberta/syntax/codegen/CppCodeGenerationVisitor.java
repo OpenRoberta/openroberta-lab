@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -36,6 +37,7 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -109,6 +111,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -835,6 +839,34 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     @Override
+    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+        this.sb.append("P" + pinTouchSensor.getPinNumber() + ".isTouched()");
+        return null;
+    }
+
+    @Override
+    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
+        String valueType = "AnalogValue()";
+        if ( pinValueSensor.getValueType() == ValueType.DIGITAL ) {
+            valueType = "DigitalValue()";
+        }
+        this.sb.append("P" + pinValueSensor.getPinNumber() + ".get" + valueType);
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+        String valueType = "AnalogValue(";
+        if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
+            valueType = "DigitalValue(";
+        }
+        this.sb.append("P" + pinWriteValueSensor.getPinNumber() + ".set" + valueType);
+        pinWriteValueSensor.getValue().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         return null;
     }
@@ -1398,6 +1430,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     private void addConstants() {
         this.sb.append("#include \"MicroBit.h\" \n");
+        if ( !this.usedHardwareVisitor.getUsedPins().isEmpty() ) {
+            this.sb.append("#include \"MicroBitPin.h\" \n");
+        }
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit uBit; \n \n");
@@ -1430,6 +1465,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( this.usedHardwareVisitor.isAccelerometerUsed() ) {
             nlIndent();
             this.sb.append("uBit.accelerometer.updateSample();");
+        }
+
+        for ( Integer usedPin : this.usedHardwareVisitor.getUsedPins() ) {
+            nlIndent();
+            this.sb.append(String.format("MicroBitPin P%s(MICROBIT_ID_IO_P%s, MICROBIT_PIN_P%s, PIN_CAPABILITY_ALL);", usedPin, usedPin, usedPin));
         }
 
     }

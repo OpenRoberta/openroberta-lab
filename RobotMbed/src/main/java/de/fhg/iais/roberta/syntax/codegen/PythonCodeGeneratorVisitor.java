@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -105,6 +106,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -727,6 +730,13 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     }
 
     @Override
+    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
+        String valueType = pinValueSensor.getValueType().toString().toLowerCase();
+        this.sb.append("pin" + pinValueSensor.getPinNumber() + ".read_" + valueType + "()");
+        return null;
+    }
+
+    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
@@ -1204,7 +1214,12 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+        this.sb.append("pin" + pinTouchSensor.getPinNumber() + ".read_digital()");
         return null;
     }
 
@@ -1400,7 +1415,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    // TODO
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
         // TODO
@@ -1454,6 +1468,12 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
                 }
             }
         }
+    }
+
+    @Override
+    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

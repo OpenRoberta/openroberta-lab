@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -15,6 +16,8 @@ import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 
 /**
@@ -133,4 +136,25 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param rgbColor phrase to be visited
      */
     public V visitRgbColor(RgbColor<V> rgbColor);
+
+    /**
+     * visit a {@link PinTouchSensor}.
+     *
+     * @param pinTouchSensor phrase to be visited
+     */
+    public V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor);
+
+    /**
+     * visit a {@link PinValueSensor}.
+     *
+     * @param pinValueSensor phrase to be visited
+     */
+    public V visitPinValueSensor(PinValueSensor<V> pinValueSensor);
+
+    /**
+     * visit a {@link PinWriteValueSensor}.
+     *
+     * @param pinWriteValueSensor phrase to be visited
+     */
+    public V visitPinWriteValueSensor(PinWriteValueSensor<V> pinWriteValueSensor);
 }

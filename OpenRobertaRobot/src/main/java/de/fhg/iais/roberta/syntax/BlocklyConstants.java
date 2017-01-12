@@ -282,5 +282,7 @@ public final class BlocklyConstants {
     public static final String CAMERA = "CAMERA";
     public static final String RESOLUTION = "RESOLUTION";
     public static final String COORDINATE = "COORDINATE";
+    public static final String PIN = "PIN";
+    public static final String VALUETYPE = "VALUETYPE";
 
 }
