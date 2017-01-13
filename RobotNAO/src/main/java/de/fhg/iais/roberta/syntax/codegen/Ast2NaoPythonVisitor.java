@@ -1577,15 +1577,15 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         } else if ( setStiffness.getBodyPart() == BodyPart.ARMS ) {
             this.sb.append("\"Arms\"");
         } else if ( setStiffness.getBodyPart() == BodyPart.LEFTARM ) {
-            this.sb.append("\"LeftArm\"");
+            this.sb.append("\"LArm\"");
         } else if ( setStiffness.getBodyPart() == BodyPart.RIGHTARM ) {
-            this.sb.append("\"RightArm\"");
+            this.sb.append("\"RArm\"");
         } else if ( setStiffness.getBodyPart() == BodyPart.LEGS ) {
             this.sb.append("\"Legs\"");
         } else if ( setStiffness.getBodyPart() == BodyPart.LEFTLEG ) {
-            this.sb.append("\"LeftLeg\"");
+            this.sb.append("\"LLeg\"");
         } else if ( setStiffness.getBodyPart() == BodyPart.RIHTLEG ) {
-            this.sb.append("\"Rightleg\"");
+            this.sb.append("\"RLeg\"");
         }
 
         if ( setStiffness.getOnOff() == OnOff.ON ) {
@@ -1861,42 +1861,42 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitSetLeds(SetLeds<Void> setLeds) {
         this.sb.append("h.setLeds(");
         if ( setLeds.getLed() == Led.ALL ) {
-            this.sb.append("\"All\", ");
+            this.sb.append("\"AllLeds\", ");
         } else if ( setLeds.getLed() == Led.CHEST ) {
-            this.sb.append("\"Chest\", ");
+            this.sb.append("\"ChestLeds\", ");
         } else if ( setLeds.getLed() == Led.EARS ) {
-            this.sb.append("\"Ears\", ");
+            this.sb.append("\"RightEarLeds\", ");
         } else if ( setLeds.getLed() == Led.EYES ) {
-            this.sb.append("\"Eyes\", ");
+            this.sb.append("\"FaceLeds\", ");
         } else if ( setLeds.getLed() == Led.HEAD ) {
-            this.sb.append("\"Head\", ");
+            this.sb.append("\"BrainLeds\", ");
         } else if ( setLeds.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEar\", ");
+            this.sb.append("\"LeftEarLeds\", ");
         } else if ( setLeds.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftEye\", ");
+            this.sb.append("\"LeftFaceLeds\", ");
         } else if ( setLeds.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFoot\", ");
+            this.sb.append("\"LeftFootLeds\", ");
         } else if ( setLeds.getLed() == Led.RIGHTEAR ) {
             this.sb.append("\"RightEar\", ");
         } else if ( setLeds.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightEye\", ");
+            this.sb.append("\"RightFaceLeds\", ");
         } else if ( setLeds.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFoot\", ");
+            this.sb.append("\"RightFootLeds\", ");
         }
         if ( setLeds.getColor() == Color.GREEN ) {
-            this.sb.append("\"Green\", ");
+            this.sb.append("\"green\", ");
         } else if ( setLeds.getColor() == Color.BLUE ) {
-            this.sb.append("\"Blue\", ");
+            this.sb.append("\"blue\", ");
         } else if ( setLeds.getColor() == Color.RED ) {
-            this.sb.append("\"Red\", ");
+            this.sb.append("\"red\", ");
         } else if ( setLeds.getColor() == Color.WHITE ) {
-            this.sb.append("\"White\", ");
+            this.sb.append("\"white\", ");
         } else if ( setLeds.getColor() == Color.YELLOW ) {
-            this.sb.append("\"Yellow\", ");
+            this.sb.append("\"yellow\", ");
         } else if ( setLeds.getColor() == Color.MAGENTA ) {
-            this.sb.append("\"Magenta\", ");
+            this.sb.append("\"magenta\", ");
         } else if ( setLeds.getColor() == Color.CYAN ) {
-            this.sb.append("\"Cyan\", ");
+            this.sb.append("\"cyan\", ");
         }
         setLeds.getIntensity().visit(this);
         this.sb.append(")");
@@ -1965,11 +1965,11 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitGyrometer(Gyrometer<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
         if ( gyrometer.getCoordinate() == Coordinates.X ) {
-            this.sb.append("X)");
+            this.sb.append("\"X\")");
         } else if ( gyrometer.getCoordinate() == Coordinates.Y ) {
-            this.sb.append("Y)");
+            this.sb.append("\"Y\")");
         } else if ( gyrometer.getCoordinate() == Coordinates.Z ) {
-            this.sb.append("Z)");
+            this.sb.append("\"Z\")");
         }
         return null;
     }
@@ -1978,11 +1978,11 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
         this.sb.append("h.accelerometer(");
         if ( accelerometer.getCoordinate() == Coordinates.X ) {
-            this.sb.append("X)");
+            this.sb.append("\"X\")");
         } else if ( accelerometer.getCoordinate() == Coordinates.Y ) {
-            this.sb.append("Y)");
+            this.sb.append("\"Y\")");
         } else if ( accelerometer.getCoordinate() == Coordinates.Z ) {
-            this.sb.append("Z)");
+            this.sb.append("\"Z\")");
         }
         return null;
     }
