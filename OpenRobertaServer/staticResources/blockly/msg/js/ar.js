@@ -1122,6 +1122,7 @@ Blockly.Msg.TOOLBOX_LOOP = "Loops";  // untranslated
 Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "Loop Variables";  // untranslated
 Blockly.Msg.TOOLBOX_MATH = "Math";  // untranslated
 Blockly.Msg.TOOLBOX_MOVE = "Move";  // untranslated
+Blockly.Msg.TOOLBOX_MOVEMENT = "Movement";  // untranslated
 Blockly.Msg.TOOLBOX_PIN = "Pin";  // untranslated
 Blockly.Msg.TOOLBOX_PROCEDURE = "Functions";  // untranslated
 Blockly.Msg.TOOLBOX_SENSOR = "Sensors";  // untranslated

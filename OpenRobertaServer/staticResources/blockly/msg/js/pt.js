@@ -1122,10 +1122,7 @@ Blockly.Msg.TOOLBOX_LOOP = "Ciclos";
 Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "Variáveis de Ciclo";
 Blockly.Msg.TOOLBOX_MATH = "Matemática";
 Blockly.Msg.TOOLBOX_MOVE = "Mover";
-<<<<<<< 39c4f0a04d81c6f0b82642f0c5984ebfd4610dd7
-=======
 Blockly.Msg.TOOLBOX_MOVEMENT = "Movement";  // untranslated
->>>>>>> #310 #348 add new blocks and toolboxes for NAO, #346 add code generation for new NAO blocks
 Blockly.Msg.TOOLBOX_PIN = "Pin";  // untranslated
 Blockly.Msg.TOOLBOX_PROCEDURE = "Funções";
 Blockly.Msg.TOOLBOX_SENSOR = "Sensores";

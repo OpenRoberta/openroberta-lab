@@ -1,11 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< 39c4f0a04d81c6f0b82642f0c5984ebfd4610dd7
-		"lastupdated": "2017-01-12 12:13:47.609279",
-=======
 		"lastupdated": "2017-01-13 08:28:17.658504",
->>>>>>> #310 #348 add new blocks and toolboxes for NAO, #346 add code generation for new NAO blocks
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
