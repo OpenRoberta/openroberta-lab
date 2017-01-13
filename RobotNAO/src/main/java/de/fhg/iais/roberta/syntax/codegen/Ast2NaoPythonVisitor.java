@@ -1617,55 +1617,55 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
         this.sb.append("h.moveJoint(");
         if ( moveJoint.getJoint() == Joint.HEADYAW ) {
-            this.sb.append("HeadYaw");
+            this.sb.append("\"HeadYaw\"");
         } else if ( moveJoint.getJoint() == Joint.HEADPITCH ) {
-            this.sb.append("HeadPitch");
+            this.sb.append("\"HeadPitch\"");
         } else if ( moveJoint.getJoint() == Joint.LSHOULDERPITCH ) {
-            this.sb.append("LShoulderPitch");
+            this.sb.append("\"LShoulderPitch\"");
         } else if ( moveJoint.getJoint() == Joint.LSHOULDERROLL ) {
-            this.sb.append("LShoulderRoll");
+            this.sb.append("\"LShoulderRoll\"");
         } else if ( moveJoint.getJoint() == Joint.LELBOWYAW ) {
-            this.sb.append("LElbowYaw");
+            this.sb.append("\"LElbowYaw\"");
         } else if ( moveJoint.getJoint() == Joint.LELBOWROLL ) {
-            this.sb.append("LElbowRoll");
+            this.sb.append("\"LElbowRoll\"");
         } else if ( moveJoint.getJoint() == Joint.LWRISTYAW ) {
-            this.sb.append("LWristYaw");
+            this.sb.append("\"LWristYaw\"");
         } else if ( moveJoint.getJoint() == Joint.LHAND ) {
-            this.sb.append("LHand");
+            this.sb.append("\"LHand\"");
         } else if ( moveJoint.getJoint() == Joint.LHIPYAWPITCH ) {
-            this.sb.append("LHipYawPitch");
+            this.sb.append("\"LHipYawPitch\"");
         } else if ( moveJoint.getJoint() == Joint.LHIPROLL ) {
-            this.sb.append("LHipRoll");
+            this.sb.append("\"LHipRoll\"");
         } else if ( moveJoint.getJoint() == Joint.LHIPPITCH ) {
-            this.sb.append("LHipPitch");
+            this.sb.append("\"LHipPitch\"");
         } else if ( moveJoint.getJoint() == Joint.LKNEEPITCH ) {
-            this.sb.append("LKneePitch");
+            this.sb.append("\"LKneePitch\"");
         } else if ( moveJoint.getJoint() == Joint.LANKLEPITCH ) {
-            this.sb.append("LAnklePitch");
+            this.sb.append("\"LAnklePitch\"");
         } else if ( moveJoint.getJoint() == Joint.RANKLEROLL ) {
-            this.sb.append("RAnkleRoll");
+            this.sb.append("\"RAnkleRoll\"");
         } else if ( moveJoint.getJoint() == Joint.RHIPYAWPITCH ) {
-            this.sb.append("RHipYawPitch");
+            this.sb.append("\"RHipYawPitch\"");
         } else if ( moveJoint.getJoint() == Joint.RHIPROLL ) {
-            this.sb.append("RHipRoll");
+            this.sb.append("\"RHipRoll\"");
         } else if ( moveJoint.getJoint() == Joint.RHIPITCH ) {
-            this.sb.append("RHipPitch");
+            this.sb.append("\"RHipPitch\"");
         } else if ( moveJoint.getJoint() == Joint.RKNEEPITCH ) {
-            this.sb.append("RKneePitch");
+            this.sb.append("\"RKneePitch\"");
         } else if ( moveJoint.getJoint() == Joint.RANKLEPITCH ) {
-            this.sb.append("RAnklePitch");
+            this.sb.append("\"RAnklePitch\"");
         } else if ( moveJoint.getJoint() == Joint.RSHOULDERPITCH ) {
-            this.sb.append("RShoulderPitch");
+            this.sb.append("\"RShoulderPitch\"");
         } else if ( moveJoint.getJoint() == Joint.RSHOULDERROLL ) {
-            this.sb.append("RShoulderRoll");
+            this.sb.append("\"RShoulderRoll\"");
         } else if ( moveJoint.getJoint() == Joint.RELBOWYAW ) {
-            this.sb.append("RElbowYaw");
+            this.sb.append("\"RElbowYaw\"");
         } else if ( moveJoint.getJoint() == Joint.RELBOWROLL ) {
-            this.sb.append("RElbowRoll");
+            this.sb.append("\"RElbowRoll\"");
         } else if ( moveJoint.getJoint() == Joint.RWRISTYAW ) {
-            this.sb.append("RWristYaw");
+            this.sb.append("\"RWristYaw\"");
         } else if ( moveJoint.getJoint() == Joint.RHAND ) {
-            this.sb.append("RHand");
+            this.sb.append("\"RHand\"");
         }
         this.sb.append(", ");
         moveJoint.getDegrees().visit(this);
