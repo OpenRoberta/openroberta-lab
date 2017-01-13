@@ -6,7 +6,27 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum Language implements IMode {
-    GERMAN(), ENGLISH(), FRENCH();
+    GERMAN(),
+    ENGLISH(),
+    FRENCH(),
+    JAPANESE(),
+    CHINESE(),
+    SPANISH(),
+    KOREAN(),
+    ITALIAN(),
+    DUTCH(),
+    FINNISH(),
+    POLISH(),
+    RUSSIAN(),
+    TURKISH(),
+    ARABIC(),
+    CZECH(),
+    PORTUGUESE(),
+    BRAZILIAN(),
+    SWEDISH(),
+    DANISH(),
+    NORWEGIAN(),
+    GREEK();
 
     private final String[] values;
 

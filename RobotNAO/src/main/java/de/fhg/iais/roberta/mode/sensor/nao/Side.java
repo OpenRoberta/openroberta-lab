@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum Side implements IMode {
-    LEFT(), RIGHT();
+    LEFT(), RIGHT(), FRONT(), REAR(), MIDDLE();
 
     private final String[] values;
 

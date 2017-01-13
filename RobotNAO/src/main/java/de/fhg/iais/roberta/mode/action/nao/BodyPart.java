@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum BodyPart implements IMode {
-    ARM(), LARM(), RARM();
+    BODY(), HEAD(), ARMS(), LEFTARM(), RIGHTARM(), LEGS(), LEFTLEG(), RIHTLEG();
 
     private final String[] values;
 

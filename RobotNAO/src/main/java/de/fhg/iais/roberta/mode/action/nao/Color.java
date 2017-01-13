@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum Color implements IMode {
-    GREEN(), RED(), BLUE();
+    GREEN(), RED(), BLUE(), WHITE(), YELLOW(), MAGENTA(), CYAN();
 
     private final String[] values;
 

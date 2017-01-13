@@ -22,34 +22,32 @@ import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode;
+import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
-import de.fhg.iais.roberta.syntax.action.nao.Blink;
+import de.fhg.iais.roberta.syntax.action.nao.Dialog;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
+import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
-import de.fhg.iais.roberta.syntax.action.nao.LookAt;
-import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOff;
-import de.fhg.iais.roberta.syntax.action.nao.PartialStiffnessOn;
-import de.fhg.iais.roberta.syntax.action.nao.PointAt;
+import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
+import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
+import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
+import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
-import de.fhg.iais.roberta.syntax.action.nao.SetEarIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetEyeColor;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
+import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
+import de.fhg.iais.roberta.syntax.action.nao.SetMode;
+import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
 import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
-import de.fhg.iais.roberta.syntax.action.nao.SitDown;
-import de.fhg.iais.roberta.syntax.action.nao.StandUp;
-import de.fhg.iais.roberta.syntax.action.nao.StiffnessOff;
-import de.fhg.iais.roberta.syntax.action.nao.StiffnessOn;
 import de.fhg.iais.roberta.syntax.action.nao.Stop;
-import de.fhg.iais.roberta.syntax.action.nao.TaiChi;
+import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
-import de.fhg.iais.roberta.syntax.action.nao.Wave;
-import de.fhg.iais.roberta.syntax.action.nao.WipeForehead;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -108,14 +106,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
-import de.fhg.iais.roberta.syntax.sensor.nao.HeadTouched;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
-import de.fhg.iais.roberta.syntax.sensor.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.sensor.nao.SelectCamera;
-import de.fhg.iais.roberta.syntax.sensor.nao.SensorTouched;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
-import de.fhg.iais.roberta.syntax.sensor.nao.TakePicture;
+import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
@@ -682,6 +677,32 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
+    public Void visitSetMode(SetMode<Void> setMode) {
+        return null;
+    }
+
+    @Override
+    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
+        return null;
+    }
+
+    @Override
+    public Void visitSetStiffness(SetStiffness<Void> SetStiffness) {
+        return null;
+    }
+
+    @Override
+    public Void visitHand(Hand<Void> Hand) {
+        return null;
+    }
+
+    @Override
+    public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
+        moveJoint.getDegrees().visit(this);
+        return null;
+    }
+
+    @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
         walkDistance.getDistanceToWalk().visit(this);
         return null;
@@ -707,72 +728,17 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitStandUp(StandUp<Void> standUp) {
+    public Void visitAnimation(Animation<Void> animation) {
         return null;
     }
 
     @Override
-    public Void visitSitDown(SitDown<Void> sitDown) {
-        return null;
-    }
+    public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
+        pointLookAt.getpointX().visit(this);
+        pointLookAt.getpointY().visit(this);
+        pointLookAt.getpointZ().visit(this);
+        pointLookAt.getSpeed().visit(this);
 
-    @Override
-    public Void visitTaiChi(TaiChi<Void> taiChi) {
-        return null;
-    }
-
-    @Override
-    public Void visitWave(Wave<Void> wave) {
-        return null;
-    }
-
-    @Override
-    public Void visitWipeForehead(WipeForehead<Void> wipeForehead) {
-        return null;
-    }
-
-    @Override
-    public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
-        return null;
-    }
-
-    @Override
-    public Void visitStiffnessOn(StiffnessOn<Void> stiffnessOn) {
-        return null;
-    }
-
-    @Override
-    public Void visitStiffnessOff(StiffnessOff<Void> stiffnessOff) {
-        return null;
-    }
-
-    @Override
-    public Void visitLookAt(LookAt<Void> lookAt) {
-        lookAt.getlookX().visit(this);
-        lookAt.getlookY().visit(this);
-        lookAt.getlookZ().visit(this);
-        lookAt.getSpeed().visit(this);
-
-        return null;
-    }
-
-    @Override
-    public Void visitPointAt(PointAt<Void> pointAt) {
-        pointAt.getpointX().visit(this);
-        pointAt.getpointY().visit(this);
-        pointAt.getpointZ().visit(this);
-        pointAt.getSpeed().visit(this);
-
-        return null;
-    }
-
-    @Override
-    public Void visitPartialStiffnessOn(PartialStiffnessOn<Void> partialStiffnessOn) {
-        return null;
-    }
-
-    @Override
-    public Void visitPartialStiffnessOff(PartialStiffnessOff<Void> partialStiffnessOff) {
         return null;
     }
 
@@ -783,18 +749,48 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitSetEyeColor(SetEyeColor<Void> setEyeColor) {
+    public Void visitGetVolume(GetVolume<Void> getVolume) {
         return null;
     }
 
     @Override
-    public Void visitSetEarIntensity(SetEarIntensity<Void> setEarIntensity) {
-        setEarIntensity.getIntensity().visit(this);
+    public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
         return null;
     }
 
     @Override
-    public Void visitBlink(Blink<Void> blink) {
+    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayText(SayText<Void> sayText) {
+        sayText.getMsg().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPlayFile(PlayFile<Void> playFile) {
+        playFile.getMsg().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitDialog(Dialog<Void> dialog) {
+        dialog.getPhrase().visit(this);
+        dialog.getAnswer().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+        recognizeWord.getMsg().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitSetLeds(SetLeds<Void> setLeds) {
+        setLeds.getIntensity().visit(this);
         return null;
     }
 
@@ -821,53 +817,12 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetVolume(GetVolume<Void> getVolume) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
-        return null;
-    }
-
-    @Override
-    public Void visitHeadTouched(HeadTouched<Void> headTouched) {
-        return null;
-    }
-
-    @Override
-    public Void visitSensorTouched(SensorTouched<Void> sensorTouched) {
-        return null;
-    }
-
-    @Override
-    public Void visitNaoMark(NaoMark<Void> naoMark) {
+    public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
         return null;
     }
 
     @Override
     public Void visitSonar(Sonar<Void> sonar) {
-        return null;
-    }
-
-    @Override
-    public Void visitSelectCamera(SelectCamera<Void> selectCamera) {
-        return null;
-    }
-
-    @Override
-    public Void visitTakePicture(TakePicture<Void> takePicture) {
-        return null;
-    }
-
-    @Override
-    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
-        recordVideo.getDuration().visit(this);
         return null;
     }
 
@@ -882,8 +837,22 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitSayText(SayText<Void> sayText) {
-        sayText.getMsg().visit(this);
+    public Void visitForceSensor(ForceSensor<Void> forceSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitNaoMark(NaoMark<Void> naoMark) {
+        return null;
+    }
+
+    @Override
+    public Void visitTakePicture(TakePicture<Void> takePicture) {
+        return null;
+    }
+
+    @Override
+    public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
         return null;
     }
 }

@@ -50,6 +50,7 @@
 <script src="../blocks/robCommunication.js"></script>
 <script src="../blocks/robControls.js"></script>
 <script src="../blocks/naoSensors.js"></script> 
+<script src="../blocks/naoVision.js"></script> 
 <script src="../blocks/simActions.js"></script>
 <script src="../blocks/simSensors.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
@@ -265,61 +266,18 @@ h1 {
         <category name='brick'>
         <block type='naoBrick_NAO-Brick'></block>
         </category>
-        <category name='TOOLBOX_MOVE' svg="true">
-            <block type='naoActions_standUp'></block>
-            <block type='naoActions_sitDown'></block>
-            <block type='naoActions_taiChi'></block>
-            <block type='naoActions_wave'></block>
-            <block type='naoActions_wipeForehead'></block>
+        <category name='TOOLBOX_MOVEMENT' svg="true">
+            <block type='naoActions_mode'></block>
             <block type='naoActions_applyPosture'></block>
-            <block type='naoActions_lookAt'>
-                <value name='X'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Y'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Z'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Speed'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
+            <block type='naoActions_stiffness'></block>
+            <block type='naoActions_hand'></block>
+            <block type='naoActions_moveJoint'>
+            	<value name='POWER'>
+            		<block type='math_number'>
+            			<field name='NUM'>1</field>
+            		</block>
+            	</value>
             </block>
-            <block type='naoActions_pointAt'>
-                <value name='X'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Y'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Z'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-                <value name='Speed'>
-                    <block type='math_number'>
-                        <field name='NUM'>0</field>
-                    </block>
-                </value>
-            </block>
-            <block type='naoActions_stiffnessOn'></block>
-            <block type='naoActions_stiffnessOff'></block>
-            <block type='naoActions_partialStiffnessOn'></block>
-            <block type='naoActions_partialStiffnessOff'></block>
         </category>
         <category name='TOOLBOX_WALK' svg="true">
             <block type='naoActions_walk'>
@@ -355,6 +313,31 @@ h1 {
             </block>
             <block type='naoActions_stop'></block>
         </category>
+        <category name='TOOLBOX_ANIMATIONS' svg="true">
+        	<block type='naoActions_animation'></block>
+        	<block type='naoActions_pointLookAt'>
+                <value name='X'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='Y'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='Z'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+                <value name='Speed'>
+                    <block type='math_number'>
+                        <field name='NUM'>0</field>
+                    </block>
+                </value>
+            </block>
+        </category>
         <category name='TOOLBOX_SOUND' svg="true">
             <block type='naoActions_setVolume'>
                 <value name='VOLUME'>
@@ -364,8 +347,8 @@ h1 {
                 </value>
             </block>
             <block type='naoActions_getVolume'></block>
-            <block type='naoActions_getLanguage'></block>
             <block type='naoActions_setLanguage'></block>
+            <block type='naoActions_getLanguage'></block>
             <block type='naoActions_sayText'>
             	<value name='OUT'>
                     <block type='text'>
@@ -373,17 +356,51 @@ h1 {
                     </block>
                 </value>
             </block>
+            <block type='naoActions_playFile'>
+            	<value name='OUT'>
+                    <block type='text'>
+                        <field name='TEXT'>roberta</field>
+                    </block>
+                </value>
+            </block>
+            <block type='naoActions_dialog'>
+            	<value name='PHRASE'>
+                    <block type='text'>
+                        <field name='TEXT'>What is your name?</field>
+                    </block>
+                </value>
+                <value name='ANSWER'>
+                    <block type='text'>
+                        <field name='TEXT'>NAO</field>
+                    </block>
+                </value>
+            </block>
+            <block type='naoActions_recognizeWord'>
+            	<value name='WORD'>
+                    <block type='text'>
+                        <field name='TEXT'>hello</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <category name='TOOLBOX_VISION' svg="true">
+        	<block type='naoActions_takePicture'></block>
+        	<block type='naoActions_recordVideo'>
+        		<value name='DURATION'>
+                    <block type='math_number'>
+                        <field name='NUM'>5</field>
+                    </block>
+            	</value>
+        	</block>
         </category>
         <category name='TOOLBOX_LIGHT' svg="true">
-            <block type='naoActions_setEyeColor'></block>
-            <block type='naoActions_setEarIntensity'>
-                <value name='INTENSITY'>
+        	<block type='naoActions_leds'>
+            	<value name='INTENSITY'>
                     <block type='math_number'>
                         <field name='NUM'>50</field>
                     </block>
                 </value>
             </block>
-            <block type='naoActions_blink'></block>
             <block type='naoActions_ledOff'></block>
             <block type='naoActions_ledReset'></block>
             <block type='naoActions_randomEyes'>
@@ -403,31 +420,42 @@ h1 {
         </category> 
     </category>    
     <category name='TOOLBOX_SENSOR' svg="true">
-        <block type='naoSensors_headsensors'>
-        </block>
-        <block type='naoSensors_touchsensors'>
-        </block>
-        <block type='naoSensors_naoMark'>
-        </block>
-        <block type='naoSensors_sonar'>
-        </block>
-        <block type='naoSensors_selectCamera'>
-        </block>
-        <block type='naoSensors_takePicture'>
-        </block>
-        <block type='naoSensors_recordVideo'>
-        	<value name='DURATION'>
-                    <block type='math_number'>
-                        <field name='NUM'>5</field>
+        <block type='naoSensors_touchsensors'></block>
+        <block type='naoSensors_sonar'></block>        
+        <block type='naoSensors_gyrometer'></block>
+        <block type='naoSensors_accelerometer'></block>
+        <block type='naoSensors_fsr'></block>3
+        <block type='naoSensors_naoMark'></block>
+        <block type='naoSensors_learnFace'>
+            	<value name='NAME'>
+                    <block type='text'>
+                        <field name='TEXT'>roberta</field>
                     </block>
                 </value>
         </block>
-        <block type='naoSensors_gyrometer'>
+        <block type='naoSensors_forgetFace'>
+            	<value name='NAME'>
+                    <block type='text'>
+                        <field name='TEXT'>roberta</field>
+                    </block>
+                </value>
         </block>
-        <block type='naoSensors_accelerometer'>
+        <block type='naoSensors_detectFace'></block>
+        <block type='naoSensors_learnObject'>
+            	<value name='NAME'>
+                    <block type='text'>
+                        <field name='TEXT'>roberta</field>
+                    </block>
+                </value>
         </block>
-        <block type='naoSensors_fsr'>
+        <block type='naoSensors_forgetObject'>
+            	<value name='NAME'>
+                    <block type='text'>
+                        <field name='TEXT'>roberta</field>
+                    </block>
+                </value>
         </block>
+        <block type='naoSensors_detectObject'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg="true">
         <category name='TOOLBOX_DECISION'>

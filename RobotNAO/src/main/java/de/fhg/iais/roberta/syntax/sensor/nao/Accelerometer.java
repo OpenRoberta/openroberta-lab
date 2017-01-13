@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-public final class Accelerometer<V> extends Action<V> {
+public final class Accelerometer<V> extends Sensor<V> {
 
     private final Coordinates coordinate;
 
