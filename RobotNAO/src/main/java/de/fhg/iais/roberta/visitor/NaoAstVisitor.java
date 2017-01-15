@@ -28,7 +28,11 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForgetObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.LearnObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -260,4 +264,32 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
      * @param NaoMark on phrase to be visited
      */
     V visitRecordVideo(RecordVideo<V> recordVideo);
+
+    /**
+     * visit a {@link LearnFace}.
+     *
+     * @param LearnFace on phrase to be visited
+     */
+	V visitLearnFace(LearnFace<V> learnFace);
+	
+	/**
+     * visit a {@link ForgetFace}.
+     *
+     * @param ForgetFace on phrase to be visited
+     */
+	V visitForgetFace(ForgetFace<V> forgetFace);
+	
+	/**
+     * visit a {@link LearnObject}.
+     *
+     * @param LearnObject on phrase to be visited
+     */
+	V visitLearnObject(LearnObject<V> learnObject);
+	
+	/**
+     * visit a {@link ForgetObject}.
+     *
+     * @param ForgetObject on phrase to be visited
+     */
+	V visitForgetObject(ForgetObject<V> forgetObject);
 }

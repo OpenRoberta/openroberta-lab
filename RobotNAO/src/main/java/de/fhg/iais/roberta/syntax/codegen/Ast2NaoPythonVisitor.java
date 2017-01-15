@@ -140,7 +140,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForgetObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.LearnObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -2031,6 +2035,37 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("\"Bottom\", ");
         }
         recordVideo.getDuration().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+    
+    @Override
+    public Void visitLearnFace(LearnFace<Void> learnFace) {
+        this.sb.append("h.learnFace(");
+        learnFace.getMsg().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+    
+    @Override
+    public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+        this.sb.append("h.forgetFace(");
+        forgetFace.getMsg().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+    
+    public Void visitLearnObject(LearnObject<Void> learnObject) {
+        this.sb.append("h.learnObject(");
+        learnObject.getMsg().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+    
+    @Override
+    public Void visitForgetObject(ForgetObject<Void> forgetObject) {
+        this.sb.append("h.forgetObject(");
+        forgetObject.getMsg().visit(this);
         this.sb.append(")");
         return null;
     }

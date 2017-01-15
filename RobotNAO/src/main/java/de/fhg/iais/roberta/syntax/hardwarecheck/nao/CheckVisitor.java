@@ -107,7 +107,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.ForgetObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.LearnObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -853,6 +857,30 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
+        return null;
+    }
+    
+    @Override
+    public Void visitLearnFace(LearnFace<Void> learnFace) {
+        learnFace.getMsg().visit(this);
+        return null;
+    }
+    
+    @Override
+    public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+        forgetFace.getMsg().visit(this);
+        return null;
+    }
+    
+    @Override
+    public Void visitLearnObject(LearnObject<Void> learnObject) {
+        learnObject.getMsg().visit(this);
+        return null;
+    }
+    
+    @Override
+    public Void visitForgetObject(ForgetObject<Void> forgetObject) {
+        forgetObject.getMsg().visit(this);
         return null;
     }
 }
