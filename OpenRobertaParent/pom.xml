@@ -59,6 +59,7 @@
 		<module>../RobotNAO</module>
 		<module>../RobotMbed</module>
 		<module>../OpenRobertaServer</module>
+		<module>../TestResources</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -119,6 +120,11 @@
 			<dependency>
 				<groupId>de.fhg.iais.openroberta</groupId>
 				<artifactId>RobotNAO</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.fhg.iais.openroberta</groupId>
+				<artifactId>TestResiources</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
