@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -123,38 +122,9 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet, brickConfiguration);
         Ast2Ev3PythonVisitor astVisitor =
             new Ast2Ev3PythonVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), checkVisitor.getUsedActors(), 0);
-        astVisitor.generatePrefix(withWrapping);
-
-        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
-
-        astVisitor.generateSuffix(withWrapping);
+        astVisitor.genearateCode(phrasesSet, withWrapping);
 
         return astVisitor.sb.toString();
-    }
-
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2Ev3PythonVisitor astVisitor) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                if ( phrase.getKind().getCategory() != Category.TASK ) {
-                    astVisitor.nlIndent();
-                }
-                mainBlock = isMainBlock(phrase);
-                if ( mainBlock ) {
-                    astVisitor.setProgramIsEmpty(checkIsProgramEmpty(phrases));
-                }
-                phrase.visit(astVisitor);
-            }
-            mainBlock = mainBlock ? !mainBlock : mainBlock;
-        }
-    }
-
-    private static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
-        return phrases.size() == 2;
-    }
-
-    private static boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
     }
 
     @Override
@@ -823,7 +793,8 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         return null;
     }
 
-    private void generatePrefix(boolean withWrapping) {
+    @Override
+    protected void generatePrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
@@ -838,7 +809,8 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         this.sb.append("hal = Hal(_brickConfiguration)\n");
     }
 
-    private void generateSuffix(boolean withWrapping) {
+    @Override
+    protected void generateSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }

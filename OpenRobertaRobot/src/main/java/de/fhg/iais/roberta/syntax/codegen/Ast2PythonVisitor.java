@@ -1,13 +1,16 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
@@ -83,6 +86,41 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
+    }
+
+    protected void genearateCode(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        generatePrefix(withWrapping);
+        generateCodeFromPhrases(phrasesSet, withWrapping);
+        generateSuffix(withWrapping);
+    }
+
+    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        boolean mainBlock = false;
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                if ( phrase.getKind().getCategory() != Category.TASK ) {
+                    nlIndent();
+                }
+                mainBlock = isMainBlock(phrase);
+                if ( mainBlock ) {
+                    setProgramIsEmpty(checkIsProgramEmpty(phrases));
+                }
+                phrase.visit(this);
+            }
+            mainBlock = mainBlock ? !mainBlock : mainBlock;
+        }
+    }
+
+    abstract protected void generatePrefix(boolean withWrapping);
+
+    abstract protected void generateSuffix(boolean withWrapping);
+
+    protected static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
+        return phrases.size() == 2;
+    }
+
+    protected static boolean isMainBlock(Phrase<Void> phrase) {
+        return phrase.getKind().getName().equals("MAIN_TASK");
     }
 
     protected void incrIndentation() {

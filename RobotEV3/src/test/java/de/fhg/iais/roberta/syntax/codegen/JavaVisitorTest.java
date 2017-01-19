@@ -42,7 +42,7 @@ public class JavaVisitorTest {
     @Test
     public void visitEmptyExpr() throws Exception {
         EmptyExpr<Void> emptyExpr = EmptyExpr.make(Double.class);
-        Ast2Ev3JavaVisitor visitor = new Ast2Ev3JavaVisitor("Test", brickConfiguration, usedSensors, 0);
+        Ast2JavaVisitor visitor = new Ast2Ev3JavaVisitor("Test", brickConfiguration, usedSensors, 0);
         emptyExpr.visit(visitor);
         Assert.assertEquals("null", visitor.getSb().toString());
     }
