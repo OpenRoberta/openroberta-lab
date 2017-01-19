@@ -35,8 +35,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     function formatDate(dateLong) {
         if (dateLong) {
             var date = new Date(dateLong);
-            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
-                    + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
         } else {
             return "";
@@ -259,9 +258,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         document.body.removeChild(element);
     }
     exports.download = download;
-});
 
-(function($) {
     $.fn.draggable = function(opt) {
 
         opt = $.extend({
@@ -284,18 +281,17 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left
-                    + drg_w - pageX;
+            var drg_h = $selected.outerHeight(), drg_w = $selected.outerWidth(), pos_y = $selected.offset().top + drg_h - pageY, pos_x = $selected.offset().left + drg_w - pageX;
             $(document).on("mousemove touchmove", function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 $selected.offset({
                     top : pageY + pos_y - drg_h,
-                    left : pageX + pos_x - drg_w                
+                    left : pageX + pos_x - drg_w
                 });
                 $selected.css({
-                    right : 'auto',            
-                });               
+                    right : 'auto',
+                });
             }).on("mouseup touchend", function() {
                 $(this).off("mousemove touchmove"); // Unbind events from document
                 if ($selected !== null) {
@@ -313,8 +309,6 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             }
             $selected = null;
         });
-
         return this;
-
     };
-})(jQuery);
+});
