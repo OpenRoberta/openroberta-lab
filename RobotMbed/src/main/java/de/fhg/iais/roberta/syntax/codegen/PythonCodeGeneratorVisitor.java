@@ -1219,7 +1219,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("pin" + pinTouchSensor.getPinNumber() + ".read_digital()");
+        this.sb.append("pin" + pinTouchSensor.getPinNumber() + ".is_touched()");
         return null;
     }
 

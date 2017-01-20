@@ -177,12 +177,12 @@ public class PythonCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void visitPinTouchSensor_ScriptDisplayPin0andPin3areTouched_ReturnsCorrectMicroPythonScript() throws Exception {
+    public void visitPinTouchSensor_ScriptDisplayPin0andPin2areTouched_ReturnsCorrectMicroPythonScript() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(pin0.read_digital()))\n"
-            + "display.scroll(str(pin3.read_digital()))";
+            + "display.scroll(str(pin0.is_touched()))\n"
+            + "display.scroll(str(pin2.is_touched()))";
 
         assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
     }

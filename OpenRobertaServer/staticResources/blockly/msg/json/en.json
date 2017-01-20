@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-01-13 08:28:17.658504",
+		"lastupdated": "2017-01-20 12:53:36.528191",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1009,8 +1009,8 @@
 	"NAO_LEDRESET": "LED reset",
 	"NAO_RANDOMEYES": "random eyes",
 	"NAO_RASTA": "rasta",
-	"NAO_GYROMETER": "get gyrometer",
-	"NAO_ACCELEROMETER": "get accelerometer",
+	"NAO_GYROMETER": "gyrometer",
+	"NAO_ACCELEROMETER": "accelerometer",
 	"NAO_HEADSENSOR": "headsensor",
 	"NAO_TOUCHSENSOR": "touchsensor",
 	"NAO_SONAR": "sonar",
@@ -1018,7 +1018,7 @@
 	"NAO_SELECTCAMERA": "select camera",
 	"NAO_TAKEPICTURE": "take picture",
 	"NAO_RECORDVIDEO": "record video",
-	"NAO_FSR": "get force sensitive resistor",
+	"NAO_FSR": "force sensitive resistor",
 	"NAO_PLAY_FILE": "play file",
 	"NAO_PHRASE": "phrase",
 	"NAO_ANSWER": "answer",
@@ -1146,6 +1146,9 @@
 	"NAO_MODE_OPEN": "open",
 	"NAO_MODE_CLOSE": "close",
 	"NAO_HAND": "hand",
+	"NAO_ABSOLUTE": "absolute",
+	"NAO_RELATIVE": "relative",
+	"NAO_FILENAME": "filename",
 	"NAOBRICK_TOOLTIP": "Represents the NAO configuration. Enter the information about your NAO to be able to establish a connection.",
 	"NAO_STANDUP_TOOLTIP": "NAO stands up.",
 	"NAO_SITDOWN_TOOLTIP": "NAO sits down.",

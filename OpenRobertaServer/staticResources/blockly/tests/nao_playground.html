@@ -49,8 +49,8 @@
 <script src="../blocks/robColour.js"></script>
 <script src="../blocks/robCommunication.js"></script>
 <script src="../blocks/robControls.js"></script>
-<script src="../blocks/naoSensors.js"></script> 
-<script src="../blocks/naoVision.js"></script> 
+<script src="../blocks/naoControls.js"></script>
+<script src="../blocks/naoSensors.js"></script>
 <script src="../blocks/simActions.js"></script>
 <script src="../blocks/simSensors.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
@@ -384,13 +384,24 @@ h1 {
             </block>
         </category>
         <category name='TOOLBOX_VISION' svg="true">
-        	<block type='naoActions_takePicture'></block>
+        	<block type='naoActions_takePicture'>
+        		<value name='FILENAME'>
+                    <block type='text'>
+                        <field name='TEXT'>RobertaPicture</field>
+                    </block>
+                </value>
+        	</block>
         	<block type='naoActions_recordVideo'>
         		<value name='DURATION'>
                     <block type='math_number'>
                         <field name='NUM'>5</field>
                     </block>
             	</value>
+            	<value name='FILENAME'>
+                    <block type='text'>
+                        <field name='TEXT'>RobertaVideo</field>
+                    </block>
+                </value>
         	</block>
         </category>
         <category name='TOOLBOX_LIGHT' svg="true">
@@ -503,36 +514,21 @@ h1 {
                     </block> 
                 </value>
             </block>
-            <block type='robControls_wait_for'>
-                <value name='WAIT0'>
-                    <block type='logic_compare'>
-                    <mutation operator_range='BOOL'></mutation>
-                        <value name='A'>
-                            <block type='robSensors_getSample'>
-                            </block> 
-                        </value>
-                        <value name='B'>
-                            <block type='logic_boolean'>
-                            </block> 
-                        </value>
-                    </block> 
-                </value>
-            </block> 
-            <block type='robControls_wait_for'>
-                <value name='WAIT0'>
-                    <block type='logic_compare'>
-                    <mutation operator_range='BOOL'></mutation>
-                        <value name='A'>
-                            <block type='robSensors_getSample_ardu'>
-                            </block> 
-                        </value>
-                        <value name='B'>
-                            <block type='logic_boolean'>
-                            </block> 
-                        </value>
-                    </block> 
-                </value>
-            </block> 
+            <block type='naoControls_wait_for'>
+            	<value name='WAIT0'>
+                	<block type='logic_compare'>
+                    	<mutation operator_range='BOOL'></mutation>
+                        	<value name='A'>
+                                <block type='naoSensors_getSample'>
+                                </block>
+                            </value>
+                            <value name='B'>
+                                <block type='logic_boolean'>
+                                </block>
+                            </value>
+                     </block>
+                 </value>
+             </block> 
         </category>
         <category name='Tasks'> 
             <block type='robControls_start'></block> 
