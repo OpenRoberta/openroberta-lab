@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class PythonCodeGeneratorVisitorTest {
 
     private static final String IMPORTS = "" //
-        + "from microbit import *\n"
+        + "import microbit\n"
         + "import random\n"
         + "import math\n\n"
         + "timer1 = running_time()\n";
@@ -37,7 +37,7 @@ public class PythonCodeGeneratorVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsMicroPythonScriptWithShowTextCall() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "\ndisplay.scroll('Hallo')";
+            + "\nmicrobit.display.scroll('Hallo')";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
     }
@@ -58,8 +58,8 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image.HEART)\n"
-            + "display.show([Image.HEART_SMALL, Image.ASLEEP])";
+            + "microbit.display.show(Image.HEART)\n"
+            + "microbit.display.show([Image.HEART_SMALL, Image.ASLEEP])";
 
         assertCodeIsOk(expectedResult, "/action/display_image_show_imag_and_animation.xml");
     }
@@ -69,7 +69,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(\"\")";
+            + "microbit.display.show(\"\")";
 
         assertCodeIsOk(expectedResult, "/action/display_image_missing_image_name.xml");
     }
@@ -79,7 +79,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.clear()";
+            + "microbit.display.clear()";
 
         assertCodeIsOk(expectedResult, "/action/display_clear.xml");
     }
@@ -89,8 +89,8 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image.SILLY.shift_up(1))\n"
-            + "display.show(Image.SILLY.shift_down(2))";
+            + "microbit.display.show(Image.SILLY.shift_up(1))\n"
+            + "microbit.display.show(Image.SILLY.shift_down(2))";
 
         assertCodeIsOk(expectedResult, "/function/image_shift_up_down.xml");
     }
@@ -100,7 +100,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image.SILLY.shift_up(0))";
+            + "microbit.display.show(Image.SILLY.shift_up(0))";
 
         assertCodeIsOk(expectedResult, "/function/image_shift_missing_image_and_position.xml");
     }
@@ -110,7 +110,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image.HEART.invert())";
+            + "microbit.display.show(Image.HEART.invert())";
 
         assertCodeIsOk(expectedResult, "/function/image_invert_heart_image.xml");
     }
@@ -120,7 +120,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image.SILLY.invert())";
+            + "microbit.display.show(Image.SILLY.invert())";
 
         assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
     }
@@ -130,7 +130,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(button_a.is_pressed()))";
+            + "microbit.display.scroll(str(button_a.is_pressed()))";
 
         assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
     }
@@ -140,7 +140,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(compass.heading()))";
+            + "microbit.display.scroll(str(compass.heading()))";
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
     }
@@ -150,7 +150,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.show(Image('99000:00009:03000:00090:02000'))";
+            + "microbit.display.show(Image('99000:00009:03000:00090:02000'))";
 
         assertCodeIsOk(expectedResult, "/expr/image_create.xml");
     }
@@ -160,8 +160,8 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(\"face down\" == accelerometer.current_gesture()))\n"
-            + "display.scroll(str(\"left\" == accelerometer.current_gesture()))";
+            + "microbit.display.scroll(str(\"face down\" == accelerometer.current_gesture()))\n"
+            + "microbit.display.scroll(str(\"left\" == accelerometer.current_gesture()))";
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
     }
@@ -171,7 +171,7 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(temperature()))";
+            + "microbit.display.scroll(str(temperature()))";
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
     }
@@ -181,8 +181,8 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(pin0.is_touched()))\n"
-            + "display.scroll(str(pin2.is_touched()))";
+            + "microbit.display.scroll(str(pin0.is_touched()))\n"
+            + "microbit.display.scroll(str(pin2.is_touched()))";
 
         assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
     }
@@ -192,8 +192,8 @@ public class PythonCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "\n"
-            + "display.scroll(str(pin0.read_analog()))\n"
-            + "display.scroll(str(pin2.read_digital()))";
+            + "microbit.display.scroll(str(pin0.read_analog()))\n"
+            + "microbit.display.scroll(str(pin2.read_digital()))";
 
         assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
     }

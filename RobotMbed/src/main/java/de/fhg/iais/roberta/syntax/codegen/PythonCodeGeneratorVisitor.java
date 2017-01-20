@@ -559,7 +559,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("display.clear()");
+        this.sb.append("microbit.display.clear()");
         return null;
     }
 
@@ -617,7 +617,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("display.scroll(");
+        this.sb.append("microbit.display.scroll(");
         if ( !displayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             displayTextAction.getMsg().visit(this);
@@ -631,7 +631,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        this.sb.append("display.show(");
+        this.sb.append("microbit.display.show(");
         displayImageAction.getValuesToDisplay().visit(this);
         this.sb.append(")");
         return null;
@@ -1355,7 +1355,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         if ( !withWrapping ) {
             return;
         }
-        this.sb.append("from microbit import *\n");
+        this.sb.append("import microbit\n");
         this.sb.append("import random\n");
         this.sb.append("import math\n");
 
