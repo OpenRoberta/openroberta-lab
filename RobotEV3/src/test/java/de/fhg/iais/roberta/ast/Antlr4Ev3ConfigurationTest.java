@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Properties;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -13,6 +14,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Actor;
@@ -32,11 +34,19 @@ import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.transformer.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.util.Option;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 public class Antlr4Ev3ConfigurationTest {
     EV3Factory robotModeFactory = new EV3Factory(null);
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
+
+    @BeforeClass
+    public static void loadPropertiesForTests() {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+    }
 
     @Test
     public void testParsing() throws Exception {

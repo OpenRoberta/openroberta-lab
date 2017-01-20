@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.factory.generic;
 
+import java.util.Properties;
+
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.EV3Factory;
@@ -23,11 +26,19 @@ import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import junit.framework.Assert;
 
 public class RobotModeFactoryTest {
     EV3Factory factory = new EV3Factory(null);
+
+    @BeforeClass
+    public static void loadPropertiesForTests() {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+    }
 
     @Test
     public void getIndexLocationFromString() {

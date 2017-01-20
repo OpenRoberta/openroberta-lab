@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class CompileSourceInMemoryTest {
-    //EV3Factory robotModeFactory = new EV3Factory(null);
+
     public static String code =
         "package generated.main;\n"
             + "import de.fhg.iais.roberta.runtime.*;\n"

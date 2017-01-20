@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.ast;
 
+import java.util.Properties;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,9 +13,17 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 public class ArduConfigurationTest {
     ArduFactory factory = new ArduFactory(null);
+
+    @BeforeClass
+    public static void loadPropertiesForTests() {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+    }
 
     @Test
     public void testRoundtrip() throws Exception {
@@ -72,8 +83,6 @@ public class ArduConfigurationTest {
         //        Assert.assertEquals(bc1, bc3);
         //        Assert.assertEquals(bc2, bc3);
     }
-
-
 
     private String resourceAsString(String name) throws Exception {
         return IOUtils.toString(ArduConfigurationTest.class.getResourceAsStream("/ast/brickConfiguration/" + name), "UTF-8");

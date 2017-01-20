@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.ast;
 
+import java.util.Properties;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -10,15 +13,23 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
+import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 public class NxtConfigurationTest {
     NxtFactory factory = new NxtFactory(null);
+
+    @BeforeClass
+    public static void loadPropertiesForTests() {
+        Properties properties = Util1.loadProperties(null);
+        RobertaProperties.setRobertaProperties(properties);
+    }
 
     @Test
     public void testRoundtrip() throws Exception {
         testRoundtrip("brick_configuration0");
     }
-    
+
     @Ignore
     @Test
     public void testText2Text() throws Exception {
@@ -101,7 +112,6 @@ public class NxtConfigurationTest {
         //        Assert.assertEquals(bc1, bc3);
         //        Assert.assertEquals(bc2, bc3);
     }
-
 
     private String resourceAsString(String name) throws Exception {
         return IOUtils.toString(NxtConfigurationTest.class.getResourceAsStream("/ast/brickConfiguration/" + name), "UTF-8");

@@ -3,11 +3,9 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.factory.ArduFactory;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ActionTest {
 
@@ -50,17 +48,9 @@ public class ActionTest {
         Helper.assertTransformationIsOk("/ast/actions/action_Stop2.xml");
     }
 
-    @Test
+    @Test(expected = DbcException.class)
     public void blockException() throws Exception {
-        BlockSet project = JaxbHelper.path2BlockSet("/ast/actions/action_Exception.xml");
-        ArduFactory factory = new ArduFactory(null);
-        Jaxb2BlocklyProgramTransformer<?> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
-        try {
-            transformer.transform(project);
-            Assert.fail();
-        } catch ( final Exception e ) {
-            Assert.assertEquals("blockly name is not found: robactions_bricklight_on1", e.getMessage());
-        }
+        Helper.assertTransformationIsOk("/ast/actions/action_Exception.xml");
     }
 
     @Test
