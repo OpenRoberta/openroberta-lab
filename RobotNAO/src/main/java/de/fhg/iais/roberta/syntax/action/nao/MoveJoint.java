@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.mode.action.nao.Joint;
+import de.fhg.iais.roberta.mode.action.nao.RelativeAbsolute;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -29,12 +30,15 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 public final class MoveJoint<V> extends Action<V> {
 
     private final Joint joint;
+    private final RelativeAbsolute relativeAbsolute;
     private final Expr<V> degrees;
 
-    private MoveJoint(Joint joint, Expr<V> degrees, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MoveJoint(Joint joint, RelativeAbsolute relativeAbsolute, Expr<V> degrees, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MOVE_JOINT"), properties, comment);
         Assert.notNull(joint, "Missing joint in MoveJoint block!");
+        Assert.notNull(relativeAbsolute, "Missing relativeAbsolute in MoveJoint block!");
         this.joint = joint;
+        this.relativeAbsolute = relativeAbsolute;
         this.degrees = degrees;
         setReadOnly();
     }
@@ -48,11 +52,15 @@ public final class MoveJoint<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MoveJoint}
      */
-    private static <V> MoveJoint<V> make(Joint joint, Expr<V> degrees, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MoveJoint<V>(joint, degrees, properties, comment);
+    private static <V> MoveJoint<V> make(Joint joint, RelativeAbsolute relativeAbsolute, Expr<V> degrees, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MoveJoint<V>(joint, relativeAbsolute, degrees, properties, comment);
     }
 
-    public Joint getJoint() {
+    public RelativeAbsolute getRelativeAbsolute() {
+		return relativeAbsolute;
+	}
+
+	public Joint getJoint() {
         return this.joint;
     }
 
@@ -61,9 +69,9 @@ public final class MoveJoint<V> extends Action<V> {
     }
 
     @Override
-    public String toString() {
-        return "MoveJoint [" + this.joint + ", " + this.degrees + "]";
-    }
+	public String toString() {
+		return "MoveJoint [" + joint + ", " + relativeAbsolute + ", " + degrees + "]";
+	}
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
@@ -78,13 +86,15 @@ public final class MoveJoint<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Field> fields = helper.extractFields(block, (short) 2);
         List<Value> values = helper.extractValues(block, (short) 1);
 
         String joint = helper.extractField(fields, BlocklyConstants.JOINT);
+        String relativeAbsolute = helper.extractField(fields, BlocklyConstants.MODE);
+
         Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
 
-        return MoveJoint.make(Joint.get(joint), helper.convertPhraseToExpr(walkDistance), helper.extractBlockProperties(block), helper.extractComment(block));
+        return MoveJoint.make(Joint.get(joint), RelativeAbsolute.get(relativeAbsolute), helper.convertPhraseToExpr(walkDistance), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -93,6 +103,7 @@ public final class MoveJoint<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.JOINT, this.joint.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.relativeAbsolute.toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, this.degrees);
 
         return jaxbDestination;

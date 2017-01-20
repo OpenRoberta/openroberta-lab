@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.mode.action.nao.Move;
 import de.fhg.iais.roberta.mode.action.nao.OnOff;
 import de.fhg.iais.roberta.mode.action.nao.PointLook;
 import de.fhg.iais.roberta.mode.action.nao.Posture;
+import de.fhg.iais.roberta.mode.action.nao.RelativeAbsolute;
 import de.fhg.iais.roberta.mode.action.nao.Resolution;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
@@ -281,16 +282,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     private static String getEnumCode(IMode value) {
         return "'" + value.toString().toLowerCase() + "'";
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> sensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> sensor) {
-        return null;
     }
 
     @Override
@@ -635,288 +626,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("hal.waitFor(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("hal.clearDisplay()");
-        return null;
-    }
-
-    //set/getVolume
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        switch ( volumeAction.getMode() ) {
-            case SET:
-                this.sb.append("hal.setVolume(");
-                volumeAction.getVolume().visit(this);
-                this.sb.append(")");
-                break;
-            case GET:
-                this.sb.append("hal.getVolume()");
-                break;
-            default:
-                throw new DbcException("Invalid volume action mode!");
-        }
-        return null;
-    }
-
-    //SetEyeColor
-    //edit Block: change name
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.setEyeColor(" + getEnumCode(lightAction.getColor()) + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        switch ( lightStatusAction.getStatus() ) {
-            case OFF:
-                this.sb.append("hal.off()");
-                break;
-            case RESET:
-                this.sb.append("hal.reset()");
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
-        return null;
-    }
-
-    //LED Animations
-    //edit Block: change name, edit parameters
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        String mode = playFileAction.getFileName();
-        switch ( mode ) {
-            case "0": //RandomEyes
-                this.sb.append("hal.randomEyes(5)");
-                break;
-            case "1": //Rasta
-                this.sb.append("hal.rasta(5)");
-                break;
-            case "2": //Blink
-                this.sb.append("hal.blink()");
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(" + getEnumCode(showPictureAction.getPicture()) + ", ");
-        showPictureAction.getX().visit(this);
-        this.sb.append(", ");
-        showPictureAction.getY().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    //say Text
-    //edit Block: change Name
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("hal.say(");
-        if ( !showTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            showTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            showTextAction.getMsg().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("hal.playTone(");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String animation = motorOnAction.getPort().toString();
-        switch ( animation ) {
-            case "A": //Tai Chi
-                this.sb.append("hal.taiChi()");
-                break;
-            case "B": //Wave
-                this.sb.append("hal.wave()");
-                break;
-            case "C": //wipe Forehead
-                this.sb.append("hal.wipeForehead()");
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal.stop()");
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        String methodName = "hal.walk(";
-        this.sb.append(methodName);
-        if ( getEnumCode(driveAction.getDirection()).equals("\'foreward\'") ) {
-            driveAction.getParam().getSpeed().visit(this);
-            this.sb.append(", 0, 0)");
-        } else {
-            this.sb.append("-");
-            driveAction.getParam().getSpeed().visit(this);
-            this.sb.append(", 0, 0)");
-        }
-
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        String methodName = "hal.walk(";
-        this.sb.append(methodName);
-        if ( getEnumCode(turnAction.getDirection()).equals("\'right\'") ) {
-            this.sb.append("0, ");
-            turnAction.getParam().getSpeed().visit(this);
-            this.sb.append(", 0)");
-        } else {
-            this.sb.append("0, -");
-            turnAction.getParam().getSpeed().visit(this);
-            this.sb.append(", 0)");
-        }
-
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("hal.stop()");
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-        this.sb.append("hal.walk(");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        if ( duration != null ) {
-            this.sb.append(", ");
-            duration.getValue().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        switch ( brickSensor.getMode() ) {
-            case IS_PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getKey()) + ")");
-                break;
-            case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
-                break;
-            default:
-                throw new DbcException("Invalide mode for BrickSensor!");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = colorSensor.getPort().getPortNumber();
-        switch ( (ColorSensorMode) colorSensor.getMode() ) {
-            case AMBIENTLIGHT:
-                this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
-                break;
-            case COLOUR:
-                this.sb.append("hal.getColorSensorColour('" + colorSensorPort + "')");
-                break;
-            case RED:
-                this.sb.append("hal.getColorSensorRed('" + colorSensorPort + "')");
-                break;
-            case RGB:
-                this.sb.append("hal.getColorSensorRgb('" + colorSensorPort + "')");
-                break;
-            default:
-                throw new DbcException("Invalide mode for Color Sensor!");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        String encoderSensorPort = encoderSensor.getMotorPort().toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
-            this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
-        } else {
-            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
-        }
-        return null;
-    }
-
-    //Gyrometer + Accelerometer (Inertial Unit)
-    //edit Block: change name, edit Port numbers, remove RESET
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        return null;
-    }
-
-    //Touchsensors
-    //edit Block: change name, edit parameters
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String position = infraredSensor.getPort().getPortNumber();
-        this.sb.append("hal.touchsensor(" + infraredSensor.getMode().toString() + ", " + position + ")");
-        return null;
-    }
-
-    //SelectCamera
-    //edit block: change name, edit Parameters, remove GET_SAMPLE
-    @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        this.sb.append("hal.selectCamera(" + timerSensor.getTimer() + ")");
-        return null;
-    }
-
-    //HeadSensor
-    @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.headsensor(" + touchSensor.getPort().getPortNumber() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("hal.sonar()");
         return null;
     }
 
@@ -1351,50 +1060,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
-    @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
-        bluetoothReadAction.getConnection().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        this.sb.append("hal.establishConnectionTo(");
-        if ( !bluetoothConnectAction.get_address().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            bluetoothConnectAction.get_address().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothConnectAction.get_address().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("hal.sendMessage(");
-        bluetoothSendAction.getConnection().visit(this);
-        this.sb.append(", ");
-        if ( !bluetoothSendAction.getMsg().getKind().hasName("STRING_CONST") ) {
-            this.sb.append("str(");
-            bluetoothSendAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            bluetoothSendAction.getMsg().visit(this);
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        this.sb.append("hal.waitForConnection()");
-        return null;
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Binary.Op.MINUS
             && binary.getRight().getKind().hasName("BINARY")
@@ -1513,36 +1178,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         } catch ( NumberFormatException e ) {
             return false;
         }
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     //****************************************************************NAO******************************************************
@@ -1673,7 +1308,12 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         }
         this.sb.append(", ");
         moveJoint.getDegrees().visit(this);
-        this.sb.append(")");
+        this.sb.append(", ");
+        if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.ABSOLUTE) {
+        	this.sb.append("1)");
+        } else if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.RELATIVE) {
+        	this.sb.append("2)");
+        }
         return null;
     }
 
@@ -2012,10 +1652,12 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitTakePicture(TakePicture<Void> takePicture) {
         this.sb.append("h.takePicture(");
         if ( takePicture.getCamera() == Camera.TOP ) {
-            this.sb.append("\"Top\")");
+            this.sb.append("\"Top\", ");
         } else if ( takePicture.getCamera() == Camera.BOTTOM ) {
-            this.sb.append("\"Bottom\")");
+            this.sb.append("\"Bottom\", ");
         }
+        takePicture.getMsg().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -2035,6 +1677,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("\"Bottom\", ");
         }
         recordVideo.getDuration().visit(this);
+        this.sb.append(", ");
+        recordVideo.getMsg().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -2069,4 +1713,215 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(")");
         return null;
     }
+
+	@Override
+	public Void visitDriveAction(DriveAction<Void> driveAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitCurveAction(CurveAction<Void> curveAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitTurnAction(TurnAction<Void> turnAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitLightAction(LightAction<Void> lightAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitToneAction(ToneAction<Void> toneAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitLightSensor(LightSensor<Void> lightSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitBluetoothWaitForConnectionAction(
+			BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitConnectConst(ConnectConst<Void> connectConst) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
