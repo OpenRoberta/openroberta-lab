@@ -630,7 +630,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         String varType = displayTextAction.getMsg().getVarType().toString();
 
         if ( !varType.equals("STRING") ) {
-            ending = wrapInManageStringToDisplay(displayTextAction, ending, varType);
+            ending = wrapInManageStringToDisplay(displayTextAction, ending);
         } else {
             this.sb.append("uBit.display.scroll(");
             displayTextAction.getMsg().visit(this);
@@ -640,31 +640,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending, String varType) {
-        if ( varType.equals("NUMBER") ) {
-            castDoubleToStringToDisplay(displayTextAction);
-        } else {
-            this.sb.append("uBit.display.scroll(");
-            this.sb.append("ManagedString(");
-            displayTextAction.getMsg().visit(this);
-            ending += ")";
-        }
+    private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
+        this.sb.append("uBit.display.scroll(ManagedString(");
+        displayTextAction.getMsg().visit(this);
+        ending += ")";
         return ending;
-    }
-
-    private void castDoubleToStringToDisplay(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("ManagedString __m1((int) ");
-        displayTextAction.getMsg().visit(this);
-        this.sb.append(");");
-        nlIndent();
-        this.sb.append("ManagedString __m2((int) ((");
-        displayTextAction.getMsg().visit(this);
-        this.sb.append("-(int)");
-        displayTextAction.getMsg().visit(this);
-        this.sb.append(")*10));");
-        nlIndent();
-        this.sb.append("uBit.display.scroll(");
-        this.sb.append("ManagedString(__m1 + \".\" + __m2)");
     }
 
     @Override
