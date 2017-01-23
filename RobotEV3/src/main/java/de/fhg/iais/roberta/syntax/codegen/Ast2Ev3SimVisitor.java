@@ -200,7 +200,7 @@ public class Ast2Ev3SimVisitor extends SimulationVisitor<Void> {
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         String end = createClosingBracket();
-        this.sb.append("createPlayFileAction(CONST." + playFileAction.getFileName());
+        this.sb.append("createPlayFileAction(" + playFileAction.getFileName());
         this.sb.append(end);
         return null;
     }
