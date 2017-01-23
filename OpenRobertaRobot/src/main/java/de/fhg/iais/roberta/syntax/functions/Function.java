@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 /**
  * the top class of all functions. There are two ways for a client to find out which kind of function {@link #Function}-object is:<br>
@@ -38,5 +39,7 @@ public abstract class Function<V> extends Phrase<V> {
      * @return the association
      */
     abstract public Assoc getAssoc();
+
+    abstract public BlocklyType getReturnType();
 
 }

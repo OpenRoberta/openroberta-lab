@@ -76,6 +76,11 @@ public class ListRepeat<V> extends Function<V> {
     }
 
     @Override
+    public BlocklyType getReturnType() {
+        return BlocklyType.ARRAY;
+    }
+
+    @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitListRepeat(this);
     }

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -1216,7 +1217,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        textJoinFunct.getParam().visit(this);
+        List<Expr<Void>> a = textJoinFunct.getParam().get();
+        for ( int i = 0; i < a.size(); i++ ) {
+            this.sb.append("ManagedString(");
+            a.get(i).visit(this);
+            this.sb.append(")");
+            if ( i < a.size() - 1 ) {
+                this.sb.append(" + ");
+            }
+        }
         return null;
     }
 

@@ -50,7 +50,7 @@ public class FunctionExpr<V> extends Expr<V> {
 
     @Override
     public BlocklyType getVarType() {
-        return BlocklyType.NOTHING;
+        return this.function.getReturnType();
     }
 
     @Override

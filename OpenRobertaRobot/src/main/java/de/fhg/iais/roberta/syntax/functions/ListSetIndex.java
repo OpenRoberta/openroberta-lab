@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -90,6 +91,11 @@ public class ListSetIndex<V> extends Function<V> {
     @Override
     public Assoc getAssoc() {
         return Assoc.LEFT;
+    }
+
+    @Override
+    public BlocklyType getReturnType() {
+        return BlocklyType.VOID;
     }
 
     @Override
