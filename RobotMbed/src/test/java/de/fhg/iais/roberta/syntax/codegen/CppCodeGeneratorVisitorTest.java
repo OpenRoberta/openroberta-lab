@@ -400,14 +400,15 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void visitPinTouchSensor_DisplayIfPin0andPin2areTouched_ReturnsCorrectCppProgram() throws Exception {
+    public void visitPinTouchSensor_DisplayIfPin0Pin2andPin3areTouched_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + "uBit.display.scroll(ManagedString(uBit.io.P0.isTouched()));\n"
             + "uBit.display.scroll(ManagedString(uBit.io.P2.isTouched()));"
+            + "uBit.display.scroll(ManagedString(uBit.io.CAL_P22.isTouched()));"
             + END;
 
-        assertCodeIsOk(expectedResult, "/sensor/pin_is_touched.xml");
+        assertCodeIsOk(expectedResult, "/sensor/pin3_is_touched.xml");
     }
 
     @Test

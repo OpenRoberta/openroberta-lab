@@ -87,31 +87,4 @@ public class PinTouchSensor<V> extends Sensor<V> {
         return jaxbDestination;
     }
 
-    /**
-     * Modes in which the sensor can operate.
-     */
-    public static enum GestureMode {
-        UP( "up" ),
-        DOWN( "down" ),
-        LEFT( "left" ),
-        RIGHT( "righ" ),
-        FACE_DOWN( "face down" ),
-        FACE_UP( "face up" ),
-        SHAKE( "shake" ),
-        FREEFALL( "freefall" ),
-        G3( "3g" ),
-        G6( "6g" ),
-        G8( "8g" );
-
-        private final String pythonCode;
-
-        private GestureMode(String pythonCode) {
-            this.pythonCode = pythonCode;
-        }
-
-        public String getPythonCode() {
-            return this.pythonCode;
-        }
-    }
-
 }

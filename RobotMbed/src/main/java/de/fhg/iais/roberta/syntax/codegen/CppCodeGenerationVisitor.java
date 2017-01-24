@@ -821,7 +821,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("uBit.io.P" + pinTouchSensor.getPinNumber() + ".isTouched()");
+        this.sb.append("uBit.io.");
+        if ( pinTouchSensor.getPinNumber() == 3 ) {
+            this.sb.append("CAL_P22" + ".isTouched()");
+        } else {
+            this.sb.append("P" + pinTouchSensor.getPinNumber() + ".isTouched()");
+        }
         return null;
     }
 
