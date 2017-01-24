@@ -39,6 +39,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.program.shared = true;
         exports.program.timestamp = '';
         exports.program.source = '';
+        exports.program.fileExtension = ''
         exports.program.xml = '';
         exports.program.toolbox = {};
         exports.program.toolbox.level = '';

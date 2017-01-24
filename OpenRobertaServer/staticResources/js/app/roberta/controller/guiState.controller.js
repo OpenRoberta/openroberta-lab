@@ -57,7 +57,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set gui state
-     * 
+     *
      * @param {result}
      *            result of server call
      */
@@ -154,7 +154,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 $('#menuRunProg').parent().addClass('disabled');
             }
-        } 
+        }
     }
     exports.setState = setState;
 
@@ -411,6 +411,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     }
     exports.getProgramSource = getProgramSource;
 
+    function setProgramFileExtension(fileExtension) {
+        GUISTATE.program.fileExtension = fileExtension;
+    }
+    exports.setProgramFileExtension = setProgramFileExtension;
+
+    function getProgramFileExtension() {
+        return GUISTATE.program.fileExtension;
+    }
+    exports.getProgramFileExtension = getProgramFileExtension;
+
     function isUserLoggedIn() {
         return GUISTATE.user.id >= 0;
     }
@@ -618,7 +628,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set program name
-     * 
+     *
      * @param {name}
      *            Name to be set
      */

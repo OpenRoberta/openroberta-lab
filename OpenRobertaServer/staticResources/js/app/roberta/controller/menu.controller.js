@@ -261,13 +261,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             }, {
                 duration : 750,
                 start: function() {
-                    $(".modal").modal("hide"); 
+                    $(".modal").modal("hide");
                 },
                 step : function() {
                     $(window).resize();
                     Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
                 },
-                done : function() {                   
+                done : function() {
                     $('#simDiv').removeClass('simActive');
                     $('#menuSim').parent().addClass('disabled');
                     $('.nav > li > ul > .robotType').removeClass('disabled');
@@ -322,7 +322,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
             $("#simButtonsCollapse").collapse('hide');
         }, 'simRobot clicked');
-        
+
         $('#simValues').onWrap('click', function(event) {
             $("#simValuesModal").modal("toggle");
             $('#simValuesModal').draggable();
@@ -489,11 +489,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'show more releases clicked');
 
         $('#codeDownload').onWrap('click', function(event) {
-            // TODO get the programming language type from server.
-            var extension = GUISTATE_C.getRobotFWName() === "ev3dev" ? ".py" : ".java";
-            var filename = GUISTATE_C.getProgramName() + extension;
+            var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getProgramFileExtension();
             UTIL.download(filename, GUISTATE_C.getProgramSource());
-            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
+            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
         }, 'codeDownload clicked');
 
         $('#confirmContinue').onWrap('click', function(event) {
@@ -545,7 +543,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             // You may replace `c` with whatever key you want
             if ((e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'q')) {
                 PROGRAM_C.showCode();
-                PROGRAM_C.showCode();
+                // PROGRAM_C.showCode();
             }
         });
 

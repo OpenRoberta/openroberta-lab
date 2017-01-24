@@ -315,9 +315,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             $('#codeDiv').addClass('codeActive');
             $('.nav > li > ul > .robotType').addClass('disabled');
             $(".code").removeClass('hide');
-            $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
+            $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
             // TODO change javaSource to source on server
-            GUISTATE_C.setProgramSource(result.javaSource);
+            GUISTATE_C.setProgramSource(result.sourceCode);
+            GUISTATE_C.setProgramFileExtension(result.fileExtension);
             //console.log(prettyPrintOne(result.javaSource, null, true));
         });
         LOG.info('show code ' + GUISTATE_C.getProgramName());

@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -22,11 +25,13 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
+import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -34,6 +39,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Ignore
@@ -58,10 +64,11 @@ public class PerformanceUserInteractionTest {
 
     private String theProgramOfAllUserLol;
     private ExecutorService executorService;
+    private Map<String, IRobotFactory> robotPlugins = new HashMap<>();
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util1.loadProperties("classpath:performanceUserInteraction.properties");
+        Properties properties = Util1.loadProperties(null);
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
@@ -77,6 +84,8 @@ public class PerformanceUserInteractionTest {
         this.theProgramOfAllUserLol =
             Resources.toString(PerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(PerformanceUserInteractionTest.MAX_PARALLEL_USERS + 10);
+
+        loadPlugin(this.robotPlugins);
     }
 
     @Test
@@ -133,7 +142,7 @@ public class PerformanceUserInteractionTest {
         PerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
-        HttpSessionState s = HttpSessionState.init(this.brickCommunicator, null);
+        HttpSessionState s = HttpSessionState.init(this.brickCommunicator, this.robotPlugins);
         Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success
@@ -190,5 +199,16 @@ public class PerformanceUserInteractionTest {
             Thread.sleep(think);
         }
         return think;
+    }
+
+    private void loadPlugin(Map<String, IRobotFactory> robotPlugins) {
+        try {
+            @SuppressWarnings("unchecked")
+            Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory");
+            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
+            robotPlugins.put("ev3", factoryConstructor.newInstance(this.brickCommunicator));
+        } catch ( Exception e ) {
+            throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
+        }
     }
 }

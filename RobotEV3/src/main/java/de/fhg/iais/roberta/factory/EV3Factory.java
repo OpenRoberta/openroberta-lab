@@ -440,6 +440,12 @@ public class EV3Factory extends AbstractRobotFactory {
     }
 
     @Override
+    public String getFileExtension() {
+        //FIX ME: when the ev3lejos and ev3dev are splitted then we will have different file extension
+        return "java";
+    }
+
+    @Override
     public String getProgramToolboxBeginner() {
         return this.ev3Properties.getProperty("robot.program.toolbox.beginner");
     }

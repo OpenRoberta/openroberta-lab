@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -13,9 +16,9 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.server.Server;
 import org.hibernate.Session;
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -29,6 +32,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
@@ -42,6 +46,7 @@ import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Ignore
@@ -89,8 +94,8 @@ public class RoundTripTest {
     private static Session nativeSession;
     private static StringBuffer verificationErrors = new StringBuffer();
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         initialize();
         driver = SeleniumHelper.runBrowser(browserVisibility);
         setUpDatabase();
@@ -167,8 +172,8 @@ public class RoundTripTest {
         assertRoundTrip(blocklyPrograms[13]);
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         driver.quit();
         String verificationErrorString = verificationErrors.toString();
         if ( !"".equals(verificationErrorString) ) {
@@ -177,7 +182,7 @@ public class RoundTripTest {
         server.stop();
     }
 
-    private static void initialize() {
+    private void initialize() {
         Properties properties = Util1.loadProperties("classpath:openRoberta.properties");
         RobertaProperties.setRobertaProperties(properties);
         buildXml = properties.getProperty("robot.plugin.1.generated.programs.build.xml");
@@ -194,11 +199,12 @@ public class RoundTripTest {
 
         restUser = new ClientUser(brickCommunicator, null);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator);
-
-        s1 = HttpSessionState.init(brickCommunicator, null);
+        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+        loadPlugin(robotPlugins);
+        s1 = HttpSessionState.init(brickCommunicator, robotPlugins);
     }
 
-    private static void setUpDatabase() throws Exception {
+    private void setUpDatabase() throws Exception {
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
         response = restUser.command(
             s1,
@@ -224,7 +230,7 @@ public class RoundTripTest {
         }
     }
 
-    private static void startServerAndLogin() throws IOException, InterruptedException {
+    private void startServerAndLogin() throws IOException, InterruptedException {
         List<String> addr = Arrays.asList("server.ip=localhost", "server.port=1998");
         server = new ServerStarter("classpath:openRoberta.properties", addr).start();
         int port = server.getURI().getPort();
@@ -306,8 +312,19 @@ public class RoundTripTest {
         Helper.assertXML(blocklyProgram, resultProgram);
     }
 
-    private static long getOneBigInteger(String sqlStmt) {
+    private long getOneBigInteger(String sqlStmt) {
         return memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
+    }
+
+    private void loadPlugin(Map<String, IRobotFactory> robotPlugins) {
+        try {
+            @SuppressWarnings("unchecked")
+            Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory");
+            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
+            robotPlugins.put("ev3", factoryConstructor.newInstance(RoundTripTest.brickCommunicator));
+        } catch ( Exception e ) {
+            throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
+        }
     }
 
 }

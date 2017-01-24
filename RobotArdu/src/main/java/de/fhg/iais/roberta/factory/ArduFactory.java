@@ -436,6 +436,11 @@ public class ArduFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public String getFileExtension() {
+        return "ino";
+    }
+
+    @Override
     public String getProgramToolboxBeginner() {
         return this.arduProperties.getProperty("robot.program.toolbox.beginner");
     }

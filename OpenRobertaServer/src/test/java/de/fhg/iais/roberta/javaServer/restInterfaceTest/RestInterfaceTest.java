@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.javaServer.restInterfaceTest;
 
+import java.lang.reflect.Constructor;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.core.Response;
@@ -11,13 +14,16 @@ import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotCommand;
 import de.fhg.iais.roberta.javaServer.restServices.robot.RobotDownloadProgram;
+import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -26,6 +32,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * <b>Testing the REST interface of the OpenRoberta server</b><br>
@@ -54,6 +61,7 @@ import de.fhg.iais.roberta.util.Util1;
  *
  * @author rbudde
  */
+@Ignore
 public class RestInterfaceTest {
 
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
@@ -92,18 +100,19 @@ public class RestInterfaceTest {
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
-        this.sPid = HttpSessionState.init(this.brickCommunicator, null);
-        this.sMinscha = HttpSessionState.init(this.brickCommunicator, null);
+        Map<String, IRobotFactory> robotPlugins = new HashMap<>();
+        loadPlugin(robotPlugins);
+        this.sPid = HttpSessionState.init(this.brickCommunicator, robotPlugins);
+        this.sMinscha = HttpSessionState.init(this.brickCommunicator, robotPlugins);
     }
 
-    @Test
     /**
      * Each method call of this test method is a separate test testing separate components of the server. The methods have to be called in sequence, because
      * they depend on database state (as: two user exist, etc), which is created by methods called before.
      *
      * @throws Exception
      */
-    //
+    @Test
     public void test() throws Exception {
         this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
         createTwoUsers();
@@ -651,5 +660,16 @@ public class RestInterfaceTest {
         }
         JSONUtilForServer.assertJsonEquals(expectedProgramNamesAsJson, programNames, false);
         return programListing;
+    }
+
+    private void loadPlugin(Map<String, IRobotFactory> robotPlugins) {
+        try {
+            @SuppressWarnings("unchecked")
+            Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3Factory");
+            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
+            robotPlugins.put("ev3", factoryConstructor.newInstance(this.brickCommunicator));
+        } catch ( Exception e ) {
+            throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
+        }
     }
 }

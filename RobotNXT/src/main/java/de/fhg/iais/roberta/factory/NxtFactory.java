@@ -503,6 +503,11 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public String getFileExtension() {
+        return "nxc";
+    }
+
+    @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
         return this.robotCompilerWorkflow;
     }

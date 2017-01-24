@@ -337,6 +337,14 @@ public interface IRobotFactory {
      */
     AbstractModule getGuiceModule();
 
+    /**
+     * Get the file extension of the specific language for this robot. This is used when we want to download
+     * locally the source code into a file.
+     * 
+     * @return
+     */
+    String getFileExtension();
+
     String getProgramToolboxBeginner();
 
     String getProgramToolboxExpert();

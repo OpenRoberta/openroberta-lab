@@ -433,6 +433,11 @@ public class NAOFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public String getFileExtension() {
+        return "py";
+    }
+
+    @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
         return this.compilerWorkflow;
     }
