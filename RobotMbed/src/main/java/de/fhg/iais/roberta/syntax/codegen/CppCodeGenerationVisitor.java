@@ -996,8 +996,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
-                this.sb.append("rand() % ");
+                this.sb.append("uBit.random(");
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
+                this.sb.append(")");
                 break;
         }
         this.sb.append("]");
@@ -1028,8 +1029,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 this.sb.append(" - 1");
                 break;
             case "IndexLocation.RANDOM":
-                this.sb.append("rand() % ");
+                this.sb.append("uBit.random(");
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
+                this.sb.append(")");
                 break;
         }
         this.sb.append("]");
@@ -1145,9 +1147,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("rand() % ");
+        this.sb.append("uBit.random(");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(" + ");
+        this.sb.append(") + ");
         mathRandomIntFunct.getParam().get(0).visit(this);
         return null;
     }

@@ -321,7 +321,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMathRandomIntFunct_ShowRandInt1to200_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(ManagedString(rand() % 200 + 1));\n"
+            + "uBit.display.scroll(ManagedString(uBit.random(200) + 1));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator.xml");
@@ -331,7 +331,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMathRandomIntFunct_ShowRandIntMissingParam_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "uBit.display.scroll(ManagedString(rand() % 0 + 0));\n"
+            + "uBit.display.scroll(ManagedString(uBit.random(0) + 0));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator_missing_param.xml");
