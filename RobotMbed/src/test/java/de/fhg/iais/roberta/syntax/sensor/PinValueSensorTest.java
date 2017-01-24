@@ -12,7 +12,7 @@ public class PinValueSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=213, y=113], "
                 + "MainTask [], "
-                + "DisplayTextAction [SensorExpr [PinValueSensor [0, ANALOG]]], DisplayTextAction [SensorExpr [PinValueSensor [2, DIGITAL]]]]]]";
+                + "DisplayTextAction [TEXT, SensorExpr [PinValueSensor [0, ANALOG]]], DisplayTextAction [TEXT, SensorExpr [PinValueSensor [2, DIGITAL]]]]]]";
 
         String result = Helper.generateTransformerString("/sensor/read_value_from_pin.xml");
 

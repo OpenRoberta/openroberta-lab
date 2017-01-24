@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-01-20 12:53:36.528191",
+		"lastupdated": "2017-01-24 12:48:03.195098",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -482,6 +482,7 @@
 	"DISPLAY_PICTURE_FLOWERS": "flowers",
 	"DISPLAY_PICTURE_TACHO": "tacho",
 	"DISPLAY_TEXT": "text",
+	"DISPLAY_CHARACTER": "character",
 	"PLAY": "play",
 	"PLAY_TONE": "tone",
 	"PLAY_FREQUENZ": "frequency Hz",

@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.syntax.action.mbed;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -15,6 +17,7 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
@@ -26,12 +29,14 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * <br>
  */
 public class DisplayTextAction<V> extends Action<V> {
+    private final DisplayTextMode mode;
     private final Expr<V> msg;
 
-    private DisplayTextAction(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private DisplayTextAction(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("DISPLAY_TEXT_ACTION"), properties, comment);
-        Assert.isTrue(msg != null);
+        Assert.isTrue(msg != null && mode != null);
         this.msg = msg;
+        this.mode = mode;
         setReadOnly();
     }
 
@@ -43,8 +48,12 @@ public class DisplayTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> DisplayTextAction<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DisplayTextAction<>(msg, properties, comment);
+    private static <V> DisplayTextAction<V> make(DisplayTextMode mode, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DisplayTextAction<>(mode, msg, properties, comment);
+    }
+
+    public DisplayTextMode getMode() {
+        return this.mode;
     }
 
     /**
@@ -56,7 +65,7 @@ public class DisplayTextAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "DisplayTextAction [" + this.msg + "]";
+        return "DisplayTextAction [" + this.mode + ", " + this.msg + "]";
     }
 
     @Override
@@ -74,15 +83,23 @@ public class DisplayTextAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
+        List<Field> fields = helper.extractFields(block, (short) 1);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, String.class));
-        return DisplayTextAction.make(helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
+        String displaMode = "";
+        try {
+            displaMode = helper.extractField(fields, BlocklyConstants.TYPE);
+        } catch ( DbcException e ) {
+            displaMode = "TEXT";
+        }
+        return DisplayTextAction
+            .make(DisplayTextMode.get(displaMode), helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.mode.toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.OUT, this.msg);
 
         return jaxbDestination;

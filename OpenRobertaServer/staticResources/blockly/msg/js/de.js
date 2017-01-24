@@ -149,6 +149,7 @@ Blockly.Msg.DELETE_X_BLOCKS = "Block %1 löschen";
 Blockly.Msg.DIGITAL = "digitalen";
 Blockly.Msg.DISABLE_BLOCK = "Block deaktivieren";
 Blockly.Msg.DISPLAY_ANIMATION = "Animation";
+Blockly.Msg.DISPLAY_CHARACTER = "Zeichenkette";
 Blockly.Msg.DISPLAY_CLEAR = "Lösche Bildschirm";
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = "Löscht die Anzeige auf dem Bildschirm.";
 Blockly.Msg.DISPLAY_COL = "in Spalte";

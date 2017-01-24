@@ -10,7 +10,7 @@ public class RadioReciveActionTest {
     @Test
     public void make_ByDefault_ReturnInstanceOfRadioReciveActionClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=38, y=38], " + "MainTask [], " + "DisplayTextAction [ActionExpr [BluetoothReceiveAction []]]]]]";
+            "BlockAST [project=[[Location [x=38, y=38], " + "MainTask [], " + "DisplayTextAction [TEXT, ActionExpr [BluetoothReceiveAction []]]]]]";
 
         String result = Helper.generateTransformerString("/action/radio_receive_message.xml");
 

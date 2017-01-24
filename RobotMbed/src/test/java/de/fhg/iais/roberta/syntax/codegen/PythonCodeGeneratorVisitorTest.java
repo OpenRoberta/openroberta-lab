@@ -14,7 +14,7 @@ public class PythonCodeGeneratorVisitorTest {
         + "import microbit\n"
         + "import random\n"
         + "import math\n\n"
-        + "timer1 = running_time()\n";
+        + "timer1 = microbit.running_time()\n";
 
     private static Configuration brickConfiguration;
 
@@ -37,7 +37,8 @@ public class PythonCodeGeneratorVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsMicroPythonScriptWithShowTextCall() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "\nmicrobit.display.scroll('Hallo')";
+            + "\nmicrobit.display.scroll('Hallo')"
+            + "\nmicrobit.display.show('H')";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
     }

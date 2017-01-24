@@ -34,7 +34,8 @@ public class Ast2MbedSimVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsJavaScriptProgramWithShowTextCall() throws Exception {
         String expectedResult = "" //
             + "var stmt0 = createDisplayTextAction(createConstant(CONST.STRING_CONST, 'Hallo'));\n"
-            + "var blocklyProgram = {'programStmts': [stmt0]};";
+            + "var stmt1 = createDisplayTextAction(createConstant(CONST.STRING_CONST, 'H'));\n"
+            + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
     }

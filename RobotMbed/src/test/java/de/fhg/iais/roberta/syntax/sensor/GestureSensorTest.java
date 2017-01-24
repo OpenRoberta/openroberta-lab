@@ -12,8 +12,8 @@ public class GestureSensorTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=187, y=38], "
                 + "MainTask [], "
-                + "DisplayTextAction [SensorExpr [GestureSensor [ FACE_DOWN ]]], "
-                + "DisplayTextAction [SensorExpr [GestureSensor [ LEFT ]]]"
+                + "DisplayTextAction [TEXT, SensorExpr [GestureSensor [ FACE_DOWN ]]], "
+                + "DisplayTextAction [TEXT, SensorExpr [GestureSensor [ LEFT ]]]"
                 + "]]]";
 
         String result = Helper.generateTransformerString("/sensor/check_gesture.xml");

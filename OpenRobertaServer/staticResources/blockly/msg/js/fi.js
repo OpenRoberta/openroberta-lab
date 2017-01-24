@@ -149,6 +149,7 @@ Blockly.Msg.DELETE_X_BLOCKS = "Poista %1 lohkoa";
 Blockly.Msg.DIGITAL = "digital";  // untranslated
 Blockly.Msg.DISABLE_BLOCK = "Passivoi lohko";
 Blockly.Msg.DISPLAY_ANIMATION = "animation";  // untranslated
+Blockly.Msg.DISPLAY_CHARACTER = "character";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR = "tyhjennä näyttö";
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = "Clears the display.";
 Blockly.Msg.DISPLAY_COL = "sarakkeessa";

@@ -149,6 +149,7 @@ Blockly.Msg.DELETE_X_BLOCKS = "Usuń %1 bloki(ów)";
 Blockly.Msg.DIGITAL = "digital";  // untranslated
 Blockly.Msg.DISABLE_BLOCK = "Wyłącz blok";
 Blockly.Msg.DISPLAY_ANIMATION = "animation";  // untranslated
+Blockly.Msg.DISPLAY_CHARACTER = "character";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR = "wyczyść wyświetlacz";
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = "Czyści ekran";
 Blockly.Msg.DISPLAY_COL = "w kolumnie";

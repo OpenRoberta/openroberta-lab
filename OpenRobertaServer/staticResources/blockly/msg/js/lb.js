@@ -149,6 +149,7 @@ Blockly.Msg.DELETE_X_BLOCKS = "%1 Bléck läschen";
 Blockly.Msg.DIGITAL = "digital";  // untranslated
 Blockly.Msg.DISABLE_BLOCK = "Block desaktivéieren";
 Blockly.Msg.DISPLAY_ANIMATION = "animation";  // untranslated
+Blockly.Msg.DISPLAY_CHARACTER = "character";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR = "clear display";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = "Clears the display.";  // untranslated
 Blockly.Msg.DISPLAY_COL = "in column";  // untranslated

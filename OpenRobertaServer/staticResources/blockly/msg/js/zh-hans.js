@@ -149,6 +149,7 @@ Blockly.Msg.DELETE_X_BLOCKS = "删除 %1 块";
 Blockly.Msg.DIGITAL = "digital";  // untranslated
 Blockly.Msg.DISABLE_BLOCK = "禁用块";
 Blockly.Msg.DISPLAY_ANIMATION = "animation";  // untranslated
+Blockly.Msg.DISPLAY_CHARACTER = "character";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR = "clear display";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = "Clears the display.";  // untranslated
 Blockly.Msg.DISPLAY_COL = "in column";  // untranslated

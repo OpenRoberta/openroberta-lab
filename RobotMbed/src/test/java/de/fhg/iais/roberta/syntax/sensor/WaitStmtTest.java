@@ -12,10 +12,10 @@ public class WaitStmtTest {
         String expectedResult =
             "BlockAST [project=[[Location [x=113, y=87], MainTask [], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [BrickSensor [key=BUTTON_A, mode=IS_PRESSED]]], BoolConst [true]]]\n"
-                + "AktionStmt [DisplayTextAction [StringConst [Hallo]]]\n"
+                + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
                 + ")\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor []]], NumConst [20]]]\n"
-                + "AktionStmt [DisplayTextAction [StringConst [Hallo]]]\n"
+                + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
                 + ")]]]]";
 
         String result = Helper.generateTransformerString("/sensor/wait_stmt_two_cases.xml");

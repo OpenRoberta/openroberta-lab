@@ -9,7 +9,8 @@ public class AmbientLightSensorTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAmbientLightSensorClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], " + "MainTask [], " + "DisplayTextAction [SensorExpr [AmbientLightSensor []]]]]]";
+        String expectedResult =
+            "BlockAST [project=[[Location [x=163, y=62], " + "MainTask [], " + "DisplayTextAction [TEXT, SensorExpr [AmbientLightSensor []]]]]]";
 
         String result = Helper.generateTransformerString("/sensor/get_ambient_light.xml");
 

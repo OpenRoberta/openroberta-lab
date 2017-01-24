@@ -45,6 +45,7 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + "uBit.display.scroll(\"Hallo\");"
+            + "uBit.display.print(\"H\");"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");

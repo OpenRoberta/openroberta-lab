@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
@@ -629,11 +630,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         String ending = ")";
         String varType = displayTextAction.getMsg().getVarType().toString();
-
+        this.sb.append("uBit.display.");
+        appendTextDisplyType(displayTextAction);
         if ( !varType.equals("STRING") ) {
             ending = wrapInManageStringToDisplay(displayTextAction, ending);
         } else {
-            this.sb.append("uBit.display.scroll(");
             displayTextAction.getMsg().visit(this);
         }
 
@@ -641,8 +642,16 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
+    private void appendTextDisplyType(DisplayTextAction<Void> displayTextAction) {
+        if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
+            this.sb.append("scroll(");
+        } else {
+            this.sb.append("print(");
+        }
+    }
+
     private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
-        this.sb.append("uBit.display.scroll(ManagedString(");
+        this.sb.append("ManagedString(");
         displayTextAction.getMsg().visit(this);
         ending += ")";
         return ending;

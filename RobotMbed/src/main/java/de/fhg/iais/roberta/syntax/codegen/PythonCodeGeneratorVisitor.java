@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
@@ -617,7 +618,8 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("microbit.display.scroll(");
+        this.sb.append("microbit.display.");
+        appendTextDisplayType(displayTextAction);
         if ( !displayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
             displayTextAction.getMsg().visit(this);
@@ -627,6 +629,14 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         }
         this.sb.append(")");
         return null;
+    }
+
+    private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
+        if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
+            this.sb.append("scroll(");
+        } else {
+            this.sb.append("show(");
+        }
     }
 
     @Override
@@ -1365,7 +1375,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         } else {
             nlIndent();
         }
-        this.sb.append("timer1 = running_time()\n");
+        this.sb.append("timer1 = microbit.running_time()\n");
         generateUserDefinedMethods(phrasesSet);
 
     }

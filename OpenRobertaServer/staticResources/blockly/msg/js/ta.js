@@ -149,6 +149,7 @@ Blockly.Msg.DELETE_X_BLOCKS = "%1 உறுப்பை நீக்கு";
 Blockly.Msg.DIGITAL = "digital";  // untranslated
 Blockly.Msg.DISABLE_BLOCK = "உறுப்பை இயங்காது செய்";
 Blockly.Msg.DISPLAY_ANIMATION = "animation";  // untranslated
+Blockly.Msg.DISPLAY_CHARACTER = "character";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR = "clear display";  // untranslated
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = "Clears the display.";  // untranslated
 Blockly.Msg.DISPLAY_COL = "in column";  // untranslated

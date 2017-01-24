@@ -9,7 +9,8 @@ public class DisplayTextActionTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfDisplayTextActionClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=63, y=63], MainTask [], DisplayTextAction [StringConst [Hallo]]]]]";
+        String expectedResult =
+            "BlockAST [project=[[Location [x=63, y=63], MainTask [], DisplayTextAction [TEXT, StringConst [Hallo]], DisplayTextAction [CHARACTER, StringConst [H]]]]]";
 
         String result = Helper.generateTransformerString("/action/display_text_show_hello.xml");
 
@@ -18,7 +19,8 @@ public class DisplayTextActionTest {
 
     @Test
     public void make_MissingMessage_InstanceOfDisplayTextActionClassWithMissingMessage() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=63, y=63], MainTask [], DisplayTextAction [EmptyExpr [defVal=class java.lang.String]]]]]";
+        String expectedResult =
+            "BlockAST [project=[[Location [x=63, y=63], MainTask [], DisplayTextAction [TEXT, EmptyExpr [defVal=class java.lang.String]]]]]";
 
         String result = Helper.generateTransformerString("/action/display_text_missing_message.xml");
 
