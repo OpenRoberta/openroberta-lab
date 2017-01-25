@@ -645,10 +645,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     function checkSim() {
         if (GUISTATE.gui.sim === true) {
             $('#menuRunSim').parent().removeClass('disabled');
-            getBlocklyWorkspace().robControls.enable('runInSim');
+            $('#progSim').show();
         } else {
             $('#menuRunSim').parent().addClass('disabled');
-            getBlocklyWorkspace().robControls.disable('runInSim');
+            $('#progSim').hide();
         }
     }
     exports.checkSim = checkSim;

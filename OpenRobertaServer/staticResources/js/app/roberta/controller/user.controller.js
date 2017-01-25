@@ -57,7 +57,6 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         if ($formUserPasswordChange.valid()) {
             if (restPasswordLink) {
                 USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
-                    // console.log(result.message);
                     if (result.rc === "ok") {
                         $("#change-user-password").modal('hide');
                         $("#resetPassLink").val(undefined);

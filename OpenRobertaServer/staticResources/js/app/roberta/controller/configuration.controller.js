@@ -47,7 +47,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
         bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
-        bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
+        $('#progSim').hide();
         guiStateController.setBricklyWorkspace(bricklyWorkspace);
         bricklyWorkspace.robControls.disable('saveProgram');
     }

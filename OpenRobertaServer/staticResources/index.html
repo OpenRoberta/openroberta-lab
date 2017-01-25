@@ -24,6 +24,8 @@ limitations under the License.
 	href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/languages.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/typicons.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/wysiwyg.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css"
 	href="js/libs/code-prettify/prettify.css"></link>
@@ -61,10 +63,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<button id="navbarButtonsHead" type="button"
-					class="navbar-toggle head-navi-icons typcn typcn-th-menu pull-left sr-only"
+					class="navbar-toggle head-navi-icons typcn typcn-th-menu pull-left"
 					data-toggle="collapse" data-target="#navbarCollapse"></button>
 				<button id="simButtonsHead" type="button"
-					class="sim hide navbar-toggle head-navi-icons typcn typcn-th-small pull-left sr-only"
+					class="sim hide navbar-toggle head-navi-icons typcn typcn-th-small pull-left"
 					data-toggle="collapse" data-target="#simButtonsCollapse"></button>
 			</div>
 			<!-- Collect the nav links, forms, and other content for toggling -->
@@ -365,7 +367,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	<div class="tab-content container" id="main-section">
 		<div id="blockly" class="tab-pane fade in active">
 			<div id="blocklyDiv"></div>
-			<div id="simDiv">
+			<div id="simDiv" class="fromRight">
 				<div id="uniDiv"
 					style="position: absolute; left: 0; top: -1000; z-index: 0;">
 					<canvas id="unitBackgroundLayer" width=1 height=1></canvas>
@@ -379,13 +381,11 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						width=1 height=1></canvas>
 					<canvas id="robotLayer" class="canvasSim" style="z-index: 4"
 						width=1 height=1></canvas>
-					<div id="infoDiv" width="100px" height="200px"
-						style="position: absolute; right: 0; top: 0; z-index: 1"></div>
 				</div>
 				<div id="simButtons">
-					<button id="simBack" type="button"
-						class="simBack blbtn typcn typcn-arrow-left-thick"
-						lkey="Blockly.Msg.MENU_SIM_BACK_TOOLTIP" rel="tooltip"
+					<button id="simControle" type="button"
+						class="blbtn typcn typcn-media-play-outline"
+						lkey="Blockly.Msg.START" rel="tooltip"
 						data-original-title="" title=""></button>
 					<button id="simScene" type="button"
 						class="simScene blbtn typcn typcn-image"
@@ -404,15 +404,76 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						data-original-title="" title=""></button>
 				</div>
 			</div>
-			<div id="helpDiv"></div>
-			<div id="codeDiv">
+			<div id="helpDiv" class="fromRight"></div>
+			<div id="infoDiv" class="fromRight">
+				<div id="infoToolbar" class="btn-toolbar editor" data-role="editor-toolbar"
+					data-target="#infoContent">
+					<div class="btn-group">
+						<a class="btn editor btn-default dropdown-toggle" data-toggle="dropdown"
+							title="Font Size"><i class="editor fa fa-text-height"></i>&nbsp;<b
+							class="editor fa fa-sort-desc"></b></a>
+						<ul class="dropdown-menu">
+							<li><a data-edit="fontSize 5" class="fs-Five">Huge</a></li>
+							<li><a data-edit="fontSize 3" class="fs-Three">Normal</a></li>
+							<li><a data-edit="fontSize 1" class="fs-One">Small</a></li>
+						</ul>
+					</div>
+					<div class="btn-group">
+						<a class="btn editor btn-default dropdown-toggle" data-toggle="dropdown"
+							title="Font Color"><i class="editor fa fa-font"></i>&nbsp;<b
+							class="editor fa fa-sort-desc"></b></a>
+						<ul class="dropdown-menu">
+							<p>&nbsp;&nbsp;&nbsp;Font Color:</p>
+							<li><a data-edit="foreColor #000000">Black</a></li>
+							<li><a data-edit="foreColor #0000FF">Blue</a></li>
+							<li><a data-edit="foreColor #30AD23">Green</a></li>
+							<li><a data-edit="foreColor #FF7F00">Orange</a></li>
+							<li><a data-edit="foreColor #FF0000">Red</a></li>
+							<li><a data-edit="foreColor #FFFF00">Yellow</a></li>
+						</ul>
+					</div>
+					<div class="btn-group">
+						<a class="btn editor btn-default" data-edit="bold"
+							title="Bold (Ctrl/Cmd+B)"><i class="editor fa fa-bold"></i></a> <a
+							class="btn editor btn-default" data-edit="italic"
+							title="Italic (Ctrl/Cmd+I)"><i class="editor fa fa-italic"></i></a>
+						<a class="btn editor btn-default" data-edit="strikethrough"
+							title="Strikethrough"><i class="editor fa fa-strikethrough"></i></a>
+						<a class="btn editor btn-default" data-edit="underline"
+							title="Underline (Ctrl/Cmd+U)"><i
+							class="editor fa fa-underline"></i></a>
+					</div>
+					<div class="btn-group">
+						<a class="btn editor btn-default" data-edit="justifyleft"
+							title="Align Left (Ctrl/Cmd+L)"><i
+							class="editor fa fa-align-left"></i></a> <a class="btn editor btn-default"
+							data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i
+							class="editor fa fa-align-center"></i></a> <a class="btn editor btn-default"
+							data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i
+							class="editor fa fa-align-right"></i></a> <a class="btn editor btn-default"
+							data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i
+							class="editor fa fa-align-justify"></i></a>
+					</div>
+					<div class="btn-group">
+						<a class="btn editor btn-default" data-edit="insertunorderedlist"
+							title="Bullet list"><i class="editor fa fa-list-ul"></i></a> <a
+							class="btn editor btn-default" data-edit="insertorderedlist"
+							title="Number list"><i class="editor fa fa-list-ol"></i></a> 
+					</div>
+					<div class="btn-group">
+						<a class="btn editor btn-default" data-edit="undo"
+							title="Undo (Ctrl/Cmd+Z)"><i class="editor fa fa-undo"></i></a> <a
+							class="btn editor btn-default" data-edit="redo"
+							title="Redo (Ctrl/Cmd+Y)"><i class="editor fa fa-repeat"></i></a>
+					</div>
+				</div>
+				<div id="infoContent"></div>
+			</div>
+			<div id="codeDiv" class="fromRight">
 				<div id="codeContainer">
 					<div id="codeContent"></div>
 				</div>
 				<div id="codeButtons" class="code">
-					<button id="codeBack" type="button"
-						class="codeBack blbtn typcn typcn-arrow-left-thick"
-						data-toggle="collapse"></button>
 					<button id="codeDownload" type="button"
 						class="codeDownload blbtn typcn typcn-download"
 						data-toggle="collapse"></button>
@@ -424,6 +485,21 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip"
 					data-original-title="" title="">
 					<span id="" class="progHelp typcn typcn-questionmark"></span>
+				</div>
+				<div href="#" id="progInfo" class="rightMenuButton info"
+					lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip"
+					data-original-title="" title="">
+					<span id="" class="progInfo typcn typcn-message-typing"></span>
+				</div>
+				<div href="#" id="progCode" class="rightMenuButton code"
+					lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip"
+					data-original-title="" title="">
+					<span id="" class="progCode typcn typcn-code"></span>
+				</div>
+				<div href="#" id="progSim" class="rightMenuButton"
+					lkey="Blockly.Msg.MENU_EDIT_TOOLTIP" rel="tooltip"
+					data-original-title="" title="">
+					<span id="" class="progSim typcn typcn-simulation"></span>
 				</div>
 			</div>
 		</div>
@@ -1027,7 +1103,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
 			</div>
-			<div id="simValuesContent"><div id="valuesContent"></div></div>
+			<div id="simValuesContent">
+				<div id="valuesContent"></div>
+			</div>
 		</div>
 	</div>
 	<!--  Popup to show downloads for mbed -->

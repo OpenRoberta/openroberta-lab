@@ -1,4 +1,4 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'prettify', 'robot.controller', 'tour.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, TOUR_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'robot.controller', 'progHelp.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, HELP_C, INFO_C, CODE_C, SIM_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -9,10 +9,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
      */
     function init() {
         initView();
-        initHelp();
         initProgramEnvironment();
         initEvents();
         initProgramForms();
+        HELP_C.init(blocklyWorkspace);
+        INFO_C.init(blocklyWorkspace);
+        CODE_C.init(blocklyWorkspace);
+        SIM_C.init(blocklyWorkspace);
         LOG.info('init program view');
     }
     exports.init = init;
@@ -62,17 +65,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             var xml = Blockly.Xml.domToText(dom);
             GUISTATE_C.setProgramXML(xml);
         });
-        $('#progHelp').on('click touchend', function(event) {
-            toggleHelp();
-            return false;
-        });
         bindControl();
         blocklyWorkspace.addChangeListener(function(event) {
             if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
                 GUISTATE_C.setProgramSaved(false);
             }
             $('.selectedHelp').removeClass('selectedHelp');
-            if (Blockly.selected && $('#blocklyDiv').hasClass('helpActive')) {
+            if (Blockly.selected && $('#blocklyDiv').hasClass('rightActive')) {
                 var block = Blockly.selected.type;
                 $('#' + block).addClass('selectedHelp');
                 $('#helpContent').scrollTo('#' + block, 1000, {
@@ -80,26 +79,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 });
             }
             return false;
-        });
-    }
-
-    function initHelp() {
-        $('#helpContent').remove();
-        var url = '../help/progHelp_' + GUISTATE_C.getRobot() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
-        $('#helpDiv').load(url, function(response, status, xhr) {
-            if (status == "error") {
-                url = '../help/progHelp_' + GUISTATE_C.getRobot() + '_de.html';
-//                url = 'progHelp_en.html';
-                $('#helpDiv').load(url, function(response, status, xhr) {
-                    if (status == "error") {
-                        $('#rightMenuDiv').hide();
-                    } else {
-                        $('#rightMenuDiv').show();
-                    }
-                })
-            } else {
-                $('#rightMenuDiv').show();
-            }
         });
     }
 
@@ -488,162 +467,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     }
     exports.runOnBrick = runOnBrick;
 
-    /**
-     * Start the program in the simulation.
-     */
-    function runInSim() {
-        LOG.info('run ' + GUISTATE_C.getProgramName() + 'in simulation');
-        Blockly.hideChaff();
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-        var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
-        GUISTATE_C.setConfigurationXML(xmlTextConfiguration);
-
-        PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
-            if (result.rc == "ok") {
-                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                blocklyWorkspace.robControls.setSimStart(false);
-                reloadProgram(result);
-
-                if ($(".sim").hasClass('hide')) {
-                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobot());
-                    $(".sim").removeClass('hide');
-                    $('#blocklyDiv').addClass('simActive');
-                    $('#simDiv').addClass('simActive');
-                    $('#simButtonsCollapse').collapse({
-                        'toggle' : false
-                    });
-                    $('.nav > li > ul > .robotType').addClass('disabled');
-                    $('#menuShowCode').parent().addClass('disabled');
-                    var width;
-                    var smallScreen;
-                    if ($(window).width() < 768) {
-                        smallScreen = true;
-                        width = '52px';
-                    } else {
-                        smallScreen = false;
-                        width = '30%';
-                    }
-                    $('#rightMenuDiv').animate({
-                        right : '0px',
-                    }, {
-                        duration : 750
-                    });
-                    $('#blocklyDiv').animate({
-                        width : width
-                    }, {
-                        duration : 750,
-                        step : function() {
-                            $(window).resize();
-                            Blockly.svgResize(blocklyWorkspace);
-                        },
-                        done : function() {
-                            if (smallScreen) {
-                                $('.blocklyToolboxDiv').css('display', 'none');
-                            }
-                            $(window).resize();
-                            blocklyWorkspace.robControls.toogleSim();
-                            Blockly.svgResize(blocklyWorkspace);
-                            if (TOUR_C.getInstance()) {
-                                TOUR_C.getInstance().trigger('SimLoaded');
-                            }
-                            setTimeout(function() {
-                                SIM.setPause(false);
-                            }, 1000);
-                        }
-                    });
-                } else {
-                    SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobot());
-                    setTimeout(function() {
-                        SIM.setPause(false);
-                    }, 1000);
-                }
-            } else {
-                MSG.displayInformation(result, "", result.message, "");
-            }
-        });
-    }
-    exports.runInSim = runInSim;
-
-    function toggleHelp(callback, data) {
-        if ($('#blocklyDiv').hasClass('helpActive')) {
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('#menuShowCode').parent().removeClass('disabled');
-            $('.blocklyToolboxDiv').css('display', 'inherit');
-            Blockly.svgResize(blocklyWorkspace);
-            $('#rightMenuDiv').animate({
-                right : '0px',
-            }, {
-                duration : 750
-            });
-            $('#blocklyDiv').animate({
-                width : '100%'
-            }, {
-                duration : 750,
-                step : function() {
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                },
-                done : function() {
-                    $('#blocklyDiv').removeClass('helpActive');
-                    $('#helpDiv').removeClass('helpActive');
-                    $('.nav > li > ul > .robotType').removeClass('disabled');
-                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                }
-            });
-        } else {
-            $('#blocklyDiv').addClass('helpActive');
-            $('#helpDiv').addClass('helpActive');
-            $('.nav > li > ul > .robotType').addClass('disabled');
-            $('#menuShowCode').parent().addClass('disabled');
-            if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
-                $('.help.expert').hide();
-            } else {
-                $('.help.expert').show();
-            }
-            var width;
-            var smallScreen;
-            if ($(window).width() < 768) {
-                smallScreen = true;
-                width = '52px';
-            } else {
-                smallScreen = false;
-                width = $('#blocklyDiv').width() * 0.7;
-            }
-            $('#rightMenuDiv').animate({
-                right : $('#blocklyDiv').width() - width + 4,
-            }, {
-                duration : 750
-            });
-            $('#blocklyDiv').animate({
-                width : width
-            }, {
-                duration : 750,
-                step : function() {
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                },
-                done : function() {
-                    if (smallScreen) {
-                        $('.blocklyToolboxDiv').css('display', 'none');
-                    }
-                    $(window).resize();
-                    Blockly.svgResize(blocklyWorkspace);
-                    $('.selectedHelp').removeClass('selectedHelp');
-                    if (Blockly.selected) {
-                        var block = Blockly.selected.type;
-                        $('#' + block).addClass('selectedHelp');
-                        $('#helpContent').scrollTo('#' + block, 1000, {
-                            offset : -10,
-                        });
-                    }
-                }
-            });
-        }
-    }
-
     function getBlocklyWorkspace() {
         return blocklyWorkspace;
     }
@@ -663,20 +486,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             runOnBrick();
             return false;
         });
-        Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
-            LOG.info('runInSim from blockly button');
-            runInSim();
-            return false;
-        });
         Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
             LOG.info('saveProgram from blockly button');
             saveToServer();
-            return false;
-        });
-        Blockly.bindEvent_(blocklyWorkspace.robControls.simStop, 'mousedown', null, function(e) {
-            LOG.info('simStop from blockly button');
-            SIM.stopProgram();
-            blocklyWorkspace.robControls.setSimStart(true);
             return false;
         });
         blocklyWorkspace.robControls.disable('saveProgram');
@@ -698,6 +510,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             programToBlocklyWorkspace(xml);
+            INFO_C.init(blocklyWorkspace);
         }
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
@@ -712,7 +525,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         initProgramEnvironment();
         var toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
-        initHelp();
+        HELP_C.init(blocklyWorkspace);
+        INFO_C.init(blocklyWorkspace);
     }
     exports.resetView = resetView;
 
@@ -736,14 +550,24 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     }
 
     function programToBlocklyWorkspace(xml) {
-        // removing changelistener in blockly doesn't work, so no other way
         listenToBlocklyEvents = false;
         Blockly.hideChaff();
         blocklyWorkspace.clear();
         var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
         Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
+        // update right panel if it is already open
+        if ($('.fromRight').hasClass('rightActive')) {
+            $('#infoContent').html(blocklyWorkspace.description);
+            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
+            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            var xmlProgram = Blockly.Xml.domToText(dom);
+            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlProgram, xmlConfiguration, function(result) {
+                $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
+            });
+        }
         setTimeout(function() {
             listenToBlocklyEvents = true;
         }, 500);
-   }
+    }
 });

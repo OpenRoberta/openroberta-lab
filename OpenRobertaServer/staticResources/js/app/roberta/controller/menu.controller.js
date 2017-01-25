@@ -91,9 +91,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#navbarCollapse').collapse({
             'toggle' : false
         });
-        $('#simButtonsCollapse').collapse({
-            'toggle' : false
-        });
+      
         $('#navbarCollapse').onWrap('click', '.dropdown-menu a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
@@ -113,7 +111,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             if (domId === 'menuRunProg') {
                 PROGRAM_C.runOnBrick();
             } else if (domId === 'menuRunSim') {
-                PROGRAM_C.runInSim();
+                $('#progSim').trigger('click');
             } else if (domId === 'menuCheckProg') {
                 PROGRAM_C.checkProgram();
             } else if (domId === 'menuNewProg') {
@@ -129,7 +127,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             } else if (domId === 'menuSaveAsProg') {
                 PROGRAM_C.showSaveAsModal();
             } else if (domId === 'menuShowCode') {
-                PROGRAM_C.showCode();
+                $('#progCode').trigger("click");
             } else if (domId === 'menuImportProg') {
                 PROGRAM_C.importXml();
             } else if (domId === 'menuExportProg') {
@@ -247,93 +245,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             }
         }, 'sim clicked');
 
-        $('.simBack').onWrap('click', function(event) {
-            SIM.cancel();
-            $(".sim").addClass('hide');
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('#menuShowCode').parent().removeClass('disabled');
-            $("#simButtonsCollapse").collapse('hide');
-            $('.blocklyToolboxDiv').css('display', 'inherit');
-            Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-            PROGRAM_C.getBlocklyWorkspace().robControls.toogleSim();
-            $('#blocklyDiv').animate({
-                width : '100%'
-            }, {
-                duration : 750,
-                start: function() {
-                    $(".modal").modal("hide");
-                },
-                step : function() {
-                    $(window).resize();
-                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-                },
-                done : function() {
-                    $('#simDiv').removeClass('simActive');
-                    $('#menuSim').parent().addClass('disabled');
-                    $('.nav > li > ul > .robotType').removeClass('disabled');
-                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
-                    $(window).resize();
-                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-                }
-            });
-        }, 'simBack clicked');
-
-        $('.simStop').onWrap('click', function(event) {
-            SIM.stopProgram();
-            $("#simButtonsCollapse").collapse('hide');
-        }, 'simStop clicked');
-
-        $('.simForward').onWrap('click', function(event) {
-            if ($('.simForward').hasClass('typcn-media-play')) {
-                SIM.setPause(false);
-            } else {
-                SIM.setPause(true);
-            }
-            $("#simButtonsCollapse").collapse('hide');
-        }, 'simForward clicked');
-
-        $('.simStep').onWrap('click', function(event) {
-            SIM.setStep();
-            $("#simButtonsCollapse").collapse('hide');
-        }, 'simStep clicked');
-
-        $('.simInfo').onWrap('click', function(event) {
-            SIM.setInfo();
-            $("#simButtonsCollapse").collapse('hide');
-        }, 'simInfo clicked');
-
-        $('#simRobot').onWrap('click', function(event) {
-            $("#simRobotModal").modal("toggle");
-            var robot = GUISTATE_C.getRobot();
-            if (robot == 'calliope' || robot == 'microbit') {
-                var position = $("#simDiv").position();
-                position.left = $("#blocklyDiv").width();
-                $("#simRobotModal").css({
-                    top : position.top,
-                    left : position.left
-                });
-            } else {
-                $("#simRobotModal").css({
-                    top : 100,
-                    left : 50,
-                });
-            }
-            $('#simRobotModal').draggable();
-
-            $("#simButtonsCollapse").collapse('hide');
-        }, 'simRobot clicked');
-
-        $('#simValues').onWrap('click', function(event) {
-            $("#simValuesModal").modal("toggle");
-            $('#simValuesModal').draggable();
-
-            $("#simButtonsCollapse").collapse('hide');
-        }, 'simValues clicked');
-
-        $('#simImport').onWrap('click', function(event) {
-            SIM.importImage();
-        }, 'simImport clicked');
-
         $('#menuTabProgram').onWrap('click', '', function(event) {
             if ($('#tabSimulation').hasClass('tabClicked')) {
                 $('.scroller-left').click();
@@ -396,7 +307,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             window.open("TODO");
         }, 'head navigation menu item clicked');
 
-        $('#simRobotModal').removeClass("modal-backdrop");
         $('.simScene').onWrap('click', function(event) {
             SIM.setBackground(-1, SIM.setBackground);
             var scene = $("#simButtonsCollapse").collapse('hide');
@@ -424,31 +334,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#startEV3').onWrap('click', function(event) {
             switchRobot('ev3');
         }, 'start with ev3 clicked');
-
-        $('.codeBack').onWrap('click', function(event) {
-            $(".code").addClass('hide');
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('.blocklyToolboxDiv').css('display', 'inherit');
-            Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-            $('#blocklyDiv').animate({
-                width : '100%'
-            }, {
-                duration : 750,
-                step : function() {
-                    $(window).resize();
-                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-                },
-                done : function() {
-                    $('#codeDiv').removeClass('codeActive');
-                    $('.nav > li > ul > .robotType').removeClass('disabled');
-                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
-                    $(window).resize();
-                    Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-                }
-            });
-            Blockly.svgResize(PROGRAM_C.getBlocklyWorkspace());
-
-        }, 'codeBack clicked');
 
         $('.popup-robot').onWrap('click', function(event) {
             event.preventDefault();
@@ -487,12 +372,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 }
             });
         }, 'show more releases clicked');
-
-        $('#codeDownload').onWrap('click', function(event) {
-            var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getProgramFileExtension();
-            UTIL.download(filename, GUISTATE_C.getProgramSource());
-            MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
-        }, 'codeDownload clicked');
 
         $('#confirmContinue').onWrap('click', function(event) {
             if ($('#confirmContinue').data('type') === 'program') {
@@ -538,14 +417,5 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
             Blockly.svgResize(GUISTATE_C.getBricklyWorkspace());
         });
-
-        $(document).on('keydown', function(e) {
-            // You may replace `c` with whatever key you want
-            if ((e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'q')) {
-                PROGRAM_C.showCode();
-                // PROGRAM_C.showCode();
-            }
-        });
-
     }
 });

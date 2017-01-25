@@ -84,7 +84,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             return currentBackground;
         }
         setPause(true);
-        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
+        $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');      
         if (num === -1) {
             currentBackground += 1;
             if (currentBackground >= imgObjectList.length) {
@@ -213,14 +213,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             }, 100);
         } else {
             if (value) {
-                $('.simForward').removeClass('typcn-media-pause');
-                $('.simForward').addClass('typcn-media-play');
-                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
-            } else {
-                $('.simForward').removeClass('typcn-media-play');
-                $('.simForward').addClass('typcn-media-pause');
-                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(false);
-                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(false);
+                $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+            }else{
+                $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
             }
             pause = value;
         }
@@ -398,7 +393,6 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         } else if (programEval.getProgram().isTerminated() && !pause && !robot.endless) {
             setPause(true);
             robot.reset();
-            ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimStart(true);
         } else if (reset && !pause) {
             reset = false;
             robot.buttons.Reset = false;
@@ -425,7 +419,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     function reloadProgram() {
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
-        ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.setSimForward(true);
+        $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
     }
 
     function setObstacle() {
