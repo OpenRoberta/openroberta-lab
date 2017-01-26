@@ -1,7 +1,7 @@
 define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ], function(exports, MSG, LOG, $) {
     /**
      * Set cookie
-     *
+     * 
      * @param {key}
      *            Key of the cookie
      * @param {value}
@@ -16,7 +16,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Get cookie
-     *
+     * 
      * @param {key}
      *            Key of the cookie to read
      */
@@ -28,7 +28,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Format date
-     *
+     * 
      * @param {date}
      *            date from server to be formatted
      */
@@ -45,7 +45,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Convert date into numeric value
-     *
+     * 
      * @param {d}
      *            date in the form 'dd.mm.yyyy, hh:mm:ss'
      */
@@ -69,7 +69,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Format result of server call for logging
-     *
+     * 
      * @param {result}
      *            Result-object from server call
      */
@@ -175,7 +175,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Helper to show the information on top of the share modal.
-     *
+     * 
      */
     function showMsgOnTop(msg) {
 
@@ -192,7 +192,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Handle result of server call
-     *
+     * 
      * @param {result}
      *            Result-object from server call
      */
@@ -206,13 +206,13 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Rounds a number to required decimal
-     *
+     * 
      * @param value
      *            {Number} - to be rounded
      * @param decimals
      *            {Number} - number of decimals after rounding
      * @return {Number} rounded number
-     *
+     * 
      */
     function round(value, decimals) {
         return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
@@ -221,7 +221,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Get the sign of the number.
-     *
+     * 
      * @param x
      *            {Number} -
      * @return {Number} - 1 if it is positive number o/w return -1
@@ -233,7 +233,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
 
     /**
      * Returns the basename (i.e. "hello" in "C:/folder/hello.txt")
-     *
+     * 
      * @param path
      *            {String} - path
      */
@@ -260,16 +260,16 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     exports.download = download;
 
     var __entityMap = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': '&quot;',
-      "'": '&#39;',
-      "/": '&#x2F;'
+        "&" : "&amp;",
+        "<" : "&lt;",
+        ">" : "&gt;",
+        '"' : '&quot;',
+        "'" : '&#39;',
+        "/" : '&#x2F;'
     };
 
     String.prototype.escapeHTML = function() {
-        return String(this).replace(/[&<>"'\/]/g, function (s) {
+        return String(this).replace(/[&<>"'\/]/g, function(s) {
             return __entityMap[s];
         });
     }
@@ -300,10 +300,23 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
             $(document).on("mousemove touchmove", function(e) {
                 var pageX = e.pageX || e.originalEvent.touches[0].pageX;
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
-                $selected.offset({
-                    top : pageY + pos_y - drg_h,
-                    left : pageX + pos_x - drg_w
-                });
+                // special case movable slider between workspace and right divs
+                if (opt.axis == 'x') {
+                    $selected.offset({
+                        top : 0,
+                        left : pageX + pos_x - drg_w - 6
+                    });
+                    $('#blocklyDiv').width(pageX + pos_x - drg_w);
+                    $('.rightMenuButton.shifted').css({
+                        'right' : $('#main-section').width() - pageX - pos_x + drg_w - 4
+                    });
+                    $(window).resize();
+                } else {
+                    $selected.offset({
+                        top : pageY + pos_y - drg_h,
+                        left : pageX + pos_x - drg_w
+                    });
+                }
                 $selected.css({
                     right : 'auto',
                 });

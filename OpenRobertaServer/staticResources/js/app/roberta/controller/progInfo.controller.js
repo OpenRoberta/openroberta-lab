@@ -27,6 +27,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
             toggleInfo();
             return false;
         });
+        $(window).on('resize', function(e) {
+            if ($('#infoDiv').hasClass('rightActive')) {
+               $('#infoContent').css({
+                    "width" : $('#infoDiv').outerWidth(),
+                    "height" : $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight(),
+                });
+            }
+        });
     }
 
     function toggleInfo() {
@@ -58,6 +66,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                         "height" : '100 %',
                     });
                     $('#infoContent').off('change');
+                    $('#sliderDiv').show();
+                    $('#progInfo').removeClass('shifted');
                 }
             });
         } else {
@@ -89,17 +99,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     if (smallScreen) {
                         $('.blocklyToolboxDiv').css('display', 'none');
                     }
-                    var ready;
-                    window.onresize = function() {
-                        clearTimeout(ready);
-                        ready = setTimeout(resizedw, 100);
-                    };
-                    function resizedw() {
-                        $('#infoContent').css({
-                            "width" : $('#infoContent').outerWidth(),
-                            "height" : $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight(),
-                        });
-                    }
+                    $('#sliderDiv').css({
+                        'left' : width - 10
+                    });
+                    $('#sliderDiv').show();
+                    $('#progInfo').addClass('shifted');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
                     $('#infoContent').on('change', function() {

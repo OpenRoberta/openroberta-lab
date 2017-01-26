@@ -49,7 +49,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     }
 
     function initEvents() {
-
+        $('#sliderDiv').draggable({
+            'axis' : 'x',
+            'cursor' : 'col-resize'
+        });
+        
         $('#tabProgram').on('show.bs.tab', function(e) {
             GUISTATE_C.setView('tabProgram');
             blocklyWorkspace.markFocused();

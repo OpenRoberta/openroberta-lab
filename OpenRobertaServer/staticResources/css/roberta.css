@@ -240,8 +240,13 @@ body.blocklyMinimalBody  * {
 	width: 100%
 }
 
-#infoDiv {
-	
+#sliderDiv {
+	position: absolute;
+    width: 10px;
+    height: 100%;
+    right: 0px;
+    cursor: col-resize;
+    display: none;
 }
 
 .codeActive>pre {

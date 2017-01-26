@@ -121,6 +121,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
+                    $('#sliderDiv').show();
+                    $('#progSim').removeClass('shifted');
                 }
             });
         } else {
@@ -166,6 +168,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             if (smallScreen) {
                                 $('.blocklyToolboxDiv').css('display', 'none');
                             }
+                            $('#sliderDiv').css({'left': width - 10});
+                            $('#sliderDiv').show();
+                            $('#progSim').addClass('shifted');
                             $(window).resize();
                             Blockly.svgResize(blocklyWorkspace);
                             if (TOUR_C.getInstance()) {

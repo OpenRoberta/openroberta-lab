@@ -51,6 +51,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         "width" : 'inherit',
                         "height" : 'inherit',
                     });
+                    $('#sliderDiv').show();
+                    $('#progCode').removeClass('shifted');
                 }
             });
         } else {
@@ -87,6 +89,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         if (smallScreen) {
                             $('.blocklyToolboxDiv').css('display', 'none');
                         }
+                        $('#sliderDiv').css({'left': width - 10});
+                        $('#sliderDiv').show();
+                        $('#progCode').addClass('shifted');
                         $(window).resize();
                         Blockly.svgResize(blocklyWorkspace);
                     }
