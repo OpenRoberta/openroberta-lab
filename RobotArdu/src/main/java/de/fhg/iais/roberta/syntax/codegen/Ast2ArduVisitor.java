@@ -1,17 +1,16 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -86,6 +85,7 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
@@ -131,6 +131,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     private final ArduConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
+    private final Set<UsedSensor> usedSensors;
     private int indentation;
     private boolean timeSensorUsed;
     private final ArrayList<ArrayList<Phrase<Void>>> phrases;
@@ -143,10 +144,16 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
 
-    public Ast2ArduVisitor(ArduConfiguration brickConfiguration, int indentation, boolean timeSensorUsed, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    public Ast2ArduVisitor(
+        ArrayList<ArrayList<Phrase<Void>>> phrases,
+        ArduConfiguration brickConfiguration,
+        Set<UsedSensor> usedSensors,
+        int indentation,
+        boolean timeSensorUsed) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.timeSensorUsed = timeSensorUsed;
+        this.usedSensors = usedSensors;
         this.phrases = phrases;
     }
 
@@ -162,14 +169,15 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
         boolean timeSensorUsed = UsedTimerVisitorArdu.check(phrasesSet);
-
-        final Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, phrasesSet);
+        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
+        Ast2ArduVisitor astVisitor =
+            new Ast2ArduVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor.getUsedSensors(), withWrapping ? 1 : 0, timeSensorUsed);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
-        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
     }
 
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2ArduVisitor astVisitor) {
+    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2ArduVisitor astVisitor) {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
@@ -186,7 +194,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
-    private static boolean handleMainBlocks(Ast2ArduVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+    private boolean handleMainBlocks(Ast2ArduVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
         //        if (phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
@@ -197,13 +205,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return mainBlock;
     }
 
-    private static void generateSuffix(boolean withWrapping, Ast2ArduVisitor astVisitor) {
+    private void generateSuffix(boolean withWrapping, Ast2ArduVisitor astVisitor) {
         if ( withWrapping ) {
             astVisitor.sb.append("\n}\n");
         }
     }
 
-    private static String getBlocklyTypeCode(BlocklyType type) {
+    private String getBlocklyTypeCode(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -1062,7 +1070,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             nlIndent();
             this.sb.append("T.Timer();");
         }
-        this.generateSensors();
         return null;
     }
 
@@ -1615,22 +1622,27 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     }
 
     private void generateSensors() {
-        for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            switch ( entry.getValue().getType() ) {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
                 case COLOR:
                     nlIndent();
                     this.sb.append("brm.setRgbStatus(ENABLE);");
-                    break;
-                case ULTRASONIC:
-                    nlIndent();
-                    this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
                 case INFRARED:
                     nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
                     break;
-                default:
+                case ULTRASONIC:
+                    nlIndent();
+                    this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
+                case LIGHT:
+                case COMPASS:
+                case SOUND:
+                case TOUCH:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported!");
             }
         }
     }
@@ -1680,6 +1692,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         nlIndent();
         // stop motors:
         this.sb.append("one.stop();");
+        nlIndent();
+        this.generateSensors();
         if ( this.timeSensorUsed ) {
             nlIndent();
             this.sb.append("T.StartTimer();");
