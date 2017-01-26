@@ -110,7 +110,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
     }, {
         'event' : 'SimLoaded',
         'event_type' : 'SimLoaded',
-        'selector' : '.blocklyButtons>g:eq(1)>rect',
+        'selector' : '#progSim', //'.blocklyButtons>g:eq(1)>rect',
         'description' : 'TOUR1_DESCRIPTION13',
         'showSkip' : false,
         'showNext' : false,
@@ -131,7 +131,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'showSkip' : false
     }, {
         'event' : 'click',
-        'selector' : '#simBack',
+        'selector' : '#progSim',
         'description' : 'TOUR1_DESCRIPTION16',
         'showSkip' : false
     } ];
