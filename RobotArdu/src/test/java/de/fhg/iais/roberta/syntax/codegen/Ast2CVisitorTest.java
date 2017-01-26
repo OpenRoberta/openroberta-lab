@@ -161,12 +161,13 @@ public class Ast2CVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml");
     }
 
+    @Ignore
     public void test5() throws Exception {
 
         final String a = "" //
             + MAIN_METHOD
 
-            + "          OnFwdReg(OUT_B,0,100);"
+            + "        OnFwdReg(OUT_B,0,100);"
             + "        RotateMotorEx(OUT_B,-30,360.0*0,-100,true,true);"
             + "       OnFwdSync(OUT_AB,0,100);"
             + "        SetVolume(50);"
