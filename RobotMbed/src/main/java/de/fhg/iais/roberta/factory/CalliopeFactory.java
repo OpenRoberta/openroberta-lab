@@ -297,7 +297,7 @@ public class CalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public String getFileExtension() {
-        return "py";
+        return "cpp";
     }
 
     @Override
