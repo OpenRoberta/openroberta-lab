@@ -365,7 +365,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     exports.init = init;
 
     function cancel() {
-        $(window).off("resize");
+        //$(window).off("resize");
         canceled = true;
         removeMouseEvents();
     }

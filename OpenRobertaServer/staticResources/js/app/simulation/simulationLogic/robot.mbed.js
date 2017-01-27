@@ -115,7 +115,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         if (actions.display) {
             if (actions.display.text) {
                 var that = Mbed.prototype;
-                var textArray = generate(actions.display.text);
+                var textArray = generateText(actions.display.text);
                 function f(textArray, that) {
                     if (textArray && textArray.length >= 5) {
                         var array = textArray.slice(0, 5);
@@ -127,6 +127,24 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                         that.display.leds = newArray;
                         textArray.shift();
                         that.display.timeout = setTimeout(f, 150, textArray, that);
+                    }
+                }
+                f(textArray, that);
+            }
+            if (actions.display.character) {
+                var that = Mbed.prototype;
+                var textArray = generatecharacter(actions.display.character);
+               function f(textArray, that) {
+                    if (textArray && textArray.length >= 5) {
+                        var array = textArray.slice(0, 5);
+                        var newArray = array[0].map(function(col, i) {
+                            return array.map(function(row) {
+                                return row[i];
+                            })
+                        });
+                        that.display.leds = newArray;
+                        textArray = textArray.slice(5);
+                        that.display.timeout = setTimeout(f, 400, textArray, that);
                     }
                 }
                 f(textArray, that);
@@ -160,7 +178,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         }
     }
 
-    var generate = function(text) {
+    var generateText = function(text) {
         var string = [];
         string.push([ 0, 0, 0, 0, 0 ]);
         string.push([ 0, 0, 0, 0, 0 ]);
@@ -181,6 +199,30 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         string.push([ 0, 0, 0, 0, 0 ]);
         string.push([ 0, 0, 0, 0, 0 ]);
         string.push([ 0, 0, 0, 0, 0 ]);
+        return string;
+    }
+
+    var generatecharacter = function(character) {
+        var string = [];
+        for (var i = 0; i < character.length; i++) {
+            var letter = letters[character[i]];
+            if (!letter)
+                letter = letters['blank'];
+            var newLetter = Array(25).fill(0);
+            var shift = Math.floor((5 - letter[0]) / 2);
+            for (var j = 1; j < letter.length; j++) {
+                newLetter[letter[j] - 1 + shift * 5] = 255;
+            }
+            while (newLetter.length) {
+                string.push(newLetter.splice(0, 5));
+            }
+        }
+        if (character.length > 1) {
+            var newLetter = Array(25).fill(0);
+            while (newLetter.length) {
+                string.push(newLetter.splice(0, 5));
+            }
+        }
         return string;
     }
 
@@ -297,8 +339,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         h = h / scale;
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        var top = $('#robotLayer').offset().top + $('#robotLayer').width()/2;
-        var left = $('#robotLayer').offset().left + $('#robotLayer').height()/2;
+        var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
+        var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
         startX = (parseInt(X - left, 10)) / scale;
         startY = (parseInt(Y - top, 10)) / scale;
         var scsq = 1;
@@ -318,7 +360,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //   
         this.display.lightLevel = 100;
-        if (A || B || Reset || Display) {          
+        if (A || B || Reset || Display) {
             if (e.type === 'mousedown') {
                 if (A) {
                     this.buttons.A = true;
@@ -341,8 +383,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 $("#robotLayer").css('cursor', 'pointer');
             }
         } else {
-            $("#robotLayer").css('cursor', 'auto');        
-        }      
+            $("#robotLayer").css('cursor', 'auto');
+        }
     }
 
     Mbed.prototype.handleMouseUp = function(e, offsetX, offsetY, scale, w, h) {

@@ -51,7 +51,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         "width" : 'inherit',
                         "height" : 'inherit',
                     });
-                    $('#sliderDiv').show();
+                    $('#sliderDiv').hide();
                     $('#progCode').removeClass('shifted');
                 }
             });

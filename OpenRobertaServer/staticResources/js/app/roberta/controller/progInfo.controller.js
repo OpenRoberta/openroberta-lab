@@ -66,7 +66,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                         "height" : '100 %',
                     });
                     $('#infoContent').off('change');
-                    $('#sliderDiv').show();
+                    $('#sliderDiv').hide();
                     $('#progInfo').removeClass('shifted');
                 }
             });

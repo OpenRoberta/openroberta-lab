@@ -121,7 +121,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
-                    $('#sliderDiv').show();
+                    $('#sliderDiv').hide();
                     $('#progSim').removeClass('shifted');
                 }
             });

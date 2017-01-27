@@ -265,6 +265,9 @@ body.blocklyMinimalBody  * {
 	display: none;
 	position: relative;
 	z-index: 10;
+	user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 
 .fromRight.rightActive {

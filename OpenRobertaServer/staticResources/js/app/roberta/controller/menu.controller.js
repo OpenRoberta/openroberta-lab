@@ -1,6 +1,4 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
-        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
-        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -79,7 +77,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             placement : "right"
         });
         // prevent Safari 10. from zooming
-        document.addEventListener('gesturestart', function (e) {
+        document.addEventListener('gesturestart', function(e) {
             e.preventDefault();
             e.stopPropagation();
         });
@@ -91,7 +89,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#navbarCollapse').collapse({
             'toggle' : false
         });
-      
+
         $('#navbarCollapse').onWrap('click', '.dropdown-menu a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
@@ -337,8 +335,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('.popup-robot').onWrap('click', function(event) {
             event.preventDefault();
-            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
-                    || event.target.dataset.type;
+            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type || event.target.dataset.type;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {

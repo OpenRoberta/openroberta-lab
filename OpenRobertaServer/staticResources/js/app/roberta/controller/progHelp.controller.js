@@ -66,7 +66,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
-                    $('#sliderDiv').show();
+                    $('#sliderDiv').hide();
                     $('#progHelp').removeClass('shifted');
                 }
             });
