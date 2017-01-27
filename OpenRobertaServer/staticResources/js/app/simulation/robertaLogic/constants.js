@@ -23,13 +23,13 @@ define({
     ANY: "any",
 
     ESCAPE: "escape",
-    
+
     SHAKE: "shake",
-    
+
     FREEFALL: "freefall",
-    
+
     FACE_UP: "face_up",
-    
+
     FACE_DOWN: "face_down",
 
     BINARY: "Binary",
@@ -99,6 +99,8 @@ define({
     FILE: "file",
 
     TEXT: "text",
+
+    CHARACTER: "character",
 
     TEXT_APPEND: "textAppend",
 
@@ -179,9 +181,9 @@ define({
     BOOL_CONST: "BoolConst",
 
     STRING_CONST: "StringConst",
-    
+
     IMAGE_CONST: "image",
-    
+
     ANIMATION: "animation",
 
     STRING: "STRING",
@@ -203,7 +205,7 @@ define({
     ARRAY_BOOLEAN: "Array_Boolean",
 
     ARRAY_COLOUR: "Array_Colour",
-    
+
     ARRAY_IMAGE: "Array_Image",
 
     ADD: "ADD",
@@ -275,7 +277,7 @@ define({
     COLOUR: "colorValue",
 
     LED_COLOR_CONST: "ledColor",
-    
+
     RGB_COLOR_CONST: "rgbColor",
 
     LED_ON_ACTION: "ledOnAction",
@@ -325,11 +327,11 @@ define({
     MOTOR_LEFT: "C",
 
     MOTOR_RIGHT: "B",
-    
+
     MOTOR_XA: "XA",
-    
+
     MOTOR_XB: "XB",
-    
+
     MOTOR_XAB: "XAB",
 
     MOTOR_SIDE: "motorSide",
@@ -427,7 +429,7 @@ define({
     COMPASS: "compass",
 
     GESTURE: "gesture",
-    
+
     TEMPERATURE: "temperature",
 
     COLOR_ENUM: {

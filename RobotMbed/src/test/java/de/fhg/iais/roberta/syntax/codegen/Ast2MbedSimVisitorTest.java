@@ -33,8 +33,8 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitDisplayText_ShowHelloScript_ReturnsJavaScriptProgramWithShowTextCall() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayTextAction(createConstant(CONST.STRING_CONST, 'Hallo'));\n"
-            + "var stmt1 = createDisplayTextAction(createConstant(CONST.STRING_CONST, 'H'));\n"
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createConstant(CONST.STRING_CONST, 'Hallo'));\n"
+            + "var stmt1 = createDisplayTextAction(CONST.CHARACTER, createConstant(CONST.STRING_CONST, 'H'));\n"
             + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
@@ -43,7 +43,7 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsJavaScriptProgram() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayTextAction(createGetSample(CONST.BUTTONS, CONST.BUTTON_A));\n"
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createGetSample(CONST.BUTTONS, CONST.BUTTON_A));\n"
             + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(expectedResult, "/sensor/check_if_key_A_is_pressed.xml");
     }
@@ -51,7 +51,7 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsJavaScriptProgram() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayTextAction(createGetSample(CONST.COMPASS));\n"
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createGetSample(CONST.COMPASS));\n"
             + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(expectedResult, "/sensor/get_compass_orientation_value.xml");
@@ -97,8 +97,8 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCorrectJavaScriptProgram() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayTextAction(createGetSample(CONST.GESTURE, CONST.FACE_DOWN));\n"
-            + "var stmt1 = createDisplayTextAction(createGetSample(CONST.GESTURE, CONST.LEFT));\n"
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createGetSample(CONST.GESTURE, CONST.FACE_DOWN));\n"
+            + "var stmt1 = createDisplayTextAction(CONST.TEXT, createGetSample(CONST.GESTURE, CONST.LEFT));\n"
             + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
@@ -107,7 +107,7 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCorrectJavaScriptProgram() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayTextAction(createGetSample(CONST.TEMPERATURE));\n"
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createGetSample(CONST.TEMPERATURE));\n"
             + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(expectedResult, "/sensor/get_temperature.xml");
@@ -127,7 +127,7 @@ public class Ast2MbedSimVisitorTest {
     @Test
     public void visitRgbColor_CreateColorAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
-            + "var stmt0 = createDisplayTextAction(createRgbColor([createConstant(CONST.NUM_CONST, 20), createConstant(CONST.NUM_CONST, 25), createConstant(CONST.NUM_CONST, 30)]));\n"
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createRgbColor([createConstant(CONST.NUM_CONST, 20), createConstant(CONST.NUM_CONST, 25), createConstant(CONST.NUM_CONST, 30)]));\n"
             + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(expectedResult, "/expr/create_color.xml");
     }

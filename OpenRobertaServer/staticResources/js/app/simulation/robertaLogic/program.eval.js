@@ -310,7 +310,11 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalDisplayTextAction = function(obj, simulationData, stmt) {
         obj.outputCommands.display = {};
         var val = evalExpr(obj, stmt.text);
-        obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
+        if (stmt.mode == CONSTANTS.TEXT) {
+          obj.outputCommands.display.text = String(roundIfSensorData(val, stmt.text.expr));
+        } else {
+          obj.outputCommands.display.character = String(roundIfSensorData(val, stmt.text.expr)); 
+        }
         obj.program.setIsRunningTimer(true);
         obj.program.resetTimer(simulationData.time);
         // TODO get the time needed to display this specific string from the simulation or a finish flag.

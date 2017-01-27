@@ -232,7 +232,9 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         String end = createClosingBracket();
-        this.sb.append("createDisplayTextAction(");
+        this.sb.append("createDisplayTextAction(CONST.");
+        this.sb.append(displayTextAction.getMode().toString());
+        this.sb.append(", ");
         displayTextAction.getMsg().visit(this);
         this.sb.append(end);
         return null;

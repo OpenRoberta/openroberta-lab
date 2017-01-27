@@ -168,9 +168,10 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
-    function createDisplayTextAction(text) {
+    function createDisplayTextAction(displayMode, text) {
         var result = {};
         result[CONST.STMT] = CONST.DISPLAY_TEXT_ACTION;
+        result[CONST.MODE] = displayMode;
         result[CONST.TEXT] = text;
         return result;
     }
