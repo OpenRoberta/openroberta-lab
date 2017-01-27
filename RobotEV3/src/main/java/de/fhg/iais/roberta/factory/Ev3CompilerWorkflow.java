@@ -167,7 +167,7 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
      * @param sourceCode
      */
     public Key runBuild(String token, String mainFile, String sourceCode) {
-        JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode);
+        JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode, this.crossCompilerResourcesDir);
         boolean isSuccess = scp.compileAndPackage(this.pathToCrosscompilerBaseDir, token);
         if ( !isSuccess ) {
             Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());

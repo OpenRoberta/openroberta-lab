@@ -29,6 +29,7 @@ public class JavaSourceCompiler {
     private final String programName;
     private final String sourceCode;
     private final String packageName = "generated.main.";
+    private final String classPath;
 
     /**
      * @param programName
@@ -36,11 +37,12 @@ public class JavaSourceCompiler {
      * @param sourceCode
      *        Here we specify the source code of the class to be compiled
      */
-    public JavaSourceCompiler(String programName, String sourceCode) {
+    public JavaSourceCompiler(String programName, String sourceCode, String classPath) {
         this.programName = programName;
         this.sourceCode = sourceCode;
         this.compiler = ToolProvider.getSystemJavaCompiler();
         this.fileManager = initFileManager();
+        this.classPath = classPath;
     }
 
     private CustomJavaFileManager initFileManager() {
@@ -90,6 +92,20 @@ public class JavaSourceCompiler {
         compilationOptions.add("1.7");
         compilationOptions.add("-target");
         compilationOptions.add("1.7");
+        compilationOptions.add("-classpath");
+        compilationOptions.add(
+            this.classPath
+                + "dbusjava.jar:"
+                + this.classPath
+                + "ev3classes.jar:"
+                + this.classPath
+                + "EV3Runtime.jar:"
+                + this.classPath
+                + "Java-WebSocket.jar:"
+                + this.classPath
+                + "jna.jar:"
+                + this.classPath
+                + "json.jar");
         return compilationOptions;
     }
 
