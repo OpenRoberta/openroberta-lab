@@ -140,12 +140,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.ForgetObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
-import de.fhg.iais.roberta.syntax.sensor.nao.LearnObject;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -176,10 +175,10 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final Configuration brickConfiguration;
-    private final String programName;
+    //private final Configuration brickConfiguration;
+    //private final String programName;
     private final StringBuilder sb = new StringBuilder();
-    private final UsedHardwareVisitor usedHardware;
+    //private final UsedHardwareVisitor usedHardware;
 
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
@@ -193,10 +192,10 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     Ast2NaoPythonVisitor(String programName, Configuration brickConfiguration, UsedHardwareVisitor usedHardwareVisitor, int indentation) {
-        this.programName = programName;
-        this.brickConfiguration = brickConfiguration;
+        //this.programName = programName;
+        //this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
-        this.usedHardware = usedHardwareVisitor;
+        //this.usedHardware = usedHardwareVisitor;
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
@@ -1180,8 +1179,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         }
     }
 
-    //****************************************************************NAO******************************************************
-
     @Override
     public Void visitSetMode(SetMode<Void> setMode) {
         this.sb.append("h.mode(");
@@ -1698,20 +1695,9 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(")");
         return null;
     }
-    
-    public Void visitLearnObject(LearnObject<Void> learnObject) {
-        this.sb.append("h.learnObject(");
-        learnObject.getMsg().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-    
-    @Override
-    public Void visitForgetObject(ForgetObject<Void> forgetObject) {
-        this.sb.append("h.forgetObject(");
-        forgetObject.getMsg().visit(this);
-        this.sb.append(")");
-        return null;
+    public Void visitDetectFace(DetectFace<Void> detectFace) {
+    	this.sb.append("h.detectFace()");
+    	return null;
     }
 
 	@Override
