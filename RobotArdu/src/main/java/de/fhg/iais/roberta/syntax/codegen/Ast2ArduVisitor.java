@@ -1667,7 +1667,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         this.sb.append("BnrOneA one; \n");
         this.sb.append("BnrRescue brm; \n");
-        this.sb.append("RobertaFunctions rob; \n");
+        this.sb.append("RobertaFunctions rob(one, brm);  \n");
         if ( this.timeSensorUsed ) {
             this.sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
@@ -1692,6 +1692,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         nlIndent();
         // stop motors:
         this.sb.append("one.stop();");
+        nlIndent();
+        this.sb.append("rob.setOne(one);");
+        nlIndent();
+        this.sb.append("rob.setBrm(brm);");
         nlIndent();
         this.generateSensors();
         if ( this.timeSensorUsed ) {
