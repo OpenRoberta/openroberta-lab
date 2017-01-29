@@ -49,7 +49,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
 
     Mbed.prototype.display = {
         leds : [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ],
-        color : [ '#ffffff', '#ffe263', '#ffe300', '#ffdb00', '#ffc900', '#ffb800', '#ff8f00', '#ff7100', '#ff6400', '#ff4c02' ],
+        color : [ '255,255,255', '255,226,99', '255,227,0', '255,219,0', '255,201,0', '255,184,0', '255,143,0', '255, 113, 0', '255, 100, 0', '255, 76, 2' ],
         x : -60,
         y : 80,
         r : 5,
@@ -69,19 +69,22 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             for (var i = 0; i < this.leds.length; i++) {
                 for (var j = 0; j < this.leds[i].length; j++) {
                     var colorIndex = UTIL.round(this.leds[j][i] * 0.035294118, 0);
-                    canvas.fillStyle = this.color[colorIndex];
+                    canvas.fillStyle = this.color[0];
                     canvas.beginPath();
                     canvas.rect(this.x + i * this.dx - this.r + 2, this.y - j * this.dy - 2 * this.r + 2, 2 * (this.r - 2), 4 * this.r - 4);
                     canvas.fill();
                     if (colorIndex > 0) {
+                        canvas.save();
+                        var rad = canvas.createRadialGradient((this.x + i * this.dx) * 2, this.y - j * this.dy, 1.5 * this.r, (this.x + i * this.dx) * 2, this.y - j * this.dy, 3 * this.r);
+                        rad.addColorStop(0, 'rgba(' + this.color[colorIndex] + ',1)');
+                        rad.addColorStop(1, 'rgba(' + this.color[colorIndex] + ',0)');
+                        canvas.fillStyle = rad;
+                        canvas.scale(0.5, 1);
                         canvas.beginPath();
-                        canvas.globalAlpha = 0.5;
-                        canvas.arc(this.x + i * this.dx, this.y - j * this.dy - this.rL, this.rL, 0, Math.PI * 2);
-                        canvas.arc(this.x + i * this.dx, this.y - j * this.dy + this.rL, this.rL, 0, Math.PI * 2);
-                        canvas.rect(this.x + i * this.dx - this.rL, this.y - j * this.dy - this.rL, 2 * this.rL, 2 * this.rL);
+                        canvas.arc((this.x + i * this.dx) * 2, this.y - j * this.dy, 3 * this.r, 0, Math.PI * 2);
                         canvas.fill();
+                        canvas.restore();
                         canvas.beginPath();
-                        canvas.globalAlpha = 1;
                     }
                 }
             }
@@ -97,6 +100,40 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     Mbed.prototype.temperature = {
         degree : 25
     }
+
+    Mbed.prototype.pin0 = {
+        x : -209.5,
+        y : -170,
+        wh : 40,
+        touched : false,
+        draw : function(canvas) {
+            if (this.touched) {
+                canvas.fillStyle = 'green';
+                canvas.beginPath();
+                canvas.fillRect(this.x, this.y, this.wh, this.wh);
+                canvas.fill();
+                // show "circuit"
+                canvas.fillStyle = 'red';
+                canvas.beginPath();
+                canvas.arc(189.5, -112, 18, 0, Math.PI * 2);
+                canvas.fill();
+            }
+        }
+    };
+    Mbed.prototype.pin1 = {
+        x : -120,
+        y : -170,
+        wh : 40,
+        touched : false,
+        draw : Mbed.prototype.pin0.draw
+    };
+    Mbed.prototype.pin2 = {
+        x : -20,
+        y : -170,
+        wh : 40,
+        touched : false,
+        draw : Mbed.prototype.pin0.draw
+    };
 
     Mbed.prototype.time = 0;
     Mbed.prototype.timer = {
@@ -134,7 +171,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             if (actions.display.character) {
                 var that = Mbed.prototype;
                 var textArray = generatecharacter(actions.display.character);
-               function f(textArray, that) {
+                function f(textArray, that) {
                     if (textArray && textArray.length >= 5) {
                         var array = textArray.slice(0, 5);
                         var newArray = array[0].map(function(col, i) {
@@ -355,24 +392,33 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         var dxReset = startX - this.button.xReset;
         var dyReset = startY + this.button.yReset;
         var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
+        var Pin0 = (startX > this.pin0.x) && (-startY > this.pin0.y) && (startX < this.pin0.x + this.pin0.wh) && (-startY < this.pin0.y + this.pin0.wh);
+        var Pin1 = (startX > this.pin1.x) && (-startY > this.pin1.y) && (startX < this.pin1.x + this.pin1.wh) && (-startY < this.pin1.y + this.pin1.wh);
+        var Pin2 = (startX > this.pin2.x) && (-startY > this.pin2.y) && (startX < this.pin2.x + this.pin2.wh) && (-startY < this.pin2.y + this.pin2.wh);
         // special case, display (center: 0,0) represents light level
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //   
         this.display.lightLevel = 100;
-        if (A || B || Reset || Display) {
+        this.pin0.touched = false;
+        this.pin1.touched = false;
+        this.pin2.touched = false;
+        if (A || B || Reset || Display || Pin0 || Pin1 || Pin2) {
             if (e.type === 'mousedown') {
                 if (A) {
                     this.buttons.A = true;
-                }
-                if (B) {
+                } else if (B) {
                     this.buttons.B = true;
-                }
-                if (Display) {
+                } else if (Display) {
                     this.display.lightLevel = 150;
-                }
-                if (Reset) {
+                } else if (Reset) {
                     this.buttons.Reset = true;
+                } else if (Pin0) {
+                    this.pin0.touched = true;
+                } else if (Pin1) {
+                    this.pin1.touched = true;
+                } else if (Pin2) {
+                    this.pin2.touched = true;
                 }
             } else if (e.type === 'mousemove' && Display) {
                 this.display.lightLevel = 50;

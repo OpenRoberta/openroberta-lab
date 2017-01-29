@@ -497,12 +497,6 @@ div.rightMenuButton:hover, .rightMenuButton:active {
    margin-bottom: 5px;
 }
 
-
-.simbtn.btn:hover, .simbtn.btn:active:focus, .simbtn.btn:focus, .simbtn.btn.focus, .simbtn.btn:active, .simbtn.btn.active, .open>.dropdown-toggle.simbtn.btn {
-    background-color: #f29400;
-}
-
-
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tab-content
 >
@@ -822,13 +816,6 @@ table#download-instructions
 	bottom: inherit;
 }
 
-.modal#simValuesModal {
-	right: 12px;
-	top: 100px;
-	left: initial;
-	bottom: inherit;
-}
-
 .modal#simRobotModal button.close {
     margin-right: -10px;
     margin-top: -14px;
@@ -979,6 +966,10 @@ table#download-instructions
 	box-shadow: none;
 	cursor: pointer;
 	box-shadow: none;
+}
+
+.simbtn.btn:hover, .simbtn.btn:active:focus, .simbtn.btn:focus, .simbtn.btn.focus, .simbtn.btn:active, .simbtn.btn.active, .open>.dropdown-toggle.simbtn.btn {
+    background-color: #f29400;
 }
 
 .simKey:hover {

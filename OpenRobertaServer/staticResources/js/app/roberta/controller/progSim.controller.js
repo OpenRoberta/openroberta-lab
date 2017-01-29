@@ -62,17 +62,19 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         $('#simRobot').on('click', function(event) {
             $("#simRobotModal").modal("toggle");
             var robot = GUISTATE_C.getRobot();
+            var position = $("#simDiv").position();
+            position.top += 12;
             if (robot == 'calliope' || robot == 'microbit') {
-                var position = $("#simDiv").position();
-                position.left = $("#blocklyDiv").width();
+                position.left = $("#blocklyDiv").width() + 12;
                 $("#simRobotModal").css({
                     top : position.top,
                     left : position.left
                 });
             } else {
+                position.left += 48;
                 $("#simRobotModal").css({
-                    top : 100,
-                    left : 50,
+                    top : position.top,
+                    left : position.left
                 });
             }
             $('#simRobotModal').draggable();
@@ -81,6 +83,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
 
         $('#simValues').onWrap('click', function(event) {
             $("#simValuesModal").modal("toggle");
+            var position = $("#simDiv").position();
+            position.top += 12;
+            $("#simValuesModal").css({
+                top : position.top,
+                right : 12,
+                left: 'initial',
+                bottom: 'inherit'
+            });
             $('#simValuesModal').draggable();
 
             $("#simButtonsCollapse").collapse('hide');

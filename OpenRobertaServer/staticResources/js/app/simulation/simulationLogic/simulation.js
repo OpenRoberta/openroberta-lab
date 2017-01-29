@@ -7,9 +7,7 @@
  * @namespace SIM
  */
 
-define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants',
-    'simulation.program.builder', 'util', 'jquery' ], 
-        function(exports, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER, UTIL, $) {
+define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.math', 'program.controller', 'robertaLogic.constants', 'simulation.program.builder', 'util', 'jquery' ], function(exports, Scene, ProgramEval, SIMATH, ROBERTA_PROGRAM, CONST, BUILDER, UTIL, $) {
 
     var programEval = new ProgramEval();
 
@@ -29,18 +27,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var canceled;
 
     var imgObstacle1 = new Image();
-    var  imgPattern = new Image();
+    var imgPattern = new Image();
     var imgRuler = new Image();
-    var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/ruler.svg', 
-        '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.svg', 
-        '/js/app/simulation/simBackgrounds/microbitBackground.svg' , '/js/app/simulation/simBackgrounds/simpleBackground.svg', 
-        '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg', 
-        '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/wroBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg'];
-    var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/ruler.png', 
-        '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.png', 
-        '/js/app/simulation/simBackgrounds/microbitBackground.png' , '/js/app/simulation/simBackgrounds/simpleBackground.png', 
-        '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png', 
-        '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/wroBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png'];
+    var imgList = [ '/js/app/simulation/simBackgrounds/baustelle.svg', '/js/app/simulation/simBackgrounds/ruler.svg', '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.svg', '/js/app/simulation/simBackgrounds/microbitBackground.svg', '/js/app/simulation/simBackgrounds/simpleBackground.svg', '/js/app/simulation/simBackgrounds/drawBackground.svg', '/js/app/simulation/simBackgrounds/robertaBackground.svg', '/js/app/simulation/simBackgrounds/rescueBackground.svg', '/js/app/simulation/simBackgrounds/wroBackground.svg', '/js/app/simulation/simBackgrounds/mathBackground.svg' ];
+    var imgListIE = [ '/js/app/simulation/simBackgrounds/baustelle.png', '/js/app/simulation/simBackgrounds/ruler.png', '/js/app/simulation/simBackgrounds/wallPattern.png', '/js/app/simulation/simBackgrounds/calliopeBackground.png', '/js/app/simulation/simBackgrounds/microbitBackground.png', '/js/app/simulation/simBackgrounds/simpleBackground.png', '/js/app/simulation/simBackgrounds/drawBackground.png', '/js/app/simulation/simBackgrounds/robertaBackground.png', '/js/app/simulation/simBackgrounds/rescueBackground.png', '/js/app/simulation/simBackgrounds/wroBackground.png', '/js/app/simulation/simBackgrounds/mathBackground.png' ];
     var imgObjectList = [];
 
     function preloadImages() {
@@ -49,21 +39,21 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
         var i = 0;
         for (i = 0; i < imgList.length; i++) {
-            if (i==0) {
+            if (i == 0) {
                 imgObstacle1.src = imgList[i];
-            } else if (i==1){
+            } else if (i == 1) {
                 imgRuler.src = imgList[i];
-            } else if (i==2){
+            } else if (i == 2) {
                 imgPattern.src = imgList[i];
-            } else{
-                imgObjectList[i-3]=new Image();
-                imgObjectList[i-3].src=imgList[i];
+            } else {
+                imgObjectList[i - 3] = new Image();
+                imgObjectList[i - 3].src = imgList[i];
             }
         }
         if (localStorage.getItem("customBackground") !== null) {
             var dataImage = localStorage.getItem('customBackground');
-            imgObjectList[i-3] = new Image();
-            imgObjectList[i-3].src = "data:image/png;base64," + dataImage;
+            imgObjectList[i - 3] = new Image();
+            imgObjectList[i - 3].src = "data:image/png;base64," + dataImage;
         }
     }
     preloadImages();
@@ -84,7 +74,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             return currentBackground;
         }
         setPause(true);
-        $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');      
+        $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
         if (num === -1) {
             currentBackground += 1;
             if (currentBackground >= imgObjectList.length) {
@@ -96,92 +86,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         var debug = robot.debug;
         var moduleName = 'simulation.robot.' + simRobotType;
         require([ moduleName ], function(ROBOT) {
-            if (currentBackground == 2) {
-                robot = new ROBOT({
-                    x : 240,
-                    y : 200,
-                    theta : 0,
-                    xOld : 240,
-                    yOld : 200,
-                    transX : 0,
-                    transY : 0
-                });
-                robot.canDraw = false;
-            } else if (currentBackground == 3) {
-                robot = new ROBOT({
-                    x : 200,
-                    y : 200,
-                    theta : 0,
-                    xOld : 200,
-                    yOld : 200,
-                    transX : 0,
-                    transY : 0
-                });
-                robot.canDraw = true;
-                robot.drawColor = "#000000";
-                robot.drawWidth = 10;
-            } else if (currentBackground == 4) {
-                robot = new ROBOT({
-                    x : 70,
-                    y : 104,
-                    theta : 0,
-                    xOld : 70,
-                    yOld : 104,
-                    transX : 0,
-                    transY : 0
-                });
-                robot.canDraw = false;
-            } else if (currentBackground == 5) {
-                robot = new ROBOT({
-                    x : 400,
-                    y : 50,
-                    theta : 0,
-                    xOld : 400,
-                    yOld : 50,
-                    transX : 0,
-                    transY : 0
-                });
-                robot.canDraw = false;
-            } else if (currentBackground == 6) {
-                robot = new ROBOT({
-                    x : 800,
-                    y : 440,
-                    theta : -Math.PI/2,
-                    xOld : 800,
-                    yOld : 440,
-                    transX : 0,
-                    transY : 0
-                });
-                robot.canDraw = false;
-            } else if (currentBackground == 7) {
-                var cx = imgObjectList[currentBackground].width / 2.0 + 10;
-                var cy = imgObjectList[currentBackground].height / 2.0 + 10;             
-                robot = new ROBOT({
-                    x : cx,
-                    y : cy,
-                    theta : 0,
-                    xOld : cx,
-                    yOld : cy,
-                    transX : -cx,
-                    transY : -cy
-                });
-                robot.canDraw = true;
-                robot.drawColor = "#ffffff";
-                robot.drawWidth = 1;
-            } else {
-                var cx = imgObjectList[currentBackground].width / 2.0 + 10;
-                var cy = imgObjectList[currentBackground].height / 2.0 + 10;
-                robot = new ROBOT({
-                    x : cx,
-                    y : cy,
-                    theta : 0,
-                    xOld : cx,
-                    yOld : cy,
-                    transX : 0,
-                    transY : 0
-                });
-                robot.canDraw = false;
-            }
+            createRobot(ROBOT);
             robot.debug = debug;
             callback();
         });
@@ -214,7 +119,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         } else {
             if (value) {
                 $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
-            }else{
+            } else {
                 $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
             }
             pause = value;
@@ -303,7 +208,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     var ROBOT;
 
     function init(program, refresh, robotType) {
-        
+
         reset = false;
         simRobotType = robotType;
         userProgram = program;
@@ -331,15 +236,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         programEval.initProgram(blocklyProgram);
         if (refresh) {
             require([ 'simulation.robot.' + simRobotType ], function(reqRobot) {
-                robot = new reqRobot({
-                    x : 240,
-                    y : 200,
-                    theta : 0,
-                    xOld : 240,
-                    yOld : 200,
-                    transX : 0,
-                    transY : 0
-                });
+                createRobot(reqRobot);
                 robot.reset();
                 robot.resetPose();
                 ready = false;
@@ -412,7 +309,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
         robot.update(actionValues);
         reset = robot.buttons.Reset;
-        sensorValues = scene.updateSensorValues(!pause);      
+        sensorValues = scene.updateSensorValues(!pause);
         scene.drawRobot();
     }
 
@@ -430,7 +327,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.h = 100;
             obstacle.img = null;
             obstacle.color = "#33B8CA";
-        } else if (currentBackground ==2) {
+        } else if (currentBackground == 2) {
             obstacle.x = 580;
             obstacle.y = 290;
             obstacle.w = 100;
@@ -479,8 +376,8 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             obstacle.color = "#009EE3";
             obstacle.img = null;
         } else {
-            var x = imgObjectList[currentBackground].width -50;
-            var y = imgObjectList[currentBackground].height -50;
+            var x = imgObjectList[currentBackground].width - 50;
+            var y = imgObjectList[currentBackground].height - 50;
             obstacle.x = x;
             obstacle.y = y;
             obstacle.w = 50;
@@ -567,7 +464,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 $("#robotLayer").css('cursor', 'auto');
             return;
         }
-        $("#robotLayer").css('cursor', 'pointer');       
+        $("#robotLayer").css('cursor', 'pointer');
         dx = (mouseX - startX);
         dy = (mouseY - startY);
         startX = mouseX;
@@ -594,31 +491,31 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     }
 
     var dist = 0;
-    
+
     function handleMouseWheel(e) {
         var delta = 0;
         if (e.originalEvent.wheelDelta !== undefined) {
             delta = e.originalEvent.wheelDelta;
         } else {
-            if (e.originalEvent.touches){
+            if (e.originalEvent.touches) {
                 if (e.originalEvent.touches[0] && e.originalEvent.touches[1]) {
-                   var diffX = e.originalEvent.touches[0].pageX - e.originalEvent.touches[1].pageX;
-                   var diffY = e.originalEvent.touches[0].pageY - e.originalEvent.touches[1].pageY;
-                   var newDist = diffX * diffX + diffY * diffY;
-                   if (dist == 0) {
-                       dist = newDist;
-                       return;
-                   } else {
-                       delta = newDist - dist;
-                       dist = newDist;
-                   }
+                    var diffX = e.originalEvent.touches[0].pageX - e.originalEvent.touches[1].pageX;
+                    var diffY = e.originalEvent.touches[0].pageY - e.originalEvent.touches[1].pageY;
+                    var newDist = diffX * diffX + diffY * diffY;
+                    if (dist == 0) {
+                        dist = newDist;
+                        return;
+                    } else {
+                        delta = newDist - dist;
+                        dist = newDist;
+                    }
                 } else {
                     dist = 0;
                     return;
-                }               
+                }
             } else {
                 delta = -e.originalEvent.deltaY;
-            }       
+            }
         }
         var zoom = false;
         if (delta > 0) {
@@ -636,10 +533,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
         if (zoom) {
             scene.drawBackground();
-            scene.drawRuler();        
+            scene.drawRuler();
             scene.drawObjects();
             e.stopPropagation();
-        }       
+        }
     }
 
     function resizeAll() {
@@ -686,7 +583,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 robot.handleMouseOut(e, offsetX, offsetY, scene.playground.w / 2, scene.playground.h / 2);
             else
                 handleMouseOut(e);
-        });       
+        });
         $("#simDiv").on('wheel mousewheel touchmove', function(e) {
             handleMouseWheel(e);
         });
@@ -738,7 +635,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
         return false;
     }
-    
+
     function isEdge() {
         var ua = window.navigator.userAgent;
         var edge = ua.indexOf('Edge');
@@ -771,9 +668,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                     var dataImage = localStorage.getItem('customBackground');
                     var image = new Image();
                     image.src = "data:image/png;base64," + dataImage;
-                    imgObjectList[imgObjectList.length] = image; 
-                    setBackground(imgObjectList.length-1,setBackground);
-                    initScene();       
+                    imgObjectList[imgObjectList.length] = image;
+                    setBackground(imgObjectList.length - 1, setBackground);
+                    initScene();
                 }
                 img.src = reader.result;
             }
@@ -781,6 +678,95 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         })
     }
     exports.importImage = importImage;
+
+    function createRobot(reqRobot) {
+        if (currentBackground == 2) {
+            robot = new reqRobot({
+                x : 240,
+                y : 200,
+                theta : 0,
+                xOld : 240,
+                yOld : 200,
+                transX : 0,
+                transY : 0
+            });
+            robot.canDraw = false;
+        } else if (currentBackground == 3) {
+            robot = new reqRobot({
+                x : 200,
+                y : 200,
+                theta : 0,
+                xOld : 200,
+                yOld : 200,
+                transX : 0,
+                transY : 0
+            });
+            robot.canDraw = true;
+            robot.drawColor = "#000000";
+            robot.drawWidth = 10;
+        } else if (currentBackground == 4) {
+            robot = new reqRobot({
+                x : 70,
+                y : 104,
+                theta : 0,
+                xOld : 70,
+                yOld : 104,
+                transX : 0,
+                transY : 0
+            });
+            robot.canDraw = false;
+        } else if (currentBackground == 5) {
+            robot = new reqRobot({
+                x : 400,
+                y : 50,
+                theta : 0,
+                xOld : 400,
+                yOld : 50,
+                transX : 0,
+                transY : 0
+            });
+            robot.canDraw = false;
+        } else if (currentBackground == 6) {
+            robot = new reqRobot({
+                x : 800,
+                y : 440,
+                theta : -Math.PI / 2,
+                xOld : 800,
+                yOld : 440,
+                transX : 0,
+                transY : 0
+            });
+            robot.canDraw = false;
+        } else if (currentBackground == 7) {
+            var cx = imgObjectList[currentBackground].width / 2.0 + 10;
+            var cy = imgObjectList[currentBackground].height / 2.0 + 10;
+            robot = new reqRobot({
+                x : cx,
+                y : cy,
+                theta : 0,
+                xOld : cx,
+                yOld : cy,
+                transX : -cx,
+                transY : -cy
+            });
+            robot.canDraw = true;
+            robot.drawColor = "#ffffff";
+            robot.drawWidth = 1;
+        } else {
+            var cx = imgObjectList[currentBackground].width / 2.0 + 10;
+            var cy = imgObjectList[currentBackground].height / 2.0 + 10;
+            robot = new reqRobot({
+                x : cx,
+                y : cy,
+                theta : 0,
+                xOld : cx,
+                yOld : cy,
+                transX : 0,
+                transY : 0
+            });
+            robot.canDraw = false;
+        }
+    }
 });
 
 //http://paulirish.com/2011/requestanimationframe-for-smart-animating/

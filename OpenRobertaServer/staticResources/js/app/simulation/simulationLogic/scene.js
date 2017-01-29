@@ -124,6 +124,16 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             break;
         }
         $("#valuesContent").append('<div><label>Gesture</label><span>' + gesture + '</span></div>');
+        var pin = this.robot.pin0.touched ? 1 : 0;
+        $("#valuesContent").append('<div><label>Pin 0</label><span>' + pin + '</span></div>');
+        pin = this.robot.pin1.touched ? 1 : 0;
+        $("#valuesContent").append('<div><label>Pin 1</label><span>' + pin + '</span></div>');
+        pin = this.robot.pin2.touched ? 1 : 0;
+        $("#valuesContent").append('<div><label>Pin 2</label><span>' + pin + '</span></div>');
+        if (this.robot.pin3) {
+            pin = this.robot.pin3.touched ? 1 : 0;
+            $("#valuesContent").append('<div><label>Pin 3</label><span>' + pin + '</span></div>');
+        }
         this.rCtx.scale(SIM.getScale(), SIM.getScale());
         this.rCtx.save();
 
@@ -614,6 +624,22 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         }
         if (this.robot.compass) {
             values.compass = this.robot.compass.degree;
+        }
+        if (this.robot.pin0) {
+            values.pin0 = {};
+            values.pin0.touched = this.robot.pin0.touched;
+        }
+        if (this.robot.pin1) {
+            values.pin1 = {};
+            values.pin1.touched = this.robot.pin1.touched;
+        }
+        if (this.robot.pin2) {
+            values.pin2 = {};
+            values.pin2.touched = this.robot.pin2.touched;
+        }
+        if (this.robot.pin3) {
+            values.pin3 = {};
+            values.pin0.touched = this.robot.pin3.touched;
         }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();

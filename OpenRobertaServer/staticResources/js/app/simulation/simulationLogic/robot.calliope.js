@@ -69,18 +69,65 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
             canvas.fill();
             canvas.fillStyle = this.color;
             canvas.beginPath();
-            canvas.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
             canvas.fill();
             if (this.color != 'grey') {
-                canvas.globalAlpha = 0.5;
+                canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
+                canvas.fill();
+                var rad = canvas.createRadialGradient(this.x, this.y, this.r - 5, this.x, this.y, this.r + 5);
+                rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
+                rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
+                canvas.fillStyle = rad;
                 canvas.beginPath();
                 canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
                 canvas.fill();
-                canvas.beginPath();
-                canvas.globalAlpha = 1;
+            } else {
+                canvas.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                canvas.fill();
             }
         }
     }
+
+    Calliope.prototype.pin0 = {
+        x : -196.5,
+        y : -0.5,
+        r : 26,
+        touched : false,
+        draw : function(canvas) {
+            if (this.touched) {
+                canvas.fillStyle = 'green';
+                canvas.beginPath();
+                canvas.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                canvas.fill();
+                // show "circuit"
+                canvas.fillStyle = 'red';
+                canvas.beginPath();
+                canvas.arc(-97, 169.5, 13, 0, Math.PI * 2);
+                canvas.fill();
+            }
+        }
+    };
+    Calliope.prototype.pin1 = {
+        x : -97,
+        y : -169.5,
+        r : 26,
+        touched : false,
+        draw : Calliope.prototype.pin0.draw
+    };
+    Calliope.prototype.pin2 = {
+        x : 98.5,
+        y : -168.5,
+        r : 26,
+        touched : false,
+        draw : Calliope.prototype.pin0.draw
+    };
+    Calliope.prototype.pin3 = {
+        x : 196.5,
+        y : -0.5,
+        r : 26,
+        touched : false,
+        draw : Calliope.prototype.pin0.draw
+    };
 
     /**
      * Update all actions of the Calliope.
@@ -95,7 +142,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         // update debug
         if (actions.led) {
             if (actions.led.color) {
-                this.led.color = "rgb(" + actions.led.color[0] + "," + actions.led.color[1] + "," + actions.led.color[2] + ")";
+                this.led.color = actions.led.color;
             } else {
                 if (actions.led.mode && actions.led.mode == 'OFF')
                     this.led.color = 'grey';
@@ -141,7 +188,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                     f(RightSpeed, that);
                 }
             }
-        } 
+        }
     }
 
     var AudioContext = window.AudioContext // Default
@@ -254,6 +301,80 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         color : 'grey',
 
         draw : Calliope.prototype.motorA.draw
+    }
+
+    Calliope.prototype.handleMouse = function(e, offsetX, offsetY, scale, w, h) {
+        w = w / scale;
+        h = h / scale;
+        var X = e.clientX || e.originalEvent.touches[0].pageX;
+        var Y = e.clientY || e.originalEvent.touches[0].pageY;
+        var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
+        var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
+        startX = (parseInt(X - left, 10)) / scale;
+        startY = (parseInt(Y - top, 10)) / scale;
+        var scsq = 1;
+        if (scale < 1)
+            scsq = scale * scale;
+        var dxA = startX - this.button.xA;
+        var dyA = startY + this.button.yA;
+        var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA / scsq);
+        var dxB = startX - this.button.xB;
+        var dyB = startY + this.button.yB;
+        var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB / scsq);
+        var dxReset = startX - this.button.xReset;
+        var dyReset = startY + this.button.yReset;
+        var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
+        var dxPin0 = startX - this.pin0.x;
+        var dyPin0 = startY + this.pin0.y;
+        var Pin0 = (dxPin0 * dxPin0 + dyPin0 * dyPin0 < this.pin0.r * this.pin0.r / scsq);
+        var dxPin1 = startX - this.pin1.x;
+        var dyPin1 = startY + this.pin1.y;
+        var Pin1 = (dxPin1 * dxPin1 + dyPin1 * dyPin1 < this.pin1.r * this.pin1.r / scsq);
+        var dxPin2 = startX - this.pin2.x;
+        var dyPin2 = startY + this.pin2.y;
+        var Pin2 = (dxPin2 * dxPin2 + dyPin2 * dyPin2 < this.pin2.r * this.pin2.r / scsq);
+        var dxPin3 = startX - this.pin3.x;
+        var dyPin3 = startY + this.pin3.y;
+        var Pin3 = (dxPin3 * dxPin3 + dyPin3 * dyPin3 < this.pin3.r * this.pin3.r / scsq);
+        // special case, display (center: 0,0) represents light level
+        var dxDisplay = startX;
+        var dyDisplay = startY + 20;
+        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
+        this.display.lightLevel = 100;
+        this.pin0.touched = false;
+        this.pin1.touched = false;
+        this.pin2.touched = false;
+        this.pin3.touched = false;
+        if (A || B || Reset || Display || Pin0 || Pin1 || Pin2 || Pin3) {
+            if (e.type === 'mousedown') {
+                if (A) {
+                    this.buttons.A = true;
+                } else if (B) {
+                    this.buttons.B = true;
+                } else if (Display) {
+                    this.display.lightLevel = 150;
+                } else if (Reset) {
+                    this.buttons.Reset = true;
+                } else if (Pin0) {
+                    this.pin0.touched = true;
+                } else if (Pin1) {
+                    this.pin1.touched = true;
+                } else if (Pin2) {
+                    this.pin2.touched = true;
+                } else if (Pin3) {
+                    this.pin3.touched = true;
+                }
+            } else if (e.type === 'mousemove' && Display) {
+                this.display.lightLevel = 50;
+            }
+            if (Display) {
+                $("#robotLayer").css('cursor', 'crosshair');
+            } else {
+                $("#robotLayer").css('cursor', 'pointer');
+            }
+        } else {
+            $("#robotLayer").css('cursor', 'auto');
+        }
     }
 
     return Calliope;
