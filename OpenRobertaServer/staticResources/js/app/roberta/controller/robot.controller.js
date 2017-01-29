@@ -193,6 +193,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
                     if (GUISTATE_C.getView() == 'tabProgList') {
                         $('#progList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
                     }
+                    if ($('.rightMenuButton.shifted')) {
+                        $('.rightMenuButton.shifted').trigger('click');
+                    }
                 } else {
                     alert('Robot not available');
                 }

@@ -42,8 +42,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
 
     function toggleHelp() {
         if ($('#blocklyDiv').hasClass('rightActive')) {
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('.' + GUISTATE_C.getRobot()).addClass('disabled');
             $('.blocklyToolboxDiv').css('display', 'inherit');
             Blockly.svgResize(blocklyWorkspace);
             $('#progHelp').animate({
@@ -73,8 +71,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
         } else {
             $('#blocklyDiv').addClass('rightActive');
             $('#helpDiv').addClass('rightActive');
-            $('.nav > li > ul > .robotType').addClass('disabled');
-            $('#menuShowCode').parent().addClass('disabled');
             if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
                 $('.help.expert').hide();
             } else {
@@ -106,7 +102,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     if (smallScreen) {
                         $('.blocklyToolboxDiv').css('display', 'none');
                     }
-                    $('#sliderDiv').css({'left': width - 10});
+                    $('#sliderDiv').css({
+                        'left' : width - 10
+                    });
                     $('#sliderDiv').show();
                     $('#progHelp').addClass('shifted');
                     $(window).resize();

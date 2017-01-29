@@ -26,8 +26,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     function toggleCode() {
         if ($('#codeDiv').hasClass('rightActive')) {
             $('.blocklyToolboxDiv').css('display', 'inherit');
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('.' + GUISTATE_C.getRobot()).addClass('disabled');
             Blockly.svgResize(blocklyWorkspace);
             $('#progCode').animate({
                 right : '0px',
@@ -64,7 +62,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 GUISTATE_C.setState(result);
                 $('#blocklyDiv').addClass('rightActive');
                 $('#codeDiv').addClass('rightActive');
-                $('.nav > li > ul > .robotType').addClass('disabled');
                 var width;
                 var smallScreen = $('#device-size').find('div:visible').first().attr('id') == 'xs';
                 if (smallScreen) {
@@ -89,7 +86,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         if (smallScreen) {
                             $('.blocklyToolboxDiv').css('display', 'none');
                         }
-                        $('#sliderDiv').css({'left': width - 10});
+                        $('#sliderDiv').css({
+                            'left' : width - 10
+                        });
                         $('#sliderDiv').show();
                         $('#progCode').addClass('shifted');
                         $(window).resize();

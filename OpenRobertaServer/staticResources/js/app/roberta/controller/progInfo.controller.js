@@ -29,7 +29,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
         });
         $(window).on('resize', function(e) {
             if ($('#infoDiv').hasClass('rightActive')) {
-               $('#infoContent').css({
+                $('#infoContent').css({
                     "width" : $('#infoDiv').outerWidth(),
                     "height" : $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight(),
                 });
@@ -40,8 +40,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
     function toggleInfo() {
         if ($('#infoDiv').hasClass('rightActive')) {
             $('.blocklyToolboxDiv').css('display', 'inherit');
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('.' + GUISTATE_C.getRobot()).addClass('disabled');
             Blockly.svgResize(blocklyWorkspace);
             $('#progInfo').animate({
                 right : '0px',
@@ -74,7 +72,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
             $('#infoContent').html(blocklyWorkspace.description);
             $('#blocklyDiv').addClass('rightActive');
             $('#infoDiv').addClass('rightActive');
-            $('.nav > li > ul > .robotType').addClass('disabled');
             var width;
             var smallScreen = $('#device-size').find('div:visible').first().attr('id') == 'xs';
             if (smallScreen) {

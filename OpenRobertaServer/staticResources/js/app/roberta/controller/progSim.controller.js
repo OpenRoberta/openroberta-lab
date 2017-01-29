@@ -18,7 +18,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             toggleSim();
             return false;
         });
-        
+
         $('#simRobotModal').removeClass("modal-backdrop");
         $('#simControle').onWrap('click', function(event) {
             if ($('#simControle').hasClass('typcn-media-play-outline')) {
@@ -48,7 +48,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         $('#simImport').onWrap('click', function(event) {
             SIM.importImage();
         }, 'simImport clicked');
-        
+
         $('#simButtonsCollapse').collapse({
             'toggle' : false
         });
@@ -88,8 +88,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             $("#simValuesModal").css({
                 top : position.top,
                 right : 12,
-                left: 'initial',
-                bottom: 'inherit'
+                left : 'initial',
+                bottom : 'inherit'
             });
             $('#simValuesModal').draggable();
 
@@ -101,11 +101,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         if ($('#simDiv').hasClass('rightActive')) {
             SIM.cancel();
             $(".sim").addClass('hide');
-            $('.nav > li > ul > .robotType').removeClass('disabled');
-            $('.' + GUISTATE_C.getRobot()).addClass('disabled');
             $("#simButtonsCollapse").collapse('hide');
             $('.blocklyToolboxDiv').css('display', 'inherit');
-            $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');   
+            $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
             Blockly.svgResize(blocklyWorkspace);
             $('#progSim').animate({
                 right : '0px',
@@ -144,7 +142,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             GUISTATE_C.setConfigurationXML(xmlTextConfiguration);
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 if (result.rc == "ok") {
-                    //$('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');                      
                     MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                     SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobot());
                     $(".sim").removeClass('hide');
@@ -153,7 +150,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     $('#simButtonsCollapse').collapse({
                         'toggle' : false
                     });
-                    $('.nav > li > ul > .robotType').addClass('disabled');
                     var width;
                     var smallScreen = $('#device-size').find('div:visible').first().attr('id') == 'xs';
                     if (smallScreen) {
@@ -178,7 +174,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             if (smallScreen) {
                                 $('.blocklyToolboxDiv').css('display', 'none');
                             }
-                            $('#sliderDiv').css({'left': width - 10});
+                            $('#sliderDiv').css({
+                                'left' : width - 10
+                            });
                             $('#sliderDiv').show();
                             $('#progSim').addClass('shifted');
                             $(window).resize();
