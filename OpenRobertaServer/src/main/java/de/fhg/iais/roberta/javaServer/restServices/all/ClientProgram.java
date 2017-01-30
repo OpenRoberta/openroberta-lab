@@ -25,6 +25,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 
@@ -77,6 +78,9 @@ public class ClientProgram {
     public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
 
         AliveData.rememberClientCall();
+        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
+        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
+        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
         final String robot = httpSessionState.getRobotName();
@@ -314,6 +318,7 @@ public class ClientProgram {
             }
         }
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        MDC.clear();
         return Response.ok(response).build();
     }
 

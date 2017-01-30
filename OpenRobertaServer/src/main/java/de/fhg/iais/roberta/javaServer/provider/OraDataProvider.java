@@ -82,7 +82,7 @@ public class OraDataProvider implements InjectableProvider<OraData, Parameter> {
                 if ( httpSessionState == null ) {
                     long sessionNumber = SESSION_COUNTER.incrementAndGet();
                     LOG.info("session #" + sessionNumber + " created");
-                    httpSessionState = HttpSessionState.init(OraDataProvider.this.robotCommunicator, OraDataProvider.this.robotPluginMap);
+                    httpSessionState = HttpSessionState.init(OraDataProvider.this.robotCommunicator, OraDataProvider.this.robotPluginMap, sessionNumber);
                     httpSession.setAttribute(OPEN_ROBERTA_STATE, httpSessionState);
                 }
                 return httpSessionState;

@@ -102,8 +102,8 @@ public class RestInterfaceTest {
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
-        this.sPid = HttpSessionState.init(this.brickCommunicator, robotPlugins);
-        this.sMinscha = HttpSessionState.init(this.brickCommunicator, robotPlugins);
+        this.sPid = HttpSessionState.init(this.brickCommunicator, robotPlugins, 1);
+        this.sMinscha = HttpSessionState.init(this.brickCommunicator, robotPlugins, 2);
     }
 
     /**

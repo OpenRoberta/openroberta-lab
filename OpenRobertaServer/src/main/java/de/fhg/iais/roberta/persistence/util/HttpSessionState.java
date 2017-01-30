@@ -1,10 +1,6 @@
 package de.fhg.iais.roberta.persistence.util;
 
-import java.util.Collection;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -12,7 +8,6 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
-    private static final Logger LOG = LoggerFactory.getLogger(HttpSessionState.class);
     public final static int NO_USER = -1;
 
     private int userId = HttpSessionState.NO_USER;
@@ -24,15 +19,17 @@ public class HttpSessionState {
     private String configuration;
     private String toolboxName;
     private String toolbox;
+    private long sessionNumber;
     private Map<String, IRobotFactory> robotPluginMap;
 
-    public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
+    public HttpSessionState(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap, long sessionNumber) {
         this.robotPluginMap = robotPluginMap;
         this.robotName = RobertaProperties.getDefaultRobot();
+        this.sessionNumber = sessionNumber;
     }
 
-    public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap) {
-        return new HttpSessionState(robotCommunicator, robotPluginMap);
+    public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap, long sessionNumber) {
+        return new HttpSessionState(robotCommunicator, robotPluginMap, sessionNumber);
     }
 
     public int getUserId() {
@@ -117,5 +114,9 @@ public class HttpSessionState {
 
     public IRobotFactory getRobotFactory(String robotName) {
         return this.robotPluginMap.get(robotName);
+    }
+
+    public long getSessionNumber() {
+        return this.sessionNumber;
     }
 }

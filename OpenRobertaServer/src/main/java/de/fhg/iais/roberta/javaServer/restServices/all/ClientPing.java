@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -48,8 +49,12 @@ public class ClientPing {
     public Response handle(@OraData HttpSessionState httpSessionState, JSONObject fullRequest, @PathParam("version") String version) throws Exception {
         VersionChecker.checkRestVersion(version);
         AliveData.rememberClientCall();
+        MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
+        MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
+        MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         int logLen = new ClientLogger().log(LOG, fullRequest);
         int counter = pingCounterForLogging.incrementAndGet();
+
         if ( counter % EVERY_REQUEST == 0 ) {
             LOG.info("/ping [count:" + counter + "]");
         }
@@ -57,6 +62,7 @@ public class ClientPing {
         JSONObject response =
             new JSONObject().put("version", this.version).put("date", date.getTime()).put("dateAsString", date.toString()).put("logged", logLen);
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        MDC.clear();
         return Response.ok(response).build();
     }
 }

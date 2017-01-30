@@ -201,7 +201,7 @@ public class RoundTripTest {
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator);
         Map<String, IRobotFactory> robotPlugins = new HashMap<>();
         loadPlugin(robotPlugins);
-        s1 = HttpSessionState.init(brickCommunicator, robotPlugins);
+        s1 = HttpSessionState.init(brickCommunicator, robotPlugins, 1);
     }
 
     private void setUpDatabase() throws Exception {
