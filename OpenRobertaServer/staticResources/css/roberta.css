@@ -485,7 +485,7 @@ div.rightMenuButton:hover, .rightMenuButton:active {
 
 #simButtons, #codeButtons {
 	left: 12px;
-	bottom: 12px;
+	bottom: 6px;
 	position: absolute;
 	z-index: 99;
 }
@@ -1035,6 +1035,7 @@ table [data-toggle="collapse"].collapsed:after {
 	height: 48px;
 	margin-right: 2px;
 	margin-left: 0;
+	margin-bottom: 6px;
 	background-color: #fff;
 	color: #333;
 	font-size: 24px;

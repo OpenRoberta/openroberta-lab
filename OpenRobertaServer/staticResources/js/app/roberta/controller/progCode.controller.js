@@ -21,6 +21,19 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             UTIL.download(filename, GUISTATE_C.getProgramSource());
             MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
         }, 'codeDownload clicked');
+        $('#codeRefresh').onWrap('click', function(event) {
+            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            var xmlProgram = Blockly.Xml.domToText(dom);
+            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
+
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlProgram, xmlConfiguration, function(result) {
+                GUISTATE_C.setState(result);
+                $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
+                // TODO change javaSource to source on server                   // TODO change javaSource to source on server
+                GUISTATE_C.setProgramSource(result.sourceCode);
+                GUISTATE_C.setProgramFileExtension(result.fileExtension);
+            });
+        }, 'code refresh clicked');
     }
 
     function toggleCode() {

@@ -302,13 +302,16 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
                 var pageY = e.pageY || e.originalEvent.touches[0].pageY;
                 // special case movable slider between workspace and right divs
                 if (opt.axis == 'x') {
+                    var left = pageX + pos_x - drg_w - 6;
+                    var left = Math.min(left, $('#main-section').width() - 80);
+                    var left = Math.max(left, 42);
                     $selected.offset({
                         top : 0,
-                        left : pageX + pos_x - drg_w - 6
+                        left : left
                     });
-                    $('#blocklyDiv').width(pageX + pos_x - drg_w);
+                    $('#blocklyDiv').width(left + 6);
                     $('.rightMenuButton.shifted').css({
-                        'right' : $('#main-section').width() - pageX - pos_x + drg_w - 4
+                        'right' : $('#main-section').width() - left - 10
                     });
                     $(window).resize();
                 } else {

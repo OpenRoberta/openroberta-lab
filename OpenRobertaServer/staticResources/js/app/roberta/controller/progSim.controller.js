@@ -183,10 +183,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             Blockly.svgResize(blocklyWorkspace);
                             if (TOUR_C.getInstance()) {
                                 TOUR_C.getInstance().trigger('SimLoaded');
-                            }
-                            setTimeout(function() {
-                                SIM.setPause(false);
-                            }, 500);
+                            }                            
+//                            setTimeout(function() {
+//                                SIM.setPause(false);
+//                            }, 500);
                         }
                     });
                 } else {
