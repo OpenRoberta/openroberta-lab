@@ -38,23 +38,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         yReset : 140,
         rReset : 10,
         colorReset : '#ffffff',
-        draw : function(canvas) {
-            // draw button A            
-            canvas.beginPath();
-            canvas.fillStyle = this.colorA;
-            canvas.arc(this.xA, this.yA, this.rA, 0, Math.PI * 2);
-            canvas.fill();
-            // draw button B
-            canvas.beginPath();
-            canvas.fillStyle = this.colorB;
-            canvas.arc(this.xB, this.yB, this.rB, 0, Math.PI * 2);
-            canvas.fill();
-            // draw button Reset
-            canvas.beginPath();
-            canvas.fillStyle = this.colorReset;
-            canvas.arc(this.xReset, this.yReset, this.rReset, 0, Math.PI * 2);
-            canvas.fill();
-        }
     }
 
     Calliope.prototype.led = {
@@ -63,14 +46,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -90,
         r : 10,
         draw : function(canvas) {
-            canvas.fillStyle = 'white';
-            canvas.beginPath();
-            canvas.rect(this.x - this.r, this.y - this.r, 2 * this.r, 2 * this.r);
-            canvas.fill();
-            canvas.fillStyle = this.color;
-            canvas.beginPath();
-            canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
-            canvas.fill();
             if (this.color != 'grey') {
                 canvas.arc(this.x, this.y, this.r - 5, 0, Math.PI * 2);
                 canvas.fill();
@@ -81,9 +56,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.beginPath();
                 canvas.arc(this.x, this.y, this.r + 5, 0, Math.PI * 2);
                 canvas.fill();
-            } else {
-                canvas.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                canvas.fill();
             }
         }
     }
@@ -93,6 +65,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -0.5,
         r : 26,
         touched : false,
+        analogIn : 1023,
+        digitalIn : 9999,
         draw : function(canvas) {
             if (this.touched) {
                 canvas.fillStyle = 'green';
@@ -105,6 +79,67 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.arc(-97, 169.5, 13, 0, Math.PI * 2);
                 canvas.fill();
             }
+            if (this.digitalOut != undefined) {
+                canvas.fillStyle = 'green';
+                canvas.beginPath();
+                canvas.save();
+                canvas.scale(1, -1);
+                canvas.save();
+                canvas.translate(this.x - 16, -this.y + 15);
+                canvas.rotate(Math.PI / 2);
+                canvas.font = "bold 50px Roboto";
+                canvas.fillText('> ', 0, 0);
+                canvas.restore();
+                canvas.font = "10px Courier";
+                canvas.fillText('\u2293', this.x - 14, -this.y + 41);
+                canvas.fillText(this.digitalOut, this.x + 6, -this.y + 41);
+                canvas.restore();
+            } else if (this.digitalIn != undefined) {
+                canvas.fillStyle = 'red';
+                canvas.beginPath();
+                canvas.save();
+                canvas.scale(1, -1);
+                canvas.save();
+                canvas.translate(this.x - 16, -this.y + 15);
+                canvas.rotate(Math.PI / 2);
+                canvas.font = "bold 50px Roboto";
+                canvas.fillText('< ', 0, 0);
+                canvas.restore();
+                canvas.font = "10px Courier";
+                canvas.fillText('\u2293', this.x - 22, -this.y + 41);
+                canvas.fillText(this.digitalIn, this.x + 15, -this.y + 41);
+                canvas.restore();
+            } else if (this.analogOut != undefined) {
+                canvas.fillStyle = 'green';
+                canvas.beginPath();
+                canvas.save();
+                canvas.scale(1, -1);
+                canvas.save();
+                canvas.translate(this.x - 16, -this.y + 15);
+                canvas.rotate(Math.PI / 2);
+                canvas.font = "bold 50px Roboto";
+                canvas.fillText('> ', 0, 0);
+                canvas.restore();
+                canvas.font = "10px Courier";
+                canvas.fillText('\u223F', this.x - 14, -this.y + 41);
+                canvas.fillText(this.analogOut, this.x + 6, -this.y + 41);
+                canvas.restore();
+            } else if (this.analogIn != undefined) {
+                canvas.fillStyle = 'red';
+                canvas.beginPath();
+                canvas.save();
+                canvas.scale(1, -1);
+                canvas.save();
+                canvas.translate(this.x - 16, -this.y + 15);
+                canvas.rotate(Math.PI / 2);
+                canvas.font = "bold 50px Roboto";
+                canvas.fillText('< ', 0, 0);
+                canvas.restore();
+                canvas.font = "10px Courier";
+                canvas.fillText('\u223F', this.x - 22, -this.y + 41);
+                canvas.fillText(this.analogIn, this.x + 15, -this.y + 41);
+                canvas.restore();
+            }
         }
     };
     Calliope.prototype.pin1 = {
@@ -112,6 +147,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -169.5,
         r : 26,
         touched : false,
+        analogIn : 8888,
         draw : Calliope.prototype.pin0.draw
     };
     Calliope.prototype.pin2 = {
@@ -119,6 +155,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -168.5,
         r : 26,
         touched : false,
+        analogOut : 8888,
         draw : Calliope.prototype.pin0.draw
     };
     Calliope.prototype.pin3 = {
@@ -126,6 +163,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -0.5,
         r : 26,
         touched : false,
+        digitalOut : 1,
         draw : Calliope.prototype.pin0.draw
     };
 

@@ -42,6 +42,33 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             that.compass.degree = $('#slider').val();
             e.stopPropagation();
         });
+        for (var i = 0; i < 3; i++) {
+            delete this['pin'+i].analogOut;
+            delete this['pin'+i].digitalOut;
+            delete this['pin'+i].analogIn;
+            delete this['pin'+i].digitalIn;
+        }
+        if (this.pin3){
+            delete this.pin3.analogOut;
+            delete this.pin3.digitalOut;
+            delete this.pin3.analogIn;
+            delete this.pin3.digitalIn;
+        }
+        $("select#pin").on('change', function() {
+            console.log($("select#pin option:selected").attr('id'));
+        });
+        $("select#state").on('change', function() {
+            console.log($("select#state option:selected").attr('id'));
+        });
+        $('#slider1').on("mousedown touchstart", function(e) {
+            e.stopPropagation();
+        });
+        $('#slider1').change(function(e) {
+            e.preventDefault();
+            $('#range1').html($('#slider1').val());
+            that.pin0.analogIn = $('#slider1').val();
+            e.stopPropagation();
+        });
     }
 
     Mbed.prototype.resetPose = function() {
@@ -69,12 +96,9 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             for (var i = 0; i < this.leds.length; i++) {
                 for (var j = 0; j < this.leds[i].length; j++) {
                     var colorIndex = UTIL.round(this.leds[j][i] * 0.035294118, 0);
-                    canvas.fillStyle = this.color[0];
-                    canvas.beginPath();
-                    canvas.rect(this.x + i * this.dx - this.r + 2, this.y - j * this.dy - 2 * this.r + 2, 2 * (this.r - 2), 4 * this.r - 4);
-                    canvas.fill();
                     if (colorIndex > 0) {
                         canvas.save();
+                        canvas.beginPath();
                         var rad = canvas.createRadialGradient((this.x + i * this.dx) * 2, this.y - j * this.dy, 1.5 * this.r, (this.x + i * this.dx) * 2, this.y - j * this.dy, 3 * this.r);
                         rad.addColorStop(0, 'rgba(' + this.color[colorIndex] + ',1)');
                         rad.addColorStop(1, 'rgba(' + this.color[colorIndex] + ',0)');
@@ -101,44 +125,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         degree : 25
     }
 
-    Mbed.prototype.pin0 = {
-        x : -209.5,
-        y : -170,
-        wh : 40,
-        touched : false,
-        draw : function(canvas) {
-            if (this.touched) {
-                canvas.fillStyle = 'green';
-                canvas.beginPath();
-                canvas.fillRect(this.x, this.y, this.wh, this.wh);
-                canvas.fill();
-                // show "circuit"
-                canvas.fillStyle = 'red';
-                canvas.beginPath();
-                canvas.arc(189.5, -112, 18, 0, Math.PI * 2);
-                canvas.fill();
-            }
-        }
-    };
-    Mbed.prototype.pin1 = {
-        x : -120,
-        y : -170,
-        wh : 40,
-        touched : false,
-        draw : Mbed.prototype.pin0.draw
-    };
-    Mbed.prototype.pin2 = {
-        x : -20,
-        y : -170,
-        wh : 40,
-        touched : false,
-        draw : Mbed.prototype.pin0.draw
-    };
-
-    Mbed.prototype.time = 0;
-    Mbed.prototype.timer = {
-        timer1 : false
-    }
     /**
      * Update all actions of the Mbed. The new pose is calculated with the
      * forward kinematics equations for a differential drive Mbed.
@@ -149,6 +135,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
      * 
      */
     Mbed.prototype.update = function(actions) {
+        
         if (actions.display) {
             if (actions.display.text) {
                 var that = Mbed.prototype;
@@ -205,6 +192,39 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
             }
         }
+        if (actions.pin0) {
+            if (actions.pin0.digital) {
+                this.pin0.digitalOut = actions.pin0.digital;
+            }
+            if (actions.pin0.analog) {
+                this.pin0.analogOut = actions.pin0.analog;
+            }
+        }
+        if (actions.pin1) {
+            if (actions.pin1.digital) {
+                this.pin1.digitalOut = actions.pin1.digital;
+            }
+            if (actions.pin1.analog) {
+                this.pin1.analogOut = actions.pin1.analog;
+            }
+        }
+        if (actions.pin2) {
+            if (actions.pin2.digital) {
+                this.pin2.digitalOut = actions.pin2.digital;
+            }
+            if (actions.pin2.analog) {
+                this.pin2.analogOut = actions.pin2.analog;
+            }
+        }
+        if (actions.pin3 && this.pin3) {
+            if (actions.pin3.digital) {
+                this.pin3.digitalOut = actions.pin3.digital;
+            }
+            if (actions.pin3.analog) {
+                this.pin3.analogOut = actions.pin3.analog;
+            }
+        }
+
         // update timer
         if (actions.timer) {
             for (key in actions.timer) {
@@ -365,73 +385,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         8 : [ 5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24 ],
         9 : [ 5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22 ]
     }
-    var isDownrobot = false;
-    var isDownObstacle = false;
-    var isDownRuler = false;
-    var startX;
-    var startY;
-
-    Mbed.prototype.handleMouse = function(e, offsetX, offsetY, scale, w, h) {
-        w = w / scale;
-        h = h / scale;
-        var X = e.clientX || e.originalEvent.touches[0].pageX;
-        var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        var top = $('#robotLayer').offset().top + $('#robotLayer').width() / 2;
-        var left = $('#robotLayer').offset().left + $('#robotLayer').height() / 2;
-        startX = (parseInt(X - left, 10)) / scale;
-        startY = (parseInt(Y - top, 10)) / scale;
-        var scsq = 1;
-        if (scale < 1)
-            scsq = scale * scale;
-        var dxA = startX - this.button.xA;
-        var dyA = startY + this.button.yA;
-        var A = (dxA * dxA + dyA * dyA < this.button.rA * this.button.rA / scsq);
-        var dxB = startX - this.button.xB;
-        var dyB = startY + this.button.yB;
-        var B = (dxB * dxB + dyB * dyB < this.button.rB * this.button.rB / scsq);
-        var dxReset = startX - this.button.xReset;
-        var dyReset = startY + this.button.yReset;
-        var Reset = (dxReset * dxReset + dyReset * dyReset < this.button.rReset * this.button.rReset / scsq);
-        var Pin0 = (startX > this.pin0.x) && (-startY > this.pin0.y) && (startX < this.pin0.x + this.pin0.wh) && (-startY < this.pin0.y + this.pin0.wh);
-        var Pin1 = (startX > this.pin1.x) && (-startY > this.pin1.y) && (startX < this.pin1.x + this.pin1.wh) && (-startY < this.pin1.y + this.pin1.wh);
-        var Pin2 = (startX > this.pin2.x) && (-startY > this.pin2.y) && (startX < this.pin2.x + this.pin2.wh) && (-startY < this.pin2.y + this.pin2.wh);
-        // special case, display (center: 0,0) represents light level
-        var dxDisplay = startX;
-        var dyDisplay = startY + 20;
-        var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight); //   
-        this.display.lightLevel = 100;
-        this.pin0.touched = false;
-        this.pin1.touched = false;
-        this.pin2.touched = false;
-        if (A || B || Reset || Display || Pin0 || Pin1 || Pin2) {
-            if (e.type === 'mousedown') {
-                if (A) {
-                    this.buttons.A = true;
-                } else if (B) {
-                    this.buttons.B = true;
-                } else if (Display) {
-                    this.display.lightLevel = 150;
-                } else if (Reset) {
-                    this.buttons.Reset = true;
-                } else if (Pin0) {
-                    this.pin0.touched = true;
-                } else if (Pin1) {
-                    this.pin1.touched = true;
-                } else if (Pin2) {
-                    this.pin2.touched = true;
-                }
-            } else if (e.type === 'mousemove' && Display) {
-                this.display.lightLevel = 50;
-            }
-            if (Display) {
-                $("#robotLayer").css('cursor', 'crosshair');
-            } else {
-                $("#robotLayer").css('cursor', 'pointer');
-            }
-        } else {
-            $("#robotLayer").css('cursor', 'auto');
-        }
-    }
 
     Mbed.prototype.handleMouseUp = function(e, offsetX, offsetY, scale, w, h) {
         this.handleMouse(e, offsetX, offsetY, scale, w, h);
@@ -457,7 +410,11 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         '<label class="btn simbtn"><input type="radio" id="face_down"name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FACE_DOWN + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
-        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div></div></div>');
+        '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
+//        '<label style="margin: 8px;margin-top: 12px; margin-left: 0"><select id="pin"><option id="0">Pin 0</option><option id="1">Pin 1</option><option id="2">Pin 2</option></select><select id="state"><option id="off">off</option><option id="analog">analog</option><option id="digital">digital</option></select></label>' + //
+//        '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div>' + //
+        '</div>'); //
+
     }
 
     Mbed.prototype.gesture = {
