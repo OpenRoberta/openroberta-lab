@@ -582,8 +582,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                             + element
                             + " < sizeof("
                             + arr
+                            + "Raw"
                             + ") / sizeof("
                             + arr
+                            + "Raw"
                             + "[0]); "
                             + element
                             + "++) {");
@@ -1132,7 +1134,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     private void arrayLen(Var<Void> arr) {
 
-        this.sb.append("sizeof(" + arr.getValue() + ")/sizeof(" + arr.getValue() + "[0])");
+        this.sb.append("sizeof(" + arr.getValue() + "Raw" + ")/sizeof(" + arr.getValue() + "Raw" + "[0])");
     }
 
     @Override
