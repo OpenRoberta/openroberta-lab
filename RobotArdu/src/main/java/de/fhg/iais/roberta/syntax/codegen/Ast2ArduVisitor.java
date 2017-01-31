@@ -132,8 +132,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private final ArduConfiguration brickConfiguration;
     private final StringBuilder sb = new StringBuilder();
     private final Set<UsedSensor> usedSensors;
+    private final boolean isTimeSensorUsed;
     private int indentation;
-    private boolean timeSensorUsed;
     private final ArrayList<ArrayList<Phrase<Void>>> phrases;
 
     /**
@@ -147,13 +147,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Ast2ArduVisitor(
         ArrayList<ArrayList<Phrase<Void>>> phrases,
         ArduConfiguration brickConfiguration,
-        Set<UsedSensor> usedSensors,
-        int indentation,
-        boolean timeSensorUsed) {
+        UsedHardwareVisitor usedHardwareVisitor,
+        int indentation) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
-        this.timeSensorUsed = timeSensorUsed;
-        this.usedSensors = usedSensors;
+        this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
+        this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.phrases = phrases;
     }
 
@@ -168,10 +167,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
-        boolean timeSensorUsed = UsedTimerVisitorArdu.check(phrasesSet);
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
-        Ast2ArduVisitor astVisitor =
-            new Ast2ArduVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor.getUsedSensors(), withWrapping ? 1 : 0, timeSensorUsed);
+        Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
         astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
@@ -1066,7 +1063,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         generateUserDefinedMethods(this.phrases);
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-        if ( this.timeSensorUsed ) {
+        if ( this.isTimeSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
         }
@@ -1668,7 +1665,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("BnrOneA one; \n");
         this.sb.append("BnrRescue brm; \n");
         this.sb.append("RobertaFunctions rob(one, brm);  \n");
-        if ( this.timeSensorUsed ) {
+        if ( this.isTimeSensorUsed ) {
             this.sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
         this.sb.append("#define SSPIN  2 \n");
@@ -1698,7 +1695,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("rob.setBrm(brm);");
         nlIndent();
         this.generateSensors();
-        if ( this.timeSensorUsed ) {
+        if ( this.isTimeSensorUsed ) {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }

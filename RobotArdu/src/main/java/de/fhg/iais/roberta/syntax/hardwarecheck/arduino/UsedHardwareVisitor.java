@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
@@ -38,6 +39,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  */
 public class UsedHardwareVisitor extends CheckVisitor {
     private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
+    private boolean isTimerSensorUsed;
 
     public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         check(phrasesSet);
@@ -52,6 +54,10 @@ public class UsedHardwareVisitor extends CheckVisitor {
         return this.usedSensors;
     }
 
+    public boolean isTimerSensorUsed() {
+        return this.isTimerSensorUsed;
+    }
+
     private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(phrasesSet.size() >= 1);
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
@@ -59,6 +65,12 @@ public class UsedHardwareVisitor extends CheckVisitor {
                 phrase.visit(this);
             }
         }
+    }
+
+    @Override
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        this.isTimerSensorUsed = true;
+        return null;
     }
 
     @Override
