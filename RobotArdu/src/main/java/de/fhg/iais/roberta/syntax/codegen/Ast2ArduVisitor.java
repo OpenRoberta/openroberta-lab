@@ -238,11 +238,11 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             case NUMBER_INT:
                 return "int";
             case STRING:
-                return "String";
+                return "char";
             case VOID:
                 return "void";
             case COLOR:
-                return "String";
+                return "char";
             case CONNECTION:
                 return "int";
             default:
@@ -314,7 +314,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("(String) \"" + colorConst.getValue() + "\"");
+        this.sb.append("\"" + colorConst.getValue() + "\"");
         return null;
     }
 
@@ -362,6 +362,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                     return null;
                 }
             }
+        } else if ( var.getTypeVar().toString() == "STRING" ) {
+            this.sb.append("[]");
         }
 
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -400,11 +402,26 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
+            this.sb.append("strcat(");
+            generateSubExpr(this.sb, false, binary.getLeft(), binary);
+            this.sb.append(", ");
+            if ( binary.getRight().getVarType().toString() == "NUMBER" ) {
+                this.sb.append("rob.numToString(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+            } else if ( binary.getRight().getVarType().toString() == "BOOLEAN" ) {
+                this.sb.append("rob.boolToString(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+            } else {
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+            }
+
+            this.sb.append(")");
         } else {
+            generateSubExpr(this.sb, false, binary.getLeft(), binary);
+            this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
         return null;
@@ -552,7 +569,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 } else if ( expression.contains("BOOLEAN") ) {
                     varType = "bool";
                 } else {
-                    varType = "String";
+                    varType = "char";
                 }
                 if ( !segments[6].contains("java.util") ) {
                     arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));
@@ -777,13 +794,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: look into motors - why there is no "right":
-    //actor port {
-    //    A: middle motor, regulated, forward;
-    //    B: middle motor, regulated, forward, left;
-    //    C: ardu motor, regulated, forward;
-    //    D: ardu motor, regulated, forward;
-    //  }
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         //this.sb.append(this.brickConfiguration.generateText("q") + "\n");
