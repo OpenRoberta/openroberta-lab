@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -863,22 +864,24 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     // TURN ACTIONS
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        final boolean isRegulatedDrive =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
-        final boolean isDuration = turnAction.getParam().getDuration() != null;
-        final boolean reverse =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
-        final boolean turnRight = turnAction.getDirection() == TurnDirection.RIGHT;
-        final boolean turnLeft = turnAction.getDirection() == TurnDirection.LEFT;
+        Actor leftMotor = this.brickConfiguration.getLeftMotor();
+        Actor rightMotor = this.brickConfiguration.getRightMotor();
+        boolean isRegulatedDrive = leftMotor.isRegulated() || rightMotor.isRegulated();
+        boolean isDuration = turnAction.getParam().getDuration() != null;
+        boolean isReverseLeftMotor = leftMotor.getRotationDirection() == DriveDirection.BACKWARD;
+        boolean isReverseRightMotor = rightMotor.getRotationDirection() == DriveDirection.BACKWARD;
+        boolean isTurnRight = turnAction.getDirection() == TurnDirection.RIGHT;
+
         String methodName;
-        String sign1 = "";
-        String sign2 = "";
-        if ( (turnRight && !reverse) || (turnLeft && reverse) ) {
-            sign1 = "-";
-        } else {
-            sign2 = "-";
+        String rightMotorSign = "";
+        String leftMotorSign = "";
+
+        if ( isTurnRight && !isReverseRightMotor ) {
+            rightMotorSign = "-";
+        }
+
+        if ( !isTurnRight && !isReverseLeftMotor ) {
+            leftMotorSign = "-";
         }
 
         if ( isDuration ) {
@@ -891,10 +894,10 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
         methodName = methodName + "(";
         this.sb.append(methodName);
-        this.sb.append(sign1);
+        this.sb.append(leftMotorSign);
         turnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
-        this.sb.append(sign2);
+        this.sb.append(rightMotorSign);
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");

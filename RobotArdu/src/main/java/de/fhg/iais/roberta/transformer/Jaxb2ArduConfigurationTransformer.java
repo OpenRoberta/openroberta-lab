@@ -143,7 +143,7 @@ public class Jaxb2ArduConfigurationTransformer {
                         //fields = extractFields(value.getBlock(), (short) 2);
                         if ( this.factory.getActorPort(value.getName()).equals(ActorPort.B) ) {
                             motorSide = MotorSide.LEFT;
-                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.C) ) {
+                        } else if ( this.factory.getActorPort(value.getName()).equals(ActorPort.A) ) {
                             motorSide = MotorSide.RIGHT;
                         } else {
                             motorSide = MotorSide.NONE;
