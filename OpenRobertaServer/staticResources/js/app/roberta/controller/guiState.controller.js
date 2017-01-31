@@ -57,7 +57,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set gui state
-     *
+     * 
      * @param {result}
      *            result of server call
      */
@@ -187,10 +187,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
-        if (!opt_init) {
-            $('#head-navi-icon-robot').removeClass('typcn-open');
-            $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robot);
-            $('#head-navi-icon-robot').addClass('typcn-' + robot);
+        $('#head-navi-icon-robot').removeClass('typcn-open');
+        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robot);
+        $('#head-navi-icon-robot').addClass('typcn-' + robot);
+        if (!opt_init) {           
             setProgramSaved(true);
             setConfigurationSaved(true);
             checkSim();
@@ -202,16 +202,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
-            //if (GUISTATE.gui.blocklyWorkspace)
-            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            if (GUISTATE.gui.blocklyWorkspace)
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
         } else {
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
-            //if (GUISTATE.gui.blocklyWorkspace)
-            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            if (GUISTATE.gui.blocklyWorkspace)
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled')
         }
@@ -628,7 +628,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set program name
-     *
+     * 
      * @param {name}
      *            Name to be set
      */
