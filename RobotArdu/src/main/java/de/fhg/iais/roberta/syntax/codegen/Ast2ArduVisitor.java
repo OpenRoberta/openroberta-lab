@@ -242,7 +242,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             case VOID:
                 return "void";
             case COLOR:
-                return "char";
+                return "String";
             case CONNECTION:
                 return "int";
             default:
