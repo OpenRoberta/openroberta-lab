@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 
 /**
@@ -145,11 +145,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
     public V visitPinTouchSensor(PinTouchSensor<V> pinTouchSensor);
 
     /**
-     * visit a {@link PinValueSensor}.
+     * visit a {@link PinGetValueSensor}.
      *
      * @param pinValueSensor phrase to be visited
      */
-    public V visitPinValueSensor(PinValueSensor<V> pinValueSensor);
+    public V visitPinGetValueSensor(PinGetValueSensor<V> pinValueSensor);
 
     /**
      * visit a {@link PinWriteValueSensor}.

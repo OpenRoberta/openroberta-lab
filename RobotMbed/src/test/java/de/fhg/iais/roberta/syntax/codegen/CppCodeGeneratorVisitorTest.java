@@ -413,7 +413,7 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void visitPinValueSensor_DisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectCppProgram() throws Exception {
+    public void visitPinGetValueSensor_DisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + "uBit.display.scroll(ManagedString(uBit.io.P0.getAnalogValue()));\n"
@@ -424,10 +424,9 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void visitPinValueSensor_SetAnalogPin0andDigitalPin2To0_ReturnsCorrectCppProgram() throws Exception {
+    public void visitPinWriteValueSensor_SetAnalogPin0andDigitalPin2To0_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-
             + "uBit.io.P0.setAnalogValue(0);\n"
             + "uBit.io.P2.setDigitalValue(0);"
             + END;

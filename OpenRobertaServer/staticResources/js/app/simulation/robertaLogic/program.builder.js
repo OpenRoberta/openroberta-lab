@@ -532,4 +532,33 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createPinTouchSensor(pinNumber) {
+        var result = {};
+        result[CONST.EXPR] = CONST.PIN_TOUCH_SENSOR;
+        result[CONST.PIN] = 'pin' + pinNumber;
+
+        return result;
+    }
+
+    function createPinGetValueSensor(valueType, pinNumber) {
+        var result = {};
+        result[CONST.EXPR] = CONST.PIN_GET_VALUE_SENSOR;
+        result[CONST.TYPE] = valueType;
+        result[CONST.PIN] = 'pin' + pinNumber;
+
+        return result;
+    }
+
+    function createPinWriteValueSensor(valueType, pinNumber, value) {
+        var result = {};
+        result[CONST.STMT] = CONST.PIN_WRITE_VALUE_SENSOR;
+        result[CONST.TYPE] = valueType;
+        result[CONST.PIN] = 'pin' + pinNumber;
+        result[CONST.VALUE] = value;
+
+        return result;
+    }
+
+
+
 });

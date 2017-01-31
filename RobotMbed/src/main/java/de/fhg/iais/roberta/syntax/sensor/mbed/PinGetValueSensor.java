@@ -24,11 +24,11 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class PinValueSensor<V> extends Sensor<V> {
+public class PinGetValueSensor<V> extends Sensor<V> {
     private final ValueType valueType;
     private final int pinNumber;
 
-    private PinValueSensor(int pinNumber, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinGetValueSensor(int pinNumber, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_VALUE"), properties, comment);
         Assert.isTrue(pinNumber >= 0 && pinNumber <= 3);
         Assert.notNull(valueType);
@@ -38,16 +38,16 @@ public class PinValueSensor<V> extends Sensor<V> {
     }
 
     /**
-     * Create object of the class {@link PinValueSensor}.
+     * Create object of the class {@link PinGetValueSensor}.
      *
      * @param pinNumber
      * @param valueType see {@link ValueType}
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link PinValueSensor}
+     * @return read only object of {@link PinGetValueSensor}
      */
-    public static <V> PinValueSensor<V> make(int pinNumber, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinValueSensor<V>(pinNumber, valueType, properties, comment);
+    public static <V> PinGetValueSensor<V> make(int pinNumber, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PinGetValueSensor<V>(pinNumber, valueType, properties, comment);
     }
 
     public ValueType getValueType() {
@@ -65,7 +65,7 @@ public class PinValueSensor<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((MbedAstVisitor<V>) visitor).visitPinValueSensor(this);
+        return ((MbedAstVisitor<V>) visitor).visitPinGetValueSensor(this);
 
     }
 
@@ -80,7 +80,7 @@ public class PinValueSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String pinNumber = helper.extractField(fields, BlocklyConstants.PIN);
         String valueType = helper.extractField(fields, BlocklyConstants.VALUETYPE);
-        return PinValueSensor.make(Integer.valueOf(pinNumber), ValueType.get(valueType), helper.extractBlockProperties(block), helper.extractComment(block));
+        return PinGetValueSensor.make(Integer.valueOf(pinNumber), ValueType.get(valueType), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 

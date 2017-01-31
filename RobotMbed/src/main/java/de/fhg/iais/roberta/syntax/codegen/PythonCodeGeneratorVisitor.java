@@ -108,7 +108,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -740,7 +740,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     }
 
     @Override
-    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         String valueType = pinValueSensor.getValueType().toString().toLowerCase();
         this.sb.append("pin" + pinValueSensor.getPinNumber() + ".read_" + valueType + "()");
         return null;

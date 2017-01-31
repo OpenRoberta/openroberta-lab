@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
@@ -156,7 +156,7 @@ public class MicrobitSimProgramCheckVisitor extends SimulationProgramCheckVisito
     }
 
     @Override
-    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         // TODO Auto-generated method stub
         return null;
     }

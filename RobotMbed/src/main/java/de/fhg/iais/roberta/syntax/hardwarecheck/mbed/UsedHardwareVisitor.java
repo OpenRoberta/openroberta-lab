@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -116,7 +116,7 @@ public class UsedHardwareVisitor extends CheckVisitor {
     }
 
     @Override
-    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         return null;
     }
 

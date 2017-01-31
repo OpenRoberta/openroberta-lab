@@ -49,8 +49,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
@@ -323,7 +323,6 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        System.out.println(gestureSensor.getMode());
         this.sb.append("createGetSample(CONST.GESTURE, CONST." + gestureSensor.getMode() + ")");
         return null;
     }
@@ -381,12 +380,6 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     }
 
     @Override
-    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("createRgbColor([");
         rgbColor.getR().visit(this);
@@ -399,14 +392,25 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     }
 
     @Override
-    public Void visitPinValueSensor(PinValueSensor<Void> pinValueSensor) {
-        // TODO Auto-generated method stub
+    public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPinNumber() + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
+        this.sb.append("createPinGetValueSensor(CONST." + pinValueSensor.getValueType().toString());
+        this.sb.append(", " + pinValueSensor.getPinNumber() + ")");
         return null;
     }
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
+        String end = createClosingBracket();
+        this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getValueType().toString());
+        this.sb.append(", " + pinWriteValueSensor.getPinNumber() + ", ");
+        pinWriteValueSensor.getValue().visit(this);
+        this.sb.append(end);
         return null;
     }
 }

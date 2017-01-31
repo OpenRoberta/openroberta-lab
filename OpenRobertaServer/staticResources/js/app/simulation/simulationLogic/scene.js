@@ -6,7 +6,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 
     /**
      * Creates a new Scene.
-     * 
+     *
      * @constructor
      */
     function Scene(backgroundImg, robot, obstacle, pattern, ruler) {
@@ -20,7 +20,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.bCtx = $('#backgroundLayer')[0].getContext('2d'); // background context
         this.mCtx = $('#rulerLayer')[0].getContext('2d'); // ruler == *m*easurement context
         this.oCtx = $('#objectLayer')[0].getContext('2d'); // object context
-        this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context       
+        this.rCtx = $('#robotLayer')[0].getContext('2d'); // robot context
         this.playground = {
             x : 0,
             y : 0,
@@ -111,7 +111,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         this.rCtx.restore();
         this.rCtx.save();
-        // provide new user information   
+        // provide new user information
         $('#valuesContent').html('');
         $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
         $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 0) + 's</span></div>');
@@ -155,7 +155,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.clearRect(0, 0, CONSTANTS.MAX_WIDTH, CONSTANTS.MAX_HEIGHT);
         this.rCtx.restore();
         this.rCtx.save();
-        // provide new user information   
+        // provide new user information
         $('#valuesContent').html('');
         $("#valuesContent").append('<div><label>FPS</label><span>' + UTIL.round(1 / SIM.getDt(), 0) + '</span></div>');
         $("#valuesContent").append('<div><label>Time</label><span>' + UTIL.round(this.robot.time, 0) + 's</span></div>');
@@ -251,7 +251,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         this.rCtx.fillStyle = this.robot.wheelRight.color;
         this.rCtx.fillRect(this.robot.wheelRight.x, this.robot.wheelRight.y, this.robot.wheelRight.w, this.robot.wheelRight.h);
         this.rCtx.lineWidth = "0.5";
-        //color   
+        //color
         this.rCtx.beginPath();
         this.rCtx.arc(0, -15, this.robot.colorSensor.r, 0, Math.PI * 2);
         this.rCtx.fillStyle = this.robot.colorSensor.color;
@@ -267,7 +267,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         }
         this.rCtx.restore();
 
-        // ultra 
+        // ultra
         this.wave += CONSTANTS.WAVE_LENGTH * SIM.getDt();
         this.wave = this.wave % CONSTANTS.WAVE_LENGTH;
         this.rCtx.lineDashOffset = CONSTANTS.WAVE_LENGTH - this.wave;
@@ -639,7 +639,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         }
         if (this.robot.pin3) {
             values.pin3 = {};
-            values.pin0.touched = this.robot.pin3.touched;
+            values.pin3.touched = this.robot.pin3.touched;
         }
         values.correctDrive = SIM.getBackground() == 5;
         values.frameTime = SIM.getDt();

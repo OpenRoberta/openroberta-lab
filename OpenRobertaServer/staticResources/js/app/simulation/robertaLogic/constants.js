@@ -432,6 +432,18 @@ define({
 
     TEMPERATURE: "temperature",
 
+    ANALOG: "analog",
+
+    DIGITAL: "digital",
+
+    PIN_TOUCH_SENSOR: "createPinTouchSensor",
+
+    PIN_GET_VALUE_SENSOR: "createPinGetValueSensor",
+
+    PIN_WRITE_VALUE_SENSOR: "createPinWriteValueSensor",
+
+    PIN: "pin",    
+
     COLOR_ENUM: {
         NONE: "NONE",
         BLACK: "BLACK",

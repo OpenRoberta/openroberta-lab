@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
 
-public class PinValueSensorTest {
+public class PinGetValueSensorTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPinValueSensorClass() throws Exception {

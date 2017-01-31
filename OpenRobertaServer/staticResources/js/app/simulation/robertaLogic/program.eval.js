@@ -28,7 +28,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
 
     /**
      * Initialize the program that is executed in the simulation.
-     * 
+     *
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -42,7 +42,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
 
     /**
      * Function that executes one step of the program.
-     * 
+     *
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -172,11 +172,17 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             case CONSTANTS.CREATE_LISTS_GET_INDEX_STMT:
                 evalListsGetIndexStmt(internal(this), stmt);
                 break;
+
             case CONSTANTS.CREATE_LISTS_SET_INDEX:
                 evalListsSetIndex(internal(this), stmt);
                 break;
+
             case CONSTANTS.METHOD_CALL_VOID:
                 evalMethodCallVoid(internal(this), stmt);
+                break;
+
+            case CONSTANTS.PIN_WRITE_VALUE_SENSOR:
+                evalPinWriteValueSensor(internal(this), stmt);
                 break;
 
             default:
@@ -397,6 +403,12 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             }
         }
         obj.program.prepend(method.stmtList);
+    };
+
+    var evalPinWriteValueSensor = function(obj, stmt) {
+      obj.outputCommands[stmt.pin] = {};
+      obj.outputCommands[stmt.pin][stmt.type] = {};
+      obj.outputCommands[stmt.pin][stmt.type] = evalExpr(obj, stmt.value);
     };
 
     var evalMethodCallReturn = function(obj, name, paramters, values) {
@@ -628,6 +640,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             return evalMathConst(obj, expr.value);
         case CONSTANTS.GET_SAMPLE:
             return evalSensor(obj, expr.sensorType, expr.sensorMode);
+        case CONSTANTS.PIN_TOUCH_SENSOR:
+            return evalPinTouchSensor(obj, expr.pin);
+        case CONSTANTS.PIN_GET_VALUE_SENSOR:
+            return evalPinGetValueSensor(obj, expr.type, expr.pin);
         case CONSTANTS.GET_GYRO_SENSOR_SAMPLE:
             return evalGyroSensor(obj, expr.sensorType, expr.sensorMode);
         case CONSTANTS.ENCODER_SENSOR_SAMPLE:
@@ -640,6 +656,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             return evalMethodCallReturn(obj, expr.name, expr.parameters, expr.values);
         case CONSTANTS.RGB_COLOR_CONST:
             return evalRgbColorConst(obj, expr.value);
+
         default:
             throw "Invalid Expression Type!";
         }
@@ -650,6 +667,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
             return obj.simulationData[sensorType][sensorMode];
         }
         return obj.simulationData[sensorType];
+    };
+
+    var evalPinTouchSensor = function(obj, pinNumber) {
+      return obj.simulationData[pinNumber].touched;
+    };
+
+    var evalPinGetValueSensor = function(obj, valueType, pinNumber) {
+      return obj.simulationData[pinNumber][valueType];
     };
 
     var evalGyroSensor = function(obj, sensorType, sensorMode) {

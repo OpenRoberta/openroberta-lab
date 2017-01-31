@@ -125,11 +125,41 @@ public class Ast2MbedSimVisitorTest {
     }
 
     @Test
-    public void visitRgbColor_CreateColorAndDisplay_ReturnsCorrectCppProgram() throws Exception {
+    public void visitRgbColor_DisplayIfPin0Pin2andPin3areTouched__ReturnsCorrectJavaScriptProgram() throws Exception {
         String expectedResult = "" //
             + "var stmt0 = createDisplayTextAction(CONST.TEXT, createRgbColor([createConstant(CONST.NUM_CONST, 20), createConstant(CONST.NUM_CONST, 25), createConstant(CONST.NUM_CONST, 30)]));\n"
             + "var blocklyProgram = {'programStmts': [stmt0]};";
         assertCodeIsOk(expectedResult, "/expr/create_color.xml");
+    }
+
+    @Test
+    public void visitPinTouchSensor_CreateColorAndDisplay__ReturnsCorrectJavaScriptProgram() throws Exception {
+        String expectedResult = "" //
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createPinTouchSensor(0));\n"
+            + "var stmt1 = createDisplayTextAction(CONST.TEXT, createPinTouchSensor(2));\n"
+            + "var stmt2 = createDisplayTextAction(CONST.TEXT, createPinTouchSensor(3));\n"
+            + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
+        assertCodeIsOk(expectedResult, "/sensor/pin3_is_touched.xml");
+    }
+
+    @Test
+    public void visitPinGetValueSensor_DisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectJavaScriptProgram() throws Exception {
+        String expectedResult = "" //
+            + "var stmt0 = createDisplayTextAction(CONST.TEXT, createPinGetValueSensor(CONST.ANALOG, 0));\n"
+            + "var stmt1 = createDisplayTextAction(CONST.TEXT, createPinGetValueSensor(CONST.DIGITAL, 2));\n"
+            + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
+
+        assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
+    }
+
+    @Test
+    public void visitPinWriteValueSensor_SetAnalogPin0andDigitalPin2To0_ReturnsCorrectJavaScriptProgram() throws Exception {
+        String expectedResult = "" //
+            + "var stmt0 = createPinWriteValueSensor(CONST.ANALOG, 0, createConstant(CONST.NUM_CONST, 0));\n"
+            + "var stmt1 = createPinWriteValueSensor(CONST.DIGITAL, 2, createConstant(CONST.NUM_CONST, 0));\n"
+            + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
+
+        assertCodeIsOk(expectedResult, "/action/write_value_to_pin.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
