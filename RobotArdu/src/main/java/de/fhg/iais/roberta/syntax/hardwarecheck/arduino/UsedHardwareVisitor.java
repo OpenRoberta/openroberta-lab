@@ -132,37 +132,37 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(null, SensorType.GYRO, null));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SensorType.INFRARED, infraredSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(null, SensorType.INFRARED, null));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(new UsedSensor(touchSensor.getPort(), SensorType.TOUCH, touchSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(null, SensorType.TOUCH, null));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), SensorType.ULTRASONIC, ultrasonicSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(null, SensorType.ULTRASONIC, null));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LIGHT, lightSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(null, SensorType.LIGHT, null));
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.usedSensors.add(new UsedSensor(soundSensor.getPort(), SensorType.SOUND, soundSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(null, SensorType.SOUND, null));
         return null;
     }
 
