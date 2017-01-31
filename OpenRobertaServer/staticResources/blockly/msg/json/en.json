@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-01-25 06:00:58.701291",
+		"lastupdated": "2017-01-31 10:14:40.064643",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1030,9 +1030,6 @@
 	"NAO_LEARNFACEOF": "learn face of",
 	"NAO_FORGETFACEOF": "forget face of",
 	"NAO_DETECTFACE": "detect face",
-	"NAO_LEARNOBJECT": "learn object",
-	"NAO_FORGETOBJECT": "forget object",
-	"NAO_DETECTOBJECT": "detect object",
 	"NAO_PERFORM": "perform",
 	"NAO_MOVE": "move",
 	"NAO_WALK_DISTANCE": "distance cm",
@@ -1191,9 +1188,6 @@
 	"NAO_LEARNFACE_TOOLTIP": "Learn and save a face under a given name",
 	"NAO_FORGETFACE_TOOLTIP": "Forget a face previously saved under a given name",
 	"NAO_DETECTFACE_TOOLTIP": "Detect a face previously saved under a given name",
-	"NAO_DETECTOBJECT_TOOLTIP": "Detect an object previously saved under a given name",
-	"NAO_LEARNOBJECT_TOOLTIP": "Learn and save an object under a given name",
-	"NAO_FORGETOBJECT_TOOLTIP": "Forget an object previously saved under a given name",
 	"NAO_ANIMATION_TOOLTIP": "Perform a animation.",
 	"NAO_MOVEJOINT_TOOLTIP": "Move a single joint.",
 	"NAO_HAND_TOOLTIP": "Open/close a hand."
