@@ -48,22 +48,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.arc(189.5, -112, 18, 0, Math.PI * 2);
                 canvas.fill();
             }
-            if (this.digitalOut) {
-                canvas.fillStyle = 'green';
-                canvas.beginPath();
-                canvas.save();
-                canvas.scale(1, -1);
-                canvas.save();
-                canvas.translate(this.x + 4, -this.y - 10);
-                canvas.rotate(Math.PI / 2);
-                canvas.font = "bold 50px Roboto";
-                canvas.fillText('> ', 0, 0);
-                canvas.restore();
-                canvas.font = "10px Courier";
-                canvas.fillText('\u2293', this.x + 5, -this.y + 16);
-                canvas.fillText(this.digitalOut, this.x + 30, -this.y + 16);
-                canvas.restore();
-            } else if (this.digitalIn) {
+            if (this.digitalIn != undefined) {
                 canvas.fillStyle = 'red';
                 canvas.beginPath();
                 canvas.save();
@@ -78,7 +63,22 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.fillText('\u2293', this.x - 2, -this.y + 16);
                 canvas.fillText(this.digitalIn, this.x + 35, -this.y + 16);
                 canvas.restore();
-            } else if (this.analogOut) {
+            } else if (this.analogIn != undefined) {
+                canvas.fillStyle = 'red';
+                canvas.beginPath();
+                canvas.save();
+                canvas.scale(1, -1);
+                canvas.save();
+                canvas.translate(this.x + 4, -this.y - 10);
+                canvas.rotate(Math.PI / 2);
+                canvas.font = "bold 50px Roboto";
+                canvas.fillText('< ', 0, 0);
+                canvas.restore();
+                canvas.font = "10px Courier";
+                canvas.fillText('\u223F', this.x - 2, -this.y + 16);
+                canvas.fillText(this.analogIn, this.x + 35, -this.y + 16);
+                canvas.restore();
+            } else if (this.analogOut != undefined) {
                 canvas.fillStyle = 'green';
                 canvas.beginPath();
                 canvas.save();
@@ -93,8 +93,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.fillText('\u223F', this.x + 5, -this.y + 16);
                 canvas.fillText(this.analogOut, this.x + 30, -this.y + 16);
                 canvas.restore();
-            } else if (this.analogIn) {
-                canvas.fillStyle = 'red';
+            } else if (this.digitalOut != undefined) {
+                canvas.fillStyle = 'green';
                 canvas.beginPath();
                 canvas.save();
                 canvas.scale(1, -1);
@@ -102,11 +102,11 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 canvas.translate(this.x + 4, -this.y - 10);
                 canvas.rotate(Math.PI / 2);
                 canvas.font = "bold 50px Roboto";
-                canvas.fillText('< ', 0, 0);
+                canvas.fillText('> ', 0, 0);
                 canvas.restore();
                 canvas.font = "10px Courier";
-                canvas.fillText('\u223F', this.x - 2, -this.y + 16);
-                canvas.fillText(this.analogIn, this.x + 35, -this.y + 16);
+                canvas.fillText('\u2293', this.x + 5, -this.y + 16);
+                canvas.fillText(this.digitalOut, this.x + 30, -this.y + 16);
                 canvas.restore();
             }
         }

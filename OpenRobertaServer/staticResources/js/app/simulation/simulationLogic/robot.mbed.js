@@ -42,31 +42,69 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             that.compass.degree = $('#slider').val();
             e.stopPropagation();
         });
-        for (var i = 0; i < 3; i++) {
-            delete this['pin'+i].analogOut;
-            delete this['pin'+i].digitalOut;
-            delete this['pin'+i].analogIn;
-            delete this['pin'+i].digitalIn;
-        }
-        if (this.pin3){
-            delete this.pin3.analogOut;
-            delete this.pin3.digitalOut;
-            delete this.pin3.analogIn;
-            delete this.pin3.digitalIn;
-        }
+//        for (var i = 0; i < 4; i++) {
+//            if (this['pin' + i]) {
+//                delete this['pin' + i].analogOut;
+//                delete this['pin' + i].digitalOut;
+//                delete this['pin' + i].analogIn;
+//                delete this['pin' + i].digitalIn;
+//            }
+//        }
+        
+        this.pin={};
+        this.pin.no = 0;
+        
         $("select#pin").on('change', function() {
-            console.log($("select#pin option:selected").attr('id'));
+            that.pin.no = $("select#pin option:selected").attr('id');
+            if (that['pin' + that.pin.no].analogIn != undefined){
+                $('#state').val('analog');
+                $('#slider1').attr("max", 1023);
+                $('#slider1').val(that['pin' + that.pin.no].analogIn);
+            } else if(that['pin' + that.pin.no].digitalIn != undefined){
+                $('#state').val('digital');
+                $('#slider1').attr("max", 1);
+                $('#slider1').val(that['pin' + that.pin.no].digitalIn);
+            } else{
+                $('#state').val('off');
+                $('#slider1').attr("max", 1023);
+                $('#slider1').val(0);
+            }
         });
+       
+        $('#slider1').val(0);
         $("select#state").on('change', function() {
-            console.log($("select#state option:selected").attr('id'));
+            if ($("select#state option:selected").attr('value') == 'off') {
+                delete that['pin' + that.pin.no].analogIn;
+                delete that['pin' + that.pin.no].digitalIn;
+            } else if ($("select#state option:selected").attr('value') == 'analog') {
+                delete that['pin' + that.pin.no].digitalIn;
+                $('#slider1').attr("max", 1023);
+                if (!that['pin' + that.pin.no].analogIn) {
+                    $('#slider1').val(0);
+                    that['pin' + that.pin.no].analogIn = $('#slider1').val();  
+                }else{
+                    $('#slider1').val(that['pin' + that.pin.no].analogIn);
+                }                             
+            } else if ($("select#state option:selected").attr('value') == 'digital') {
+                delete that['pin' + that.pin.no].analogIn;
+                $('#slider1').attr("max", 1);
+                if (!that['pin' + that.pin.no].digitalIn) {
+                    $('#slider1').val(0);
+                    that['pin' + that.pin.no].digitalIn = $('#slider1').val();  
+                }else{
+                    $('#slider1').val(that['pin' + that.pin.no].digitalIn);
+                }        
+            }
+            that.pin.state = $("select#state option:selected").val();
         });
+
         $('#slider1').on("mousedown touchstart", function(e) {
             e.stopPropagation();
         });
         $('#slider1').change(function(e) {
             e.preventDefault();
             $('#range1').html($('#slider1').val());
-            that.pin0.analogIn = $('#slider1').val();
+            that['pin' + that.pin.no][that.pin.state + 'In'] = $('#slider1').val();
             e.stopPropagation();
         });
     }
@@ -135,7 +173,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
      * 
      */
     Mbed.prototype.update = function(actions) {
-        
+
         if (actions.display) {
             if (actions.display.text) {
                 var that = Mbed.prototype;
@@ -192,36 +230,14 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
             }
         }
-        if (actions.pin0) {
-            if (actions.pin0.digital) {
-                this.pin0.digitalOut = actions.pin0.digital;
-            }
-            if (actions.pin0.analog) {
-                this.pin0.analogOut = actions.pin0.analog;
-            }
-        }
-        if (actions.pin1) {
-            if (actions.pin1.digital) {
-                this.pin1.digitalOut = actions.pin1.digital;
-            }
-            if (actions.pin1.analog) {
-                this.pin1.analogOut = actions.pin1.analog;
-            }
-        }
-        if (actions.pin2) {
-            if (actions.pin2.digital) {
-                this.pin2.digitalOut = actions.pin2.digital;
-            }
-            if (actions.pin2.analog) {
-                this.pin2.analogOut = actions.pin2.analog;
-            }
-        }
-        if (actions.pin3 && this.pin3) {
-            if (actions.pin3.digital) {
-                this.pin3.digitalOut = actions.pin3.digital;
-            }
-            if (actions.pin3.analog) {
-                this.pin3.analogOut = actions.pin3.analog;
+        for (var i = 0; i < 4; i++) {
+            if (actions['pin' + i] != undefined) {
+                if (actions['pin' + i].digital != undefined) {
+                    this['pin' + i].digitalOut = actions['pin' + i].digital;
+                }
+                if (actions['pin' + i].analog != undefined) {
+                    this['pin' + i].analogOut = actions['pin' + i].analog;
+                }
             }
         }
 
@@ -411,10 +427,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_SHAKE + '</label>' + //
         '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' + Blockly.Msg.SENSOR_GESTURE_FREEFALL + '</label>' + //
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_COMPASS + '</label><span style="margin-bottom: 8px;margin-top: 12px; min-width: 25px; width: 25px; display: inline-block" id="range">0</span>' + '<div style="margin:8px 0; "><input id="slider" type="range" min="0" max="360" value="0" step="5" /></div>' + //
-//        '<label style="margin: 8px;margin-top: 12px; margin-left: 0"><select id="pin"><option id="0">Pin 0</option><option id="1">Pin 1</option><option id="2">Pin 2</option></select><select id="state"><option id="off">off</option><option id="analog">analog</option><option id="digital">digital</option></select></label>' + //
-//        '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div>' + //
-        '</div>'); //
-
+        '<label style="width:100%;margin: 8px;margin-top: 12px; margin-left: 0"><select class="customDropdown" id="pin"><option id="0">' + Blockly.Msg.SENSOR_PIN + ' 0</option><option id="1">' + Blockly.Msg.SENSOR_PIN + ' 1</option><option id="2">' + Blockly.Msg.SENSOR_PIN + ' 2</option></select><select class="customDropdown" style="float: right;" id="state"><option value="off">' + Blockly.Msg.OFF + '</option><option value="analog">analog</option><option value="digital">digital</option></select></label>' + //
+        '<div style="margin:8px 0; "><input id="slider1" type="range" min="0" max="1023" value="0" step="1" /></div></div>'); //
     }
 
     Mbed.prototype.gesture = {

@@ -357,6 +357,11 @@ body.blocklyMinimalBody  * {
 	border-radius: 2px;
 	display: inline-block;
 }
+.customDropdown {
+	border: 1px solid #333;
+	border-radius: 2px;
+	background-color: #fff;
+}
 
 .rightMenuButton {
    width: 40px;
