@@ -22,7 +22,7 @@ public class TextTest {
 
     @Test
     public void textAppend() throws Exception {
-        String a = "BlockAST [project=[[Location [x=14, y=93], Binary [TEXT_APPEND, Var [item], StringConst [text]]]]]";
+        String a = "BlockAST [project=[[Location [x=14, y=93], \nexprStmt Binary [TEXT_APPEND, Var [item], StringConst [text]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_append.xml"));
     }

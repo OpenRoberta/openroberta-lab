@@ -403,25 +403,14 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
-            this.sb.append("strcat(");
-            generateSubExpr(this.sb, false, binary.getLeft(), binary);
-            this.sb.append(", ");
-            if ( binary.getRight().getVarType().toString() == "NUMBER" ) {
-                this.sb.append("rob.numToString(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-            } else if ( binary.getRight().getVarType().toString() == "BOOLEAN" ) {
+            if ( binary.getRight().getVarType().toString() == "BOOLEAN" ) {
                 this.sb.append("rob.boolToString(");
                 generateSubExpr(this.sb, false, binary.getRight(), binary);
                 this.sb.append(")");
             } else {
                 generateSubExpr(this.sb, false, binary.getRight(), binary);
             }
-
-            this.sb.append(")");
         } else {
-            generateSubExpr(this.sb, false, binary.getLeft(), binary);
-            this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
         return null;
@@ -702,6 +691,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         String toChar = "";
+        String varType = showTextAction.getMsg().getVarType().toString();
+        boolean isVar = showTextAction.getMsg().getKind().getName().toString().equals("VAR");
         IColorSensorMode mode = null;
         Expr<Void> tt = showTextAction.getMsg();
         if ( tt.getKind().hasName("SENSOR_EXPR") ) {
@@ -717,14 +708,22 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         } else {
             this.sb.append("1");
         }
-        if ( showTextAction.getMsg().getKind().toString().equals("VAR")
-            && (showTextAction.getMsg().getVarType().toString().equals("STRING") || showTextAction.getMsg().getVarType().toString().equals("COLOR"))
+
+        this.sb.append("(");
+
+        if ( isVar && (varType.equals("STRING") || varType.equals("COLOR"))
             || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") ) {
             toChar = ".c_str()";
         }
 
-        this.sb.append("(");
-        showTextAction.getMsg().visit(this);
+        if ( varType.equals("BOOLEAN") ) {
+            this.sb.append("rob.boolToString(");
+            showTextAction.getMsg().visit(this);
+            this.sb.append(")");
+        } else {
+            showTextAction.getMsg().visit(this);
+        }
+
         this.sb.append(toChar + ");");
         return null;
     }
