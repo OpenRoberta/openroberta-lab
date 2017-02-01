@@ -230,13 +230,14 @@ public final class Binary<V> extends Expr<V> {
                 values = helper.extractValues(block, (short) 2);
                 leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
                 rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, String.class));
-                return Binary.make(
-                    Binary.Op.TEXT_APPEND,
-                    helper.convertPhraseToExpr(leftt),
-                    helper.convertPhraseToExpr(rightt),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
+                return ExprStmt.make(
+                    Binary.make(
+                        Binary.Op.TEXT_APPEND,
+                        helper.convertPhraseToExpr(leftt),
+                        helper.convertPhraseToExpr(rightt),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block)));
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = helper.extractValues(block, (short) 2);

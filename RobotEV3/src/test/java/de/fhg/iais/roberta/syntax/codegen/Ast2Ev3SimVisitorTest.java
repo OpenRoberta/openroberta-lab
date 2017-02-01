@@ -703,10 +703,10 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createTextAppend() throws Exception {
         String a =
-            "var stmt0 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createGetSample(CONST.TOUCH));\n"
-                + "var stmt1 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.NUM_CONST, 0));\n"
-                + "var stmt2 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'aaa'));\n"
-                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
+            "var stmt0 = var stmt1 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createGetSample(CONST.TOUCH));\n"
+                + ";var stmt2 = var stmt3 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.NUM_CONST, 0));\n"
+                + ";var stmt4 = var stmt5 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'aaa'));\n"
+                + ";var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5]};";
         assertCodeIsOk(a, "/syntax/text/text_append.xml");
     }
 

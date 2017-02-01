@@ -238,7 +238,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             case NUMBER_INT:
                 return "int";
             case STRING:
-                return "char";
+                return "String";
             case VOID:
                 return "void";
             case COLOR:
@@ -362,8 +362,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                     return null;
                 }
             }
-        } else if ( var.getTypeVar().toString() == "STRING" ) {
-            this.sb.append("[]");
         }
 
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -402,6 +400,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
             this.sb.append("strcat(");
             generateSubExpr(this.sb, false, binary.getLeft(), binary);
