@@ -562,7 +562,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
                 } else if ( expression.contains("BOOLEAN") ) {
                     varType = "bool";
                 } else {
-                    varType = "char";
+                    varType = "String";
                 }
                 if ( !segments[6].contains("java.util") ) {
                     arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));

@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2CVisitorTest {
 
-    private static final String MAIN_METHOD = ""
+    private static final String MAIN_METHOD1 = ""
         + "#include<math.h>\n"
         + "#include<CountUpDownTimer.h>\n"
         + "#include<BnrOneA.h>//Bot'nRollONEAlibrary"
@@ -24,7 +24,9 @@ public class Ast2CVisitorTest {
         + "#include<Wire.h>//alibraryrequiredbyBnrRescue.cppfortheadditionalsonar"
         + "BnrOneAone;"
         + "BnrRescuebrm;"
-        + "RobertaFunctionsrob(one,brm);"
+        + "RobertaFunctionsrob(one,brm);";
+
+    private static final String MAIN_METHOD2 = ""
         + "#defineSSPIN2"
         + "#defineMODULE_ADDRESS0x2C"
         + "bytecolorsLeft[3]={0,0,0};"
@@ -54,7 +56,8 @@ public class Ast2CVisitorTest {
     public void test() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "voidloop(){"
             + "        one.lcd1(\"Hallo\");\n"
@@ -67,7 +70,8 @@ public class Ast2CVisitorTest {
     public void test1() throws Exception {
 
         final String a = ""
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "voidloop(){"
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
@@ -79,10 +83,70 @@ public class Ast2CVisitorTest {
     }
 
     @Test
+    public void test2() throws Exception {
+
+        final String a = ""
+            + MAIN_METHOD1
+            + MAIN_METHOD2
+            + "one.obstacleEmitters(ON);"
+            + "}"
+            + "String item = \"yyy\";"
+            + "double item2Raw[0];"
+            + "double* item2 = item2Raw;"
+            + "voidloop(){"
+            + "item += \"zzz\";"
+            + "while (true) {"
+            + "    if (rob.infraredSensorObstacle(1) == true) {"
+            + "        break;"
+            + "    }"
+            + "    delay(15);"
+            + "}"
+            + "while (true) {"
+            + "    if (( rob.buttonIsPressed(2) ) ? rob.buttonIsPressed(123) : rob.buttonIsPressed(3)) {"
+            + "        break;"
+            + "    }"
+            + "    delay(15);}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
+    }
+
+    @Test
+    public void test3() throws Exception {
+
+        final String a = ""
+            + MAIN_METHOD1
+            + "CountUpDownTimer T(UP, HIGH);"
+            + MAIN_METHOD2
+            + "one.obstacleEmitters(ON);"
+            + "T.StartTimer();"
+            + "}"
+            + "bool itemRaw[3] = {true, true, true};"
+            + "bool* item = itemRaw;"
+            + "String item2Raw[3] = {\"\", \"\", \"\"};"
+            + "String* item2 = item2Raw;"
+            + "double item3 = T.ShowSeconds();"
+            + "voidloop(){"
+            + "T.Timer();"
+            + "for(bool  item4 = 0; item4 < sizeof(itemRaw) / sizeof(itemRaw[0]);  item4++) {"
+            + "    T.ResetTimer();"
+            + "    item3 = one.readAdc(1) / 10.23;"
+            + "}"
+            + "for(String  item5 = 0; item5 < sizeof(item2Raw) / sizeof(item2Raw[0]);  item5++) {"
+            + "    one.movePID(rob.readBearing(), rob.readBearing());"
+            + "if (rob.infraredSensorPresence(3)) {"
+            + "    one.stop();}}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
+    }
+
+    @Test
     public void test4() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "one.obstacleEmitters(ON);brm.setSonarStatus(ENABLE);"
             + "}"
             + "voidloop(){"
@@ -102,7 +166,8 @@ public class Ast2CVisitorTest {
     public void test5() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "voidloop(){"
             + "       one.move1m(1, 0);"
@@ -118,7 +183,8 @@ public class Ast2CVisitorTest {
     public void test6() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "voidloop(){"
             + "        one.lcd1(\"Hallo\");\n"
@@ -131,7 +197,8 @@ public class Ast2CVisitorTest {
     @Test
     public void test7() throws Exception {
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "voidloop(){"
             + "          one.move1m(1,30);\n"
@@ -145,7 +212,8 @@ public class Ast2CVisitorTest {
     public void test8() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "        double item = 10;\n"
             + "        String item2 = \"TTTT\";\n"
@@ -164,7 +232,8 @@ public class Ast2CVisitorTest {
     public void test11() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "void test() {\n"
             + "    one.led(HIGH);"
@@ -180,7 +249,8 @@ public class Ast2CVisitorTest {
     public void test12() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "void test(bool x) {\n"
             + "    if (x) return;"
@@ -197,7 +267,8 @@ public class Ast2CVisitorTest {
     public void test13() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "    double variablenName=0;\n"
             + "    bool variablenName2=true;\n"
@@ -221,7 +292,8 @@ public class Ast2CVisitorTest {
     public void test14() throws Exception {
 
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "String variablenNameRaw[3]={\"a\",\"b\",\"c\"};\n"
             + "String *variablenName = variablenNameRaw;"
@@ -240,7 +312,8 @@ public class Ast2CVisitorTest {
     public void test17() throws Exception {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "    String message=\"exit\";\n"
             + "voidloop(){"
@@ -256,7 +329,8 @@ public class Ast2CVisitorTest {
     @Test
     public void test18() throws Exception {
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "    double item=0;\n"
             + "    String item2=\"cc\";\n"
@@ -269,7 +343,8 @@ public class Ast2CVisitorTest {
     @Test
     public void testStmtForEach() throws Exception {
         final String a = "" //
-            + MAIN_METHOD
+            + MAIN_METHOD1
+            + MAIN_METHOD2
             + "}"
             + "double item2Raw[3] = {0, 0, 0};"
             + "double* item2 = item2Raw;"
