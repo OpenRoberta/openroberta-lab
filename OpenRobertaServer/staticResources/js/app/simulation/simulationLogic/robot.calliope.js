@@ -65,8 +65,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -0.5,
         r : 26,
         touched : false,
-        analogIn : 1023,
-        digitalIn : 9999,
         draw : function(canvas) {
             if (this.touched) {
                 canvas.fillStyle = 'green';
@@ -147,7 +145,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -169.5,
         r : 26,
         touched : false,
-        analogIn : 8888,
         draw : Calliope.prototype.pin0.draw
     };
     Calliope.prototype.pin2 = {
@@ -155,7 +152,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -168.5,
         r : 26,
         touched : false,
-        analogOut : 8888,
         draw : Calliope.prototype.pin0.draw
     };
     Calliope.prototype.pin3 = {
@@ -163,7 +159,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         y : -0.5,
         r : 26,
         touched : false,
-        digitalOut : 1,
         draw : Calliope.prototype.pin0.draw
     };
 
@@ -414,7 +409,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
             $("#robotLayer").css('cursor', 'auto');
         }
     }
-    
+
     Calliope.prototype.controle = function() {
         $('#simRobotContent').append('<div id="mbedContent"><div id="mbedButtons" class="btn-group btn-group-vertical" data-toggle="buttons">' + //
         '<label style="margin: 8px;margin-top: 12px; margin-left: 0">' + Blockly.Msg.SENSOR_GESTURE + '</label>' + //
