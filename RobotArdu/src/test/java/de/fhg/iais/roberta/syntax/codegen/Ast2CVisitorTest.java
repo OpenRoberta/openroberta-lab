@@ -241,14 +241,14 @@ public class Ast2CVisitorTest {
     }
 
     //TODO: fix the test
-    @Ignore
+    @Test
     public void test14() throws Exception {
 
         final String a = "" //
             + MAIN_METHOD
             + "String variablenNameRaw[3]={\"a\",\"b\",\"c\"};\n"
             + "String *variablenName = variablenNameRaw;"
-            + "     double test(double x, Stringx2Raw[0]) {\n"
+            + "     double test(double x, Stringx2[]) {\n"
             + "       one.lcd1(x2);\n"
             + "        return x;\n"
             + "    }"
