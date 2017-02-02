@@ -124,8 +124,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
- * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
+ * StringBuilder. <b>This representation is correct C code.</b> <br>
  */
 public class Ast2ArduVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
@@ -138,7 +138,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     private final ArrayList<ArrayList<Phrase<Void>>> phrases;
 
     /**
-     * initialize the Java code generator visitor.
+     * initialize the C code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
      * @param usedFunctions in the current program
@@ -158,14 +158,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     }
 
     /**
-     * factory method to generate Java code from an AST.<br>
+     * factory method to generate C code from an AST.<br>
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
-    {
+    public static String generate(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
