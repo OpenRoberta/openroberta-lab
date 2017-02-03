@@ -183,8 +183,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.connection = result.connection;
+        GUISTATE.gui.configurationUsed = result.configurationUsed;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
+        $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
+        
+        if (!isConfigurationUsed()) {
+            $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'BackgroundConf.png) no-repeat');
+            $('#bricklyDiv').css('background-position', 'center');
+            $('#bricklyDiv').css('background-size', '75% auto');
+        } 
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
@@ -243,6 +251,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.robot.time > 0 || GUISTATE.gui.connection;
     }
     exports.isRobotConnected = isRobotConnected;
+    
+    function isConfigurationUsed() {
+        return GUISTATE.gui.configurationUsed;
+    }
+    exports.isConfigurationUsed = isConfigurationUsed;
 
     function isRobotDisconnected() {
         return GUISTATE.robot.time = -1;

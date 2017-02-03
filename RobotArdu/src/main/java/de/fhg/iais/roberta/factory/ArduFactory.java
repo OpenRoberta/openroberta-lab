@@ -506,4 +506,9 @@ public class ArduFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public Boolean hasConfiguration() {
+        return this.arduProperties.getProperty("robot.configuration") != null ? false : true;
+    }
 }

@@ -364,4 +364,9 @@ public class CalliopeFactory extends AbstractRobotFactory {
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return new CalliopeSimProgramCheckVisitor(brickConfiguration);
     }
+
+    @Override
+    public Boolean hasConfiguration() {
+        return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+    }
 }

@@ -572,4 +572,8 @@ public class NxtFactory extends AbstractRobotFactory {
         return new SimulationProgramCheckVisitor(brickConfiguration);
     }
 
+    @Override
+    public Boolean hasConfiguration() {
+        return this.nxtProperties.getProperty("robot.configuration") != null ? false : true;
+    }
 }

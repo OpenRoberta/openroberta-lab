@@ -499,4 +499,9 @@ public class EV3Factory extends AbstractRobotFactory {
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return new SimulationProgramCheckVisitor(brickConfiguration);
     }
+
+    @Override
+    public Boolean hasConfiguration() {
+        return this.ev3Properties.getProperty("robot.configuration") != null ? false : true;
+    }
 }

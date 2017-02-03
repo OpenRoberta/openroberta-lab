@@ -1,5 +1,4 @@
-define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate'], function(exports,
-    LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports, LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;
 
@@ -19,29 +18,29 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
 
     /**
      * Inject Brickly with initial toolbox
-     *
+     * 
      * @param {response}
      *            toolbox
      */
     function initView() {
         var toolbox = guiStateController.getConfigurationToolbox();
         bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
-            path: '/blockly/',
-            toolbox: toolbox,
-            trashcan: true,
-            scrollbars: true,
-            media: '../blockly/media/',
-            zoom: {
-                controls: true,
-                wheel: true,
-                startScale: 1.0,
-                maxScale: 4,
-                minScale: .25,
-                scaleSpeed: 1.1
+            path : '/blockly/',
+            toolbox : toolbox,
+            trashcan : true,
+            scrollbars : true,
+            media : '../blockly/media/',
+            zoom : {
+                controls : true,
+                wheel : true,
+                startScale : 1.0,
+                maxScale : 4,
+                minScale : .25,
+                scaleSpeed : 1.1
             },
-            checkInTask: ['-Brick'],
-            variableDeclaration: true,
-            robControls: true
+            checkInTask : [ '-Brick' ],
+            variableDeclaration : true,
+            robControls : true
         });
         bricklyWorkspace.setDevice(guiStateController.getRobot());
         bricklyWorkspace.setVersion('2.0');
@@ -60,7 +59,11 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
         });
 
         $('#tabConfiguration').onWrap('shown.bs.tab', function(e) {
-            bricklyWorkspace.setVisible(true);
+            if (guiStateController.isConfigurationUsed()) {
+                bricklyWorkspace.setVisible(true);
+            } else {
+                bricklyWorkspace.setVisible(false);
+            }
             reloadConf();
         }, 'tabConfiguration clicked');
 
@@ -181,20 +184,20 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
         }, saveAsToServer, function() {
 
         }, {
-            rules: {
-                singleModalInput: {
-                    required: true,
-                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*$/
+            rules : {
+                singleModalInput : {
+                    required : true,
+                    regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*$/
                 }
             },
-            errorClass: "form-invalid",
-            errorPlacement: function(label, element) {
+            errorClass : "form-invalid",
+            errorPlacement : function(label, element) {
                 label.insertAfter(element);
             },
-            messages: {
-                singleModalInput: {
-                    required: jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    regex: jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_NAME"])
+            messages : {
+                singleModalInput : {
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                    regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_NAME"])
                 }
             }
         });
@@ -225,7 +228,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
 
     /**
      * Show configuration
-     *
+     * 
      * @param {load}
      *            load configuration
      * @param {data}
@@ -261,8 +264,8 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
                 var coord = blocks[0].getRelativeToSurfaceXY();
                 blocks[0].moveBy(x - coord.x, y - coord.y);
             }
-            seen = true;
         }
+        seen = true;
     }
 
     function reloadView() {
@@ -291,6 +294,7 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
 
     function configurationToBricklyWorkspace(xml) {
         // removing changelistener in blockly doesn't work, so no other way
+        var conf = guiStateController.getConfigurationXML();
         listenToBricklyEvents = false;
         Blockly.hideChaff();
         bricklyWorkspace.clear();
@@ -300,5 +304,10 @@ define(['exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blo
         setTimeout(function() {
             listenToBricklyEvents = true;
         }, 500);
+        if (guiStateController.isConfigurationUsed()) {
+            bricklyWorkspace.setVisible(true);
+        } else {
+            bricklyWorkspace.setVisible(false);
+        }
     }
 });

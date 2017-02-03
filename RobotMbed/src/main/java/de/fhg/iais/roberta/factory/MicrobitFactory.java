@@ -333,4 +333,9 @@ public class MicrobitFactory extends AbstractRobotFactory {
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return new MicrobitSimProgramCheckVisitor(brickConfiguration);
     }
+
+    @Override
+    public Boolean hasConfiguration() {
+        return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+    }
 }

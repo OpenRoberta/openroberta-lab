@@ -505,4 +505,9 @@ public class NAOFactory extends AbstractRobotFactory {
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
+
+    @Override
+    public Boolean hasConfiguration() {
+        return this.naoProperties.getProperty("robot.configuration") != null ? false : true;
+    }
 }

@@ -365,6 +365,8 @@ public interface IRobotFactory {
 
     Boolean isAutoconnected();
 
+    Boolean hasConfiguration();
+
     SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
 
 }
