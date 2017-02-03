@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -113,8 +112,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -137,8 +136,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
- * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Cpp code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct Cpp code.</b> <br>
  */
 public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public static final String INDENT = "    ";
@@ -146,22 +145,28 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     private final UsedHardwareVisitor usedHardwareVisitor;
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
+    private ArrayList<ArrayList<Phrase<Void>>> phrases;
 
     /**
-     * initialize the Java code generator visitor.
+     * initialize the Cpp code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
 
-    public CppCodeGenerationVisitor(CalliopeConfiguration brickConfiguration, UsedHardwareVisitor usedHardware, int indentation) {
+    public CppCodeGenerationVisitor(
+        ArrayList<ArrayList<Phrase<Void>>> phrases,
+        CalliopeConfiguration brickConfiguration,
+        UsedHardwareVisitor usedHardware,
+        int indentation) {
+        this.phrases = phrases;
         this.usedHardwareVisitor = usedHardware;
         this.indentation = indentation;
     }
 
     /**
-     * factory method to generate Java code from an AST.<br>
+     * factory method to generate Cpp code from an AST.<br>
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
@@ -171,7 +176,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
-        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
+        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
@@ -873,7 +878,29 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        this.sb.append("uBit.init(); \n");
+        this.sb.append("int initTime = uBit.systemTime(); \n");
+        decrIndentation();
         mainTask.getVariables().visit(this);
+        incrIndentation();
+        this.sb.append("\n");
+        generateUserDefinedMethods(this.phrases);
+        this.sb.append("\n");
+        this.sb.append("int main() \n");
+        this.sb.append("{");
+        nlIndent();
+        // Initialise the micro:bit runtime.
+        if ( this.usedHardwareVisitor.isGreyScale() ) {
+            this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
+        }
+        if ( this.usedHardwareVisitor.isRadioUsed() ) {
+            nlIndent();
+            this.sb.append("uBit.radio.enable();");
+        }
+        if ( this.usedHardwareVisitor.isAccelerometerUsed() ) {
+            nlIndent();
+            this.sb.append("uBit.accelerometer.updateSample();");
+        }
         return null;
     }
 
@@ -934,14 +961,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             this.sb.append("null");
             return null;
         }
-        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
-        this.sb.append(methodName);
-        arrayLen((Var<Void>) indexOfFunct.getParam().get(0));
-        this.sb.append(", ");
-        indexOfFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        indexOfFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -1052,13 +1071,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("rob.clamp(");
-        mathConstrainFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -1076,11 +1088,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 this.sb.append(", 2) != 0");
                 break;
             case PRIME:
-                this.sb.append("rob.isPrime(");
-                mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case WHOLE:
-                this.sb.append("rob.isWhole(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 break;
             case POSITIVE:
@@ -1115,28 +1124,20 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         }
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
-                this.sb.append("rob.arrSum(");
                 break;
             case MIN:
-                this.sb.append("rob.arrMin(");
                 break;
             case MAX:
-                this.sb.append("rob.arrMax(");
                 break;
             case AVERAGE:
-                this.sb.append("rob.arrMean(");
                 break;
             case MEDIAN:
-                this.sb.append("rob.arrMedian(");
                 break;
             case STD_DEV:
-                this.sb.append("rob.arrStandardDeviatioin(");
                 break;
             case RANDOM:
-                this.sb.append("rob.arrRand(");
                 break;
             case MODE:
-                this.sb.append("rob.arrMode(");
                 break;
             default:
                 break;
@@ -1445,30 +1446,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( !withWrapping ) {
             return;
         }
-
         this.addConstants();
-        generateUserDefinedMethods(phrasesSet);
 
-        this.sb.append("int main() \n");
-        this.sb.append("{");
-        nlIndent();
-        // Initialise the micro:bit runtime.
-        this.sb.append("uBit.init();");
-        nlIndent();
-        this.sb.append("int initTime = uBit.systemTime();");
-        nlIndent();
-        if ( this.usedHardwareVisitor.isGreyScale() ) {
-            this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
-            nlIndent();
-        }
-        if ( this.usedHardwareVisitor.isRadioUsed() ) {
-            nlIndent();
-            this.sb.append("uBit.radio.enable();");
-        }
-        if ( this.usedHardwareVisitor.isAccelerometerUsed() ) {
-            nlIndent();
-            this.sb.append("uBit.accelerometer.updateSample();");
-        }
     }
 
     private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {

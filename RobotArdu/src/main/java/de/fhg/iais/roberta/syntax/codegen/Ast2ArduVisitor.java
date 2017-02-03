@@ -943,7 +943,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: fix the button calling
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         IBrickKey button = brickSensor.getKey();
@@ -966,7 +965,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    //TODO: after testing with a real robot change functions so they would accept only port number
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String port = colorSensor.getPort().getPortNumber();
@@ -1057,6 +1055,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    //no such sensor
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         return null;

@@ -16,9 +16,10 @@ public class CppCodeGeneratorVisitorTest {
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
             + "MicroBituBit;"
-            + "int main() {"
             + "uBit.init();"
             + "int initTime=uBit.systemTime();";
+
+    private static final String MAIN = "int main() {";
 
     private static final String END = "release_fiber();}";
 
@@ -35,6 +36,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMainTask_ByDefault_ReturnsEmptyCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + END;
 
         assertCodeIsOk(expectedResult, "/task/main_task_no_variables_empty.xml");
@@ -44,6 +46,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitDisplayText_ShowHelloScript_ReturnsCppProgramWithShowTextCall() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(\"Hallo\");"
             + "uBit.display.print(\"H\");"
             + END;
@@ -57,6 +60,7 @@ public class CppCodeGeneratorVisitorTest {
             + IMPORTS
             + "MicroBitImage Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
             + "MicroBitImage Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
+            + MAIN
             + END;
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
@@ -66,6 +70,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitDisplayImageAction_ScriptWithDisplayImageAndAnimation_ReturnsCppProgramWithDisplayImageAndAnimation() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n"
             + "255,255,255,255,255\\n"
             + "255,255,255,255,255\\n"
@@ -89,6 +94,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitDisplayImageAction_ScriptWithMissinImageToDisplay_ReturnsCppProgramWithMissingImageToDisplay() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.print(\"\");"
             + END;
         //
@@ -100,6 +106,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitClearDisplayAction_ScriptWithClearDisplay_ReturnsCppProgramClearDisplay() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "\n"
             + "uBit.display.clear();"
             + END;
@@ -111,6 +118,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitImageShiftFunction_ScriptWithShiftTwoImages_ReturnsCppProgramShiftTwoImages() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + END;
         // + "\n"
         // + "display.show(Image.SILLY.shift_up(1))\n"
@@ -123,6 +131,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitImageShiftFunction_ScriptWithMissingPositionImage_ReturnsCppProgramMissingPositionImage() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + END;
         // + "\n"
         // + "display.show(Image.SILLY.shift_up(0))";
@@ -145,6 +154,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitImageInvertFunction_ScriptWithMissingImage_ReturnsCppProgramInvertDefaultImage() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + END;
         // + "\n"
         //+ "display.show(Image.SILLY.invert())";
@@ -156,6 +166,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitBrickSensor_ScriptChecksKeyAStatus_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString(uBit.buttonA.isPressed()));"
             + END;
 
@@ -166,6 +177,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitCompassSensor_ScriptDisplayCompassHeading_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.accelerometer.updateSample();\n"
             + "uBit.display.scroll(ManagedString(uBit.compass.heading()));"
             + END;
@@ -177,6 +189,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitImage_ScriptCreatingImage_ReturnsCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);"
             + "uBit.display.print(MicroBitImage(\"255,255,0,0,0\\n0,0,0,0,255\\n0,85,0,0,0\\n0,0,0,255,0\\n0,56,0,0,0\\n\"));"
             + END;
@@ -188,6 +201,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitGestureSensor_ScriptGetCurrentGestureAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.accelerometer.updateSample();\n"
             + "\n"
             + "uBit.display.scroll(ManagedString(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN));"
@@ -201,6 +215,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitTemperatureSensor_ScriptGetCurrentTemperatureAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString(uBit.thermometer.getTemperature()));"
             + END;
 
@@ -211,6 +226,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitLedOnAction_TurnOnLedInThreeDifferentColors_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.rgb.setColour(255, 0, 0, 255);\n"
             + "uBit.rgb.setColour(0, 153, 0, 255);"
             + "uBit.rgb.setColour(153, 153, 255, 255);\n"
@@ -223,6 +239,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitLedOnAction_TurnOnLedMissingColor_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.rgb.setColour(0, 0, 0, 255);\n"
             + END;
 
@@ -233,6 +250,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitLightStatusAction_TurnOffLed_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.rgb.off();\n"
             + END;
 
@@ -244,6 +262,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMotorOnAction_TurnOnMotorsA_B_AB_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.soundmotor.motorAOn(30);\n"
             + "uBit.soundmotor.motorBOn(30);\n"
             + "uBit.soundmotor.motorOn(30);\n"
@@ -256,6 +275,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitToneAction_PlayTone50Hz500ms_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.soundmotor.soundOn(50);\n"
             + "uBit.sleep(500);\n"
             + "uBit.soundmotor.soundOff();\n"
@@ -268,6 +288,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitTAmbientLightSensor_GetAmbientLigthAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString(uBit.display.readLightLevel()));\n"
             + END;
 
@@ -278,6 +299,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitRadioSendAction_SendHelloMessage_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.radio.enable();\n"
             + "uBit.radio.datagram.send(\"Hallo\");\n"
             + END;
@@ -289,6 +311,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitRadioSendAction_SendMissingMessage_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.radio.enable();\n"
             + "uBit.radio.datagram.send(\"\");\n"
             + END;
@@ -300,6 +323,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitRadioReceiveAction_ReceiveMessage_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.radio.enable();\n"
             + "uBit.display.scroll(ManagedString(ManagedString(uBit.radio.datagram.recv())));\n"
             + END;
@@ -311,6 +335,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMotorStopAction_StopMotorFloatNonFloat_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.soundmotor.motorAOff();\n"
             + "uBit.soundmotor.motorBOff();\n"
             + END;
@@ -322,6 +347,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMathRandomIntFunct_ShowRandInt1to200_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString((uBit.random(200) + 1)));\n"
             + END;
 
@@ -332,6 +358,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitMathRandomIntFunct_ShowRandIntMissingParam_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString((uBit.random(0) + 0)));\n"
             + END;
 
@@ -342,6 +369,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitWaitStmt_TestAllTheSensorsInTheWaitStmt_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.accelerometer.updateSample();"
             + "while(1){"
             + "if(uBit.buttonA.isPressed()==true){"
@@ -373,6 +401,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitWaitStmt_TestTwoCases_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "while(1){"
             + "if(uBit.buttonA.isPressed()==true){"
             + "uBit.display.scroll(\"Hallo\");"
@@ -394,6 +423,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitRgbColor_CreateColorAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString(20, 25, 30, 255));"
             + END;
 
@@ -404,6 +434,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitPinTouchSensor_DisplayIfPin0Pin2andPin3areTouched_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString(uBit.io.P0.isTouched()));\n"
             + "uBit.display.scroll(ManagedString(uBit.io.P2.isTouched()));"
             + "uBit.display.scroll(ManagedString(uBit.io.CAL_P22.isTouched()));"
@@ -416,6 +447,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitPinGetValueSensor_DisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.display.scroll(ManagedString(uBit.io.P0.getAnalogValue()));\n"
             + "uBit.display.scroll(ManagedString(uBit.io.P2.getDigitalValue()));"
             + END;
@@ -427,6 +459,7 @@ public class CppCodeGeneratorVisitorTest {
     public void visitPinWriteValueSensor_SetAnalogPin0andDigitalPin2To0_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
             + "uBit.io.P0.setAnalogValue(0);\n"
             + "uBit.io.P2.setDigitalValue(0);"
             + END;
