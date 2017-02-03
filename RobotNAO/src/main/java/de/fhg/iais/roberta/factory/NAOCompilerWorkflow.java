@@ -4,9 +4,6 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildListener;
-import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +11,6 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NaoPythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NaoConfigurationTransformer;
@@ -25,42 +20,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class NAOCompilerWorkflow implements ICompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(NAOCompilerWorkflow.class);
-    private final RobotCommunicator brickCommunicator;
     public final String pathToCrosscompilerBaseDir;
     public final String crossCompilerResourcesDir;
-    public final String pathToCrossCompilerBuildXMLResource;
 
-    private enum Language {
-        JAVA( ".java" ), PYTHON( ".py" );
-
-        private String extension;
-
-        Language(String ext) {
-            this.extension = ext;
-        }
-
-        String getExtension() {
-            return this.extension;
-        }
-
-        public static Language fromCommunicationData(RobotCommunicationData state) {
-            if ( state == null ) {
-                return JAVA;
-            }
-            String fwName = state.getFirmwareName();
-            return (fwName != null && fwName.equals("ev3dev")) ? PYTHON : JAVA;
-        }
-    }
-
-    public NAOCompilerWorkflow(
-        RobotCommunicator brickCommunicator,
-        String pathToCrosscompilerBaseDir,
-        String crossCompilerResourcesDir,
-        String pathToCrossCompilerBuildXMLResource) {
-        this.brickCommunicator = brickCommunicator;
+    public NAOCompilerWorkflow(String pathToCrosscompilerBaseDir, String crossCompilerResourcesDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.crossCompilerResourcesDir = crossCompilerResourcesDir;
-        this.pathToCrossCompilerBuildXMLResource = pathToCrossCompilerBuildXMLResource;
+
     }
 
     /**
@@ -81,33 +47,19 @@ public class NAOCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        RobotCommunicationData communicationData;
-        communicationData = this.brickCommunicator.getState(token);
-        Language lang = Language.fromCommunicationData(communicationData);
-        String sourceCode = generateProgram(lang, programName, data);
-
+        String sourceCode = generateProgram(programName, data);
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
-            storeGeneratedProgram(token, programName, sourceCode, lang.getExtension());
-        } catch ( Exception e ) {
+            storeGeneratedProgram(token, programName, sourceCode, ".py");
+        } catch ( final Exception e ) {
             NAOCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        switch ( lang ) {
-            case JAVA:
-                Key messageKey = runBuild(token, programName, "generated.main");
-                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                    NAOCompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
-                } else {
-                    NAOCompilerWorkflow.LOG.info(messageKey.toString());
-                }
-                return messageKey;
-            case PYTHON:
-                // maybe copy from /src/ to /target/
-                // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
-                return Key.COMPILERWORKFLOW_SUCCESS;
-        }
-        return null;
+
+        // maybe copy from /src/ to /target/
+        // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
+        return Key.COMPILERWORKFLOW_SUCCESS;
+
     }
 
     /**
@@ -129,14 +81,12 @@ public class NAOCompilerWorkflow implements ICompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        Language lang = Language.fromCommunicationData(this.brickCommunicator.getState(token));
-        return generateProgram(lang, programName, data);
+        return generateProgram(programName, data);
     }
 
-    private String generateProgram(Language lang, String programName, BlocklyProgramAndConfigTransformer data) {
+    private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2NaoPythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-
-        NAOCompilerWorkflow.LOG.info("generating {} code", lang.toString().toLowerCase());
+        NAOCompilerWorkflow.LOG.info("generating {} code", toString().toLowerCase());
         return sourceCode;
     }
 
@@ -148,77 +98,6 @@ public class NAOCompilerWorkflow implements ICompilerWorkflow {
     }
 
     /**
-     * 1. Make target folder (if not exists).<br>
-     * 2. Clean target folder (everything inside).<br>
-     * 3. Compile .java files to .class.<br>
-     * 4. Make jar from class files and add META-INF entries.<br>
-     *
-     * @param token
-     * @param mainFile
-     * @param mainPackage
-     */
-    public Key runBuild(String token, String mainFile, String mainPackage) {
-        final StringBuilder sb = new StringBuilder();
-        try {
-            File buildFile = new File(this.pathToCrossCompilerBuildXMLResource);
-            org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
-
-            project.init();
-            project.setProperty("user.projects.dir", this.pathToCrosscompilerBaseDir);
-            project.setProperty("crosscompiler.resources.dir", this.crossCompilerResourcesDir);
-            project.setProperty("token.dir", token);
-            project.setProperty("main.name", mainFile);
-            project.setProperty("main.package", mainPackage);
-
-            ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
-            projectHelper.parse(project, buildFile);
-
-            project.addBuildListener(new BuildListener() {
-                @Override
-                public void taskStarted(BuildEvent event) {
-                }
-
-                @Override
-                public void taskFinished(BuildEvent event) {
-                }
-
-                @Override
-                public void targetStarted(BuildEvent event) {
-                    sb.append("targetStart: ").append(event.getTarget().getName()).append("\n");
-                }
-
-                @Override
-                public void targetFinished(BuildEvent event) {
-                    sb.append("targetEnd:   ").append(event.getTarget().getName()).append("\n");
-                }
-
-                @Override
-                public void messageLogged(BuildEvent event) {
-                    sb.append(event.getMessage()).append("\n");
-                }
-
-                @Override
-                public void buildStarted(BuildEvent event) {
-                }
-
-                @Override
-                public void buildFinished(BuildEvent event) {
-                }
-            });
-            project.executeTarget(project.getDefaultTarget());
-            // LOG.info("build ok. Messages from build script are:\n" + sb.toString());
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } catch ( Exception e ) {
-            if ( sb.length() > 0 ) {
-                NAOCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
-            } else {
-                NAOCompilerWorkflow.LOG.error("exception when preparing the build", e);
-            }
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        }
-    }
-
-    /**
      * return the brick configuration for given XML configuration text.
      *
      * @param blocklyXml the configuration XML as String
@@ -227,14 +106,13 @@ public class NAOCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
-        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2NaoConfigurationTransformer transformer = new Jaxb2NaoConfigurationTransformer(factory);
+        final BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        final Jaxb2NaoConfigurationTransformer transformer = new Jaxb2NaoConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 
     @Override
     public String getCompiledCode() {
-        // TODO Auto-generated method stub
         return null;
     }
 
