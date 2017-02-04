@@ -878,7 +878,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        this.sb.append("uBit.init(); \n");
         this.sb.append("int initTime = uBit.systemTime(); \n");
         decrIndentation();
         mainTask.getVariables().visit(this);
@@ -890,6 +889,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append("{");
         nlIndent();
         // Initialise the micro:bit runtime.
+        this.sb.append("uBit.init();");
+        nlIndent();
         if ( this.usedHardwareVisitor.isGreyScale() ) {
             this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }

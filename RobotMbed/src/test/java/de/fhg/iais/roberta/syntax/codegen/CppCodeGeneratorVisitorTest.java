@@ -16,10 +16,9 @@ public class CppCodeGeneratorVisitorTest {
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
             + "MicroBituBit;"
-            + "uBit.init();"
             + "int initTime=uBit.systemTime();";
 
-    private static final String MAIN = "int main() {";
+    private static final String MAIN = "int main() { uBit.init();";
 
     private static final String END = "release_fiber();}";
 

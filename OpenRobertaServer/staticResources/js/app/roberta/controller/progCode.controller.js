@@ -21,7 +21,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             UTIL.download(filename, GUISTATE_C.getProgramSource());
             MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", filename);
         }, 'codeDownload clicked');
-        $('#codeRefresh').onWrap('click', function(event) {  qtp30113588
+        $('#codeRefresh').onWrap('click', function(event) {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
             var xmlConfiguration = GUISTATE_C.getConfigurationXML();

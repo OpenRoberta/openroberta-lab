@@ -1,4 +1,5 @@
-define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports, LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
+define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
+        LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;
 
@@ -264,8 +265,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 var coord = blocks[0].getRelativeToSurfaceXY();
                 blocks[0].moveBy(x - coord.x, y - coord.y);
             }
+            seen = true;
         }
-        seen = true;
     }
 
     function reloadView() {
@@ -294,7 +295,6 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
 
     function configurationToBricklyWorkspace(xml) {
         // removing changelistener in blockly doesn't work, so no other way
-        var conf = guiStateController.getConfigurationXML();
         listenToBricklyEvents = false;
         Blockly.hideChaff();
         bricklyWorkspace.clear();
