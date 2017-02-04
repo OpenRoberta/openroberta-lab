@@ -73,8 +73,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
      * Initialize the navigation bar in the head of the page
      */
     function initMenuEvents() {
-        $('[rel="tooltip"]').tooltip({
+        $('[rel="tooltip"]').not('.rightMenuButton').tooltip({
             placement : "right"
+        });
+        $('[rel="tooltip"].rightMenuButton').tooltip({
+            placement : "auto"
         });
         // prevent Safari 10. from zooming
         document.addEventListener('gesturestart', function(e) {
@@ -208,7 +211,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'user clicked');
 
         $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
-            $('.modal').modal('hide'); // head-navigation-sim-controle
+            $('.modal').modal('hide'); // head-navigation-sim-control
             var domId = event.target.id;
             if (domId === 'menuSimSimple') {
                 $('.menuSim').parent().removeClass('disabled');

@@ -205,7 +205,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         }
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robot);
         $('#simRobot').addClass('typcn-' + robot);
-
+        
         if (isAutoconnected()) {
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
@@ -227,6 +227,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.gui.robot = robot;
         setConfigurationName(getRobot().toUpperCase() + 'basis');
         setProgramName('NEPOprog');
+        var value = Blockly.Msg.MENU_START_BRICK;                       
+        if (value.indexOf("$") >= 0) {
+            value = value.replace("$", getRobotRealName());
+        }       
+        $('#menuRunProg').text(value);
+        if (GUISTATE.gui.blocklyWorkspace)
+            GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
     }
 
     exports.setRobot = setRobot;
@@ -246,6 +253,18 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.gui.robot;
     }
     exports.getRobot = getRobot;
+    
+    function getRobotRealName() {
+        for ( var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot))
+                continue;
+            if (getRobots()[robot].name == getRobot()) {
+                return getRobots()[robot].realName;
+            }
+        }
+        return getRobot();
+    }
+    exports.getRobotRealName = getRobotRealName;
 
     function isRobotConnected() {
         return GUISTATE.robot.time > 0 || GUISTATE.gui.connection;

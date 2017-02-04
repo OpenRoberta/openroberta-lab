@@ -20,8 +20,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         });
 
         $('#simRobotModal').removeClass("modal-backdrop");
-        $('#simControle').onWrap('click', function(event) {
-            if ($('#simControle').hasClass('typcn-media-play-outline')) {
+        $('#simControl').onWrap('click', function(event) {
+            if ($('#simControl').hasClass('typcn-media-play-outline')) {
                 Blockly.hideChaff();
                 var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
                 var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
@@ -31,7 +31,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                        $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                        $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                         SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobot());
                         setTimeout(function() {
                             SIM.setPause(false);
@@ -41,7 +41,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     }
                 });
             } else {
-                $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                 SIM.stopProgram();
             }
         });
@@ -103,7 +103,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             $(".sim").addClass('hide');
             $("#simButtonsCollapse").collapse('hide');
             $('.blocklyToolboxDiv').css('display', 'inherit');
-            $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+            $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
             Blockly.svgResize(blocklyWorkspace);
             $('#progSim').animate({
                 right : '0px',

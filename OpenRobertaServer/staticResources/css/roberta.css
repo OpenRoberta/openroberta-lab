@@ -549,6 +549,13 @@ hidden
 .tooltip.right>.tooltip-arrow {
 	border-right-color: #333;
 }
+.tooltip.left>.tooltip-inner {
+	background-color: #333;
+}
+
+.tooltip.left>.tooltip-arrow {
+	border-right-color: #333;
+}
 
 .container-fluid {
 	padding-right: 16px;
