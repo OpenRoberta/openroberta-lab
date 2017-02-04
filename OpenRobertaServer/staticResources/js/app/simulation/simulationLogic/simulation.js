@@ -74,7 +74,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             return currentBackground;
         }
         setPause(true);
-        $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+        $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
         if (num === -1) {
             currentBackground += 1;
             if (currentBackground >= imgObjectList.length) {
@@ -118,9 +118,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
             }, 100);
         } else {
             if (value) {
-                $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
             } else {
-                $('#simControle').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
             }
             pause = value;
         }
@@ -316,7 +316,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
     function reloadProgram() {
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
-        $('#simControle').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+        $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
     }
 
     function setObstacle() {
