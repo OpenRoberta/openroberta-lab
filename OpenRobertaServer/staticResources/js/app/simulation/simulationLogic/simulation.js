@@ -307,7 +307,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 setPause(false);
             }, 1000);
         }
-        robot.update(actionValues);
+        robot.update(actionValues);        
         reset = robot.buttons.Reset;
         sensorValues = scene.updateSensorValues(!pause);
         scene.drawRobot();

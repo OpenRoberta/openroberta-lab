@@ -42,14 +42,12 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             that.compass.degree = $('#slider').val();
             e.stopPropagation();
         });
-//        for (var i = 0; i < 4; i++) {
-//            if (this['pin' + i]) {
-//                delete this['pin' + i].analogOut;
-//                delete this['pin' + i].digitalOut;
-//                delete this['pin' + i].analogIn;
-//                delete this['pin' + i].digitalIn;
-//            }
-//        }
+        for (var i = 0; i < 4; i++) {
+            if (this['pin' + i]) {
+                delete this['pin' + i].analogOut;
+                delete this['pin' + i].digitalOut;
+             }
+        }
         
         this.pin={};
         this.pin.no = 0;
@@ -162,6 +160,11 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
     Mbed.prototype.temperature = {
         degree : 25
     }
+    
+    Mbed.prototype.time = 0;        
+    Mbed.prototype.timer = {      
+        timer1 : false        
+    }
 
     /**
      * Update all actions of the Mbed. The new pose is calculated with the
@@ -193,7 +196,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 }
                 f(textArray, that);
             }
-            if (actions.display.character) {
+            if (actions.display.character) {               
                 var that = Mbed.prototype;
                 var textArray = generatecharacter(actions.display.character);
                 function f(textArray, that) {

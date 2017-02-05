@@ -373,11 +373,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         var dxDisplay = startX;
         var dyDisplay = startY + 20;
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
-        this.display.lightLevel = 100;
-        this.pin0.touched = false;
-        this.pin1.touched = false;
-        this.pin2.touched = false;
-        this.pin3.touched = false;
+        this.display.lightLevel = 100;        
         if (A || B || Reset || Display || Pin0 || Pin1 || Pin2 || Pin3) {
             if (e.type === 'mousedown') {
                 if (A) {
@@ -399,6 +395,13 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                 }
             } else if (e.type === 'mousemove' && Display) {
                 this.display.lightLevel = 50;
+            } else if (e.type === 'mouseup') {
+                this.pin0.touched = false;
+                this.pin1.touched = false;
+                this.pin2.touched = false;
+                this.pin3.touched = false;
+                this.buttons.A = false;
+                this.buttons.B = false;
             }
             if (Display) {
                 $("#robotLayer").css('cursor', 'crosshair');

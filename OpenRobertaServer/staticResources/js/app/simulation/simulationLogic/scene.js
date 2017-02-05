@@ -600,10 +600,10 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
             for ( var key in this.robot.buttons) {
                 values.buttons[key] = this.robot.buttons[key] == true;
                 values.buttons.any = (values.buttons.any || this.robot.buttons[key]);
-            }
-            for ( var key in this.robot.buttons) {
-                this.robot.buttons[key] = false;
-            }
+             }
+//            for ( var key in this.robot.buttons) {
+//                this.robot.buttons[key] = false;
+//            }
         }
         if (this.robot.webAudio) {
             values.volume = this.robot.webAudio.volume * 100;
