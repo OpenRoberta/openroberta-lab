@@ -142,7 +142,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             GUISTATE_C.setConfigurationXML(xmlTextConfiguration);
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 if (result.rc == "ok") {
-                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
+//                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                     SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobot());
                     $(".sim").removeClass('hide');
                     $('#blocklyDiv').addClass('rightActive');
