@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1024 600" style="enable-background:new 0 0 1024 600;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#333333;stroke-miterlimit:10;}
+	.st1{fill:#333333;}
+	.st2{font-family:'Roboto-Regular';}
+	.st3{font-size:12px;}
+</style>
+<g id="Ebene_3">
+	
+		<image style="overflow:visible;enable-background:new    ;" width="569" height="450" xlink:href="nao_skizze.jpg"  transform="matrix(1 0 0 1 228.1667 75.3993)">
+	</image>
+</g>
+<g id="Ebene_2">
+	<line class="st0" x1="648.5" y1="320" x2="722.7" y2="320"/>
+	<line class="st0" x1="579" y1="515" x2="722.7" y2="515"/>
+	<line class="st0" x1="300.3" y1="477" x2="430" y2="477"/>
+	<text transform="matrix(1 0 0 1 215.6325 93.5008)" class="st1 st2 st3">tactile sensors</text>
+	<text transform="matrix(1 0 0 1 172.1676 116.5021)" class="st1 st2 st3">speakers and ear-LEDs</text>
+	<text transform="matrix(1 0 0 1 88.5133 138.5033)" class="st1 st2 st3">infrared emitter/receiver and eye-LEDs</text>
+	<text transform="matrix(1 0 0 1 241.7125 174.5057)" class="st1 st2 st3">head joint</text>
+	<text transform="matrix(1 0 0 1 226.6773 226.5065)" class="st1 st2 st3">chest button</text>
+	<text transform="matrix(1 0 0 1 251.6324 276.5102)" class="st1 st2 st3">hip joint</text>
+	<text transform="matrix(1 0 0 1 203.0581 354.5147)" class="st1 st2 st3">prehensile hands</text>
+	<text transform="matrix(1 0 0 1 239.3569 449.5208)" class="st1 st2 st3">ankle joint</text>
+	<text transform="matrix(1 0 0 1 247.5131 480.5222)" class="st1 st2 st3">bumpers</text>
+	<text transform="matrix(1 0 0 1 728.5114 104.4991)" class="st1 st2 st3">front&amp;rear microphone</text>
+	<text transform="matrix(1 0 0 1 728.5099 121.5)" class="st1 st2 st3">cameras</text>
+	<text transform="matrix(1 0 0 1 728.5112 147.5015)" class="st1 st2 st3">lateral microphones</text>
+	<text transform="matrix(1 0 0 1 728.5101 176.5034)" class="st1 st2 st3">shoulder joint</text>
+	<text transform="matrix(1 0 0 1 728.5104 204.1718)" class="st1 st2 st3">sonars</text>
+	<text transform="matrix(1 0 0 1 728.5114 238.5075)" class="st1 st2 st3">elbow joint</text>
+	<text transform="matrix(1 0 0 1 728.5112 261.0086)" class="st1 st2 st3">battery</text>
+	<text transform="matrix(1 0 0 1 728.5106 283.5102)" class="st1 st2 st3">wrist joint</text>
+	<text transform="matrix(1 0 0 1 728.5112 323.5125)" class="st1 st2 st3">tactile sensors</text>
+	<text transform="matrix(1 0 0 1 728.5115 405.5184)" class="st1 st2 st3">knee joint</text>
+	<text transform="matrix(1 0 0 1 728.511 518.5247)" class="st1 st2 st3">pressure sensor</text>
+	<line class="st0" x1="300.3" y1="446" x2="462.5" y2="446"/>
+	<line class="st0" x1="300.3" y1="351" x2="425" y2="351"/>
+	<line class="st0" x1="443.5" y1="273" x2="487.5" y2="273"/>
+	<line class="st0" x1="300.3" y1="273" x2="411.5" y2="273"/>
+	<line class="st0" x1="300.3" y1="223" x2="418.5" y2="223"/>
+	<line class="st0" x1="457.5" y1="223" x2="490.5" y2="223"/>
+	<line class="st0" x1="300.3" y1="171" x2="499.5" y2="171"/>
+	<line class="st0" x1="300.3" y1="135" x2="485.5" y2="135"/>
+	<line class="st0" x1="300.3" y1="113" x2="462.5" y2="113"/>
+	<line class="st0" x1="300.3" y1="90" x2="496.5" y2="90"/>
+	<line class="st0" x1="590.5" y1="402" x2="722.7" y2="402"/>
+	<line class="st0" x1="633" y1="280" x2="722.7" y2="280"/>
+	<line class="st0" x1="628.5" y1="235" x2="722.7" y2="235"/>
+	<line class="st0" x1="499.5" y1="200.7" x2="722.7" y2="200.7"/>
+	<line class="st0" x1="527" y1="222" x2="499.5" y2="200.7"/>
+	<line class="st0" x1="499.5" y1="200.7" x2="519.5" y2="210.3"/>
+	<line class="st0" x1="474" y1="222" x2="499.5" y2="200.7"/>
+	<line class="st0" x1="499.5" y1="200.7" x2="479.2" y2="210.3"/>
+	<line class="st0" x1="593.5" y1="173" x2="722.7" y2="173"/>
+	<line class="st0" x1="559.5" y1="144" x2="722.7" y2="144"/>
+	<line class="st0" x1="513.3" y1="118" x2="722.7" y2="118"/>
+	<line class="st0" x1="576.1" y1="118" x2="515.5" y2="152.5"/>
+	<line class="st0" x1="513.3" y1="101" x2="722.7" y2="101"/>
+	<line class="st0" x1="635.7" y1="257.5" x2="722.7" y2="257.5"/>
+	<line class="st0" x1="550.7" y1="257.5" x2="601" y2="257.5"/>
+</g>
+</svg>

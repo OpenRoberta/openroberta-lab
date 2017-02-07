@@ -189,7 +189,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
         
         if (!isConfigurationUsed()) {
-            $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'BackgroundConf.png) no-repeat');
+            $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'BackgroundConf.svg) no-repeat');
             $('#bricklyDiv').css('background-position', 'center');
             $('#bricklyDiv').css('background-size', '75% auto');
         } 
