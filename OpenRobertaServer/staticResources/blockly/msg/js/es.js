@@ -858,7 +858,7 @@ Blockly.Msg.PLAY_TONE = "tono";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "Reproduce un tono";
 Blockly.Msg.PLAY_VOLUME = "volumen";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_1_3 = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_2_0 = "Version 2.2.0 <ul class='NonIcon'><li>bug fixes for Bot'n Roll, EV3 and Calliope</li><li>new feature - upload custom simulation environments</li><li>new feature - document your programs directly</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "quiero ayudar";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab es un entorno de programación integrado basado en la nube que permite a niñas,  niños y adolescentes programar de un modo sencillo robots Lego Mindstorms EV3. Esta plataforma es totalmente de código abierto, así que la participación en ella es bienvenida. Tanto el software como las herramientas de desarrollo en código abierto están disponibles en los servidores de Fraunhofer.";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab es una plataforma de programación en código abierto desarrollada por Fraunhofer IAIS a iniciativa de <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";
@@ -886,7 +886,7 @@ Blockly.Msg.POPUP_EMAIL_SEND = "Enviar ahora";
 Blockly.Msg.POPUP_NAME = "Nombre";
 Blockly.Msg.POPUP_NEW_PASSWORD = "Nueva contraseña";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Contraseña antigua";
-Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Contraseña";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "resetear password ...";
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "La ejecición del programa en el robot ha terminado inesperadamente.";
@@ -1116,6 +1116,7 @@ Blockly.Msg.TOUR1_DESCRIPTION10 = "Pulsa sobre »Acción«";
 Blockly.Msg.TOUR1_DESCRIPTION11 = "Pulsa y crea un bloque en el área de trabajo";
 Blockly.Msg.TOUR1_DESCRIPTION12 = "Ahora arrastra el bloque justo debajo del bloque inicio para que conecten.";
 Blockly.Msg.TOUR1_DESCRIPTION13 = "¡Ahora, prueba tu programa en la simulación!";
+Blockly.Msg.TOUR1_DESCRIPTION13a = "and test your program in the simulation!";  // untranslated
 Blockly.Msg.TOUR1_DESCRIPTION14 = "¡Un momento!";
 Blockly.Msg.TOUR1_DESCRIPTION15 = "Perfecto,<br>tu robot avanza 20 cm,<br> ¡exactamente lo que has programado!";
 Blockly.Msg.TOUR1_DESCRIPTION16 = "Adios. ¡Diviértete probando más cosas!";

@@ -121,6 +121,11 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
             }
         }
     }, {
+        'event' : 'mousedown touchstart',
+        'selector' : '#simControl',
+        'description' : 'TOUR1_DESCRIPTION13a',
+        'showSkip' : false,
+    }, {
         'event_type' : 'next',
         'selector' : '#simDiv',
         'description' : 'TOUR1_DESCRIPTION15',

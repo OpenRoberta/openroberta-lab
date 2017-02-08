@@ -57,7 +57,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             clone.find('span:eq( 0 )').addClass('typcn-' + robots[i].name);
             clone.find('span:eq( 1 )').text(robots[i].realName);
             clone.find('a').attr('onclick', 'window.open("' + robots[i].info + '");return false;');
-            onclick = clone.attr('data-type', robots[i].name);
+            clone.attr('data-type', robots[i].name);
             if (!robots[i].beta) {
                 clone.find('img').css('visibility', 'hidden');
             }
