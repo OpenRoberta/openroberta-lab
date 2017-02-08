@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -107,8 +108,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
@@ -261,7 +262,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        this.sb.append("Image." + predefinedImage.getImageName());
+        this.sb.append("microbit.Image." + predefinedImage.getImageName());
         return null;
     }
 
@@ -384,10 +385,10 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
             case "de.fhg.iais.roberta.syntax.expr.NullConst":
                 break;
             case "de.fhg.iais.roberta.syntax.expr.PredefinedImage":
-                this.sb.append("Image.SILLY");
+                this.sb.append("microbit.Image.SILLY");
                 break;
             case "de.fhg.iais.roberta.syntax.expr.Image":
-                this.sb.append("Image()");
+                this.sb.append("microbit.Image()");
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
@@ -552,7 +553,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("sleep(");
+        this.sb.append("microbit.sleep(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
         return null;
@@ -566,7 +567,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitImage(Image<Void> image) {
-        this.sb.append("Image('");
+        this.sb.append("microbit.Image('");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
                 String pixel = image.getImage()[i][j].trim();
@@ -694,13 +695,13 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append(getEnumCode(brickSensor.getKey()) + ".is_pressed()");
+        this.sb.append("microbit." + getEnumCode(brickSensor.getKey()) + ".is_pressed()");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("temperature()");
+        this.sb.append("microbit.temperature()");
         return null;
     }
 
@@ -726,6 +727,11 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        if ( timerSensor.getMode() == TimerSensorMode.GET_SAMPLE ) {
+            this.sb.append("microbit.running_time() - timer1");
+        } else {
+            this.sb.append("timer1 = microbit.running_time()");
+        }
         return null;
     }
 
@@ -742,7 +748,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         String valueType = pinValueSensor.getValueType().toString().toLowerCase();
-        this.sb.append("pin" + pinValueSensor.getPinNumber() + ".read_" + valueType + "()");
+        this.sb.append("microbit.pin" + pinValueSensor.getPinNumber() + ".read_" + valueType + "()");
         return null;
     }
 
@@ -777,7 +783,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        this.sb.append("\"" + gestureSensor.getMode().getPythonCode() + "\" == accelerometer.current_gesture()");
+        this.sb.append("\"" + gestureSensor.getMode().getPythonCode() + "\" == microbit.accelerometer.current_gesture()");
         return null;
     }
 
@@ -1206,7 +1212,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.sb.append("compass.heading()");
+        this.sb.append("microbit.compass.heading()");
         return null;
     }
 
@@ -1229,7 +1235,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("pin" + pinTouchSensor.getPinNumber() + ".is_touched()");
+        this.sb.append("microbit.pin" + pinTouchSensor.getPinNumber() + ".is_touched()");
         return null;
     }
 

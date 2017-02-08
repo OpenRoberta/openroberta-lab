@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -175,7 +176,21 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     @Override
     public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
-        return null;
+        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
+            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
+        }
+        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
+        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
+            if ( timerSens.toString().equals(sUpper) ) {
+                return timerSens;
+            }
+            for ( String value : timerSens.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return timerSens;
+                }
+            }
+        }
+        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
     }
 
     @Override
