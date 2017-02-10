@@ -25,12 +25,9 @@ import de.fhg.iais.roberta.mode.action.nao.Resolution;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.Coordinates;
-import de.fhg.iais.roberta.mode.sensor.nao.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nao.Sensor;
 import de.fhg.iais.roberta.mode.sensor.nao.Side;
-import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -163,7 +160,6 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -615,14 +611,14 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("hal.waitFor(15)");
+        this.sb.append("time.sleep(15)");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("hal.waitFor(");
+        this.sb.append("time.sleep(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
         return null;
@@ -1306,10 +1302,10 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(", ");
         moveJoint.getDegrees().visit(this);
         this.sb.append(", ");
-        if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.ABSOLUTE) {
-        	this.sb.append("1)");
-        } else if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.RELATIVE) {
-        	this.sb.append("2)");
+        if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.ABSOLUTE ) {
+            this.sb.append("1)");
+        } else if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.RELATIVE ) {
+            this.sb.append("2)");
         }
         return null;
     }
@@ -1679,7 +1675,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(")");
         return null;
     }
-    
+
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
         this.sb.append("h.learnFace(");
@@ -1687,7 +1683,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(")");
         return null;
     }
-    
+
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
         this.sb.append("h.forgetFace(");
@@ -1695,219 +1691,220 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(")");
         return null;
     }
+
+    @Override
     public Void visitDetectFace(DetectFace<Void> detectFace) {
-    	this.sb.append("h.detectFace()");
-    	return null;
+        this.sb.append("h.detectFace()");
+        return null;
     }
 
-	@Override
-	public Void visitDriveAction(DriveAction<Void> driveAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitCurveAction(CurveAction<Void> curveAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitTurnAction(TurnAction<Void> turnAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitLightAction(LightAction<Void> lightAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitToneAction(ToneAction<Void> toneAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitLightSensor(LightSensor<Void> lightSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitBluetoothWaitForConnectionAction(
-			BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitConnectConst(ConnectConst<Void> connectConst) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
