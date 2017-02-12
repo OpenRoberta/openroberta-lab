@@ -108,19 +108,25 @@ public class ProgramProcessor extends AbstractProcessor {
         // Now we find all the programs which are not owned by the user but have been shared to him
         List<AccessRight> accessRights2 = accessRightDao.loadAccessRightsForUser(owner);
         for ( AccessRight accessRight : accessRights2 ) {
-            JSONArray programInfo2 = new JSONArray();
-            programInfo2.put(accessRight.getProgram().getName());
-            programInfo2.put(accessRight.getProgram().getOwner().getAccount());
-            //            programInfo2.put(userProgram.getProgram().getNumberOfBlocks());
-            JSONObject sharedFrom = new JSONObject();
-            try {
-                sharedFrom.put("sharedFrom", accessRight.getRelation().toString());
-            } catch ( JSONException e ) {
+            // Don't return programs with wrong robot type
+            System.out.println(accessRight.getProgram().getName());
+            Program program = programDao.load(accessRight.getProgram().getName(), accessRight.getProgram().getOwner(), robot);
+            if ( program != null ) {
+                System.out.println(accessRight.getProgram().getName());
+                JSONArray programInfo2 = new JSONArray();
+                programInfo2.put(accessRight.getProgram().getName());
+                programInfo2.put(accessRight.getProgram().getOwner().getAccount());
+                //            programInfo2.put(userProgram.getProgram().getNumberOfBlocks());
+                JSONObject sharedFrom = new JSONObject();
+                try {
+                    sharedFrom.put("sharedFrom", accessRight.getRelation().toString());
+                } catch ( JSONException e ) {
+                }
+                programInfo2.put(sharedFrom);
+                programInfo2.put(accessRight.getProgram().getCreated().getTime());
+                programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
+                programInfos.put(programInfo2);
             }
-            programInfo2.put(sharedFrom);
-            programInfo2.put(accessRight.getProgram().getCreated().getTime());
-            programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
-            programInfos.put(programInfo2);
         }
 
         setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programInfos.length());
