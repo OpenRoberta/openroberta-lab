@@ -5,6 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.mode.action.mbed.MbedPins;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -29,15 +30,15 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  */
 public class PinWriteValueSensor<V> extends Sensor<V> {
     private final ValueType valueType;
-    private final int pinNumber;
+    private final MbedPins pin;
     private final Expr<V> value;
 
-    private PinWriteValueSensor(int pinNumber, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinWriteValueSensor(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"), properties, comment);
         Assert.notNull(value);
-        Assert.isTrue(pinNumber >= 0 && pinNumber <= 3 && value.isReadOnly());
+        Assert.notNull(pin);
         Assert.notNull(valueType);
-        this.pinNumber = pinNumber;
+        this.pin = pin;
         this.valueType = valueType;
         this.value = value;
         setReadOnly();
@@ -46,27 +47,22 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link PinWriteValueSensor}.
      *
-     * @param pinNumber
+     * @param pin
      * @param valueType see {@link ValueType}
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of {@link PinWriteValueSensor}
      */
-    public static <V> PinWriteValueSensor<V> make(
-        int pinNumber,
-        ValueType valueType,
-        Expr<V> value,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
-        return new PinWriteValueSensor<V>(pinNumber, valueType, value, properties, comment);
+    public static <V> PinWriteValueSensor<V> make(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PinWriteValueSensor<V>(pin, valueType, value, properties, comment);
     }
 
     public ValueType getValueType() {
         return this.valueType;
     }
 
-    public int getPinNumber() {
-        return this.pinNumber;
+    public MbedPins getPin() {
+        return this.pin;
     }
 
     public Expr<V> getValue() {
@@ -75,7 +71,7 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return "PinWriteValueSensor [" + this.pinNumber + ", " + this.valueType + ", " + this.value + "]";
+        return "PinWriteValueSensor [" + this.pin.getPinNumber() + ", " + this.valueType + ", " + this.value + "]";
     }
 
     @Override
@@ -98,7 +94,7 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
         String valueType = helper.extractField(fields, BlocklyConstants.VALUETYPE);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, int.class));
         return PinWriteValueSensor.make(
-            Integer.valueOf(pinNumber),
+            MbedPins.findPin(pinNumber),
             ValueType.get(valueType),
             helper.convertPhraseToExpr(value),
             helper.extractBlockProperties(block),
@@ -112,7 +108,7 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.valueType.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pinNumber));
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pin.getPinNumber()));
         return jaxbDestination;
     }
 }

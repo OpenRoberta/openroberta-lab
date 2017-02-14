@@ -393,14 +393,14 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPinNumber() + ")");
+        this.sb.append("createPinTouchSensor(" + pinTouchSensor.getPin().getPinNumber() + ")");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         this.sb.append("createPinGetValueSensor(CONST." + pinValueSensor.getValueType().toString());
-        this.sb.append(", " + pinValueSensor.getPinNumber() + ")");
+        this.sb.append(", " + pinValueSensor.getPin().getPinNumber() + ")");
         return null;
     }
 
@@ -408,7 +408,7 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
         String end = createClosingBracket();
         this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getValueType().toString());
-        this.sb.append(", " + pinWriteValueSensor.getPinNumber() + ", ");
+        this.sb.append(", " + pinWriteValueSensor.getPin().getPinNumber() + ", ");
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(end);
         return null;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.mode.action.mbed.MbedPins;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -27,12 +28,12 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * To create an instance from this class use the method {@link #make(int, BrickKey, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class PinTouchSensor<V> extends Sensor<V> {
-    private final int pinNumber;
+    private MbedPins pin;
 
-    private PinTouchSensor(int pinNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinTouchSensor(MbedPins pinNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_TOUCH_SENSING"), properties, comment);
-        Assert.isTrue(pinNumber >= 0 && pinNumber <= 3);
-        this.pinNumber = pinNumber;
+        Assert.notNull(pinNumber);
+        this.pin = pinNumber;
         setReadOnly();
     }
 
@@ -44,20 +45,20 @@ public class PinTouchSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PinTouchSensor}
      */
-    public static <V> PinTouchSensor<V> make(int pinNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> PinTouchSensor<V> make(MbedPins pinNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PinTouchSensor<V>(pinNumber, properties, comment);
     }
 
     /**
      * @return get the number of pin.
      */
-    public int getPinNumber() {
-        return this.pinNumber;
+    public MbedPins getPin() {
+        return this.pin;
     }
 
     @Override
     public String toString() {
-        return "PinTouchSensor [" + this.pinNumber + "]";
+        return "PinTouchSensor [" + this.pin.getPinNumber() + "]";
     }
 
     @Override
@@ -75,14 +76,14 @@ public class PinTouchSensor<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String pinNumber = helper.extractField(fields, BlocklyConstants.PIN);
-        return PinTouchSensor.make(Integer.valueOf(pinNumber), helper.extractBlockProperties(block), helper.extractComment(block));
+        return PinTouchSensor.make(MbedPins.findPin(pinNumber), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pinNumber));
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pin.getPinNumber()));
 
         return jaxbDestination;
     }

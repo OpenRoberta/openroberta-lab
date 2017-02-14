@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.mode.action.mbed.MbedPins;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -26,13 +27,13 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  */
 public class PinGetValueSensor<V> extends Sensor<V> {
     private final ValueType valueType;
-    private final int pinNumber;
+    private final MbedPins pin;
 
-    private PinGetValueSensor(int pinNumber, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinGetValueSensor(MbedPins pin, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_VALUE"), properties, comment);
-        Assert.isTrue(pinNumber >= 0 && pinNumber <= 3);
+        Assert.notNull(pin);
         Assert.notNull(valueType);
-        this.pinNumber = pinNumber;
+        this.pin = pin;
         this.valueType = valueType;
         setReadOnly();
     }
@@ -40,27 +41,27 @@ public class PinGetValueSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link PinGetValueSensor}.
      *
-     * @param pinNumber
+     * @param pin
      * @param valueType see {@link ValueType}
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of {@link PinGetValueSensor}
      */
-    public static <V> PinGetValueSensor<V> make(int pinNumber, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinGetValueSensor<V>(pinNumber, valueType, properties, comment);
+    public static <V> PinGetValueSensor<V> make(MbedPins pin, ValueType valueType, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PinGetValueSensor<V>(pin, valueType, properties, comment);
     }
 
     public ValueType getValueType() {
         return this.valueType;
     }
 
-    public int getPinNumber() {
-        return this.pinNumber;
+    public MbedPins getPin() {
+        return this.pin;
     }
 
     @Override
     public String toString() {
-        return "PinValueSensor [" + this.pinNumber + ", " + this.valueType + "]";
+        return "PinValueSensor [" + this.pin.getPinNumber() + ", " + this.valueType + "]";
     }
 
     @Override
@@ -80,7 +81,8 @@ public class PinGetValueSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String pinNumber = helper.extractField(fields, BlocklyConstants.PIN);
         String valueType = helper.extractField(fields, BlocklyConstants.VALUETYPE);
-        return PinGetValueSensor.make(Integer.valueOf(pinNumber), ValueType.get(valueType), helper.extractBlockProperties(block), helper.extractComment(block));
+        return PinGetValueSensor
+            .make(MbedPins.findPin(pinNumber), ValueType.get(valueType), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -89,7 +91,7 @@ public class PinGetValueSensor<V> extends Sensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.valueType.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pinNumber));
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, String.valueOf(this.pin.getPinNumber()));
         return jaxbDestination;
     }
 }

@@ -434,9 +434,9 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.display.scroll(ManagedString(uBit.io.P0.isTouched()));\n"
-            + "uBit.display.scroll(ManagedString(uBit.io.P2.isTouched()));"
-            + "uBit.display.scroll(ManagedString(uBit.io.CAL_P22.isTouched()));"
+            + "uBit.display.scroll(ManagedString(uBit.io.P12.isTouched()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.io.P1.isTouched()));"
+            + "uBit.display.scroll(ManagedString(uBit.io.P16.isTouched()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/pin3_is_touched.xml");
@@ -447,8 +447,8 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.display.scroll(ManagedString(uBit.io.P0.getAnalogValue()));\n"
-            + "uBit.display.scroll(ManagedString(uBit.io.P2.getDigitalValue()));"
+            + "uBit.display.scroll(ManagedString(uBit.io.P12.getAnalogValue()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.io.P1.getDigitalValue()));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
@@ -459,8 +459,8 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.io.P0.setAnalogValue(0);\n"
-            + "uBit.io.P2.setDigitalValue(0);"
+            + "uBit.io.P12.setAnalogValue(0);\n"
+            + "uBit.io.P1.setDigitalValue(0);"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/write_value_to_pin.xml");

@@ -835,12 +835,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("uBit.io.");
-        if ( pinTouchSensor.getPinNumber() == 3 ) {
-            this.sb.append("CAL_P22" + ".isTouched()");
-        } else {
-            this.sb.append("P" + pinTouchSensor.getPinNumber() + ".isTouched()");
-        }
+        this.sb.append("uBit.io." + pinTouchSensor.getPin().getCalliopeName() + ".isTouched()");
         return null;
     }
 
@@ -850,7 +845,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( pinValueSensor.getValueType() == ValueType.DIGITAL ) {
             valueType = "DigitalValue()";
         }
-        this.sb.append("uBit.io.P" + pinValueSensor.getPinNumber() + ".get" + valueType);
+        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName() + ".get" + valueType);
         return null;
     }
 
@@ -860,7 +855,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
             valueType = "DigitalValue(";
         }
-        this.sb.append("uBit.io.P" + pinWriteValueSensor.getPinNumber() + ".set" + valueType);
+        this.sb.append("uBit.io." + pinWriteValueSensor.getPin().getCalliopeName() + ".set" + valueType);
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(");");
         return null;

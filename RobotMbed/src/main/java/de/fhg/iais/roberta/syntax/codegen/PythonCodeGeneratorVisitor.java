@@ -748,7 +748,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         String valueType = pinValueSensor.getValueType().toString().toLowerCase();
-        this.sb.append("microbit.pin" + pinValueSensor.getPinNumber() + ".read_" + valueType + "()");
+        this.sb.append("microbit.pin" + pinValueSensor.getPin().getPinNumber() + ".read_" + valueType + "()");
         return null;
     }
 
@@ -1235,7 +1235,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("microbit.pin" + pinTouchSensor.getPinNumber() + ".is_touched()");
+        this.sb.append("microbit.pin" + pinTouchSensor.getPin().getPinNumber() + ".is_touched()");
         return null;
     }
 
