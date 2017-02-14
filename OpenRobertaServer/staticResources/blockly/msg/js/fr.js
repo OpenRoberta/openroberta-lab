@@ -858,7 +858,7 @@ Blockly.Msg.PLAY_TONE = "note";
 Blockly.Msg.PLAY_TONE_TOOLTIP = "joue une note";
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
-Blockly.Msg.POPUP_2_1_3 = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
+Blockly.Msg.POPUP_2_2_0 = "Version 2.2.0 <ul class='NonIcon'><li>bug fixes for Bot'n Roll, EV3 and Calliope</li><li>new feature - upload custom simulation environments</li><li>new feature - document your programs directly</li></ul>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "je souhaite aider";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab est un environnement de programmation online pour les jeunes qui permet de façon simplifiée et sans obstacles techniques la programmation d'un robot. <br /> L'environnement de programmation est complètement »open source«, Vous pouvez l'améliorer!  Les Open-Source-developpertools sont à votre disposition sur le serveur Fraunhofer";
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab a été développé par Fraunhofer-Instituts IAIS dans le cadre de l'iInitiative  <a href='http://www.roberta-home.de/'>»Roberta – apprendre grâce aux robots«</a>";
@@ -886,7 +886,7 @@ Blockly.Msg.POPUP_EMAIL_SEND = "Envoyer maintenant";
 Blockly.Msg.POPUP_NAME = "Nom";
 Blockly.Msg.POPUP_NEW_PASSWORD = "nouveau mot de passe";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Ancien mot de passe";
-Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.1 <ul class='NonIcon'><li>Calliope - create programs for Calliope</li><li>micro:bit - create Programs for micro:bit©</li><li>New languages: Portuguese, Russian, Polish</li></ul>";  // untranslated
+Blockly.Msg.POPUP_OLD_RELEASE = "Version 2.1.3 <ul class='NonIcon'><li>Calliope - simulate programs for Calliope</li><li>micro:bit - simulate programs for micro:bit©</li><li>new feature - help for programming blocks in the editor (EV3 only)</li></ul>";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Mot de passe";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "réinitialiser le mot de passe";
 Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Le programme n'a pas pu s'exécuter sur le robot.";
@@ -1116,6 +1116,7 @@ Blockly.Msg.TOUR1_DESCRIPTION10 = "Clique sur »Action«";
 Blockly.Msg.TOUR1_DESCRIPTION11 = "Clique et construit le bloc dans le scripte";
 Blockly.Msg.TOUR1_DESCRIPTION12 = "Maintenant fais glisser le nouveau bloc en dessous du start-bloc afin qu'ils soient connectés";
 Blockly.Msg.TOUR1_DESCRIPTION13 = "Maintenant, testes ton programme avec la simulation!";
+Blockly.Msg.TOUR1_DESCRIPTION13a = "and test your program in the simulation!";  // untranslated
 Blockly.Msg.TOUR1_DESCRIPTION14 = "Un moment s'il te plaît!";
 Blockly.Msg.TOUR1_DESCRIPTION15 = "Parfait, <br>ton robot a roulé 20 cm tout droit,<br>c'est ce que tu as programmé!";
 Blockly.Msg.TOUR1_DESCRIPTION16 = "Salut et amuse-toi en essayant encore plus!";
