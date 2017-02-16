@@ -219,7 +219,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', '
         }
         obj.program.getTimer().setCurrentTime(simulationData.time);
         // We multiply the next frame by two because of the unstable framre rate
-        obj.program.setNextFrameTimeDuration(simulationData.frameTime * 2.);
+        obj.program.setNextFrameTimeDuration(simulationData.frameTime * 5.);
     };
 
     var outputSpeeds = function(obj, speeds) {

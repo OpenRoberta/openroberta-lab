@@ -140,7 +140,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
         String scriptName = this.robotCompilerResourcesDir + "/compile.sh";
 
         if ( SystemUtils.IS_OS_WINDOWS ) {
-        	scriptName = this.robotCompilerResourcesDir + "/compile.bat";
+            scriptName = this.robotCompilerResourcesDir + "/compile.bat";
         }
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");
@@ -150,7 +150,8 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
                 scriptName,
                 this.robotCompilerDir,
                 mainFile,
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/"
+                base.resolve(path).toAbsolutePath().normalize().toString() + "/",
+                this.robotCompilerResourcesDir
             });
 
             procBuilder.redirectInput(Redirect.INHERIT);
