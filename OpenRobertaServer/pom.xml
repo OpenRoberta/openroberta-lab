@@ -26,6 +26,11 @@
 			<artifactId>OpenRobertaRobot</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>RobotEV3</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 		</dependency>

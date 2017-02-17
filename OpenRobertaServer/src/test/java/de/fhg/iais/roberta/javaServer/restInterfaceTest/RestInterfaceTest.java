@@ -14,7 +14,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -61,7 +60,6 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  *
  * @author rbudde
  */
-@Ignore
 public class RestInterfaceTest {
 
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
