@@ -1,6 +1,6 @@
 /**
  * A module representing the current program to be executed in the simulation.
- * 
+ *
  * @module robertaLogic/program
  */
 define([ 'robertaLogic.timer' ], function(Timer) {
@@ -13,7 +13,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
         var privateProperties = {
             methods : new Map(),
             program : [],
-            currentMethod : [],
+            currentMethods : [],
             nextStatement : true,
             nextFrameTimeDuration : 0,
             wait : false,
@@ -33,7 +33,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Set array of objects (statements of the program) as program.
-     * 
+     *
      * @param {Object}
      *            newProgram - array of objects (representing statements of the
      *            program).
@@ -50,7 +50,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Get created method in blockly program using the name of the method.
-     * 
+     *
      * @param {String}
      *            methodName - name of the method given by the user
      */
@@ -62,9 +62,20 @@ define([ 'robertaLogic.timer' ], function(Timer) {
         return method;
     };
 
+    Program.prototype.addCustomMethodForEvaluation = function(stmts) {
+      if (stmts != undefined) {
+          privateMem.get(this).currentMethods = privateMem.get(this).currentMethods.concat(stmts);
+      }
+    };
+
+    Program.prototype.merge = function() {
+        this.prepend(privateMem.get(this).currentMethods);
+        privateMem.get(this).currentMethods = [];
+    };
+
     /**
      * Checks if there is new statement to be evaluated.
-     * 
+     *
      * @returns {Boolean} - True if there is still statement that needs to be
      *          evaluated
      */
@@ -74,7 +85,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Check if the program is finished.
-     * 
+     *
      * @returns {Boolean} - True if the program is finished.
      */
     Program.prototype.isTerminated = function() {
@@ -83,7 +94,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Get the next statement that needs to be evaluated.
-     * 
+     *
      * @returns {Object} - statement from the program that is next for
      *          evaluation.
      */
@@ -97,7 +108,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
     /**
      * Get the next statement for evaluation and remove from the queue of
      * program statements.
-     * 
+     *
      * @returns {Object} - statement from the program that is next for
      *          evaluation.
      */
@@ -113,7 +124,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
     /**
      * Appends statement to the array of the program statements. This statement
      * is added at position 0 of the array.
-     * 
+     *
      * @param programPrefix
      *            {Object} - Statement that needs to be added.
      */
@@ -125,7 +136,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Check if the current statement is blocking or not.
-     * 
+     *
      * @returns {Boolean} - true if we have evaluation of a blocking statement,
      *          o/w false
      */
@@ -134,7 +145,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
     };
 
     /**
-     * 
+     *
      * @param {Boolean}
      *            value - true if the statement is blocking
      */
@@ -144,7 +155,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Reset the timer of the simulation.
-     * 
+     *
      * @param {Number}
      *            timeValue - current time
      */
@@ -156,7 +167,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
     /**
      * Set the simulation timer to count and stop evaluation of statements until
      * the given time is reached.
-     * 
+     *
      * @param {Number}
      *            goalTime - until no statement is evaluated
      */
@@ -166,7 +177,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
     };
 
     /**
-     * 
+     *
      * @returns {Timer} - timer of the simulation
      */
     Program.prototype.getTimer = function() {
@@ -184,7 +195,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Controls the execution of the next statement in the array.
-     * 
+     *
      * @param {Boolean}
      *            value - true for the next statement to be evaluated
      */
@@ -201,7 +212,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Set the running timer
-     * 
+     *
      * @param {Boolean}
      *            value- true if the timer is running
      */
@@ -211,11 +222,11 @@ define([ 'robertaLogic.timer' ], function(Timer) {
 
     /**
      * Converting the object to string for debugging.
-     * 
+     *
      * @returns {String} - String representation of the object.
      */
     Program.prototype.toString = function() {
-        return JSON.stringify([ privateMem.get(this).program, privateMem.get(this).timer, privateMem.get(this).nextFrameTimeDuration ]);
+        return JSON.stringify([ privateMem.get(this).program, privateMem.get(this).currentMethods, privateMem.get(this).timer, privateMem.get(this).nextFrameTimeDuration ]);
     };
 
     return Program;
