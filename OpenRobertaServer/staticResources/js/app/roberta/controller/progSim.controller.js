@@ -1,4 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'tour.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, TOUR_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'tour.controller', 'blocks', 'jquery',
+        'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, TOUR_C, Blockly, $) {
 
     var blocklyWorkspace;
     /**
@@ -98,6 +99,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     }
 
     function toggleSim() {
+        Blockly.hideChaff();
         if ($('#simDiv').hasClass('rightActive')) {
             SIM.cancel();
             $(".sim").addClass('hide');
@@ -135,7 +137,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             });
         } else {
             //LOG.info('run ' + GUISTATE_C.getProgramName() + 'in simulation');
-            Blockly.hideChaff();
             var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
             var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
@@ -183,7 +184,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                             Blockly.svgResize(blocklyWorkspace);
                             if (TOUR_C.getInstance()) {
                                 TOUR_C.getInstance().trigger('SimLoaded');
-                            }                            
+                            }
 //                            setTimeout(function() {
 //                                SIM.setPause(false);
 //                            }, 500);
