@@ -62,6 +62,8 @@ define({
 
     ASSIGN_STMT: "AssignStmt",
 
+    ASSIGN_METHOD_PARAMETER_STMT: "AssignMethodParameter",
+
     REPEAT_STMT: "RepeatStmt",
 
     IF_STMT: "IfStatement",
@@ -398,6 +400,8 @@ define({
 
     METHOD_RETURN: "createMethodReturn",
 
+    RETURN_TYPE: "returnType",
+
     METHOD_CALL_VOID: "createMethodCallVoid",
 
     METHOD_CALL_RETURN: "createMethodCallReturn",
@@ -442,7 +446,7 @@ define({
 
     PIN_WRITE_VALUE_SENSOR: "createPinWriteValueSensor",
 
-    PIN: "pin",    
+    PIN: "pin",
 
     COLOR_ENUM: {
         NONE: "NONE",

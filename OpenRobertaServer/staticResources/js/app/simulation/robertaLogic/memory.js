@@ -1,7 +1,7 @@
 /**
  * Module representing the Memory part of the simulation. This is used for
  * storing all the variables used in a program.
- * 
+ *
  * @module robertaLogic/memory
  */
 define(function() {
@@ -15,11 +15,12 @@ define(function() {
          * value).
          */
         this.memory = {};
+        this.methodCalls = new Map();
     };
 
     /**
      * Declaration of a variable used in the program.
-     * 
+     *
      * @param {String}
      *            name - of the variable,
      * @param {}
@@ -37,7 +38,7 @@ define(function() {
 
     /**
      * Assign value to an existing variable in the memory.
-     * 
+     *
      * @param {String}
      *            name - of the variable,
      * @param {}
@@ -55,16 +56,15 @@ define(function() {
 
     /**
      * Return the value of a given variable.
-     * 
+     *
      * @param {String}
      *            name - of the variable,
      * @returns {} - value of the required variable
      */
     Memory.prototype.get = function(name) {
-//        if (this.memory[name] == undefined) {
-//            throw "Variable " + name + " is undefined!";
-//        }
-
+        //        if (this.memory[name] == undefined) {
+        //            throw "Variable " + name + " is undefined!";
+        //        }
         return this.memory[name];
     };
 
@@ -73,11 +73,43 @@ define(function() {
      */
     Memory.prototype.clear = function() {
         this.memory = {};
+        this.methodCalls.clear();
+    };
+
+    /**
+     * Increases the number of calls counter for user defined method.
+     *
+     * @param {String}
+     *            methodName - name of the user defined method,
+     */
+    Memory.prototype.increaseMethodCalls = function(methodName) {
+        var numberOfCalls = this.methodCalls.get(methodName);
+        if (numberOfCalls == undefined) {
+            numberOfCalls = 1;
+        } else {
+            numberOfCalls++;
+        }
+        this.methodCalls.set(methodName, numberOfCalls);
+    };
+
+    /**
+     * Get the number of times a user defined function has been called.
+     *
+     * @param {String}
+     *            methodName - name of the user defined method,
+     * @returns {Number} - of calls of the user defined method
+     */
+    Memory.prototype.getNumberOfMethodCalls = function(methodName) {
+        var numberOfCalls = this.methodCalls.get(methodName);
+        if (numberOfCalls == undefined) {
+            throw 'The method is not defined yet!';
+        }
+        return numberOfCalls;
     };
 
     /**
      * Converting the object to string for debugging.
-     * 
+     *
      * @returns {String} - String representation of the object.
      */
     Memory.prototype.toString = function() {

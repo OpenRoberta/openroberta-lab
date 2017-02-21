@@ -115,6 +115,14 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createAssignMethodParameter(name, value) {
+        var result = {};
+        result[CONST.STMT] = CONST.ASSIGN_METHOD_PARAMETER_STMT;
+        result[CONST.NAME] = name;
+        result[CONST.EXPR] = value;
+        return result;
+    }
+
     function createRepeatStmt(mode, expr, stmtList) {
         if (!Array.isArray(stmtList)) {
             throw "Expression List is not List!";
@@ -505,21 +513,21 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
-    function createMethodReturn(methodName, stmts, return_) {
+    function createMethodReturn(methodName, stmts, returnType, return_) {
         var result = {};
         result[CONST.FUNCTION_DECLARATION] = CONST.METHOD_RETURN;
         result[CONST.NAME] = methodName;
         result[CONST.STMT_LIST] = stmts;
+        result[CONST.RETURN_TYPE] = returnType;
         result[CONST.RETURN] = return_;
         return result;
     }
 
-    function createMethodCallVoid(methodName, parameters, values) {
+    function createMethodCallVoid(methodName, parameters) {
         var result = {};
         result[CONST.STMT] = CONST.METHOD_CALL_VOID;
         result[CONST.NAME] = methodName;
         result[CONST.PARAMETERS] = parameters;
-        result[CONST.VALUES] = values;
         return result;
     }
 

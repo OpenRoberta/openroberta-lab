@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -653,7 +654,9 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
         this.sb.append("var method" + this.methodsNumber + " = createMethodReturn('" + methodReturn.getMethodName() + "', [");
         addInStmt();
         methodReturn.getBody().visit(this);
-        this.sb.append("], ");
+        this.sb.append("], CONST." + methodReturn.getReturnType().toString());
+
+        this.sb.append(", ");
         methodReturn.getReturnValue().visit(this);
         this.sb.append(");\n");
         removeInStmt();
@@ -686,9 +689,23 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
             end = createClosingBracket();
         }
         this.sb.append(name + methodCall.getMethodName() + "', [");
-        methodCall.getParameters().visit(this);
-        this.sb.append("], [");
-        methodCall.getParametersValues().visit(this);
+        List<Expr<V>> parametersNames = methodCall.getParameters().get();
+        List<Expr<V>> parametersValues = methodCall.getParametersValues().get();
+        for ( int i = 0; i < parametersNames.size(); i++ ) {
+            this.sb.append("createAssignMethodParameter(\"");
+            this.sb.append(((Var<V>) parametersNames.get(i)).getValue());
+            this.sb.append("\", ");
+            parametersValues.get(i).visit(this);
+            this.sb.append(")");
+            boolean isLastMethodParameter = i != parametersNames.size() - 1;
+            if ( isLastMethodParameter ) {
+                this.sb.append(", ");
+            }
+
+        }
+        //        methodCall.getParameters().visit(this);
+        //        this.sb.append("], [");
+        //        methodCall.getParametersValues().visit(this);
         this.sb.append("]" + end);
         return null;
     }

@@ -650,7 +650,7 @@ public class Ast2Ev3SimVisitorTest {
     public void createMethodVoidTwoParameters() throws Exception {
         String a =
             "var stmt0 = createMotorOnAction(createConstant(CONST.NUM_CONST, 30), CONST.MOTOR_RIGHT, createDuration(CONST.ROTATIONS, createConstant(CONST.NUM_CONST, 1)));\n"
-                + "var stmt1 = createMethodCallVoid('macheEtwas', [createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.NUMBER, \"x2\")], [createConstant(CONST.NUM_CONST, 10), createConstant(CONST.NUM_CONST, 10)]);\n"
+                + "var stmt1 = createMethodCallVoid('macheEtwas', [createAssignMethodParameter(\"x\", createConstant(CONST.NUM_CONST, 10)), createAssignMethodParameter(\"x2\", createConstant(CONST.NUM_CONST, 10))]);\n"
                 + "var method0 = createMethodVoid('macheEtwas', [createVarDeclaration(CONST.NUMBER, \"x\", createConstant(CONST.NUM_CONST, 0)), createVarDeclaration(CONST.NUMBER, \"x2\", createConstant(CONST.NUM_CONST, 0))], [createShowPictureAction('OLDGLASSES', createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.NUMBER, \"x2\"))]);\n"
                 + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
         assertCodeIsOk(a, "/syntax/methods/method_void_1.xml");
@@ -659,7 +659,7 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createMethodVoidNoParameters() throws Exception {
         String a =
-            "var stmt0 = createMethodCallVoid('test', [], []);\n"
+            "var stmt0 = createMethodCallVoid('test', []);\n"
                 + "var method0 = createMethodVoid('test', [], [createTurnLight(CONST.GREEN, CONST.ON)]);\n"
                 + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0]};";
         assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
@@ -670,8 +670,8 @@ public class Ast2Ev3SimVisitorTest {
         String a =
             "var stmt0 = createVarDeclaration(CONST.NUMBER, \"variablenName\", createConstant(CONST.NUM_CONST, 0));\n"
                 + "var stmt1 = createVarDeclaration(CONST.BOOLEAN, \"variablenName2\", createConstant(CONST.BOOL_CONST, true));\n"
-                + "var stmt2 = createMethodCallVoid('test1', [createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.NUMBER, \"x2\")], [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]);\n"
-                + "var stmt3 = createMethodCallVoid('test2', [], []);\n"
+                + "var stmt2 = createMethodCallVoid('test1', [createAssignMethodParameter(\"x\", createConstant(CONST.NUM_CONST, 0)), createAssignMethodParameter(\"x2\", createConstant(CONST.NUM_CONST, 0))]);\n"
+                + "var stmt3 = createMethodCallVoid('test2', []);\n"
                 + "var method0 = createMethodVoid('test1', [createVarDeclaration(CONST.NUMBER, \"x\", createConstant(CONST.NUM_CONST, 0)), createVarDeclaration(CONST.NUMBER, \"x2\", createConstant(CONST.NUM_CONST, 0))], [createShowTextAction(createConstant(CONST.STRING_CONST, 'Hallo'), createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.NUMBER, \"x2\"))]);\n"
                 + "var method1 = createMethodVoid('test2', [], [createIfReturn(createVarReference(CONST.BOOLEAN, \"variablenName2\"), createConstant(CONST.NULL_CONST, null)), createTurnLight(CONST.GREEN, CONST.ON)]);\n"
                 + "var blocklyProgram = {'programMethods': [method0,method1], 'programStmts': [stmt0,stmt1,stmt2,stmt3]};";
@@ -682,8 +682,8 @@ public class Ast2Ev3SimVisitorTest {
     public void createMethodReturnNumber() throws Exception {
         String a =
             "var stmt0 = createVarDeclaration(CONST.ARRAY_STRING, \"variablenName\", createCreateListWith(CONST.ARRAY_STRING, [createConstant(CONST.STRING_CONST, 'a'), createConstant(CONST.STRING_CONST, 'b'), createConstant(CONST.STRING_CONST, 'c')]));\n"
-                + "var stmt1 = createShowTextAction(createMethodCallReturn('test', [createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.ARRAY_STRING, \"x2\")], [createConstant(CONST.NUM_CONST, 0), createVarReference(CONST.ARRAY_STRING, \"variablenName\")]), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
-                + "var method0 = createMethodReturn('test', [createShowTextAction(createVarReference(CONST.ARRAY_STRING, \"x2\"), createVarReference(CONST.NUMBER, \"x\"), createConstant(CONST.NUM_CONST, 0))], createVarReference(CONST.NUMBER, \"x\"));\n"
+                + "var stmt1 = createShowTextAction(createMethodCallReturn('test', [createAssignMethodParameter(\"x\", createConstant(CONST.NUM_CONST, 0)), createAssignMethodParameter(\"x2\", createVarReference(CONST.ARRAY_STRING, \"variablenName\"))]), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
+                + "var method0 = createMethodReturn('test', [createShowTextAction(createVarReference(CONST.ARRAY_STRING, \"x2\"), createVarReference(CONST.NUMBER, \"x\"), createConstant(CONST.NUM_CONST, 0))], CONST.NUMBER, createVarReference(CONST.NUMBER, \"x\"));\n"
 
                 + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
         assertCodeIsOk(a, "/syntax/methods/method_return_1.xml");
@@ -693,8 +693,8 @@ public class Ast2Ev3SimVisitorTest {
     public void createMethodReturnColor() throws Exception {
         String a =
             "var stmt0 = createVarDeclaration(CONST.ARRAY_STRING, \"variablenName\", createCreateListWith(CONST.ARRAY_STRING, [createConstant(CONST.STRING_CONST, 'a'), createConstant(CONST.STRING_CONST, 'b'), createConstant(CONST.STRING_CONST, 'c')]));\n"
-                + "var stmt1 = createShowTextAction(createMethodCallReturn('test', [], []), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
-                + "var method0 = createMethodReturn('test', [createShowTextAction(createVarReference(CONST.ARRAY_STRING, \"variablenName\"), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))], createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.NONE));\n"
+                + "var stmt1 = createShowTextAction(createMethodCallReturn('test', []), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0));\n"
+                + "var method0 = createMethodReturn('test', [createShowTextAction(createVarReference(CONST.ARRAY_STRING, \"variablenName\"), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))], CONST.COLOR, createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.NONE));\n"
 
                 + "var blocklyProgram = {'programMethods': [method0], 'programStmts': [stmt0,stmt1]};";
         assertCodeIsOk(a, "/syntax/methods/method_return_2.xml");

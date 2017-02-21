@@ -3,7 +3,9 @@
  * reads every statement of the program and gives command to the simulation what
  * the robot should do.
  */
-define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.gyro', 'util', 'robertaLogic.constants'], function(Actors, Memory, Program, Gyro, UTIL, CONSTANTS) {
+define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'robertaLogic.gyro', 'util', 'robertaLogic.constants',
+    'simulation.program.builder'
+], function(Actors, Memory, Program, Gyro, UTIL, CONSTANTS, PROGRAM_BUILDER) {
     var privateMem = new WeakMap();
 
     var internal = function(object) {
@@ -21,6 +23,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         internal(this).simulationData = {};
         internal(this).outputCommands = {};
         internal(this).currentStatement = {};
+        internal(this).modifiedStmt = false;
+        internal(this).funcioncCalls = new WeakMap();
     };
 
     ProgramEval.prototype.getProgram = function() {
@@ -56,6 +60,10 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             switch (stmt.stmt) {
                 case CONSTANTS.ASSIGN_STMT:
                     evalAssignmentStmt(internal(this), stmt);
+                    break;
+
+                case CONSTANTS.ASSIGN_METHOD_PARAMETER_STMT:
+                    evalAssignMethodParameters(internal(this), stmt);
                     break;
 
                 case CONSTANTS.VAR_DECLARATION:
@@ -190,6 +198,13 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 default:
                     throw "Invalid Statement " + stmt.stmt + "!";
             }
+
+            if (internal(this).modifiedStmt) {
+                internal(this).program.addCustomMethodForEvaluation(internal(this).currentStatement);
+                internal(this).program.merge();
+                internal(this).modifiedStmt = false;
+            }
+
         }
         newSpeeds = internal(this).actors.checkCoveredDistanceAndCorrectSpeed(internal(this).program, internal(this).simulationData.correctDrive);
         internal(this).program.handleWaitTimer();
@@ -210,6 +225,17 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var value = evalExpr(obj, stmt.expr, "expr");
         if (typeof value !== 'object') {
             obj.memory.assign(stmt.name, value);
+        }
+    };
+
+    var evalAssignMethodParameters = function(obj, stmt) {
+        var parameterName = stmt.name;
+        var value = stmt.expr;
+        var isParameterDefined = obj.memory.get(parameterName) != undefined;
+        if (isParameterDefined) {
+            obj.memory.assign(parameterName, evalExpr(obj, value));
+        } else {
+            obj.memory.decl(parameterName, evalExpr(obj, value))
         }
     };
 
@@ -238,7 +264,9 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (speeds.right) {
             obj.outputCommands.motors.powerRight = speeds.right;
         }
-        //console.log('left: %s; right: %s', obj.outputCommands.motors.powerLeft, obj.outputCommands.motors.powerRight);
+        // console.log('left: %s; right: %s',
+        // obj.outputCommands.motors.powerLeft,
+        // obj.outputCommands.motors.powerRight);
     };
 
     var evalResetEncoderSensor = function(obj, stmt) {
@@ -325,6 +353,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var x = evalExpr(obj, stmt.x, "x");
         var y = evalExpr(obj, stmt.y, "y");
         var text = evalExpr(obj, stmt.text, "text");
+
         if (typeof x !== 'object' && typeof y !== 'object' && typeof text !== 'object') {
             obj.outputCommands.display = {};
             obj.outputCommands.display.text = String(roundIfSensorData(text, stmt.text.expr));
@@ -344,7 +373,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             }
             obj.program.setIsRunningTimer(true);
             obj.program.resetTimer(simulationData.time);
-            // TODO get the time needed to display this specific string from the simulation or a finish flag.
+            // TODO get the time needed to display this specific string from the
+            // simulation or a finish flag.
             var duration = 0;
             if (stmt.mode == CONSTANTS.TEXT) {
                 duration = (obj.outputCommands.display.text.length + 1) * 7 * 150;
@@ -414,16 +444,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalMethodCallVoid = function(obj, stmt) {
         var methodName = stmt.name;
         var method = obj.program.getMethod(methodName);
-        for (var i = 0; i < stmt.parameters.length; i++) {
-            var parameter = stmt.parameters[i];
-            var value = stmt.values[i]
-            if (obj.memory.get(parameter.name) == undefined) {
-                obj.memory.decl(parameter.name, evalExpr(obj, value))
-            } else {
-                obj.memory.assign(parameter.name, evalExpr(obj, value));
-            }
-        }
         obj.program.prepend(method.stmtList);
+        obj.program.prepend(stmt.parameters);
     };
 
     var evalPinWriteValueSensor = function(obj, stmt) {
@@ -432,20 +454,27 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.outputCommands[stmt.pin][stmt.type] = evalExpr(obj, stmt.value);
     };
 
-    var evalMethodCallReturn = function(obj, name, parameters, values) {
+    var evalMethodCallReturn = function(obj, name, parameters) {
         var method = obj.program.getMethod(name);
-        for (var i = 0; i < parameters.length; i++) {
-            var parameter = parameters[i];
-            var value = values[i]
-            if (obj.memory.get(parameter.name) == undefined) {
-                obj.memory.decl(parameter.name, evalExpr(obj, value))
-            } else {
-                obj.memory.assign(parameter.name, evalExpr(obj, value));
-            }
-        }
+        obj.memory.increaseMethodCalls(name);
+        var numberOfCalls = obj.memory.getNumberOfMethodCalls(name);
+        var funcionCallName = "funct_" + name + "_call_" + numberOfCalls;
+        var returnVariable = createReturnPlaceHolderVariable(method.returnType, funcionCallName);
+        obj.program.addCustomMethodForEvaluation(parameters);
         obj.program.addCustomMethodForEvaluation(method.stmtList);
-
-        return method.return;
+      
+        obj.program.addCustomMethodForEvaluation(returnVariable);
+        return createReferenceToReturnVarible(method.returnType, funcionCallName);
+    };
+    
+    var createReturnPlaceHolderVariable = function(returnType, funcionCallName) {
+        var returnVariable = PROGRAM_BUILDER.build("blocklyProgram=createVarDeclaration(CONST." + returnType + ",\"" + funcionCallName + "\")");
+        returnVariable.value = method.return;
+        return returnVariable;
+    };
+    
+    var createReferenceToReturnVarible = function(returnType, funcionCallName) {
+        return PROGRAM_BUILDER.build("blocklyProgram=createVarReference(CONST." + returnType + ",\"" + funcionCallName + "\")");
     };
 
     var evalTurnAction = function(obj, stmt) {
@@ -682,8 +711,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.METHOD_CALL_RETURN:
                 var value = evalMethodCallReturn(obj, expr.name, expr.parameters, expr.values);
                 obj.currentStatement[name] = value;
-                obj.program.addCustomMethodForEvaluation(obj.currentStatement);
-                obj.program.merge();
+                obj.modifiedStmt = true;
                 return value;
             case CONSTANTS.RGB_COLOR_CONST:
                 return evalRgbColorConst(obj, expr.value);
