@@ -237,6 +237,16 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								class="typcn typcn-input-checked"
 								lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
 						</ul></li>
+					<!-- Menu Gallery -->
+					<li id="head-navigation-gallery"><a href="#"
+						id="head-navi-tooltip-gallery"
+						lkey="Blockly.Msg.MENU_GALLERY_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""> <span
+							id="head-navi-icon-gallery"
+							class="head-navi-icons typcn typcn-puzzle-outline"></span><span
+							class="head-navi-title hidden-sm hidden-md hidden-lg"
+							lkey="Blockly.Msg.MENU_GALLERY">gallery</span>
+					</a></li>
 					<!-- Menu Languages -->
 					<li class="dropdown" id="head-navigation-language"><a href="#"
 						data-toggle="dropdown" class="dropdown-toggle"
@@ -363,6 +373,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					href="#confList">Listing of configurations</a></li>
 				<li class="hidden"><a data-toggle="tab" id="tabLogList"
 					href="#logList">Logging</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabGalleryList"
+					href="#galleryList">Logging</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -551,6 +563,15 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				</button>
 			</div>
 			<table id="logTable">
+			</table>
+		</div>
+		<div id="galleryList" class="tab-pane fade">
+			<div id="galleryListToolbar">
+				<button id="backGalleryList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
+			</div>
+			<table id="galleryTable" class="galleryTable">
 			</table>
 		</div>
 		<div id="bricklyDiv" class="tab-pane fade"></div>
@@ -1056,6 +1077,28 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<button type="button" class="btn btn-primary" id="shareProgram">OK</button>
 					<input type="button" class="btn backButton" data-dismiss="modal"
 						lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--  Popup to show relations / share programs -->
+	<div id="share-with-gallery" class="modal fade">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 id="#headShareGallery" class="modal-title">Share</h3>
+				</div>
+				<!-- <form id="share-program-form"> -->
+				<div class="modal-body">					
+					<table id="galleryPreview" class="galleryTable">
+					</table>
+					<span id="textShareGallery"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="shareWithGallery">OK</button>
+					<button type="button" class="btn backButton" id="cancelShareWithGallery" lkey="Blockly.Msg.POPUP_CANCEL"></button>
 				</div>
 			</div>
 		</div>

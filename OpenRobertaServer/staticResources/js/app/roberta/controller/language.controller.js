@@ -120,6 +120,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#head-navi-tooltip-help').attr('data-original-title', value);
             } else if (lkey === 'Blockly.Msg.MENU_USER_TOOLTIP') {
                 $('#head-navi-tooltip-user').attr('data-original-title', value);
+            } else if (lkey === 'Blockly.Msg.MENU_GALLERY_TOOLTIP') {
+                $('#head-navi-tooltip-gallery').attr('data-original-title', value);
             } else if (lkey === 'Blockly.Msg.MENU_LANGUAGE_TOOLTIP') {
                 $('#head-navi-tooltip-language').attr('data-original-title', value);
             } else if (lkey === 'Blockly.Msg.MENU_USER_STATE_TOOLTIP') {

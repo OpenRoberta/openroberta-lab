@@ -26,4 +26,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
     exports.loadExampleList = loadExampleList;
 
+    /**
+     * Refresh example list
+     */
+    function loadGalleryList(successFn) {
+        COMM.json("/program", {
+            "cmd" : "loadGallery"
+        }, successFn, "load gallery list");
+    }
+    exports.loadGalleryList = loadGalleryList;
+
 });

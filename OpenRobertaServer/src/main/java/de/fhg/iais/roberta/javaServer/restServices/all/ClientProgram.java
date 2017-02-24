@@ -33,17 +33,6 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.javaServer.provider.OraData;
-import de.fhg.iais.roberta.persistence.AbstractProcessor;
-import de.fhg.iais.roberta.persistence.AccessRightProcessor;
-import de.fhg.iais.roberta.persistence.DummyProcessor;
-import de.fhg.iais.roberta.persistence.ProgramProcessor;
-import de.fhg.iais.roberta.persistence.UserProcessor;
-import de.fhg.iais.roberta.persistence.bo.Program;
-import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.ProgramCheckVisitor;
@@ -54,9 +43,20 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import src.main.java.de.fhg.iais.roberta.javaServer.provider.OraData;
+import src.main.java.de.fhg.iais.roberta.persistence.AbstractProcessor;
+import src.main.java.de.fhg.iais.roberta.persistence.AccessRightProcessor;
+import src.main.java.de.fhg.iais.roberta.persistence.DummyProcessor;
+import src.main.java.de.fhg.iais.roberta.persistence.ProgramProcessor;
+import src.main.java.de.fhg.iais.roberta.persistence.UserProcessor;
+import src.main.java.de.fhg.iais.roberta.persistence.bo.Program;
+import src.main.java.de.fhg.iais.roberta.persistence.bo.User;
+import src.main.java.de.fhg.iais.roberta.persistence.util.DbSession;
+import src.main.java.de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import src.main.java.de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import src.main.java.de.fhg.iais.roberta.util.Util;
 
 @Path("/program")
 public class ClientProgram {
@@ -98,8 +98,9 @@ public class ClientProgram {
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
 
-            IRobotFactory robotFactory = httpSessionState.getRobotFactory();
-            ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
+            final IRobotFactory robotFactory = httpSessionState.getRobotFactory();
+            final ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
+            System.out.println(cmd);
 
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
@@ -141,11 +142,12 @@ public class ClientProgram {
                 Util.addResultInfo(response, forMessages);
 
             } else if ( cmd.equals("loadP") && (httpSessionState.isUserLoggedIn() || request.getString("owner").equals("Roberta")) ) {
-                String programName = request.getString("name");
-                String ownerName = request.getString("owner");
-                User owner = up.getUser(ownerName);
-                int ownerID = owner.getId();
-                Program program = pp.getProgram(programName, ownerID, robot);
+                final String programName = request.getString("name");
+                final String ownerName = request.getString("owner");
+                final User owner = up.getUser(ownerName);
+                final int ownerID = owner.getId();
+                System.out.println(ownerID);
+                final Program program = pp.getProgram(programName, ownerID, robot);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
                     response.put("lastChanged", program.getLastChanged().getTime());
@@ -190,6 +192,11 @@ public class ClientProgram {
                 upp.shareToUser(userId, robot, programName, userToShareName, right);
                 Util.addResultInfo(response, upp);
 
+            } else if ( cmd.equals("shareWithGallery") && httpSessionState.isUserLoggedIn() ) {
+                final String programName = request.getString("programName");
+                upp.shareToUser(userId, robot, programName, "Gallery", "READ");
+                Util.addResultInfo(response, upp);
+
             } else if ( cmd.equals("shareDelete") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("programName");
                 String owner = request.getString("owner");
@@ -206,10 +213,27 @@ public class ClientProgram {
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
+            } else if ( cmd.equals("loadGallery") ) {
+                final JSONArray programInfo = pp.getProgramGallery(2);
+                response.put("programNames", programInfo);
+                Util.addResultInfo(response, pp);
+
+            } else if ( cmd.equals("loadProgramEntity") && httpSessionState.isUserLoggedIn() ) {
+                final String programName = request.getString("name");
+                final String ownerName = request.getString("owner");
+                final User owner = up.getUser(ownerName);
+                final int ownerID = owner.getId();
+                final JSONArray program = pp.getProgramEntity(programName, ownerID, robot);
+                if ( program != null ) {
+                    response.put("program", program);
+                }
+                Util.addResultInfo(response, pp);
+
             } else if ( cmd.equals("loadEN") ) {
                 JSONArray programInfo = pp.getProgramInfo(1, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
+
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
                 JSONArray relations = pp.getProgramRelations(programName, userId, robot);

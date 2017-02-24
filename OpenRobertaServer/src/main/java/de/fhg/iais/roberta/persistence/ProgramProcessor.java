@@ -39,7 +39,7 @@ public class ProgramProcessor extends AbstractProcessor {
         if ( !Util1.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
-        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId == 1 ) {
+        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId < 3 ) {
             UserDao userDao = new UserDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
@@ -237,5 +237,67 @@ public class ProgramProcessor extends AbstractProcessor {
         } else {
             setError(Key.PROGRAM_DELETE_ERROR);
         }
+    }
+
+    /**
+     * Get information about all the programs shared with the gallery
+     * 
+     * @param galleryId the gallery user
+     */
+    public JSONArray getProgramGallery(int galleryId) {
+
+        UserDao userDao = new UserDao(this.dbSession);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
+        User owner = userDao.get(galleryId);
+        JSONArray programs = new JSONArray();
+        // Now we find all the programs which are not owned by the gallery but have been shared to it
+        List<AccessRight> accessRights2 = accessRightDao.loadAccessRightsForUser(owner);
+        for ( AccessRight accessRight : accessRights2 ) {
+            Program program = accessRight.getProgram();
+            JSONArray prog = new JSONArray();
+            prog.put(program.getName());
+            prog.put(program.getOwner().getAccount());
+            prog.put(program.getRobot().getName());
+            prog.put(program.getNumberOfBlocks());
+            prog.put(program.getLastChanged().getTime());
+            prog.put(program.getProgramText());
+            prog.put(program.getTags());
+            programs.put(prog);
+        }
+        System.out.println(programs.length());
+        setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programs.length());
+        return programs;
+    }
+
+    public JSONArray getProgramEntity(String programName, int ownerId, String robotName) {
+
+        if ( !Util1.isValidJavaIdentifier(programName) ) {
+            setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
+            return null;
+        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId == 1 ) {
+            UserDao userDao = new UserDao(this.dbSession);
+            RobotDao robotDao = new RobotDao(this.dbSession);
+            ProgramDao programDao = new ProgramDao(this.dbSession);
+            User owner = userDao.get(ownerId);
+            Robot robot = robotDao.loadRobot(robotName);
+            Program program = programDao.load(programName, owner, robot);
+            if ( program != null ) {
+                setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
+                JSONArray prog = new JSONArray();
+                prog.put(program.getName());
+                prog.put(program.getOwner().getAccount());
+                prog.put(program.getRobot().getName());
+                prog.put(program.getNumberOfBlocks());
+                prog.put(program.getLastChanged().getTime());
+                prog.put(program.getProgramText());
+                prog.put(program.getTags());
+                return prog;
+            } else {
+                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN);
+                return null;
+            }
+        }
+        return null;
     }
 }

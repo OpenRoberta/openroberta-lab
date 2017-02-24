@@ -95,6 +95,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
 
     exports.shareProgram = shareProgram;
 
+    function shareProgramWithGallery(programName, successFn) {
+        COMM.json("/program", {
+            "cmd" : "shareWithGallery",
+            "programName" : programName,
+        }, successFn, "share program '" + programName + "' with Gallery");
+    }
+    exports.shareProgramWithGallery = shareProgramWithGallery;
+
     /**
      * Delete the sharing from another user that was selected in program list.
      * 
@@ -151,6 +159,25 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.loadProgramFromListing = loadProgramFromListing;
+
+    /**
+     * Load the program that to share with the gallery.
+     * 
+     * @param programName
+     *            {String} - name of the program
+     * @param ownerName
+     *            {String} - name of the owner of the program
+     * 
+     */
+    function loadProgramEntity(programName, ownerName, successFn) {
+        COMM.json("/program", {
+            "cmd" : "loadProgramEntity",
+            "name" : programName,
+            "owner" : ownerName
+        }, successFn, "load programEntity '" + programName + "' owned by '" + ownerName + "'");
+    }
+
+    exports.loadProgramEntity = loadProgramEntity;
 
     /**
      * Refresh program list
@@ -211,7 +238,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.runOnBrick = runOnBrick;
-    
+
     function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
         COMM.json("/program", {
             "cmd" : "runPBack",

@@ -251,6 +251,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             return false;
         }, 'user clicked');
 
+        $('#head-navigation-gallery').onWrap('click', function(event) {
+            $('#tabGalleryList').click();
+            return false;
+        }, 'gallery clicked');
+
         $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // head-navigation-sim-control
             var domId = event.target.id;
