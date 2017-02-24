@@ -74,6 +74,11 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
                 GUISTATE_C.setProgramSaved(false);
             }
+            if (event.type === Blockly.Events.DELETE) {
+                if (blocklyWorkspace.getAllBlocks().length === 0){
+                    newProgram(true);
+                }
+            }
             $('.selectedHelp').removeClass('selectedHelp');
             if (Blockly.selected && $('#blocklyDiv').hasClass('rightActive')) {
                 var block = Blockly.selected.type;

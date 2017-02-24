@@ -81,6 +81,11 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             if (listenToBricklyEvents && event.type != Blockly.Events.UI && guiStateController.isConfigurationSaved()) {
                 guiStateController.setConfigurationSaved(false);
             }
+            if (event.type === Blockly.Events.DELETE) {
+                if (bricklyWorkspace.getAllBlocks().length === 0){
+                    newConfiguration(true);
+                }
+            }
         });
     }
 
