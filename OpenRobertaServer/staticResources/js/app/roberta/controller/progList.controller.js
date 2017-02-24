@@ -53,7 +53,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 checkbox : true,
                 valign : 'middle',
             }, {
-                field : '7',
                 events : eventsDeleteShareLoad,
                 title : titleActions,
                 align : 'left',
@@ -247,9 +246,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                     } else if (user === 'Gallery') {
                         result.unshift('<span class="typcn typcn-puzzle-outline"></span>&nbsp;' + user);
                     } else if (right === 'READ') {
-                        result.push('<span title="READ" class="typcn typcn-eye"></span>&nbsp;' + user);
+                        result.push('<span class="typcn typcn-eye"></span>&nbsp;' + user);
                     } else {
-                        result.push('<span title="WRITE" class="typcn typcn-pencil"></span>&nbsp;' + user);
+                        result.push('<span class="typcn typcn-pencil"></span>&nbsp;' + user);
                     }
                 });
             });
@@ -272,10 +271,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
             if (row[2].sharedFrom) {
                 result += '<a href="#" class="share disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-                result += '<a href="#" class="gallery disabled" title="Share with gallery"><span class="typcn typcn-puzzle-outline"></span></a>';
+                result += '<a href="#" class="gallery disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
             } else {
                 result += '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-                result += '<a href="#" class="gallery" title="Share with gallery"><span class="typcn typcn-puzzle-outline"></span></a>';
+                result += '<a href="#" class="gallery disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
             }
         }
         result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
