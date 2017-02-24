@@ -406,7 +406,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var isObject = function(obj) {
-        return typeof obj === 'object'
+        return typeof obj === 'object' && !(obj instanceof Array)
     };
 
     var evalToneAction = function(obj, simulationData, stmt) {
@@ -613,31 +613,40 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 if (i == 0) {
                     evalVarDeclaration(obj, stmt.expr.left);
                 }
-                var list = evalExpr(obj, stmt.expr.right);
-                if (i < list.length) {
-                    obj.memory.assign(stmt.expr.left.name, list[i]);
-                    obj.program.prepend([stmt])
-                    obj.program.prepend(stmt.stmtList);
+                obj.currentStatement = stmt.expr
+                var list = evalExpr(obj, stmt.expr.right, "right");
+                obj.currentStatement = stmt;
+                if (!isObject(list)) {
+                    if (i < list.length) {
+                        obj.memory.assign(stmt.expr.left.name, list[i]);
+                        obj.program.prepend([stmt])
+                        obj.program.prepend(stmt.stmtList);
+                    }
                 }
                 break;
             case CONSTANTS.FOR:
-                if (obj.memory.get(stmt.expr[0].name) == undefined) {
-                    obj.memory.decl(stmt.expr[0].name, evalExpr(obj, stmt.expr[1]))
-                } else {
-                    var step = evalExpr(obj, stmt.expr[3]);
-                    var oldValue = obj.memory.get(stmt.expr[0].name);
-                    obj.memory.assign(stmt.expr[0].name, oldValue + step);
-                }
-                var left = obj.memory.get(stmt.expr[0].name);
-                var right = evalExpr(obj, stmt.expr[2]);
-                if (left <= right) {
-                    obj.program.prepend([stmt]);
-                    obj.program.prepend(stmt.stmtList);
+                obj.currentStatement = stmt.expr
+                var from = evalExpr(obj, stmt.expr[1], 1);
+                var to = evalExpr(obj, stmt.expr[2], 2);
+                var step = evalExpr(obj, stmt.expr[3], 3);
+                obj.currentStatement = stmt;
+                if (!isObject(from) && !isObject(to) && !isObject(to)) {
+                    if (obj.memory.get(stmt.expr[0].name) == undefined) {
+                        obj.memory.decl(stmt.expr[0].name, from)
+                    } else {
+                        var oldValue = obj.memory.get(stmt.expr[0].name);
+                        obj.memory.assign(stmt.expr[0].name, oldValue + step);
+                    }
+                    var left = obj.memory.get(stmt.expr[0].name);
+                    if (left <= to) {
+                        obj.program.prepend([stmt]);
+                        obj.program.prepend(stmt.stmtList);
+                    }
                 }
                 break;
             default:
-                var value = evalExpr(obj, stmt.expr);
-                if (value) {
+                var value = evalExpr(obj, stmt.expr, "expr");
+                if (!isObject(value) && value) {
                     obj.program.prepend([stmt]);
                     obj.program.prepend(stmt.stmtList);
                 }
