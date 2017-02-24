@@ -150,10 +150,20 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     function validateLoginUser() {
         $formLogin.removeData('validator')
+        $.validator.addMethod("loginRegex", function(value, element) {
+            return this.optional(element) || /^[a-z0-9\-\s]+$/i.test(value);
+        }, "This field must contain only letters, numbers, or dashes.");
         $formLogin.validate({
             rules : {
-                loginAccountName : "required",
-                loginPassword : "required",
+            	loginAccountName : {
+                    required : true,
+                    maxlength : 15,
+                    loginRegex : true
+                },
+                loginPassword : {
+                    required : true,
+                    minlength : 6
+                },
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
@@ -174,7 +184,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formRegister.removeData('validator');
         $.validator.addMethod("loginRegex", function(value, element) {
             return this.optional(element) || /^[a-z0-9\-\s]+$/i.test(value);
-        }, "Username must contain only letters, numbers, or dashes.");
+        }, "This field must contain only letters, numbers, or dashes.");
         $formRegister.validate({
             rules : {
                 registerAccountName : {
