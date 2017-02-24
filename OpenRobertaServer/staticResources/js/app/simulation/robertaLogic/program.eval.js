@@ -72,7 +72,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
                 case CONSTANTS.IF_STMT:
                     evalIf(internal(this), stmt);
-                    this.step(simulationData);
+                    // this.step(simulationData);
                     break;
 
                 case CONSTANTS.REPEAT_STMT:
@@ -650,7 +650,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         obj.currentStatement = stmt.exprList;
         for (var i = 0; i < stmt.exprList.length; i++) {
             value = evalExpr(obj, stmt.exprList[i], i);
-            if (!isObject(value) && value != undefined) {
+            if (!isObject(value) && value) {
                 programPrefix = stmt.thenList[i];
                 if (obj.program.isWait()) {
                     obj.program.getRemove();
@@ -660,7 +660,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             }
         }
         obj.currentStatement = stmt;
-        if ((programPrefix == undefined || programPrefix == []) && !obj.program.isWait()) {
+        if ((programPrefix == undefined || programPrefix == []) && !obj.program.isWait() && !obj.modifiedStmt) {
             programPrefix = stmt.elseStmts;
         }
         obj.program.prepend(programPrefix);
