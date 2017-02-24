@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -117,6 +118,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -354,7 +356,13 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        Pattern p = Pattern.compile("[^a-zA-Z0-9=+\"!?.%(){} ]");
+        boolean hasSpecialChar = p.matcher(stringConst.getValue()).find();
+        if ( hasSpecialChar ) {
+            stringConst.addInfo(NepoInfo.error("POSSIBLY_DANGEROUS_INPUT"));
+        } else {
+            this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        }
         return null;
     }
 
@@ -1478,7 +1486,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        if (methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn")){
+        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
         return null;
@@ -1676,7 +1684,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
             this.sb.append("SetSensor(");
             switch ( entry.getValue().getType() ) {
                 case COLOR:
-                    this.sb.append("SENSOR_"+entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
+                    this.sb.append("SENSOR_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
                     break;
                 case LIGHT:
                     this.sb.append(entry.getKey() + ", SENSOR_LIGHT);");

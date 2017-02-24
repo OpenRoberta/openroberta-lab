@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -119,6 +120,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -319,7 +321,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        Pattern p = Pattern.compile("[^a-zA-Z0-9=+\"!?.%(){} ]");
+        boolean hasSpecialChar = p.matcher(stringConst.getValue()).find();
+        if ( hasSpecialChar ) {
+            stringConst.addInfo(NepoInfo.error("POSSIBLY_DANGEROUS_INPUT"));
+        } else {
+            this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        }
         return null;
     }
 
