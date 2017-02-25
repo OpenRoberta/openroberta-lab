@@ -54,7 +54,7 @@
 	"COLOUR_BLEND_RATIO": "proporção",
 	"COLOUR_BLEND_TOOLTIP": "Mistura duas cores dada uma proporção (0.0 - 1.0).",
 	"CONTROLS_REPEAT_HELPURL": "http://pt.wikipedia.org/wiki/Estrutura_de_repeti%C3%A7%C3%A3o#Repeti.C3.A7.C3.A3o_com_vari.C3.A1vel_de_controle",
-	"CONTROLS_REPEAT_TITLE": "repire %1 vezes",
+	"CONTROLS_REPEAT_TITLE": "repetir %1 vezes",
 	"CONTROLS_REPEAT_INPUT_DO": "então",
 	"CONTROLS_REPEAT_TOOLTIP": "Faça algumas instruções várias vezes.",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "repita enquanto",

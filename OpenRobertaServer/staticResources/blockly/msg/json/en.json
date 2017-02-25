@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-02-08 18:42:51.354248",
+		"lastupdated": "2017-02-24 21:09:42.541908",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1161,5 +1161,13 @@
 	"MENU_SIM_STOP_TOOLTIP": "Stop your program in the simulation.",
 	"MENU_SIM_IMPORT_TOOLTIP": "Upload your own simulation background image, it will be appended at the end of the background's list.",
 	"MENU_RIGHT_HELP_TOOLTIP": "Open/close help view",
-	"MENU_RIGHT_INFO_TOOLTIP": "Open/close info view"
+	"MENU_RIGHT_INFO_TOOLTIP": "Open/close info view",
+	"DISPLAY_PIXEL_TITLE": "LED",
+	"DISPLAY_PIXEL_BRIGHTNESS": "brightness",
+	"X": "x",
+	"Y": "y",
+	"DISPLAY_GET_PIXEL_TOOLTIP": "Returns the brightness for this led. 0 means the led is turned off, 9 is the brightest value.",
+	"DISPLAY_SET_PIXEL_TOOLTIP": "Sets the brightness for this led. 0 means the led is turned off, 9 is the brightest value.",
+	"DISPLAY_GET_BRIGHTNESS_TOOLTIP": "Returns the brightness for all leds of the display. 0 means all leds are turned off, 9 is the brightest value.",
+	"DISPLAY_SET_BRIGHTNESS_TOOLTIP": "Sets the brightness for all leds of the display. 0 means all leds are turned off, 9 is the brightest value."
 }
