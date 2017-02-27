@@ -347,7 +347,7 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.display.scroll(ManagedString((uBit.random(200) + 1)));\n"
+            + "uBit.display.scroll(ManagedString((uBit.random(200 - 1 + 1) + 1)));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator.xml");
@@ -358,7 +358,7 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.display.scroll(ManagedString((uBit.random(0) + 0)));\n"
+            + "uBit.display.scroll(ManagedString((uBit.random(0 - 0 + 1) + 0)));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/function/random_int_generator_missing_param.xml");
