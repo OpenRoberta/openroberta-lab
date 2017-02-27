@@ -21,7 +21,11 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
@@ -411,6 +415,44 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
         this.sb.append(", " + pinWriteValueSensor.getPin().getPinNumber() + ", ");
         pinWriteValueSensor.getValue().visit(this);
         this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        String end = createClosingBracket();
+        this.sb.append("createDisplaySetBrightnessAction(");
+        displaySetBrightnessAction.getBrightness().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        this.sb.append("createDisplayGetBrightnessAction(CONST.BRIGHTNESS)");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+        String end = createClosingBracket();
+        this.sb.append("createDisplaySetPixelAction(");
+        displaySetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getY().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getBrightness().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+        this.sb.append("createDisplayGetPixelAction(");
+        displayGetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displayGetPixelAction.getY().visit(this);
+        this.sb.append(")");
         return null;
     }
 }

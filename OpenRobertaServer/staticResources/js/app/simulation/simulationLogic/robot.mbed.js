@@ -21,6 +21,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             property = false;
         }
         this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
+        this.display.brightness = 255;
         clearTimeout(this.display.timeout);
 
         this.gesture = {};
@@ -121,6 +122,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
         dx : 30,
         dy : 30,
         lightLevel : 100,
+        brightness : 255, // cannot be changed for microbit
         draw : function(canvas) {
             canvas.beginPath();
             canvas.fillStyle = '#ffffff';
@@ -131,7 +133,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             canvas.globalAlpha = 1;
             for (var i = 0; i < this.leds.length; i++) {
                 for (var j = 0; j < this.leds[i].length; j++) {
-                    var colorIndex = UTIL.round(this.leds[j][i] * 0.035294118, 0);
+                    var thisLED = Math.min(this.leds[j][i], this.brightness);
+                    var colorIndex = UTIL.round(thisLED * 0.035294118, 0);
                     if (colorIndex > 0) {
                         canvas.save();
                         canvas.beginPath();
@@ -231,6 +234,9 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             }
             if (actions.display.clear) {
                 this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
+            }
+            if (actions.display.pixel) {
+                this.display.leds[actions.display.pixel.y][actions.display.pixel.x] = actions.display.pixel.brightness * 255 / 9;
             }
         }
         for (var i = 0; i < 4; i++) {

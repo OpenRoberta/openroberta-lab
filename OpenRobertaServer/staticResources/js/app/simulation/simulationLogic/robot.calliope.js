@@ -220,6 +220,11 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
                     that = this.__proto__.motorB;
                     f(RightSpeed, that);
                 }
+            }           
+        }
+        if (actions.display) {
+            if (actions.display.brightness) {
+                this.display.brightness = Math.round(actions.display.brightness * 255.0 / 9.0, 0);  
             }
         }
     }

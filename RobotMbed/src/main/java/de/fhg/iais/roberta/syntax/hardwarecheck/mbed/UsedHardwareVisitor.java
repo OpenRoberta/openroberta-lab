@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
@@ -13,8 +17,8 @@ import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -122,6 +126,30 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        this.greyScale = true;
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        this.greyScale = true;
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+        this.greyScale = true;
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

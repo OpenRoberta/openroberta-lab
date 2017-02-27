@@ -567,6 +567,38 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createDisplaySetBrightnessAction(value) {
+        var result = {};
+        result[CONST.STMT] = CONST.DISPLAY_SET_BRIGHTNESS_ACTION;
+        result[CONST.VALUE] = value;
+        
+        return result;
+    }
 
+    function createDisplaySetPixelAction(x, y, value) {
+        var result = {};
+        result[CONST.STMT] = CONST.DISPLAY_SET_PIXEL_ACTION;
+        result[CONST.X] = x;
+        result[CONST.Y] = y;
+        result[CONST.VALUE] = value;
+        
+        return result;
+    }
+    
+    function createDisplayGetBrightnessAction(){
+        var result = {};
+        result[CONST.EXPR] = CONST.DISPLAY_GET_BRIGHTNESS_ACTION;
+
+        return result;
+    }
+    
+    function createDisplayGetPixelAction(x, y){
+        var result = {};
+        result[CONST.EXPR] = CONST.DISPLAY_GET_PIXEL_ACTION;
+        result[CONST.X] = x;
+        result[CONST.Y] = y;
+
+        return result;
+    }
 
 });

@@ -613,6 +613,8 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         }
         if (this.robot.display) {
             values.ambientlight = this.robot.display.lightLevel;
+            values.brightness = this.robot.display.brightness;
+            values.pixel = this.robot.display.leds;
         }
         if (this.robot.temperature) {
             values.temperature = this.robot.temperature.degree;

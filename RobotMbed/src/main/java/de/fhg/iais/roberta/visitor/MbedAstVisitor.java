@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
@@ -16,8 +20,8 @@ import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 
 /**
@@ -157,4 +161,32 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param pinWriteValueSensor phrase to be visited
      */
     public V visitPinWriteValueSensor(PinWriteValueSensor<V> pinWriteValueSensor);
+
+    /**
+     * visit a {@link DisplaySetBrightnessAction}.
+     *
+     * @param displaySetBrightnessAction phrase to be visited
+     */
+    public V visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<V> displaySetBrightnessAction);
+
+    /**
+     * visit a {@link DisplayGetBrightnessAction}.
+     *
+     * @param displayGetBrightnessAction phrase to be visited
+     */
+    public V visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<V> displayGetBrightnessAction);
+
+    /**
+     * visit a {@link DisplaySetPixelAction}.
+     *
+     * @param DisplaySetPixelAction phrase to be visited
+     */
+    public V visitDisplaySetPixelAction(DisplaySetPixelAction<V> displaySetPixelAction);
+
+    /**
+     * visit a {@link DisplayGetPixelAction}.
+     *
+     * @param DisplayGetPixelAction phrase to be visited
+     */
+    public V visitDisplayGetPixelAction(DisplayGetPixelAction<V> displayGetPixelAction);
 }

@@ -88,6 +88,7 @@ public final class BlocklyConstants {
     public static final String CHANNEL = "CHANNEL";
     public static final String MESSAGE = "sendData";
     public static final String ADDRESS = "ADDRESS";
+    public static final String BRIGHTNESS = "BRIGHTNESS";
 
     public static final String STRING_CONST_TEXT = "text";
 
@@ -285,12 +286,12 @@ public final class BlocklyConstants {
     public static final String PIN = "PIN";
     public static final String VALUETYPE = "VALUETYPE";
 
-	public static final String MODE = "MODE";
+    public static final String MODE = "MODE";
     public static final String PHRASE = "PHRASE";
     public static final String ANSWER = "ANSWER";
     public static final String WORD = "WORD";
     public static final String LED = "LED";
     public static final String JOINT = "joint";
     public static final String MOVE = "MOVE";
-	public static final String FILENAME = "FILENAME";
+    public static final String FILENAME = "FILENAME";
 }

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -33,7 +34,11 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
@@ -1433,7 +1438,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        // TODO
+        // not supported in micropython
         return null;
     }
 
@@ -1488,7 +1493,48 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("microbit.pin" + pinWriteValueSensor.getPin().getPinNumber());
+        String valueType = "analog(";
+        if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
+            valueType = "digital(";
+        }
+        this.sb.append(".write_" + valueType);
+        pinWriteValueSensor.getValue().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        // not supported in micropython
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        // not supported in micropython
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+        this.sb.append("microbit.display.set_pixel(");
+        displaySetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getY().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getBrightness().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+        this.sb.append("microbit.display.get_pixel(");
+        displayGetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displayGetPixelAction.getY().visit(this);
+        this.sb.append(")");
         return null;
     }
 

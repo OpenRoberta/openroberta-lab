@@ -309,6 +309,18 @@ define({
     AMBIENTLIGHT: "ambientlight",
 
     DISPLAY_TEXT_ACTION: "displayTextAction",
+    
+    BRIGHTNESS: "brightness",
+    
+    PIXEL: "pixel",
+    
+    DISPLAY_SET_BRIGHTNESS_ACTION: "displaySetBrightnessAction",
+    
+    DISPLAY_SET_PIXEL_ACTION: "displaySetPixelAction",
+    
+    DISPLAY_GET_BRIGHTNESS_ACTION: "displayGetBrightnessAction",
+    
+    DISPLAY_GET_PIXEL_ACTION: "displayGetPixelAction",
 
     TIMES: "TIMES",
 

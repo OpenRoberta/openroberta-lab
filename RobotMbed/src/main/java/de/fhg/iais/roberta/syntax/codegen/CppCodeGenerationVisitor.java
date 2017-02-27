@@ -36,7 +36,11 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
@@ -1600,6 +1604,42 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append(", ");
         rgbColor.getB().visit(this);
         this.sb.append(", 255");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        this.sb.append("uBit.display.setBrightness(");
+        displaySetBrightnessAction.getBrightness().visit(this);
+        this.sb.append(" * 255.0 / 9.0);");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        this.sb.append("round(uBit.display.getBrightness() * 9.0 / 255.0)");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+        this.sb.append("uBit.display.image.setPixelValue(");
+        displaySetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getY().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getBrightness().visit(this);
+        this.sb.append(" * 255.0 / 9.0);");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+        this.sb.append("round(uBit.display.image.getPixelValue(");
+        displayGetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displayGetPixelAction.getY().visit(this);
+        this.sb.append(") * 9.0 / 255.0)");
         return null;
     }
 }

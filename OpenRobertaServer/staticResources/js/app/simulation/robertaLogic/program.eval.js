@@ -33,7 +33,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Initialize the program that is executed in the simulation.
-     *
+     * 
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -47,7 +47,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Function that executes one step of the program.
-     *
+     * 
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -109,6 +109,14 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
                 case CONSTANTS.DISPLAY_TEXT_ACTION:
                     evalDisplayTextAction(internal(this), simulationData, stmt);
+                    break;
+                    
+                case CONSTANTS.DISPLAY_SET_BRIGHTNESS_ACTION:
+                    evalDisplaySetBrightnessAction(internal(this), simulationData, stmt);
+                    break;
+                    
+                case CONSTANTS.DISPLAY_SET_PIXEL_ACTION:
+                    evalDisplaySetPixelAction(internal(this), simulationData, stmt);
                     break;
 
                 case CONSTANTS.CLEAR_DISPLAY_ACTION:
@@ -385,6 +393,37 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.program.setTimer(duration);
         }
     };
+    
+    var evalDisplaySetBrightnessAction = function(obj, simulationData, stmt) {
+        var value = evalExpr(obj, stmt.value, "value");
+        if (!isObject(value)) {
+            obj.outputCommands.display = {};
+            obj.outputCommands.display[CONSTANTS.BRIGHTNESS] = value;
+        }
+    }
+    
+    var evalDisplaySetPixelAction = function(obj, simulationData, stmt) {
+        var x = evalExpr(obj, stmt.x, "x");
+        var y = evalExpr(obj, stmt.y, "y");
+        var value = evalExpr(obj, stmt.value, "value");
+        if (!isObject(x) && !isObject(y) && !isObject(value)) {
+            obj.outputCommands.display = {};
+            obj.outputCommands.display[CONSTANTS.PIXEL] = {};
+            obj.outputCommands.display[CONSTANTS.PIXEL][CONSTANTS.X] = x;
+            obj.outputCommands.display[CONSTANTS.PIXEL][CONSTANTS.Y] = y;
+            obj.outputCommands.display[CONSTANTS.PIXEL][CONSTANTS.BRIGHTNESS] = value;
+        }
+    }
+    
+    var evalDisplayGetBrightnessAction = function(obj) {
+        return obj.simulationData[CONSTANTS.BRIGHTNESS];
+    }
+    
+    var evalDisplayGetPixelAction = function(obj, x, y) {
+        var X = evalExpr(obj, x);
+        var Y = evalExpr(obj, y);
+        return obj.simulationData[CONSTANTS.PIXEL][X][Y] * 9.0 / 255.0;
+    }
 
     var roundIfSensorData = function(val, exprType) {
         if ((exprType == CONSTANTS.GET_SAMPLE || exprType == CONSTANTS.ENCODER_SENSOR_SAMPLE) && isNumber(val)) {
@@ -754,6 +793,10 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 return evalMotorGetPowerAction(obj, expr.motorSide);
             case CONSTANTS.GET_VOLUME:
                 return evalGetVolume(obj);
+            case CONSTANTS.DISPLAY_GET_BRIGHTNESS_ACTION:
+                return evalDisplayGetBrightnessAction(obj);
+            case CONSTANTS.DISPLAY_GET_PIXEL_ACTION:
+                return evalDisplayGetPixelAction(obj, expr.x, expr.y);
             case CONSTANTS.METHOD_CALL_RETURN:
                 var value = evalMethodCallReturn(obj, expr.name, expr.parameters, expr.values);
                 obj.currentStatement[name] = value;
