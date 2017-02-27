@@ -801,7 +801,14 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         expressions.get().get(1).visit(this);
         this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
-        this.sb.append("<" + whitespace());
+		int posOpenBracket = expressions.get().toString().lastIndexOf("[");
+		int posClosedBracket = expressions.get().toString().lastIndexOf("]");
+		int counterPos = expressions.get().toString().lastIndexOf("-");
+        if(counterPos > posOpenBracket && counterPos<posClosedBracket){
+			this.sb.append(">" + whitespace());
+		}else{
+			this.sb.append("<" + whitespace());
+		}
         expressions.get().get(2).visit(this);
         this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
