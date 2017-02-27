@@ -1167,7 +1167,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
         this.sb.append("(uBit.random(");
         mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(") + ");
+        this.sb.append(" - ");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(" + 1)");
+        this.sb.append(" + ");
         mathRandomIntFunct.getParam().get(0).visit(this);
         this.sb.append(")");
         return null;
