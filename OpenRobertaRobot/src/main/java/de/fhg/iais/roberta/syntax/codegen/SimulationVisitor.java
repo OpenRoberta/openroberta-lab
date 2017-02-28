@@ -823,7 +823,7 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
                 break;
             case TIMES:
                 this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
-                ((NumConst<V>) ((ExprList<V>) repeatStmt.getExpr()).get().get(2)).visit(this);
+                (((ExprList<V>) repeatStmt.getExpr()).get().get(2)).visit(this);
                 this.sb.append(", [");
                 break;
             case FOREVER:

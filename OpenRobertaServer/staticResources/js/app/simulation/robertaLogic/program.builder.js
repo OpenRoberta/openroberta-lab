@@ -1,4 +1,4 @@
-define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
+define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
 
     function build(program) {
         eval(program);
@@ -381,8 +381,14 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         }
         result = {};
         result[CONST.STMT] = CONST.IF_STMT;
-        result[CONST.EXPR_LIST] = exprList;
-        result[CONST.THEN_LIST] = thenList;
+        result[CONST.EXPR_LIST] = {};
+        for (i = 0; i < exprList.length; i++) {
+            result[CONST.EXPR_LIST][i] = exprList[i];
+        }
+        result[CONST.THEN_LIST] = {};
+        for (i = 0; i < thenList.length; i++) {
+            result[CONST.THEN_LIST][i] = thenList[i];
+        }
         result[CONST.ELSE_STMTS] = elseStmts;
         return result;
     }
@@ -571,7 +577,7 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         var result = {};
         result[CONST.STMT] = CONST.DISPLAY_SET_BRIGHTNESS_ACTION;
         result[CONST.VALUE] = value;
-        
+
         return result;
     }
 
@@ -581,18 +587,18 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         result[CONST.X] = x;
         result[CONST.Y] = y;
         result[CONST.VALUE] = value;
-        
+
         return result;
     }
-    
-    function createDisplayGetBrightnessAction(){
+
+    function createDisplayGetBrightnessAction() {
         var result = {};
         result[CONST.EXPR] = CONST.DISPLAY_GET_BRIGHTNESS_ACTION;
 
         return result;
     }
-    
-    function createDisplayGetPixelAction(x, y){
+
+    function createDisplayGetPixelAction(x, y) {
         var result = {};
         result[CONST.EXPR] = CONST.DISPLAY_GET_PIXEL_ACTION;
         result[CONST.X] = x;
