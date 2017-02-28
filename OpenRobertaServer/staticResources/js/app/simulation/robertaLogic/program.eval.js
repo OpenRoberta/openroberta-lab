@@ -358,7 +358,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var x = evalExpr(obj, stmt.x, "x");
         var y = evalExpr(obj, stmt.y, "y");
         var text = evalExpr(obj, stmt.text, "text");
-
+        text = text.replace(/[^a-zA-Z0-9=+\"!?.%(){} ]/gmi, "");
         if (!isObject(x) && !isObject(y) && !isObject(text)) {
             obj.outputCommands.display = {};
             obj.outputCommands.display.text = String(roundIfSensorData(text, stmt.text.expr));
@@ -369,6 +369,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var evalDisplayTextAction = function(obj, simulationData, stmt) {
         var text = evalExpr(obj, stmt.text, "text");
+        text = text.replace(/[^a-zA-Z0-9=+\"!?.%(){} ]/gmi, "");
         if (!isObject(text)) {
             obj.outputCommands.display = {};
             if (stmt.mode == CONSTANTS.TEXT) {

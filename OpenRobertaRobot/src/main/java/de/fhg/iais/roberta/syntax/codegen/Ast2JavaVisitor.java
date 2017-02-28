@@ -197,13 +197,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        Pattern p = Pattern.compile("[^a-zA-Z0-9=+\"!?.%(){} ]");
-        boolean hasSpecialChar = p.matcher(stringConst.getValue()).find();
-        if ( hasSpecialChar ) {
-            stringConst.addInfo(NepoInfo.error("POSSIBLY_DANGEROUS_INPUT"));
-        } else {
-            this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
-        }
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[^a-zA-Z0-9=+\"!?.%(){} ]", ""))).append("\"");
         return null;
     }
 
@@ -801,14 +795,14 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         expressions.get().get(1).visit(this);
         this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
-	int posOpenBracket = expressions.get().toString().lastIndexOf("[");
-	int posClosedBracket = expressions.get().toString().lastIndexOf("]");
-	int counterPos = expressions.get().toString().lastIndexOf("-");
-        if(counterPos > posOpenBracket && counterPos<posClosedBracket){
-			this.sb.append(">" + whitespace());
-	}else{
-		this.sb.append("<" + whitespace());
-	}
+        int posOpenBracket = expressions.get().toString().lastIndexOf("[");
+        int posClosedBracket = expressions.get().toString().lastIndexOf("]");
+        int counterPos = expressions.get().toString().lastIndexOf("-");
+        if ( counterPos > posOpenBracket && counterPos < posClosedBracket ) {
+            this.sb.append(">" + whitespace());
+        } else {
+            this.sb.append("<" + whitespace());
+        }
         expressions.get().get(2).visit(this);
         this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
