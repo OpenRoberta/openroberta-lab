@@ -27,6 +27,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'pl';
         } else if (navigator.language.indexOf("ru") > -1) {
             language = 'ru';
+        } else if (navigator.language.indexOf("cs") > -1) {
+            language = 'cs';
 //        } else if (navigator.language.indexOf("eu") > -1) {
 //            language = 'eu';
 //        } else if (navigator.language.indexOf("gl") > -1) {
