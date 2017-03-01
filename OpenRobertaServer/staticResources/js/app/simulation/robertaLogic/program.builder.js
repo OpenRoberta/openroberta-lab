@@ -399,7 +399,10 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         }
         var result = {};
         result[CONST.STMT] = CONST.WAIT_STMT;
-        result[CONST.STATEMENTS] = stmtList;
+        result[CONST.STATEMENTS] = {};
+        for (i = 0; i < stmtList.length; i++) {
+            result[CONST.STATEMENTS][i] = stmtList[i];
+        }
         return result;
     }
 

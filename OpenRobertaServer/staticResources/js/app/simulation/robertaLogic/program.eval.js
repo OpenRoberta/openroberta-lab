@@ -697,9 +697,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     }
                     var left = obj.memory.get(stmt.expr[0].name);
                     if (left <= to) {
-                        obj.program.prepend([UTIL.clone(obj.repeatStmtExpr)]);
+                        obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
-                    } else {
                         obj.repeatStmtExpr = {};
                     }
                 }
@@ -708,9 +707,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 var value = evalExpr(obj, "expr");
                 if (!isObject(value) && !obj.modifiedStmt) {
                     if (value) {
-                        obj.program.prepend([UTIL.clone(obj.repeatStmtExpr)]);
+                        obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
-                    } else {
                         obj.repeatStmtExpr = {};
                     }
                 }
@@ -726,7 +724,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             if (!isObject(value) && value && !obj.modifiedStmt) {
                 programPrefix = stmt.thenList[k];
                 if (obj.program.isWait()) {
-                    obj.program.getRemove();
+                    // obj.program.getRemove();
                     obj.program.setWait(false);
                 }
                 break;
@@ -741,11 +739,21 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     var evalWaitStmt = function(obj, stmt) {
         obj.program.setWait(true);
-        obj.program.prepend([stmt]);
-        for (var i = 0; i < stmt.statements.length; i++) {
-            var value = evalIf(obj, "statements", i);
-            if (value) {
-                break;
+        if (UTIL.isEmpty(obj.repeatStmtExpr)) {
+            obj.repeatStmtExpr = UTIL.clone(stmt);
+        }
+        for (var k in stmt.statements) {
+            obj.currentStatement = stmt.statements[k];
+            var value = evalIf(obj, stmt.statements[k]);
+            obj.currentStatement = stmt;
+
+            if (!isObject(value) && !obj.modifiedStmt) {
+                if (value) {
+                    break;
+                } else {
+                    obj.program.prepend([obj.repeatStmtExpr]);
+                    obj.repeatStmtExpr = {};
+                }
             }
         }
     };
@@ -777,7 +785,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.CREATE_LIST_FIND_ITEM:
                 return evalListFindItem(obj, propName + ".position", propName + ".list", propName + ".item");
             case CONSTANTS.CREATE_LISTS_GET_INDEX:
-                return evalListsGetIndex(obj, propName + ".list", propName + ".op", propName + ".position", propName + ".item");
+                return evalListsGetIndex(obj, propName + ".list", expr.op, expr.position, propName + ".item");
             case CONSTANTS.TEXT_JOIN:
                 return evalTextJoin(obj, propName + ".value");
             case CONSTANTS.CREATE_LISTS_GET_SUBLIST:
@@ -802,7 +810,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.RANDOM_DOUBLE:
                 return evalRandDouble();
             case CONSTANTS.MATH_CONSTRAIN_FUNCTION:
-                return evalMathPropFunct(obj, propName + ".value", propName + ".min", propName + ".max");
+                return evalMathConstrainFunct(obj, propName + ".value", propName + ".min", propName + ".max");
             case CONSTANTS.MATH_ON_LIST:
                 return evalMathOnList(obj, propName + expr.op, propName + ".list");
             case CONSTANTS.MATH_PROP_FUNCT:
@@ -908,60 +916,61 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalBinary = function(obj, op, left, right) {
         var valLeft = evalExpr(obj, left);
         var valRight = evalExpr(obj, right);
-        if (!isObject(valLeft) && !isObject(valRight) && !obj.modifiedStmt)
+        if (!isObject(valLeft) && !isObject(valRight) && !obj.modifiedStmt) {
             var val;
-        switch (op) {
-            case CONSTANTS.ADD:
-                val = valLeft + valRight;
-                break;
-            case CONSTANTS.MINUS:
-                val = valLeft - valRight;
-                break;
-            case CONSTANTS.MULTIPLY:
-                val = valLeft * valRight;
-                break;
-            case CONSTANTS.DIVIDE:
-                val = valLeft / valRight;
-                break;
-            case CONSTANTS.POWER:
-                val = Math.pow(valLeft, valRight);
-                break;
-            case CONSTANTS.TEXT_APPEND:
-                valLeft = isNumber(valLeft) ? UTIL.round(valLeft, 2) : valLeft
-                valRight = isNumber(valRight) ? UTIL.round(valRight, 2) : valRight
-                val = String(valLeft) + String(valRight);
-                break;
-            case CONSTANTS.LT:
-                val = valLeft < valRight;
-                break;
-            case CONSTANTS.GT:
-                val = valLeft > valRight;
-                break;
-            case CONSTANTS.EQ:
-                val = valLeft == valRight;
-                break;
-            case CONSTANTS.NEQ:
-                val = valLeft != valRight;
-                break;
-            case CONSTANTS.GTE:
-                val = valLeft >= valRight;
-                break;
-            case CONSTANTS.LTE:
-                val = valLeft <= valRight;
-                break;
-            case CONSTANTS.OR:
-                val = valLeft || valRight;
-                break;
-            case CONSTANTS.AND:
-                val = valLeft && valRight;
-                break;
-            case CONSTANTS.MOD:
-                val = valLeft % valRight;
-                break;
-            default:
-                throw "Invalid Binary Operator";
+            switch (op) {
+                case CONSTANTS.ADD:
+                    val = valLeft + valRight;
+                    break;
+                case CONSTANTS.MINUS:
+                    val = valLeft - valRight;
+                    break;
+                case CONSTANTS.MULTIPLY:
+                    val = valLeft * valRight;
+                    break;
+                case CONSTANTS.DIVIDE:
+                    val = valLeft / valRight;
+                    break;
+                case CONSTANTS.POWER:
+                    val = Math.pow(valLeft, valRight);
+                    break;
+                case CONSTANTS.TEXT_APPEND:
+                    valLeft = isNumber(valLeft) ? UTIL.round(valLeft, 2) : valLeft
+                    valRight = isNumber(valRight) ? UTIL.round(valRight, 2) : valRight
+                    val = String(valLeft) + String(valRight);
+                    break;
+                case CONSTANTS.LT:
+                    val = valLeft < valRight;
+                    break;
+                case CONSTANTS.GT:
+                    val = valLeft > valRight;
+                    break;
+                case CONSTANTS.EQ:
+                    val = valLeft == valRight;
+                    break;
+                case CONSTANTS.NEQ:
+                    val = valLeft != valRight;
+                    break;
+                case CONSTANTS.GTE:
+                    val = valLeft >= valRight;
+                    break;
+                case CONSTANTS.LTE:
+                    val = valLeft <= valRight;
+                    break;
+                case CONSTANTS.OR:
+                    val = valLeft || valRight;
+                    break;
+                case CONSTANTS.AND:
+                    val = valLeft && valRight;
+                    break;
+                case CONSTANTS.MOD:
+                    val = valLeft % valRight;
+                    break;
+                default:
+                    throw "Invalid Binary Operator";
+            }
+            return val;
         }
-        return val;
     };
 
     var evalUnary = function(obj, op, value) {
@@ -1061,7 +1070,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             }
     };
 
-    var evalMathPropFunct = function(obj, val, min, max) {
+    var evalMathConstrainFunct = function(obj, val, min, max) {
         var val_ = evalExpr(obj, val);
         var min_ = evalExpr(obj, min);
         var max_ = evalExpr(obj, max);
@@ -1069,28 +1078,30 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             return Math.min(Math.max(val_, min_), max_);
     };
 
-    var evalMathConstrainFunct = function(obj, val, min, max) {
+    var evalMathPropFunct = function(obj, functionName, arg1, arg2) {
         var val1 = evalExpr(obj, arg1);
-        if (arg2) {
+        if (UTIL.getPropertyFromObject(obj.currentStatement, arg2)) {
             var val2 = evalExpr(obj, arg2);
         }
-        switch (functName) {
-            case 'EVEN':
-                return val1 % 2 == 0;
-            case 'ODD':
-                return val1 % 2 != 0;
-            case 'PRIME':
-                return isPrime(val1);
-            case 'WHOLE':
-                return Number(val1) === val1 && val1 % 1 === 0;
-            case 'POSITIVE':
-                return val1 >= 0;
-            case 'NEGATIVE':
-                return val1 < 0;
-            case 'DIVISIBLE_BY':
-                return val1 % val2 == 0;
-            default:
-                throw "Invalid Math Property Function Name";
+        if (!isObject(val1) && !isObject(val2) && !obj.modifiedStmt) {
+            switch (functionName) {
+                case 'EVEN':
+                    return val1 % 2 == 0;
+                case 'ODD':
+                    return val1 % 2 != 0;
+                case 'PRIME':
+                    return isPrime(val1);
+                case 'WHOLE':
+                    return Number(val1) === val1 && val1 % 1 === 0;
+                case 'POSITIVE':
+                    return val1 >= 0;
+                case 'NEGATIVE':
+                    return val1 < 0;
+                case 'DIVISIBLE_BY':
+                    return val1 % val2 == 0;
+                default:
+                    throw "Invalid Math Property Function Name";
+            }
         }
     };
 
@@ -1138,7 +1149,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var list = evalExpr(obj, value);
         var ite = evalExpr(obj, item);
         if (!isObject(list) && !isObject(ite) && !obj.modifiedStmt) {
-            if (position == FIRST) {
+            if (position == CONSTANTS.FIRST) {
                 return list.indexOf(ite);
             }
             return list.lastIndexOf(ite);
@@ -1148,7 +1159,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalListsGetIndex = function(obj, list, op, position, item) {
         var list = evalExpr(obj, list);
         var it;
-        if (item) {
+        if (UTIL.getPropertyFromObject(obj.currentStatement, item)) {
             it = evalExpr(obj, item);
         }
         if (!isObject(list) && !isObject(it) && !obj.modifiedStmt) {
@@ -1186,7 +1197,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var list = evalExpr(obj, stmt.list);
         var it;
         if (stmt.item) {
-            it = evalExpr(obj, stmt.item);
+            it = evalExpr(obj, "item");
         }
         if (!isObject(list) && !isObject(it) && !obj.modifiedStmt) {
             switch (stmt.position) {
