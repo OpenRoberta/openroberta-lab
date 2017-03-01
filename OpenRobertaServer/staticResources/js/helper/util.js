@@ -61,6 +61,12 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
     }
     exports.clone = clone;
 
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0 && obj.constructor === Object;
+    }
+
+    exports.isEmpty = isEmpty;
+
     function getPropertyFromObject(obj, prop, arrayIndex) {
         //property not found
         if (typeof obj === 'undefined') return false;

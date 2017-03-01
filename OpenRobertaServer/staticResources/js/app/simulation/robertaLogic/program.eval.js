@@ -24,6 +24,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         internal(this).outputCommands = {};
         internal(this).currentStatement = {};
         internal(this).modifiedStmt = false;
+        internal(this).repeatStmtExpr = {};
         internal(this).funcioncCalls = new WeakMap();
     };
 
@@ -43,6 +44,12 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         internal(this).program.setWait(false);
         internal(this).program.set(program);
         internal(this).actors.resetMotorsSpeed();
+        internal(this).simulationData = {};
+        internal(this).outputCommands = {};
+        internal(this).currentStatement = {};
+        internal(this).modifiedStmt = false;
+        internal(this).repeatStmtExpr = {};
+        internal(this).funcioncCalls = new WeakMap();
     };
 
     /**
@@ -650,7 +657,9 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var evalRepeat = function(obj, stmt) {
-        var originalStmt = UTIL.clone(stmt);
+        if (UTIL.isEmpty(obj.repeatStmtExpr)) {
+            obj.repeatStmtExpr = UTIL.clone(stmt);
+        }
         switch (stmt.mode) {
             case CONSTANTS.TIMES:
                 var val = evalExpr(obj, "expr");
@@ -688,16 +697,22 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     }
                     var left = obj.memory.get(stmt.expr[0].name);
                     if (left <= to) {
-                        obj.program.prepend([originalStmt]);
+                        obj.program.prepend([UTIL.clone(obj.repeatStmtExpr)]);
                         obj.program.prepend(stmt.stmtList);
+                    } else {
+                        obj.repeatStmtExpr = {};
                     }
                 }
                 break;
             default:
                 var value = evalExpr(obj, "expr");
-                if (!isObject(value) && value && !obj.modifiedStmt) {
-                    obj.program.prepend([originalStmt]);
-                    obj.program.prepend(stmt.stmtList);
+                if (!isObject(value) && !obj.modifiedStmt) {
+                    if (value) {
+                        obj.program.prepend([UTIL.clone(obj.repeatStmtExpr)]);
+                        obj.program.prepend(stmt.stmtList);
+                    } else {
+                        obj.repeatStmtExpr = {};
+                    }
                 }
         }
     };
