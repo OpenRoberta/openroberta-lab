@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
 import java.util.Date;
-import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
@@ -71,30 +70,23 @@ public class ClientUser {
                 if ( userId != HttpSessionState.NO_USER ) {
                     ClientUser.LOG.info("clear for (logged in) user " + userId + ". Has the user reloaded the page?");
                 }
-
             } else if ( cmd.equals("login") && !httpSessionState.isUserLoggedIn() ) {
                 String userAccountName = request.getString("accountName");
                 String password = request.getString("password");
-                Pattern p = Pattern.compile("[^a-zA-Z0-9]");
-                boolean nameHasSpecialChar = p.matcher(userAccountName).find();
-                if ( nameHasSpecialChar ) {
-                    up.setError(Key.USER_DANGEROUS_SYMBOLS);
-                } else {
-                    User user = up.getUser(userAccountName, password);
-                    Util.addResultInfo(response, up);
-                    if ( user != null ) {
-                        int id = user.getId();
-                        String account = user.getAccount();
-                        String name = user.getUserName();
-                        httpSessionState.setUserClearDataKeepTokenAndRobotId(id);
-                        user.setLastLogin();
-                        response.put("userId", id);
-                        response.put("userRole", user.getRole());
-                        response.put("userAccountName", account);
-                        response.put("userName", name);
-                        ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
-                        AliveData.rememberLogin();
-                    }
+                User user = up.getUser(userAccountName, password);
+                Util.addResultInfo(response, up);
+                if ( user != null ) {
+                    int id = user.getId();
+                    String account = user.getAccount();
+                    String name = user.getUserName();
+                    httpSessionState.setUserClearDataKeepTokenAndRobotId(id);
+                    user.setLastLogin();
+                    response.put("userId", id);
+                    response.put("userRole", user.getRole());
+                    response.put("userAccountName", account);
+                    response.put("userName", name);
+                    ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
+                    AliveData.rememberLogin();
                 }
 
             } else if ( cmd.equals("getUser") && httpSessionState.isUserLoggedIn() ) {

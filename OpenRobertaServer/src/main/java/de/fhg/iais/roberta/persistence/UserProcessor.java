@@ -34,14 +34,22 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     public User getUser(String account, String password) throws Exception {
-        UserDao userDao = new UserDao(this.dbSession);
-        User user = userDao.loadUser(account);
-        if ( user != null && user.isPasswordCorrect(password) ) {
-            setSuccess(Key.USER_GET_ONE_SUCCESS);
-            return user;
-        } else {
-            setError(Key.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
+        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_ ]", Pattern.CASE_INSENSITIVE);
+        Matcher acc_symbols = p.matcher(account);
+        boolean account_check = acc_symbols.find();
+        if ( account_check ) {
+            setError(Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, account);
             return null;
+        } else {
+            UserDao userDao = new UserDao(this.dbSession);
+            User user = userDao.loadUser(account);
+            if ( user != null && user.isPasswordCorrect(password) && !account_check ) {
+                setSuccess(Key.USER_GET_ONE_SUCCESS);
+                return user;
+            } else {
+                setError(Key.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
+                return null;
+            }
         }
     }
 
@@ -70,7 +78,7 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     public void createUser(String account, String password, String userName, String roleAsString, String email, String tags) throws Exception {
-        Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_ ]", Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
         Matcher userName_symbols = p.matcher(userName);
