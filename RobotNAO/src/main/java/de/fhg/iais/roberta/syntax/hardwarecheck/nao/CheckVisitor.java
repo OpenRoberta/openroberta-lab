@@ -107,6 +107,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
@@ -879,6 +880,11 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitNaoGetSampleSensor(NaoGetSampleSensor<Void> naoGetSampleSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
         return null;
     }
 

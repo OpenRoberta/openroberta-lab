@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
@@ -72,7 +73,7 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     /**
      * visit a {@link MoveJoint}.
      *
-     * @param MoveJoint on phrase to be visited
+     * @param ElectricCurrent on phrase to be visited
      */
     V visitMoveJoint(MoveJoint<V> moveJoint);
 
@@ -107,7 +108,7 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     /**
      * visit a {@link MoveJoint}.
      *
-     * @param MoveJoint on phrase to be visited
+     * @param ElectricCurrent on phrase to be visited
      */
     V visitAnimation(Animation<V> animation);
 
@@ -287,4 +288,6 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     V visitDetectFace(DetectFace<V> detectFace);
 
     V visitNaoGetSampleSensor(NaoGetSampleSensor<V> naoGetSampleSensor);
+
+    V visitElectricCurrent(ElectricCurrent<V> electricCurrent);
 }

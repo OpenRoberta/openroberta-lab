@@ -138,6 +138,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
@@ -1702,6 +1703,64 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     @Override
     public Void visitNaoGetSampleSensor(NaoGetSampleSensor<Void> sensorGetSample) {
         return sensorGetSample.getSensor().visit(this);
+    }
+
+    @Override
+    public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
+        this.sb.append("h.getElectricCurrent(");
+        if ( electricCurrent.getJoint() == Joint.HEADYAW ) {
+            this.sb.append("\"HeadYaw\"");
+        } else if ( electricCurrent.getJoint() == Joint.HEADPITCH ) {
+            this.sb.append("\"HeadPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.LSHOULDERPITCH ) {
+            this.sb.append("\"LShoulderPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.LSHOULDERROLL ) {
+            this.sb.append("\"LShoulderRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.LELBOWYAW ) {
+            this.sb.append("\"LElbowYaw\"");
+        } else if ( electricCurrent.getJoint() == Joint.LELBOWROLL ) {
+            this.sb.append("\"LElbowRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.LWRISTYAW ) {
+            this.sb.append("\"LWristYaw\"");
+        } else if ( electricCurrent.getJoint() == Joint.LHAND ) {
+            this.sb.append("\"LHand\"");
+        } else if ( electricCurrent.getJoint() == Joint.LHIPYAWPITCH ) {
+            this.sb.append("\"LHipYawPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.LHIPROLL ) {
+            this.sb.append("\"LHipRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.LHIPPITCH ) {
+            this.sb.append("\"LHipPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.LKNEEPITCH ) {
+            this.sb.append("\"LKneePitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.LANKLEPITCH ) {
+            this.sb.append("\"LAnklePitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.RANKLEROLL ) {
+            this.sb.append("\"RAnkleRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.RHIPYAWPITCH ) {
+            this.sb.append("\"RHipYawPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.RHIPROLL ) {
+            this.sb.append("\"RHipRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.RHIPITCH ) {
+            this.sb.append("\"RHipPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.RKNEEPITCH ) {
+            this.sb.append("\"RKneePitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.RANKLEPITCH ) {
+            this.sb.append("\"RAnklePitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.RSHOULDERPITCH ) {
+            this.sb.append("\"RShoulderPitch\"");
+        } else if ( electricCurrent.getJoint() == Joint.RSHOULDERROLL ) {
+            this.sb.append("\"RShoulderRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.RELBOWYAW ) {
+            this.sb.append("\"RElbowYaw\"");
+        } else if ( electricCurrent.getJoint() == Joint.RELBOWROLL ) {
+            this.sb.append("\"RElbowRoll\"");
+        } else if ( electricCurrent.getJoint() == Joint.RWRISTYAW ) {
+            this.sb.append("\"RWristYaw\"");
+        } else if ( electricCurrent.getJoint() == Joint.RHAND ) {
+            this.sb.append("\"RHand\"");
+        }
+        this.sb.append(")");
+        return null;
     }
 
     @Override
