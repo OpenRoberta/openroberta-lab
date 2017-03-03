@@ -94,7 +94,7 @@ public class Ast2CVisitorTest {
             + "double item2Raw[0];"
             + "double* item2 = item2Raw;"
             + "voidloop(){"
-            + "item += \"zzz\";"
+            + "item =+ \"zzz\";"
             + "while (true) {"
             + "    if (rob.infraredSensorObstacle(1) == true) {"
             + "        break;"
