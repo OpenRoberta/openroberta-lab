@@ -35,7 +35,7 @@ public final class NaoMark<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link NaoMark}
      */
-    private static <V> NaoMark<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> NaoMark<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new NaoMark<V>(properties, comment);
     }
 

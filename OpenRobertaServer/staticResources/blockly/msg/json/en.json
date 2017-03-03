@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-02 21:30:50.512273",
+		"lastupdated": "2017-03-03 12:52:28.490166",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1018,6 +1018,7 @@
 	"NAO_DETECTFACE": "detect face",
 	"NAO_PERFORM": "perform",
 	"NAO_MOVE": "move",
+	"NAO_CURRENT": "electric current of",
 	"NAO_POSTURE_STAND": "Stand",
 	"NAO_POSTURE_STANDINIT": "StandInit",
 	"NAO_POSTURE_STANDZERO": "StandZero",
@@ -1153,6 +1154,7 @@
 	"NAO_MOVEJOINT_TOOLTIP": "Move a single joint.",
 	"NAO_HAND_TOOLTIP": "Open/close a hand.",
 	"NAO_SAY_TOOLTIP": "The robot says the given text.",
+	"NAO_GETCURRENT_TOOLTIP": "Get the electric current from the selected joint.",
 	"MENU_CODE_DOWNLOAD_TOOLTIP": "Download the source code of your program on the computer",
 	"MENU_CODE_REFRESH_TOOLTIP": "Refresh the source code, if you have changed the NEPO Block's.",
 	"MENU_SIM_WRO": "World Robot Olympiad scene",

@@ -35,7 +35,7 @@ public final class Sonar<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Sonar}
      */
-    private static <V> Sonar<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> Sonar<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Sonar<V>(properties, comment);
     }
 

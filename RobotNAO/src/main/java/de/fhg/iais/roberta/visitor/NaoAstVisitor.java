@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -269,19 +270,21 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
      *
      * @param LearnFace on phrase to be visited
      */
-	V visitLearnFace(LearnFace<V> learnFace);
-	
-	/**
+    V visitLearnFace(LearnFace<V> learnFace);
+
+    /**
      * visit a {@link ForgetFace}.
      *
      * @param ForgetFace on phrase to be visited
      */
-	V visitForgetFace(ForgetFace<V> forgetFace);
-	
-	/**
+    V visitForgetFace(ForgetFace<V> forgetFace);
+
+    /**
      * visit a {@link DetectFace}.
      *
      * @param DetectFace on phrase to be visited
      */
-	V visitDetectFace(DetectFace<V> detectFace);
+    V visitDetectFace(DetectFace<V> detectFace);
+
+    V visitNaoGetSampleSensor(NaoGetSampleSensor<V> naoGetSampleSensor);
 }

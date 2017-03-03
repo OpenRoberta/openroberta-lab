@@ -1,20 +1,13 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.Posture;
-import de.fhg.iais.roberta.mode.sensor.nao.Sensor;
-import de.fhg.iais.roberta.mode.sensor.nao.Side;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -39,7 +32,7 @@ public final class DetectFace<V> extends de.fhg.iais.roberta.syntax.sensor.Senso
      * @param comment added from the user,
      * @return read only object of class {@link Touchsensors}
      */
-    private static <V> DetectFace<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> DetectFace<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DetectFace<V>(properties, comment);
     }
 

@@ -35,6 +35,7 @@
 <script src="../core/error.js"></script>
 <script src="../core/comment.js"></script>
 <script src="../core/bubble.js"></script>
+<script src="../core/constants.js"></script>
 <script src="../core/trashcan.js"></script>
 <script src="../blocks/logic.js"></script>
 <script src="../blocks/loops.js"></script>
@@ -266,7 +267,7 @@ h1 {
         <category name='brick'>
         <block type='naoBrick_NAO-Brick'></block>
         </category>
-        <category name='TOOLBOX_MOVEMENT' svg="true">
+        <category name='TOOLBOX_MOVE' svg="true">
             <block type='naoActions_mode'></block>
             <block type='naoActions_applyPosture'></block>
             <block type='naoActions_stiffness'></block>
@@ -313,7 +314,7 @@ h1 {
             </block>
             <block type='naoActions_stop'></block>
         </category>
-        <category name='TOOLBOX_ANIMATIONS' svg="true">
+        <category name='TOOLBOX_ANIMATION' svg="true">
         	<block type='naoActions_animation'></block>
         	<block type='naoActions_pointLookAt'>
                 <value name='X'>
@@ -360,18 +361,6 @@ h1 {
             	<value name='OUT'>
                     <block type='text'>
                         <field name='TEXT'>roberta</field>
-                    </block>
-                </value>
-            </block>
-            <block type='naoActions_dialog'>
-            	<value name='PHRASE'>
-                    <block type='text'>
-                        <field name='TEXT'>What is your name?</field>
-                    </block>
-                </value>
-                <value name='ANSWER'>
-                    <block type='text'>
-                        <field name='TEXT'>NAO</field>
                     </block>
                 </value>
             </block>
@@ -435,8 +424,9 @@ h1 {
         <block type='naoSensors_sonar'></block>        
         <block type='naoSensors_gyrometer'></block>
         <block type='naoSensors_accelerometer'></block>
-        <block type='naoSensors_fsr'></block>3
+        <block type='naoSensors_fsr'></block>
         <block type='naoSensors_naoMark'></block>
+        <block type='naoSensors_getCurrent'></block>
         <block type='naoSensors_learnFace'>
             	<value name='NAME'>
                     <block type='text'>

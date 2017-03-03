@@ -19,8 +19,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_applyPosture</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for applying a posture<br/>
+ * This class represents the <b>naoActions_touchsensor</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for reading the status of the touchsensors<br/>
  * <br/>
  * The client must provide the {@link Posture} (name of posture).
  */
@@ -46,7 +46,7 @@ public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sen
      * @param comment added from the user,
      * @return read only object of class {@link Touchsensors}
      */
-    private static <V> Touchsensors<V> make(Sensor sensor, Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> Touchsensors<V> make(Sensor sensor, Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Touchsensors<V>(sensor, side, properties, comment);
     }
 

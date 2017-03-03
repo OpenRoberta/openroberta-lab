@@ -294,4 +294,11 @@ public final class BlocklyConstants {
     public static final String JOINT = "joint";
     public static final String MOVE = "MOVE";
     public static final String FILENAME = "FILENAME";
+    public static final String NAO_TOUCHSENSOR = "TOUCHSENSOR";
+    public static final String NAO_DETECTFACE = "DETECTFACE";
+    public static final String NAO_NAOMARK = "NAOMARK";
+    public static final String NAO_SONAR = "SONAR";
+    public static final String NAO_GYROMETER = "GYROMETER";
+    public static final String NAO_ACCELEROMETER = "ACCELEROMETER";
+    public static final String NAO_FSR = "FSR";
 }

@@ -45,7 +45,7 @@ public final class ForceSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ForceSensor}
      */
-    private static <V> ForceSensor<V> make(Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> ForceSensor<V> make(Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ForceSensor<V>(side, properties, comment);
     }
 

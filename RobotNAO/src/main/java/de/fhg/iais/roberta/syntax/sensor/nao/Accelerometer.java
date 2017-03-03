@@ -45,7 +45,7 @@ public final class Accelerometer<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Accelerometer}
      */
-    private static <V> Accelerometer<V> make(Coordinates coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> Accelerometer<V> make(Coordinates coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Accelerometer<V>(coordinate, properties, comment);
     }
 

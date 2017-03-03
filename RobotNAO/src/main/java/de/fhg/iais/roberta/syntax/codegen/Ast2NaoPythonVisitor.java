@@ -142,6 +142,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -1696,6 +1697,11 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitDetectFace(DetectFace<Void> detectFace) {
         this.sb.append("h.detectFace()");
         return null;
+    }
+
+    @Override
+    public Void visitNaoGetSampleSensor(NaoGetSampleSensor<Void> sensorGetSample) {
+        return sensorGetSample.getSensor().visit(this);
     }
 
     @Override
