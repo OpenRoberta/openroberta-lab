@@ -19,7 +19,8 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.CalliopeFactory;
+import de.fhg.iais.roberta.factory.AbstractCalliopeFactory;
+import de.fhg.iais.roberta.factory.Calliope2016Factory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
@@ -36,12 +37,12 @@ import de.fhg.iais.roberta.util.Util1;
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
  */
 public class Helper {
-    public static CalliopeFactory factory;
+    public static AbstractCalliopeFactory factory;
 
     static {
         Properties properties = Util1.loadProperties(null);
         RobertaProperties.setRobertaProperties(properties);
-        factory = new CalliopeFactory(null);
+        factory = new Calliope2016Factory(null);
     }
 
     /**

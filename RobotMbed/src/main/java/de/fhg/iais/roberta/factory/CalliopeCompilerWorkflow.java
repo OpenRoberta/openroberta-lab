@@ -137,10 +137,10 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
     Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
 
-        String scriptName = this.robotCompilerResourcesDir + "/compile.sh";
+        String scriptName = this.robotCompilerResourcesDir + "/../compile.sh";
 
         if ( SystemUtils.IS_OS_WINDOWS ) {
-            scriptName = this.robotCompilerResourcesDir + "/compile.bat";
+            scriptName = this.robotCompilerResourcesDir + "/../compile.bat";
         }
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");

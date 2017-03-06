@@ -1105,6 +1105,10 @@
 .typcn-microbit:before {
   content: "\ea65";
 }
-.typcn-calliope:before {
+.typcn-calliope2016:before {
+  content: "\ea66";
+}
+
+.typcn-calliope2017:before {
   content: "\ea66";
 }

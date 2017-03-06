@@ -26,30 +26,18 @@ import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
-import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class CalliopeFactory extends AbstractRobotFactory {
+public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
 
-    private final CalliopeCompilerWorkflow compilerWorkflow;
-    private final MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
-    private final Properties calliopeProperties;
+    protected CalliopeCompilerWorkflow compilerWorkflow;
+    protected MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
+    protected Properties calliopeProperties;
 
-    public CalliopeFactory(RobotCommunicator unusedForArdu) {
-
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("calliope");
-        this.compilerWorkflow =
-            new CalliopeCompilerWorkflow(
-                RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
-        this.calliopeProperties = Util1.loadProperties("classpath:Calliope.properties");
-        this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
-        addBlockTypesFromProperties("Calliope.properties", this.calliopeProperties);
+    public AbstractCalliopeFactory() {
+        super();
     }
 
     @Override
@@ -369,4 +357,5 @@ public class CalliopeFactory extends AbstractRobotFactory {
     public Boolean hasConfiguration() {
         return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
     }
+
 }
