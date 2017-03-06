@@ -368,7 +368,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         } else {
             this.sb.append(getBlocklyTypeCode(var.getTypeVar()));
             if ( var.getTypeVar().isArray() ) {
-                this.sb.append("0>");
+                this.sb.append("N>");
             }
             this.sb.append(whitespace() + var.getName());
         }
@@ -1252,6 +1252,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        List<Expr<Void>> parameters = methodVoid.getParameters().get();
+        for ( Expr<Void> parameter : parameters ) {
+            if ( parameter.getVarType().isArray() ) {
+                this.sb.append("\ntemplate<size_t N>");
+                break;
+            }
+        }
         this.sb.append("\n").append("void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
@@ -1263,6 +1270,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        List<Expr<Void>> parameters = methodReturn.getParameters().get();
+        for ( Expr<Void> parameter : parameters ) {
+            if ( parameter.getVarType().isArray() ) {
+                this.sb.append("\ntemplate<size_t N>");
+                break;
+            }
+        }
         this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
