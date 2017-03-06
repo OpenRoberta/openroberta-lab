@@ -101,8 +101,8 @@ public class ListRepeat<V> extends Function<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.ITEM, List.class));
-        exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
+        exprParams.add(new ExprParam(BlocklyConstants.ITEM, BlocklyType.ARRAY));
+        exprParams.add(new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return ListRepeat.make(BlocklyType.get(filename), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }

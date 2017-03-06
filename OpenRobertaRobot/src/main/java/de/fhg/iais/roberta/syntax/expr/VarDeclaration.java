@@ -144,8 +144,7 @@ public class VarDeclaration<V> extends Expr<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
         BlocklyType typeVar = BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE));
         String name = helper.extractField(fields, BlocklyConstants.VAR);
-        //TODO replace the place holder with the specificType
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, typeVar));
         boolean next = block.getMutation().isNext();
 
         return VarDeclaration

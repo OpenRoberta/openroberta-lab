@@ -18,7 +18,7 @@ public class RadioSendActionTest {
 
     @Test
     public void make_MissingTextMessage_InstanceOfRadioSendActionMissingMessage() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=63, y=38], MainTask [], RadioSendAction [ EmptyExpr [defVal=class java.lang.String] ]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=63, y=38], MainTask [], RadioSendAction [ EmptyExpr [defVal=STRING] ]]]]";
 
         String result = Helper.generateTransformerString("/action/radio_send_missing_message.xml");
 

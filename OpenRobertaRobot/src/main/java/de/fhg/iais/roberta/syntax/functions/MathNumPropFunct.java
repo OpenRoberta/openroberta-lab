@@ -101,11 +101,11 @@ public class MathNumPropFunct<V> extends Function<V> {
         boolean divisorInput = block.getMutation().isDivisorInput();
         String op = helper.extractOperation(block, BlocklyConstants.PROPERTY);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.NUMBER_TO_CHECK, Integer.class));
+        exprParams.add(new ExprParam(BlocklyConstants.NUMBER_TO_CHECK, BlocklyType.NUMBER_INT));
 
         if ( op.equals(BlocklyConstants.DIVISIBLE_BY) ) {
             Assert.isTrue(divisorInput, "Divisor input is not equal to true!");
-            exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, Integer.class));
+            exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return MathNumPropFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));

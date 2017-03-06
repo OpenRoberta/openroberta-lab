@@ -101,8 +101,8 @@ public class IndexOfFunct<V> extends Function<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
-        exprParams.add(new ExprParam(BlocklyConstants.FIND, String.class));
+        exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
+        exprParams.add(new ExprParam(BlocklyConstants.FIND, BlocklyType.STRING));
         String op = helper.getOperation(block, BlocklyConstants.END);
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return IndexOfFunct.make(factory.getIndexLocation(op), params, helper.extractBlockProperties(block), helper.extractComment(block));

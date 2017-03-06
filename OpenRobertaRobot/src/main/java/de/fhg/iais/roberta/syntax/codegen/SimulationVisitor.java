@@ -242,20 +242,21 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitEmptyExpr(EmptyExpr<V> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) {
-            case "java.lang.String":
+        switch ( emptyExpr.getDefVal() ) {
+            case STRING:
                 this.sb.append("createConstant(CONST.STRING_CONST, '')");
                 break;
-            case "java.lang.Boolean":
+            case BOOLEAN:
                 this.sb.append("createConstant(CONST.BOOL_CONST, true)");
                 break;
-            case "java.lang.Integer":
+            case NUMBER_INT:
+            case NUMBER:
                 this.sb.append("createConstant(CONST.NUM_CONST, 0)");
                 break;
-            case "java.util.ArrayList":
+            case ARRAY:
                 this.sb.append("[]");
                 break;
-            case "de.fhg.iais.roberta.syntax.expr.NullConst":
+            case NULL:
                 this.sb.append("createConstant(CONST.NULL_CONST, null)");
                 break;
             default:
@@ -703,9 +704,6 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
             }
 
         }
-        //        methodCall.getParameters().visit(this);
-        //        this.sb.append("], [");
-        //        methodCall.getParametersValues().visit(this);
         this.sb.append("]" + end);
         return null;
     }

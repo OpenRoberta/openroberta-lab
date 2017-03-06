@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -97,8 +96,8 @@ public class MethodIfReturn<V> extends Method<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 2);
-        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, Boolean.class));
-        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, NullConst.class));
+        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, BlocklyType.BOOLEAN));
+        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NULL));
         String mode = block.getMutation().getReturnType() == null ? "void" : block.getMutation().getReturnType();
         return MethodIfReturn.make(
             helper.convertPhraseToExpr(left),

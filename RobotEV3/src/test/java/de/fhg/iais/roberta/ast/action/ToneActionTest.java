@@ -32,7 +32,7 @@ public class ToneActionTest {
     @Test
     public void missing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-8, y=1], ToneAction [EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ToneAction [NumConst [300], EmptyExpr [defVal=class java.lang.Integer]], ToneAction [EmptyExpr [defVal=class java.lang.Integer], NumConst [100]]]]]";
+            "BlockAST [project=[[Location [x=-8, y=1], ToneAction [EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], ToneAction [NumConst [300], EmptyExpr [defVal=NUMBER_INT]], ToneAction [EmptyExpr [defVal=NUMBER_INT], NumConst [100]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_PlaySoundMissing.xml"));
     }
 

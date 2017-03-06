@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
@@ -43,11 +44,11 @@ public final class TakePicture<V> extends Action<V> {
     }
 
     @Override
-	public String toString() {
-		return "TakePicture [" + camera + ", " + msg + "]";
-	}
+    public String toString() {
+        return "TakePicture [" + this.camera + ", " + this.msg + "]";
+    }
 
-	/**
+    /**
      * Creates instance of {@link TakePicture}. This instance is read only and can not be modified.
      *
      * @param port {@link ActorPort} on which the motor is connected,
@@ -63,12 +64,12 @@ public final class TakePicture<V> extends Action<V> {
     public Camera getCamera() {
         return this.camera;
     }
-    
-    public Expr<V> getMsg() {
-		return msg;
-	}
 
-	@Override
+    public Expr<V> getMsg() {
+        return this.msg;
+    }
+
+    @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((NaoAstVisitor<V>) visitor).visitTakePicture(this);
     }
@@ -85,7 +86,7 @@ public final class TakePicture<V> extends Action<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
 
         String camera = helper.extractField(fields, BlocklyConstants.CAMERA);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, Integer.class));
+        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
         return TakePicture.make(Camera.get(camera), helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
     }

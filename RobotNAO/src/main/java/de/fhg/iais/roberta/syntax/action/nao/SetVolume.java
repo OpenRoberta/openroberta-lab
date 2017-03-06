@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -69,7 +70,7 @@ public final class SetVolume<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
 
-        Phrase<V> volume = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, Integer.class));
+        Phrase<V> volume = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, BlocklyType.NUMBER_INT));
 
         return SetVolume.make(helper.convertPhraseToExpr(volume), helper.extractBlockProperties(block), helper.extractComment(block));
     }

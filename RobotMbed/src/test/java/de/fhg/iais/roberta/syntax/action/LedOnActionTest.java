@@ -23,8 +23,7 @@ public class LedOnActionTest {
 
     @Test
     public void make_MissingColor_InstanceOfLedOnActionClassWithMissingLedClor() throws Exception {
-        String expectedResult =
-            "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ EmptyExpr [defVal=class de.fhg.iais.roberta.syntax.expr.mbed.LedColor] ]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=163, y=62], MainTask [], LedOnAction [ EmptyExpr [defVal=COLOR] ]]]]";
 
         String result = Helper.generateTransformerString("/action/led_on_missing_color.xml");
 

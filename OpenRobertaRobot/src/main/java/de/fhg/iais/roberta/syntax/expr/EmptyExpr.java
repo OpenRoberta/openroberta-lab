@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class EmptyExpr<V> extends Expr<V> {
 
-    private final Class<?> defVal;
+    private final BlocklyType defVal;
 
-    private EmptyExpr(Class<?> defVal) {
+    private EmptyExpr(BlocklyType defVal) {
         super(BlockTypeContainer.getByName("EMPTY_EXPR"), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
@@ -28,14 +28,14 @@ public class EmptyExpr<V> extends Expr<V> {
      * @param defVal type of the value that the missing expression should have.
      * @return read only object of class {@link EmptyExpr}.
      */
-    public static <V> EmptyExpr<V> make(Class<?> defVal) {
+    public static <V> EmptyExpr<V> make(BlocklyType defVal) {
         return new EmptyExpr<V>(defVal);
     }
 
     /**
      * @return type of the value that the missing expression should have.
      */
-    public Class<?> getDefVal() {
+    public BlocklyType getDefVal() {
         return this.defVal;
     }
 

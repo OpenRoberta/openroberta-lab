@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -93,9 +94,9 @@ public class ShowTextAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 3);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, String.class));
-        Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL_, Integer.class));
-        Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW_, Integer.class));
+        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
+        Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL_, BlocklyType.NUMBER_INT));
+        Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW_, BlocklyType.NUMBER_INT));
         return ShowTextAction.make(
             helper.convertPhraseToExpr(msg),
             helper.convertPhraseToExpr(col),

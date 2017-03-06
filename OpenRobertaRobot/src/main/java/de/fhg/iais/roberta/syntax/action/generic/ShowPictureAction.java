@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -97,8 +98,8 @@ public class ShowPictureAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 2);
         String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, Integer.class));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, Integer.class));
+        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, BlocklyType.NUMBER_INT));
+        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, BlocklyType.NUMBER_INT));
         return ShowPictureAction.make(
             factory.getShowPicture(pic),
             helper.convertPhraseToExpr(x),

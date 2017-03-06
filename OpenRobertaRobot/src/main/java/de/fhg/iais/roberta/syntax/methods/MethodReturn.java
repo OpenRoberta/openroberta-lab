@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
@@ -138,7 +137,7 @@ public class MethodReturn<V> extends Method<V> {
         helper.convertStmtValList(values, statements, valAndStmt);
         ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
         StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, BlocklyType.NULL));
 
         return MethodReturn.make(
             name,

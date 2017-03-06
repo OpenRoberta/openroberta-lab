@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.syntax.action.generic;
 
 import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
@@ -17,6 +15,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
@@ -83,7 +82,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
         List<Field> fields = helper.extractFields(block, (short) 3);
-        Phrase<V> bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, Null.class));
+        Phrase<V> bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.NULL));
         if ( fields.size() == 3 ) {
             String bluetoothRecieveChannel = helper.extractField(fields, BlocklyConstants.CHANNEL);
             String bluetoothRecieveDataType = helper.extractField(fields, BlocklyConstants.TYPE);

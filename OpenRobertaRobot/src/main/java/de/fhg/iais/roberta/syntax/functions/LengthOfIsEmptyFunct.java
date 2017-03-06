@@ -98,7 +98,7 @@ public class LengthOfIsEmptyFunct<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
+        exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return LengthOfIsEmptyFunct.make(FunctionNames.get(block.getType()), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }

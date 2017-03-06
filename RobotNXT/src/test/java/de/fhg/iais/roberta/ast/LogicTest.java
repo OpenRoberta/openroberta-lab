@@ -9,8 +9,7 @@ public class LogicTest {
 
     @Test
     public void logicCompare() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=1, y=1], Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=1], Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/logic/logic_compare.xml"));
     }
@@ -47,15 +46,14 @@ public class LogicTest {
 
     @Test
     public void logic_operation() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=263, y=-422], Binary [AND, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]]]";
+        String a = "BlockAST [project=[[Location [x=263, y=-422], Binary [AND, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/logic/logic_operation.xml"));
     }
 
     @Test
     public void logic_negate() throws Exception {
-        String a = "BlockAST [project=[[Location [x=157, y=-187], Unary [NOT, EmptyExpr [defVal=class java.lang.Boolean]]]]]";
+        String a = "BlockAST [project=[[Location [x=157, y=-187], Unary [NOT, EmptyExpr [defVal=BOOLEAN]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/logic/logic_negate.xml"));
     }

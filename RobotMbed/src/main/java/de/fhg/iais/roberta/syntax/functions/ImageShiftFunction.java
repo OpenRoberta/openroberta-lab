@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -121,8 +120,8 @@ public class ImageShiftFunction<V> extends Function<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 2);
         IDirection shiftingDirection = factory.getDirection(helper.extractField(fields, BlocklyConstants.OP_));
-        Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, PredefinedImage.class));
-        Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, Integer.class));
+        Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
+        Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
         return ImageShiftFunction.make(
             helper.convertPhraseToExpr(image),
             helper.convertPhraseToExpr(numberOfPositions),

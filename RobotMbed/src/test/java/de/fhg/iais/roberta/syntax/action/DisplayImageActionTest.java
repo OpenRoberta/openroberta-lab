@@ -23,8 +23,7 @@ public class DisplayImageActionTest {
 
     @Test
     public void make_MissingMessage_InstanceOfDisplayTextActionClassWithMissingMessage() throws Exception {
-        String expectedResult =
-            "BlockAST [project=[[Location [x=13, y=13], MainTask [], DisplayImageAction [IMAGE, EmptyExpr [defVal=class java.lang.String]]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=13, y=13], MainTask [], DisplayImageAction [IMAGE, EmptyExpr [defVal=STRING]]]]]";
 
         String result = Helper.generateTransformerString("/action/display_image_missing_image_name.xml");
 

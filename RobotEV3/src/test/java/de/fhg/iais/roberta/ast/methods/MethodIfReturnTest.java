@@ -9,8 +9,8 @@ public class MethodIfReturnTest {
     @Test
     public void methodIfReturn1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMBER, x, EmptyExpr [defVal=class java.lang.Integer], false, false], "
-                + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [port=S1]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=class de.fhg.iais.roberta.syntax.expr.NullConst]]]]]";
+            "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMBER, x, EmptyExpr [defVal=NUMBER], false, false], "
+                + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [port=S1]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=NULL]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_if_return_1.xml"));
 
     }
@@ -19,9 +19,9 @@ public class MethodIfReturnTest {
     public void methodIfReturn2() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=44, y=104], MethodReturn [Funktionsblock,"
-                + " VarDeclaration [NUMBER, x, EmptyExpr [defVal=class java.lang.Integer], true, false],"
-                + " VarDeclaration [NUMBER, x2, EmptyExpr [defVal=class java.lang.Integer], true, false],"
-                + " VarDeclaration [NUMBER, x3, EmptyExpr [defVal=class java.lang.Integer], false, false], "
+                + " VarDeclaration [NUMBER, x, EmptyExpr [defVal=NUMBER], true, false],"
+                + " VarDeclaration [NUMBER, x2, EmptyExpr [defVal=NUMBER], true, false],"
+                + " VarDeclaration [NUMBER, x3, EmptyExpr [defVal=NUMBER], false, false], "
                 + "\nAktionStmt [LightAction [GREEN, ON]]MethodStmt [MethodIfReturn [Binary [EQ, NumConst [0], NumConst [0]], NUMBER, Var [x2]]], NUMBER, Var [x3]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_if_return_2.xml"));
     }

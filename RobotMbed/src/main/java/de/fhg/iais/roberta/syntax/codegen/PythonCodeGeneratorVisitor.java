@@ -376,23 +376,23 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) {
-            case "java.lang.String":
+        switch ( emptyExpr.getDefVal() ) {
+            case STRING:
                 this.sb.append("\"\"");
                 break;
-            case "java.lang.Boolean":
+            case BOOLEAN:
                 this.sb.append("True");
                 break;
-            case "java.lang.Integer":
+            case NUMBER_INT:
                 this.sb.append("0");
                 break;
-            case "java.util.ArrayList":
-            case "de.fhg.iais.roberta.syntax.expr.NullConst":
+            case ARRAY:
+            case NULL:
                 break;
-            case "de.fhg.iais.roberta.syntax.expr.PredefinedImage":
+            case PREDEFINED_IMAGE:
                 this.sb.append("microbit.Image.SILLY");
                 break;
-            case "de.fhg.iais.roberta.syntax.expr.Image":
+            case IMAGE:
                 this.sb.append("microbit.Image()");
                 break;
             default:

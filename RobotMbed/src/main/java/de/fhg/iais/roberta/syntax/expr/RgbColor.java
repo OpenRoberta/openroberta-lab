@@ -96,9 +96,9 @@ public class RgbColor<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 3);
-        Phrase<V> red = helper.extractValue(values, new ExprParam(BlocklyConstants.RED, Integer.class));
-        Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, Integer.class));
-        Phrase<V> blue = helper.extractValue(values, new ExprParam(BlocklyConstants.BLUE, Integer.class));
+        Phrase<V> red = helper.extractValue(values, new ExprParam(BlocklyConstants.RED, BlocklyType.NUMBER_INT));
+        Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, BlocklyType.NUMBER_INT));
+        Phrase<V> blue = helper.extractValue(values, new ExprParam(BlocklyConstants.BLUE, BlocklyType.NUMBER_INT));
         return RgbColor.make(
             helper.convertPhraseToExpr(red),
             helper.convertPhraseToExpr(green),

@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
@@ -73,7 +74,7 @@ public class RecognizeWord<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.WORD, String.class));
+        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.WORD, BlocklyType.STRING));
         return RecognizeWord.make(helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

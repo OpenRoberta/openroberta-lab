@@ -121,10 +121,10 @@ public class ListSetIndex<V> extends Function<V> {
         String op = helper.extractField(fields, BlocklyConstants.MODE_);
 
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.LIST_, String.class));
-        exprParams.add(new ExprParam(BlocklyConstants.TO_, Integer.class));
+        exprParams.add(new ExprParam(BlocklyConstants.LIST_, BlocklyType.STRING));
+        exprParams.add(new ExprParam(BlocklyConstants.TO_, BlocklyType.NUMBER_INT));
         if ( block.getMutation().isAt() ) {
-            exprParams.add(new ExprParam(BlocklyConstants.AT, Integer.class));
+            exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return ListSetIndex.make(

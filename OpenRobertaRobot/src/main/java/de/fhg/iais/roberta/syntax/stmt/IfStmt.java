@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -204,9 +205,9 @@ public class IfStmt<V> extends Stmt<V> {
         if ( block.getType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
             List<Value> values = block.getValue();
             Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
-            Phrase<V> ifExpr = helper.extractValue(values, new ExprParam(BlocklyConstants.IF, Boolean.class));
-            Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, Stmt.class));
-            Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, Stmt.class));
+            Phrase<V> ifExpr = helper.extractValue(values, new ExprParam(BlocklyConstants.IF, BlocklyType.BOOLEAN));
+            Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, BlocklyType.ANY));
+            Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, BlocklyType.ANY));
             StmtList<V> thenList = StmtList.make();
             thenList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(thenStmt)));
             thenList.setReadOnly();

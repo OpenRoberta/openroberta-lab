@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.expr;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -99,7 +98,7 @@ public class ListCreate<V> extends Expr<V> {
         String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
         return ListCreate.make(
             BlocklyType.get(filename),
-            helper.blockToExprList(block, ArrayList.class),
+            helper.blockToExprList(block, BlocklyType.ARRAY),
             helper.extractBlockProperties(block),
             helper.extractComment(block));
     }

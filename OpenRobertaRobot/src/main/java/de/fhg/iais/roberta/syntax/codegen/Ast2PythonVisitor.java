@@ -428,19 +428,19 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) {
-            case "java.lang.String":
+        switch ( emptyExpr.getDefVal() ) {
+            case STRING:
                 this.sb.append("\"\"");
                 break;
-            case "java.lang.Boolean":
+            case BOOLEAN:
                 this.sb.append("True");
                 break;
-            case "java.lang.Integer":
+            case NUMBER_INT:
                 this.sb.append("0");
                 break;
-            case "java.util.ArrayList":
+            case ARRAY:
                 break;
-            case "de.fhg.iais.roberta.syntax.expr.NullConst":
+            case NULL:
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");

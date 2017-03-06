@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -90,7 +91,7 @@ public class WaitStmt<V> extends Stmt<V> {
             helper.convertStmtValList(values, statementss, valAndStmt);
         }
         for ( int i = 0; i <= mutat; i++ ) {
-            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT + i, Boolean.class));
+            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT + i, BlocklyType.BOOLEAN));
             statement = helper.extractStatement(statementss, BlocklyConstants.DO + i);
             list.addStmt(
                 RepeatStmt.make(Mode.WAIT, helper.convertPhraseToExpr(expr), statement, helper.extractBlockProperties(block), helper.extractComment(block)));

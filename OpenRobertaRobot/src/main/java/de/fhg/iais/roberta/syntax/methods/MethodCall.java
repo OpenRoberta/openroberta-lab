@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -118,10 +117,10 @@ public class MethodCall<V> extends Method<V> {
         String methodName = block.getMutation().getName();
         List<Arg> arguments = block.getMutation().getArg();
         ExprList<V> parameters = helper.argumentsToExprList(arguments);
-
+        BlocklyType[] types = helper.argumentsToParametersType(arguments);
         List<Value> values = helper.extractValues(block, (short) arguments.size());
 
-        ExprList<V> parametersValues = helper.valuesToExprList(values, EmptyExpr.class, arguments.size(), BlocklyConstants.ARG);
+        ExprList<V> parametersValues = helper.valuesToExprList(values, types, arguments.size(), BlocklyConstants.ARG);
 
         return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
     }

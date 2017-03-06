@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.syntax.stmt;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -126,7 +125,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
                 var = Var.make(BlocklyType.NUMBER_INT, "k" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
                 from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
-                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
+                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TIMES, BlocklyType.NUMBER_INT));
                 if ( block.getType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {
                     fields = helper.extractFields(block, (short) 1);
                     to = NumConst.make(helper.extractField(fields, BlocklyConstants.TIMES), helper.extractBlockProperties(block), helper.extractComment(block));
@@ -148,9 +147,9 @@ public class RepeatStmt<V> extends Stmt<V> {
                 exprList = ExprList.make();
 
                 var = helper.extractVar(block);
-                from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM_, Integer.class));
-                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO_, Integer.class));
-                by = helper.extractValue(values, new ExprParam(BlocklyConstants.BY_, Integer.class));
+                from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM_, BlocklyType.NUMBER_INT));
+                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO_, BlocklyType.NUMBER_INT));
+                by = helper.extractValue(values, new ExprParam(BlocklyConstants.BY_, BlocklyType.NUMBER_INT));
 
                 exprList.addExpr(helper.convertPhraseToExpr(var));
                 exprList.addExpr(helper.convertPhraseToExpr(from));
@@ -161,7 +160,7 @@ public class RepeatStmt<V> extends Stmt<V> {
             case BlocklyConstants.ROB_CONTROLS_FOR_EACH:
             case BlocklyConstants.CONTROLS_FOR_EACH:
                 fields = helper.extractFields(block, (short) 2);
-                EmptyExpr<V> empty = EmptyExpr.make(Integer.class);
+                EmptyExpr<V> empty = EmptyExpr.make(BlocklyType.NUMBER_INT);
                 var =
                     VarDeclaration.make(
                         BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
@@ -173,7 +172,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                         null);
 
                 values = helper.extractValues(block, (short) 1);
-                exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));
+                exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST_, BlocklyType.ARRAY));
 
                 Binary<V> exprBinary =
                     Binary.make(
@@ -193,11 +192,11 @@ public class RepeatStmt<V> extends Stmt<V> {
                     exprr =
                         Unary.make(
                             Op.NOT,
-                            helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class))),
+                            helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN))),
                             helper.extractBlockProperties(block),
                             helper.extractComment(block));
                 } else {
-                    exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class));
+                    exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN));
                 }
                 return helper.extractRepeatStatement(block, exprr, modee);
             case BlocklyConstants.ROB_CONTROLS_LOOP_FOREVER_ARDU:

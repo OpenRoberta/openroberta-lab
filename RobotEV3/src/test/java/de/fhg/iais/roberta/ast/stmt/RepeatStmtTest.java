@@ -103,7 +103,7 @@ public class RepeatStmtTest {
 
     @Test
     public void repeatStmtWhileUntil2() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-93, y=101], \n" + "(repeat [WHILE, EmptyExpr [defVal=class java.lang.Boolean]]\n)]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=101], \n" + "(repeat [WHILE, EmptyExpr [defVal=BOOLEAN]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_whileUntil2.xml"));
     }
@@ -130,7 +130,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-436, y=284], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [STRING, j, EmptyExpr [defVal=class java.lang.Integer], false, false], EmptyList [STRING]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [STRING, j, EmptyExpr [defVal=NUMBER_INT], false, false], EmptyList [STRING]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
 
@@ -141,7 +141,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-93, y=290], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, i, EmptyExpr [defVal=class java.lang.Integer], false, false], EmptyExpr [defVal=class java.util.ArrayList]]]\n)]]]";
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, i, EmptyExpr [defVal=NUMBER_INT], false, false], EmptyExpr [defVal=ARRAY]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each1.xml"));
     }
@@ -150,7 +150,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach2() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=39, y=60], \n"
-                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, j, EmptyExpr [defVal=class java.lang.Integer], false, false], ListCreate [NUMBER, EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList]]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, j, EmptyExpr [defVal=NUMBER_INT], false, false], ListCreate [NUMBER, EmptyExpr [defVal=ARRAY], EmptyExpr [defVal=ARRAY], EmptyExpr [defVal=ARRAY]]]]\n"
                 + "AktionStmt [LightAction [GREEN, ON]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each2.xml"));
@@ -159,7 +159,7 @@ public class RepeatStmtTest {
     @Test
     public void loopForever() throws Exception {
         String a =
-            "BlockAST[project=[[Location[x=1,y=379],(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN]]]]),(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=classjava.lang.String]]]])]]]";
+            "BlockAST[project=[[Location[x=1,y=379],(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN]]]]),(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=STRING]]]])]]]";
 
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml").replaceAll("\\s+", ""));
     }

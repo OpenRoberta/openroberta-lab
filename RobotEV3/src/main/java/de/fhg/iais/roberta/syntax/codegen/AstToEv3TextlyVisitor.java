@@ -262,11 +262,11 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) {
-            case "java.lang.String":
+        switch ( emptyExpr.getDefVal() ) {
+            case STRING:
                 this.sb.append("\"\"");
                 break;
-            case "java.lang.Boolean":
+            case BOOLEAN:
                 this.sb.append("true");
                 break;
             default:

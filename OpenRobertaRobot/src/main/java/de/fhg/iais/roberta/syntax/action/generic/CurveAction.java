@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -118,16 +119,16 @@ public class CurveAction<V> extends Action<V> {
 
         if ( !block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_CURVE) ) {
             values = helper.extractValues(block, (short) 3);
-            Phrase<V> dist = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
+            Phrase<V> dist = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, BlocklyType.NUMBER_INT));
             MotorDuration<V> md = new MotorDuration<>(factory.getMotorMoveMode("DISTANCE"), helper.convertPhraseToExpr(dist));
-            left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, Integer.class));
-            right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, Integer.class));
+            left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, BlocklyType.NUMBER_INT));
+            right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, BlocklyType.NUMBER_INT));
             mpLeft = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
             mpRight = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(right)).duration(md).build();
         } else {
             values = helper.extractValues(block, (short) 2);
-            left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, Integer.class));
-            right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, Integer.class));
+            left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_LEFT, BlocklyType.NUMBER_INT));
+            right = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER_RIGHT, BlocklyType.NUMBER_INT));
             mpLeft = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).build();
             mpRight = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(right)).build();
         }

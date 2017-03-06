@@ -121,9 +121,9 @@ public class ListGetIndex<V> extends Function<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         String op = helper.extractField(fields, BlocklyConstants.MODE_);
-        exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
+        exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         if ( block.getMutation().isAt() ) {
-            exprParams.add(new ExprParam(BlocklyConstants.AT, Integer.class));
+            exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return ListGetIndex.make(

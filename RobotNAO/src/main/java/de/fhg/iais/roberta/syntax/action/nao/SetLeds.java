@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -86,7 +87,7 @@ public final class SetLeds<V> extends Action<V> {
 
         String leds = helper.extractField(fields, BlocklyConstants.LED);
         String color = helper.extractField(fields, BlocklyConstants.COLOR);
-        Phrase<V> intensity = helper.extractValue(values, new ExprParam(BlocklyConstants.INTENSITY, Integer.class));
+        Phrase<V> intensity = helper.extractValue(values, new ExprParam(BlocklyConstants.INTENSITY, BlocklyType.NUMBER_INT));
 
         return SetLeds
             .make(Led.get(leds), Color.get(color), helper.convertPhraseToExpr(intensity), helper.extractBlockProperties(block), helper.extractComment(block));

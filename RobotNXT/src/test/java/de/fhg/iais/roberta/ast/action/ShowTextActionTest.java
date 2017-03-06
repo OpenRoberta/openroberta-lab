@@ -45,7 +45,7 @@ public class ShowTextActionTest {
     @Test
     public void missing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-7, y=1], ShowTextAction [EmptyExpr [defVal=class java.lang.String], EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=class java.lang.Integer], NumConst [0]], ShowTextAction [StringConst [Hallo], NumConst [0], EmptyExpr [defVal=class java.lang.Integer]]]]]";
+            "BlockAST [project=[[Location [x=-7, y=1], ShowTextAction [EmptyExpr [defVal=STRING], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=NUMBER_INT], NumConst [0]], ShowTextAction [StringConst [Hallo], NumConst [0], EmptyExpr [defVal=NUMBER_INT]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowTextMissing.xml"));
     }
 

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.transformer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Arg;
@@ -194,7 +195,7 @@ abstract public class Jaxb2AstTransformer<V> {
             if ( _else != 0 && i == _elseIf + _else ) {
                 elseList = extractStatement(statements, BlocklyConstants.ELSE);
             } else {
-                Phrase<V> p = extractValue(values, new ExprParam(BlocklyConstants.IF + i, Boolean.class));
+                Phrase<V> p = extractValue(values, new ExprParam(BlocklyConstants.IF + i, BlocklyType.BOOLEAN));
                 exprsList.add(convertPhraseToExpr(p));
                 thenList.add(extractStatement(statements, BlocklyConstants.DO + i));
             }
@@ -231,14 +232,34 @@ abstract public class Jaxb2AstTransformer<V> {
      * @param defVal if the expression is missing
      * @return list of expressions
      */
-    public ExprList<V> blockToExprList(Block block, Class<?> defVal) {
+    public ExprList<V> blockToExprList(Block block, BlocklyType[] defVal) {
         int items = 0;
         if ( block.getMutation().getItems() != null ) {
             items = block.getMutation().getItems().intValue();
         }
+        Assert.isTrue(defVal.length == items);
         List<Value> values = block.getValue();
         Assert.isTrue(values.size() <= items, "Number of values is not less or equal to number of items in mutation!");
         return valuesToExprList(values, defVal, items, BlocklyConstants.ADD);
+    }
+
+    /**
+     * Transforms JAXB {@link Block} to list of expressions.
+     *
+     * @param block to be transformed
+     * @param defVal if the expression is missing
+     * @return list of expressions
+     */
+    public ExprList<V> blockToExprList(Block block, BlocklyType defVal) {
+        int items = 0;
+        if ( block.getMutation().getItems() != null ) {
+            items = block.getMutation().getItems().intValue();
+        }
+        BlocklyType[] types = new BlocklyType[items];
+        Arrays.fill(types, defVal);
+        List<Value> values = block.getValue();
+        Assert.isTrue(values.size() <= items, "Number of values is not less or equal to number of items in mutation!");
+        return valuesToExprList(values, types, items, BlocklyConstants.ADD);
     }
 
     /**
@@ -260,6 +281,23 @@ abstract public class Jaxb2AstTransformer<V> {
         }
         parameters.setReadOnly();
         return parameters;
+    }
+
+    /**
+     * Transforms JAXB list of {@link Arg} objects to list of AST parameters type.
+     *
+     * @param arguments to be transformed
+     * @return array of AST expressions
+     */
+    public BlocklyType[] argumentsToParametersType(List<Arg> arguments) {
+        BlocklyType[] types = new BlocklyType[arguments.size()];
+        int i = 0;
+        for ( Arg arg : arguments ) {
+            types[i] = BlocklyType.get(arg.getType());
+            i++;
+        }
+
+        return types;
     }
 
     /**
@@ -295,10 +333,10 @@ abstract public class Jaxb2AstTransformer<V> {
      * @param name of the values
      * @return
      */
-    public ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems, String name) {
+    public ExprList<V> valuesToExprList(List<Value> values, BlocklyType[] parametersTypes, int nItems, String name) {
         ExprList<V> exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, defVal))));
+            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, parametersTypes[i]))));
         }
         exprList.setReadOnly();
         return exprList;

@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -64,7 +65,7 @@ public class WaitTimeStmt<V> extends Stmt<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT, Integer.class));
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT, BlocklyType.NUMBER_INT));
         return WaitTimeStmt.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

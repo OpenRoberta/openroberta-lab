@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
@@ -92,7 +93,7 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
 
         String pinNumber = helper.extractField(fields, BlocklyConstants.PIN);
         String valueType = helper.extractField(fields, BlocklyConstants.VALUETYPE);
-        Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, int.class));
+        Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
         return PinWriteValueSensor.make(
             MbedPins.findPin(pinNumber),
             ValueType.get(valueType),

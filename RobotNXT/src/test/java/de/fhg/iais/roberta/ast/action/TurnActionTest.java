@@ -40,14 +40,14 @@ public class TurnActionTest {
     @Test
     public void motorDiffTurnMissing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=35, y=84], TurnAction [direction=RIGHT, param=MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=null]]]]]";
+            "BlockAST [project=[[Location [x=35, y=84], TurnAction [direction=RIGHT, param=MotionParam [speed=EmptyExpr [defVal=NUMBER_INT], duration=null]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffTurnMissing.xml"));
     }
 
     @Test
     public void motorDiffTurnForMissing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=27, y=3], TurnAction [direction=RIGHT, param=MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=MotorDuration [type=DEGREE, value=EmptyExpr [defVal=class java.lang.Integer]]]], TurnAction [direction=RIGHT, param=MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=MotorDuration [type=DEGREE, value=NumConst [20]]]], TurnAction [direction=RIGHT, param=MotionParam [speed=NumConst [50], duration=MotorDuration [type=DEGREE, value=EmptyExpr [defVal=class java.lang.Integer]]]]]]]";
+            "BlockAST [project=[[Location [x=27, y=3], TurnAction [direction=RIGHT, param=MotionParam [speed=EmptyExpr [defVal=NUMBER_INT], duration=MotorDuration [type=DEGREE, value=EmptyExpr [defVal=NUMBER_INT]]]], TurnAction [direction=RIGHT, param=MotionParam [speed=EmptyExpr [defVal=NUMBER_INT], duration=MotorDuration [type=DEGREE, value=NumConst [20]]]], TurnAction [direction=RIGHT, param=MotionParam [speed=NumConst [50], duration=MotorDuration [type=DEGREE, value=EmptyExpr [defVal=NUMBER_INT]]]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffTurnForMissing.xml"));
     }
 

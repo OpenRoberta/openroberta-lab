@@ -122,12 +122,12 @@ public class GetSubFunct<V> extends Function<V> {
         strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE1)));
         strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE2)));
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.LIST_, String.class));
+        exprParams.add(new ExprParam(BlocklyConstants.LIST_, BlocklyType.STRING));
         if ( block.getMutation().isAt1() ) {
-            exprParams.add(new ExprParam(BlocklyConstants.AT1, Integer.class));
+            exprParams.add(new ExprParam(BlocklyConstants.AT1, BlocklyType.NUMBER_INT));
         }
         if ( block.getMutation().isAt2() ) {
-            exprParams.add(new ExprParam(BlocklyConstants.AT2, Integer.class));
+            exprParams.add(new ExprParam(BlocklyConstants.AT2, BlocklyType.NUMBER_INT));
         }
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return GetSubFunct.make(FunctionNames.GET_SUBLIST, strParams, params, helper.extractBlockProperties(block), helper.extractComment(block));

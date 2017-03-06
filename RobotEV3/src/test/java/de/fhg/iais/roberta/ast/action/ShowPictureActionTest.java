@@ -39,7 +39,7 @@ public class ShowPictureActionTest {
     @Test
     public void missing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-9, y=3], ShowPictureAction [FLOWERS, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [OLDGLASSES, NumConst [0], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [TACHO, EmptyExpr [defVal=class java.lang.Integer], NumConst [0]]]]]";
+            "BlockAST [project=[[Location [x=-9, y=3], ShowPictureAction [FLOWERS, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]], ShowPictureAction [OLDGLASSES, NumConst [0], EmptyExpr [defVal=NUMBER_INT]], ShowPictureAction [TACHO, EmptyExpr [defVal=NUMBER_INT], NumConst [0]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowPictureMissing.xml"));
     }
 

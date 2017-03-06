@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
@@ -52,15 +53,20 @@ public final class MoveJoint<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MoveJoint}
      */
-    private static <V> MoveJoint<V> make(Joint joint, RelativeAbsolute relativeAbsolute, Expr<V> degrees, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MoveJoint<V> make(
+        Joint joint,
+        RelativeAbsolute relativeAbsolute,
+        Expr<V> degrees,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         return new MoveJoint<V>(joint, relativeAbsolute, degrees, properties, comment);
     }
 
     public RelativeAbsolute getRelativeAbsolute() {
-		return relativeAbsolute;
-	}
+        return this.relativeAbsolute;
+    }
 
-	public Joint getJoint() {
+    public Joint getJoint() {
         return this.joint;
     }
 
@@ -69,9 +75,9 @@ public final class MoveJoint<V> extends Action<V> {
     }
 
     @Override
-	public String toString() {
-		return "MoveJoint [" + joint + ", " + relativeAbsolute + ", " + degrees + "]";
-	}
+    public String toString() {
+        return "MoveJoint [" + this.joint + ", " + this.relativeAbsolute + ", " + this.degrees + "]";
+    }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
@@ -92,9 +98,14 @@ public final class MoveJoint<V> extends Action<V> {
         String joint = helper.extractField(fields, BlocklyConstants.JOINT);
         String relativeAbsolute = helper.extractField(fields, BlocklyConstants.MODE);
 
-        Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+        Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
-        return MoveJoint.make(Joint.get(joint), RelativeAbsolute.get(relativeAbsolute), helper.convertPhraseToExpr(walkDistance), helper.extractBlockProperties(block), helper.extractComment(block));
+        return MoveJoint.make(
+            Joint.get(joint),
+            RelativeAbsolute.get(relativeAbsolute),
+            helper.convertPhraseToExpr(walkDistance),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

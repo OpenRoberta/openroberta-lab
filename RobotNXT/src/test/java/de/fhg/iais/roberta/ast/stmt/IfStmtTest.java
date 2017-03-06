@@ -12,7 +12,7 @@ public class IfStmtTest {
     public void ifStmt() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=68, y=133], \n"
-                + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
+                + "if Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + "]]]";
@@ -24,7 +24,7 @@ public class IfStmtTest {
     public void ifStmt1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=68, y=133], \n"
-                + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
+                + "if Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else\n"
@@ -38,7 +38,7 @@ public class IfStmtTest {
     public void getExpr() throws Exception {
         IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
 
-        String a = "[Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]";
+        String a = "[Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]";
         Assert.assertEquals(a, ifStmt.getExpr().toString());
     }
 
@@ -125,7 +125,7 @@ public class IfStmtTest {
     public void ifStmt6() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=68, y=133], \n"
-                + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
+                + "if Binary [EQ, EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else\n"
@@ -150,7 +150,7 @@ public class IfStmtTest {
 
     @Test
     public void ifStmt8() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-93, y=1], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=1], \nif EmptyExpr [defVal=BOOLEAN]\n,then\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt8.xml"));
     }
@@ -158,13 +158,13 @@ public class IfStmtTest {
     @Test
     public void ifStmt9() throws Exception {
 
-        String a = "BlockAST [project=[[Location [x=-93, y=90], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=90], \nif EmptyExpr [defVal=BOOLEAN]\n,then\n]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt9.xml"));
     }
 
     @Test
     public void ifStmt10() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-93, y=179], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=179], \nif EmptyExpr [defVal=BOOLEAN]\n,then\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt10.xml"));
     }

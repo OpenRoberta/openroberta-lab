@@ -19,8 +19,7 @@ public class DisplayTextActionTest {
 
     @Test
     public void make_MissingMessage_InstanceOfDisplayTextActionClassWithMissingMessage() throws Exception {
-        String expectedResult =
-            "BlockAST [project=[[Location [x=63, y=63], MainTask [], DisplayTextAction [TEXT, EmptyExpr [defVal=class java.lang.String]]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=63, y=63], MainTask [], DisplayTextAction [TEXT, EmptyExpr [defVal=STRING]]]]]";
 
         String result = Helper.generateTransformerString("/action/display_text_missing_message.xml");
 

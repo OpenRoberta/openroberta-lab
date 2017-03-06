@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
@@ -41,7 +42,6 @@ public final class RecordVideo<V> extends Action<V> {
     private final Expr<V> duration;
     private final Expr<V> msg;
 
-
     private RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("RECORD_VIDEO"), properties, comment);
         Assert.notNull(resolution, "Missing resolution in RecordVideo block!");
@@ -62,7 +62,13 @@ public final class RecordVideo<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RecordVideo}
      */
-    private static <V> RecordVideo<V> make(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> RecordVideo<V> make(
+        Resolution resolution,
+        Camera camera,
+        Expr<V> duration,
+        Expr<V> msg,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         return new RecordVideo<V>(resolution, camera, duration, msg, properties, comment);
     }
 
@@ -77,7 +83,7 @@ public final class RecordVideo<V> extends Action<V> {
     public Expr<V> getDuration() {
         return this.duration;
     }
-    
+
     public Expr<V> getMsg() {
         return this.msg;
     }
@@ -100,8 +106,8 @@ public final class RecordVideo<V> extends Action<V> {
 
         String resolution = helper.extractField(fields, BlocklyConstants.RESOLUTION);
         String camera = helper.extractField(fields, BlocklyConstants.CAMERA);
-        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, Integer.class));
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, Integer.class));
+        Phrase<V> duration = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, BlocklyType.NUMBER_INT));
+        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.FILENAME, BlocklyType.NUMBER_INT));
 
         return RecordVideo.make(
             Resolution.get(resolution),

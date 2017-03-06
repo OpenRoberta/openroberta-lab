@@ -47,8 +47,7 @@ public class MotorOnActionTest {
 
     @Test
     public void motorOnMissing() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=55, y=64], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=null]]]]]";
+        String a = "BlockAST [project=[[Location [x=55, y=64], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=NUMBER_INT], duration=null]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOnMissing.xml"));
     }
 
@@ -61,7 +60,7 @@ public class MotorOnActionTest {
     @Test
     public void motorOnForMissing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=62, y=103], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=MotorDuration [type=DEGREE, value=EmptyExpr [defVal=class java.lang.Integer]]]], MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=EmptyExpr [defVal=class java.lang.Integer]]]], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=MotorDuration [type=ROTATIONS, value=NumConst [30]]]]]]]";
+            "BlockAST [project=[[Location [x=62, y=103], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=NUMBER_INT], duration=MotorDuration [type=DEGREE, value=EmptyExpr [defVal=NUMBER_INT]]]], MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=EmptyExpr [defVal=NUMBER_INT]]]], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=NUMBER_INT], duration=MotorDuration [type=ROTATIONS, value=NumConst [30]]]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOnForMissing.xml"));
     }
 

@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -127,10 +128,10 @@ public final class PointLookAt<V> extends Action<V> {
 
         String pointLook = helper.extractField(fields, BlocklyConstants.MODE);
         String frame = helper.extractField(fields, BlocklyConstants.DIRECTION);
-        Phrase<V> pointX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, Integer.class));
-        Phrase<V> pointY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, Integer.class));
-        Phrase<V> pointZ = helper.extractValue(values, new ExprParam(BlocklyConstants.Z, Integer.class));
-        Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.Speed, Integer.class));
+        Phrase<V> pointX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase<V> pointY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
+        Phrase<V> pointZ = helper.extractValue(values, new ExprParam(BlocklyConstants.Z, BlocklyType.NUMBER_INT));
+        Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.Speed, BlocklyType.NUMBER_INT));
 
         return PointLookAt.make(
             Frame.get(frame),

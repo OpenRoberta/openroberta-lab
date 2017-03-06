@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MathConst.Const;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class JavaVisitorTest {
     private static final Configuration brickConfiguration = new EV3Configuration.Builder().build();
@@ -41,9 +42,9 @@ public class JavaVisitorTest {
 
     @Test
     public void visitEmptyExpr() throws Exception {
-        EmptyExpr<Void> emptyExpr = EmptyExpr.make(Double.class);
+        EmptyExpr<Void> emptyExpr = EmptyExpr.make(BlocklyType.NUMBER_INT);
         Ast2JavaVisitor visitor = new Ast2Ev3JavaVisitor("Test", brickConfiguration, usedSensors, 0);
         emptyExpr.visit(visitor);
-        Assert.assertEquals("null", visitor.getSb().toString());
+        Assert.assertEquals("0", visitor.getSb().toString());
     }
 }

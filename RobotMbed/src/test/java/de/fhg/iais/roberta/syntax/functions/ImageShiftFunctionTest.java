@@ -25,7 +25,7 @@ public class ImageShiftFunctionTest {
     public void make_MissingImagePosition_InstanceOfImageShiftFunctionWithMissingImagePosition() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=13, y=13], MainTask [], "
-                + "DisplayImageAction [IMAGE, FunctionExpr [ImageShiftFunction [EmptyExpr [defVal=class de.fhg.iais.roberta.syntax.expr.PredefinedImage], EmptyExpr [defVal=class java.lang.Integer], UP]]]"
+                + "DisplayImageAction [IMAGE, FunctionExpr [ImageShiftFunction [EmptyExpr [defVal=PREDEFINED_IMAGE], EmptyExpr [defVal=NUMBER_INT], UP]]]"
                 + "]]]";
 
         String result = Helper.generateTransformerString("/function/image_shift_missing_image_and_position.xml");

@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -83,9 +84,9 @@ public final class WalkTo<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 3);
 
-        Phrase<V> walkToX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, Integer.class));
-        Phrase<V> walkToY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, Integer.class));
-        Phrase<V> walkToTheta = helper.extractValue(values, new ExprParam(BlocklyConstants.Theta, Integer.class));
+        Phrase<V> walkToX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase<V> walkToY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
+        Phrase<V> walkToTheta = helper.extractValue(values, new ExprParam(BlocklyConstants.Theta, BlocklyType.NUMBER_INT));
 
         return WalkTo.make(
             helper.convertPhraseToExpr(walkToX),

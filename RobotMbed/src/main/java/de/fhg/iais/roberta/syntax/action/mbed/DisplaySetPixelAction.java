@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
@@ -96,9 +97,9 @@ public class DisplaySetPixelAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 3);
 
-        Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, int.class));
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, int.class));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, int.class));
+        Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
+        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, BlocklyType.NUMBER_INT));
+        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, BlocklyType.NUMBER_INT));
         return DisplaySetPixelAction.make(
             helper.convertPhraseToExpr(x),
             helper.convertPhraseToExpr(y),

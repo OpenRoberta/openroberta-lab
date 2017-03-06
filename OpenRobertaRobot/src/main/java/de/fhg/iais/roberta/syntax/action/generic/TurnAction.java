@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -96,12 +97,12 @@ public class TurnAction<V> extends Action<V> {
 
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN) ) {
             values = helper.extractValues(block, (short) 1);
-            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
         } else {
             values = helper.extractValues(block, (short) 2);
-            Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-            Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, Integer.class));
+            Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
+            Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, BlocklyType.NUMBER_INT));
             MotorDuration<V> md = new MotorDuration<V>(factory.getMotorMoveMode("DEGREE"), helper.convertPhraseToExpr(right));
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }

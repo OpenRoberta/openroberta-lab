@@ -168,7 +168,7 @@ public class Unary<V> extends Expr<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, Boolean.class), BlocklyConstants.NOT);
+        return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN), BlocklyConstants.NOT);
     }
 
     @Override

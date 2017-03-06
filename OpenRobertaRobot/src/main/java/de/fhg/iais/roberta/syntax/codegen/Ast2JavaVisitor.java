@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -58,7 +57,6 @@ import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -296,19 +294,19 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) {
-            case "java.lang.String":
+        switch ( emptyExpr.getDefVal() ) {
+            case STRING:
                 this.sb.append("\"\"");
                 break;
-            case "java.lang.Boolean":
+            case BOOLEAN:
                 this.sb.append("true");
                 break;
-            case "java.lang.Integer":
+            case NUMBER_INT:
                 this.sb.append("0");
                 break;
-            case "java.util.ArrayList":
+            case ARRAY:
                 break;
-            case "de.fhg.iais.roberta.syntax.expr.NullConst":
+            case NULL:
                 break;
             default:
                 this.sb.append("null");

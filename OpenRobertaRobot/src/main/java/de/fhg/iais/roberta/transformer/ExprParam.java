@@ -1,22 +1,24 @@
 package de.fhg.iais.roberta.transformer;
 
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+
 /**
  * This class is parameter class for finding expression or creating empty expression if the expression is missing in the XML. Client must provide type of the
  * value the expression should have
  * and the name of the location of the
  * expression in the XML.
- * 
+ *
  * @author kcvejoski
  */
 public class ExprParam {
     private final String name;
-    private final Class<?> defaultValue;
+    private final BlocklyType defaultValue;
 
     /**
      * @param name of the location of the expression in the XML
      * @param defaultValue type if the expression is missing
      */
-    public ExprParam(String name, Class<?> defaultValue) {
+    public ExprParam(String name, BlocklyType defaultValue) {
         super();
         this.name = name;
         this.defaultValue = defaultValue;
@@ -32,7 +34,7 @@ public class ExprParam {
     /**
      * @return type of the value the expression should have if it is missing.
      */
-    public Class<?> getDefaultValue() {
+    public BlocklyType getDefaultValue() {
         return this.defaultValue;
     }
 

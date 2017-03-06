@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
@@ -82,7 +83,7 @@ public final class WalkDistance<V> extends Action<V> {
         List<Value> values = helper.extractValues(block, (short) 1);
 
         String walkDirection = helper.extractField(fields, BlocklyConstants.DIRECTION);
-        Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+        Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
         return WalkDistance.make(
             WalkDirection.get(walkDirection),

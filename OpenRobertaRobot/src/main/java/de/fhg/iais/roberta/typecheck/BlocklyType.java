@@ -56,6 +56,7 @@ public enum BlocklyType {
     STRING("String", false,COMPARABLE, ADDABLE),
     COLOR("Colour", false,ANY), //
     IMAGE("Image", false, ANY),
+    PREDEFINED_IMAGE("PredefinedImage", false, ANY),
     NULL("", false,STRING, COLOR),
     REF("", false,NULL), PRIM("",false, NUMBER, BOOLEAN),
     NOTHING("", false,REF, PRIM),

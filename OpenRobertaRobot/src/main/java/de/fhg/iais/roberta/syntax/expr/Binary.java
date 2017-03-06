@@ -228,8 +228,8 @@ public final class Binary<V> extends Expr<V> {
         switch ( block.getType() ) {
             case BlocklyConstants.TEXT_APPEND:
                 values = helper.extractValues(block, (short) 2);
-                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
-                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, String.class));
+                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
+                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, BlocklyType.STRING));
                 return ExprStmt.make(
                     Binary.make(
                         Binary.Op.TEXT_APPEND,
@@ -241,8 +241,8 @@ public final class Binary<V> extends Expr<V> {
             case BlocklyConstants.ROB_MATH_CHANGE:
             case BlocklyConstants.MATH_CHANGE:
                 values = helper.extractValues(block, (short) 2);
-                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
-                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
+                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, BlocklyType.STRING));
+                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, BlocklyType.NUMBER_INT));
                 return ExprStmt.make(
                     Binary.make(
                         Binary.Op.MATH_CHANGE,
@@ -255,24 +255,24 @@ public final class Binary<V> extends Expr<V> {
             case BlocklyConstants.MATH_MODULO:
                 return helper.blockToBinaryExpr(
                     block,
-                    new ExprParam(BlocklyConstants.DIVIDEND, Integer.class),
-                    new ExprParam(BlocklyConstants.DIVISOR, Integer.class),
+                    new ExprParam(BlocklyConstants.DIVIDEND, BlocklyType.NUMBER_INT),
+                    new ExprParam(BlocklyConstants.DIVISOR, BlocklyType.NUMBER_INT),
                     BlocklyConstants.MOD);
 
             case BlocklyConstants.MATH_ARITHMETIC:
                 String opp = helper.extractOperation(block, BlocklyConstants.OP_);
                 if ( opp.equals(BlocklyConstants.POWER) ) {
                     ArrayList<ExprParam> exprParams = new ArrayList<>();
-                    exprParams.add(new ExprParam(BlocklyConstants.A, Integer.class));
-                    exprParams.add(new ExprParam(BlocklyConstants.B, Integer.class));
+                    exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
+                    exprParams.add(new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
                     List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
                     return MathPowerFunct.make(FunctionNames.POWER, params, helper.extractBlockProperties(block), helper.extractComment(block));
                 }
             default:
                 return helper.blockToBinaryExpr(
                     block,
-                    new ExprParam(BlocklyConstants.A, Integer.class),
-                    new ExprParam(BlocklyConstants.B, Integer.class),
+                    new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT),
+                    new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT),
                     BlocklyConstants.OP_);
 
         }

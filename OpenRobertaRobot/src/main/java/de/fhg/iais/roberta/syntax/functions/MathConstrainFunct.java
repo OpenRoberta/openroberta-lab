@@ -88,9 +88,9 @@ public class MathConstrainFunct<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.VALUE, Integer.class));
-        exprParams.add(new ExprParam(BlocklyConstants.LOW, Integer.class));
-        exprParams.add(new ExprParam(BlocklyConstants.HIGH, Integer.class));
+        exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.LOW, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.HIGH, BlocklyType.NUMBER_INT));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return MathConstrainFunct.make(params, helper.extractBlockProperties(block), helper.extractComment(block));
     }

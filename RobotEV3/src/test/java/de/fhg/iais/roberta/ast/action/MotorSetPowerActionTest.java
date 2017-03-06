@@ -32,7 +32,7 @@ public class MotorSetPowerActionTest {
 
     @Test
     public void powerMissing() throws Exception {
-        String a = "BlockAST [project=[[Location [x=22, y=145], MotorSetPowerAction [port=B, power=EmptyExpr [defVal=class java.lang.Integer]]]]]";
+        String a = "BlockAST [project=[[Location [x=22, y=145], MotorSetPowerAction [port=B, power=EmptyExpr [defVal=NUMBER_INT]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorSetPowerMissing.xml"));
     }
 

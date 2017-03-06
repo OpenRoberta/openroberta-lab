@@ -24,7 +24,7 @@ public class ImageInvertFunctionTest {
     public void make_MissingImage_InstanceOfImageShiftFunctionWithMissingImage() throws Exception {
         String expectedResult =
             "BlockAST [project=[[Location [x=13, y=13], MainTask [], "
-                + "DisplayImageAction [IMAGE, FunctionExpr [ImageInvertFunction [EmptyExpr [defVal=class de.fhg.iais.roberta.syntax.expr.PredefinedImage]]]"
+                + "DisplayImageAction [IMAGE, FunctionExpr [ImageInvertFunction [EmptyExpr [defVal=PREDEFINED_IMAGE]]]"
                 + "]]]]";
 
         String result = Helper.generateTransformerString("/function/image_invert_missing_image.xml");
