@@ -74,19 +74,16 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 

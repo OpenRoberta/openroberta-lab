@@ -73,6 +73,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     protected final Set<UsedSensor> usedSensors;
     private int indentation;
 
+    private int loopCounter = 0;
+
     /**
      * initialize the Java code generator visitor.
      *
@@ -383,6 +385,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         boolean additionalClosingBracket = false;
+
         switch ( repeatStmt.getMode() ) {
             case FOREVER:
                 /*
@@ -395,16 +398,25 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
                 nlIndent();
             case UNTIL:
             case WHILE:
+                //                this.loopCounter++;
+                //                this.sb.append("loop" + this.loopCounter + ":");
+                //                nlIndent();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
             case FOR:
+                //                this.loopCounter++;
+                //                this.sb.append("loop" + this.loopCounter + ":");
+                //                nlIndent();
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
+                //                this.loopCounter++;
+                //                this.sb.append("loop" + this.loopCounter + ":");
+                //                nlIndent();
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             default:
@@ -440,6 +452,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        //        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.loopCounter + ";");
         return null;
     }
 
