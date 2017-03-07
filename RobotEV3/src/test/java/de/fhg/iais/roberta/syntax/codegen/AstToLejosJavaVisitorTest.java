@@ -574,6 +574,350 @@ public class AstToLejosJavaVisitorTest {
         assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml");
     }
 
+    @Test
+    public void check_noLoops_returnsEmptyMap() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if ( 30 == 20 ) {"
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}"
+            + "}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/no_loops.xml");
+    }
+
+    @Test
+    public void check_nestedLoopsNoBreakorContinue_returnsMapWithTwoFalseElements() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "while(true){"
+            + "if ( 30 == 20 ) {"
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}"
+            + "}"
+            + "for (float i = 1; i<10; i+=1) {"
+            + "}}}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+        assertCodeIsOk(a, "/syntax/code_generator/java/nested_loops.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinue_returnsMapWithFiveFalseElements() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "while(true){"
+            + "if ( 30 == 20 ) {"
+            + "break;"
+            + "} else if(30==12){continue;}}}for(floati=1;i<10;i+=1){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==12){break;}}for(floatitem:item2){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==20){break;}}while(true){if(30==20){continue;}elseif(30==20){break;}}for(floatk0=0;k0<10;k0+=1){if(30==20){break;}elseif(30==20){continue;}}while(true){if(hal.isPressed(SensorPort.S1)==true){break;}if(hal.isPressed(SensorPort.S1)==true){break;}hal.waitFor(15);}hal.closeResources();}}";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/loops_with_break_and_continue.xml");
+    }
+
+    @Test
+    public void check_loopWithBreakAndContinueInWait_returnsMapWithOneTrueElements() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "loop1:"
+            + "while(true){"
+
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) break loop1;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) continue loop1;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}"
+            + "}"
+            + "}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/loop_with_break_and_continue_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "loop1:"
+            + "while(true){"
+
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) break loop1;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) continue loop1;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}"
+            + "}"
+            + "}"
+            + "for (float i = 1; i<10; i+=1) {"
+            + "if (i < 10) {"
+            + "continue;"
+            + "}}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/two_loop_with_break_and_continue_one_inside_wait_another_not.xml");
+    }
+
+    @Test
+    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "loop1:"
+            + "while(true){"
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) break loop1;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) continue loop1;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}"
+            + "for (float i = 1; i<10; i+=1) {"
+            + "if (i < 10) {"
+            + "continue;"
+            + "}}}}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+        assertCodeIsOk(a, "/syntax/code_generator/java/two_nested_loops_first_with_break_in_wait_second_not.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWait_returnsMapWithThreeElementsFirsTrueSecondThirdFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "loop1:"
+            + "while(true){"
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "for (float i = 1; i<10; i+=1) {"
+            + "if (i < 10) {"
+            + "continue;"
+            + "}}"
+            + "if (true) break loop1;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "for (float j = 1; j<10; j+=1) {"
+            + "if (j < 10) {"
+            + "continue;"
+            + "}}"
+            + "if (true) continue loop1;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}}}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/loop_with_nested_two_loops_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithThreeElementsFirsAndThirdTrueSecondFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "loop1:"
+            + "while(true){"
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "for (float j = 1; j<10; j+=1) {"
+            + "if (j < 10) {"
+            + "continue;"
+            + "}}"
+            + "if (true) continue loop1;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "loop3:"
+            + "for (float i = 1; i<10; i+=1) {"
+            + "while (true) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) continue loop3;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) break loop3;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}}"
+            + "if (true) break loop1;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}}}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
+    @Test
+    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithFiveElementsFirsThirdFourthTrueSecondFifthFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+            + HAL
+            + MAIN_METHOD
+            + "public void run() throwsException {\n"
+            + "hal.startLogging();"
+            + "if(true){"
+            + "loop1:"
+            + "while(true){"
+            + "while ( true ) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "for (float j = 1; j<10; j+=1) {"
+            + "if (j < 10) {"
+            + "continue;"
+            + "}}"
+            + "if (true) continue loop1;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "loop3:"
+            + "for (float i = 1; i<10; i+=1) {"
+            + "while (true) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) continue loop3;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) break loop3;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}}"
+            + "if (true) break loop1;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}}}"
+            + "if (true) {"
+            + "while (true) {"
+            + "if (10 < 10) {"
+            + "continue;"
+            + "}"
+            + "}"
+            + "}"
+            + "if (true) {"
+            + "loop5:"
+            + "while (true) {"
+            + "while (true) {"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) continue loop5;"
+            + "break;"
+            + "}"
+            + "if ( hal.isPressed(SensorPort.S1) == true ) {"
+            + "if (true) break loop5;"
+            + "break;"
+            + "}"
+            + "hal.waitFor(15);"
+            + "}"
+            + "}"
+            + "}"
+            + "hal.closeResources();"
+            + "}"
+            + "}\n";
+        assertCodeIsOk(a, "/syntax/code_generator/java/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));

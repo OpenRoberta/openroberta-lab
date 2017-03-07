@@ -103,7 +103,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class LoopsCounterVisitor implements AstVisitor<Void> {
     private int loopCounter = 0;
     private int currenLoop = 0;
-    private HashMap<Integer, Boolean> loopsContainer = new HashMap<Integer, Boolean>();
+    private HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<Integer, Boolean>();
     private HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
 
     public LoopsCounterVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -111,12 +111,12 @@ public class LoopsCounterVisitor implements AstVisitor<Void> {
     }
 
     /**
-     * Returns set of used sensor in Blockly program.
+     * Returns map of loop number and boolean value that indicates if the loop is labeled in Blockly program.
      *
-     * @return set of used sensors
+     * @return map of loops and boolean value
      */
-    public Map<Integer, Boolean> getLoop() {
-        return this.loopsContainer;
+    public Map<Integer, Boolean> getloopsLabelContainer() {
+        return this.loopsLabelContainer;
     }
 
     private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -257,8 +257,7 @@ public class LoopsCounterVisitor implements AstVisitor<Void> {
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         boolean isInWaitStmt = this.waitsInLoops.get(this.currenLoop) != 0;
-        this.loopsContainer.put(this.currenLoop, isInWaitStmt);
-
+        this.loopsLabelContainer.put(this.currenLoop, isInWaitStmt);
         return null;
     }
 
@@ -615,7 +614,7 @@ public class LoopsCounterVisitor implements AstVisitor<Void> {
     private void increaseLoopCounter() {
         this.loopCounter++;
         this.currenLoop = this.loopCounter;
-        this.loopsContainer.put(this.loopCounter, false);
+        this.loopsLabelContainer.put(this.loopCounter, false);
         this.waitsInLoops.put(this.loopCounter, 0);
     }
 

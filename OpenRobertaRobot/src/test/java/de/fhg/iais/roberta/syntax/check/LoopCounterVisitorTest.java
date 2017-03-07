@@ -16,7 +16,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -25,7 +25,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=false, 2=false}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=false, 2=false}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -34,7 +34,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=false, 2=false, 3=false, 4=false, 5=false}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=false, 2=false, 3=false, 4=false, 5=false}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=true}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=true}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=true, 2=false}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=true, 2=false}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=true, 2=false}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=true, 2=false}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=true, 2=false, 3=false}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=true, 2=false, 3=false}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=true, 2=false, 3=true}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=true, 2=false, 3=true}", checkVisitor.getloopsLabelContainer().toString());
     }
 
     @Test
@@ -88,6 +88,6 @@ public class LoopCounterVisitorTest {
 
         LoopsCounterVisitor checkVisitor = new LoopsCounterVisitor(phrases);
 
-        Assert.assertEquals("{1=true, 2=false, 3=true, 4=false, 5=true}", checkVisitor.getLoop().toString());
+        Assert.assertEquals("{1=true, 2=false, 3=true, 4=false, 5=true}", checkVisitor.getloopsLabelContainer().toString());
     }
 }

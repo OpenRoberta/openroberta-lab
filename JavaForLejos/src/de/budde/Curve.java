@@ -1,5 +1,6 @@
 package de.budde;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -14,12 +15,13 @@ import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.mode.action.ev3.DriveDirection;
 import de.fhg.iais.roberta.mode.action.ev3.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.ev3.TouchSensorMode;
 import de.fhg.iais.roberta.runtime.ev3.Hal;
 
 public class Curve {
     private static Configuration brickConfiguration;
 
-    private Set<UsedSensor> usedSensors = new LinkedHashSet<>();
+    private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));
 
     private Hal hal = new Hal(brickConfiguration, this.usedSensors);
 
@@ -44,9 +46,30 @@ public class Curve {
 
     public void run() throws Exception {
         this.hal.startLogging();
-        this.hal.driveInCurve(DriveDirection.FOREWARD, 30, 50);
-        this.hal.driveDistance(DriveDirection.FOREWARD, 30, 20);
+        loop1: if ( true ) {
+            while ( true ) {
+                while ( true ) {
+                    if ( this.hal.isPressed(SensorPort.S1) == true ) {
+                        if ( true ) {
+                            break loop1;
+                        }
+                        break;
+                    }
+                    if ( this.hal.isPressed(SensorPort.S1) == true ) {
+                        if ( true ) {
+                            break loop1;
+                        }
+                        break;
+                    }
+                    this.hal.waitFor(15);
+                }
+                for ( float i = 1; i < 10; i += 1 ) {
+                    if ( i < 10 ) {
+                        continue;
+                    }
+                }
+            }
+        }
         this.hal.closeResources();
     }
-
 }

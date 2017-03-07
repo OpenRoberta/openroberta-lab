@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -16,6 +18,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -51,7 +54,6 @@ import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
@@ -74,6 +76,9 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     private int indentation;
 
     private int loopCounter = 0;
+    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+
+    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Java code generator visitor.
@@ -91,6 +96,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     }
 
     protected void genearateCode(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        this.loopsLabels = new LoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
         generatePrefix(phrasesSet, withWrapping);
         generateCodeFromPhrases(phrasesSet, withWrapping);
         generateSuffix(withWrapping);
@@ -385,7 +391,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         boolean additionalClosingBracket = false;
-
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.getMode() ) {
             case FOREVER:
                 /*
@@ -398,25 +404,19 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
                 nlIndent();
             case UNTIL:
             case WHILE:
-                //                this.loopCounter++;
-                //                this.sb.append("loop" + this.loopCounter + ":");
-                //                nlIndent();
+                addLabelToLoop(isWaitStmt);
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
             case FOR:
-                //                this.loopCounter++;
-                //                this.sb.append("loop" + this.loopCounter + ":");
-                //                nlIndent();
+                addLabelToLoop(isWaitStmt);
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
-                //                this.loopCounter++;
-                //                this.sb.append("loop" + this.loopCounter + ":");
-                //                nlIndent();
+                addLabelToLoop(isWaitStmt);
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             default:
@@ -424,7 +424,12 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         }
         incrIndentation();
         repeatStmt.getList().visit(this);
-        appendBreakStmt(repeatStmt);
+        if ( !isWaitStmt ) {
+            this.currenLoop.removeLast();
+        } else {
+            appendBreakStmt(repeatStmt);
+
+        }
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -434,6 +439,17 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             this.sb.append("}");
         }
         return null;
+    }
+
+    private void addLabelToLoop(boolean isWaitStmt) {
+        if ( !isWaitStmt ) {
+            increaseLoopCounter();
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("loop" + this.loopCounter + ":");
+                nlIndent();
+            }
+
+        }
     }
 
     @Override
@@ -451,8 +467,13 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("if (true) " + stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.currenLoop.getLast() + ";");
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
-        //        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.loopCounter + ";");
         return null;
     }
 
@@ -845,10 +866,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break;");
-        }
+        nlIndent();
+        this.sb.append("break;");
     }
 
     private boolean isInteger(String str) {
@@ -867,6 +886,11 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             mainBlock = true;
         }
         return mainBlock;
+    }
+
+    private void increaseLoopCounter() {
+        this.loopCounter++;
+        this.currenLoop.add(this.loopCounter);
     }
 
 }
