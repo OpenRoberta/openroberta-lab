@@ -467,7 +467,7 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void check_noLoops_returnsEmptyMap() throws Exception {
+    public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
@@ -485,7 +485,7 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void check_nestedLoopsNoBreakorContinue_returnsMapWithTwoFalseElements() throws Exception {
+    public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
@@ -507,7 +507,7 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void check_loopsWithBreakAndContinue_returnsMapWithFiveFalseElements() throws Exception {
+    public void check_loopsWithBreakAndContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
             + "array<double, 3> item2 = {0, 0, 0};"
@@ -553,11 +553,10 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void check_loopWithBreakAndContinueInWait_returnsMapWithOneTrueElements() throws Exception {
+    public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
-            + "break_loop1:"
             + "while (true) {"
 
             + "   while (1) {"
@@ -574,16 +573,16 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop1:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop1:"
             + END;
         assertCodeIsOk(a, "/stmts/loop_with_break_and_continue_inside_wait.xml");
     }
 
     @Test
-    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
-            + "break_loop1:"
             + "while (true) {"
             + "   while (1) {"
             + "     if (uBit.buttonA.isPressed() == true) {"
@@ -599,6 +598,7 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop1:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop1:"
             + "for (int i = 1; i < 10; i += 1) {"
             + "     if (i < 10) {"
             + "         continue;"
@@ -610,11 +610,10 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
-    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
-            + "break_loop1:"
             + "while (true) {"
             + "   while (1) {"
             + "     if (uBit.buttonA.isPressed() == true) {"
@@ -635,16 +634,16 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop1:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop1:"
             + END;
         assertCodeIsOk(a, "/stmts/two_nested_loops_first_with_break_in_wait_second_not.xml");
     }
 
     @Test
-    public void check_loopWithNestedTwoLoopsInsideWait_returnsMapWithThreeElementsFirsTrueSecondThirdFalse() throws Exception {
+    public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
-            + "break_loop1:"
             + "while (true) {"
             + "   while (1) {"
             + "     if (uBit.buttonA.isPressed() == true) {"
@@ -670,17 +669,17 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop1:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop1:"
             + END;
 
         assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait.xml");
     }
 
     @Test
-    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithThreeElementsFirsAndThirdTrueSecondFalse() throws Exception {
+    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstAndThirdLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
-            + "break_loop1:"
             + "while (true) {"
             + "   while (1) {"
             + "     if (uBit.buttonA.isPressed() == true) {"
@@ -693,7 +692,6 @@ public class CppCodeGeneratorVisitorTest {
             + "         break;"
             + "     }"
             + "     if (uBit.buttonA.isPressed() == true) {"
-            + "         break_loop3:"
             + "         for (int i = 1; i < 10; i += 1) {"
             + "         while (1) {"
             + "             if (uBit.buttonA.isPressed() == true) {"
@@ -708,6 +706,7 @@ public class CppCodeGeneratorVisitorTest {
             + "         }"
             + "         continue_loop3:"
             + "         }"
+            + "         break_loop3:"
             + "         goto break_loop1;"
             + "         break;"
             + "     }"
@@ -716,16 +715,16 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop1:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop1:"
             + END;
         assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
     }
 
     @Test
-    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithFiveElementsFirsThirdFourthTrueSecondFifthFalse() throws Exception {
+    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN
-            + "break_loop1:"
             + "while (true) {"
             + "   while (1) {"
             + "     if (uBit.buttonA.isPressed() == true) {"
@@ -738,7 +737,6 @@ public class CppCodeGeneratorVisitorTest {
             + "         break;"
             + "     }"
             + "     if (uBit.buttonA.isPressed() == true) {"
-            + "         break_loop3:"
             + "         for (int i = 1; i < 10; i += 1) {"
             + "         while (1) {"
             + "             if (uBit.buttonA.isPressed() == true) {"
@@ -753,6 +751,7 @@ public class CppCodeGeneratorVisitorTest {
             + "         }"
             + "         continue_loop3:"
             + "         }"
+            + "         break_loop3:"
             + "         goto break_loop1;"
             + "         break;"
             + "     }"
@@ -761,13 +760,13 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop1:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop1:"
             + "while (true) {"
             + "     if (10 < 10) {"
             + "         continue;"
             + "     }"
             + "uBit.sleep(1);"
             + "}"
-            + "break_loop5:"
             + "while (true) {"
             + "         while (1) {"
             + "             if (uBit.buttonA.isPressed() == true) {"
@@ -783,6 +782,7 @@ public class CppCodeGeneratorVisitorTest {
             + "continue_loop5:"
             + "uBit.sleep(1);"
             + "}"
+            + "break_loop5:"
             + END;
         assertCodeIsOk(a, "/stmts/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
     }

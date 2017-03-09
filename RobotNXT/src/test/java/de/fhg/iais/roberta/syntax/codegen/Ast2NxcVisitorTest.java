@@ -468,6 +468,324 @@ public class Ast2NxcVisitorTest {
         assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml");
     }
 
+    @Test
+    public void check_noLoops_returnsNoLabeledLoops() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "if (30 == 20) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "}}";
+
+        assertCodeIsOk(a, "/syntax/stmt/no_loops.xml");
+    }
+
+    @Test
+    public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "if (30 == 20) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "}"
+            + "for (float i = 1; i < 10; i += 1) {"
+            + "}"
+            + "}"
+            + "}";
+        assertCodeIsOk(a, "/syntax/stmt/nested_loops.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinue_returnsNoLabeledLoops() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + "float item2[] = {0, 0, 0};"
+            + MASMETHOD
+            + "while (true) {"
+            + "if (30 == 20) {"
+            + "     break;"
+            + "} else if (30 == 12) {"
+            + "     continue;"
+            + "}"
+            + "}"
+            + "for (float i = 1; i < 10; i += 1) {"
+            + "if (30 == 20) {"
+            + "     continue;"
+            + "} else if (30 == 12) {"
+            + "     break;"
+            + "}"
+            + "}"
+            + "for (float item=0; item<sizeof(item2)/sizeof(item2[0]); item++) {"
+            + "if (30 == 20) {"
+            + "     continue;"
+            + "} else if (30 == 20) {"
+            + "     break;"
+            + "}"
+            + "}"
+            + "while (true) {"
+            + "if (30 == 20) {"
+            + "     continue;"
+            + "} else if (30 == 20) {"
+            + "     break;"
+            + "}"
+            + "}"
+            + "for (float k0 = 0; k0 < 10; k0 += 1) {"
+            + "if (30 == 20) {"
+            + "     break;"
+            + "} else if (30 == 20) {"
+            + "     continue;"
+            + "}"
+            + "}"
+            + "while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "}"
+            + "}";
+        assertCodeIsOk(a, "/syntax/stmt/loops_with_break_and_continue.xml");
+    }
+
+    @Test
+    public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "continue_loop1:"
+            + "}"
+            + "break_loop1:"
+            + "}";
+        assertCodeIsOk(a, "/syntax/stmt/loop_with_break_and_continue_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "continue_loop1:"
+            + "}"
+            + "break_loop1:"
+            + "for (float i = 1; i < 10; i += 1) {"
+            + "     if (i < 10) {"
+            + "         continue;"
+            + "     }"
+            + "}"
+            + "}";
+
+        assertCodeIsOk(a, "/syntax/stmt/two_loop_with_break_and_continue_one_inside_wait_another_not.xml");
+    }
+
+    @Test
+    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "for (float i = 1; i < 10; i += 1) {"
+            + "     if (i < 10) {"
+            + "        continue;"
+            + "     }"
+            + "}"
+            + "continue_loop1:"
+            + "}"
+            + "break_loop1:"
+            + "}";
+        assertCodeIsOk(a, "/syntax/stmt/two_nested_loops_first_with_break_in_wait_second_not.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         for (float i = 1; i < 10; i += 1) {"
+            + "             if (i < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         for (float j = 1; j < 10; j += 1) {"
+            + "             if (j < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "    Wait(15);"
+            + "   }"
+            + "continue_loop1:"
+            + "}"
+            + "break_loop1:"
+            + "}";
+
+        assertCodeIsOk(a, "/syntax/stmt/loop_with_nested_two_loops_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstAndThirdLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         for (float j = 1; j < 10; j += 1) {"
+            + "             if (j < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         for (float i = 1; i < 10; i += 1) {"
+            + "         while (true) {"
+            + "             if (Sensor(S1) == true) {"
+            + "                 goto continue_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             if (Sensor(S1) == true) {"
+            + "                 goto break_loop3;"
+            + "                 break;"
+            + "             }"
+            + "              Wait(15);"
+            + "         }"
+            + "         continue_loop3:"
+            + "         }"
+            + "         break_loop3:"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "continue_loop1:"
+            + "}"
+            + "break_loop1:"
+            + "}";
+        assertCodeIsOk(a, "/syntax/stmt/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
+    @Test
+    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS_CONSTANTS
+            + MASMETHOD
+            + "while (true) {"
+            + "   while (true) {"
+            + "     if (Sensor(S1) == true) {"
+            + "         for (float j = 1; j < 10; j += 1) {"
+            + "             if (j < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (Sensor(S1) == true) {"
+            + "         for (float i = 1; i < 10; i += 1) {"
+            + "         while (true) {"
+            + "             if (Sensor(S1) == true) {"
+            + "                 goto continue_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             if (Sensor(S1) == true) {"
+            + "                 goto break_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             Wait(15);"
+            + "         }"
+            + "         continue_loop3:"
+            + "         }"
+            + "         break_loop3:"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     Wait(15);"
+            + "   }"
+            + "continue_loop1:"
+            + "}"
+            + "break_loop1:"
+            + "while (true) {"
+            + "     if (10 < 10) {"
+            + "         continue;"
+            + "     }"
+            + "}"
+            + "while (true) {"
+            + "         while (true) {"
+            + "             if (Sensor(S1) == true) {"
+            + "                 goto continue_loop5;"
+            + "                 break;"
+            + "             }"
+            + "             if (Sensor(S1) == true) {"
+            + "                 goto break_loop5;"
+            + "                 break;"
+            + "             }"
+            + "             Wait(15);"
+            + "         }"
+            + "continue_loop5:"
+            + "}"
+            + "break_loop5:"
+            + "}";
+        assertCodeIsOk(a, "/syntax/stmt/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         System.out.println(a.replaceAll("\\s+", ""));

@@ -575,7 +575,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_noLoops_returnsEmptyMap() throws Exception {
+    public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -601,7 +601,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_nestedLoopsNoBreakorContinue_returnsMapWithTwoFalseElements() throws Exception {
+    public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -630,7 +630,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_loopsWithBreakAndContinue_returnsMapWithFiveFalseElements() throws Exception {
+    public void check_loopsWithBreakAndContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -650,7 +650,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_loopWithBreakAndContinueInWait_returnsMapWithOneTrueElements() throws Exception {
+    public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -685,7 +685,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -724,7 +724,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -759,7 +759,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_loopWithNestedTwoLoopsInsideWait_returnsMapWithThreeElementsFirsTrueSecondThirdFalse() throws Exception {
+    public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
@@ -799,7 +799,7 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
-    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithThreeElementsFirsAndThirdTrueSecondFalse() throws Exception {
+    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS

@@ -438,21 +438,23 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        addBreakLabelToLoop(isWaitStmt);
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
+                increaseLoopCounter();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
             case FOR:
+                increaseLoopCounter();
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
+                increaseLoopCounter();
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             default:
@@ -469,6 +471,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         decrIndentation();
         nlIndent();
         this.sb.append("}");
+        addBreakLabelToLoop(isWaitStmt);
 
         return null;
     }
@@ -1563,7 +1566,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             nlIndent();
             this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
         }
-        this.currenLoop.removeLast();
     }
 
     private int map(int x, int in_min, int in_max, int out_min, int out_max) {
@@ -1572,12 +1574,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     private void addBreakLabelToLoop(boolean isWaitStmt) {
         if ( !isWaitStmt ) {
-            increaseLoopCounter();
             if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("break_loop" + this.loopCounter + ":");
+                this.sb.append("break_loop" + this.currenLoop.getLast() + ":");
                 nlIndent();
             }
-
+            this.currenLoop.removeLast();
         }
     }
 

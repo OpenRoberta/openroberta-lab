@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -46,6 +48,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.check.NxcLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -109,7 +112,6 @@ import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
@@ -136,6 +138,11 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     private boolean timeSensorUsed;
     private boolean volumeActionUsed;
 
+    private int loopCounter = 0;
+    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+
+    private Map<Integer, Boolean> loopsLabels;
+
     /**
      * initialize the Java code generator visitor.
      *
@@ -154,6 +161,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         this.timeSensorUsed = timeSensorUsed;
         this.volumeActionUsed = volumeActionUsed;
         this.phrases = phrases;
+        this.loopsLabels = new NxcLoopsCounterVisitor(phrases).getloopsLabelContainer();
     }
 
     /**
@@ -173,17 +181,17 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         boolean volumeActionUsed = NxtUsedVolumeVisitor.check(phrasesSet);
         final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, volumeActionUsed, phrasesSet);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
-        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
     }
 
-    private static void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
+    private void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
         if ( withWrapping ) {
             astVisitor.sb.append("\n}\n");
         }
     }
 
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NxcVisitor astVisitor) {
+    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NxcVisitor astVisitor) {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
@@ -201,7 +209,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     }
 
-    private static boolean handleMainBlocks(Ast2NxcVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+    private boolean handleMainBlocks(Ast2NxcVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
         //        if (phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
@@ -212,7 +220,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         return mainBlock;
     }
 
-    private static String getBlocklyTypeCode(BlocklyType type) {
+    private String getBlocklyTypeCode(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -550,21 +558,24 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        //boolean additionalClosingBracket = false;
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
+                increaseLoopCounter();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
             case FOR:
+                increaseLoopCounter();
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
+                increaseLoopCounter();
                 String varType;
                 String expression = repeatStmt.getExpr().toString();
                 String segments[] = expression.split(",");
@@ -602,10 +613,16 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
         incrIndentation();
         repeatStmt.getList().visit(this);
-        appendBreakStmt(repeatStmt);
+        if ( !isWaitStmt ) {
+            addContinueLabelToLoop();
+        } else {
+            appendBreakStmt(repeatStmt);
+        }
         decrIndentation();
         nlIndent();
         this.sb.append("}");
+        addBreakLabelToLoop(isWaitStmt);
+
         return null;
     }
 
@@ -617,6 +634,12 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
         return null;
     }
@@ -1557,6 +1580,24 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
+        this.sb.append("!!!Hello World!!!");
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     private void incrIndentation() {
         this.indentation += 1;
     }
@@ -1664,10 +1705,8 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break;");
-        }
+        nlIndent();
+        this.sb.append("break;");
     }
 
     private void generateSensors() {
@@ -1732,21 +1771,26 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
     }
 
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
-        return null;
+    private void addBreakLabelToLoop(boolean isWaitStmt) {
+        if ( !isWaitStmt ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("break_loop" + this.currenLoop.getLast() + ":");
+                nlIndent();
+            }
+            this.currenLoop.removeLast();
+        }
     }
 
-    @Override
-    public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
-        this.sb.append("!!!Hello World!!!");
-        return null;
+    private void increaseLoopCounter() {
+        this.loopCounter++;
+        this.currenLoop.add(this.loopCounter);
     }
 
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
+    private void addContinueLabelToLoop() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            nlIndent();
+            this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
+        }
     }
+
 }
