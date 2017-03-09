@@ -14,6 +14,8 @@ public class PythonCodeGeneratorVisitorTest {
         + "import microbit\n"
         + "import random\n"
         + "import math\n\n"
+        + "class BreakOutOfALoop(Exception): pass\n"
+        + "class ContinueLoop(Exception): pass\n\n"
         + "timer1 = microbit.running_time()\n";
 
     private static Configuration brickConfiguration;
@@ -197,6 +199,226 @@ public class PythonCodeGeneratorVisitorTest {
             + "microbit.display.scroll(str(microbit.pin2.read_digital()))";
 
         assertCodeIsOk(expectedResult, "/sensor/read_value_from_pin.xml");
+    }
+
+    @Test
+    public void check_noLoops_returnsNoLabeledLoops() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "if 20 == 30:\n"
+            + "    while True:\n"
+            + "        if microbit.button_a.is_pressed() == True:\n"
+            + "            break\n";
+
+        assertCodeIsOk(a, "/stmts/no_loops.xml");
+    }
+
+    @Test
+    public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    if 30 == 20:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                break\n"
+            + "    for i in range(1, 10, 1):\n"
+            + "        pass";
+
+        assertCodeIsOk(a, "/stmts/nested_loops.xml");
+    }
+
+    @Test
+    public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
+
+        assertCodeIsOk(a, "/stmts/loop_with_break_and_continue_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue\n"
+            + "for i in range(1, 10, 1):\n"
+            + "    if i < 10:\n"
+            + "        continue";
+
+        assertCodeIsOk(a, "/stmts/two_loop_with_break_and_continue_one_inside_wait_another_not.xml");
+    }
+
+    @Test
+    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "        for i in range(1, 10, 1):\n"
+            + "            if i < 10:\n"
+            + "                continue\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
+
+        assertCodeIsOk(a, "/stmts/two_nested_loops_first_with_break_in_wait_second_not.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for i in range(1, 10, 1):\n"
+            + "                    if i < 10:\n"
+            + "                        continue\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for j in range(1, 10, 1):\n"
+            + "                    if j < 10:\n"
+            + "                        continue\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
+
+        assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstAndThirdLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for j in range(1, 10, 1):\n"
+            + "                    if j < 10:\n"
+            + "                        continue\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for i in range(1, 10, 1):\n"
+            + "                    try:\n"
+            + "                        while True:\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise ContinueLoop\n"
+            + "                                break\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise BreakOutOfALoop\n"
+            + "                                break\n"
+            + "                    except BreakOutOfALoop:\n"
+            + "                        break\n"
+            + "                    except ContinueLoop:\n"
+            + "                        continue\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
+
+        assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
+    @Test
+    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for j in range(1, 10, 1):\n"
+            + "                    if j < 10:\n"
+            + "                        continue\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                for i in range(1, 10, 1):\n"
+            + "                    try:\n"
+            + "                        while True:\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise ContinueLoop\n"
+            + "                                break\n"
+            + "                            if microbit.button_a.is_pressed() == True:\n"
+            + "                                raise BreakOutOfALoop\n"
+            + "                                break\n"
+            + "                    except BreakOutOfALoop:\n"
+            + "                        break\n"
+            + "                    except ContinueLoop:\n"
+            + "                        continue\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue\n"
+            + "while True:\n"
+            + "    if 10 < 10:\n"
+            + "        continue\n"
+            + "while True:\n"
+            + "    try:\n"
+            + "        while True:\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise ContinueLoop\n"
+            + "                break\n"
+            + "            if microbit.button_a.is_pressed() == True:\n"
+            + "                raise BreakOutOfALoop\n"
+            + "                break\n"
+            + "    except BreakOutOfALoop:\n"
+            + "        break\n"
+            + "    except ContinueLoop:\n"
+            + "        continue";
+        assertCodeIsOk(a, "/stmts/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
     }
 
     //    @Test

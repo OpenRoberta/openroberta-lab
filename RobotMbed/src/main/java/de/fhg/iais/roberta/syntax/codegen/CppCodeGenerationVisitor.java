@@ -52,7 +52,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.check.CppLoopsCounterVisitor;
+import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -175,7 +175,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.phrases = phrases;
         this.usedHardwareVisitor = usedHardware;
         this.indentation = indentation;
-        this.loopsLabels = new CppLoopsCounterVisitor(phrases).getloopsLabelContainer();
+        this.loopsLabels = new MbedLoopsCounterVisitor(phrases).getloopsLabelContainer();
     }
 
     /**

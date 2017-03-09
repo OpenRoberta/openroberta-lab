@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -49,6 +51,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
@@ -127,10 +130,12 @@ import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
@@ -146,6 +151,11 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     private final StringBuilder sb = new StringBuilder();
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
+
+    private int loopCounter = 0;
+    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+
+    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Python code generator visitor.
@@ -192,9 +202,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
         PythonCodeGeneratorVisitor astVisitor = new PythonCodeGeneratorVisitor(brickConfiguration, usedHardwareVisitor, 0);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
-
-        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
-
+        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         astVisitor.generateSuffix(withWrapping);
 
         return astVisitor.sb.toString();
@@ -488,38 +496,39 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                appendTry();
+
                 break;
             case TIMES:
             case FOR:
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                appendTry();
+
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                appendTry();
+
                 break;
             default:
-                break;
+                throw new DbcException("Invalide Repeat Statement!");
         }
         incrIndentation();
-        Mode mode = repeatStmt.getMode();
-        if ( repeatStmt.getList().get().isEmpty() ) {
-            if ( mode != Mode.WAIT ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
+        appendPassIfEmptyBody(repeatStmt);
+        repeatStmt.getList().visit(this);
+        if ( !isWaitStmt ) {
+            appendExceptionHandling();
         } else {
-            repeatStmt.getList().visit(this);
-        }
-        if ( mode == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break");
+            appendBreakStmt(repeatStmt);
         }
         decrIndentation();
         return null;
@@ -533,6 +542,12 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
     }
@@ -552,7 +567,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         decrIndentation();
-        nlIndent();
+        //        nlIndent();
         return null;
     }
 
@@ -1244,7 +1259,104 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, PythonCodeGeneratorVisitor astVisitor) {
+    // not supported
+    @Override
+    public Void visitLedColor(LedColor<Void> ledColor) {
+        return null;
+    }
+
+    // not supported
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
+        // not supported in micropython
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+        this.sb.append("radio.send(");
+        radioSendAction.getMsg().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+        this.sb.append("radio.receive()");
+        return null;
+    }
+
+    // not supported
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
+        getSampleSensor.getSensor().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        return null;
+    }
+
+    @Override
+    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+        this.sb.append("microbit.pin" + pinWriteValueSensor.getPin().getPinNumber());
+        String valueType = "analog(";
+        if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
+            valueType = "digital(";
+        }
+        this.sb.append(".write_" + valueType);
+        pinWriteValueSensor.getValue().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
+        // not supported in micropython
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
+        // not supported in micropython
+        return null;
+    }
+
+    @Override
+    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
+        this.sb.append("microbit.display.set_pixel(");
+        displaySetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getY().visit(this);
+        this.sb.append(", ");
+        displaySetPixelAction.getBrightness().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
+        this.sb.append("microbit.display.get_pixel(");
+        displayGetPixelAction.getX().visit(this);
+        this.sb.append(", ");
+        displayGetPixelAction.getY().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, PythonCodeGeneratorVisitor astVisitor) {
+        this.loopsLabels = new MbedLoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
@@ -1261,7 +1373,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    private static boolean handleMainBlocks(PythonCodeGeneratorVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+    private boolean handleMainBlocks(PythonCodeGeneratorVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
         } else if ( !phrase.getKind().getName().equals("LOCATION") ) {
@@ -1386,6 +1498,8 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         } else {
             nlIndent();
         }
+        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
+        this.sb.append("class ContinueLoop(Exception): pass\n\n");
         this.sb.append("timer1 = microbit.running_time()\n");
         generateUserDefinedMethods(phrasesSet);
 
@@ -1397,7 +1511,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    private static boolean isInteger(String str) {
+    private boolean isInteger(String str) {
         try {
             Integer.parseInt(str);
             return true;
@@ -1424,55 +1538,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    // not supported
-    @Override
-    public Void visitLedColor(LedColor<Void> ledColor) {
-        return null;
-    }
-
-    // not supported
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        // not supported in micropython
-        return null;
-    }
-
-    @Override
-    public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        this.sb.append("radio.send(");
-        radioSendAction.getMsg().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
-        this.sb.append("radio.receive()");
-        return null;
-    }
-
-    // not supported
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> getSampleSensor) {
-        getSampleSensor.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        return null;
-    }
-
     private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         //TODO: too many nested loops and condition there must be a better way this to be done
         if ( phrasesSet.size() > 1 ) {
@@ -1491,51 +1556,52 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    @Override
-    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
-        this.sb.append("microbit.pin" + pinWriteValueSensor.getPin().getPinNumber());
-        String valueType = "analog(";
-        if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {
-            valueType = "digital(";
+    private void increaseLoopCounter() {
+        this.loopCounter++;
+        this.currenLoop.add(this.loopCounter);
+    }
+
+    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+        nlIndent();
+        this.sb.append("break");
+    }
+
+    private void appendTry() {
+        increaseLoopCounter();
+
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            incrIndentation();
+            nlIndent();
+            this.sb.append("try:");
         }
-        this.sb.append(".write_" + valueType);
-        pinWriteValueSensor.getValue().visit(this);
-        this.sb.append(");");
-        return null;
     }
 
-    @Override
-    public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        // not supported in micropython
-        return null;
+    private void appendExceptionHandling() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except BreakOutOfALoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("break");
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except ContinueLoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("continue");
+            decrIndentation();
+        }
+        this.currenLoop.removeLast();
     }
 
-    @Override
-    public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        // not supported in micropython
-        return null;
-    }
-
-    @Override
-    public Void visitDisplaySetPixelAction(DisplaySetPixelAction<Void> displaySetPixelAction) {
-        this.sb.append("microbit.display.set_pixel(");
-        displaySetPixelAction.getX().visit(this);
-        this.sb.append(", ");
-        displaySetPixelAction.getY().visit(this);
-        this.sb.append(", ");
-        displaySetPixelAction.getBrightness().visit(this);
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        this.sb.append("microbit.display.get_pixel(");
-        displayGetPixelAction.getX().visit(this);
-        this.sb.append(", ");
-        displayGetPixelAction.getY().visit(this);
-        this.sb.append(")");
-        return null;
+    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getList().get().isEmpty() ) {
+            if ( repeatStmt.getMode() != Mode.WAIT ) {
+                nlIndent();
+                this.sb.append("pass");
+            }
+        }
     }
 
 }

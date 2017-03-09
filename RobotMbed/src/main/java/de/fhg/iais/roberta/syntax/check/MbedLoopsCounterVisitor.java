@@ -28,9 +28,9 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
-public class CppLoopsCounterVisitor extends LoopsCounterVisitor implements MbedAstVisitor<Void> {
+public class MbedLoopsCounterVisitor extends LoopsCounterVisitor implements MbedAstVisitor<Void> {
 
-    public CppLoopsCounterVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public MbedLoopsCounterVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         super(phrasesSet);
 
     }
