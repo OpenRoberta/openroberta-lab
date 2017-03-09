@@ -23,48 +23,48 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
 /**
- * This class represents the <b>naoActions_rgbLeds</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for colouring the RGB-LEDs of NAO.<br/>
+ * This class represents the <b>naoActions_setIntensity</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for setting the intensity of the NON-RGB-LEDs of NAO.<br/>
  * <br/>
  * The client must provide the {@link led}.
  */
-public final class SetLeds<V> extends Action<V> {
+public final class SetIntensity<V> extends Action<V> {
 
     private final Led led;
-    private final Expr<V> Color;
+    private final Expr<V> Intensity;
 
-    private SetLeds(Led led, Expr<V> Color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RGB_LED"), properties, comment);
+    private SetIntensity(Led led, Expr<V> Intensity, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("SET_INTENSITY"), properties, comment);
         this.led = led;
-        Assert.notNull(Color);
-        this.Color = Color;
+        Assert.notNull(Intensity);
+        this.Intensity = Intensity;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link SetLeds}. This instance is read only and can not be modified.
+     * Creates instance of {@link SetIntensity}. This instance is read only and can not be modified.
      *
      * @param frame {@link Frame} the coordinates relate to,
      * @param speed {@link speed} the movement will be executed at,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link SetLeds}
+     * @return read only object of class {@link SetIntensity}
      */
-    private static <V> SetLeds<V> make(Led led, Expr<V> Color, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SetLeds<V>(led, Color, properties, comment);
+    private static <V> SetIntensity<V> make(Led led, Expr<V> Intensity, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SetIntensity<V>(led, Intensity, properties, comment);
     }
 
     public Led getLed() {
         return this.led;
     }
 
-    public Expr<V> getColor() {
-        return this.Color;
+    public Expr<V> getIntensity() {
+        return this.Intensity;
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((NaoAstVisitor<V>) visitor).visitSetLeds(this);
+        return ((NaoAstVisitor<V>) visitor).visitSetIntensity(this);
     }
 
     /**
@@ -78,11 +78,11 @@ public final class SetLeds<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 1);
 
-        Phrase<V> Color = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOUR, BlocklyType.COLOR));
+        Phrase<V> Intensity = helper.extractValue(values, new ExprParam(BlocklyConstants.INTENSITY, BlocklyType.NUMBER_INT));
 
         String leds = helper.extractField(fields, BlocklyConstants.LED);
 
-        return SetLeds.make(Led.get(leds), helper.convertPhraseToExpr(Color), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetIntensity.make(Led.get(leds), helper.convertPhraseToExpr(Intensity), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -91,13 +91,13 @@ public final class SetLeds<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LED, this.led.toString());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COLOUR, this.Color);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.INTENSITY, this.Intensity);
 
         return jaxbDestination;
     }
 
     @Override
     public String toString() {
-        return "SetLeds [" + this.led + ", " + this.Color + ", " + "]";
+        return "SetLeds [" + this.led + ", " + this.Intensity + ", " + "]";
     }
 }

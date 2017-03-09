@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
-import de.fhg.iais.roberta.mode.action.nao.Color;
 import de.fhg.iais.roberta.mode.action.nao.Frame;
 import de.fhg.iais.roberta.mode.action.nao.Joint;
 import de.fhg.iais.roberta.mode.action.nao.Language;
@@ -67,6 +66,7 @@ import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
+import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
@@ -103,6 +103,7 @@ import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
+//import de.fhg.iais.roberta.syntax.expr.nao.LedColor;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
@@ -1516,7 +1517,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         } else if ( setLeds.getLed() == Led.CHEST ) {
             this.sb.append("\"ChestLeds\", ");
         } else if ( setLeds.getLed() == Led.EARS ) {
-            this.sb.append("\"RightEarLeds\", ");
+            this.sb.append("\"EarLeds\", ");
         } else if ( setLeds.getLed() == Led.EYES ) {
             this.sb.append("\"FaceLeds\", ");
         } else if ( setLeds.getLed() == Led.HEAD ) {
@@ -1528,31 +1529,53 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         } else if ( setLeds.getLed() == Led.LEFTFOOT ) {
             this.sb.append("\"LeftFootLeds\", ");
         } else if ( setLeds.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEar\", ");
+            this.sb.append("\"RightEarLeds\", ");
         } else if ( setLeds.getLed() == Led.RIGHTEYE ) {
             this.sb.append("\"RightFaceLeds\", ");
         } else if ( setLeds.getLed() == Led.RIGHTFOOT ) {
             this.sb.append("\"RightFootLeds\", ");
         }
-        if ( setLeds.getColor() == Color.GREEN ) {
-            this.sb.append("\"green\", ");
-        } else if ( setLeds.getColor() == Color.BLUE ) {
-            this.sb.append("\"blue\", ");
-        } else if ( setLeds.getColor() == Color.RED ) {
-            this.sb.append("\"red\", ");
-        } else if ( setLeds.getColor() == Color.WHITE ) {
-            this.sb.append("\"white\", ");
-        } else if ( setLeds.getColor() == Color.YELLOW ) {
-            this.sb.append("\"yellow\", ");
-        } else if ( setLeds.getColor() == Color.MAGENTA ) {
-            this.sb.append("\"magenta\", ");
-        } else if ( setLeds.getColor() == Color.CYAN ) {
-            this.sb.append("\"cyan\", ");
-        }
-        setLeds.getIntensity().visit(this);
+        setLeds.getColor().visit(this);
         this.sb.append(")");
         return null;
     }
+
+    @Override
+    public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+        this.sb.append("h.setIntensity(");
+        if ( setIntensity.getLed() == Led.ALL ) {
+            this.sb.append("\"AllLeds\", ");
+        } else if ( setIntensity.getLed() == Led.CHEST ) {
+            this.sb.append("\"ChestLeds\", ");
+        } else if ( setIntensity.getLed() == Led.EARS ) {
+            this.sb.append("\"EarLeds\", ");
+        } else if ( setIntensity.getLed() == Led.EYES ) {
+            this.sb.append("\"FaceLeds\", ");
+        } else if ( setIntensity.getLed() == Led.HEAD ) {
+            this.sb.append("\"BrainLeds\", ");
+        } else if ( setIntensity.getLed() == Led.LEFTEAR ) {
+            this.sb.append("\"LeftEarLeds\", ");
+        } else if ( setIntensity.getLed() == Led.LEFTEYE ) {
+            this.sb.append("\"LeftFaceLeds\", ");
+        } else if ( setIntensity.getLed() == Led.LEFTFOOT ) {
+            this.sb.append("\"LeftFootLeds\", ");
+        } else if ( setIntensity.getLed() == Led.RIGHTEAR ) {
+            this.sb.append("\"RightEarLeds\", ");
+        } else if ( setIntensity.getLed() == Led.RIGHTEYE ) {
+            this.sb.append("\"RightFaceLeds\", ");
+        } else if ( setIntensity.getLed() == Led.RIGHTFOOT ) {
+            this.sb.append("\"RightFootLeds\", ");
+        }
+        setIntensity.getIntensity().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    /*@Override
+    public Void visitLedColor(LedColor<Void> ledColor) {
+        this.sb.append(ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255");
+        return null;
+    }*/
 
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {

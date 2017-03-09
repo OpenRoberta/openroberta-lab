@@ -52,6 +52,7 @@
 <script src="../blocks/robControls.js"></script>
 <script src="../blocks/naoControls.js"></script>
 <script src="../blocks/naoSensors.js"></script>
+<script src="../blocks/naoColour.js"></script>
 <script src="../blocks/simActions.js"></script>
 <script src="../blocks/simSensors.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
@@ -394,10 +395,17 @@ h1 {
         	</block>
         </category>
         <category name='TOOLBOX_LIGHT' svg="true">
-        	<block type='naoActions_leds'>
-            	<value name='INTENSITY'>
+	    <block type='naoActions_rgbLeds'>
+		<value name="COLOR">
+       			<block type="naoColour_picker">
+          			<field name="COLOUR">#ff0000</field>
+        		</block>
+      		</value>
+	    </block>
+	    <block type='naoActions_setIntensity'>
+                <value name='INTENSITY'>
                     <block type='math_number'>
-                        <field name='NUM'>50</field>
+                        <field name='NUM'>2</field>
                     </block>
                 </value>
             </block>
@@ -604,8 +612,8 @@ h1 {
         </block>
     </category> 
     <category name='TOOLBOX_COLOUR' svg="true">
-        <block type='robColour_picker'> 
-        </block>
+        <block type='naoColour_picker'></block>
+	<block type='naoColour_rgb'></block>
     </category>
     <category name='TOOLBOX_VARIABLE' custom='VARIABLE' svg="true"></category>
     <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE' svg="true"></category>

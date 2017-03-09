@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-09 11:15:43.636160",
+		"lastupdated": "2017-03-09 14:07:38.327759",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1151,7 +1151,7 @@
 	"NAO_PLAYFILE_TOOLTIP": "Plays a sound file from the robot.",
 	"NAO_DIALOG_TOOLTIP": "The robot tries to recognize the phrase and answers on success.",
 	"NAO_RECOGNIZEWORD_TOOLTIP": "The robot tries to recognize the word.",
-	"NAO_LED_TOOLTIP": "Set the color and intensity of a single LED or a group.",
+	"NAO_LED_TOOLTIP": "Set the color of a group of LEDs.",
 	"NAO_LEARNFACE_TOOLTIP": "Learn and save a face under a given name",
 	"NAO_FORGETFACE_TOOLTIP": "Forget a face previously saved under a given name",
 	"NAO_DETECTFACE_TOOLTIP": "Detect a face previously saved under a given name",
@@ -1160,6 +1160,7 @@
 	"NAO_HAND_TOOLTIP": "Open/close a hand.",
 	"NAO_SAY_TOOLTIP": "The robot says the given text.",
 	"NAO_GETCURRENT_TOOLTIP": "Get the electric current from the selected joint.",
+	"NAO_SETINTENSITY_TOOLTIP": "Set the intensity of a group of LEDs.",
 	"MENU_CODE_DOWNLOAD_TOOLTIP": "Download the source code of your program on the computer",
 	"MENU_CODE_REFRESH_TOOLTIP": "Refresh the source code, if you have changed the NEPO Block's.",
 	"MENU_SIM_WRO": "World Robot Olympiad scene",

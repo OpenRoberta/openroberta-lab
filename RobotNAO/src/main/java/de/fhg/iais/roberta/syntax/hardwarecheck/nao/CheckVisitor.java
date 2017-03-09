@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
+import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
@@ -795,7 +796,13 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
-        setLeds.getIntensity().visit(this);
+        setLeds.getColor().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+        setIntensity.getIntensity().visit(this);
         return null;
     }
 
@@ -855,6 +862,11 @@ public abstract class CheckVisitor implements NaoAstVisitor<Void> {
     public Void visitTakePicture(TakePicture<Void> takePicture) {
         return null;
     }
+
+    /*@Override
+    public Void visitLedColor(LedColor<Void> ledColor) {
+        return null;
+    }*/
 
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {

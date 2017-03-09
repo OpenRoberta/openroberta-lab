@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
+import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
 import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
@@ -26,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+//import de.fhg.iais.roberta.syntax.expr.nao.LedColor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
@@ -290,4 +292,8 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     V visitNaoGetSampleSensor(NaoGetSampleSensor<V> naoGetSampleSensor);
 
     V visitElectricCurrent(ElectricCurrent<V> electricCurrent);
+
+    //V visitLedColor(LedColor<V> ledColor);
+
+    V visitSetIntensity(SetIntensity<V> setIntensity);
 }
