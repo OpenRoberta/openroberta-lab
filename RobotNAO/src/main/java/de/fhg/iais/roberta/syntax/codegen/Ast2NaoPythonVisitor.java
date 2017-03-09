@@ -1184,6 +1184,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("1)");
         } else if ( setMode.getModus() == Modus.REST ) {
             this.sb.append("2)");
+        } else if ( setMode.getModus() == Modus.SIT ) {
+            this.sb.append("3)");
         }
         return null;
     }

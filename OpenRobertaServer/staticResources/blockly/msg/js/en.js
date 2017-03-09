@@ -703,6 +703,7 @@ Blockly.Msg.NAO_LED_TOOLTIP = "Set the color and intensity of a single LED or a 
 Blockly.Msg.NAO_LOOKAT = "look at";
 Blockly.Msg.NAO_MODE_ACTIVE = "active";
 Blockly.Msg.NAO_MODE_REST = "rest";
+Blockly.Msg.NAO_MODE_SIT = "sit";
 Blockly.Msg.NAO_MODE_TOOLTIP = "Turns the stiffness of the robot's motors on and goes to a standing posture, or goes to a resting posture and turns the stiffness off.";
 Blockly.Msg.NAO_MOVE = "move";
 Blockly.Msg.NAO_MOVEJOINT_TOOLTIP = "Move a single joint.";

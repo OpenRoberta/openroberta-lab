@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum Modus implements IMode {
-    ACTIVE( "OPEN" ), REST( "CLOSE" );
+    ACTIVE( "OPEN" ), REST( "CLOSE" ), SIT( "SIT" );
 
     private final String[] values;
 

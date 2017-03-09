@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-03 12:52:28.490166",
+		"lastupdated": "2017-03-09 09:53:21.836408",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1079,6 +1079,7 @@
 	"NAO_LED_ALL": "all",
 	"NAO_MODE_ACTIVE": "active",
 	"NAO_MODE_REST": "rest",
+	"NAO_MODE_SIT": "sit",
 	"NAO_PART_BODY": "body",
 	"NAO_PART_HEAD": "head",
 	"NAO_PART_ARMS": "arms",
