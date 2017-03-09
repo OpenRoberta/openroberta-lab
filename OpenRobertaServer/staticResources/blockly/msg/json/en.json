@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-09 09:53:21.836408",
+		"lastupdated": "2017-03-09 11:15:43.636160",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1022,6 +1022,10 @@
 	"NAO_POSTURE_STAND": "Stand",
 	"NAO_POSTURE_STANDINIT": "StandInit",
 	"NAO_POSTURE_STANDZERO": "StandZero",
+	"NAO_POSTURE_SITRELAX": "SitRelax",
+	"NAO_POSTURE_LYINGBELLY": "LyingBelly",
+	"NAO_POSTURE_LYINGBACK": "LyingBack",
+	"NAO_POSTURE_CROUCH": "Crouch",
 	"NAO_FRAME_TORSO": "torso",
 	"NAO_FRAME_WORLD": "world",
 	"NAO_BODY_ARM": "arms",

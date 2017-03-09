@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum Posture implements IMode {
-    STAND(), STANDINIT(), STANDZERO();
+    STAND(), STANDINIT(), STANDZERO(), SIT( "sit" ), SITRELAX(), CROUCH(), LYINGBACK(), LYINGBELLY();
 
     private final String[] values;
 

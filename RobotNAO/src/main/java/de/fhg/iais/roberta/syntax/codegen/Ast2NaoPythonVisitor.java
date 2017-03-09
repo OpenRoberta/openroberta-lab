@@ -1199,6 +1199,16 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("\"StandInit\")");
         } else if ( applyPosture.getPosture() == Posture.STANDZERO ) {
             this.sb.append("\"StandZero\")");
+        } else if ( applyPosture.getPosture() == Posture.SITRELAX ) {
+            this.sb.append("\"SitRelax\")");
+        } else if ( applyPosture.getPosture() == Posture.SIT ) {
+            this.sb.append("\"Sit\")");
+        } else if ( applyPosture.getPosture() == Posture.LYINGBELLY ) {
+            this.sb.append("\"LyingBelly\")");
+        } else if ( applyPosture.getPosture() == Posture.LYINGBACK ) {
+            this.sb.append("\"LyingBack\")");
+        } else if ( applyPosture.getPosture() == Posture.CROUCH ) {
+            this.sb.append("\"Crouch\")");
         }
         return null;
     }
