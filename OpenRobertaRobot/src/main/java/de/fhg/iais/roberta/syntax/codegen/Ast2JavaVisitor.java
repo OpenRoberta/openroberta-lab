@@ -404,19 +404,19 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
                 nlIndent();
             case UNTIL:
             case WHILE:
-                addLabelToLoop(isWaitStmt);
+                addLabelToLoop();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
             case FOR:
-                addLabelToLoop(isWaitStmt);
+                addLabelToLoop();
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
-                addLabelToLoop(isWaitStmt);
+                addLabelToLoop();
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             default:
@@ -428,7 +428,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             this.currenLoop.removeLast();
         } else {
             appendBreakStmt(repeatStmt);
-
         }
         decrIndentation();
         nlIndent();
@@ -439,17 +438,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             this.sb.append("}");
         }
         return null;
-    }
-
-    private void addLabelToLoop(boolean isWaitStmt) {
-        if ( !isWaitStmt ) {
-            increaseLoopCounter();
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("loop" + this.loopCounter + ":");
-                nlIndent();
-            }
-
-        }
     }
 
     @Override
@@ -891,6 +879,14 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     private void increaseLoopCounter() {
         this.loopCounter++;
         this.currenLoop.add(this.loopCounter);
+    }
+
+    private void addLabelToLoop() {
+        increaseLoopCounter();
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            this.sb.append("loop" + this.currenLoop.getLast() + ":");
+            nlIndent();
+        }
     }
 
 }

@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -50,6 +52,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.check.CppLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -151,6 +154,11 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     private int indentation;
     private ArrayList<ArrayList<Phrase<Void>>> phrases;
 
+    private int loopCounter = 0;
+    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+
+    private Map<Integer, Boolean> loopsLabels;
+
     /**
      * initialize the Cpp code generator visitor.
      *
@@ -167,6 +175,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.phrases = phrases;
         this.usedHardwareVisitor = usedHardware;
         this.indentation = indentation;
+        this.loopsLabels = new CppLoopsCounterVisitor(phrases).getloopsLabelContainer();
     }
 
     /**
@@ -179,97 +188,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public static String generate(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
+
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
         CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping, phrasesSet);
-        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
-    }
-
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, CppCodeGenerationVisitor astVisitor) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                    phrase.visit(astVisitor);
-                }
-                if ( mainBlock ) {
-                    generateSuffix(withWrapping, astVisitor);
-                    mainBlock = false;
-                }
-            }
-        }
-    }
-
-    private static boolean handleMainBlocks(CppCodeGenerationVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
-    }
-
-    private static void generateSuffix(boolean withWrapping, CppCodeGenerationVisitor astVisitor) {
-        if ( withWrapping ) {
-            astVisitor.nlIndent();
-            // If main exits, there may still be other fibers running or registered event handlers etc.
-            // Simply release this fiber, which will mean we enter the scheduler. Worse case, we then
-            // sit in the idle task forever, in a power efficient sleep.
-            astVisitor.sb.append("release_fiber();");
-            astVisitor.sb.append("\n}\n");
-        }
-    }
-
-    private static String getBlocklyTypeCode(BlocklyType type) {
-        switch ( type ) {
-            case ANY:
-            case COMPARABLE:
-            case ADDABLE:
-            case NULL:
-            case REF:
-            case PRIM:
-            case NOTHING:
-            case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
-                return "";
-            case ARRAY:
-                return "array<";
-            case ARRAY_NUMBER:
-                return "array<double, ";
-            case ARRAY_STRING:
-                return "array<ManagedString,";
-            case ARRAY_BOOLEAN:
-                return "array<bool,";
-            case ARRAY_IMAGE:
-                return "array<MicroBitImage,";
-            case BOOLEAN:
-                return "bool";
-            case NUMBER:
-                return "double";
-            case NUMBER_INT:
-                return "int";
-            case STRING:
-                return "ManagedString";
-            case VOID:
-                return "void";
-            case COLOR:
-                return "int";
-            case CONNECTION:
-                return "int";
-            case IMAGE:
-                return "MicroBitImage";
-            default:
-                throw new IllegalArgumentException("unhandled type");
-        }
-    }
-
-    private static String getEnumCode(IMode value) {
-        return value.getClass().getSimpleName() + "." + value;
     }
 
     /**
@@ -500,15 +424,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
         if ( ifStmt.isTernary() ) {
@@ -522,6 +437,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
+        addBreakLabelToLoop(isWaitStmt);
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
@@ -543,11 +460,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         }
         incrIndentation();
         repeatStmt.getList().visit(this);
-        appendBreakStmt(repeatStmt);
-        if ( repeatStmt.getMode() == Mode.FOREVER ) {
-            nlIndent();
-            this.sb.append("uBit.sleep(1);");
+        if ( !isWaitStmt ) {
+            addContinueLabelToLoop();
+        } else {
+            appendBreakStmt(repeatStmt);
         }
+        addSleepIfForeverLoop(repeatStmt);
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -563,6 +481,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
         return null;
     }
@@ -649,21 +573,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
         this.sb.append(ending + ";");
         return null;
-    }
-
-    private void appendTextDisplyType(DisplayTextAction<Void> displayTextAction) {
-        if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
-            this.sb.append("scroll(");
-        } else {
-            this.sb.append("print(");
-        }
-    }
-
-    private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
-        this.sb.append("ManagedString(");
-        displayTextAction.getMsg().visit(this);
-        ending += ")";
-        return ending;
     }
 
     @Override
@@ -949,10 +858,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         return null;
 
-    }
-
-    private void arrayLen(Var<Void> arr) {
-        this.sb.append(arr.getValue() + ".size()");
     }
 
     @Override
@@ -1339,149 +1244,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    private void incrIndentation() {
-        this.indentation += 1;
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-    }
-
-    private void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
-            }
-        }
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n");
-        indent();
-    }
-
-    private String whitespace() {
-        return " ";
-    }
-
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("(");
-            expr.visit(this);
-            sb.append(")");
-        }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
-            decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                nlIndent();
-                this.sb.append("}").append(whitespace());
-            }
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-        nlIndent();
-        this.sb.append("}");
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(");
-        expr.visit(this);
-        this.sb.append(")" + whitespace() + "{");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(" + "int" + whitespace());
-        final ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace() + "=" + whitespace());
-        expressions.get().get(1).visit(this);
-        this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace());
-        this.sb.append("<" + whitespace());
-        expressions.get().get(2).visit(this);
-        this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace());
-        this.sb.append("+=" + whitespace());
-        expressions.get().get(3).visit(this);
-        this.sb.append(")" + whitespace() + "{");
-    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break;");
-        }
-    }
-
-    private void addConstants() {
-        this.sb.append("#include \"MicroBit.h\" \n");
-        this.sb.append("#include <array>\n");
-        this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("MicroBit uBit; \n \n");
-    }
-
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.addConstants();
-
-    }
-
-    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                    }
-
-                }
-            }
-        }
-    }
-
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
         // TODO Auto-generated method stub
@@ -1525,10 +1287,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    private int map(int x, int in_min, int in_max, int out_min, int out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
 
     @Override
@@ -1651,4 +1409,295 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append(") * 9.0 / 255.0)");
         return null;
     }
+
+    private void incrIndentation() {
+        this.indentation += 1;
+    }
+
+    private void decrIndentation() {
+        this.indentation -= 1;
+    }
+
+    private void indent() {
+        if ( this.indentation <= 0 ) {
+            return;
+        } else {
+            for ( int i = 0; i < this.indentation; i++ ) {
+                this.sb.append(INDENT);
+            }
+        }
+    }
+
+    private void nlIndent() {
+        this.sb.append("\n");
+        indent();
+    }
+
+    private String whitespace() {
+        return " ";
+    }
+
+    private boolean parenthesesCheck(Binary<Void> binary) {
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    }
+
+    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
+            // parentheses are omitted
+            expr.visit(this);
+        } else {
+            sb.append("(");
+            expr.visit(this);
+            sb.append(")");
+        }
+    }
+
+    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
+        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
+            sb.append("(");
+            unary.getExpr().visit(this);
+            sb.append(")");
+        } else {
+            unary.getExpr().visit(this);
+        }
+    }
+
+    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+            if ( i == 0 ) {
+                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
+            } else {
+                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
+            }
+            incrIndentation();
+            ifStmt.getThenList().get(i).visit(this);
+            decrIndentation();
+            if ( i + 1 < ifStmt.getExpr().size() ) {
+                nlIndent();
+                this.sb.append("}").append(whitespace());
+            }
+        }
+    }
+
+    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
+        if ( ifStmt.getElseList().get().size() != 0 ) {
+            nlIndent();
+            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
+            incrIndentation();
+            ifStmt.getElseList().visit(this);
+            decrIndentation();
+        }
+        nlIndent();
+        this.sb.append("}");
+    }
+
+    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType + whitespace() + "(");
+        expr.visit(this);
+        this.sb.append(")" + whitespace() + "{");
+    }
+
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType + whitespace() + "(" + "int" + whitespace());
+        final ExprList<Void> expressions = (ExprList<Void>) expr;
+        expressions.get().get(0).visit(this);
+        this.sb.append(whitespace() + "=" + whitespace());
+        expressions.get().get(1).visit(this);
+        this.sb.append(";" + whitespace());
+        expressions.get().get(0).visit(this);
+        this.sb.append(whitespace());
+        this.sb.append("<" + whitespace());
+        expressions.get().get(2).visit(this);
+        this.sb.append(";" + whitespace());
+        expressions.get().get(0).visit(this);
+        this.sb.append(whitespace());
+        this.sb.append("+=" + whitespace());
+        expressions.get().get(3).visit(this);
+        this.sb.append(")" + whitespace() + "{");
+    }
+
+    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+        nlIndent();
+        this.sb.append("break;");
+    }
+
+    private void addConstants() {
+        this.sb.append("#include \"MicroBit.h\" \n");
+        this.sb.append("#include <array>\n");
+        this.sb.append("#include <stdlib.h>\n");
+        this.sb.append("MicroBit uBit; \n \n");
+    }
+
+    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.addConstants();
+
+    }
+
+    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        if ( phrasesSet.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+                    if ( isCreateMethodPhrase ) {
+                        phrase.visit(this);
+                        this.sb.append("\n");
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void addSleepIfForeverLoop(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getMode() == Mode.FOREVER ) {
+            nlIndent();
+            this.sb.append("uBit.sleep(1);");
+        }
+    }
+
+    private void addContinueLabelToLoop() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            nlIndent();
+            this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
+        }
+        this.currenLoop.removeLast();
+    }
+
+    private int map(int x, int in_min, int in_max, int out_min, int out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
+    private void addBreakLabelToLoop(boolean isWaitStmt) {
+        if ( !isWaitStmt ) {
+            increaseLoopCounter();
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("break_loop" + this.loopCounter + ":");
+                nlIndent();
+            }
+
+        }
+    }
+
+    private void increaseLoopCounter() {
+        this.loopCounter++;
+        this.currenLoop.add(this.loopCounter);
+    }
+
+    private void arrayLen(Var<Void> arr) {
+        this.sb.append(arr.getValue() + ".size()");
+    }
+
+    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, CppCodeGenerationVisitor astVisitor) {
+        boolean mainBlock = false;
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                    phrase.visit(astVisitor);
+                }
+                if ( mainBlock ) {
+                    generateSuffix(withWrapping, astVisitor);
+                    mainBlock = false;
+                }
+            }
+        }
+    }
+
+    private boolean handleMainBlocks(CppCodeGenerationVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+        if ( phrase.getKind().getCategory() != Category.TASK ) {
+            astVisitor.nlIndent();
+        } else if ( !phrase.getKind().hasName("LOCATION") ) {
+            mainBlock = true;
+        }
+        return mainBlock;
+    }
+
+    private void generateSuffix(boolean withWrapping, CppCodeGenerationVisitor astVisitor) {
+        if ( withWrapping ) {
+            astVisitor.nlIndent();
+            // If main exits, there may still be other fibers running or registered event handlers etc.
+            // Simply release this fiber, which will mean we enter the scheduler. Worse case, we then
+            // sit in the idle task forever, in a power efficient sleep.
+            astVisitor.sb.append("release_fiber();");
+            astVisitor.sb.append("\n}\n");
+        }
+    }
+
+    private String getBlocklyTypeCode(BlocklyType type) {
+        switch ( type ) {
+            case ANY:
+            case COMPARABLE:
+            case ADDABLE:
+            case NULL:
+            case REF:
+            case PRIM:
+            case NOTHING:
+            case CAPTURED_TYPE:
+            case R:
+            case S:
+            case T:
+                return "";
+            case ARRAY:
+                return "array<";
+            case ARRAY_NUMBER:
+                return "array<double, ";
+            case ARRAY_STRING:
+                return "array<ManagedString,";
+            case ARRAY_BOOLEAN:
+                return "array<bool,";
+            case ARRAY_IMAGE:
+                return "array<MicroBitImage,";
+            case BOOLEAN:
+                return "bool";
+            case NUMBER:
+                return "double";
+            case NUMBER_INT:
+                return "int";
+            case STRING:
+                return "ManagedString";
+            case VOID:
+                return "void";
+            case COLOR:
+                return "int";
+            case CONNECTION:
+                return "int";
+            case IMAGE:
+                return "MicroBitImage";
+            default:
+                throw new IllegalArgumentException("unhandled type");
+        }
+    }
+
+    private String getEnumCode(IMode value) {
+        return value.getClass().getSimpleName() + "." + value;
+    }
+
+    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+        this.sb.append("(" + whitespace());
+        ifStmt.getExpr().get(0).visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        this.sb.append(whitespace() + ":" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+    }
+
+    private void appendTextDisplyType(DisplayTextAction<Void> displayTextAction) {
+        if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
+            this.sb.append("scroll(");
+        } else {
+            this.sb.append("print(");
+        }
+    }
+
+    private String wrapInManageStringToDisplay(DisplayTextAction<Void> displayTextAction, String ending) {
+        this.sb.append("ManagedString(");
+        displayTextAction.getMsg().visit(this);
+        ending += ")";
+        return ending;
+    }
+
 }

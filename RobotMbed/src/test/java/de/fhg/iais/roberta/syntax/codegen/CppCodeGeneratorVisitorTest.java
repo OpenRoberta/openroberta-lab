@@ -466,6 +466,327 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/action/write_value_to_pin.xml");
     }
 
+    @Test
+    public void check_noLoops_returnsEmptyMap() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "if (20 == 30) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "}"
+            + END;
+
+        assertCodeIsOk(a, "/stmts/no_loops.xml");
+    }
+
+    @Test
+    public void check_nestedLoopsNoBreakorContinue_returnsMapWithTwoFalseElements() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "while (true) {"
+            + "if (30 == 20) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "}"
+            + "for (int i = 1; i < 10; i += 1) {"
+            + "}"
+            + "uBit.sleep(1);"
+            + "}"
+            + END;
+        assertCodeIsOk(a, "/stmts/nested_loops.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinue_returnsMapWithFiveFalseElements() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + "array<double, 3> item2 = {0, 0, 0};"
+            + MAIN
+            + "while (true) {"
+            + "if (30 == 20) {"
+            + "     break;"
+            + "} else if (30 == 12) {"
+            + "     continue;"
+            + "}"
+            + "uBit.sleep(1);"
+            + "}"
+            + "for (int i = 1; i < 10; i += 1) {"
+            + "if (30 == 20) {"
+            + "     continue;"
+            + "} else if (30 == 12) {"
+            + "     break;"
+            + "}"
+            + "}"
+            + "for (double item : item2) {"
+            + "if (30 == 20) {"
+            + "     continue;"
+            + "} else if (30 == 20) {"
+            + "     break;"
+            + "}"
+            + "}"
+            + "while (true) {"
+            + "if (30 == 20) {"
+            + "     continue;"
+            + "} else if (30 == 20) {"
+            + "     break;"
+            + "}"
+            + "}"
+            + "for (int k0 = 0; k0 < 10; k0 += 1) {"
+            + "if (30 == 20) {"
+            + "     break;"
+            + "} else if (30 == 20) {"
+            + "     continue;"
+            + "}"
+            + "}"
+            + END;
+        assertCodeIsOk(a, "/stmts/loops_with_break_and_continue.xml");
+    }
+
+    @Test
+    public void check_loopWithBreakAndContinueInWait_returnsMapWithOneTrueElements() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "break_loop1:"
+            + "while (true) {"
+
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "continue_loop1:"
+            + "uBit.sleep(1);"
+            + "}"
+            + END;
+        assertCodeIsOk(a, "/stmts/loop_with_break_and_continue_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "break_loop1:"
+            + "while (true) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "continue_loop1:"
+            + "uBit.sleep(1);"
+            + "}"
+            + "for (int i = 1; i < 10; i += 1) {"
+            + "     if (i < 10) {"
+            + "         continue;"
+            + "     }"
+            + "}"
+            + END;
+
+        assertCodeIsOk(a, "/stmts/two_loop_with_break_and_continue_one_inside_wait_another_not.xml");
+    }
+
+    @Test
+    public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsMapWithTwoElementsFirsTrueSecondFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "break_loop1:"
+            + "while (true) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "for (int i = 1; i < 10; i += 1) {"
+            + "     if (i < 10) {"
+            + "        continue;"
+            + "     }"
+            + "}"
+            + "continue_loop1:"
+            + "uBit.sleep(1);"
+            + "}"
+            + END;
+        assertCodeIsOk(a, "/stmts/two_nested_loops_first_with_break_in_wait_second_not.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWait_returnsMapWithThreeElementsFirsTrueSecondThirdFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "break_loop1:"
+            + "while (true) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         for (int i = 1; i < 10; i += 1) {"
+            + "             if (i < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         for (int j = 1; j < 10; j += 1) {"
+            + "             if (j < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "continue_loop1:"
+            + "uBit.sleep(1);"
+            + "}"
+            + END;
+
+        assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait.xml");
+    }
+
+    @Test
+    public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithThreeElementsFirsAndThirdTrueSecondFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "break_loop1:"
+            + "while (true) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         for (int j = 1; j < 10; j += 1) {"
+            + "             if (j < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         break_loop3:"
+            + "         for (int i = 1; i < 10; i += 1) {"
+            + "         while (1) {"
+            + "             if (uBit.buttonA.isPressed() == true) {"
+            + "                 goto continue_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             if (uBit.buttonA.isPressed() == true) {"
+            + "                 goto break_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             uBit.sleep(100);"
+            + "         }"
+            + "         continue_loop3:"
+            + "         }"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "continue_loop1:"
+            + "uBit.sleep(1);"
+            + "}"
+            + END;
+        assertCodeIsOk(a, "/stmts/loop_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
+    @Test
+    public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsMapWithFiveElementsFirsThirdFourthTrueSecondFifthFalse() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN
+            + "break_loop1:"
+            + "while (true) {"
+            + "   while (1) {"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         for (int j = 1; j < 10; j += 1) {"
+            + "             if (j < 10) {"
+            + "                 continue;"
+            + "             }"
+            + "         }"
+            + "         goto continue_loop1;"
+            + "         break;"
+            + "     }"
+            + "     if (uBit.buttonA.isPressed() == true) {"
+            + "         break_loop3:"
+            + "         for (int i = 1; i < 10; i += 1) {"
+            + "         while (1) {"
+            + "             if (uBit.buttonA.isPressed() == true) {"
+            + "                 goto continue_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             if (uBit.buttonA.isPressed() == true) {"
+            + "                 goto break_loop3;"
+            + "                 break;"
+            + "             }"
+            + "             uBit.sleep(100);"
+            + "         }"
+            + "         continue_loop3:"
+            + "         }"
+            + "         goto break_loop1;"
+            + "         break;"
+            + "     }"
+            + "     uBit.sleep(100);"
+            + "   }"
+            + "continue_loop1:"
+            + "uBit.sleep(1);"
+            + "}"
+            + "while (true) {"
+            + "     if (10 < 10) {"
+            + "         continue;"
+            + "     }"
+            + "uBit.sleep(1);"
+            + "}"
+            + "break_loop5:"
+            + "while (true) {"
+            + "         while (1) {"
+            + "             if (uBit.buttonA.isPressed() == true) {"
+            + "                 goto continue_loop5;"
+            + "                 break;"
+            + "             }"
+            + "             if (uBit.buttonA.isPressed() == true) {"
+            + "                 goto break_loop5;"
+            + "                 break;"
+            + "             }"
+            + "             uBit.sleep(100);"
+            + "         }"
+            + "continue_loop5:"
+            + "uBit.sleep(1);"
+            + "}"
+            + END;
+        assertCodeIsOk(a, "/stmts/three_loops_with_nested_two_loops_inside_wait_second_contain_wait.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
