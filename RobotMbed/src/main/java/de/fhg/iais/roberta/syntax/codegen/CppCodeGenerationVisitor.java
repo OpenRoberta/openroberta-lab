@@ -680,14 +680,14 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         String gest = gestureSensor.getMode().toString();
-        this.sb.append("uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
+        this.sb.append("(uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
         if ( gestureSensor.getMode().toString() == "UP"
             || gestureSensor.getMode().toString() == "DOWN"
             || gestureSensor.getMode().toString() == "LEFT"
             || gestureSensor.getMode().toString() == "RIGHT" ) {
             this.sb.append("TILT_");
         }
-        this.sb.append(gest);
+        this.sb.append(gest + ")");
         return null;
     }
 

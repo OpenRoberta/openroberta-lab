@@ -203,8 +203,8 @@ public class CppCodeGeneratorVisitorTest {
             + MAIN
             + "uBit.accelerometer.updateSample();\n"
             + "\n"
-            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN));"
-            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT));"
+            + "uBit.display.scroll(ManagedString((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)));"
+            + "uBit.display.scroll(ManagedString((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_LEFT)));"
             + END;
 
         assertCodeIsOk(expectedResult, "/sensor/check_gesture.xml");
@@ -383,12 +383,12 @@ public class CppCodeGeneratorVisitorTest {
             + "uBit.sleep(100);"
             + "}"
             + "while(1){"
-            + "if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_UP==true){break;}uBit.sleep(100);}"
-            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_DOWN==true){break;}uBit.sleep(100);}"
-            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_UP==true){break;}uBit.sleep(100);}"
-            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN==true){break;}uBit.sleep(100);}"
-            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_SHAKE==true){break;}uBit.sleep(100);}"
-            + "while(1){if(uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FREEFALL==true){break;}uBit.sleep(100);}"
+            + "if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_UP)==true){break;}uBit.sleep(100);}"
+            + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_TILT_DOWN)==true){break;}uBit.sleep(100);}"
+            + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_UP)==true){break;}uBit.sleep(100);}"
+            + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FACE_DOWN)==true){break;}uBit.sleep(100);}"
+            + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_SHAKE)==true){break;}uBit.sleep(100);}"
+            + "while(1){if((uBit.accelerometer.getGesture()==MICROBIT_ACCELEROMETER_EVT_FREEFALL)==true){break;}uBit.sleep(100);}"
             + "while(1){if(uBit.compass.heading()>180){break;}uBit.sleep(100);}while(1){if(uBit.systemTime()-initTime>500){break;}uBit.sleep(100);}"
             + "while(1){if(uBit.thermometer.getTemperature()>20){break;}uBit.sleep(100);}while(1){if(uBit.display.readLightLevel()>50){break;}uBit.sleep(100);}"
             + END;
