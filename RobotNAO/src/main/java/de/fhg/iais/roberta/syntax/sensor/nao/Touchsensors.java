@@ -97,7 +97,7 @@ public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sen
      * Modes in which the sensor can operate.
      */
     public static enum SensorType {
-        HAND( "HAND" ), HEAD( "head" ), BUMPER( "bumper" );
+        HAND( "hand" ), HEAD( "head" ), BUMPER( "bumper" );
 
         private final String pythonCode;
 
