@@ -14,10 +14,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
 /**
- * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for setting the motor speed and type of movement connected on given port and turn the motor on.<br/>
+ * This class represents the <b>naoSensors_naoMark</b> blocks from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for detecting a NaoMark.<br/>
  * <br/>
- * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
 public final class NaoMark<V> extends Sensor<V> {
 
@@ -41,7 +40,7 @@ public final class NaoMark<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return "Sonar []";
+        return "NaoMark []";
     }
 
     @Override

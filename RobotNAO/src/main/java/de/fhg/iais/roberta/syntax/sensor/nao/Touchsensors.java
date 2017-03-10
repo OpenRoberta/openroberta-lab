@@ -5,8 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.Posture;
-import de.fhg.iais.roberta.mode.sensor.nao.Sensor;
-import de.fhg.iais.roberta.mode.sensor.nao.Side;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,10 +24,10 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sensor<V> {
 
-    private final Sensor sensor;
-    private final Side side;
+    private final SensorType sensor;
+    private final TouchSide side;
 
-    private Touchsensors(Sensor sensor, Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Touchsensors(SensorType sensor, TouchSide side, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("TOUCHSENSORS"), properties, comment);
         Assert.notNull(sensor, "Missing sensor in Touchsensors block!");
         Assert.notNull(side, "Missing side in Touchsensors block!");
@@ -46,11 +44,11 @@ public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sen
      * @param comment added from the user,
      * @return read only object of class {@link Touchsensors}
      */
-    static <V> Touchsensors<V> make(Sensor sensor, Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> Touchsensors<V> make(SensorType sensor, TouchSide side, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Touchsensors<V>(sensor, side, properties, comment);
     }
 
-    public Side getSide() {
+    public TouchSide getSide() {
         return this.side;
     }
 
@@ -59,7 +57,7 @@ public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sen
         return "Touchsensors [" + this.sensor + ", " + this.side + "]";
     }
 
-    public Sensor getSensor() {
+    public SensorType getSensor() {
         return this.sensor;
     }
 
@@ -81,7 +79,7 @@ public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sen
         String sensor = helper.extractField(fields, BlocklyConstants.POSITION);
         String side = helper.extractField(fields, BlocklyConstants.SIDE);
 
-        return Touchsensors.make(Sensor.get(sensor), Side.get(side), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Touchsensors.make(SensorType.valueOf(sensor), TouchSide.valueOf(side), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -93,5 +91,39 @@ public final class Touchsensors<V> extends de.fhg.iais.roberta.syntax.sensor.Sen
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, this.side.toString());
 
         return jaxbDestination;
+    }
+
+    /**
+     * Modes in which the sensor can operate.
+     */
+    public static enum SensorType {
+        HAND( "HAND" ), HEAD( "head" ), BUMPER( "bumper" );
+
+        private final String pythonCode;
+
+        private SensorType(String pythonCode) {
+            this.pythonCode = pythonCode;
+        }
+
+        public String getPythonCode() {
+            return this.pythonCode;
+        }
+    }
+
+    /**
+     * Modes in which the sensor can operate.
+     */
+    public static enum TouchSide {
+        LEFT( "left" ), RIGHT( "right" ), FRONT( "front" ), MIDDLE( "middle" ), REAR( "rear" );
+
+        private final String pythonCode;
+
+        private TouchSide(String pythonCode) {
+            this.pythonCode = pythonCode;
+        }
+
+        public String getPythonCode() {
+            return this.pythonCode;
+        }
     }
 }

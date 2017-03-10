@@ -26,9 +26,6 @@ import de.fhg.iais.roberta.mode.action.nao.Resolution;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.nao.Coordinates;
-import de.fhg.iais.roberta.mode.sensor.nao.Sensor;
-import de.fhg.iais.roberta.mode.sensor.nao.Side;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -1672,6 +1669,12 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
+        this.sb.append("h.touchsensor(");
+        this.sb.append(touchsensors.getSensor().getPythonCode());
+        this.sb.append(", ");
+        this.sb.append(touchsensors.getSide().getPythonCode());
+        this.sb.append(")");
+        /*
         this.sb.append("h.touchsensors(");
         if ( touchsensors.getSensor() == Sensor.BUMPER ) {
             this.sb.append("\"Bumper\", ");
@@ -1690,7 +1693,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("\"Rear\")");
         } else if ( touchsensors.getSide() == Side.RIGHT ) {
             this.sb.append("\"Right\")");
-        }
+        }*/
         return null;
     }
 
@@ -1703,18 +1706,25 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     @Override
     public Void visitGyrometer(Gyrometer<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
+        this.sb.append(gyrometer.getCoordinate().getPythonCode());
+        this.sb.append(")");
+        /*
         if ( gyrometer.getCoordinate() == Coordinates.X ) {
             this.sb.append("\"X\")");
         } else if ( gyrometer.getCoordinate() == Coordinates.Y ) {
             this.sb.append("\"Y\")");
         } else if ( gyrometer.getCoordinate() == Coordinates.Z ) {
             this.sb.append("\"Z\")");
-        }
+        }*/
         return null;
     }
 
     @Override
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.sb.append("h.accelerometer(");
+        this.sb.append(accelerometer.getCoordinate().getPythonCode());
+        this.sb.append(")");
+        /*
         this.sb.append("h.accelerometer(");
         if ( accelerometer.getCoordinate() == Coordinates.X ) {
             this.sb.append("\"X\")");
@@ -1722,18 +1732,21 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             this.sb.append("\"Y\")");
         } else if ( accelerometer.getCoordinate() == Coordinates.Z ) {
             this.sb.append("\"Z\")");
-        }
+        }*/
         return null;
     }
 
     @Override
     public Void visitForceSensor(ForceSensor<Void> forceSensor) {
         this.sb.append("h.fsr(");
+        this.sb.append(forceSensor.getSide().getPythonCode());
+        this.sb.append(")");
+        /*
         if ( forceSensor.getSide() == Side.LEFT ) {
             this.sb.append("\"Left\")");
         } else if ( forceSensor.getSide() == Side.RIGHT ) {
             this.sb.append("\"Right\")");
-        }
+        }*/
         return null;
     }
 

@@ -35,15 +35,31 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public class NaoGetSampleSensor<V> extends Sensor<V> {
     private final Sensor<V> sensor;
+    private final String touchSensor;
+    private final String touchSide;
+    private final String Coordinate;
+    private final String fsrSide;
     private final GetSampleType sensorType;
 
-    private NaoGetSampleSensor(GetSampleType sensorType, BlocklyBlockProperties properties, BlocklyComment comment, IRobotFactory factory) {
+    private NaoGetSampleSensor(
+        GetSampleType sensorType,
+        String touchsensor,
+        String side,
+        String coordinate,
+        String fsrSide,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment,
+        IRobotFactory factory) {
         super(BlockTypeContainer.getByName("GET_SAMPLE"), properties, comment);
         Assert.isTrue(sensorType != null);
         this.sensorType = sensorType;
+        this.touchSensor = touchsensor;
+        this.touchSide = side;
+        this.Coordinate = coordinate;
+        this.fsrSide = fsrSide;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.NAO_TOUCHSENSOR:
-                this.sensor = Touchsensors.make(null, null, properties, comment);
+                this.sensor = Touchsensors.make(Touchsensors.SensorType.valueOf(touchsensor), Touchsensors.TouchSide.valueOf(side), properties, comment);
                 break;
             case BlocklyConstants.NAO_DETECTFACE:
                 this.sensor = DetectFace.make(properties, comment);
@@ -55,13 +71,13 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
                 this.sensor = Sonar.make(properties, comment);
                 break;
             case BlocklyConstants.NAO_GYROMETER:
-                this.sensor = Gyrometer.make(null, properties, comment);
+                this.sensor = Gyrometer.make(Gyrometer.Coordinate.valueOf(coordinate), properties, comment);
                 break;
             case BlocklyConstants.NAO_ACCELEROMETER:
-                this.sensor = Accelerometer.make(null, properties, comment);
+                this.sensor = Accelerometer.make(Accelerometer.Coordinate.valueOf(coordinate), properties, comment);
                 break;
             case BlocklyConstants.NAO_FSR:
-                this.sensor = ForceSensor.make(null, properties, comment);
+                this.sensor = ForceSensor.make(ForceSensor.Side.valueOf(fsrSide), properties, comment);
                 break;
 
             default:
@@ -81,30 +97,55 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
      */
     public static <V> NaoGetSampleSensor<V> make(
         GetSampleType sensorType,
-        String port,
+        String touchSensor,
+        String touchSide,
+        String coordinate,
+        String fsrSide,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new NaoGetSampleSensor<V>(sensorType, properties, comment, factory);
+        return new NaoGetSampleSensor<V>(sensorType, touchSensor, touchSide, coordinate, fsrSide, properties, comment, factory);
     }
 
-    /**
-     * @return the sensor
-     */
+    public String getFsrSide() {
+        return this.fsrSide;
+    }
+
     public Sensor<V> getSensor() {
         return this.sensor;
     }
 
-    /**
-     * @return type of the sensor who will get the sample
-     */
+    public String getTouchSensor() {
+        return this.touchSensor;
+    }
+
+    public String getTouchSide() {
+        return this.touchSide;
+    }
+
+    public String getCoordinate() {
+        return this.Coordinate;
+    }
+
     public GetSampleType getSensorType() {
         return this.sensorType;
     }
 
     @Override
     public String toString() {
-        return "NaoGetSampleSensor [" + this.sensor + "]";
+        return "NaoGetSampleSensor [sensor="
+            + this.sensor
+            + ", touchSensor="
+            + this.touchSensor
+            + ", touchSide="
+            + this.touchSide
+            + ", Coordinate="
+            + this.Coordinate
+            + ", fsrSide="
+            + this.fsrSide
+            + ", sensorType="
+            + this.sensorType
+            + "]";
     }
 
     @Override
@@ -122,8 +163,40 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
-        return NaoGetSampleSensor
-            .make(GetSampleType.get(modeName), modeName, helper.extractBlockProperties(block), helper.extractComment(block), helper.getModeFactory());
+
+        String touchSensorName = GetSampleType.get(modeName).getTouchSensorName();
+        String touchSensor = "";
+        if ( !touchSensorName.equals("") ) {
+            touchSensor = helper.extractField(fields, touchSensorName);
+        }
+
+        String touchSideName = GetSampleType.get(modeName).getTouchSideName();
+        String touchSide = "";
+        if ( !touchSideName.equals("") ) {
+            touchSide = helper.extractField(fields, touchSideName);
+        }
+
+        String coordinateName = GetSampleType.get(modeName).getCoordinateName();
+        String coordinate = "";
+        if ( !coordinateName.equals("") ) {
+            coordinate = helper.extractField(fields, coordinateName);
+        }
+
+        String fsrSideName = GetSampleType.get(modeName).getFsrSide();
+        String fsrSide = "";
+        if ( !fsrSideName.equals("") ) {
+            fsrSide = helper.extractField(fields, fsrSideName);
+        }
+
+        return NaoGetSampleSensor.make(
+            GetSampleType.get(modeName),
+            touchSensor,
+            touchSide,
+            coordinate,
+            fsrSide,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block),
+            helper.getModeFactory());
     }
 
     @Override

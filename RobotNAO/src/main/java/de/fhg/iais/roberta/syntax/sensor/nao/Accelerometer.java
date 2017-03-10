@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.nao.Coordinates;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -27,9 +26,9 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class Accelerometer<V> extends Sensor<V> {
 
-    private final Coordinates coordinate;
+    private final Coordinate coordinate;
 
-    private Accelerometer(Coordinates coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Accelerometer(Coordinate coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("Accelerometer"), properties, comment);
         Assert.notNull(coordinate, "Missing coordinate in accelerometer block!");
         this.coordinate = coordinate;
@@ -45,11 +44,11 @@ public final class Accelerometer<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Accelerometer}
      */
-    static <V> Accelerometer<V> make(Coordinates coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> Accelerometer<V> make(Coordinate coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Accelerometer<V>(coordinate, properties, comment);
     }
 
-    public Coordinates getCoordinate() {
+    public Coordinate getCoordinate() {
         return this.coordinate;
     }
 
@@ -70,7 +69,7 @@ public final class Accelerometer<V> extends Sensor<V> {
 
         String coordinate = helper.extractField(fields, BlocklyConstants.COORDINATE);
 
-        return Accelerometer.make(Coordinates.get(coordinate), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Accelerometer.make(Coordinate.valueOf(coordinate), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -82,5 +81,22 @@ public final class Accelerometer<V> extends Sensor<V> {
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, this.coordinate.toString());
 
         return jaxbDestination;
+    }
+
+    /**
+     * Modes in which the sensor can operate.
+     */
+    public static enum Coordinate {
+        X( "x" ), Y( "y" ), Z( "z" );
+
+        private final String pythonCode;
+
+        private Coordinate(String pythonCode) {
+            this.pythonCode = pythonCode;
+        }
+
+        public String getPythonCode() {
+            return this.pythonCode;
+        }
     }
 }

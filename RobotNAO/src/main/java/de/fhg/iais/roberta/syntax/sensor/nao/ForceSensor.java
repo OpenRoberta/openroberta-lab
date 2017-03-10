@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.nao.Side;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -70,7 +69,7 @@ public final class ForceSensor<V> extends Sensor<V> {
 
         String side = helper.extractField(fields, BlocklyConstants.SIDE);
 
-        return ForceSensor.make(Side.get(side), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ForceSensor.make(Side.valueOf(side), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -81,5 +80,22 @@ public final class ForceSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, this.side.toString());
 
         return jaxbDestination;
+    }
+
+    /**
+     * Modes in which the sensor can operate.
+     */
+    public static enum Side {
+        LEFT( "left" ), RIGHT( "right" );
+
+        private final String pythonCode;
+
+        private Side(String pythonCode) {
+            this.pythonCode = pythonCode;
+        }
+
+        public String getPythonCode() {
+            return this.pythonCode;
+        }
     }
 }

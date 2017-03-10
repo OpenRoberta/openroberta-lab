@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.nao.Coordinates;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -27,9 +26,9 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  */
 public final class Gyrometer<V> extends Sensor<V> {
 
-    private final Coordinates coordinate;
+    private final Coordinate coordinate;
 
-    private Gyrometer(Coordinates coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Gyrometer(Coordinate coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("GYROMETER"), properties, comment);
         Assert.notNull(coordinate, "Missing coordinate in gyrometer block!");
         this.coordinate = coordinate;
@@ -45,11 +44,11 @@ public final class Gyrometer<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Gyrometer}
      */
-    static <V> Gyrometer<V> make(Coordinates coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> Gyrometer<V> make(Coordinate coordinate, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Gyrometer<V>(coordinate, properties, comment);
     }
 
-    public Coordinates getCoordinate() {
+    public Coordinate getCoordinate() {
         return this.coordinate;
     }
 
@@ -70,7 +69,7 @@ public final class Gyrometer<V> extends Sensor<V> {
 
         String coordinate = helper.extractField(fields, BlocklyConstants.COORDINATE);
 
-        return Gyrometer.make(Coordinates.get(coordinate), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Gyrometer.make(Coordinate.valueOf(coordinate), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -82,4 +81,22 @@ public final class Gyrometer<V> extends Sensor<V> {
 
         return jaxbDestination;
     }
+
+    /**
+     * Modes in which the sensor can operate.
+     */
+    public static enum Coordinate {
+        X( "x" ), Y( "y" ), Z( "z" );
+
+        private final String pythonCode;
+
+        private Coordinate(String pythonCode) {
+            this.pythonCode = pythonCode;
+        }
+
+        public String getPythonCode() {
+            return this.pythonCode;
+        }
+    }
+
 }
