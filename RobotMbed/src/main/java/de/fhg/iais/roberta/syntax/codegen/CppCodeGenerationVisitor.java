@@ -994,6 +994,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        this.sb.append("min(max(");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append("), ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
         return null;
     }
 
