@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -81,6 +83,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.check.NaoLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
@@ -159,6 +162,7 @@ import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
@@ -181,6 +185,11 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     private int indentation;
     private final StringBuilder indent = new StringBuilder();
+
+    private int loopCounter = 0;
+    private final LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+
+    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Python code generator visitor.
@@ -217,14 +226,15 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         Ast2NaoPythonVisitor astVisitor = new Ast2NaoPythonVisitor(programName, brickConfiguration, checkVisitor, 0);
         astVisitor.generatePrefix(withWrapping);
 
-        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
 
         astVisitor.generateSuffix(withWrapping);
 
         return astVisitor.sb.toString();
     }
 
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NaoPythonVisitor astVisitor) {
+    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NaoPythonVisitor astVisitor) {
+        this.loopsLabels = new NaoLoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
@@ -550,38 +560,36 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                appendTry();
                 break;
             case TIMES:
             case FOR:
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                appendTry();
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                appendTry();
                 break;
             default:
                 break;
         }
         incrIndentation();
-        Mode mode = repeatStmt.getMode();
-        if ( repeatStmt.getList().get().isEmpty() ) {
-            if ( mode != Mode.WAIT ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
+        appendPassIfEmptyBody(repeatStmt);
+        repeatStmt.getList().visit(this);
+        if ( !isWaitStmt ) {
+            appendExceptionHandling();
         } else {
-            repeatStmt.getList().visit(this);
-        }
-        if ( mode == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break");
+            appendBreakStmt(repeatStmt);
         }
         decrIndentation();
         return null;
@@ -593,8 +601,62 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
+    private void increaseLoopCounter() {
+        this.loopCounter++;
+        this.currenLoop.add(this.loopCounter);
+    }
+
+    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+        nlIndent();
+        this.sb.append("break");
+    }
+
+    private void appendTry() {
+        increaseLoopCounter();
+
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            incrIndentation();
+            nlIndent();
+            this.sb.append("try:");
+        }
+    }
+
+    private void appendExceptionHandling() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except BreakOutOfALoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("break");
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except ContinueLoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("continue");
+            decrIndentation();
+        }
+        this.currenLoop.removeLast();
+    }
+
+    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getList().get().isEmpty() ) {
+            if ( repeatStmt.getMode() != Mode.WAIT ) {
+                nlIndent();
+                this.sb.append("pass");
+            }
+        }
+    }
+
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
     }
@@ -1150,7 +1212,10 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("import math\n");
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
-        this.sb.append("h = Hal()\n");
+        this.sb.append("h = Hal()\n\n");
+
+        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
+        this.sb.append("class ContinueLoop(Exception): pass\n\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
