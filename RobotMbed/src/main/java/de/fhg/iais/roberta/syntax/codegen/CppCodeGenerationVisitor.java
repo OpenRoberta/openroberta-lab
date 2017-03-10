@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -869,6 +870,20 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             this.sb.append("null");
             return null;
         }
+        String methodName = "findFirstOccurrenceOfElementInArray(";
+        if ( indexOfFunct.getLocation() != IndexLocation.FIRST ) {
+            methodName = "findLastOccurrenceOfElementInArray(";
+        }
+        this.sb.append(methodName);
+        if ( indexOfFunct.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
+            this.sb.append("(double) ");
+        } else if ( indexOfFunct.getParam().get(1).getVarType() == BlocklyType.STRING ) {
+            this.sb.append("(ManagedString) ");
+        }
+        indexOfFunct.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
         return null;
     }
 
