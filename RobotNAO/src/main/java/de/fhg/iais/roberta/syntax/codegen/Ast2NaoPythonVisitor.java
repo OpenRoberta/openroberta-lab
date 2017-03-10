@@ -1641,13 +1641,61 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
-        this.sb.append("h.ledOff()");
+        this.sb.append("h.ledOff(");
+        if ( ledOff.getLed() == Led.ALL ) {
+            this.sb.append("\"AllLeds\", ");
+        } else if ( ledOff.getLed() == Led.CHEST ) {
+            this.sb.append("\"ChestLeds\", ");
+        } else if ( ledOff.getLed() == Led.EARS ) {
+            this.sb.append("\"EarLeds\", ");
+        } else if ( ledOff.getLed() == Led.EYES ) {
+            this.sb.append("\"FaceLeds\", ");
+        } else if ( ledOff.getLed() == Led.HEAD ) {
+            this.sb.append("\"BrainLeds\", ");
+        } else if ( ledOff.getLed() == Led.LEFTEAR ) {
+            this.sb.append("\"LeftEarLeds\", ");
+        } else if ( ledOff.getLed() == Led.LEFTEYE ) {
+            this.sb.append("\"LeftFaceLeds\", ");
+        } else if ( ledOff.getLed() == Led.LEFTFOOT ) {
+            this.sb.append("\"LeftFootLeds\", ");
+        } else if ( ledOff.getLed() == Led.RIGHTEAR ) {
+            this.sb.append("\"RightEarLeds\", ");
+        } else if ( ledOff.getLed() == Led.RIGHTEYE ) {
+            this.sb.append("\"RightFaceLeds\", ");
+        } else if ( ledOff.getLed() == Led.RIGHTFOOT ) {
+            this.sb.append("\"RightFootLeds\", ");
+        }
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
         this.sb.append("h.ledReset()");
+        if ( ledReset.getLed() == Led.ALL ) {
+            this.sb.append("\"AllLeds\", ");
+        } else if ( ledReset.getLed() == Led.CHEST ) {
+            this.sb.append("\"ChestLeds\", ");
+        } else if ( ledReset.getLed() == Led.EARS ) {
+            this.sb.append("\"EarLeds\", ");
+        } else if ( ledReset.getLed() == Led.EYES ) {
+            this.sb.append("\"FaceLeds\", ");
+        } else if ( ledReset.getLed() == Led.HEAD ) {
+            this.sb.append("\"BrainLeds\", ");
+        } else if ( ledReset.getLed() == Led.LEFTEAR ) {
+            this.sb.append("\"LeftEarLeds\", ");
+        } else if ( ledReset.getLed() == Led.LEFTEYE ) {
+            this.sb.append("\"LeftFaceLeds\", ");
+        } else if ( ledReset.getLed() == Led.LEFTFOOT ) {
+            this.sb.append("\"LeftFootLeds\", ");
+        } else if ( ledReset.getLed() == Led.RIGHTEAR ) {
+            this.sb.append("\"RightEarLeds\", ");
+        } else if ( ledReset.getLed() == Led.RIGHTEYE ) {
+            this.sb.append("\"RightFaceLeds\", ");
+        } else if ( ledReset.getLed() == Led.RIGHTFOOT ) {
+            this.sb.append("\"RightFootLeds\", ");
+        }
+        this.sb.append(")");
         return null;
     }
 
@@ -1674,26 +1722,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append(", ");
         this.sb.append(touchsensors.getSide().getPythonCode());
         this.sb.append(")");
-        /*
-        this.sb.append("h.touchsensors(");
-        if ( touchsensors.getSensor() == Sensor.BUMPER ) {
-            this.sb.append("\"Bumper\", ");
-        } else if ( touchsensors.getSensor() == Sensor.HAND ) {
-            this.sb.append("\"Hand\", ");
-        } else if ( touchsensors.getSensor() == Sensor.HEAD ) {
-            this.sb.append("\"Head\", ");
-        }
-        if ( touchsensors.getSide() == Side.FRONT ) {
-            this.sb.append("\"Front\")");
-        } else if ( touchsensors.getSide() == Side.LEFT ) {
-            this.sb.append("\"Left\")");
-        } else if ( touchsensors.getSide() == Side.MIDDLE ) {
-            this.sb.append("\"Middle\")");
-        } else if ( touchsensors.getSide() == Side.REAR ) {
-            this.sb.append("\"Rear\")");
-        } else if ( touchsensors.getSide() == Side.RIGHT ) {
-            this.sb.append("\"Right\")");
-        }*/
         return null;
     }
 
@@ -1708,14 +1736,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("h.gyrometer(");
         this.sb.append(gyrometer.getCoordinate().getPythonCode());
         this.sb.append(")");
-        /*
-        if ( gyrometer.getCoordinate() == Coordinates.X ) {
-            this.sb.append("\"X\")");
-        } else if ( gyrometer.getCoordinate() == Coordinates.Y ) {
-            this.sb.append("\"Y\")");
-        } else if ( gyrometer.getCoordinate() == Coordinates.Z ) {
-            this.sb.append("\"Z\")");
-        }*/
         return null;
     }
 
@@ -1724,15 +1744,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("h.accelerometer(");
         this.sb.append(accelerometer.getCoordinate().getPythonCode());
         this.sb.append(")");
-        /*
-        this.sb.append("h.accelerometer(");
-        if ( accelerometer.getCoordinate() == Coordinates.X ) {
-            this.sb.append("\"X\")");
-        } else if ( accelerometer.getCoordinate() == Coordinates.Y ) {
-            this.sb.append("\"Y\")");
-        } else if ( accelerometer.getCoordinate() == Coordinates.Z ) {
-            this.sb.append("\"Z\")");
-        }*/
         return null;
     }
 
@@ -1741,12 +1752,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("h.fsr(");
         this.sb.append(forceSensor.getSide().getPythonCode());
         this.sb.append(")");
-        /*
-        if ( forceSensor.getSide() == Side.LEFT ) {
-            this.sb.append("\"Left\")");
-        } else if ( forceSensor.getSide() == Side.RIGHT ) {
-            this.sb.append("\"Right\")");
-        }*/
         return null;
     }
 

@@ -686,7 +686,6 @@ Blockly.Msg.NAO_LEARNFACEOF = "learn face of";
 Blockly.Msg.NAO_LEARNFACE_TOOLTIP = "Learn and save a face under a given name";
 Blockly.Msg.NAO_LED = "led";
 Blockly.Msg.NAO_LEDOFF_TOOLTIP = "Turn the LEDs off.";
-Blockly.Msg.NAO_LEDRESET = "LED reset";
 Blockly.Msg.NAO_LEDRESET_TOOLTIP = "Reset the LEDs.";
 Blockly.Msg.NAO_LED_ALL = "all";
 Blockly.Msg.NAO_LED_CHEST = "chest";

@@ -686,7 +686,6 @@ Blockly.Msg.NAO_LEARNFACEOF = "Merke Gesicht von";
 Blockly.Msg.NAO_LEARNFACE_TOOLTIP = "Learn and save a face under a given name";  // untranslated
 Blockly.Msg.NAO_LED = "LED";
 Blockly.Msg.NAO_LEDOFF_TOOLTIP = "Turn the LEDs off.";  // untranslated
-Blockly.Msg.NAO_LEDRESET = "Setze LED zurück";
 Blockly.Msg.NAO_LEDRESET_TOOLTIP = "Reset the LEDs.";  // untranslated
 Blockly.Msg.NAO_LED_ALL = "alle";
 Blockly.Msg.NAO_LED_CHEST = "Brust";

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-09 14:07:38.327759",
+		"lastupdated": "2017-03-10 14:49:42.065838",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -997,7 +997,6 @@
 	"NAO_SAY": "say",
 	"NAO_BLINK": "blink",
 	"NAO_LED": "led",
-	"NAO_LEDRESET": "LED reset",
 	"NAO_RANDOMEYES": "random eyes",
 	"NAO_RASTA": "rasta",
 	"NAO_GYROMETER": "gyrometer",
