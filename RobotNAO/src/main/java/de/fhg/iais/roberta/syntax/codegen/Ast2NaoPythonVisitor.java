@@ -673,14 +673,14 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("time.sleep(15)");
+        this.sb.append("h.wait(15)");
         decrIndentation();
         return null;
     }
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("time.sleep(");
+        this.sb.append("h.wait(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(")");
         return null;
