@@ -212,7 +212,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         reset = false;
         simRobotType = robotType;
         userProgram = program;
-        if (robotType === 'calliope') {
+        if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
             $('.dropdown.sim, .simScene, #simImport, #simButtonsHead').hide();
         } else if (robotType === 'microbit') {

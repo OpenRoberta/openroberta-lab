@@ -53,6 +53,8 @@ require.config({
         'simulation.robot.draw' : '../app/simulation/simulationLogic/robot.draw',
         'simulation.robot.mbed' : '../app/simulation/simulationLogic/robot.mbed',
         'simulation.robot.calliope' : '../app/simulation/simulationLogic/robot.calliope',
+        'simulation.robot.calliope2016' : '../app/simulation/simulationLogic/robot.calliope2016',
+        'simulation.robot.calliope2017' : '../app/simulation/simulationLogic/robot.calliope2017',
         'simulation.robot.microbit' : '../app/simulation/simulationLogic/robot.microbit',
         'simulation.robot.math' : '../app/simulation/simulationLogic/robot.math',
         'simulation.robot.rescue' : '../app/simulation/simulationLogic/robot.rescue',

@@ -60,7 +60,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            if (this.robot.constructor.name != 'Calliope' && this.robot.constructor.name != 'Microbit') {
+            if (this.robot.constructor.name.indexOf("Calliope") < 0 && this.robot.constructor.name != 'Microbit') {
                 ctx.beginPath();
                 if (this.pattern) {
                     var patternImg = this.pattern;
