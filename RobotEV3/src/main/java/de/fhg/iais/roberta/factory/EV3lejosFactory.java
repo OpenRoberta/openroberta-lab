@@ -42,25 +42,23 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class EV3Factory extends AbstractRobotFactory {
-    private final Ev3CompilerWorkflow robotCompilerWorkflow;
+public class EV3lejosFactory extends AbstractRobotFactory {
+    private final Ev3lejosCompilerWorkflow robotCompilerWorkflow;
     private final Ev3SimCompilerWorkflow simCompilerWorkflow;
     private final Properties ev3Properties;
 
-    public EV3Factory(RobotCommunicator robotCommunicator) {
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ev3");
-        this.ev3Properties = Util1.loadProperties("classpath:EV3.properties");
+    public EV3lejosFactory(RobotCommunicator robotCommunicator) {
+        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ev3lejos");
+        this.ev3Properties = Util1.loadProperties("classpath:EV3lejos.properties");
 
         this.robotCompilerWorkflow =
-            new Ev3CompilerWorkflow(
-                robotCommunicator,
+            new Ev3lejosCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".generated.programs.build.xml"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
 
         this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
 
-        addBlockTypesFromProperties("EV3.properties", this.ev3Properties);
+        addBlockTypesFromProperties("EV3lejos.properties", this.ev3Properties);
     }
 
     @Override

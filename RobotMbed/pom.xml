@@ -22,15 +22,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-guice</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant-launcher</artifactId>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -60,8 +52,7 @@
 				<configuration>
 					<includes>
 						<include>**/*.class</include>
-					</includes>
-					<excludedGroups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</excludedGroups>
+					</includes>				
 				</configuration>
 			</plugin>
 			<plugin>
@@ -74,23 +65,7 @@
 						<artifactId>common-junit48</artifactId>
 						<version>2.17</version>
 					</dependency>
-				</dependencies>
-				<configuration>
-					<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-						<configuration>
-							<includes>
-								<include>**/*.class</include>
-							</includes>
-						</configuration>
-					</execution>
-				</executions>
+				</dependencies>				
 			</plugin>
 		</plugins>
 	</build>

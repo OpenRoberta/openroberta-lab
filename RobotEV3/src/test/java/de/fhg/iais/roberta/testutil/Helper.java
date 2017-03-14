@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.EV3Configuration;
-import de.fhg.iais.roberta.factory.EV3Factory;
+import de.fhg.iais.roberta.factory.EV3lejosFactory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -42,12 +42,12 @@ import de.fhg.iais.roberta.util.Util1;
  */
 public class Helper {
 
-    static EV3Factory robotModeFactory;
+    static EV3lejosFactory robotModeFactory;
 
     static {
         Properties properties = Util1.loadProperties(null);
         RobertaProperties.setRobertaProperties(properties);
-        robotModeFactory = new EV3Factory(null);
+        robotModeFactory = new EV3lejosFactory(null);
     }
 
     /**

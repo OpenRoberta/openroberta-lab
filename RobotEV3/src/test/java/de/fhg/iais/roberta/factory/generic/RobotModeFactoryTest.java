@@ -5,7 +5,7 @@ import java.util.Properties;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.EV3Factory;
+import de.fhg.iais.roberta.factory.EV3lejosFactory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -32,7 +32,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import junit.framework.Assert;
 
 public class RobotModeFactoryTest {
-    EV3Factory factory = new EV3Factory(null);
+    EV3lejosFactory factory = new EV3lejosFactory(null);
 
     @BeforeClass
     public static void loadPropertiesForTests() {

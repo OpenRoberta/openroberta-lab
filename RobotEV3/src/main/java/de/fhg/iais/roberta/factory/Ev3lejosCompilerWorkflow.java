@@ -12,53 +12,21 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.JavaSourceCompiler;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-public class Ev3CompilerWorkflow implements ICompilerWorkflow {
-    private static final Logger LOG = LoggerFactory.getLogger(Ev3CompilerWorkflow.class);
-    private final RobotCommunicator brickCommunicator;
+public class Ev3lejosCompilerWorkflow implements ICompilerWorkflow {
+    private static final Logger LOG = LoggerFactory.getLogger(Ev3lejosCompilerWorkflow.class);
     public final String pathToCrosscompilerBaseDir;
     public final String crossCompilerResourcesDir;
-    public final String pathToCrossCompilerBuildXMLResource;
 
-    private enum Language {
-        JAVA( ".java" ), PYTHON( ".py" );
-
-        private String extension;
-
-        Language(String ext) {
-            this.extension = ext;
-        }
-
-        String getExtension() {
-            return this.extension;
-        }
-
-        public static Language fromCommunicationData(RobotCommunicationData state) {
-            if ( state == null ) {
-                return JAVA;
-            }
-            String fwName = state.getFirmwareName();
-            return (fwName != null && fwName.equals("ev3dev")) ? PYTHON : JAVA;
-        }
-    }
-
-    public Ev3CompilerWorkflow(
-        RobotCommunicator brickCommunicator,
-        String pathToCrosscompilerBaseDir,
-        String crossCompilerResourcesDir,
-        String pathToCrossCompilerBuildXMLResource) {
-        this.brickCommunicator = brickCommunicator;
+    public Ev3lejosCompilerWorkflow(String pathToCrosscompilerBaseDir, String crossCompilerResourcesDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.crossCompilerResourcesDir = crossCompilerResourcesDir;
-        this.pathToCrossCompilerBuildXMLResource = pathToCrossCompilerBuildXMLResource;
+
     }
 
     /**
@@ -79,38 +47,23 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        Language lang = getRobotProgrammingLanguage(token);
-        String sourceCode = generateProgram(lang, programName, data);
+        String sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
-            storeGeneratedProgram(token, programName, sourceCode, lang.getExtension());
+            storeGeneratedProgram(token, programName, sourceCode);
         } catch ( Exception e ) {
-            Ev3CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
+            Ev3lejosCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        switch ( lang ) {
-            case JAVA:
-                Key messageKey = runBuild(token, programName, sourceCode);
-                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                    Ev3CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
-                } else {
-                    Ev3CompilerWorkflow.LOG.info(messageKey.toString());
-                }
-                return messageKey;
-            case PYTHON:
-                // maybe copy from /src/ to /target/
-                // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
-                return Key.COMPILERWORKFLOW_SUCCESS;
+        Key messageKey = runBuild(token, programName, sourceCode);
+        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+            Ev3lejosCompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
+        } else {
+            Ev3lejosCompilerWorkflow.LOG.info(messageKey.toString());
         }
-        return null;
-    }
+        return messageKey;
 
-    private Language getRobotProgrammingLanguage(String token) {
-        RobotCommunicationData communicationData;
-        communicationData = this.brickCommunicator.getState(token);
-        Language lang = Language.fromCommunicationData(communicationData);
-        return lang;
     }
 
     /**
@@ -132,28 +85,13 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        Language lang = Language.fromCommunicationData(this.brickCommunicator.getState(token));
-        return generateProgram(lang, programName, data);
+        return Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
-    private String generateProgram(Language lang, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = "";
-        switch ( lang ) {
-            case JAVA:
-                sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-                break;
-            case PYTHON:
-                sourceCode = Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-                break;
-        }
-        Ev3CompilerWorkflow.LOG.info("generating {} code", lang.toString().toLowerCase());
-        return sourceCode;
-    }
-
-    private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
+    private void storeGeneratedProgram(String token, String programName, String sourceCode) throws Exception {
         Assert.isTrue(token != null && programName != null && sourceCode != null);
-        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
-        Ev3CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
+        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ".java");
+        Ev3lejosCompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
         FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
     }
 
@@ -170,7 +108,7 @@ public class Ev3CompilerWorkflow implements ICompilerWorkflow {
         JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode, this.crossCompilerResourcesDir);
         boolean isSuccess = scp.compileAndPackage(this.pathToCrosscompilerBaseDir, token);
         if ( !isSuccess ) {
-            Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
+            Ev3lejosCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
         return Key.COMPILERWORKFLOW_SUCCESS;

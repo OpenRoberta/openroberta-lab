@@ -1099,7 +1099,10 @@
 .typcn-tinkerbots:before {
   content: "\ea63";
 }
-.typcn-ev3:before {
+.typcn-ev3dev:before {
+  content: "\ea64";
+}
+.typcn-ev3lejos:before {
   content: "\ea64";
 }
 .typcn-microbit:before {

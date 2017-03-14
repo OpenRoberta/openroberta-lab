@@ -16,6 +16,6 @@ public class Calliope2017Factory extends AbstractCalliopeFactory {
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope2017.properties");
         this.calliopeSimCompilerWorkflow = new MbedSimCompilerWorkflow();
-        addBlockTypesFromProperties("Calliope2016.properties", this.calliopeProperties);
+        addBlockTypesFromProperties("Calliope2017.properties", this.calliopeProperties);
     }
 }

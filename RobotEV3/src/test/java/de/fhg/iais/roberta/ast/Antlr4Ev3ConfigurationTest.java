@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
-import de.fhg.iais.roberta.factory.EV3Factory;
+import de.fhg.iais.roberta.factory.EV3lejosFactory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Antlr4Ev3ConfigurationTest {
-    EV3Factory robotModeFactory = new EV3Factory(null);
+    EV3lejosFactory robotModeFactory = new EV3lejosFactory(null);
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
 
