@@ -65,7 +65,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             if (!robots[i].beta) {
                 clone.find('img').css('visibility', 'hidden');
             }
-            $("#show-startup-message .modal-footer").append(clone);
+            $("#show-startup-message .modal-body").append(clone);
         }
         if (robots[0].name != 'sim') {
             proto.remove();

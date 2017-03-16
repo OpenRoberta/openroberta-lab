@@ -387,8 +387,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<div id="simButtons">
 					<button id="simControl" type="button"
 						class="blbtn typcn typcn-media-play-outline"
-						lkey="Blockly.Msg.MENU_SIM_START_TOOLTIP" rel="tooltip" data-original-title=""
-						title=""></button>
+						lkey="Blockly.Msg.MENU_SIM_START_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""></button>
 					<button id="simScene" type="button"
 						class="simScene blbtn typcn typcn-image"
 						lkey="Blockly.Msg.MENU_SIM_SCENE_TOOLTIP" rel="tooltip"
@@ -485,7 +485,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						class="codeDownload blbtn typcn typcn-download"
 						lkey="Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
-					<button id="codeRefresh" type="button" 
+					<button id="codeRefresh" type="button"
 						class="codeRefresh blbtn typcn typcn-refresh"
 						lkey="Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""></button>
@@ -950,10 +950,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
-				<div id="roberta"></div>
-				<div class="modal-header"
+				<!-- <div class="modal-header"
 					style="background-color: #BACC1E; text-align: center; color: white">
-					<!-- <button style="color: white" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> -->
+					<button style="color: white" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_STARTUP_TITLE">Welcome</h3>
 					<div class="connector">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -963,77 +962,75 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
                             <path class="connector_fill"
 								d="M40.922,0c0.92,16.925-7.92,21.222-24.932,16.379l-8.742-3.933L8.117,0H40.922z"></path></svg>
 					</div>
+				</div> -->
+				<div class="modal-header"
+					style="text-align: center; font-size: 18px;">
+					<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
 				</div>
-				<div class="modal-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="border-dotted col-md-5 with-devider">
-								<h4 lkey="Blockly.Msg.POPUP_STARTUP_NEW">What's new?</h4>
-								<div lkey="Blockly.Msg.POPUP_2_2_0"></div>
-								<button id='moreReleases' type='button' class='btn-link'
-									lkey="Blockly.Msg.BUTTON_MORE">more</button>
-								<div id="oldReleases" style="display: none; color: #bbb"
-									lkey="Blockly.Msg.POPUP_OLD_RELEASE"></div>
+				<div class="modal-body" style="text-align: center;">
+					<div id="popup-sim" href="#" class="popup-robot robot-container">
+						<span href="#" class='typcn typcn-open robot-icon'></span><span
+							lkey="Blockly.Msg.POPUP_ROBOT_SIM" class="robot-label">I
+							don't have a robot!</span> <img class="img-beta" src="/css/img/beta.png"
+							alt="beta" /> <a href="#" target="_blank"
+							style="display: inline;"> <span
+							class='robot-info typcn typcn-info-large'></span>
+						</a>
+					</div>
+				</div>
+				<div class="container-fluid">
+					<hr style="border-color: #BACC1E;; border-width: 2px; margin: 10px 0">
+					<div class="row">
+						<div class="modal-header"
+							style="text-align: center; font-size: 18px;">
+							<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
+						</div>
+						<div class="clearer"></div>
+						<div class="col-md-3 hidden-xs">Lorem ipsum dolor sit amet, consetetur
+							sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+							labore et dolore magna aliquyam erat, sed diam voluptua.</div>
+						<div class="col-md-3 hidden-xs">
+							<!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
+							<div style="text-align: center">
+								<div class="robot-container startupImages"
+									data-dismiss="modal"
+									style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
+									<br>
+									<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
+								</div>
 							</div>
-							<div class="col-md-4 with-devider">
-								<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
-								<ul class="list-new-version nonIcon">
-									<li><a href="#" id="menuGeneral" class="menuGeneral"
-										lkey="Blockly.Msg.MENU_GENERAL">Allgemeine Hilfe</a></li>
-									<li><a href="#" id="menuProgramming"
-										class="menuProgramming" lkey="Blockly.Msg.MENU_PROGRAMMING">Programmieren</a></li>
-									<li><a class="menuEV3conf" lkey="Blockly.Msg.MENU_EV3"
-										href="#">EV3 preparation</a></li>
-									<li><a href="#" id="menuFaq" class="menuFAQ"
-										lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
-									<li><a class="menuBuildingInstructions"
-										lkey="Blockly.Msg.MENU_BUILDING_INSTRUCTIONS" href="#">building
-											instructions</a></li>
-								</ul>
-							</div>
-							<div class="col-md-3 with-devider">
-								<!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
-								<div style="text-align: center">
-									<div id="takeATour" class="hidden-xs robot-container"
-										data-dismiss="modal"
-										style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
-										<br>
-										<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
-									</div>
+						</div>
+						<div class="col-md-3">Lorem ipsum dolor sit amet, consetetur
+							sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+							labore et dolore magna aliquyam erat, sed diam voluptua.</div>
+						<div class="col-md-3">
+							<!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
+							<div style="text-align: center">
+								<div class="robot-container startupImages"
+									data-dismiss="modal"
+									style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
+									<br>
+									<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="clearer"></div>
-					<div class="modal-footer" style="text-align: center">
-						<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your
-							system!</h4>
-						<div id="popup-sim" href="#" class="popup-robot robot-container">
-							<span href="#" class='typcn typcn-open robot-icon'></span><span
-								lkey="Blockly.Msg.POPUP_ROBOT_SIM" class="robot-label">I
-								don't have a robot!</span> <img class="img-beta"
-								src="/css/img/beta.png" alt="beta" /> <a href="#"
-								target="_blank" style="display: inline;"> <span
-								class='robot-info typcn typcn-info-large'></span>
-							</a>
-						</div>
+					<hr style="border-color: #BACC1E;; border-width: 2px;" margin: 10px 0">
+					<div class="modal-footer left-inner-addon popup-checkbox">
+						<input type="checkbox" name="checkbox" id="checkbox_id"
+							value="value" /> <label for="checkbox_id" style="color: #333;"
+							lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show
+							this again.</label><br /> <span lkey="Blockly.Msg.POPUP_STARTUP_COOKIES">
+							We use cookies to personalise content and to analyse our traffic.</span>
+						<a href="https://www.open-roberta.org/datenschutz" target="_blank"
+							class="DE" style="display: inline;">Details ansehen.</a> <a
+							href="https://www.open-roberta.org/en/datenschutz"
+							target="_blank" class="EN" style="display: inline;">Show
+							details.</a>
 					</div>
-				</div>
-				<div class="modal-body left-inner-addon popup-checkbox">
-					<input type="checkbox" name="checkbox" id="checkbox_id"
-						value="value" /> <label for="checkbox_id"
-						lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show
-						this again.</label><br /> <br /> <span
-						lkey="Blockly.Msg.POPUP_STARTUP_COOKIES"> We use cookies to
-						personalise content and to analyse our traffic.</span> <a
-						href="https://www.open-roberta.org/datenschutz" target="_blank"
-						class="DE" style="display: inline;">Details ansehen.</a> <a
-						href="https://www.open-roberta.org/en/datenschutz" target="_blank"
-						class="EN" style="display: inline;">Show details.</a>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!--  Popup to show relations / share programs -->
 	<div id="show-relations" class="modal fade">
