@@ -50,10 +50,13 @@ public class NxtFactory extends AbstractRobotFactory {
     private final NxtCompilerWorkflow robotCompilerWorkflow;
     private final NxtSimCompilerWorkflow simCompilerWorkflow;
     private final Properties nxtProperties;
+    private final String name;
+    private int robotPropertyNumber;
 
     public NxtFactory(RobotCommunicator unusedForNxt) {
 
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nxt");
+        this.name = "nxt";
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow =
             new NxtCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
@@ -575,5 +578,12 @@ public class NxtFactory extends AbstractRobotFactory {
     @Override
     public Boolean hasConfiguration() {
         return this.nxtProperties.getProperty("robot.configuration") != null ? false : true;
+    }
+
+    @Override
+    public String getGroup() {
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : this.name;
     }
 }

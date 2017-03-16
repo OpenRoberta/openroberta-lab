@@ -1,4 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery',
+        'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
 
     var $formSingleModal;
 
@@ -144,11 +145,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
         var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
         if (mainversionServer > mainversionRobot) {
-            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '" + GUISTATE_C.getRobotVersion() + "' on the robot");
+            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '"
+                    + GUISTATE_C.getRobotVersion() + "' on the robot");
             $("#confirmUpdateFirmware").modal('show');
             return true;
         } else if (mainversionServer < mainversionRobot) {
-            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is older than the firmware version '" + GUISTATE_C.getRobotVersion() + "' on the robot");
+            LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is older than the firmware version '"
+                    + GUISTATE_C.getRobotVersion() + "' on the robot");
             MSG.displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
             return true;
         }
@@ -177,16 +180,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
      * Switch robot
      */
     function switchRobot(robot, opt_continue) {
-        if (robot === GUISTATE_C.getRobot) {
+        if (robot === GUISTATE_C.getRobot()) {
             return;
         }
-        var further = opt_continue || false;
+        var further = opt_continue || GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup();
         if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
             ROBOT.setRobot(robot, function(result) {
                 if (result.rc === "ok") {
-                    GUISTATE_C.setRobot(robot, result);
-                    PROGRAM_C.resetView();
-                    CONFIGURATION_C.resetView();
+                    if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
+                        GUISTATE_C.setRobot(robot, result);
+                        PROGRAM_C.resetView();
+                        CONFIGURATION_C.resetView();
+                    } else {
+                        GUISTATE_C.setRobot(robot, result);
+                    }
                     if (GUISTATE_C.getView() == 'tabConfList') {
                         $('#confList>.bootstrap-table').find('button[name="refresh"]').trigger('click');
                     }

@@ -69,6 +69,7 @@ public class ClientAdmin {
                         robotDescription.put("realName", httpSessionState.getRobotFactory(robot).getRealName());
                         robotDescription.put("info", httpSessionState.getRobotFactory(robot).getInfo());
                         robotDescription.put("beta", httpSessionState.getRobotFactory(robot).isBeta());
+                        robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                     }
                     robots.put("" + i, robotDescription);
                     i++;

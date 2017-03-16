@@ -46,9 +46,12 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class NAOFactory extends AbstractRobotFactory {
     private final NAOCompilerWorkflow compilerWorkflow;
     private final Properties naoProperties;
+    private final String name;
+    private final int robotPropertyNumber;
 
     public NAOFactory(RobotCommunicator robotCommunicator) {
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("nao");
+        this.name = "nao";
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.naoProperties = Util1.loadProperties("classpath:NAO.properties");
 
         this.compilerWorkflow =
@@ -509,5 +512,12 @@ public class NAOFactory extends AbstractRobotFactory {
     @Override
     public Boolean hasConfiguration() {
         return this.naoProperties.getProperty("robot.configuration") != null ? false : true;
+    }
+
+    @Override
+    public String getGroup() {
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : this.name;
     }
 }

@@ -83,8 +83,10 @@ public class ClientProgram {
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
-        final String robot = httpSessionState.getRobotName();
-
+        final String robot =
+            httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
+                ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
+                : httpSessionState.getRobotName();
         final JSONObject response = new JSONObject();
         final DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {

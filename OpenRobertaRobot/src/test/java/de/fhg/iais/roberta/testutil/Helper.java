@@ -331,6 +331,12 @@ public class Helper {
             return null;
         }
 
+        @Override
+        public String getGroup() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
     static TestFactory robotModeFactory;

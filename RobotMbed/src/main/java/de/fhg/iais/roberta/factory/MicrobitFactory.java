@@ -37,10 +37,13 @@ public class MicrobitFactory extends AbstractRobotFactory {
     private MicrobitCompilerWorkflow compilerWorkflow;
     private final MbedSimCompilerWorkflow microbitSimCompilerWorkflow;
     private final Properties calliopeProperties;
+    private final String name;
+    private final int robotPropertyNumber;
 
     public MicrobitFactory(RobotCommunicator unusedForArdu) {
 
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("microbit");
+        this.name = "microbit";
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new MicrobitCompilerWorkflow(
                 RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
@@ -352,5 +355,10 @@ public class MicrobitFactory extends AbstractRobotFactory {
     @Override
     public Boolean hasConfiguration() {
         return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+    }
+
+    @Override
+    public String getGroup() {
+        return this.calliopeProperties.getProperty("robot.group") != null ? this.calliopeProperties.getProperty("robot.group") : this.name;
     }
 }

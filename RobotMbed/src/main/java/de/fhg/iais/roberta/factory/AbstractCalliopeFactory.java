@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
@@ -35,6 +36,8 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
     protected CalliopeCompilerWorkflow compilerWorkflow;
     protected MbedSimCompilerWorkflow calliopeSimCompilerWorkflow;
     protected Properties calliopeProperties;
+    protected String name;
+    protected int robotPropertyNumber;
 
     public AbstractCalliopeFactory() {
         super();
@@ -356,6 +359,13 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
     @Override
     public Boolean hasConfiguration() {
         return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+    }
+
+    @Override
+    public String getGroup() {
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : this.name;
     }
 
 }

@@ -256,7 +256,6 @@ public class Administration {
                 String newXml = xml2Ast2xml(updatedProgram);
 
                 if ( !newXml.equals(object[1]) ) {
-                    System.out.println(programId);
                     upd.setInteger("id", programId);
                     upd.setString("program", newXml);
                     int count = upd.executeUpdate();

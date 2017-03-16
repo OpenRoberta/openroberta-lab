@@ -46,13 +46,16 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class ArduFactory extends AbstractRobotFactory {
     private ArduCompilerWorkflow compilerWorkflow;
     private final Properties arduProperties;
+    private final String name;
+    private final int robotPropertyNumber;
 
     public ArduFactory(RobotCommunicator unusedForArdu) {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("ardu");
+        this.name = "ardu";
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
@@ -510,5 +513,12 @@ public class ArduFactory extends AbstractRobotFactory {
     @Override
     public Boolean hasConfiguration() {
         return this.arduProperties.getProperty("robot.configuration") != null ? false : true;
+    }
+
+    @Override
+    public String getGroup() {
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : this.name;
     }
 }

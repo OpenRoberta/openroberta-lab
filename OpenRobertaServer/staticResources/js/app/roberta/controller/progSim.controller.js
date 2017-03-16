@@ -33,7 +33,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                         $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
-                        SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobot());
+                        SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobotGroup());
                         setTimeout(function() {
                             SIM.setPause(false);
                         }, 500);
@@ -144,7 +144,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 if (result.rc == "ok") {
 //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
-                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobot());
+                    SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
                     $(".sim").removeClass('hide');
                     $('#blocklyDiv').addClass('rightActive');
                     $('#simDiv').addClass('rightActive');

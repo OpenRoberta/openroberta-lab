@@ -43,7 +43,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             variableDeclaration : true,
             robControls : true
         });
-        bricklyWorkspace.setDevice(guiStateController.getRobot());
+        bricklyWorkspace.setDevice(guiStateController.getRobotGroup());
         bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
@@ -82,7 +82,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 guiStateController.setConfigurationSaved(false);
             }
             if (event.type === Blockly.Events.DELETE) {
-                if (bricklyWorkspace.getAllBlocks().length === 0){
+                if (bricklyWorkspace.getAllBlocks().length === 0) {
                     newConfiguration(true);
                 }
             }
@@ -286,7 +286,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     exports.reloadView = reloadView;
 
     function resetView() {
-        bricklyWorkspace.setDevice(guiStateController.getRobot());
+        bricklyWorkspace.setDevice(guiStateController.getRobotGroup());
         bricklyWorkspace.setVersion('2.0');
         initConfigurationEnvironment();
         var toolbox = guiStateController.getConfigurationToolbox();

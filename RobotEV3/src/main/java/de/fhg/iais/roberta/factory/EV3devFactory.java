@@ -46,8 +46,12 @@ public class EV3devFactory extends AbstractRobotFactory {
     private final Ev3devCompilerWorkflow robotCompilerWorkflow;
     private final Ev3SimCompilerWorkflow simCompilerWorkflow;
     private final Properties ev3Properties;
+    private final int robotPropertyNumber;
+    private final String name;
 
     public EV3devFactory(RobotCommunicator robotCommunicator) {
+        this.name = "ev3dev";
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.ev3Properties = Util1.loadProperties("classpath:EV3dev.properties");
         this.robotCompilerWorkflow = new Ev3devCompilerWorkflow(RobertaProperties.getTempDirForUserProjects());
         this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
@@ -494,5 +498,12 @@ public class EV3devFactory extends AbstractRobotFactory {
     @Override
     public Boolean hasConfiguration() {
         return this.ev3Properties.getProperty("robot.configuration") != null ? false : true;
+    }
+
+    @Override
+    public String getGroup() {
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : this.name;
     }
 }

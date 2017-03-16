@@ -369,4 +369,6 @@ public interface IRobotFactory {
 
     SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
 
+    String getGroup();
+
 }

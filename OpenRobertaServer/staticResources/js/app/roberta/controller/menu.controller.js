@@ -38,11 +38,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 i++;
             }
             var clone = proto.clone();
-            clone.find('.typcn').addClass('typcn-' + robots[i].name);
+            var robotName = robots[i].name;
+            var robotGroup = robots[i].group;
+            clone.find('.typcn').addClass('typcn-' + robotGroup);
             clone.find('.typcn').text(robots[i].realName);
-            clone.find('.typcn').attr('id', 'menu-' + robots[i].name);
-            clone.attr('data-type', robots[i].name);
-            clone.addClass(robots[i].name);
+            clone.find('.typcn').attr('id', 'menu-' + robotName);
+            clone.attr('data-type', robotName);
+            clone.addClass(robotName);
             $("#navigation-robot>.anchor").before(clone);
         }
         proto.remove();
@@ -52,12 +54,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 i++;
                 proto.attr('data-type', robots[i].name);
             }
-            var clone = proto.clone().prop('id', 'menu-' + robots[i].name);
+            var robotName = robots[i].name;
+            var robotGroup = robots[i].group;
+            var clone = proto.clone().prop('id', 'menu-' + robotName);
             clone.find('span:eq( 0 )').removeClass('typcn-open');
-            clone.find('span:eq( 0 )').addClass('typcn-' + robots[i].name);
+            clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
             clone.find('span:eq( 1 )').text(robots[i].realName);
             clone.find('a').attr('onclick', 'window.open("' + robots[i].info + '");return false;');
-            clone.attr('data-type', robots[i].name);
+            clone.attr('data-type', robotName);
             if (!robots[i].beta) {
                 clone.find('img').css('visibility', 'hidden');
             }

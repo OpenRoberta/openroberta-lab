@@ -305,6 +305,8 @@ public class ServerStarter {
             RobotDao robotDao = new RobotDao(session);
             for ( String pluginNumber : pluginNumbers ) {
                 String pluginName = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".name");
+                if ( robertaProperties.getProperty("robot.plugin." + pluginNumber + ".group") != null )
+                    pluginName = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".group");
                 Robot pluginRobot = robotDao.loadRobot(pluginName);
                 if ( pluginRobot == null ) {
                     // add missing robot type to database

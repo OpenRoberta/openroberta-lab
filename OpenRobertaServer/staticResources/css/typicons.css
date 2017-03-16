@@ -1099,19 +1099,12 @@
 .typcn-tinkerbots:before {
   content: "\ea63";
 }
-.typcn-ev3dev:before {
-  content: "\ea64";
-}
-.typcn-ev3lejos:before {
+.typcn-ev3:before {
   content: "\ea64";
 }
 .typcn-microbit:before {
   content: "\ea65";
 }
-.typcn-calliope2016:before {
-  content: "\ea66";
-}
-
-.typcn-calliope2017:before {
+.typcn-calliope:before {
   content: "\ea66";
 }

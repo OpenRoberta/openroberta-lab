@@ -8,7 +8,8 @@ public class Calliope2016Factory extends AbstractCalliopeFactory {
 
     public Calliope2016Factory(RobotCommunicator unusedForArdu) {
 
-        int robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty("calliope2016");
+        this.name = "calliope2016";
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CalliopeCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),

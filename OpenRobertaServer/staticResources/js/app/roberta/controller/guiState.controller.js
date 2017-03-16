@@ -14,6 +14,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             GUISTATE.gui.view = 'tabProgram';
             GUISTATE.gui.prevView = 'tabProgram';
             GUISTATE.gui.language = language;
+
             GUISTATE.gui.robot = GUISTATE.gui.cookie || GUISTATE.server.defaultRobot;
 
             GUISTATE.user.id = -1;
@@ -179,33 +180,42 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     exports.setBricklyWorkspace = setBricklyWorkspace;
 
     function setRobot(robot, result, opt_init) {
+        // make sure we use the group instead of the specific robottype if the robot belongs to a group
+        var robotGroup = findGroup(robot);
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
-        $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'Background.jpg) repeat');
+        $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
-        
+
         if (!isConfigurationUsed()) {
-            $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robot + 'BackgroundConf.svg) no-repeat');
+            $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'BackgroundConf.svg) no-repeat');
             $('#bricklyDiv').css('background-position', 'center');
             $('#bricklyDiv').css('background-size', '75% auto');
-        } 
+        }
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
-        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robot);
-        $('#head-navi-icon-robot').addClass('typcn-' + robot);
-        if (!opt_init) {           
+        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.group);
+        $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+        if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
             checkSim();
+            if (findGroup(robot) != getRobotGroup()) {
+                setConfigurationName(robotGroup.toUpperCase() + 'basis');
+                setProgramName('NEPOprog');
+            }
+        } else {
+            setConfigurationName(robotGroup.toUpperCase() + 'basis');
+            setProgramName('NEPOprog');
         }
-        $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robot);
-        $('#simRobot').addClass('typcn-' + robot);
-        
+        $('#simRobot').removeClass('typcn-' + GUISTATE.gui.group);
+        $('#simRobot').addClass('typcn-' + robotGroup);
+
         if (isAutoconnected()) {
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
@@ -225,18 +235,30 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         }
 
         GUISTATE.gui.robot = robot;
-        setConfigurationName(getRobot().toUpperCase() + 'basis');
-        setProgramName('NEPOprog');
-        var value = Blockly.Msg.MENU_START_BRICK;                       
+        GUISTATE.gui.robotGroup = robotGroup;
+
+        var value = Blockly.Msg.MENU_START_BRICK;
         if (value.indexOf("$") >= 0) {
             value = value.replace("$", getRobotRealName());
-        }       
+        }
         $('#menuRunProg').text(value);
         if (GUISTATE.gui.blocklyWorkspace)
             GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
     }
 
     exports.setRobot = setRobot;
+
+    function findGroup(robot) {
+        var robots = getRobots();
+        for ( var propt in robots) {
+            if (robots[propt].name == robot && robots[propt].group !== '') {
+                robot = robots[propt].group;
+                return robot;
+            }
+        }
+        return robot;
+    }
+    exports.findGroup = findGroup;
 
     function setAutoConnectedBusy(busy) {
         if (busy) {
@@ -253,7 +275,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.gui.robot;
     }
     exports.getRobot = getRobot;
-    
+
+    function getRobotGroup() {
+        return GUISTATE.gui.robotGroup;
+    }
+    exports.getRobotGroup = getRobotGroup;
+
     function getRobotRealName() {
         for ( var robot in getRobots()) {
             if (!getRobots().hasOwnProperty(robot))
@@ -270,7 +297,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.robot.time > 0 || GUISTATE.gui.connection;
     }
     exports.isRobotConnected = isRobotConnected;
-    
+
     function isConfigurationUsed() {
         return GUISTATE.gui.configurationUsed;
     }

@@ -15,10 +15,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
 
     function initView() {
         $('#helpContent').remove();
-        var url = '../help/progHelp_' + GUISTATE_C.getRobot() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
+        var url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
         $('#helpDiv').load(url, function(response, status, xhr) {
             if (status == "error") {
-                url = '../help/progHelp_' + GUISTATE_C.getRobot() + '_de.html';
+                url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_de.html';
 //                    url = 'progHelp_en.html';
                 $('#helpDiv').load(url, function(response, status, xhr) {
                     if (status == "error") {
@@ -62,8 +62,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                 done : function() {
                     $('#blocklyDiv').removeClass('rightActive');
                     $('#helpDiv').removeClass('rightActive');
-                    $('.nav > li > ul > .robotType').removeClass('disabled');
-                    $('.' + GUISTATE_C.getRobot()).addClass('disabled');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
                     $('#sliderDiv').hide();
