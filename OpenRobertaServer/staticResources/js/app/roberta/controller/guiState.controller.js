@@ -199,7 +199,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
-        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.group);
+        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
         if (!opt_init) {
             setProgramSaved(true);
