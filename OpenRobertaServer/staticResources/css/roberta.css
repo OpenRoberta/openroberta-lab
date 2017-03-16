@@ -344,7 +344,7 @@ body.blocklyMinimalBody  * {
 
 #rightMenuDiv {
     position: absolute;
-    top: 102px;
+    top: 124px;
     right: 0;    
     z-index: 9;
 }
@@ -570,6 +570,44 @@ hidden
 	margin: 0;
 }
 
+.blocklyToolboxDiv>.nav-tabs {
+    border: 0;
+}
+
+.blocklyToolboxDiv>.nav-tabs li {
+    width: 50%;
+    text-align: center;
+    height: 26px;
+    padding-top: 1px;
+}
+
+.blocklyToolboxDiv>.nav-tabs li.active {
+    background-color: #EEE;
+}
+
+.blocklyToolboxDiv>.nav-tabs li.active>a {
+    background-color: #EEE;
+    border: 0;
+}
+
+.blocklyToolboxDiv>.nav-tabs li:not(.active) {
+    background-color: #C0C0C0;
+}
+
+.blocklyToolboxDiv>.nav-tabs li:not(.active)>a {
+    background-color: #C0C0C0;
+    border: 0;
+    color: #fff;
+}
+
+.blocklyToolboxDiv>.nav-tabs li>a {
+    margin: 0;
+    padding: 6px 0;
+}
+#blocklyDiv .blocklyTreeRoot {
+	padding: 6px 0;
+}
+
 .nav#head-navigation-tabs {
 	position: relative;
 	width: auto;
@@ -769,8 +807,8 @@ px
 .popup-checkbox {
 	color: #bbb;
 	font-size: 14px;
+	padding: 0  !important;
 	padding-bottom: 16px !important;
-	width: 80%;
 }
 
 .download-checkbox {
@@ -1131,8 +1169,12 @@ table [data-toggle="collapse"].collapsed:after {
 	z-index: 1000000000;
 }
 /***** BEGIN typicons *****/
-.typcn:before {
+.dropdown-menu .typcn:before {
 	margin-right: 6px;
+}
+
+.blocklyToolboxDiv>.nav-tabs .typcn:before {
+    margin-right: 0;
 }
 
 .blbtn.typcn:before {
@@ -1449,7 +1491,7 @@ table.dataTable thead .sorting_desc {
 		padding-top: 56px;
 	}
 	#rightMenuDiv {
-        top: 66px;
+        top: 88px;
     }
 	.logo {
 		top: 11;

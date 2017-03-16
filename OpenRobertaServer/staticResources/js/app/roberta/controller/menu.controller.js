@@ -140,10 +140,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 PROGRAM_C.importXml();
             } else if (domId === 'menuExportProg') {
                 PROGRAM_C.exportXml();
-            } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
-                PROGRAM_C.loadToolbox('beginner');
+            } else if (domId === 'menuToolboxBeginner') {
+                $('#beginner').trigger('click'); 
             } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
-                PROGRAM_C.loadToolbox('expert');
+                $('#expert').trigger('click');  
             }
         }, 'program edit clicked');
 

@@ -1,6 +1,4 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'robot.controller', 'progHelp.controller',
-        'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG,
-        LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, HELP_C, INFO_C, CODE_C, SIM_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'robot.controller', 'progHelp.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, HELP_C, INFO_C, CODE_C, SIM_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -49,6 +47,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         blocklyWorkspace.robControls.disable('saveProgram');
         blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
         GUISTATE_C.checkSim();
+        var toolbox = $('#blocklyDiv .blocklyToolboxDiv');
+        toolbox.prepend('<ul class="nav nav-tabs levelTabs"><li class="active"><a id="beginner" class="typcn typcn-media-stop-outline" href="#" data-toggle="tab"></a></li><li class=""><a id="expert" href="#" class="typcn typcn-star-outline" data-toggle="tab"></a></li></ul>');
     }
 
     function initEvents() {
@@ -64,6 +64,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         $('#tabProgram').onWrap('shown.bs.tab', function(e) {
             blocklyWorkspace.setVisible(true);
             reloadProgram();
+            e.stopPropagation();
         }, 'tabProgram clicked');
 
         $('#tabProgram').on('hide.bs.tab', function(e) {
@@ -71,6 +72,19 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             var xml = Blockly.Xml.domToText(dom);
             GUISTATE_C.setProgramXML(xml);
         });
+
+        // work around for touch devices
+        $('#beginner, #expert').on('touchend', function(e) {
+            $('#' + e.target.id).trigger('click');
+        });
+
+        $('.levelTabs a').on('shown.bs.tab', function(e) {
+            e.preventDefault();
+            loadToolbox(e.target.id);
+            e.stopPropagation();
+            LOG.info('toolbox clicked, switched to ' + e.target.id);
+        });
+
         bindControl();
         blocklyWorkspace.addChangeListener(function(event) {
             if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
@@ -100,8 +114,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         $('.modal').modal('hide'); // close all opened popups
         var xml = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlText = Blockly.Xml.domToText(xml);
-        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(), xmlText, function(
-                result) {
+        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(), xmlText, function(result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setProgramTimestamp(result.lastChanged);
                 GUISTATE_C.setProgramSaved(true);
@@ -400,16 +413,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         GUISTATE_C.setAutoConnectedBusy(false);
                     } else {
                         //create link with content
-                        var programLink = "<div id='programLink' style='text-align: center;'><br><a style='font-size:36px; padding: 20px' download='"
-                                + GUISTATE_C.getProgramName() + ".hex' href='data:Application/octet-stream;content-disposition:attachment;charset=utf-8,"
-                                + encodeURIComponent(result.compiledCode) + "'>" + GUISTATE_C.getProgramName() + "</a></div>";
-                        $("#liA").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><text fill="%23337ab7" x="3" y="34" style="font-family:Arial;font-size:20px;text-decoration:underline">'
-                                + GUISTATE_C.getProgramName()
-                                + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:3"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(-2.40165 0 0 2.44495 146.371 -56.5809)" fill="%23ff0000"/></g></svg>\')');
+                        var programLink = "<div id='programLink' style='text-align: center;'><br><a style='font-size:36px; padding: 20px' download='" + GUISTATE_C.getProgramName() + ".hex' href='data:Application/octet-stream;content-disposition:attachment;charset=utf-8," + encodeURIComponent(result.compiledCode) + "'>" + GUISTATE_C.getProgramName() + "</a></div>";
+                        $("#liA").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><text fill="%23337ab7" x="3" y="34" style="font-family:Arial;font-size:20px;text-decoration:underline">' + GUISTATE_C.getProgramName() + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:3"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(-2.40165 0 0 2.44495 146.371 -56.5809)" fill="%23ff0000"/></g></svg>\')');
                         $("#liA").css('background-repeat', 'no-repeat');
-                        $("#liB").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><rect x="0" y="0" width="102" height="77" fill="%23dddddd"/><text fill="%23333333" x="3" y="34" style="font-family:Arial;font-size:14">'
-                                + Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS
-                                + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:2"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(2.44495 0 0 2.44495 -47.8835 -56.5809)" fill="%239400D3"/></g></svg>\')');
+                        $("#liB").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><rect x="0" y="0" width="102" height="77" fill="%23dddddd"/><text fill="%23333333" x="3" y="34" style="font-family:Arial;font-size:14">' + Blockly.Msg.POPUP_DOWNLOAD_SAVE_AS + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:2"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(2.44495 0 0 2.44495 -47.8835 -56.5809)" fill="%239400D3"/></g></svg>\')');
                         $("#liB").css('background-repeat', 'no-repeat');
                         var usb;
                         if (GUISTATE_C.getGuiRobot() == "calliope") {
@@ -417,13 +424,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                         } else {
                             usb = GUISTATE_C.getGuiRobot().toUpperCase();
                         }
-                        $("#liC").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><rect x="0" y="0" width="102" height="77" fill="%23dddddd"/><text fill="%23333333" x="3" y="34" style="font-family:Arial;font-size:14">'
-                                + usb
-                                + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:2"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(2.44495 0 0 2.44495 -47.8835 -56.5809)" fill="%239400D3"/></g></svg>\')');
+                        $("#liC").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><rect x="0" y="0" width="102" height="77" fill="%23dddddd"/><text fill="%23333333" x="3" y="34" style="font-family:Arial;font-size:14">' + usb + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:2"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(2.44495 0 0 2.44495 -47.8835 -56.5809)" fill="%239400D3"/></g></svg>\')');
                         $("#liC").css('background-repeat', 'no-repeat');
-                        $("#liD").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><rect x="0" y="0" width="102" height="77" fill="%23dddddd"/><text fill="%23333333" x="3" y="40" style="font-family:Arial;font-size:20px">'
-                                + Blockly.Msg.POPUP_DOWNLOAD_SAVE
-                                + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:2"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(2.44495 0 0 2.44495 -47.8835 -56.5809)" fill="%239400D3"/></g></svg>\')');
+                        $("#liD").css('background-image', 'url(\'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="102" height="77" viewBox="0 0 77 102"><rect x="0" y="0" width="102" height="77" fill="%23dddddd"/><text fill="%23333333" x="3" y="40" style="font-family:Arial;font-size:20px">' + Blockly.Msg.POPUP_DOWNLOAD_SAVE + '</text><rect x="1" y="1" stroke="%23BBBBBB" width="100" height="75" rx="2" ry="2" style="fill:none;stroke-width:2"/><g fill="%23DF01D7"><path d="M33.2 34.9h2.2c-0.2 0.3-0.3 0.6-0.3 1h-1.9c-0.3 0-0.5-0.2-0.5-0.5s0.2-0.5 0.5-0.5ZM39.1 29c0-0.3 0.2-0.5 0.5-0.5 0.3 0 0.5 0.2 0.5 0.5v1.7c-0.4 0.1-0.7 0.2-1 0.4v-2.1ZM34.8 31.3c-0.1-0.2-0.1-0.5 0-0.7s0.5-0.2 0.7 0l1.6 1.6c-0.2 0.3-0.4 0.5-0.6 0.8l-1.7-1.7ZM47.5 37.3c0-3.2-2.6-5.7-5.7-5.7 0 0 0 0-0.1 0 0 0 0 0 0 0s0 0 0 0c-0.3 0-0.5 0-0.8 0.1 0 0-0.1 0-0.1 0 -2.5 0.3-4.5 2.3-4.8 4.9 0 0 0 0 0 0.1 0 0.2 0 0.5 0 0.7 0 0 0 0 0 0v7.1c0 3.2 2.6 5.8 5.8 5.8 3.2 0 5.8-2.6 5.8-5.8l-0.1-7.2c0 0 0 0 0 0ZM41.7 36.6c0.4 0 0.8 0.6 0.8 1.3 0 0.7-0.3 1.3-0.8 1.3s-0.8-0.6-0.8-1.3c0.1-0.8 0.4-1.3 0.8-1.3ZM45.5 44.5c0 2.1-1.7 3.8-3.8 3.8s-3.8-1.7-3.8-3.8v-5.3h2.4c0.3 0.5 0.8 0.9 1.4 0.9 1 0 1.7-1 1.7-2.3 0-1.1-0.5-1.9-1.2-2.2v-2c1.9 0.2 3.3 1.8 3.3 3.8v7.1Z" transform="matrix(2.44495 0 0 2.44495 -47.8835 -56.5809)" fill="%239400D3"/></g></svg>\')');
                         $("#liD").css('background-repeat', 'no-repeat');
                         var textH
                         var textC;

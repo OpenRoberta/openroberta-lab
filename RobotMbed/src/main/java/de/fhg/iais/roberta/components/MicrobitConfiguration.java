@@ -12,7 +12,7 @@ public class MicrobitConfiguration extends Configuration {
     @Override
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
-        sb.append("robot ardu ").append(name).append(" {\n");
+        sb.append("robot microbit ").append(name).append(" {\n");
 
         sb.append("}");
         return sb.toString();
