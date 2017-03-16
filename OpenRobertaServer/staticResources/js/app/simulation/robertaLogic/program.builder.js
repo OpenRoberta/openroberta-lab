@@ -123,18 +123,28 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
-    function createRepeatStmt(mode, expr, stmtList) {
+    function createRepeatStmt(loopNumber, mode, expr, stmtList) {
         if (!Array.isArray(stmtList)) {
             throw "Expression List is not List!";
         }
         var result = {};
         result[CONST.MODE] = mode;
+        result[CONST.LOOP_NUMBER] = loopNumber;
         result[CONST.STMT] = CONST.REPEAT_STMT;
         result[CONST.EXPR] = expr;
         result[CONST.STMT_LIST] = stmtList;
         result.eachCounter = 0;
         return result;
     }
+
+    function createStmtFlowControl(loopNumber, mode) {
+        var result = {};
+        result[CONST.STMT] = CONST.FLOW_CONTROL;
+        result[CONST.MODE] = mode;
+        result[CONST.LOOP_NUMBER] = loopNumber;
+        return result;
+    }
+
 
     function createShowPictureAction(picture, x, y) {
         var result = {};

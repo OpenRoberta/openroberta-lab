@@ -20,7 +20,7 @@ public class Ast2Ev3SimVisitorTest {
             "var stmt0 = createVarDeclaration(CONST.NUMBER, \"x\", createConstant(CONST.NUM_CONST, 1));\n"
                 + "var stmt1 = createVarDeclaration(CONST.NUMBER, \"y\", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, \"x\"), createConstant(CONST.NUM_CONST, 1)));\n"
                 + "var stmt2 = createDriveAction(createConstant(CONST.NUM_CONST, 80), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 39));\n"
-                + "var stmt3 = createRepeatStmt(CONST.WHILE, createBinaryExpr(CONST.LT, createVarReference(CONST.NUMBER, \"y\"), createConstant(CONST.NUM_CONST, 5)), "
+                + "var stmt3 = createRepeatStmt('loop_1', CONST.WHILE, createBinaryExpr(CONST.LT, createVarReference(CONST.NUMBER, \"y\"), createConstant(CONST.NUM_CONST, 5)), "
                 + "[createAssignStmt(\"x\", createBinaryExpr(CONST.MULTIPLY, createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.NUMBER, \"x\"))), "
                 + "createAssignStmt(\"y\", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, \"y\"), createConstant(CONST.NUM_CONST, 1)))]);\n"
                 + "var stmt4 = createAssignStmt(\"x\", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, \"x\"), createConstant(CONST.NUM_CONST, 10)));\n"
@@ -97,7 +97,7 @@ public class Ast2Ev3SimVisitorTest {
         String a =
             "var stmt0 = createIfStmt([createBinaryExpr(CONST.LTE, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD)]], [createTurnAction(createConstant(CONST.NUM_CONST, 50), CONST.RIGHT, createConstant(CONST.NUM_CONST, 80))]);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
-                + "var stmt2 = createRepeatStmt(CONST.TIMES, createConstant(CONST.NUM_CONST, 10), [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20)), createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 30))]);\n"
+                + "var stmt2 = createRepeatStmt('loop_1', CONST.TIMES, [createVarReference(CONST.NUMBER_INT, \"k0\"), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 10), createConstant(CONST.NUM_CONST, 1)], [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20)), createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 30))]);\n"
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator5.xml");
@@ -626,7 +626,7 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createForEachStmt() throws Exception {
         String a =
-            "var stmt0 = createRepeatStmt("
+            "var stmt0 = createRepeatStmt('loop_1', "
                 + "CONST.FOR_EACH, "
                 + "createBinaryExpr(CONST.IN, createVarDeclaration(CONST.NUMBER, \"item\", createConstant(CONST.NUM_CONST, 0)), "
                 + "createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)])), "
@@ -638,7 +638,7 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createForStmt() throws Exception {
         String a =
-            "var stmt0 = createRepeatStmt("
+            "var stmt0 = createRepeatStmt('loop_1', "
                 + "CONST.FOR, ["
                 + "createVarReference(CONST.NUMBER, \"i\"), createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 10), createConstant(CONST.NUM_CONST, 1)], "
                 + "[createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'kllk'))]);\n"
@@ -708,6 +708,22 @@ public class Ast2Ev3SimVisitorTest {
                 + ";var stmt4 = var stmt5 = createTextAppend(createVarReference(CONST.STRING, \"item\"), createConstant(CONST.STRING_CONST, 'aaa'));\n"
                 + ";var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5]};";
         assertCodeIsOk(a, "/syntax/text/text_append.xml");
+    }
+
+    @Test
+    public void loopWithBreakAndContinue() throws Exception {
+
+        String a = ""
+            + "var stmt0 = createDebugAction();\n"
+            + "var stmt1 = createRepeatStmt('loop_1', CONST.FOREVER, createConstant(CONST.BOOL_CONST, true), [createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 12))], [[createStmtFlowControl('loop_1', CONST.BREAK)], [createStmtFlowControl('loop_1', CONST.CONTINUE)]], [])]);\n"
+            + "var stmt2 = createRepeatStmt('loop_2', CONST.FOR, [createVarReference(CONST.NUMBER, \"i\"), createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 10), createConstant(CONST.NUM_CONST, 1)], [createDriveAction(createConstant(CONST.NUM_CONST, 30), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20)), createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 12))], [[createStmtFlowControl('loop_2', CONST.CONTINUE)], [createStmtFlowControl('loop_2', CONST.BREAK)]], [])]);\n"
+            + "var stmt3 = createRepeatStmt('loop_3', CONST.FOR_EACH, createBinaryExpr(CONST.IN, createVarDeclaration(CONST.NUMBER, \"item\", createConstant(CONST.NUM_CONST, 0)), createVarReference(CONST.ARRAY_NUMBER, \"item2\")), [createDriveAction(createConstant(CONST.NUM_CONST, 30), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20)), createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20))], [[createStmtFlowControl('loop_3', CONST.CONTINUE)], [createStmtFlowControl('loop_3', CONST.BREAK)]], [])]);\n"
+            + "var stmt4 = createRepeatStmt('loop_4', CONST.WHILE, createConstant(CONST.BOOL_CONST, true), [createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20))], [[createStmtFlowControl('loop_4', CONST.CONTINUE)], [createStmtFlowControl('loop_4', CONST.BREAK)]], [])]);\n"
+            + "var stmt5 = createRepeatStmt('loop_5', CONST.TIMES, [createVarReference(CONST.NUMBER_INT, \"k0\"), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 10), createConstant(CONST.NUM_CONST, 1)], [createIfStmt([createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20)), createBinaryExpr(CONST.EQ, createConstant(CONST.NUM_CONST, 30), createConstant(CONST.NUM_CONST, 20))], [[createStmtFlowControl('loop_5', CONST.BREAK)], [createStmtFlowControl('loop_5', CONST.CONTINUE)]], [])]);\n"
+            + "var stmt6 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], []), createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
+            + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]};";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/loops_with_break_and_continue.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

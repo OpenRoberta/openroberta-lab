@@ -14,25 +14,6 @@ public class Ast2NxtSimVisitorTest {
     }
 
     @Test
-    public void test() throws Exception {
-
-        String a =
-            "var stmt0 = createVarDeclaration(CONST.NUMBER, \"x\", createConstant(CONST.NUM_CONST, 1));\n"
-                + "var stmt1 = createVarDeclaration(CONST.NUMBER, \"y\", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, \"x\"), createConstant(CONST.NUM_CONST, 1)));\n"
-                + "var stmt2 = createDriveAction(createConstant(CONST.NUM_CONST, 80), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 39));\n"
-                + "var stmt3 = createRepeatStmt(CONST.WHILE, createBinaryExpr(CONST.LT, createVarReference(CONST.NUMBER, \"y\"), createConstant(CONST.NUM_CONST, 5)), "
-                + "[createAssignStmt(\"x\", createBinaryExpr(CONST.MULTIPLY, createVarReference(CONST.NUMBER, \"x\"), createVarReference(CONST.NUMBER, \"x\"))), "
-                + "createAssignStmt(\"y\", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, \"y\"), createConstant(CONST.NUM_CONST, 1)))]);\n"
-                + "var stmt4 = createAssignStmt(\"x\", createBinaryExpr(CONST.ADD, createVarReference(CONST.NUMBER, \"x\"), createConstant(CONST.NUM_CONST, 10)));\n"
-                + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
-                + "var stmt6 = createDriveAction(createConstant(CONST.NUM_CONST, -50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20));\n"
-                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.ULTRASONIC, CONST.DISTANCE), createConstant(CONST.NUM_CONST, 30))], [])]);\n"
-                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]};";
-
-        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator.xml");
-    }
-
-    @Test
     public void test1() throws Exception {
 
         String a =
@@ -89,18 +70,6 @@ public class Ast2NxtSimVisitorTest {
                 + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator4.xml");
-    }
-
-    @Test
-    public void test5() throws Exception {
-
-        String a =
-            "var stmt0 = createIfStmt([createBinaryExpr(CONST.LTE, createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0))], [[createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD)]], [createTurnAction(createConstant(CONST.NUM_CONST, 50), CONST.RIGHT, createConstant(CONST.NUM_CONST, 80))]);\n"
-                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.EQ, createGetSample(CONST.TOUCH), createConstant(CONST.BOOL_CONST, true))], [])]);\n"
-                + "var stmt2 = createRepeatStmt(CONST.TIMES, createConstant(CONST.NUM_CONST, 10), [createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.FOREWARD, createConstant(CONST.NUM_CONST, 20)), createDriveAction(createConstant(CONST.NUM_CONST, 50), CONST.BACKWARD, createConstant(CONST.NUM_CONST, 30))]);\n"
-                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
-
-        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator5.xml");
     }
 
     @Test

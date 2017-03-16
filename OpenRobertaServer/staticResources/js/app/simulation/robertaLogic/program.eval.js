@@ -210,6 +210,10 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     evalPinWriteValueSensor(internal(this), stmt);
                     break;
 
+                case CONSTANTS.FLOW_CONTROL:
+                    evalFlowControlStatement(internal(this), stmt);
+                    break;
+
                 default:
                     throw "Invalid Statement " + stmt.stmt + "!";
             }
@@ -227,6 +231,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         internal(this).outputCommands.terminated = internal(this).program.isTerminated();
         return internal(this).outputCommands;
 
+    };
+
+    var evalFlowControlStatement = function(obj, stmt) {
+        var t = obj.program.getRemove();
+        while (!(t.stmt == CONSTANTS.REPEAT_STMT && t.loopNumber == stmt.loopNumber)) {
+            t = obj.program.getRemove();
+        }
+        if (stmt.mode == CONSTANTS.CONTINUE) {
+            obj.program.prepend([t]);
+        }
     };
 
     var evalVarDeclaration = function(obj, propName) {
@@ -661,14 +675,6 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.repeatStmtExpr = UTIL.clone(stmt);
         }
         switch (stmt.mode) {
-            case CONSTANTS.TIMES:
-                var val = evalExpr(obj, "expr");
-                if (!isObject(val) && !obj.modifiedStmt) {
-                    for (var i = 0; i < val; i++) {
-                        obj.program.prepend(stmt.stmtList);
-                    }
-                }
-                break;
             case CONSTANTS.FOR_EACH:
                 var i = stmt.eachCounter++;
                 if (i == 0) {
@@ -683,6 +689,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     }
                 }
                 break;
+            case CONSTANTS.TIMES:
             case CONSTANTS.FOR:
                 var from = evalExpr(obj, "expr", 1);
                 var to = evalExpr(obj, "expr", 2);
@@ -699,6 +706,9 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     if (left <= to) {
                         obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
+                        obj.repeatStmtExpr = {};
+                    } else {
+                        obj.memory.remove(stmt.expr[0].name);
                         obj.repeatStmtExpr = {};
                     }
                 }

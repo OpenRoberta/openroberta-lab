@@ -82,7 +82,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public abstract class SimulationVisitor<V> implements AstVisitor<V> {
-
+    protected int loopsCounter = 0;
+    protected int currentLoop = 0;
     protected int stmtsNumber = 0;
     protected int methodsNumber = 0;
     private ArrayList<Boolean> inStmt = new ArrayList<>();
@@ -345,6 +346,7 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitRepeatStmt(RepeatStmt<V> repeatStmt) {
+        increaseLoopCounter(repeatStmt);
         String end = createClosingBracket();
         appendRepeatStmtCondition(repeatStmt);
         addInStmt();
@@ -352,7 +354,21 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
         this.sb.append("]");
         this.sb.append(end);
         removeInStmt();
+        exitLoop(repeatStmt);
         return null;
+    }
+
+    private void increaseLoopCounter(RepeatStmt<V> repeatStmt) {
+        if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
+            this.loopsCounter++;
+            this.currentLoop = this.loopsCounter;
+        }
+    }
+
+    private void exitLoop(RepeatStmt<V> repeatStmt) {
+        if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
+            this.currentLoop--;
+        }
     }
 
     @Override
@@ -363,6 +379,9 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon) {
+        String end = createClosingBracket();
+        this.sb.append("createStmtFlowControl('loop_" + this.loopsCounter + "', CONST." + stmtFlowCon.getFlow());
+        this.sb.append(end);
         return null;
     }
 
@@ -813,33 +832,26 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
     }
 
     protected void appendRepeatStmtCondition(RepeatStmt<V> repeatStmt) {
+        String methodName = "createRepeatStmt('loop_" + this.loopsCounter + "', CONST." + repeatStmt.getMode() + ", ";
         switch ( repeatStmt.getMode() ) {
             case WAIT:
                 this.sb.append("createIfStmt([");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append("], [");
                 break;
-            case TIMES:
-                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
-                (((ExprList<V>) repeatStmt.getExpr()).get().get(2)).visit(this);
-                this.sb.append(", [");
-                break;
             case FOREVER:
             case WHILE:
             case UNTIL:
-                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
+            case FOR_EACH:
+                this.sb.append(methodName);
                 repeatStmt.getExpr().visit(this);
                 this.sb.append(", [");
                 break;
+            case TIMES:
             case FOR:
-                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", [");
+                this.sb.append(methodName + "[");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append("], [");
-                break;
-            case FOR_EACH:
-                this.sb.append("createRepeatStmt(CONST." + repeatStmt.getMode() + ", ");
-                repeatStmt.getExpr().visit(this);
-                this.sb.append(", [");
                 break;
 
             default:

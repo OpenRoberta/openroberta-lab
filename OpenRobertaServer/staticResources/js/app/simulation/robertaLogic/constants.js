@@ -196,6 +196,8 @@ define({
 
     NULL_CONST: "null",
 
+    LOOP_NUMBER: "loopNumber",
+
     TERNARY_EXPR: "createTernaryExpr",
 
     NUMERIC: "Numeric",
@@ -209,6 +211,12 @@ define({
     ARRAY_COLOUR: "Array_Colour",
 
     ARRAY_IMAGE: "Array_Image",
+
+    CONTINUE: "continue",
+
+    BREAK: "break",
+
+    FLOW_CONTROL: "flowControl",
 
     ADD: "ADD",
 
@@ -309,17 +317,17 @@ define({
     AMBIENTLIGHT: "ambientlight",
 
     DISPLAY_TEXT_ACTION: "displayTextAction",
-    
+
     BRIGHTNESS: "brightness",
-    
+
     PIXEL: "pixel",
-    
+
     DISPLAY_SET_BRIGHTNESS_ACTION: "displaySetBrightnessAction",
-    
+
     DISPLAY_SET_PIXEL_ACTION: "displaySetPixelAction",
-    
+
     DISPLAY_GET_BRIGHTNESS_ACTION: "displayGetBrightnessAction",
-    
+
     DISPLAY_GET_PIXEL_ACTION: "displayGetPixelAction",
 
     TIMES: "TIMES",

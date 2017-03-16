@@ -69,6 +69,19 @@ define(function() {
     };
 
     /**
+     * Remove given variable.
+     *
+     * @param {String}
+     *            name - of the variable,
+     */
+    Memory.prototype.remove = function(name) {
+        if (this.memory[name] == undefined) {
+            throw "Variable " + name + " is undefined!";
+        }
+        delete this.memory[name];
+    };
+
+    /**
      * Clears all stored variables from the memory.
      */
     Memory.prototype.clear = function() {
