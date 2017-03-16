@@ -173,7 +173,7 @@ public class ClientProgram {
                 if ( xmlIsValid ) {
                     final BlockSet jaxbProgramSet = JaxbHelper.xml2BlockSet(xmlText);
                     final String robotType = jaxbProgramSet.getRobottype();
-                    if ( robotType.equals(httpSessionState.getRobotName()) ) {
+                    if ( robotType.equals(robot) ) {
                         response.put("name", programName);
                         response.put("data", xmlText);
                         Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);

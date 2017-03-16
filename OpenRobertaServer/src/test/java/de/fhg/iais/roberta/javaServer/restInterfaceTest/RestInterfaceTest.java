@@ -14,7 +14,6 @@ import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -58,7 +57,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  *
  * @author rbudde
  */
-@Ignore
+
 public class RestInterfaceTest {
 
     private SessionFactoryWrapper sessionFactoryWrapper; // used by REST services to retrieve data base sessions
@@ -610,7 +609,7 @@ public class RestInterfaceTest {
      */
     private void saveAs(HttpSessionState httpSession, int owner, String name, String program, String result, Key msgOpt) throws Exception //
     {
-        String jsonAsString = "{'cmd':'saveAsP';'name':'" + name + "';'program':'" + program + "';'program':'ev3'}";
+        String jsonAsString = "{'cmd':'saveAsP';'name':'" + name + "';'program':'" + program + "';}";
         this.response = this.restProgram.command(httpSession, JSONUtilForServer.mkD(jsonAsString));
         JSONUtilForServer.assertEntityRc(this.response, result, msgOpt);
     }
@@ -658,7 +657,7 @@ public class RestInterfaceTest {
             Class<IRobotFactory> factoryClass =
                 (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.EV3lejosFactory");
             Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
-            robotPlugins.put("ev3", factoryConstructor.newInstance(this.brickCommunicator));
+            robotPlugins.put("ev3lejos", factoryConstructor.newInstance(this.brickCommunicator));
         } catch ( Exception e ) {
             throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
         }
