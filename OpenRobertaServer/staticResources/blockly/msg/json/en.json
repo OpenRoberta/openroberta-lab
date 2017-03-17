@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-17 10:47:51.142760",
+		"lastupdated": "2017-03-17 17:00:14.786733",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1011,6 +1011,7 @@
 	"NAO_PHRASE": "phrase",
 	"NAO_ANSWER": "answer",
 	"NAO_RECOGNIZEWORD": "recognize word",
+	"NAO_RECOGNIZEWORDOR": "or recognize word",
 	"NAO_POSITION": "position",
 	"NAO_LEARNFACEOF": "learn face of",
 	"NAO_FORGETFACEOF": "forget face of",
@@ -1136,6 +1137,7 @@
 	"NAO_SAY_TOOLTIP": "The robot says the given text.",
 	"NAO_GETCURRENT_TOOLTIP": "Get the electric current from the selected joint.",
 	"NAO_SETINTENSITY_TOOLTIP": "Set the intensity of a group of LEDs.",
+	"NAO_CHAT_TOOLTIP": "Add a reaction if a word is recognized.",
 	"MENU_CODE_DOWNLOAD_TOOLTIP": "Download the source code of your program on the computer",
 	"MENU_CODE_REFRESH_TOOLTIP": "Refresh the source code, if you have changed the NEPO Block's.",
 	"MENU_SIM_WRO": "World Robot Olympiad scene",
