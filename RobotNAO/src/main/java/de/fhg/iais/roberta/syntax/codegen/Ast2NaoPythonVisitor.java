@@ -1553,17 +1553,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
-    /*
-    @Override
-    public Void visitDialog(Dialog<Void> dialog) {
-        this.sb.append("h.dialog(");
-        dialog.getPhrase().visit(this);
-        this.sb.append(", ");
-        dialog.getAnswer().visit(this);
-        this.sb.append(")");
-        return null;
-    }*/
-
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         this.sb.append("h.recognizeWord(");
@@ -1736,6 +1725,14 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitGyrometer(Gyrometer<Void> gyrometer) {
         this.sb.append("h.gyrometer(");
         this.sb.append(gyrometer.getCoordinate().getPythonCode());
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitDialog(Dialog<Void> dialog) {
+        this.sb.append("h.dialog(");
+        this.sb.append(dialog.getPhrase().getPythonCode());
         this.sb.append(")");
         return null;
     }
@@ -2088,12 +2085,6 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitDialog(Dialog<Void> dialog) {
         // TODO Auto-generated method stub
         return null;
     }
