@@ -1644,27 +1644,27 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitLedOff(LedOff<Void> ledOff) {
         this.sb.append("h.ledOff(");
         if ( ledOff.getLed() == Led.ALL ) {
-            this.sb.append("\"AllLeds\", ");
+            this.sb.append("\"AllLeds\"");
         } else if ( ledOff.getLed() == Led.CHEST ) {
-            this.sb.append("\"ChestLeds\", ");
+            this.sb.append("\"ChestLeds\"");
         } else if ( ledOff.getLed() == Led.EARS ) {
-            this.sb.append("\"EarLeds\", ");
+            this.sb.append("\"EarLeds\"");
         } else if ( ledOff.getLed() == Led.EYES ) {
-            this.sb.append("\"FaceLeds\", ");
+            this.sb.append("\"FaceLeds\"");
         } else if ( ledOff.getLed() == Led.HEAD ) {
-            this.sb.append("\"BrainLeds\", ");
+            this.sb.append("\"BrainLeds\"");
         } else if ( ledOff.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEarLeds\", ");
+            this.sb.append("\"LeftEarLeds\"");
         } else if ( ledOff.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftFaceLeds\", ");
+            this.sb.append("\"LeftFaceLeds\"");
         } else if ( ledOff.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFootLeds\", ");
+            this.sb.append("\"LeftFootLeds\"");
         } else if ( ledOff.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEarLeds\", ");
+            this.sb.append("\"RightEarLeds\"");
         } else if ( ledOff.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightFaceLeds\", ");
+            this.sb.append("\"RightFaceLeds\"");
         } else if ( ledOff.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFootLeds\", ");
+            this.sb.append("\"RightFootLeds\"");
         }
         this.sb.append(")");
         return null;
@@ -1672,29 +1672,29 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
-        this.sb.append("h.ledReset()");
+        this.sb.append("h.ledReset(");
         if ( ledReset.getLed() == Led.ALL ) {
-            this.sb.append("\"AllLeds\", ");
+            this.sb.append("\"AllLeds\"");
         } else if ( ledReset.getLed() == Led.CHEST ) {
-            this.sb.append("\"ChestLeds\", ");
+            this.sb.append("\"ChestLeds\"");
         } else if ( ledReset.getLed() == Led.EARS ) {
-            this.sb.append("\"EarLeds\", ");
+            this.sb.append("\"EarLeds\"");
         } else if ( ledReset.getLed() == Led.EYES ) {
-            this.sb.append("\"FaceLeds\", ");
+            this.sb.append("\"FaceLeds\"");
         } else if ( ledReset.getLed() == Led.HEAD ) {
-            this.sb.append("\"BrainLeds\", ");
+            this.sb.append("\"BrainLeds\"");
         } else if ( ledReset.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEarLeds\", ");
+            this.sb.append("\"LeftEarLeds\"");
         } else if ( ledReset.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftFaceLeds\", ");
+            this.sb.append("\"LeftFaceLeds\"");
         } else if ( ledReset.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFootLeds\", ");
+            this.sb.append("\"LeftFootLeds\"");
         } else if ( ledReset.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEarLeds\", ");
+            this.sb.append("\"RightEarLeds\"");
         } else if ( ledReset.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightFaceLeds\", ");
+            this.sb.append("\"RightFaceLeds\"");
         } else if ( ledReset.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFootLeds\", ");
+            this.sb.append("\"RightFootLeds\"");
         }
         this.sb.append(")");
         return null;
