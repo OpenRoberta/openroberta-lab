@@ -51,7 +51,6 @@ import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
-import de.fhg.iais.roberta.syntax.action.nao.Dialog;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
@@ -139,6 +138,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
@@ -1553,6 +1553,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         return null;
     }
 
+    /*
     @Override
     public Void visitDialog(Dialog<Void> dialog) {
         this.sb.append("h.dialog(");
@@ -1561,7 +1562,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         dialog.getAnswer().visit(this);
         this.sb.append(")");
         return null;
-    }
+    }*/
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
@@ -2087,6 +2088,12 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitDialog(Dialog<Void> dialog) {
         // TODO Auto-generated method stub
         return null;
     }

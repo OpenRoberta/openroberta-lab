@@ -1,20 +1,17 @@
-package de.fhg.iais.roberta.syntax.action.nao;
+package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
@@ -25,16 +22,13 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  * <br>
  * <br>
  */
-public class Dialog<V> extends Action<V> {
-    private final Expr<V> phrase;
-    private final Expr<V> answer;
+public class Dialog<V> extends Sensor<V> {
+    private final DialogPhrase phrase;
 
-    private Dialog(Expr<V> phrase, Expr<V> answer, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Dialog(DialogPhrase phrase, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("DIALOG"), properties, comment);
         Assert.isTrue(phrase != null);
-        Assert.isTrue(answer != null);
         this.phrase = phrase;
-        this.answer = answer;
         setReadOnly();
     }
 
@@ -46,27 +40,20 @@ public class Dialog<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> Dialog<V> make(Expr<V> phrase, Expr<V> answer, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Dialog<>(phrase, answer, properties, comment);
+    static <V> Dialog<V> make(DialogPhrase phrase, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Dialog<>(phrase, properties, comment);
     }
 
     /**
      * @return the phrase.
      */
-    public Expr<V> getPhrase() {
+    public DialogPhrase getPhrase() {
         return this.phrase;
-    }
-
-    /**
-     * @return the answer.
-     */
-    public Expr<V> getAnswer() {
-        return this.answer;
     }
 
     @Override
     public String toString() {
-        return "Dialog [" + this.phrase + ", " + this.answer + "]";
+        return "Dialog [" + this.phrase + ", " + "]";
     }
 
     @Override
@@ -83,11 +70,9 @@ public class Dialog<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 2);
-        Phrase<V> phrase = helper.extractValue(values, new ExprParam(BlocklyConstants.PHRASE, BlocklyType.STRING));
-        Phrase<V> answer = helper.extractValue(values, new ExprParam(BlocklyConstants.ANSWER, BlocklyType.STRING));
-        return Dialog
-            .make(helper.convertPhraseToExpr(phrase), helper.convertPhraseToExpr(answer), helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String phrase = helper.extractField(fields, BlocklyConstants.PHRASE);
+        return Dialog.make(DialogPhrase.valueOf(phrase), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -95,10 +80,25 @@ public class Dialog<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.PHRASE, this.phrase);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ANSWER, this.answer);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PHRASE, this.phrase.toString());
 
         return jaxbDestination;
     }
 
+    /**
+     * Modes in which the sensor can operate.
+     */
+    public static enum DialogPhrase {
+        HAND( "hand" ), HEAD( "head" ), BUMPER( "bumper" );
+
+        private final String pythonCode;
+
+        private DialogPhrase(String pythonCode) {
+            this.pythonCode = pythonCode;
+        }
+
+        public String getPythonCode() {
+            return this.pythonCode;
+        }
+    }
 }

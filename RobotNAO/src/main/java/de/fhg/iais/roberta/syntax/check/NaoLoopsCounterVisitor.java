@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
-import de.fhg.iais.roberta.syntax.action.nao.Dialog;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
@@ -32,6 +31,7 @@ import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForgetFace;
@@ -153,12 +153,6 @@ public class NaoLoopsCounterVisitor extends LoopsCounterVisitor implements NaoAs
     }
 
     @Override
-    public Void visitDialog(Dialog<Void> dialog) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         // TODO Auto-generated method stub
         return null;
@@ -274,6 +268,12 @@ public class NaoLoopsCounterVisitor extends LoopsCounterVisitor implements NaoAs
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitDialog(Dialog<Void> dialog) {
         // TODO Auto-generated method stub
         return null;
     }

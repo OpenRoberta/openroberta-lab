@@ -40,6 +40,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
     private final String Coordinate;
     private final String fsrSide;
     private final GetSampleType sensorType;
+    private final String dialogPhrase;
 
     private NaoGetSampleSensor(
         GetSampleType sensorType,
@@ -47,6 +48,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         String side,
         String coordinate,
         String fsrSide,
+        String dialogPhrase,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
@@ -57,6 +59,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         this.touchSide = side;
         this.Coordinate = coordinate;
         this.fsrSide = fsrSide;
+        this.dialogPhrase = dialogPhrase;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.NAO_TOUCHSENSOR:
                 this.sensor = Touchsensors.make(Touchsensors.SensorType.valueOf(touchsensor), Touchsensors.TouchSide.valueOf(side), properties, comment);
@@ -79,7 +82,8 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.NAO_FSR:
                 this.sensor = ForceSensor.make(ForceSensor.Side.valueOf(fsrSide), properties, comment);
                 break;
-
+            case BlocklyConstants.NAO_PHRASE:
+                this.sensor = Dialog.make(Dialog.DialogPhrase.valueOf(dialogPhrase), properties, comment);
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }
@@ -101,10 +105,15 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         String touchSide,
         String coordinate,
         String fsrSide,
+        String dialogPhrase,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new NaoGetSampleSensor<V>(sensorType, touchSensor, touchSide, coordinate, fsrSide, properties, comment, factory);
+        return new NaoGetSampleSensor<V>(sensorType, touchSensor, touchSide, coordinate, fsrSide, dialogPhrase, properties, comment, factory);
+    }
+
+    public String getDialogPhrase() {
+        return this.dialogPhrase;
     }
 
     public String getFsrSide() {
@@ -145,6 +154,8 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
             + this.fsrSide
             + ", sensorType="
             + this.sensorType
+            + ", dialogPhrase="
+            + this.dialogPhrase
             + "]";
     }
 
@@ -188,12 +199,19 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
             fsrSide = helper.extractField(fields, fsrSideName);
         }
 
+        String dialogPhraseName = GetSampleType.get(modeName).getDialogPhrase();
+        String dialogPhrase = "";
+        if ( !dialogPhraseName.equals("") ) {
+            dialogPhrase = helper.extractField(fields, dialogPhraseName);
+        }
+
         return NaoGetSampleSensor.make(
             GetSampleType.get(modeName),
             touchSensor,
             touchSide,
             coordinate,
             fsrSide,
+            dialogPhrase,
             helper.extractBlockProperties(block),
             helper.extractComment(block),
             helper.getModeFactory());
