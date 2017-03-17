@@ -180,10 +180,9 @@ cmd="$1"
 shift
 case "$cmd" in
 --export)         _exportApplication $* ;;
---start-from-git) $0 --reset-db
-                  java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
-                       -d hibernate.connection.url=jdbc:hsqldb:file:OpenRobertaServer/db/${databaseName} \
-                       $* ;;
+--start-from-git) java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
+                  -d hibernate.connection.url=jdbc:hsqldb:file:OpenRobertaServer/db/${databaseName} \
+                  $* ;;
 --sqlclient)      dir="OpenRobertaServer/target/resources"
                   java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
 
