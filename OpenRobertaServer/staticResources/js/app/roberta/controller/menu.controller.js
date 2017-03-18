@@ -1,6 +1,4 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
-        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
-        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -30,8 +28,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
     exports.init = init;
 
     function initMenu() {
-        var proto = $('.robotType');
+        // fill dropdown menu robot
+        $("#startupVersion").text(GUISTATE_C.getServerVersion());
         var robots = GUISTATE_C.getRobots();
+        var proto = $('.robotType');
         var length = Object.keys(robots).length
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
@@ -48,7 +48,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             $("#navigation-robot>.anchor").before(clone);
         }
         proto.remove();
+        // fill start popup
         proto = $('#popup-sim');
+        var newGroup = false;
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
                 i++;
@@ -58,20 +60,45 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             var robotGroup = robots[i].group;
             var clone = proto.clone().prop('id', 'menu-' + robotName);
             clone.find('span:eq( 0 )').removeClass('typcn-open');
-            clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+            if (robotName != robotGroup) {
+                clone.addClass('hidden');
+                clone.addClass('robotSubGroup');
+                clone.addClass(robotGroup);
+                clone.find('span:eq( 0 )').addClass('img-' + robotName);
+            } else {
+                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+            }
             clone.find('span:eq( 1 )').text(robots[i].realName);
             clone.find('a').attr('onclick', 'window.open("' + robots[i].info + '");return false;');
             clone.attr('data-type', robotName);
             if (!robots[i].beta) {
-                clone.find('img').css('visibility', 'hidden');
+                clone.find('img.img-beta').css('visibility', 'hidden');
             }
-            $("#show-startup-message .modal-body").append(clone);
+            $("#popup-robot-container").append(clone);
+            if (robotName != robotGroup && !newGroup) {
+                newGroup = true;
+            } else {
+                if (newGroup) {
+                    var clone = proto.clone().prop('id', 'menu-' + robotGroup);
+                    clone.find('span:eq( 0 )').removeClass('typcn-open');
+                    clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
+                    clone.find('a').remove();
+                    clone.attr('data-type', robotGroup);
+                    clone.attr('data-group', true);
+                    clone.find('img').css('visibility', 'hidden');
+                    $("#popup-robot-container").append(clone);
+                }
+                newGroup = false;
+            }
         }
         if (robots[0].name != 'sim') {
             proto.remove();
         }
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
+
+        $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
 
         GUISTATE_C.setInitialState();
     }
@@ -141,9 +168,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             } else if (domId === 'menuExportProg') {
                 PROGRAM_C.exportXml();
             } else if (domId === 'menuToolboxBeginner') {
-                $('#beginner').trigger('click'); 
+                $('#beginner').trigger('click');
             } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
-                $('#expert').trigger('click');  
+                $('#expert').trigger('click');
             }
         }, 'program edit clicked');
 
@@ -343,15 +370,31 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             switchRobot('ev3');
         }, 'start with ev3 clicked');
 
+        $('#startPopupBack').on('click', function(event) {
+            $('.popup-robot').removeClass('hidden');
+            $('.popup-robot.robotSubGroup').addClass('hidden');
+            $('.robotSpecial').removeClass('robotSpecial');
+            $('#startPopupBack').addClass('hidden');
+        });
         $('.popup-robot').onWrap('click', function(event) {
             event.preventDefault();
-            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
-                    || event.target.dataset.type;
+            $('#startPopupBack').trigger('click');
+            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type || event.target.dataset.type;
+            var choosenRobottGroup = event.target.parentElement.parentElement.dataset.group || event.target.parentElement.dataset.group || event.target.dataset.group;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {
                 if (choosenRobotType) {
-                    ROBOT_C.switchRobot(choosenRobotType, true);
+                    if (choosenRobottGroup) {
+                        $('.popup-robot').addClass('hidden');
+                        $('.popup-robot.' + choosenRobotType).removeClass('hidden');
+                        $('.popup-robot.' + choosenRobotType).addClass('robotSpecial');
+                        $('#startPopupBack').removeClass('hidden');
+                        return;
+                    } else {
+                        ROBOT_C.switchRobot(choosenRobotType, true);
+                    }
+
                 }
                 if ($('#checkbox_id').is(':checked')) {
                     $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
@@ -393,10 +436,18 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             }
         }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {
-            if (GUISTATE_C.getRobot() !== 'ev3')
-                ROBOT_C.switchRobot('ev3', true);
+            if (GUISTATE_C.getRobotGroup() !== 'ev3')
+                ROBOT_C.switchRobot('ev3lejos', true);
             PROGRAM_C.newProgram(true);
             TOUR_C.start('welcome');
+        }, 'take a tour clicked');
+
+        $('#goToWiki').onWrap('click', function(event) {
+            event.preventDefault();
+            window.open('https://wiki.open-roberta.org', '_blank');
+            event.stopPropagation();
+            $("#show-startup-message").modal("show");
+
         }, 'take a tour clicked');
 
         // init popup events

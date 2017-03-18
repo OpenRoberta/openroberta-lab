@@ -433,9 +433,18 @@ div.rightMenuButton:hover, .rightMenuButton:active {
 	z-index: 1039;	
 }
 
-#show-startup-message .robot-info {
-    bottom: 72px;
+#show-startup-message .popup-robot a {
+	position: relative;
+	bottom: 72px;
     right: 100px;
+}
+
+#show-startup-message .popup-robot.robotSpecial a {
+    bottom: 10px;
+    left: 25%;
+}
+
+#show-startup-message .robot-info {
     font-size: 24px;
     position: relative;
 }
@@ -1130,17 +1139,61 @@ table [data-toggle="collapse"].collapsed:after {
      width: 140px;
      height: 88px;
      display: inline-block;
-     margin: 20px 10px;
+     margin: 20px;
      padding: 13px 0;
      text-align: center;
      cursor: pointer;
+}
+
+.robotSpecial {
+	width: 200px;
+	height: 180px;	
+	border: 0;
+	padding: 0;
+}
+
+.robotSpecial>.img-beta {
+    bottom: 170px;
+    left: 100px
+}
+
+.robotSpecial>.robot-label {
+	bottom: -10px;
+    position: relative;
+}
+
+.robotSpecial span.robot-icon {
+	background-repeat: no-repeat;
+	width: 178px;
+	height: 128px;
+	background-position: center;
+	display: inline-block;
+    text-align: center;
+}
+.robotSpecial span.img-ev3lejos {
+	background-image: url("/css/img/ev3lejos.png");		
+}
+
+.robotSpecial span.img-ev3dev {
+	background-image: url("/css/img/ev3dev.png");
+}
+
+.robotSpecial span.img-calliope2017 {
+	background-image: url("/css/img/calliope2017.png");
+	width: 178px;
+	height: 157px;	
+}
+
+.robotSpecial span.img-calliope2016 {
+	background-image: url("/css/img/calliope2016.png");	
+	width: 178px;
+	height: 157px;
 }
 
 .startupImages {
 	top: 50%;
     position: relative;
     margin-top: 0;
-    height: 96px;
 }
 
 .robot-label {

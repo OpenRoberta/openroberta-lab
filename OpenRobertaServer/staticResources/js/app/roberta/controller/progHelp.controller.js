@@ -18,8 +18,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
         var url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getLanguage().toLowerCase() + '.html';
         $('#helpDiv').load(url, function(response, status, xhr) {
             if (status == "error") {
-                url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_de.html';
-//                    url = 'progHelp_en.html';
+                url = '../help/progHelp_' + GUISTATE_C.getRobotGroup() + '_en.html';
                 $('#helpDiv').load(url, function(response, status, xhr) {
                     if (status == "error") {
                         $('#progHelp').hide();
@@ -32,6 +31,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
             }
         });
     }
+    exports.initView = initView;
 
     function initEvents() {
         $('#progHelp').off('click touchend');

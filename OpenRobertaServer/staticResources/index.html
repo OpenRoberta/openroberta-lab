@@ -949,50 +949,46 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	<div id="show-startup-message" class="modal fade" data-keyboard="false"
 		data-backdrop="static">
 		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<!-- <div class="modal-header"
-					style="background-color: #BACC1E; text-align: center; color: white">
-					<button style="color: white" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_STARTUP_TITLE">Welcome</h3>
-					<div class="connector">
-						<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-							xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-							width="48px" height="26px" viewBox="0 0 48 26"
-							style="enable-background: new 0 0 48 26;" xml:space="preserve">
-                            <path class="connector_fill"
-								d="M40.922,0c0.92,16.925-7.92,21.222-24.932,16.379l-8.742-3.933L8.117,0H40.922z"></path></svg>
-					</div>
-				</div> -->
+			<div class="modal-content" style="padding-top: 10px;">
+				<a href="https://github.com/OpenRoberta/robertalab/releases" class="modal-body" target="_blank">Release <span id="startupVersion"font-size: 18px;">
+						2.0.0 </span></a>
 				<div class="modal-header"
 					style="text-align: center; font-size: 18px;">
 					<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
 				</div>
-				<div class="modal-body" style="text-align: center;">
-					<div id="popup-sim" href="#" class="popup-robot robot-container">
+				<div id="popup-robot-container" class="modal-body"
+					style="text-align: center;">
+					<div id="popup-sim" class="popup-robot robot-container">
 						<span href="#" class='typcn typcn-open robot-icon'></span><span
 							lkey="Blockly.Msg.POPUP_ROBOT_SIM" class="robot-label">I
-							don't have a robot!</span> <img class="img-beta" src="/css/img/beta.png"
-							alt="beta" /> <a href="#" target="_blank"
+							don't have a robot!</span><img class="img-beta" src="/css/img/beta.png"
+							alt="beta" /><a href="#" target="_blank"
 							style="display: inline;"> <span
 							class='robot-info typcn typcn-info-large'></span>
 						</a>
 					</div>
 				</div>
+				<div class="modal-body">
+					<input id="startPopupBack" type="button"
+						class="btn backButton hidden" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
 				<div class="container-fluid">
-					<hr style="border-color: #BACC1E;; border-width: 2px; margin: 10px 0">
+					<hr
+						style="border-color: #BACC1E;; border-width: 2px; margin: 10px 0">
 					<div class="row">
 						<div class="modal-header"
 							style="text-align: center; font-size: 18px;">
 							<h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4>
 						</div>
 						<div class="clearer"></div>
-						<div class="col-md-3 hidden-xs">Lorem ipsum dolor sit amet, consetetur
-							sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-							labore et dolore magna aliquyam erat, sed diam voluptua.</div>
+						<div class="col-md-3 hidden-xs"
+							lkey="Blockly.Msg.POPUP_STARTUP_TOUR_TEXT">Möchtest du
+							gleich loslegen, weißt aber nicht genau wie? Wir zeigen dir die
+							ersten Schritte in einer interaktiven Anleitung.</div>
 						<div class="col-md-3 hidden-xs">
 							<!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
 							<div style="text-align: center">
-								<div class="robot-container startupImages"
+								<div id="takeATour" class="robot-container startupImages"
 									data-dismiss="modal"
 									style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
 									<br>
@@ -1000,22 +996,23 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								</div>
 							</div>
 						</div>
-						<div class="col-md-3">Lorem ipsum dolor sit amet, consetetur
-							sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-							labore et dolore magna aliquyam erat, sed diam voluptua.</div>
+						<div class="col-md-3 hidden-xs"
+							lkey="Blockly.Msg.POPUP_STARTUP_HELP_TEXT">In unserer
+							ausführlichen Hilfe erklären wir dir alles ganz genau, von der
+							Bauanleitung bis zu häufig gestellten Fragen.</div>
 						<div class="col-md-3">
 							<!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
 							<div style="text-align: center">
-								<div class="robot-container startupImages"
+								<div id="goToWiki" class="robot-container startupImages"
 									data-dismiss="modal"
-									style="background-image: url(/css/img/tour.png); background-size: contain; background-repeat: no-repeat">
+									style="background-image: url(/css/img/wiki.png); background-size: contain; background-repeat: no-repeat">
 									<br>
-									<span lkey="Blockly.Msg.POPUP_TOUR" class="robot-label"></span>
+									<span class="robot-label">Open Roberta<br>Wiki</span>
 								</div>
 							</div>
 						</div>
 					</div>
-					<hr style="border-color: #BACC1E;; border-width: 2px;" margin: 10px 0">
+					<hr style="border-color: #BACC1E;; border-width: 2px;"margin: 10px 0">
 					<div class="modal-footer left-inner-addon popup-checkbox">
 						<input type="checkbox" name="checkbox" id="checkbox_id"
 							value="value" /> <label for="checkbox_id" style="color: #333;"
