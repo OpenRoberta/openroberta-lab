@@ -33,6 +33,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                         $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                         SIM.init(result.javaScriptProgram, false, GUISTATE_C.getRobotGroup());
                         setTimeout(function() {
                             SIM.setPause(false);
@@ -43,6 +44,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 });
             } else {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                 SIM.stopProgram();
             }
         });

@@ -234,7 +234,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 },
                 registerUserEmail : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    email : Blockly.Msg["VALID_EMAIL_ADDRESS"]
+                    email : Blockly.Msg["VALIDATION_VALID_EMAIL_ADDRESS"]
                 }
             }
         });
@@ -290,7 +290,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             messages : {
                 lost_email : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    email : Blockly.Msg["VALID_EMAIL_ADDRESS"]
+                    email : Blockly.Msg["VALIDATION_VALID_EMAIL_ADDRESS"]
                 }
             }
         });
