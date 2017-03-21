@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.factory.generic;
 
 import java.util.Properties;
 
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -29,7 +30,6 @@ import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import junit.framework.Assert;
 
 public class RobotModeFactoryTest {
     EV3lejosFactory factory = new EV3lejosFactory(null);

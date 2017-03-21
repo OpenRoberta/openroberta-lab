@@ -333,14 +333,18 @@ define(['exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap'], 
 
     function download(filename, content) {
         var blob = new Blob([content]);
-        var element = document.createElement('a');
-        var myURL = window.URL || window.webkitURL;
-        element.setAttribute('href', myURL.createObjectURL(blob));
-        element.setAttribute('download', filename);
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
+        if(window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            var element = document.createElement('a');
+            var myURL = window.URL || window.webkitURL;
+            element.setAttribute('href', myURL.createObjectURL(blob));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }      
     }
     exports.download = download;
 

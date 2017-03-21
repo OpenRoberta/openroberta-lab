@@ -41,7 +41,7 @@ import de.fhg.iais.roberta.util.Pair;
  * @author lbudde + rbudde
  */
 public class SearchMsgOccurrences {
-    private static final boolean DEBUG = true; // true: debugging into to syso; false: only infos and errors
+    private static final boolean DEBUG = false; // true: debugging into to syso; false: only infos and errors
     private final List<String> msgList;
     private final ListMultimap<String, MsgHits> msgKeyOccurrences = ArrayListMultimap.create();
     private final List<String> msgNotYetMatched;
@@ -52,7 +52,7 @@ public class SearchMsgOccurrences {
         this.msgNotYetMatched = new ArrayList<>(this.msgList);
         String propfilePath = msgKeyFile.getCanonicalPath();
         System.out.println("Found " + this.msgList.size() + " message keys in file " + propfilePath);
-        if ( false && DEBUG ) {
+        if ( DEBUG ) {
             sysoList(this.msgList);
         }
     }

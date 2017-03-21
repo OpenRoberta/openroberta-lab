@@ -29,7 +29,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
 
     public final String pathToCrosscompilerBaseDir;
     public final String robotCompilerResourcesDir;
-    public final String robotCompilerDir;
+    public String robotCompilerDir;
 
     private String compiledHex = "";
 
@@ -141,6 +141,9 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
 
         if ( SystemUtils.IS_OS_WINDOWS ) {
             scriptName = this.robotCompilerResourcesDir + "/../compile.bat";
+            if (robotCompilerDir.equals("")) {
+            	robotCompilerDir = "\"\"";
+            }
         }
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");

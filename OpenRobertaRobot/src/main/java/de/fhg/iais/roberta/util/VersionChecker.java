@@ -17,7 +17,7 @@ public class VersionChecker {
         this.versionTo = versionTo.split(DOT_REGEX);
     }
 
-    @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of FALSE")
+    @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of '?'")
     public static String retrieveVersionOfOpenRobertaServer() {
         try {
             Properties properties = new Properties();
@@ -27,14 +27,14 @@ public class VersionChecker {
             version = optionalRemoveSuffix(version);
             return version;
         } catch ( Exception e ) {
-            //TODO: Log the error and info messages to the server and log file
             System.out.println("properties from OpenRobertaServer.properties could not be loaded. Version load fails");
             return "?";
         }
     }
 
-    public boolean validateServerSide() {
-        return check("EV3Runtime", "OpenRobertaServer");
+    public static void checkRestVersion(String version) {
+        // TODO Auto-generated method stub
+
     }
 
     @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of FALSE")
@@ -103,10 +103,5 @@ public class VersionChecker {
             s = s.substring(0, s.length() - 8);
         }
         return s;
-    }
-
-    public static void checkRestVersion(String version) {
-        // TODO Auto-generated method stub
-
     }
 }
