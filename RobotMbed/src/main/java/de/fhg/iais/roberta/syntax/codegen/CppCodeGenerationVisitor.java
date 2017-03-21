@@ -317,13 +317,21 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-        if ( binary.getOp() == Op.TEXT_APPEND ) {
-            this.sb.append("ManagedString(");
-            generateSubExpr(this.sb, false, binary.getRight(), binary);
-            this.sb.append(")");
-        } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        switch ( binary.getOp() ) {
+            case TEXT_APPEND:
+                this.sb.append("ManagedString(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            case DIVIDE:
+                this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
+
         return null;
     }
 

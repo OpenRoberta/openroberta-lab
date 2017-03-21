@@ -16,7 +16,7 @@ public class ExprTest {
     @Test
     public void test2() throws Exception {
         final String a =
-            "\n2 * ( 2 - 2 )\n" + "2 - (2 * 2)(88 - ( 8 + (-3 + 5))) - (2 * 2)((88 - ( 8 + (-3 + 5))) - (2 * 2) )/ ((88 -( 8 + (-3 + 5)))-(2 * 2) )";
+            "\n2 * ( 2 - 2 )\n" + "2 - (2 * 2)(88 - ( 8 + (-3 + 5))) - (2 * 2)((88 - ( 8 + (-3 + 5))) - (2 * 2) )/((float) ((88 -( 8 + (-3 + 5)))-(2 * 2) ))";
 
         Helper.assertCodeIsOk(a, "/syntax/expr/expr2.xml");
     }

@@ -343,16 +343,25 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-        if ( binary.getOp() == Op.TEXT_APPEND ) {
-            if ( binary.getRight().getVarType().toString() == "BOOLEAN" ) {
-                this.sb.append("rob.boolToString(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
+
+        switch ( binary.getOp() ) {
+            case TEXT_APPEND:
+                if ( binary.getRight().getVarType() == BlocklyType.BOOLEAN ) {
+                    this.sb.append("rob.boolToString(");
+                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+                    this.sb.append(")");
+                } else {
+                    generateSubExpr(this.sb, false, binary.getRight(), binary);
+                }
+                break;
+            case DIVIDE:
+                this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
                 this.sb.append(")");
-            } else {
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-            }
-        } else {
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                break;
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+
         }
         return null;
     }
