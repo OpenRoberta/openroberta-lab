@@ -1,12 +1,9 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
-import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.NAOConfiguration;
-import de.fhg.iais.roberta.testutil.Helper;
 
 public class Ast2NaoPythonVisitorTest {
 

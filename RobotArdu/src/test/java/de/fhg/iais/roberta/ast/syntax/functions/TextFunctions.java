@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.functions;
 
 import java.util.ArrayList;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -12,7 +13,6 @@ import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import junit.framework.Assert;
 
 public class TextFunctions {
 

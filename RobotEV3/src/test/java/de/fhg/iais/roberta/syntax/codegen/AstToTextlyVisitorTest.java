@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
