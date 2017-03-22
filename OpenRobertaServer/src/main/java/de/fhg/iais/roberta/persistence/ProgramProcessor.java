@@ -170,7 +170,6 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param ownerId the owner of the program
      */
     private Program getProgramWithAccessRight(String programName, int ownerId) {
-        UserDao userDao = new UserDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
 
         // Find whether a program has been shared to the user logged in

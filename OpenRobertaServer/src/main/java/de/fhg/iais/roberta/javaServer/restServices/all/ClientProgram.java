@@ -336,7 +336,7 @@ public class ClientProgram {
         return null;
     }
 
-    public static String jaxbToXml(BlockSet blockSet) throws JAXBException {
+    private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
         final JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         final Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -345,7 +345,7 @@ public class ClientProgram {
         return writer.toString();
     }
 
-    public static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
+    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
         final BlockSet blockSet = new BlockSet();
 
         Instance instance = null;
@@ -364,7 +364,7 @@ public class ClientProgram {
         return blockSet;
     }
 
-    private void handleRunProgramError(JSONObject response, Key messageKey, String token, boolean wasRobotWaiting) throws JSONException {
+    private static void handleRunProgramError(JSONObject response, Key messageKey, String token, boolean wasRobotWaiting) throws JSONException {
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             if ( token == null ) {
                 Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);

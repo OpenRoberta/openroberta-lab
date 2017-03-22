@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
-    private static final String openRobertaVersion = VersionChecker.retrieveVersionOfOpenRobertaServer();
+    private static final String openRobertaVersion = RobertaProperties.getStringProperty("openRobertaServer.version");
 
     private Util() {
         // no objects

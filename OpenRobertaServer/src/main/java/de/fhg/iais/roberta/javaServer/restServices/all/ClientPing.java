@@ -34,12 +34,12 @@ public class ClientPing {
     private static final int EVERY_REQUEST = 100; // after arrival of EVERY_PING many ping requests , a log entry is written
     private static final AtomicInteger pingCounterForLogging = new AtomicInteger(0);
 
-    private final String version;
+    private final String openRobertaServerVersion;
     private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientPing(@Named("version") String version, RobotCommunicator brickCommunicator) {
-        this.version = version;
+    public ClientPing(@Named("openRobertaServer.version") String openRobertaServerVersion, RobotCommunicator brickCommunicator) {
+        this.openRobertaServerVersion = openRobertaServerVersion;
         this.brickCommunicator = brickCommunicator;
     }
 
@@ -60,7 +60,11 @@ public class ClientPing {
         }
         Date date = new Date();
         JSONObject response =
-            new JSONObject().put("version", this.version).put("date", date.getTime()).put("dateAsString", date.toString()).put("logged", logLen);
+            new JSONObject()
+                .put("version", this.openRobertaServerVersion)
+                .put("date", date.getTime())
+                .put("dateAsString", date.toString())
+                .put("logged", logLen);
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();

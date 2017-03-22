@@ -28,7 +28,7 @@ public class Ast2NaoPythonVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        Configuration.Builder configuration = new NAOConfiguration.Builder();
+        Configuration.Builder<?> configuration = new NAOConfiguration.Builder();
         brickConfiguration = configuration.build();
     }
 }

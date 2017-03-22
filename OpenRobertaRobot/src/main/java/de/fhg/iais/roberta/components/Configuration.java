@@ -247,7 +247,7 @@ public abstract class Configuration {
     /**
      * This class is a builder of {@link Configuration}
      */
-    public static abstract class Builder<T extends Builder> {
+    public static abstract class Builder<T extends Builder<T>> {
         private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
         private final Map<ISensorPort, Sensor> sensorMapping = new TreeMap<>();
 
@@ -261,6 +261,7 @@ public abstract class Configuration {
          * @param actor we want to connect
          * @return
          */
+        @SuppressWarnings("unchecked")
         public T addActor(IActorPort port, Actor actor) {
             this.actorMapping.put(port, actor);
             return (T) this;
@@ -272,6 +273,7 @@ public abstract class Configuration {
          * @param actors we want to connect to the brick configuration
          * @return
          */
+        @SuppressWarnings("unchecked")
         public T addActors(List<Pair<IActorPort, Actor>> actors) {
             for ( Pair<IActorPort, Actor> pair : actors ) {
                 this.actorMapping.put(pair.getFirst(), pair.getSecond());
@@ -286,7 +288,7 @@ public abstract class Configuration {
          * @param component we want to connect
          * @return
          */
-
+        @SuppressWarnings("unchecked")
         public T addSensor(ISensorPort port, Sensor sensor) {
             this.sensorMapping.put(port, sensor);
             return (T) this;
@@ -298,6 +300,7 @@ public abstract class Configuration {
          * @param sensors we want to connect to the brick configuration
          * @return
          */
+        @SuppressWarnings("unchecked")
         public T addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
             for ( Pair<ISensorPort, Sensor> pair : sensors ) {
                 this.sensorMapping.put(pair.getFirst(), pair.getSecond());
@@ -311,6 +314,7 @@ public abstract class Configuration {
          * @param wheelDiameter in cm
          * @return
          */
+        @SuppressWarnings("unchecked")
         public T setWheelDiameter(double wheelDiameter) {
             this.wheelDiameter = wheelDiameter;
             return (T) this;
@@ -322,6 +326,7 @@ public abstract class Configuration {
          * @param trackWidth in cm
          * @return
          */
+        @SuppressWarnings("unchecked")
         public T setTrackWidth(double trackWidth) {
             this.trackWidth = trackWidth;
             return (T) this;

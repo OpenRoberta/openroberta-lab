@@ -145,7 +145,7 @@ public class Helper {
     public static String generateString(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToEv3TextlyVisitor.generate("Test", transformer.getTree(), true);
-        // System.out.println(code); // only needed for EXTREME debugging
+        System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
 

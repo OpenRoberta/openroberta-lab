@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.main;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -41,6 +44,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Upgrader;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
@@ -76,16 +80,25 @@ public class ServerStarter {
         OptionParser parser = new OptionParser();
         OptionSpec<String> propertiesOpt = parser.accepts("properties").withOptionalArg().ofType(String.class);
         OptionSpec<String> defineOpt = parser.accepts("d").withRequiredArg().ofType(String.class);
+        OptionSpec<Void> versionOpt = parser.accepts("version");
         OptionSet options = parser.parse(args);
         String propertyPath = propertiesOpt.value(options);
         List<String> defines = defineOpt.values(options);
 
-        ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
-        Server server = serverStarter.start();
-        serverStarter.checkRobotPluginsDB();
-        serverStarter.logTheNumberOfStoredPrograms();
-        server.join();
-        System.exit(0);
+        if ( options.has(versionOpt) ) {
+            // print the server version and exit. Used to detect a new version. Ignores runtime arguments.
+            Properties robertaProperties = Util1.loadProperties(false, propertyPath);
+            System.out.println(robertaProperties.get("openRobertaServer.version"));
+            System.exit(0);
+        } else {
+            ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
+            checkForUpgrade();
+            Server server = serverStarter.start();
+            serverStarter.checkRobotPluginsDB();
+            serverStarter.logTheNumberOfStoredPrograms();
+            server.join();
+            System.exit(0);
+        }
     }
 
     /**
@@ -96,22 +109,11 @@ public class ServerStarter {
      */
     public ServerStarter(String propertyPath, List<String> defines) {
         Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
-        Properties robertaProperties = Util1.loadProperties(propertyPath);
+        Properties robertaProperties = Util1.loadAndMergeProperties(propertyPath, defines);
         if ( mailProperties != null ) {
             robertaProperties.putAll(mailProperties);
         }
-        if ( defines != null ) {
-            for ( String define : defines ) {
-                String[] property = define.split("\\s*=\\s*");
-                if ( property.length == 2 ) {
-                    LOG.info("new property from command line: " + define);
-                    robertaProperties.put(property[0], property[1]);
-                } else {
-                    LOG.info("command line property is invalid and thus ignored: " + define);
-
-                }
-            }
-        }
+        setupPropertyForDatabaseConnection(robertaProperties);
         RobertaProperties.setRobertaProperties(robertaProperties);
     }
 
@@ -198,6 +200,26 @@ public class ServerStarter {
     }
 
     /**
+     * setup the hibernate.connection.url
+     *
+     * @param properties for configuring OpenRoberta, merged from property file and runtime arguments
+     */
+    private void setupPropertyForDatabaseConnection(Properties properties) {
+        String serverVersion = properties.getProperty("openRobertaServer.version");
+        String databaseParentDir = properties.getProperty("database.parentdir");
+        String databaseMode = properties.getProperty("database.mode");
+        String dbUrl;
+        if ( "embedded".equals(databaseMode) ) {
+            dbUrl = "jdbc:hsqldb:file:" + databaseParentDir + "/db-" + serverVersion + "/openroberta-db";
+        } else if ( "server".equals(databaseMode) ) {
+            dbUrl = "jdbc:hsqldb:hsql://localhost/openroberta-db";
+        } else {
+            throw new DbcException("invalid database mode (use either embedded or server): " + databaseMode);
+        }
+        properties.put("hibernate.connection.url", dbUrl);
+    }
+
+    /**
      * configure robot plugins, that may be used with this server. Uses the white list and the declarations from the openroberta.properties file.
      *
      * @param robotCommunicator
@@ -224,8 +246,9 @@ public class ServerStarter {
                 if ( pluginName == null ) {
                     throw new DbcException("robot plugin with number " + pluginNumber + " is invalid. Check the properties. Server does NOT start");
                 }
-                if ( robotToUse.equals("sim") )
+                if ( robotToUse.equals("sim") ) {
                     continue whitelist;
+                }
                 if ( robotToUse.equals(pluginName) ) {
                     String pluginFactory = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".factory");
                     if ( pluginFactory == null ) {
@@ -252,6 +275,53 @@ public class ServerStarter {
         }
         LOG.info(sb.toString());
         return robotPlugins;
+    }
+
+    private static void checkForUpgrade() throws Exception {
+        String actualServerVersion = RobertaProperties.getStringProperty("openRobertaServer.version");
+        String databaseParentdirName = RobertaProperties.getStringProperty("database.parentdir");
+        File databaseParentdir = new File(databaseParentdirName);
+        if ( !databaseParentdir.isDirectory() ) {
+            LOG.error("Abort: database parent directory is invalid: " + databaseParentdirName);
+            System.exit(4);
+        }
+        File databaseDir = new File(databaseParentdir, "db-" + actualServerVersion);
+        if ( !databaseDir.isDirectory() ) {
+            // server version upgrade is necessary
+            String[] previousServerVersions = RobertaProperties.getStringProperty("openRobertaServer.history").split(",");
+            try {
+                upgrade(databaseParentdir, previousServerVersions, actualServerVersion);
+            } catch ( Exception e ) {
+                LOG.error("Abort: server version upgrade fails", e);
+                System.exit(4);
+            }
+        }
+    }
+
+    private static void upgrade(File databaseParentdir, String[] previousServerVersions, String actualServerVersion) throws Exception {
+        for ( int previousIndex = 0; previousIndex < previousServerVersions.length; previousIndex++ ) {
+            String previousServerVersion = previousServerVersions[previousIndex];
+            File dbPreviousDir = new File(databaseParentdir, "db-" + previousServerVersion);
+            if ( dbPreviousDir.isDirectory() ) {
+                LOG.info("The last version, that was found for this installation, is " + previousServerVersion);
+                File dbActualDir = new File(databaseParentdir, "db-" + actualServerVersion);
+                if ( dbActualDir.exists() ) {
+                    LOG.error("Abort: The version " + actualServerVersion + " to upgrade has a database directory");
+                    System.exit(4);
+                }
+                FileUtils.copyDirectory(dbPreviousDir, dbActualDir);
+                if ( previousIndex > 0 ) {
+                    for ( int j = previousIndex - 1; j >= 0; j-- ) {
+                        String upgradeVersion = previousServerVersions[j];
+                        Upgrader.to(upgradeVersion);
+                    }
+                }
+                Upgrader.to(actualServerVersion);
+                return;
+            }
+        }
+        LOG.error("Abort: no usable version for upgrade to " + actualServerVersion + " from one of " + Arrays.toString(previousServerVersions));
+        System.exit(4);
     }
 
     /**
@@ -305,8 +375,9 @@ public class ServerStarter {
             RobotDao robotDao = new RobotDao(session);
             for ( String pluginNumber : pluginNumbers ) {
                 String pluginName = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".name");
-                if ( robertaProperties.getProperty("robot.plugin." + pluginNumber + ".group") != null )
+                if ( robertaProperties.getProperty("robot.plugin." + pluginNumber + ".group") != null ) {
                     pluginName = robertaProperties.getProperty("robot.plugin." + pluginNumber + ".group");
+                }
                 Robot pluginRobot = robotDao.loadRobot(pluginName);
                 if ( pluginRobot == null ) {
                     // add missing robot type to database

@@ -564,6 +564,7 @@ public class RestInterfaceTest {
     }
 
     // small helpers
+    @SuppressWarnings("unused")
     private static final boolean _____helper_start_____ = true;
 
     /**

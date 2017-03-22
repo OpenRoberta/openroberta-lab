@@ -20,8 +20,14 @@
 	<url>http://www.open-roberta.org</url>
 	<inceptionYear>2014</inceptionYear>
 	<properties>
-		<!-- the server and the crosscompiler SHOULD be compatible between(including) 
-			the following two versions of software deployed on the ROBOT -->
+	   <!-- the server version and the history of deployed versions.
+	        this version is used (among others) as SUFFIX of the data base directory. The data base upgrade facility depends on this.
+	        the server version history is a comma separated list of all versions BEFORE the actual version. Young to old (e.g. 2.1.0,2.0.0,1.9.9,1.9.7) -->
+	    <openRobertaServer.version>2.2.0</openRobertaServer.version>
+	    <openRobertaServer.history>2.1.0</openRobertaServer.history>
+	    
+		<!-- the server SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT.
+		     UNUSED functionality -->
 		<validversionrange.From>1.4.0</validversionrange.From>
 		<validversionrange.To>2.2.0</validversionrange.To>
 
@@ -211,7 +217,7 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.2</version>
+				<version>2.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.json</groupId>

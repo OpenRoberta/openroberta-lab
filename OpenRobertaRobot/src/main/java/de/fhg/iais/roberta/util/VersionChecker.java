@@ -17,21 +17,6 @@ public class VersionChecker {
         this.versionTo = versionTo.split(DOT_REGEX);
     }
 
-    @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of '?'")
-    public static String retrieveVersionOfOpenRobertaServer() {
-        try {
-            Properties properties = new Properties();
-            InputStream resourceAsStream = VersionChecker.class.getClassLoader().getResourceAsStream("OpenRobertaServer.properties");
-            properties.load(resourceAsStream);
-            String version = properties.getProperty("version", "?");
-            version = optionalRemoveSuffix(version);
-            return version;
-        } catch ( Exception e ) {
-            System.out.println("properties from OpenRobertaServer.properties could not be loaded. Version load fails");
-            return "?";
-        }
-    }
-
     public static void checkRestVersion(String version) {
         // TODO Auto-generated method stub
 

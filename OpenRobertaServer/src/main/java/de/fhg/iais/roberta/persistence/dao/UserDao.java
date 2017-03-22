@@ -15,7 +15,6 @@ public class UserDao extends AbstractDao<User> {
      *
      * @param session the session used to access the database.
      */
-
     public UserDao(DbSession session) {
         super(User.class, session);
     }

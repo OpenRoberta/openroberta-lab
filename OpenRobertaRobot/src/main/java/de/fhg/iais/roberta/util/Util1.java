@@ -6,6 +6,7 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,18 +45,67 @@ public class Util1 {
      * @return the properties. Returns null, if errors occur (file not found, ...)
      */
     public static Properties loadProperties(String propertyURI) {
+        return loadProperties(true, propertyURI);
+    }
+
+    /**
+     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
+     * <br>
+     * <b>This methods loads the properties. It does NOT store them. See class {@link RobertaProperties}</b> <br>
+     * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
+     * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
+     * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
+     *
+     * @param propertyURI URI of the property file. May be null
+     * @return the properties. Returns null, if errors occur (file not found, ...)
+     */
+    public static Properties loadAndMergeProperties(String propertyURI, List<String> defines) {
+        Properties robertaProperties = loadProperties(true, propertyURI);
+        if ( defines != null ) {
+            for ( String define : defines ) {
+                String[] property = define.split("\\s*=\\s*");
+                if ( property.length == 2 ) {
+                    LOG.info("new property from command line: " + define);
+                    robertaProperties.put(property[0], property[1]);
+                } else {
+                    LOG.info("command line property is invalid and thus ignored: " + define);
+                }
+            }
+        }
+        return robertaProperties;
+    }
+
+    /**
+     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
+     * <br>
+     * <b>This methods loads the properties. It does NOT store them. See class {@link RobertaProperties}</b> <br>
+     * If the URI-parameter is null, the classpath is searched for the default resource "openRoberta.properties".<br>
+     * If the URI-parameters start with "file:" the properties are loaded from the file system.<br>
+     * If the URI-parameters start with "classpath:" the properties are loaded as a resource from the classpath.
+     *
+     * @param doLogging if true: log debug info
+     * @param propertyURI URI of the property file. May be null
+     * @return the properties. Returns null, if errors occur (file not found, ...)
+     */
+    public static Properties loadProperties(boolean doLogging, String propertyURI) {
         Properties properties = new Properties();
         try {
             if ( propertyURI == null || propertyURI.trim().equals("") ) {
-                Util1.LOG.info("default properties from classpath. Using the resource: " + Util1.PROPERTY_DEFAULT_PATH);
+                if ( doLogging ) {
+                    Util1.LOG.info("default properties from classpath. Using the resource: " + Util1.PROPERTY_DEFAULT_PATH);
+                }
                 properties.load(Util1.class.getClassLoader().getResourceAsStream(Util1.PROPERTY_DEFAULT_PATH));
             } else if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
-                Util1.LOG.info("properties from file system. Using the path: " + filesystemPathName);
+                if ( doLogging ) {
+                    Util1.LOG.info("properties from file system. Using the path: " + filesystemPathName);
+                }
                 properties.load(new FileReader(filesystemPathName));
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
-                Util1.LOG.info("properties from classpath. Using the resource: " + classPathName);
+                if ( doLogging ) {
+                    Util1.LOG.info("properties from classpath. Using the resource: " + classPathName);
+                }
                 properties.load(Util1.class.getClassLoader().getResourceAsStream(classPathName));
             } else {
                 Util1.LOG.error("Could not load properties. Invalid URI: " + propertyURI);

@@ -21,6 +21,7 @@ public class DbTest {
         nativeSession.beginTransaction();
         String sqlGetQuery = "select ID, PROGRAM_TEXT from PROGRAM";
 
+        @SuppressWarnings("unchecked")
         List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
 
         int counter = 0;

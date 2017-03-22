@@ -66,13 +66,13 @@ public class Administration {
                 adminWork.runSql();
                 break;
             case "conf:xml2text":
-                adminWork.confXml2text();
+                // adminWork.confXml2text();
                 break;
             case "user:encryptpasswords":
-                adminWork.encryptpasswords();
+                // adminWork.encryptpasswords();
                 break;
             case "db:update":
-                adminWork.update_db();
+                // adminWork.update_db();
                 break;
             default:
                 Administration.LOG.error("invalid argument: " + args[0] + " - exit 4");
@@ -100,6 +100,7 @@ public class Administration {
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         nativeSession.beginTransaction();
+        @SuppressWarnings("unchecked")
         List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list();
         Administration.LOG.info("result set has " + resultSet.size() + " rows");
         for ( Object[] object : resultSet ) {
@@ -174,6 +175,7 @@ public class Administration {
         String sqlGetQuery = "select ID, PASSWORD from USER";
         String sqlUpdQuery = "update USER set PASSWORD=:password where ID=:id";
         SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
+        @SuppressWarnings("unchecked")
         List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
         Administration.LOG.info("there are " + resultSet.size() + " users in the data base");
         for ( Object[] object : resultSet ) {
@@ -239,7 +241,7 @@ public class Administration {
 
         SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
         SQLQuery updRobotId = nativeSession.createSQLQuery(sqlUpdRobotIdQuery);
-
+        @SuppressWarnings("unchecked")
         List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
 
         Administration.LOG.info("there are " + resultSet.size() + " programs in the data base");
@@ -300,6 +302,7 @@ public class Administration {
     private List<Object[]> selectEV3programByName(Session nativeSession, String sqlGetProgramByName, String name) {
         SQLQuery selectByProgramName = nativeSession.createSQLQuery(sqlGetProgramByName);
         selectByProgramName.setString("name", name);
+        @SuppressWarnings("unchecked")
         List<Object[]> result = selectByProgramName.list();
         return result;
     }
@@ -346,7 +349,7 @@ public class Administration {
         return blockSet;
     }
 
-    public String jaxbToXml(BlockSet blockSet) throws JAXBException {
+    private String jaxbToXml(BlockSet blockSet) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -354,5 +357,4 @@ public class Administration {
         m.marshal(blockSet, writer);
         return writer.toString();
     }
-
 }

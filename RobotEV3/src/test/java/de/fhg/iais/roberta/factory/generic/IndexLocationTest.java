@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.factory.generic;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import junit.framework.Assert;
 
 public class IndexLocationTest {
 

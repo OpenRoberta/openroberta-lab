@@ -8,6 +8,6 @@ RobotEV3/resources/*.jar
 RobotEV3/resources/updateResources/*.jar
 OpenRobertaRuntime/userProjects/*
 OpenRobertaServer/userProjects/*
-OpenRobertaServer/db
+OpenRobertaServer/db-*
 **/phantomjsdriver.log
 tags

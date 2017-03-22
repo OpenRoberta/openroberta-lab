@@ -1,13 +1,5 @@
 #!/bin/bash
 
-lejosipaddr='10.0.1.1'                           # only needed for updating a lejos based ev3
-
-databaseName=openroberta-db                      # the name of the database
-databaseurlEmbedded=jdbc:hsqldb:file:db/${databaseName}
-databaseurlServer=jdbc:hsqldb:hsql://localhost/${databaseName}
-
-databaseurl=$databaseurlServer                   # HERE the database type is selected: either server or embedded
-
 function mkAndCheckDir {
   mkdir "$1"
   if [ $? -ne 0 ]
@@ -103,26 +95,20 @@ function _checkJava {
 }
 
 function _exportApplication {
-  if [[ "$1" == '-createemptydb' ]]
-  then
-    dbOption=$1
-    shift
-  fi
   exportpath="$1"
+  databasemode="$2" # database mode: either server or embedded. Default is embedded.
+  if [ "${databasemode}" = "" ]
+  then
+    databasemode="embedded"
+  fi
   if [[ -e "$exportpath" ]]
   then
      echo "target directory \"$exportpath\" already exists - exit 4"
      exit 4
   fi
+  echo "using databasemode: ${databasemode} serverVersion: ${serverVersion}"
   echo "creating the target directory \"$exportpath\""
   mkAndCheckDir "$exportpath"
-  if [[ "$dbOption" == '-createemptydb' ]]
-  then
-    echo "creating an empty data base"
-    $0 --createemptydb "${exportpath}/db/${databaseName}"
-  else
-    echo; echo "YOU ARE RESPONSIBLE TO COPY THE DATABASE TO DIRECTORY db"; echo
-  fi
   echo "copying all jars"
   mkAndCheckDir "${exportpath}/lib"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
@@ -141,10 +127,10 @@ function _exportApplication {
   done
 # -------------- begin of here documents --------------------------------------------------------------
   cat >"${exportpath}/start-server.sh" <<.eof
-java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d hibernate.connection.url=${databaseurl} \$*
+java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=${databasemode} \$*
 .eof
   cat >"${exportpath}/start-db.sh" <<.eof
-java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db/${databaseName} --dbname.0 $databaseName
+java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db-${serverVersion}/openroberta-db --dbname.0 openroberta-db
 .eof
 # -------------- end of here documents ----------------------------------------------------------------
   chmod ugo+x "${exportpath}/start-server.sh" "${exportpath}/start-db.sh"
@@ -178,18 +164,24 @@ else
 fi
 cmd="$1"
 shift
+
+lejosipaddr='10.0.1.1' # only needed for updating a lejos based ev3
+serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
+
 case "$cmd" in
 --export)         _exportApplication $* ;;
---start-from-git) java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter \
-                  -d hibernate.connection.url=jdbc:hsqldb:file:OpenRobertaServer/db/${databaseName} \
-                  $* ;;
+
+--start-from-git) java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded $* ;;
+
 --sqlclient)      dir="OpenRobertaServer/target/resources"
+                  databaseurl=$1
                   java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
 
 ''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" may be used by compgen for completion
                   $0 --java
                   echo ''
                   cat ora-help.txt ;;
+
 --java)           _checkJava ;;
 
 --update-lejos)   serverurl="$1"
@@ -199,8 +191,10 @@ case "$cmd" in
                     exit 4
                   fi
                   _updateLejos ;;
---reset-db)       rm -rf OpenRobertaServer/db
-                  cp -a OpenRobertaServer/dbBase OpenRobertaServer/db ;;
+--reset-db)       dbVersion="$1"
+                  rm -rf OpenRobertaServer/db-${dbVersion}
+                  cp -a OpenRobertaServer/dbBase OpenRobertaServer/db-${dbVersion} ;;
+
 --createemptydb)  dbpath="$1"
                   main='de.fhg.iais.roberta.main.Administration'
                   java -cp 'OpenRobertaServer/target/resources/*' "${main}" createemptydb "${dbpath}" ;;

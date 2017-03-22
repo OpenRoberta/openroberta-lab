@@ -66,7 +66,7 @@ public class AstToLejosJavaVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        Configuration.Builder builder = new EV3Configuration.Builder();
+        Configuration.Builder<?> builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
         builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,

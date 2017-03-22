@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 import org.junit.Ignore;
-import org.junit.Test;
 
 public class SearchMsgOccurrencesTest {
     private static final Pattern ALL = Pattern.compile(".*");
