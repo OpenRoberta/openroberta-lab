@@ -470,6 +470,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
                 break;
             case NULL:
                 break;
+            case COLOR:
+            	break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
