@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -38,6 +39,7 @@ import de.fhg.iais.roberta.mode.sensor.nao.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -57,7 +59,7 @@ public class NAOFactory extends AbstractRobotFactory {
         this.compilerWorkflow =
             new NAOCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
         addBlockTypesFromProperties("NAO.properties", this.naoProperties);
     }
 
@@ -516,8 +518,14 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
+    }
+
+    @Override
+    public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

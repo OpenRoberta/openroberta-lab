@@ -12,7 +12,7 @@ public class DbTest {
 
     @Ignore
     public void test() {
-
+        Helper h = new Helper();
         SessionFactoryWrapper sessionFactoryWrapper =
             new SessionFactoryWrapper(
                 "hibernate-cfg.xml",
@@ -27,7 +27,7 @@ public class DbTest {
         int counter = 0;
         for ( Object[] object : resultSet ) {
             try {
-                Helper.assertXMLtransformation((String) object[1]);
+                h.assertXMLtransformation((String) object[1]);
             } catch ( Exception e ) {
                 System.out.println((int) object[0] + ": " + e);
                 System.out.println((String) object[1]);

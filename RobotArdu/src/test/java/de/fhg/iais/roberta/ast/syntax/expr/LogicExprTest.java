@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class LogicExprTest {
+    Helper h = new Helper();
 
     @Test
     public void test1() throws Exception {
@@ -20,21 +21,21 @@ public class LogicExprTest {
                 + "((5 + 7)==(5 + 7) )>= (((5 + 7)== (5 + 7)) && ((5 + 7) <= (5 + 7)))\n"
                 + "!((5 + 7)==(5 + 7) )== true";
 
-        Helper.assertCodeIsOk(a, "/syntax/expr/logic_expr.xml");
+        this.h.assertCodeIsOk(a, "/syntax/expr/logic_expr.xml", false);
     }
 
     @Test
     public void logicNegate() throws Exception {
         final String a = "\n!((0!= 0)&&false)";
 
-        Helper.assertCodeIsOk(a, "/syntax/expr/logic_negate.xml");
+        this.h.assertCodeIsOk(a, "/syntax/expr/logic_negate.xml", false);
     }
 
     @Test
     public void logicNull() throws Exception {
         final String a = "\nNULL";
 
-        Helper.assertCodeIsOk(a, "/syntax/expr/logic_null.xml");
+        this.h.assertCodeIsOk(a, "/syntax/expr/logic_null.xml", false);
     }
 
     // The ternary was removed
@@ -42,6 +43,6 @@ public class LogicExprTest {
     public void logicTernary() throws Exception {
         final String a = "\n( 0 == 0 ) ? false : true";
 
-        Helper.assertCodeIsOk(a, "/syntax/expr/logic_ternary.xml");
+        this.h.assertCodeIsOk(a, "/syntax/expr/logic_ternary.xml", false);
     }
 }

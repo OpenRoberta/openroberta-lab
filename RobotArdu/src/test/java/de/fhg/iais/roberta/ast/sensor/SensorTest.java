@@ -1,11 +1,20 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.factory.ArduFactory;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class SensorTest {
+    Helper h = new Helper();
+    ArduFactory robotFactory = new ArduFactory();
+
+    @Before
+    public void setUp() throws Exception {
+        this.h.setRobotFactory(this.robotFactory);
+    }
 
     @Test
     public void sensorReset() throws Exception {
@@ -18,7 +27,7 @@ public class SensorTest {
                 + "SensorStmt TimerSensor [mode=RESET, timer=1]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_reset.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_reset.xml"));
     }
 
     @Test
@@ -35,7 +44,7 @@ public class SensorTest {
                 + "Var [item] := SensorExpr [TimerSensor [mode=GET_SAMPLE, timer=1]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSample.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSample.xml"));
     }
 
 }

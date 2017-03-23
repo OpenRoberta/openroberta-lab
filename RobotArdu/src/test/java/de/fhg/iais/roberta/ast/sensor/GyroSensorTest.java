@@ -1,27 +1,36 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.mode.sensor.arduino.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class GyroSensorTest {
+    Helper h = new Helper();
+    ArduFactory robotFactory = new ArduFactory();
+
+    @Before
+    public void setUp() throws Exception {
+        this.h.setRobotFactory(this.robotFactory);
+    }
 
     @Test
     public void sensorSetGyro() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [mode=ANGLE, port=S2]], [Location [x=-26, y=250], GyroSensor [mode=RATE, port=S4]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setGyro.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setGyro.xml"));
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
@@ -32,7 +41,7 @@ public class GyroSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
@@ -45,17 +54,17 @@ public class GyroSensorTest {
     public void sensorResetGyro() throws Exception {
         String a = "BlockAST [project=[[Location [x=-13, y=105], GyroSensor [mode=RESET, port=S2]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetGyro.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetGyro.xml"));
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_setGyro.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_setGyro.xml");
     }
 
     @Test
     public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_resetGyro.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_resetGyro.xml");
     }
 
 }

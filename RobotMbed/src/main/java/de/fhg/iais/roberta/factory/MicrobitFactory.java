@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -26,6 +27,7 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.MicrobitSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -46,8 +48,8 @@ public class MicrobitFactory extends AbstractRobotFactory {
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new MicrobitCompilerWorkflow(
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.dir"));
         this.calliopeProperties = Util1.loadProperties("classpath:Microbit.properties");
         this.microbitSimCompilerWorkflow = new MbedSimCompilerWorkflow();
         addBlockTypesFromProperties("Microbit.properties", this.calliopeProperties);
@@ -360,5 +362,11 @@ public class MicrobitFactory extends AbstractRobotFactory {
     @Override
     public String getGroup() {
         return this.calliopeProperties.getProperty("robot.group") != null ? this.calliopeProperties.getProperty("robot.group") : this.name;
+    }
+
+    @Override
+    public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
