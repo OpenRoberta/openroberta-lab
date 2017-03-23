@@ -6,9 +6,9 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.TypecheckVisitor;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class TypecheckTest {
     private static final Configuration BRICK_CONFIGURATION = new ArduConfiguration.Builder().build();

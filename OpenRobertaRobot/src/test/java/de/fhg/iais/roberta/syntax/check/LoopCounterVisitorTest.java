@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class LoopCounterVisitorTest {
 

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.testutil;
+package de.fhg.iais.roberta.util.test;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -54,7 +54,7 @@ public class JavaBeanTester<T> {
 
     /**
      * Tests the get/set methods of the specified class and the behavior if it is a immutable class.
-     * 
+     *
      * @param <T>
      *        the type parameter associated with the class under test
      * @param clazz
@@ -187,7 +187,7 @@ public class JavaBeanTester<T> {
 
     /**
      * make a parameter object of given type
-     * 
+     *
      * @param clazz
      * @return the parameter object, maybe null
      * @throws Exception
@@ -254,7 +254,7 @@ public class JavaBeanTester<T> {
 
     /**
      * Hunt down missing Boolean read method if needed as Introspector cannot find 'is' getters for Boolean type properties.
-     * 
+     *
      * @param clazz
      *        the type being introspected
      * @param descriptor

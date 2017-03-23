@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class MotorGetPowerActionTest {
 

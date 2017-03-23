@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.junit.Ignore;
 
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class DbTest {
 

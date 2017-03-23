@@ -6,8 +6,8 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.sensor.arduino.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class ColorSensorTest {
 

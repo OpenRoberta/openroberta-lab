@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class BoolConstTest {
 

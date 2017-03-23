@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.testutil;
+package de.fhg.iais.roberta.util.test;
 
 import static org.junit.Assert.assertEquals;
 
