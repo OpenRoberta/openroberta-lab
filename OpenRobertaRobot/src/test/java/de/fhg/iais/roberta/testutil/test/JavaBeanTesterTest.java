@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.testutil.test;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.IValueBuilder;
-import de.fhg.iais.roberta.testutil.JavaBeanTester;
+import de.fhg.iais.roberta.util.test.IValueBuilder;
+import de.fhg.iais.roberta.util.test.JavaBeanTester;
 
 public class JavaBeanTesterTest {
     @Test

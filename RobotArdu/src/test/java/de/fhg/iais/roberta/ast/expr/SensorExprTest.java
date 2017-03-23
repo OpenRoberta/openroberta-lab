@@ -9,11 +9,14 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class SensorExprTest {
+    Helper h = new Helper();
 
     @Test
     public void make() throws Exception {
+
         TouchSensor<Void> touchSensor =
             TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);

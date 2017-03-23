@@ -1,19 +1,23 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import org.junit.Ignore;
+
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class ListsOccurrenceTest {
-    //ignore
+    Helper h = new Helper();
+
+    @Ignore
     public void Test() throws Exception {
         final String a = "";
 
-        Helper.assertCodeIsOk(a, "/syntax/lists/lists_occurrence.xml");
+        this.h.assertCodeIsOk(a, "/syntax/lists/lists_occurrence.xml", false);
     }
 
-    //ignore
+    @Ignore
     public void Test1() throws Exception {
         final String a = "";
 
-        Helper.assertCodeIsOk(a, "/syntax/lists/lists_occurrence1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/lists/lists_occurrence1.xml", false);
     }
 }

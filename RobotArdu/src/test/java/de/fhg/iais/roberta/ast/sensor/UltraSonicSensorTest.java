@@ -1,27 +1,36 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class UltraSonicSensorTest {
+    Helper h = new Helper();
+    ArduFactory robotFactory = new ArduFactory();
+
+    @Before
+    public void setUp() throws Exception {
+        this.h.setRobotFactory(this.robotFactory);
+    }
 
     @Test
     public void sensorSetUltrasonic() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [mode=DISTANCE, port=S4]], [Location [x=1, y=98], UltrasonicSensor [mode=PRESENCE, port=S2]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(1).get(1);
@@ -32,7 +41,7 @@ public class UltraSonicSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0).get(1);
         UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(1).get(1);
@@ -43,7 +52,7 @@ public class UltraSonicSensorTest {
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_setUltrasonic.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_setUltrasonic.xml");
     }
 
 }

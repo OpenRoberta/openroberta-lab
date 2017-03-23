@@ -2,27 +2,29 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class MathSingleTest {
+    Helper h = new Helper();
+
     @Test
     public void Test() throws Exception {
         final String a = "sqrt(0)abs(0)-0log(0)log10(0)exp(0)pow(10.0,0)";
 
-        Helper.assertCodeIsOk(a, "/syntax/math/math_single.xml");
+        this.h.assertCodeIsOk(a, "/syntax/math/math_single.xml", false);
     }
 
     @Test
     public void Test1() throws Exception {
         final String a = "";
 
-        Helper.assertCodeIsOk(a, "/syntax/math/math_single1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/math/math_single1.xml", false);
     }
 
     @Test
     public void Test2() throws Exception {
         final String a = "item=sqrt(0);";
 
-        Helper.assertCodeIsOk(a, "/syntax/math/math_single2.xml");
+        this.h.assertCodeIsOk(a, "/syntax/math/math_single2.xml", false);
     }
 }

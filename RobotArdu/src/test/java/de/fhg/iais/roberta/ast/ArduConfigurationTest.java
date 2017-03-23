@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class ArduConfigurationTest {
-    ArduFactory factory = new ArduFactory(null);
+    ArduFactory factory = new ArduFactory();
 
     @BeforeClass
     public static void loadPropertiesForTests() {

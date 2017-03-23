@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.TypecheckVisitor;
+import de.fhg.iais.roberta.testutil.Helper;
 
 public class TypecheckTest {
     private static final EV3Configuration BRICK_CONFIGURATION = (EV3Configuration) new EV3Configuration.Builder().build();

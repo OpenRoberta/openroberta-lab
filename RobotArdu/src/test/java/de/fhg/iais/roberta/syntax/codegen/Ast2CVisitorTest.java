@@ -1,18 +1,11 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.ArduConfiguration;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class Ast2CVisitorTest {
+    Helper h = new Helper();
 
     private static final String MAIN_METHOD1 = ""
         + "#include<math.h>\n"
@@ -41,17 +34,6 @@ public class Ast2CVisitorTest {
         + "rob.setOne(one);"
         + "rob.setBrm(brm);";
 
-    private static ArduConfiguration brickConfiguration;
-
-    @BeforeClass
-    public static void setupConfigurationForAllTests() {
-        final ArduConfiguration.Builder builder = new ArduConfiguration.Builder();
-        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
-            ActorPort.B,
-            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        brickConfiguration = (ArduConfiguration) builder.build();
-    }
-
     @Test
     public void test() throws Exception {
 
@@ -63,7 +45,7 @@ public class Ast2CVisitorTest {
             + "        one.lcd1(\"Hallo\");\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml", true);
     }
 
     @Test
@@ -79,7 +61,7 @@ public class Ast2CVisitorTest {
             + "        }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml", true);
     }
 
     @Test
@@ -108,7 +90,7 @@ public class Ast2CVisitorTest {
             + "    delay(15);}"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml", true);
     }
 
     @Test
@@ -138,7 +120,7 @@ public class Ast2CVisitorTest {
             + "    one.stop();}}"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml", true);
     }
 
     @Test
@@ -159,7 +141,7 @@ public class Ast2CVisitorTest {
             + "tone(9, 300, 100);}}"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml", true);
     }
 
     @Test
@@ -176,7 +158,7 @@ public class Ast2CVisitorTest {
             + "       tone(9,0,0);"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml", true);
     }
 
     @Test
@@ -191,7 +173,7 @@ public class Ast2CVisitorTest {
             + "        tone(9,300, 3000);\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator6.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator6.xml", true);
     }
 
     @Test
@@ -205,7 +187,7 @@ public class Ast2CVisitorTest {
             + "          rob.move1mTime(1,30,1);\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator7.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator7.xml", true);
     }
 
     @Test
@@ -225,7 +207,7 @@ public class Ast2CVisitorTest {
             + "        item3 = false;\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator8.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator8.xml", true);
     }
 
     @Test
@@ -242,7 +224,7 @@ public class Ast2CVisitorTest {
             + "    test();"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
+        this.h.assertCodeIsOk(a, "/syntax/methods/method_void_2.xml", true);
     }
 
     @Test
@@ -260,7 +242,7 @@ public class Ast2CVisitorTest {
             + "test(true);"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/methods/method_if_return_1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/methods/method_if_return_1.xml", true);
     }
 
     @Test
@@ -285,7 +267,7 @@ public class Ast2CVisitorTest {
             + "        test2();"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
+        this.h.assertCodeIsOk(a, "/syntax/methods/method_void_3.xml", true);
     }
 
     @Test
@@ -305,7 +287,7 @@ public class Ast2CVisitorTest {
             + "one.lcd1(test(0,variablenName));"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/methods/method_return_1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/methods/method_return_1.xml", true);
     }
 
     @Test
@@ -323,7 +305,7 @@ public class Ast2CVisitorTest {
 
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/stmt/if_stmt4.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt4.xml", true);
     }
 
     @Test
@@ -337,7 +319,7 @@ public class Ast2CVisitorTest {
             + "voidloop(){"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml", true);
     }
 
     @Test
@@ -353,11 +335,7 @@ public class Ast2CVisitorTest {
             + "    rob.moveTimePID(item, item, 100);}"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml", true);
     }
 
-    private void assertCodeIsOk(String a, String fileName) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
-    }
 }

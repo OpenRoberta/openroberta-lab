@@ -1,11 +1,13 @@
 package de.fhg.iais.roberta.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
+import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -37,7 +39,8 @@ import de.fhg.iais.roberta.mode.sensor.arduino.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.codegen.Ast2ArduVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -49,7 +52,7 @@ public class ArduFactory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public ArduFactory(RobotCommunicator unusedForArdu) {
+    public ArduFactory() {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
@@ -59,8 +62,8 @@ public class ArduFactory extends AbstractRobotFactory {
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
         this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
         addBlockTypesFromProperties("Ardu.properties", this.arduProperties);
     }
@@ -517,8 +520,13 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
+    }
+
+    @Override
+    public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        return Ast2ArduVisitor.generate((ArduConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 }

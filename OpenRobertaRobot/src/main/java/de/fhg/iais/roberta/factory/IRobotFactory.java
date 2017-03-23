@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.AbstractModule;
@@ -32,6 +33,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
 
 public interface IRobotFactory {
@@ -340,7 +342,7 @@ public interface IRobotFactory {
     /**
      * Get the file extension of the specific language for this robot. This is used when we want to download
      * locally the source code into a file.
-     * 
+     *
      * @return
      */
     String getFileExtension();
@@ -370,5 +372,7 @@ public interface IRobotFactory {
     SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
 
     String getGroup();
+
+    String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping);
 
 }
