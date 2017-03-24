@@ -302,4 +302,6 @@ public final class BlocklyConstants {
     public static final String NAO_ACCELEROMETER = "ACCELEROMETER";
     public static final String NAO_FSR = "FSR";
     public static final String NAO_PHRASE = "PHRASE";
+    public static final String ACCELERATION = "ACCELERATION";
+    public static final String ORIENTATION = "ORIENTATION";
 }

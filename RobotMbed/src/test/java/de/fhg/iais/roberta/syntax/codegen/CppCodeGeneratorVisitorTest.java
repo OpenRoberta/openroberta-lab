@@ -443,6 +443,35 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
+    public void visitAccelerationSensor_DisplayTheAccelerationInEachDirection_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + MAIN
+            + "uBit.accelerometer.updateSample();\n"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getX()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getY()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getZ()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getStrength()));"
+            + END;
+
+        assertCodeIsOk(expectedResult, "/sensor/acceleration_sensor.xml");
+    }
+
+    @Test
+    public void visitAccelerationOrientationSensor_DisplayTheTileAndRotation_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + MAIN
+            + "uBit.accelerometer.updateSample();\n"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getPitch()));\n"
+            + "uBit.display.scroll(ManagedString(uBit.accelerometer.getRoll()));"
+
+            + END;
+
+        assertCodeIsOk(expectedResult, "/sensor/acceleration_orientation_sensor.xml");
+    }
+
+    @Test
     public void visitPinGetValueSensor_DisplayAnalogReadPin0andDigitalReadPin2_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS

@@ -202,6 +202,19 @@ public class PythonCodeGeneratorVisitorTest {
     }
 
     @Test
+    public void visitAccelerationSensor_DisplayTheAccelerationInEachDirection_ReturnsCorrectMicroPythonScript() throws Exception {
+        String expectedResult = "" //
+            + IMPORTS
+            + "\n"
+            + "microbit.display.scroll(str(microbit.accelerometer.get_x()))\n"
+            + "microbit.display.scroll(str(microbit.accelerometer.get_y()))\n"
+            + "microbit.display.scroll(str(microbit.accelerometer.get_z()))\n"
+            + "microbit.display.scroll(str(math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)))";
+
+        assertCodeIsOk(expectedResult, "/sensor/acceleration_sensor.xml");
+    }
+
+    @Test
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS

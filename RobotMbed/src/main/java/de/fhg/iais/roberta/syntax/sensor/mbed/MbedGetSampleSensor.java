@@ -63,6 +63,12 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.LIGHT_LEVEL:
                 this.sensor = AmbientLightSensor.make(properties, comment);
                 break;
+            case BlocklyConstants.ACCELERATION:
+                this.sensor = AccelerometerSensor.make(AccelerometerSensor.Mode.valueOf(port), properties, comment);
+                break;
+            case BlocklyConstants.ORIENTATION:
+                this.sensor = AccelerometerOrientationSensor.make(AccelerometerOrientationSensor.Mode.valueOf(port), properties, comment);
+                break;
             case BlocklyConstants.TIME:
                 this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
                 break;

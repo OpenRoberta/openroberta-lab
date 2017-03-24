@@ -33,6 +33,7 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
     public void transform(BlockSet set) {
         this.data.setRobotType(set.getRobottype());
         this.data.setXmlVersion(set.getXmlversion());
+        this.data.setDescription(set.getDescription());
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
             instanceToAST(instance);

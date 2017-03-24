@@ -117,6 +117,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
@@ -130,7 +133,6 @@ import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
@@ -1397,6 +1399,22 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     @Override
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+        if ( accelerometerSensor.getAccelerationDirection() == Mode.STRENGTH ) {
+            this.sb.append("uBit.accelerometer.getStrength()");
+        } else {
+            this.sb.append(String.format("uBit.accelerometer.get%s()", accelerometerSensor.getAccelerationDirection()));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
+        this.sb.append(String.format("uBit.accelerometer." + accelerometerOrientationSensor.getAccelerationOrientationMode().getCppCode()));
+        return null;
+    }
+
+    @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         rgbColor.getR().visit(this);
         this.sb.append(", ");
@@ -1585,7 +1603,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     private void addSleepIfForeverLoop(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.FOREVER ) {
+        if ( repeatStmt.getMode() == RepeatStmt.Mode.FOREVER ) {
             nlIndent();
             this.sb.append("uBit.sleep(1);");
         }
@@ -1730,5 +1748,4 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         ending += ")";
         return ending;
     }
-
 }

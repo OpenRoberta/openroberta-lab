@@ -16,6 +16,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
@@ -59,7 +61,6 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -149,7 +150,18 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction<Void> displayGetPixelAction) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
+        this.accelerometerUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
+        this.accelerometerUsed = true;
         return null;
     }
 }

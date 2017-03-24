@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.testutil.Helper;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
@@ -201,7 +200,7 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         final Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        // System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 
@@ -209,6 +208,7 @@ public class Helper {
         BlockSet blockSet = new BlockSet();
         blockSet.setRobottype(data.getRobotType());
         blockSet.setXmlversion(data.getXmlVersion());
+        blockSet.setDescription(data.getXmlVersion());
         Instance instance = null;
         for ( ArrayList<Phrase<Void>> tree : data.getTree() ) {
             for ( Phrase<Void> phrase : tree ) {
