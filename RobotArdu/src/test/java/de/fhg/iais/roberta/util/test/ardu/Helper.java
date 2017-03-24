@@ -13,7 +13,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
 
     public Helper() {
         super();
-        ArduFactory robotFactory = new ArduFactory();
+        ArduFactory robotFactory = new ArduFactory(null);
         Configuration brickConfiguration =
             new ArduConfiguration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))

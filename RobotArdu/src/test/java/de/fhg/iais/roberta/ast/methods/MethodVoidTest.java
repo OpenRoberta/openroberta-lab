@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.test.Helper;
 
 public class MethodVoidTest {
     Helper h = new Helper();
-    ArduFactory robotFactory = new ArduFactory();
+    ArduFactory robotFactory = new ArduFactory(null);
 
     @Before
     public void setUp() throws Exception {

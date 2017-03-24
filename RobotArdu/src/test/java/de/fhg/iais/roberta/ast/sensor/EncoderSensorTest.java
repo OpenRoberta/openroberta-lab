@@ -1,24 +1,16 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class EncoderSensorTest {
     Helper h = new Helper();
-    ArduFactory robotFactory = new ArduFactory();
-
-    @Before
-    public void setUp() throws Exception {
-        this.h.setRobotFactory(this.robotFactory);
-    }
 
     @Test
     public void sensorSetEncoder() throws Exception {

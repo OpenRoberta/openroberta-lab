@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.test.Helper;
 
 public class MotorStopActionTest {
     Helper h = new Helper();
-    ArduFactory robotFactory = new ArduFactory();
+    ArduFactory robotFactory = new ArduFactory(null);
 
     @Before
     public void setUp() throws Exception {

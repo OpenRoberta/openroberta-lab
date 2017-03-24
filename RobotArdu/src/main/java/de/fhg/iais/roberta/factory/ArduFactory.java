@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.mode.sensor.arduino.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.codegen.Ast2ArduVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
@@ -52,7 +53,7 @@ public class ArduFactory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public ArduFactory() {
+    public ArduFactory(RobotCommunicator robotCommunicator) {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";

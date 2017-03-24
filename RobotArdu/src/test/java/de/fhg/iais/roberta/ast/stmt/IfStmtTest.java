@@ -1,21 +1,13 @@
 package de.fhg.iais.roberta.ast.stmt;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class IfStmtTest {
     Helper h = new Helper();
-    ArduFactory robotFactory = new ArduFactory();
-
-    @Before
-    public void setUp() throws Exception {
-        this.h.setRobotFactory(this.robotFactory);
-    }
 
     @Test
     public void ifStmt() throws Exception {
