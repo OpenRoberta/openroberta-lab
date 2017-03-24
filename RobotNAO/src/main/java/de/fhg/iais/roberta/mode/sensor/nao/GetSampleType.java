@@ -15,7 +15,8 @@ public enum GetSampleType {
     NAO_GYROMETER( "GYROMETER", "", "", "COORDINATE", "", "" ),
     NAO_ACCELEROMETER( "ACCELEROMETER", "", "", "COORDINATE", "", "" ),
     NAO_FSR( "FSR", "", "", "", "SIDE", "" ),
-    NAO_PHRASE( "PHRASE", "", "", "", "", "DICTIONARY" );
+    NAO_PHRASE( "PHRASE", "", "", "", "", "DICTIONARY" ),
+	NAO_RECOGNIZEDWORD("", "", "", "", "", "");
 
     public String getDialogPhrase() {
         return this.dialogPhrase;
