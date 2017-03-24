@@ -30,7 +30,7 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  * tree).
  * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
- * The client must provide the {@link SensorType} and port. See enum {@link SensorType} for all possible type of sensors.<br>
+ * The client must provide the {@link SensorType}. See enum {@link SensorType} for all possible type of sensors.<br>
  * <br>
  * To create an instance from this class use the method {@link #make}.<br>
  */
@@ -82,6 +82,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
                 break;
             case BlocklyConstants.NAO_RECOGNIZEDWORD:
                 this.sensor = RecognizedWord.make(properties, comment);
+                break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }
@@ -146,7 +147,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 3);
+        List<Field> fields = helper.extractFields(block, (short) 4);
         String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
 
         String touchSensorName = GetSampleType.get(modeName).getTouchSensorName();

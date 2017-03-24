@@ -5,7 +5,7 @@ import java.util.Locale;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
- * This enumeration contain all types of sensors that are used in <b>robSensors_getSample</b> Blockly block.
+ * This enumeration contain all types of sensors that are used in <b>naoSensors_getSample</b> Blockly block.
  */
 public enum GetSampleType {
     NAO_TOUCHSENSOR( "TOUCHSENSOR", "POSITION", "SIDE", "", "", "" ),
@@ -15,7 +15,7 @@ public enum GetSampleType {
     NAO_GYROMETER( "GYROMETER", "", "", "COORDINATE", "", "" ),
     NAO_ACCELEROMETER( "ACCELEROMETER", "", "", "COORDINATE", "", "" ),
     NAO_FSR( "FSR", "", "", "", "SIDE", "" ),
-	NAO_RECOGNIZEDWORD("RECOGNIZEDWORD", "", "", "", "", "");
+	NAO_RECOGNIZEDWORD("RECOGNIZEDWORD", "", "", "", "", "" );
 
     private final String sensorType;
     private final String touchSensorName;
