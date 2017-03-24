@@ -304,4 +304,5 @@ public final class BlocklyConstants {
     public static final String NAO_PHRASE = "PHRASE";
     public static final String ACCELERATION = "ACCELERATION";
     public static final String ORIENTATION = "ORIENTATION";
+	public static final String NAO_RECOGNIZEDWORD = "RECOGNIZEDWORD";
 }

@@ -15,19 +15,13 @@ public enum GetSampleType {
     NAO_GYROMETER( "GYROMETER", "", "", "COORDINATE", "", "" ),
     NAO_ACCELEROMETER( "ACCELEROMETER", "", "", "COORDINATE", "", "" ),
     NAO_FSR( "FSR", "", "", "", "SIDE", "" ),
-    NAO_PHRASE( "PHRASE", "", "", "", "", "DICTIONARY" ),
-	NAO_RECOGNIZEDWORD("", "", "", "", "", "");
-
-    public String getDialogPhrase() {
-        return this.dialogPhrase;
-    }
+	NAO_RECOGNIZEDWORD("RECOGNIZEDWORD", "", "", "", "", "");
 
     private final String sensorType;
     private final String touchSensorName;
     private final String touchSideName;
     private final String coordinateName;
     private final String fsrSide;
-    private final String dialogPhrase;
     private final String[] values;
 
     public String getTouchSideName() {
@@ -48,7 +42,6 @@ public enum GetSampleType {
         String touchSideName,
         String coordinateName,
         String fsrSide,
-        String dialogPhrase,
         String... values) {
         this.values = values;
         this.sensorType = sensorType;
@@ -56,7 +49,6 @@ public enum GetSampleType {
         this.touchSideName = touchSideName;
         this.coordinateName = coordinateName;
         this.fsrSide = fsrSide;
-        this.dialogPhrase = dialogPhrase;
     }
 
     public String getTouchSensorName() {

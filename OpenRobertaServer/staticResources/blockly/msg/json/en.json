@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-24 12:47:04.185784",
+		"lastupdated": "2017-03-24 15:01:39.259955",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1079,7 +1079,7 @@
 	"NAO_FSR_TOOLTIP": "Get the current reading from the force sensitive resistor under the feet of the robot.",
 	"NAO_PLAYFILE_TOOLTIP": "Plays a sound file from the robot.",
 	"NAO_DIALOG_TOOLTIP": "The robot tries to recognize the phrase and answers on success.",
-	"NAO_RECOGNIZEWORD_TOOLTIP": "Returns the last word the robot recognized.",
+	"NAO_RECOGNIZEDWORD_TOOLTIP": "Returns the last word the robot recognized.",
 	"NAO_LED_TOOLTIP": "Set the color of a group of LEDs.",
 	"NAO_LEARNFACE_TOOLTIP": "Learn and save a face under a given name",
 	"NAO_FORGETFACE_TOOLTIP": "Forget a face previously saved under a given name",

@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
-import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
@@ -37,6 +36,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 
@@ -171,11 +171,11 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     V visitDialog(Dialog<V> dialog);
 
     /**
-     * visit a {@link RecognizeWord}.
+     * visit a {@link RecognizedWord}.
      *
-     * @param recognize word phrase to be visited
+     * @param recognized word phrase to be visited
      */
-    V visitRecognizeWord(RecognizeWord<V> recognizeWord);
+    V visitRecognizedWord(RecognizedWord<V> recognizedWord);
 
     /**
      * visit a {@link SetLeds}.

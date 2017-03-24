@@ -61,7 +61,6 @@ import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
-import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
@@ -146,6 +145,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
@@ -1555,9 +1555,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+    public Void visitRecognizedWord(RecognizedWord<Void> recognizedWord) {
         this.sb.append("h.recognizeWord(");
-        recognizeWord.getMsg().visit(this);
         this.sb.append(")");
         return null;
     }
