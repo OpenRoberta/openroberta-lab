@@ -1054,7 +1054,12 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+        //TODO: uncomment this.sb.append("SensorHtColor("); after the block is implemented
+        //if ( this.brickConfiguration.getSensorOnPort(colorSensor.getPort()).getType().toString().contains("LIGHT") ) {
         this.sb.append("SensorColor(");
+        //} else {
+        //this.sb.append("SensorHtColor(");
+        //}
         this.sb.append(colorSensor.getPort());
         this.sb.append(", ");
         switch ( getEnumCode(colorSensor.getMode()) ) {
