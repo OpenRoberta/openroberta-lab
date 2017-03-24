@@ -109,6 +109,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     $('#progHelp').addClass('shifted');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
+                    if (Blockly.selected) {
+                        var block = Blockly.selected.type;
+                        $('#' + block).addClass('selectedHelp');
+                        $('#helpContent').scrollTo('#' + block, 1000, {
+                            offset : -10,
+                        });
+                    }
                 }
             });
         }
