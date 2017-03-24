@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum SensorType {
     COLOR( "robBrick_colour" ),
+    HT_COLOR( "robBrick_HiTechnic_colour" ),
     TOUCH( "robBrick_touch" ),
     ULTRASONIC( "robBrick_ultrasonic" ),
     INFRARED( "robBrick_infrared" ),

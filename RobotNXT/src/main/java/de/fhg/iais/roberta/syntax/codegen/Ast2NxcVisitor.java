@@ -1054,12 +1054,11 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        //TODO: uncomment this.sb.append("SensorHtColor("); after the block is implemented
-        //if ( this.brickConfiguration.getSensorOnPort(colorSensor.getPort()).getType().toString().contains("LIGHT") ) {
-        this.sb.append("SensorColor(");
-        //} else {
-        //this.sb.append("SensorHtColor(");
-        //}
+        if ( this.brickConfiguration.getSensorOnPort(colorSensor.getPort()).getType().toString().contains("HT_COLOR") ) {
+            this.sb.append("SensorHtColor(");
+        } else {
+            this.sb.append("SensorColor(");
+        }
         this.sb.append(colorSensor.getPort());
         this.sb.append(", ");
         switch ( getEnumCode(colorSensor.getMode()) ) {
@@ -1730,6 +1729,9 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
             switch ( entry.getValue().getType() ) {
                 case COLOR:
                     this.sb.append("SENSOR_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
+                    break;
+                case HT_COLOR:
+                    this.sb.append(entry.getKey() + ", SENSOR_LOWSPEED);");
                     break;
                 case LIGHT:
                     this.sb.append(entry.getKey() + ", SENSOR_LIGHT);");
