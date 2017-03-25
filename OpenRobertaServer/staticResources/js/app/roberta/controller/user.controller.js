@@ -170,7 +170,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             messages : {
                 loginAccountName : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-            		loginRegex : Blockly.Msg["ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS"]
+            		loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
                 },
                 loginPassword : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
@@ -188,7 +188,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             rules : {
                 registerAccountName : {
                     required : true,
-                    maxlength : 15,
+                    maxlength : 25,
                     loginRegex : true
                 },
                 registerPass : {
@@ -201,7 +201,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 },
                 registerUserName : {
                     required : true,
-                    maxlength : 15,
+                    maxlength : 25,
                     loginRegex : true
                 },
                 registerUserEmail : {
@@ -216,8 +216,8 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             messages : {
                 registerAccountName : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    maxlength : Blockly.Msg["ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS"],
-                    loginRegex : Blockly.Msg["ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS"]
+                    maxlength : Blockly.Msg["VALIDATION_MAX_LENGTH"],
+                    loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
                 },
                 registerPass : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
@@ -225,12 +225,12 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 },
                 registerPassConfirm : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    equalTo : Blockly.Msg["SECOND_PASSWORD_EQUAL"]
+                    equalTo : Blockly.Msg["VALIDATION_SECOND_PASSWORD_EQUAL"]
                 },
                 registerUserName : {
                     required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
-                    maxlength : Blockly.Msg["ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS"],
-                    loginRegex : Blockly.Msg["ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS"]
+                    maxlength : Blockly.Msg["VALIDATION_MAX_LENGTH"],
+                    loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
                 },
                 registerUserEmail : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],

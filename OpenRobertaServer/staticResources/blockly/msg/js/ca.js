@@ -777,7 +777,6 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "An error has occurred while saving the too
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "An error error has occurred while saving the configuration in the database.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Toolbox saved";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "¿Error de transformación?";
-Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Name or username format is not valid.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Desaparecidos los campos necesarios";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Error al almacenar el usuario";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "El usuario ha sido creado con éxito";
@@ -1072,7 +1071,9 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";  // untra
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Obtiene la lectura actual del sensor ultrasónico.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Representa el sensor de ultrasonidos del EV3";
 Blockly.Msg.UNDO = "Undo";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "¡Este campo no puede quedar vacío!";
+Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Password min length is 6!";
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = "¡Las dos contraseñas deben ser iguales!";
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = "Token length is 8 characters!";

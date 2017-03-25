@@ -777,7 +777,6 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Při ukládání palety nástrojů došlo 
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Při ukládání nastavení do databáze došlo k chybě.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Paleta nástrojů uložena.";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
-Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Name or username format is not valid.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Zkontrolujte, zda všechny požadovaná pole byla vyplněna.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Zadané uživatelské jméno již existuje v databázi, zvolte prosím jiné jméno.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Uživatel byl úspěšně vytvořen.";
@@ -1072,7 +1071,9 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Nashledanou a uživejte si dalších pokusů!
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Vrátí aktuální hodnotu z ultrazvukového senzoru.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Představuje ultrazvukový senzor.";
 Blockly.Msg.UNDO = "Undo";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "Toto pole nemůže být prázdné.";
+Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Heslo musí mít nejméně 6 znaků!";
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = "Obě hesla musí být stejná!";
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = "Symbol musí mít alespoň 8 znaků!";

@@ -777,7 +777,6 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "erreur de sauvegarde de la palette.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "erreur de sauvegarde de la palette";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "la palette a été enrégistrée!";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
-Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Name or username format is not valid.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Vérifie si toutes les cases ont été remplies.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Erreur de sauvegarde; l'utilisateur existe déjà ou réesaie !";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "L'utilisateur a été créé !";
@@ -1072,7 +1071,9 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Salut et amuse-toi en essayant encore plus!";
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Donne la valeur actuelle du capteur ultra-son.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Bloc pour le capteur ultyra-son.";
 Blockly.Msg.UNDO = "Annuler";
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "Il faut remplir cette case!";
+Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Le mot de passe doit contenir au moins 6 caractères!";
 Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = "Les deux mots de passe doivent être identiques !";
 Blockly.Msg.VALIDATION_TOKEN_LENGTH = "L'identificateur a 8 caractères!";
