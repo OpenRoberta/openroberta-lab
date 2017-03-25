@@ -665,6 +665,10 @@ hidden
 	margin: 4px 4px 4px 16px;
 }
 
+.navbar-toggle ~ .navbar-toggle {
+	margin: 4px 4px 4px 0;
+}
+
 .navbar-default
 
 .navbar-toggle
@@ -1096,17 +1100,13 @@ table [data-toggle="collapse"].collapsed:after {
 	margin-bottom: 6px;
 	background-color: #fff;
 	color: #333;
-	font-size: 24px;
+	font-size: 0;
 	border: none;
 	border-radius: 2px;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	cursor: pointer;
 	box-shadow: none;
-}
-
-.sim .blbtn.typcn:before {
-	font-size: 36px;
 }
 
 .blbtn:hover {
@@ -1232,6 +1232,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .blbtn.typcn:before {
 	margin-right: 0;
+	font-size: 36px;
 }
 
 .bootstrap-table .typcn:before {

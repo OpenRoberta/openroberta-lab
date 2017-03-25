@@ -380,7 +380,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot.mb
         var Display = (dxDisplay * dxDisplay + dyDisplay * dyDisplay < this.display.rLight * this.display.rLight);
         this.display.lightLevel = 100;        
         if (A || B || Reset || Display || Pin0 || Pin1 || Pin2 || Pin3) {
-            if (e.type === 'mousedown') {
+            if (e.type === 'mousedown' || e.type === 'touchstart') {
                 if (A) {
                     this.buttons.A = true;
                 } else if (B) {
