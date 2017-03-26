@@ -233,13 +233,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("PI");
+                this.sb.append("M_PI");
                 break;
             case E:
                 this.sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("GOLDEN_RATIO");
+                this.sb.append("1.61803398875");
                 break;
             case SQRT2:
                 this.sb.append("M_SQRT2");
@@ -578,7 +578,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         String ending = ")";
         String varType = displayTextAction.getMsg().getVarType().toString();
         this.sb.append("uBit.display.");
-        appendTextDisplyType(displayTextAction);
+        appendTextDisplayType(displayTextAction);
         if ( !varType.equals("STRING") ) {
             ending = wrapInManageStringToDisplay(displayTextAction, ending);
         } else {
@@ -1427,9 +1427,9 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        this.sb.append("uBit.display.setBrightness(");
+        this.sb.append("uBit.display.setBrightness((");
         displaySetBrightnessAction.getBrightness().visit(this);
-        this.sb.append(" * 255.0 / 9.0);");
+        this.sb.append(") * 255.0 / 9.0);");
         return null;
     }
 
@@ -1573,6 +1573,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     private void addConstants() {
+        this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\" \n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
@@ -1734,7 +1735,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
-    private void appendTextDisplyType(DisplayTextAction<Void> displayTextAction) {
+    private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
         if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
         } else {

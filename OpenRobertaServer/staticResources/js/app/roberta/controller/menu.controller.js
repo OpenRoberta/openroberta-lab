@@ -438,6 +438,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#takeATour').onWrap('click', function(event) {
             if (GUISTATE_C.getRobotGroup() !== 'ev3')
                 ROBOT_C.switchRobot('ev3lejos', true);
+            if (GUISTATE_C.getProgramToolboxLevel() !== 'beginner') {
+                $('#beginner').trigger('click');
+            }
             PROGRAM_C.newProgram(true);
             TOUR_C.start('welcome');
         }, 'take a tour clicked');
