@@ -12,7 +12,8 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class CppCodeGeneratorVisitorTest {
 
     private static final String IMPORTS = //
-        "#include \"MicroBit.h\"" //
+        "#define_GNU_SOURCE\n\n"
+            + "#include \"MicroBit.h\"" //
             + "#include <array>\n"
             + "#include <stdlib.h>\n"
             + "MicroBituBit;"

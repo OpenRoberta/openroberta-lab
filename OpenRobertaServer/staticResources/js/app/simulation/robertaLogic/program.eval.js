@@ -748,6 +748,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     };
 
     var evalWaitStmt = function(obj, stmt) {
+        var stmtNotEvaluated = true;
         obj.program.setWait(true);
         if (UTIL.isEmpty(obj.repeatStmtExpr)) {
             obj.repeatStmtExpr = UTIL.clone(stmt);
@@ -759,13 +760,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
             if (!isObject(value) && !obj.modifiedStmt) {
                 if (value) {
+                    stmtNotEvaluated = false;
                     break;
-                } else {
-                    obj.program.prepend([obj.repeatStmtExpr]);
-                    obj.repeatStmtExpr = {};
-                }
+                } 
             }
         }
+        if (stmtNotEvaluated) {
+            obj.program.prepend([obj.repeatStmtExpr]);
+            obj.repeatStmtExpr = {};    
+        }        
     };
 
     var evalExpr = function(obj, propName, arrayIndex) {
