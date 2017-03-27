@@ -755,7 +755,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("uBit.systemTime() - initTime");
+                this.sb.append("( uBit.systemTime() - initTime )");
                 break;
             case RESET:
                 this.sb.append("initTime = uBit.systemTime();");

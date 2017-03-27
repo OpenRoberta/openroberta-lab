@@ -750,7 +750,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         if ( timerSensor.getMode() == TimerSensorMode.GET_SAMPLE ) {
-            this.sb.append("microbit.running_time() - timer1");
+            this.sb.append("( microbit.running_time() - timer1 )");
         } else {
             this.sb.append("timer1 = microbit.running_time()");
         }
