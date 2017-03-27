@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.action.mbed;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum MbedPins {
-    P0( "P12", 0 ), P1( "P0", 1 ), P2( "P1", 2 ), P3( "P16", 3 );
+    P0( "P12", 0 ), P1( "P0", 1 ), P2( "P1", 2 ), P3( "P16", 3 ), P4( "P19", 4 ), P5( "P2", 5 );
 
     private final String mbedPin;
     private final int pinNumber;

@@ -6,9 +6,9 @@ goog.provide('Blockly.Msg.pt');
 
 goog.require('Blockly.Msg');
 
-Blockly.Msg.ACCELERATION = "acceleration (mg)";  // untranslated
+Blockly.Msg.ACCELERATION = "acceleration mg";  // untranslated
 Blockly.Msg.ACCELERATION_TOOLTIP = "Get the acceleration value in milli-gravitys.";  // untranslated
-Blockly.Msg.ACCELEROMETER_ROTATION = "rotation (°)";  // untranslated
+Blockly.Msg.ACCELEROMETER_ROTATION = "rotation °";  // untranslated
 Blockly.Msg.ACCELEROMETER_ROTATION_TOOLTIP = "Get the tilt or rotations in degrees.";  // untranslated
 Blockly.Msg.ACTIVITY_TOOLTIP = "Marcador para uma atividade adicional.";
 Blockly.Msg.ACTOR_TOOLTIP = "Representa um atuador.";
@@ -513,6 +513,7 @@ Blockly.Msg.MESSAGE_USER_DELETED = "utilizador apagado";
 Blockly.Msg.MESSAGE_USER_LOGIN = "Olá »$«";
 Blockly.Msg.MESSAGE_USER_LOGOUT = "Terminaste a sessão";
 Blockly.Msg.MICROBITBRICK_TOOLTIP = "Represents micro:bit, a pocket-sized codeable computer. There are also inbuilt actors and sensors available, e.g. buttons, display ...";  // untranslated
+Blockly.Msg.MICROPHONE_GETSAMPLE_TOOLTIP = "Gets the current reading from the microphone.";  // untranslated
 Blockly.Msg.MODE = "modo";
 Blockly.Msg.MODE_ACCELERATION = "acceleration";  // untranslated
 Blockly.Msg.MODE_AMBIENTLIGHT = "luz ambiente";
@@ -851,7 +852,6 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repetir palavra-passe";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Tensão";
 Blockly.Msg.POPUP_ROBOT_NAME = "Nome";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Primeiro tens que efetuar uma ligação ao robô.";
-Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Estado";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "ocupado";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "desconectado";
@@ -917,6 +917,7 @@ Blockly.Msg.SENSOR_GESTURE_SHAKE = "shaking";  // untranslated
 Blockly.Msg.SENSOR_GESTURE_UP = "upright";  // untranslated
 Blockly.Msg.SENSOR_GET = "get";  // untranslated
 Blockly.Msg.SENSOR_GET_SAMPLE = "obter valor";
+Blockly.Msg.SENSOR_GROVE = "Grove";  // untranslated
 Blockly.Msg.SENSOR_GYRO = "giroscópio";
 Blockly.Msg.SENSOR_INFRARED = "sensor de infra-vermelhos";
 Blockly.Msg.SENSOR_IS_PIN = "is";  // untranslated
@@ -931,6 +932,7 @@ Blockly.Msg.SENSOR_KEY_LEFT = "esquerda";
 Blockly.Msg.SENSOR_KEY_RIGHT = "direita";
 Blockly.Msg.SENSOR_KEY_UP = "acima";
 Blockly.Msg.SENSOR_LIGHT = "sensor de linha";
+Blockly.Msg.SENSOR_MIC = "microphone";  // untranslated
 Blockly.Msg.SENSOR_MS_TIMER = "em ms";
 Blockly.Msg.SENSOR_PIN = "pin";  // untranslated
 Blockly.Msg.SENSOR_PRESSED = "(pressionado)";

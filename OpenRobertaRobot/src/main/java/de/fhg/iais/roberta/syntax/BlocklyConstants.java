@@ -107,6 +107,7 @@ public final class BlocklyConstants {
     public static final String ROB_SENSOR_SOUND_GET_SAMPLE = "robSensors_sound_getSample";
     public static final String ROB_SENSOR_TOUCH_IS_PRESSED = "robSensors_touch_isPressed";
     public static final String ROB_SENSOR_COMPASS_GET_SAMPLE = "robSensors_compass_getSample";
+    public static final String ROB_SENSOR_MICROPHONE_GET_SAMPLE = "robSensors_microphone_getSample";
     public static final String ROB_SENSOR_VOLTAGE_GET_SAMPLE = "robSensors_battery_voltage";
     public static final String ROB_SENSOR_ULTRASONIC_GET_SAMPLE = "robSensors_ultrasonic_getSample";
     public static final String ROB_SENSOR_INFRARED_GET_SAMPLE = "robSensors_infrared_getSample";
@@ -237,6 +238,7 @@ public final class BlocklyConstants {
     public static final String LIGHT = "LIGHT";
     public static final String SOUND = "SOUND";
     public static final String COMPASS = "COMPASS";
+    public static final String MICROPHONE = "MICROPHONE";
 
     public static final String ROB_BRICK_GYRO = "robBrick_gyro";
     public static final String ROB_BRICK_INFRARED = "robBrick_infrared";
@@ -304,5 +306,5 @@ public final class BlocklyConstants {
     public static final String NAO_PHRASE = "PHRASE";
     public static final String ACCELERATION = "ACCELERATION";
     public static final String ORIENTATION = "ORIENTATION";
-	public static final String NAO_RECOGNIZEDWORD = "RECOGNIZEDWORD";
+    public static final String NAO_RECOGNIZEDWORD = "RECOGNIZEDWORD";
 }

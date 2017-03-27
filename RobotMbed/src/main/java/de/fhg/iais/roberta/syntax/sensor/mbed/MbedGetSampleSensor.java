@@ -57,6 +57,9 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.COMPASS:
                 this.sensor = CompassSensor.make(1, properties, comment);
                 break;
+            case BlocklyConstants.MICROPHONE:
+                this.sensor = MicrophoneSensor.make(1, properties, comment);
+                break;
             case BlocklyConstants.TEMPERATURE:
                 this.sensor = TemperatureSensor.make(properties, comment);
                 break;

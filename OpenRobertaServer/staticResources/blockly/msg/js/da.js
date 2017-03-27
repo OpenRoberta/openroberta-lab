@@ -6,9 +6,9 @@ goog.provide('Blockly.Msg.da');
 
 goog.require('Blockly.Msg');
 
-Blockly.Msg.ACCELERATION = "acceleration (mg)";  // untranslated
+Blockly.Msg.ACCELERATION = "acceleration mg";  // untranslated
 Blockly.Msg.ACCELERATION_TOOLTIP = "Get the acceleration value in milli-gravitys.";  // untranslated
-Blockly.Msg.ACCELEROMETER_ROTATION = "rotation (°)";  // untranslated
+Blockly.Msg.ACCELEROMETER_ROTATION = "rotation °";  // untranslated
 Blockly.Msg.ACCELEROMETER_ROTATION_TOOLTIP = "Get the tilt or rotations in degrees.";  // untranslated
 Blockly.Msg.ACTIVITY_TOOLTIP = "Markør for endnu en aktivitet.";
 Blockly.Msg.ACTOR_TOOLTIP = "Repræsenterer en aktør.";
@@ -513,6 +513,7 @@ Blockly.Msg.MESSAGE_USER_DELETED = "Bruger slettet";
 Blockly.Msg.MESSAGE_USER_LOGIN = "Hej '$'";
 Blockly.Msg.MESSAGE_USER_LOGOUT = "Du er logget";
 Blockly.Msg.MICROBITBRICK_TOOLTIP = "Represents micro:bit, a pocket-sized codeable computer. There are also inbuilt actors and sensors available, e.g. buttons, display ...";  // untranslated
+Blockly.Msg.MICROPHONE_GETSAMPLE_TOOLTIP = "Gets the current reading from the microphone.";  // untranslated
 Blockly.Msg.MODE = "tilstand";
 Blockly.Msg.MODE_ACCELERATION = "acceleration";  // untranslated
 Blockly.Msg.MODE_AMBIENTLIGHT = "omgivende lys";
@@ -851,7 +852,6 @@ Blockly.Msg.POPUP_REPEAT_PASSWORD = "Gentag kodeord";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Spænding";
 Blockly.Msg.POPUP_ROBOT_NAME = "Navn";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du er nødt til at forbinde din robot først.";
-Blockly.Msg.POPUP_ROBOT_SIM = "Open Roberta Sim";  // untranslated
 Blockly.Msg.POPUP_ROBOT_STATE = "Tilstand";
 Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "kører";
 Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "ikke tilsluttet";
@@ -917,6 +917,7 @@ Blockly.Msg.SENSOR_GESTURE_SHAKE = "shaking";  // untranslated
 Blockly.Msg.SENSOR_GESTURE_UP = "upright";  // untranslated
 Blockly.Msg.SENSOR_GET = "get";  // untranslated
 Blockly.Msg.SENSOR_GET_SAMPLE = "aflæs værdi";
+Blockly.Msg.SENSOR_GROVE = "Grove";  // untranslated
 Blockly.Msg.SENSOR_GYRO = "gyroskop";
 Blockly.Msg.SENSOR_INFRARED = "infrarød sensor";
 Blockly.Msg.SENSOR_IS_PIN = "is";  // untranslated
@@ -931,6 +932,7 @@ Blockly.Msg.SENSOR_KEY_LEFT = "venstre";
 Blockly.Msg.SENSOR_KEY_RIGHT = "højre";
 Blockly.Msg.SENSOR_KEY_UP = "op";
 Blockly.Msg.SENSOR_LIGHT = "light sensor";  // untranslated
+Blockly.Msg.SENSOR_MIC = "microphone";  // untranslated
 Blockly.Msg.SENSOR_MS_TIMER = "i ms";
 Blockly.Msg.SENSOR_PIN = "pin";  // untranslated
 Blockly.Msg.SENSOR_PRESSED = " (trykket)";

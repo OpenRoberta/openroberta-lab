@@ -20,7 +20,7 @@
 </ul> If global variables have been created:<p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Text, name of the variable</li>
-<li class="typcn typcn-arrow-sorted-down">Type of the variable, »Number«, »Boolean«, »String«, »Color«, »Connection«, »List Number«, »List Boolean«, »List String«, »List Connection«</li>
+<li class="typcn typcn-arrow-down">Type of the variable, »Number«, »Boolean«, »String«, »Color«, »Connection«, »List Number«, »List Boolean«, »List String«, »List Connection«</li>
 <li class="typcn typcn-arrow-left">Value, that corresponds to the variable type. This is the initial value of the variable.</li>
 </ul></div>
 </div>
@@ -50,7 +50,7 @@
 <p>With the »motor port ... on« block you can program the speed (velocity) of the selected motor. Your robot starts the selected motor, until it is stopped or another block specifies new moving parameters.</p>
 <p>Options and Arguments:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">motor port, choose the port where the motor is connected to.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">motor port, choose the port where the motor is connected to.</li>
 <li class="typcn typcn-arrow-left">value, speed between -100 to 100. Negative values let the motor turn backwards.</li>
 </ul></div>
 </div>
@@ -63,9 +63,9 @@
 <p>With the »motor port ... rotation« block you can program the speed (velocity) of the selected motor. Your robot starts the selected motor and rotates the motor until the specified number of rotations or degrees is done. </p>
 <p>Options and Arguments:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">motor port, choose the one where the motor that you want to program is connected to.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">motor port, choose the one where the motor that you want to program is connected to.</li>
 <li class="typcn typcn-arrow-left">number, spped between -100 and 100. 100 is the maximum speed. Negative values lets the motor rotate into the other direction.</li>
-<li class="typcn typcn-arrow-sorted-down">rotation or degree. Choose the one which fits best. 1 rotation is the same than 360 degrees.</li>
+<li class="typcn typcn-arrow-down">rotation or degree. Choose the one which fits best. 1 rotation is the same than 360 degrees.</li>
 <li class="typcn typcn-arrow-left">number, rotations or degrees, only positive numbers are allowed.</li>
 </ul></div>
 </div>
@@ -79,7 +79,7 @@
 <p>Options and Arguments:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">motor port, choose the port where the motor is connected to.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">number, the current speed of the motor.</li>
 </ul></div>
 </div>
@@ -92,7 +92,7 @@
 <p>The block »s<span style="color: rgb(0,0,0);">et motor port ... </span><span style="color: rgb(0,0,0);">speed</span>« sets the speed (velocity) of one selected motor to a new value. </p>
 <p>Options and Arguments:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">motor port, choose the port where the motor is connected to.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">motor port, choose the port where the motor is connected to.</li>
 <li class="typcn typcn-arrow-left">number, speed between -100 and 100. Negative values let the motor run backwards.</li>
 </ul></div>
 </div>
@@ -106,9 +106,9 @@
 <p>Using the block »s<span>top motor port</span>« switches off one selected motor. You can decide the motor to run out slowly (float) or to break immediately</p>
 <p>Setting options:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">motor port,<span>choose the port where the motor is connected to.</span>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">motor port,<span>choose the port where the motor is connected to.</span>
 </li>
-<li class="typcn typcn-arrow-sorted-down">float or brake; make your choice.</li>
+<li class="typcn typcn-arrow-down">float or brake; make your choice.</li>
 </ul></div>
 </div>
 </div><div class="cell normal" data-type="normal">
@@ -118,7 +118,7 @@
 <p>With the »drive« block you can program the direction and also the speed (velocity) of your robot.<span>Your robot moves  until it is stopped or another block specifies new driving parameters. The driving speed can be set in the field  »speed«.</span></p>
 <p>Options and Arguments:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">direction, forwards or backwards. Choose the direction.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">direction, forwards or backwards. Choose the direction.</li>
 <li class="typcn typcn-arrow-left"><span>number, speed between -100 to 100. 100 is the maximum speed. Negative values lets the motor rotate into the other direction.</span></li>
 </ul></div>
 </div>
@@ -130,7 +130,7 @@
 <p>»drive distance« controls both motors of the robot at the same time, meaning that the settings you make here apply to both motors of the robot. If the robot's actions don't correspond with the block's settings when running the program, check the robot configuration settings, especially the wheel diameter and the track width.</p>
 <p>Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Drive, »forwards« or »backwards«. Select a direction.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Drive, »forwards« or »backwards«. Select a direction.</li>
 <li class="typcn typcn-arrow-left">Number, speed between  -100 and 100. If the number is negative, the motors will rotate backwards.</li>
 <li class="typcn typcn-arrow-left">Number, the distance to drive in cm.</li>
 </ul></div>
@@ -151,7 +151,7 @@
 <p>»turn« controls both motors of the robot at the same time, therefore the robot turns on the spot. If the EV3 Robot's actions don't correspond with the block's settings when running the program, check the EV3 robot configuration settings, especially the wheel diameter and the track width.</p>
 <p>Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Turn, »right« or »left«. Select the desired direction for turning.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Turn, »right« or »left«. Select the desired direction for turning.</li>
 <li class="typcn typcn-arrow-left">Number, speed between  -100 and 100. If the number is negative, the motors will rotate backwards.</li>
 </ul></div>
 </div>
@@ -163,7 +163,7 @@
 <p>The »turn degree« block controls both motors of the robot in such a way that the robot turns around its own axis. If the robot's actions don't correspond with the block's settings when running the program, check the EV3 robot configuration settings, especially the wheel diameter and the track width.</p>
 <p>Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Turn, »right« or »left«. Select the desired direction for turning.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Turn, »right« or »left«. Select the desired direction for turning.</li>
 <li class="typcn typcn-arrow-left">Number, speed between  -100 and 100. If the number is negative, the motors will rotate backwards.</li>
 <li class="typcn typcn-arrow-left">Number, degrees the robot shall turn. Degree of 360 will perform a full turn around. Negative numbers are not allowed.</li>
 </ul></div>
@@ -175,7 +175,7 @@
 <p style="text-align: left;">The block »steer ... speed left ... speed right ...« programs the robot to drive a curve by setting different speeds for the left and right motor. The robot configuration influences the radius of the curve depending from wheel distance and wheel diameter. The turning direction will define the driving direction.</p>
 <p style="text-align: left;">Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Turning direction, »forwards« or »backwards«. Select your desired moving direction.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Turning direction, »forwards« or »backwards«. Select your desired moving direction.</li>
 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards.</li>
 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards.</li>
 </ul>Return value: none</div>
@@ -187,7 +187,7 @@
 <p style="text-align: left;">The block »steer ... speed left ... speed right ... distance ...« programs the robot to drive a curve by setting different speeds for the left and right motor and also a distance related to the middle between both wheels. The robot configuration influences the radius of the curve depending from wheel distance and wheel diameter. The turning direction will define the driving direction.</p>
 <p style="text-align: left;">Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Turning direction, »forwards« or »backwards«. Select your desired moving direction.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Turning direction, »forwards« or »backwards«. Select your desired moving direction.</li>
 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards.</li>
 <li class="typcn typcn-arrow-left">Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards.</li>
 <li class="typcn typcn-arrow-left">Number, the distance in cm to be driven.</li>
@@ -214,7 +214,7 @@
 <p>With the »show picture« block you can show one of some stored pictures on the EV3 display of your robot. Avaliable pictures are »glasses«, »eyes open«, »eyes closed«, »flowers«, »tacho«.</p>
 <p>Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Picture, select one of the available.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Picture, select one of the available.</li>
 <li class="typcn typcn-arrow-left">Number for x, column, where the picture shall start.</li>
 <li class="typcn typcn-arrow-left">Number for y, line, where the picture shall start.</li>
 </ul></div>
@@ -250,7 +250,7 @@
 <p>With the »play file« block your robot plays one of five stored sounds.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Number between 1 and 5 with the following assignment:1 = single beep2 = double beep3 = increasing sound of 4 tones4 = decreasing sound of 4 tones5 = single low tone</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Number between 1 and 5 with the following assignment:1 = single beep2 = double beep3 = increasing sound of 4 tones4 = decreasing sound of 4 tones5 = single low tone</li>
 </ul></div>
 </div>
 </div><div class="cell normal" data-type="normal">
@@ -268,7 +268,7 @@
 <div id="robActions_play_getVolume" class="help expert">
 <h3 id="Programming-BlocksEV3-»getvolume«[Expertblock]">»get volume«<span class="typcn typcn-star"></span></h3>
 <p>With the »get volume« block you can read the currend sound volume level.</p>
-<p>Return value:
+<p><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, currently adjusted volume. 0 = no tone, 100 = maximum volume</li>
 </ul></div>
@@ -280,8 +280,8 @@
 <p>With the »brick light« block you can program the background light of the EV3 buttons. In addition to color, you can also turn on and off the EV3 brick light. The EV3 brick light stays on until you reprogram it. The following colors are available: »green«, »orange« or »red«.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Colour, select a colour.</li>
-<li class="typcn typcn-arrow-sorted-down">Flash type, »on«, »flashing« or »double flashing«. Select a flash type for the brick light.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Colour, select a colour.</li>
+<li class="typcn typcn-arrow-down">Flash type, »on«, »flashing« or »double flashing«. Select a flash type for the brick light.</li>
 </ul></div>
 </div>
 </div><div class="cell normal" data-type="normal">
@@ -320,8 +320,8 @@
 <p>With the block »touch sensor« you can "tell" another block whether the touch sensor is pressed or not. This block returns the logical values <em>true = pressed</em> or <em>false = not pressed</em>. This block can only be used in conjunction with another block which requires a logical value as an input parameter, for example together with the »if then« block.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Port, select the sensor port where your touch sensor is connected.</li>
-</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Port, select the sensor port where your touch sensor is connected.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean value: »true«, if the touch sensor is pressed, otherwise »false«.</li>
 </ul></div>
 </div>
@@ -335,9 +335,9 @@
 </div>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Presence or distance; »presence« means that the presence of another ultrasonic sensor will be checked. »Distance« means that the ultrasonic sensor measures the distance to the next obstacle.</li>
-<li class="typcn typcn-arrow-sorted-down">Port, select the sensor port where your ultrasonic sensor is connected.</li>
-</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Presence or distance; »presence« means that the presence of another ultrasonic sensor will be checked. »Distance« means that the ultrasonic sensor measures the distance to the next obstacle.</li>
+<li class="typcn typcn-arrow-down">Port, select the sensor port where your ultrasonic sensor is connected.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">
 <p>If »presence« was selected, a boolean value: »true«, if another ultrasonic sensor was detected, otherwise »false«.</p>
 <p>If »distance« was selected, a number, indicating the distance between the ultrasonic sensor and an obstacle in cm.</p>
@@ -354,9 +354,9 @@
 <p>In mode »ambient light« the same scale (0-100) as in the mode light is used. Here, the ambient light inciding the sensor is measured.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Mode of measurement, select the mode of measurement.</li>
-<li class="typcn typcn-arrow-sorted-down"> Port, select the sensor port where your light/colour sensor is connected.</li>
-</ul><p>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Mode of measurement, select the mode of measurement.</li>
+<li class="typcn typcn-arrow-down"> Port, select the sensor port where your light/colour sensor is connected.</li>
+</ul><p><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Value, depending on the selected ode of measurement.</li>
 </ul></div>
@@ -374,9 +374,9 @@
 </div>
 <p>Settins:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">»Distance« or »presence«. Select the measuring mode for the infrared sensor.</li>
-<li class="typcn typcn-arrow-sorted-down">Port, select the sensor port where your infrared sensor is connected.</li>
-</ul><p>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">»Distance« or »presence«. Select the measuring mode for the infrared sensor.</li>
+<li class="typcn typcn-arrow-down">Port, select the sensor port where your infrared sensor is connected.</li>
+</ul><p><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">
 <p>»Distance« mode: number indicating the distance in cm, maximalum distance is 70 cm.</p>
@@ -390,7 +390,7 @@
 <p>With the block »reset encoder« the internal sensor (motor encoder) of a motor can be reset to 0 .</p>
 <p>Setting:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Port, select the sensor port where your motor is connected.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Port, select the sensor port where your motor is connected.</li>
 </ul>     </div>
 </div>
 </div><div class="cell normal" data-type="normal">
@@ -399,9 +399,9 @@
 <p>With the block »get rotation/degree« you can "tell" another block the rotation of the motor. The distance is transmitted as a number (in cm). In addition, this block can be set to »degree« in the drop down menu. With this setting the number of degrees is transmitted instead of cm. This block can only be used in conjunction with another block, which requires a number as an input parameter.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Measurement mode, »rotation«, »degree« or»distance«. Select your mode of measurement.</li>
-<li class="typcn typcn-arrow-sorted-down">Encoder port, select the sensor port where your motor/encoder is connected.</li>
-</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Measurement mode, »rotation«, »degree« or»distance«. Select your mode of measurement.</li>
+<li class="typcn typcn-arrow-down">Encoder port, select the sensor port where your motor/encoder is connected.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, that indicates according to the measurement mode the number of rotations, the degrees, or the distance in cm.</li>
 </ul></div>
 </div>
@@ -411,8 +411,8 @@
 <p>With the block »button« you can "tell" another block whether the selected button is pressed or not. Available buttons are »enter« / »up« / »down« / »left« / »right« / »escape« / »any«. This block returns logical values <em>true = pressed or false = not pressed</em>.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Button, select the button you want to check.</li>
-</ul>Return value
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Button, select the button you want to check.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean value, »true«, if the selected button has been pressed, »false« otherwise.</li>
 </ul></div>
 </div>
@@ -422,7 +422,7 @@
 <p>With the block »reset gyroscope« the gyroscope (also called gyro sensor) can be reset to 0.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Port, select the sensor port where your gyroscope is connected.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Port, select the sensor port where your gyroscope is connected.</li>
 </ul></div>
 </div>
 </div><div class="cell normal" data-type="normal">
@@ -436,9 +436,9 @@
 </div>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Measurement mode: »angle« oder »rate«</li>
-<li class="typcn typcn-arrow-sorted-down">Port, select the sensor port where your gyroscope is connected.</li>
-</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Measurement mode: »angle« oder »rate«</li>
+<li class="typcn typcn-arrow-down">Port, select the sensor port where your gyroscope is connected.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, depending from the mode of measurement an angle in degrees or the rate of turns per second.</li>
 </ul></div>
 </div>
@@ -449,8 +449,8 @@
 <p>With the block »get value« you can "tell" another block the current time in milliseconds of the internal timer. 5 timers are available.</p>
 <p>Setting:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Timer number, select the timer you want to read.</li>
-</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Timer number, select the timer you want to read.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, milliseconds since program start or since the last reset of the selected timer.</li>
 </ul></div>
 </div>
@@ -461,7 +461,7 @@
 <p>With the block »reset timer« the internal timer (1 to 5) can be reset to the value 0.</p>
 <p>Setting:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Timer number, select the timer you want to reset.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Timer number, select the timer you want to reset.</li>
 </ul></div>
 </div>
 </div><div class="cell normal" data-type="normal">
@@ -540,7 +540,7 @@
 <p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the »repeat while/until« block will be executed as long as the condition in the entry field is true. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the condition is still true. Therefore, this block is also called »conditional loop«.</p>
 <p>Settings and input:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">»while« or »until«, defining the type of the conditional repetition.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">»while« or »until«, defining the type of the conditional repetition.</li>
 <li class="typcn typcn-arrow-left">Boolean value, »true« or »false«.</li>
 <li class="typcn typcn-arrow-left">Blocks that will be repeated while/until the condition evaluates to »true«. </li>
 </ul></div>
@@ -552,7 +552,7 @@
 <p>With the block »for each item in list« all list items will successively be bound to a variable. The variable can be used within the loop. With each loop cycle the next item of the list will be bound until all list elements have been processed.</p>
 <p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Type of list elements, »Number«, »String«, »Boolean«, »Colour«, »Connection«</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Type of list elements, »Number«, »String«, »Boolean«, »Colour«, »Connection«</li>
 <li class="typcn typcn-pen">Variable, name of free choice; list elements will be delivered one after the other to the variable.</li>
 <li class="typcn typcn-arrow-left">List  that contains elements of the desired type. If the list elements are not of the correct type then the list will not fit to the input slot.</li>
 <li class="typcn typcn-arrow-left">Blocks which will be executed as often as there are elements in the list.</li>
@@ -579,7 +579,7 @@
 <p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end of the loop will be ignored.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Type of breaking behavior, »break out« or »continue with next iteration«.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Type of breaking behavior, »break out« or »continue with next iteration«.</li>
 </ul>
 </div>
 </div>
@@ -625,9 +625,9 @@
 <p>Settings and input values:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Value for the left hand side.</li>
-<li class="typcn typcn-arrow-sorted-down">Comparison, select one of =, ≠,<, ≤, >, ≥</li>
+<li class="typcn typcn-arrow-down">Comparison, select one of =, ≠,<, ≤, >, ≥</li>
 <li class="typcn typcn-arrow-left">Value for the right hand side.</li>
-</ul><p style="text-align: left;">Return value:
+</ul><p style="text-align: left;"><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
 </ul></div>
@@ -640,7 +640,7 @@
 <p>Settings:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Boolean value on the left hand side.</li>
-<li class="typcn typcn-arrow-sorted-down">Boolean function, »and« or »or«.</li>
+<li class="typcn typcn-arrow-down">Boolean function, »and« or »or«.</li>
 <li class="typcn typcn-arrow-left">Boolean value on the right hand side.</li>
 </ul>Return value:<li class="typcn typcn-arrow-right">Boolean value »true« or»false«.</li>
 </div>
@@ -653,7 +653,7 @@
 <p>Input value:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Boolean value, to be inverted.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean value, »true« or »false«; result of inverting.</li>
 </ul></div>
 </div>
@@ -664,8 +664,8 @@
 <p>With the block »true/false« you can return either the logical value »true« or »false« to another block.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Boolean value, make your choice.</li>
-</ul>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Boolean value, make your choice.</li>
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean value, »true« or »false«.</li>
 </ul></div>
 </div>
@@ -690,7 +690,7 @@
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Boolean value for the test; if no input value is given "true" will be assumed.</li>
 <li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
 <li class="typcn typcn-arrow-left">Arbitrary value, evaluated by a block.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Value of arbitrary type.</li>
 </ul></div>
 </div>
@@ -721,7 +721,7 @@
 <p>  Settings:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Number</li>
-</ul><p style="text-align: left;">Return value:
+</ul><p style="text-align: left;"><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Number</li>
 </ul></div>
@@ -734,9 +734,9 @@
 <p>Settings and input values:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left"> Number</li>
-<li class="typcn typcn-arrow-sorted-down"> Mathematical operator, choose one of +, −, ×, ÷, ^</li>
+<li class="typcn typcn-arrow-down"> Mathematical operator, choose one of +, −, ×, ÷, ^</li>
 <li class="typcn typcn-arrow-left">Number</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Number, result of the calculation.</li>
 </ul></div>
 </div>
@@ -747,9 +747,9 @@
 <p>With the block »mathematical function« some elementary mathematical functions may be calculated. Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm), »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p>
 <p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Mathematical function, choose one.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Mathematical function, choose one.</li>
 <li class="typcn typcn-arrow-left">Number to apply the function to.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Number, result of the function application.</li>
 </ul></div>
 </div>
@@ -760,9 +760,9 @@
 <p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can be calculated. Input values are expected in radian measure(see hint above).</p>
 <p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Trigonometric function, choose one.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Trigonometric function, choose one.</li>
 <li class="typcn typcn-arrow-left">Number, in radian measure.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Number, result of the trigonometric calculation.</li>
 </ul></div>
 </div>
@@ -773,8 +773,8 @@
 <p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Mathematical constants, choose one.</li>
-</ul><p>Return value:
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Mathematical constants, choose one.</li>
+</ul><p><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right"> Number, value of the selected mathematical constant. Infinity will return »infinity«.</li>
 </ul></div>
@@ -787,9 +787,9 @@
 <p>Input value and settings:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Number, the property of this input value will be checked.</li>
-<li class="typcn typcn-arrow-sorted-down">Number property, choose one.</li>
+<li class="typcn typcn-arrow-down">Number property, choose one.</li>
 <li class="typcn typcn-arrow-left">Number, evaluated from a block. The second input value is only required for the property »divisible by«.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean value, »true« or »false«, depending on the selected property.</li>
 </ul></div>
 </div>
@@ -800,7 +800,7 @@
 <p>The block »change by x« increments a numerical variable by a defined value.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Variable name, which value is to be changed. Choose the variable to be changed.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Variable name, which value is to be changed. Choose the variable to be changed.</li>
 <li class="typcn typcn-arrow-left">Number, given by a block.</li>
 </ul></div>
 </div>
@@ -811,9 +811,9 @@
 <p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on the value of the decimal places whether the block rounds up or down. You may also decide by settings to always round up or down.</p>
 <p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Type of rounding, choose a round mode.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Type of rounding, choose a round mode.</li>
 <li class="typcn typcn-arrow-left">Number, given by a block.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, rounded whole number, according to the round mode.</li>
 </ul></div>
 </div>
@@ -832,9 +832,9 @@
 <li>random item - one list value randomly selected</li>
 </ul><p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Mode of list evaluation, choose one mode.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Mode of list evaluation, choose one mode.</li>
 <li class="typcn typcn-arrow-left">List of numbers</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, calculated according to the selected list evaluation mode.</li>
 </ul></div>
 </div>
@@ -847,7 +847,7 @@
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Number to be divided (dividend).</li>
 <li class="typcn typcn-arrow-left">Number, divisor.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, rest of the division.</li>
 </ul></div>
 </div>
@@ -861,7 +861,7 @@
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Number, that will be constrained.</li>
 <li class="typcn typcn-arrow-left">Number, lower bound.</li>
 <li class="typcn typcn-arrow-left">Number, upper bound.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, constrained by the lower and the upper bound.</li>
 </ul></div>
 </div>
@@ -874,7 +874,7 @@
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Number, lower bound</li>
 <li class="typcn typcn-arrow-left">Number, upper bound</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, a whole random number from within the upper and lower bounds.</li>
 </ul></div>
 </div>
@@ -883,7 +883,7 @@
 <div id="math_random_float" class="help expert">
 <h3 id="Programming-BlocksEV3-»randomfraction«[Expertblock]">»random fraction«<span class="typcn typcn-star"></span></h3>
 <p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p>
-<p>Return value:
+<p><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, positive random value between 0.0 and 1.0.</li>
 </ul></div>
@@ -905,7 +905,7 @@
 <p>Input value:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">String, containing arbitrary characters.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">String, containing arbitrary characters.</li>
 </ul></div>
 </div>
@@ -917,7 +917,7 @@
 <p>Input values:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Arbitrary values (numbers, text, logical values, colours)</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">String, containing arbitrary characters, compiled sequentially from all input values.</li>
 </ul></div>
 </div>
@@ -943,7 +943,7 @@
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-plus">Insert another variable.</li>
 <li class="typcn typcn-minus">Delete this variable.</li>
 <li class="typcn typcn-pen">Variable name, special characters and space sign are not allowed.</li>
-<li class="typcn typcn-arrow-sorted-down">Variable type, »number«, »boolean«, »string«, »colour«, »connection«, »list number«, »list boolean«, »list string« oder »list connection«</li>
+<li class="typcn typcn-arrow-down">Variable type, »number«, »boolean«, »string«, »colour«, »connection«, »list number«, »list boolean«, »list string« oder »list connection«</li>
 <li class="typcn typcn-arrow-left">Initial values, according to the variable type.</li>
 </ul>These »Variables« blocks are available in NEPO:<ul><li>set variable</li>
 <li><p>get variable</p></li>
@@ -955,7 +955,7 @@
 <p>Using the block »set variable« will assign a value to a variable. Depending on the variable type the value may be assigned by an input connector.</p>
 <p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Variable, which value is to be changed.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Variable, which value is to be changed.</li>
 <li class="typcn typcn-arrow-left">Value, new value for the variable, evaluated from a suitable block.</li>
 </ul></div>
 </div>
@@ -966,7 +966,7 @@
 <p>Using the block »get variable« returns the value of a variable to another block.The type of the output parameter is equal to the type that has been assigned to the variable in the »start« block.</p>
 <p><span>Settings:</span>
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Variable, that will be read. The value will not be changed by reading.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Variable, that will be read. The value will not be changed by reading.</li>
 </ul><span>Return value:</span>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Value, stored in the variable.</li>
 </ul>
@@ -993,11 +993,11 @@
 <p>The block »empty list« creates a list with no content.The block »list« generates a list with some predefined values.</p>
 <p>This block may only be used in the context of a »set variable« block.</p>Using + or − enables you to extend or reduce the list at its end.<p>Settings and input values:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">List type, »Number«, »String«, »Boolean«, »Colour«, »Connection«.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">List type, »Number«, »String«, »Boolean«, »Colour«, »Connection«.</li>
 <li class="typcn typcn-plus">Create further list element, append to the end of the list.</li>
 <li class="typcn typcn-minus">Delete list element at the end of the list.</li>
 <li class="typcn typcn-arrow-left">Values, according to the list type. Here the input of initial values is possible.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Empty list or list, containing elements of the specified list type.</li>
 </ul></div>
 </div>
@@ -1008,10 +1008,10 @@
 <p>The »repeat element in list« block generates a list of equal elements.  </p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">List type, »Number«, »Boolean«, »String«, »Colour« or »Connection«.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">List type, »Number«, »Boolean«, »String«, »Colour« or »Connection«.</li>
 <li class="typcn typcn-arrow-left">List element, according to the selected list type. This value will be repeated in the list.</li>
 <li class="typcn typcn-arrow-left"> Number, defining how often the list element will be repeated.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">List of the specified list type, containing the specified number of equal elements.</li>
 </ul></div>
 </div>
@@ -1023,7 +1023,7 @@
 <p>Input value:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Integer, number of list elements.</li>
 </ul></div>
 </div>
@@ -1035,7 +1035,7 @@
 <p>Input value:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">List, evaluated by an appropriate block.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Boolean, either »true« or »false«.</li>
 </ul></div>
 </div>
@@ -1047,9 +1047,9 @@
 <p>Settings and input values:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">List, that will be examined.</li>
-<li class="typcn typcn-arrow-sorted-down">Position of the occurrence, either »first« or »last«.</li>
+<li class="typcn typcn-arrow-down">Position of the occurrence, either »first« or »last«.</li>
 <li class="typcn typcn-arrow-left">Value, list item to be found.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Number, indicating the position where the element was found in the list. Note: Counting list positions will start with 0.</li>
 </ul></div>
 </div>
@@ -1062,10 +1062,10 @@
 <p>Settings:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">List, that is under consideration.</li>
-<li class="typcn typcn-arrow-sorted-down">Action for the element found: »get« reads the element and leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just removes the element from the list.</li>
-<li class="typcn typcn-arrow-sorted-down">Position of the element found: »#«, »# from end«, »first«, »last« or »random« .</li>
+<li class="typcn typcn-arrow-down">Action for the element found: »get« reads the element and leaves it unchanged, »get and remove« reads the element and removes it from the list, »remove« just removes the element from the list.</li>
+<li class="typcn typcn-arrow-down">Position of the element found: »#«, »# from end«, »first«, »last« or »random« .</li>
 <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected as position.Note: Counting of list positions starts with 0.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">List element that has been found at the specified list position; »undefined«, if the list position does not exist. With selection of »remove« there is no return value; instead the list will be shortened by this list element.</li>
 </ul></div>
 </div>
@@ -1077,8 +1077,8 @@
 <p>Settings and input values:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">List, that will be changed.</li>
-<li class="typcn typcn-arrow-sorted-down">Action for the element found; »set« changes the element, »insert at« inserts a new element into the list.</li>
-<li class="typcn typcn-arrow-sorted-down">Position for the element to be changed: »#«, »# from end«, »first«, »last« or »random« .</li>
+<li class="typcn typcn-arrow-down">Action for the element found; »set« changes the element, »insert at« inserts a new element into the list.</li>
+<li class="typcn typcn-arrow-down">Position for the element to be changed: »#«, »# from end«, »first«, »last« or »random« .</li>
 <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not required if »first«, »last« or »random« was selected.Note: Counting of list positions begins with 0.</li>
 <li class="typcn typcn-arrow-left">List element, that will be set or inserted at the selected list position.</li>
 </ul></div>
@@ -1091,11 +1091,11 @@
 <p>Settings and input values:
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">List to be examined.</li>
-<li class="typcn typcn-arrow-sorted-down">Position, start of the sublist: »#«, »# from end« or »first«.</li>
+<li class="typcn typcn-arrow-down">Position, start of the sublist: »#«, »# from end« or »first«.</li>
 <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not required if »first« has been selected.Note: Counting of list positions starts with 0.</li>
-<li class="typcn typcn-arrow-sorted-down">Position, end of the sublist: »#«, »# from end« or »last«.</li>
+<li class="typcn typcn-arrow-down">Position, end of the sublist: »#«, »# from end« or »last«.</li>
 <li class="typcn typcn-arrow-left">Number, indicating the list position. This input value is not required if »last« has been selected.Note: Counting of list positions starts with 0.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">List, a sublist of the same type as the given list.</li>
 </ul></div>
 </div>
@@ -1138,9 +1138,9 @@
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-pen">Function name, no special characters and white spaces allowed</li>
 <li class="typcn typcn-plus">Generate new local variables, that will be assigned with the function call.</li>
 <li class="typcn typcn-minus">Delete the associated local variable.</li>
-<li class="typcn typcn-arrow-sorted-down">Data type for the return value; choose one data type.</li>
+<li class="typcn typcn-arrow-down">Data type for the return value; choose one data type.</li>
 <li class="typcn typcn-arrow-left">Block, that returns a value of the defined data type.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Value of the defined data type, evaluated in an appropriate block.</li>
 </ul></div>
 </div>
@@ -1160,7 +1160,7 @@
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-left">Boolean value, possibly evaluated by a condition.</li>
 <li class="typcn typcn-arrow-left">Value of the specified data type.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Value of the specified data type.</li>
 </ul></div>
 </div>
@@ -1201,9 +1201,9 @@
 <p>A text message will be transferred using a global connection variable. The text message will be entered in a text block. To give the connection information to the EV3 robot the value of the global connection variable will be read.</p>
 <p>Settings:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Message data type, »String«.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Message data type, »String«.</li>
 <li class="typcn typcn-arrow-left">String, message to be sent.</li>
-<li class="typcn typcn-arrow-sorted-down">Connection type, »Bluetooth«.</li>
+<li class="typcn typcn-arrow-down">Connection type, »Bluetooth«.</li>
 <li class="typcn typcn-arrow-left">Connection variable, established for the connection.</li>
 </ul></div>
 </div>
@@ -1214,10 +1214,10 @@
 <p>A text message will be transferred using a global connection variable. The text message will be transferred into a text block. To give the connection information to the EV3 robot the value of the global connection variable will be read.</p>
 <p>Settings and input value:
 </p>
-<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-sorted-down">Message data type, »String«.</li>
-<li class="typcn typcn-arrow-sorted-down">Connection type, »Bluetooth«.</li>
+<ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-down">Message data type, »String«.</li>
+<li class="typcn typcn-arrow-down">Connection type, »Bluetooth«.</li>
 <li class="typcn typcn-arrow-left">Connection variable, established for the connection.</li>
-</ul>Return value:
+</ul><p>Return value:</p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">String, content of the received message.</li>
 </ul></div>
 </div>
@@ -1230,7 +1230,7 @@
 <p>Step 1: Create a global variable of type "connection".</p>
 <p>Step 2: The value of the connection variable is set to the expert block "wait for connection".</p>
 <p>The connection variable will be set when the calling EV3 robot has initiated the connection (see above: connect to robot name).</p>
-<p>Return value:
+<p><p>Return value:</p>
 </p>
 <ul style="margin-top: 0; margin-bottom: 10px"><li class="typcn typcn-arrow-right">Connection object that may be stored in a connection variable.</li>
 </ul></div>
