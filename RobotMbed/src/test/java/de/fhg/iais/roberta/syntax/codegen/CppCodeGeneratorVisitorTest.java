@@ -114,50 +114,51 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/action/display_clear.xml");
     }
 
-    @Ignore
+    @Test
     public void visitImageShiftFunction_ScriptWithShiftTwoImages_ReturnsCppProgramShiftTwoImages() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
+            + "\n"
+            + "uBit.display.print(MicroBitImage(\"255,0,0,0,255\\n0,0,0,0,0\\n255,255,255,255,255\\n0,0,255,0,255\\n0,0,255,255,255\\n\").shiftImageUp(1));\n"
+            + "uBit.display.print(MicroBitImage(\"255,0,0,0,255\\n0,0,0,0,0\\n255,255,255,255,255\\n0,0,255,0,255\\n0,0,255,255,255\\n\").shiftImageDown(2));"
             + END;
-        // + "\n"
-        // + "display.show(Image.SILLY.shift_up(1))\n"
-        // + "display.show(Image.SILLY.shift_down(2))";
 
         assertCodeIsOk(expectedResult, "/function/image_shift_up_down.xml");
     }
 
-    @Ignore
+    @Test
     public void visitImageShiftFunction_ScriptWithMissingPositionImage_ReturnsCppProgramMissingPositionImage() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
+            + "\n"
+            + "uBit.display.print(MicroBitImage().shiftImageUp(0));"
             + END;
-        // + "\n"
-        // + "display.show(Image.SILLY.shift_up(0))";
 
         assertCodeIsOk(expectedResult, "/function/image_shift_missing_image_and_position.xml");
     }
 
-    @Ignore
+    @Test
     public void visitImageInvertFunction_ScriptWithInvertHeartImage_ReturnsCppProgramInvertHeartImage() throws Exception {
         String expectedResult = "" //
             + IMPORTS
+            + MAIN
+            + "\n"
+            + "uBit.display.print(MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\").invert());"
             + END;
-        // + "\n"
-        // + "display.show(Image.HEART.invert())";
 
         assertCodeIsOk(expectedResult, "/function/image_invert_heart_image.xml");
     }
 
-    @Ignore
+    @Test
     public void visitImageInvertFunction_ScriptWithMissingImage_ReturnsCppProgramInvertDefaultImage() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
+            + "\n"
+            + "uBit.display.print(MicroBitImage().invert());"
             + END;
-        // + "\n"
-        //+ "display.show(Image.SILLY.invert())";
 
         assertCodeIsOk(expectedResult, "/function/image_invert_missing_image.xml");
     }

@@ -374,6 +374,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             case COLOR:
                 this.sb.append("0, 0, 0, 255");
                 break;
+            case PREDEFINED_IMAGE:
+                this.sb.append("MicroBitImage()");
+                break;
+            case IMAGE:
+                this.sb.append("MicroBitImage()");
+                break;
             default:
                 this.sb.append("null");
                 break;
@@ -1314,13 +1320,17 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
-        // TODO Auto-generated method stub
+        imageShiftFunction.getImage().visit(this);
+        this.sb.append(".shiftImage" + capitalizeFirstLetter(imageShiftFunction.getShiftDirection().toString()) + "(");
+        imageShiftFunction.getPositions().visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        // TODO Auto-generated method stub
+        imageInvertFunction.getImage().visit(this);
+        this.sb.append(".invert()");
         return null;
     }
 
@@ -1748,5 +1758,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         displayTextAction.getMsg().visit(this);
         ending += ")";
         return ending;
+    }
+
+    private String capitalizeFirstLetter(String original) {
+        if ( original == null || original.length() == 0 ) {
+            return original;
+        }
+        return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 }
