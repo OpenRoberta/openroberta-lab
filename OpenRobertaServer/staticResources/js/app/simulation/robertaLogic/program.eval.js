@@ -703,7 +703,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                         obj.memory.assign(stmt.expr[0].name, oldValue + step);
                     }
                     var left = obj.memory.get(stmt.expr[0].name);
-                    if (left <= to) {
+                    if (left < to) {
                         obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
                         obj.repeatStmtExpr = {};
