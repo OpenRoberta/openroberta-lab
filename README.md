@@ -17,7 +17,7 @@ environment. License information is available in the **docs** folder.
 
 Things you need on your computer:
 
-* Java 1.7
+* Java 1.8
 * Maven >= 3.2
 * Git
 * Web browser
