@@ -107,8 +107,9 @@ function _exportApplication {
      exit 4
   fi
   echo "using databasemode: ${databasemode} serverVersion: ${serverVersion}"
-  echo "creating the target directory \"$exportpath\""
   mkAndCheckDir "$exportpath"
+  exportpath=`cd "$exportpath"; pwd`
+  echo "created the target directory \"$exportpath\""
   echo "copying all jars"
   mkAndCheckDir "${exportpath}/lib"
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
