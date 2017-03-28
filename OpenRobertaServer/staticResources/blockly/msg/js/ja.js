@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "赤";
 Blockly.Msg.COLOUR_RGB_TITLE = "カラーと";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "赤、緑、および青の指定された量で色を作成します。すべての値は 0 ～ 100 の間でなければなりません。";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

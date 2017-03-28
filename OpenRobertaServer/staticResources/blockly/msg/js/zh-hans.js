@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "红色";
 Blockly.Msg.COLOUR_RGB_TITLE = "颜色";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "通过指定红色、绿色和蓝色的量创建一种颜色。所有的值必须介于0和100之间。";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

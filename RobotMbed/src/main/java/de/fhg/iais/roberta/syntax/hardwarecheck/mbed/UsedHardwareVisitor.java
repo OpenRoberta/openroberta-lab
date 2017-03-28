@@ -113,6 +113,7 @@ public class UsedHardwareVisitor extends CheckVisitor {
         rgbColor.getR().visit(this);
         rgbColor.getG().visit(this);
         rgbColor.getB().visit(this);
+        rgbColor.getA().visit(this);
         return null;
     }
 

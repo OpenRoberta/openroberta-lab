@@ -10,7 +10,8 @@ public class RgbColorTest {
     @Test
     public void make_ByDefault_ReturnInstancesOfRgbColorClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=163, y=37], MainTask [], " + "DisplayTextAction [TEXT, RgbColor [NumConst [20], NumConst [25], NumConst [30]]]]]]";
+            "BlockAST [project=[[Location [x=163, y=37], MainTask [], "
+                + "DisplayTextAction [TEXT, RgbColor [NumConst [20], NumConst [25], NumConst [30], NumConst [30]]]]]]";
         String result = Helper.generateTransformerString("/expr/create_color.xml");
 
         Assert.assertEquals(expectedResult, result);

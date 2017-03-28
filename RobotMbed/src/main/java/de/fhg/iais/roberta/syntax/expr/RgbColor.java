@@ -28,12 +28,14 @@ public class RgbColor<V> extends Expr<V> {
     private final Expr<V> R;
     private final Expr<V> G;
     private final Expr<V> B;
+    private final Expr<V> A;
 
-    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment);
         this.R = R;
         this.G = G;
         this.B = B;
+        this.A = A;
         setReadOnly();
     }
 
@@ -45,8 +47,8 @@ public class RgbColor<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RgbColor}
      */
-    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RgbColor<V>(R, G, B, properties, comment);
+    public static <V> RgbColor<V> make(Expr<V> R, Expr<V> G, Expr<V> B, Expr<V> A, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new RgbColor<V>(R, G, B, A, properties, comment);
     }
 
     public Expr<V> getR() {
@@ -59,6 +61,10 @@ public class RgbColor<V> extends Expr<V> {
 
     public Expr<V> getB() {
         return this.B;
+    }
+
+    public Expr<V> getA() {
+        return this.A;
     }
 
     @Override
@@ -78,7 +84,7 @@ public class RgbColor<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "RgbColor [" + this.R + ", " + this.G + ", " + this.B + "]";
+        return "RgbColor [" + this.R + ", " + this.G + ", " + this.B + ", " + this.A + "]";
     }
 
     @Override
@@ -95,14 +101,24 @@ public class RgbColor<V> extends Expr<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 3);
+        List<Value> values;
+        boolean oldVersion = false;
+        try {
+            values = helper.extractValues(block, (short) 4);
+        } catch ( Exception e ) {
+            oldVersion = true;
+            values = helper.extractValues(block, (short) 3);
+        }
+
         Phrase<V> red = helper.extractValue(values, new ExprParam(BlocklyConstants.RED, BlocklyType.NUMBER_INT));
         Phrase<V> green = helper.extractValue(values, new ExprParam(BlocklyConstants.GREEN, BlocklyType.NUMBER_INT));
         Phrase<V> blue = helper.extractValue(values, new ExprParam(BlocklyConstants.BLUE, BlocklyType.NUMBER_INT));
+        Phrase<V> alpha = helper.extractValue(values, new ExprParam(BlocklyConstants.ALPHA, BlocklyType.NUMBER_INT));
         return RgbColor.make(
             helper.convertPhraseToExpr(red),
             helper.convertPhraseToExpr(green),
             helper.convertPhraseToExpr(blue),
+            helper.convertPhraseToExpr(alpha),
             helper.extractBlockProperties(block),
             helper.extractComment(block));
     }
@@ -114,6 +130,7 @@ public class RgbColor<V> extends Expr<V> {
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.RED, this.R);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.GREEN, this.G);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BLUE, this.B);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ALPHA, this.A);
 
         return jaxbDestination;
     }

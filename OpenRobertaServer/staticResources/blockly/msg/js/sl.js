@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "rdeča";
 Blockly.Msg.COLOUR_RGB_TITLE = "določena barva";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Ustvari barvo z določeno količino rdeče, zelene in modre. Vse vrednosti morajo biti med 0 in 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

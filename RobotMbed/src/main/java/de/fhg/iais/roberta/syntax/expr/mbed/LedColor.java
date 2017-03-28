@@ -87,6 +87,10 @@ public class LedColor<V> extends Expr<V> {
         return Integer.valueOf(this.value.substring(5, 7), 16);
     }
 
+    public int getAlphaChannel() {
+        return 255;
+    }
+
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((MbedAstVisitor<V>) visitor).visitLedColor(this);

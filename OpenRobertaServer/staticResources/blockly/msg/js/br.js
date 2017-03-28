@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "ruz";
 Blockly.Msg.COLOUR_RGB_TITLE = "liv gant";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Krouiñ ul liv gant ar c'hementad spisaet a ruz, a wer hag a c'hlas. Etre 0 ha 100 e tle bezañ an holl dalvoudoù.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

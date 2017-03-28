@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "vörös";
 Blockly.Msg.COLOUR_RGB_TITLE = "Szín";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Szín előállítása a megadott vörös, zöld, és kék értékekkel.  Minden értéknek 0 és 100 közé kell esnie.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

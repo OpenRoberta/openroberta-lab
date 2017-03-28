@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "https://de.wikipedia.org/wiki/RGB-Farbraum";
 Blockly.Msg.COLOUR_RGB_RED = "rot";
 Blockly.Msg.COLOUR_RGB_TITLE = "Farbe mit";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Kreiere eine Farbe mit selbst definierten Rot-, Grün- und Blauwerten. Alle Werte müssen zwischen 0 und 100 liegen.";
+Blockly.Msg.COLOUR_RGB_WHITE = "weiß";
 Blockly.Msg.COLOUR_TOOLTIP = "Block für den Farbsensor";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Block für den Kompasssensor.";

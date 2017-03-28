@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-27 14:43:35.918864",
+		"lastupdated": "2017-03-28 13:27:17.829136",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -494,6 +494,7 @@
 	"BRICKLIGHT_ORANGE": "orange",
 	"BRICKLIGHT_RED": "red",
 	"BRICKLIGHT_BLUE": "blue",
+	"COLOUR_RGB_WHITE": "white",
 	"WAIT": "wait ms",
 	"WAIT_OR": "or wait for",
 	"SENSOR_ULTRASONIC": "ultrasonic sensor",

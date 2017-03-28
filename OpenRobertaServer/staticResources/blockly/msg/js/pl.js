@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "czerwony";
 Blockly.Msg.COLOUR_RGB_TITLE = "kolor z";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Połącz czerwony, zielony i niebieski w odpowiednich proporcjach, tak aby powstał nowy kolor. Zawartość każdego z nich określa liczba z przedziału od 0 do 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Reprezentuje czujnik koloru";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Reprezentuje czujnik kompasu";

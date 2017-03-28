@@ -271,6 +271,7 @@ public final class BlocklyConstants {
     public static final String RED = "RED";
     public static final String GREEN = "GREEN";
     public static final String BLUE = "BLUE";
+    public static final String ALPHA = "WHITE";
 
     public static final String X = "X";
     public static final String Y = "Y";

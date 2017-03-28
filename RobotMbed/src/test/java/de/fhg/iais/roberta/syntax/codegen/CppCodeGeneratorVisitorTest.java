@@ -420,12 +420,13 @@ public class CppCodeGeneratorVisitorTest {
         assertCodeIsOk(expectedResult, "/sensor/wait_stmt_two_cases.xml");
     }
 
+    @Ignore // display color is not allowed anymore
     @Test
     public void visitRgbColor_CreateColorAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.display.scroll(ManagedString(20, 25, 30, 255));"
+            + "uBit.display.scroll(ManagedString(20, 25, 30, 30));"
             + END;
 
         assertCodeIsOk(expectedResult, "/expr/create_color.xml");

@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "červená";
 Blockly.Msg.COLOUR_RGB_TITLE = "ofarbiť s";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Vytvoriť farbu pomocou zadaného množstva červenej, zelenej a modrej. Množstvo musí byť medzi 0 a 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

@@ -153,6 +153,7 @@ public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisito
         rgbColor.getR().visit(this);
         rgbColor.getG().visit(this);
         rgbColor.getB().visit(this);
+        rgbColor.getA().visit(this);
         return null;
     }
 

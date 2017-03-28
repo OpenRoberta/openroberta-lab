@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "ಕೆಂಪು ಬಣ್ಣೊ";
 Blockly.Msg.COLOUR_RGB_TITLE = "ಬಣ್ಣೊದೊಟ್ಟುಗೆ";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "ತೋಜಿಪಾಯಿನ ಕೆಂಪು, ಪಚ್ಚೆ ಬುಕ್ಕೊ ನೀಲಿ ಬಣ್ಣೊದ ಪ್ರಮಾಣೊನು ರಚಿಸಲೆ.  ಮಾಂತ ಮೌಲ್ಯೊಲು 0 ಬುಕ್ಕೊ 100 ನಡುಟೆ ಇಪ್ಪೊಡು.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

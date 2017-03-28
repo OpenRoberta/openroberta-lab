@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "rød";
 Blockly.Msg.COLOUR_RGB_TITLE = "farve med";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Lav en farve med den angivne mængde af rød, grøn og blå. Alle værdier skal være mellem 0 og 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Repræsenterer EV3 farvesensoren.";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

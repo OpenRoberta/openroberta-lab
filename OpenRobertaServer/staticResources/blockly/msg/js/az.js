@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "qırmızı";
 Blockly.Msg.COLOUR_RGB_TITLE = "rənglə";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Qırmızı, yaşıl və mavinin göstərilən miqdarı ilə bir rəng düzəlt. Bütün qiymətlər 0 ilə 100 arasında olmalıdır.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

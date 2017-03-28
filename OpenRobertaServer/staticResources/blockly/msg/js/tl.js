@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "pula";
 Blockly.Msg.COLOUR_RGB_TITLE = "kulayan ng";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "gumawa ng kulay ng may espisipikong dami ng kulay pula, berde, at asul. lahat ng halaga ay dapat sa pagitan ng 0 at 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

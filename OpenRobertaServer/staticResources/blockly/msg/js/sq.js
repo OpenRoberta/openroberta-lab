@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "e kuqe";
 Blockly.Msg.COLOUR_RGB_TITLE = "ngjyre me";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Krijo një ngjyrë me shumën e specifikuar te te kuqes, te gjelbëres, dhe bluse. Te gjitha vlerat duhet te jene mes 0 dhe 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

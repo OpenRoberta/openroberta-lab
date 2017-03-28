@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "красного";
 Blockly.Msg.COLOUR_RGB_TITLE = "цвет из";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Создаёт цвет с указанной пропорцией  красного, зеленого и синего.  Все значения должны быть между 0 и 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Представляет датчик цвета.";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Представляет компас.";

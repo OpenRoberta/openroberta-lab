@@ -1365,7 +1365,16 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb.append("MicroBitColor(" + ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255)");
+        this.sb.append(
+            "MicroBitColor("
+                + ledColor.getRedChannel()
+                + ", "
+                + ledColor.getGreenChannel()
+                + ", "
+                + ledColor.getBlueChannel()
+                + ", "
+                + ledColor.getAlphaChannel()
+                + ")");
         return null;
     }
 
@@ -1433,12 +1442,15 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        this.sb.append("MicroBitColor(");
         rgbColor.getR().visit(this);
         this.sb.append(", ");
         rgbColor.getG().visit(this);
         this.sb.append(", ");
         rgbColor.getB().visit(this);
-        this.sb.append(", 255");
+        this.sb.append(", ");
+        rgbColor.getA().visit(this);
+        this.sb.append(")");
         return null;
     }
 

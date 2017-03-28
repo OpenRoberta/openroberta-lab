@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "κόκκινο";
 Blockly.Msg.COLOUR_RGB_TITLE = "χρώμα με";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Δημιουργεί χρώμα με το συγκεκριμένο ποσό του κόκκινου, πράσινου και μπλε που ορίζεις. Όλες οι τιμές πρέπει να είναι μεταξύ 0 και 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

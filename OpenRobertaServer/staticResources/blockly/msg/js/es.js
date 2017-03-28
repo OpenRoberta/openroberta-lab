@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "rojo";
 Blockly.Msg.COLOUR_RGB_TITLE = "colorear con";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Crea un color con cantidades específicas de rojo, verde y azul. Todos los valores deben encontrarse entre 0 y 100.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Representa el sensor de color del EV3";
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Representa el sensor de brújula";

@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "ҡыҙылдан";
 Blockly.Msg.COLOUR_RGB_TITLE = "ошонан төҫ";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "Бирелгән нисбәттәрҙә ҡыҙылдан, йәшелдән һәм зәңгәрҙән төҫ барлыҡҡа килә. Бөтә мәғәнәләр 0 менән 100 араһында булырға тейеш.";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated

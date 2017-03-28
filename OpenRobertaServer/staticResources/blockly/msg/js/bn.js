@@ -59,6 +59,7 @@ Blockly.Msg.COLOUR_RGB_HELPURL = "http://www.december.com/html/spec/colorper.htm
 Blockly.Msg.COLOUR_RGB_RED = "লাল";
 Blockly.Msg.COLOUR_RGB_TITLE = "রং সহ";
 Blockly.Msg.COLOUR_RGB_TOOLTIP = "একটি রং তৈরি করুন নির্দিষ্ট পরিমাণে লাল, সবুজ এবং নীল রং মিশ্রিত করে। প্রত্যেকটির মান অবশ্যই ০ থেকে ১০০ এর মধ্যে হতে হবে।";
+Blockly.Msg.COLOUR_RGB_WHITE = "white";  // untranslated
 Blockly.Msg.COLOUR_TOOLTIP = "Represents a colour sensor.";  // untranslated
 Blockly.Msg.COMPASS_GETSAMPLE_TOOLTIP = "Gets the current reading from the compass sensor.";  // untranslated
 Blockly.Msg.COMPASS_TOOLTIP = "Represents a compass sensor.";  // untranslated
