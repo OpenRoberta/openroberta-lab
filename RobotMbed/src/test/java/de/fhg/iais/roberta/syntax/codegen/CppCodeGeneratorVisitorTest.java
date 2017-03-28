@@ -228,9 +228,9 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.rgb.setColour(255, 0, 0, 255);\n"
-            + "uBit.rgb.setColour(0, 153, 0, 255);"
-            + "uBit.rgb.setColour(153, 153, 255, 255);\n"
+            + "uBit.rgb.setColour(MicroBitColor(255, 0, 0, 255));\n"
+            + "uBit.rgb.setColour(MicroBitColor(0, 153, 0, 255));\n"
+            + "uBit.rgb.setColour(MicroBitColor(153, 153, 255, 255));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/led_on_three_colors.xml");
@@ -241,7 +241,7 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.rgb.setColour(0, 0, 0, 255);\n"
+            + "uBit.rgb.setColour(MicroBitColor());\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/led_on_missing_color.xml");

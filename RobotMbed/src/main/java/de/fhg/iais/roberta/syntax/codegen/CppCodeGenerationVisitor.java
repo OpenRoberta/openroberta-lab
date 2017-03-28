@@ -373,7 +373,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             case NULL:
                 break;
             case COLOR:
-                this.sb.append("0, 0, 0, 255");
+                this.sb.append("MicroBitColor()");
                 break;
             case PREDEFINED_IMAGE:
                 this.sb.append("MicroBitImage()");
@@ -720,7 +720,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append("uBit.compass.heading()");
         return null;
     }
-    
+
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
         this.sb.append("uBit.io.P21.getAnalogValue()");
@@ -1365,7 +1365,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
-        this.sb.append(ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255");
+        this.sb.append("MicroBitColor(" + ledColor.getRedChannel() + ", " + ledColor.getGreenChannel() + ", " + ledColor.getBlueChannel() + ", 255)");
         return null;
     }
 
@@ -1718,6 +1718,8 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 return "array<bool,";
             case ARRAY_IMAGE:
                 return "array<MicroBitImage,";
+            case ARRAY_COLOUR:
+                return "array<MicroBitColor,";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -1729,7 +1731,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             case VOID:
                 return "void";
             case COLOR:
-                return "int";
+                return "MicroBitColor";
             case CONNECTION:
                 return "int";
             case IMAGE:
