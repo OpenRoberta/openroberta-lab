@@ -207,7 +207,6 @@ public class AstToEv3PythonVisitorTest {
             + "item2 = \"TTTT\"\n"
             + "item3 = True\n"
             + "def run():\n"
-            + "    global item, item2, item3\n"
             + "    hal.drawText(str(item), 0, 0)\n"
             + "    hal.drawText(str(item2), 0, 0)\n"
             + "    hal.drawText(str(item3), 0, 0)\n"
@@ -224,7 +223,6 @@ public class AstToEv3PythonVisitorTest {
             + make_globals(CFG_MOTORS, "")
             + "variablenName = 0\n"
             + "def run():\n"
-            + "    global variablenName\n"
             + "    hal.regulatedDrive('A', 'B', False, 'foreward', 50)\n"
             + "    hal.drawPicture("
             + IMG_OLDGLASSES
@@ -246,7 +244,7 @@ public class AstToEv3PythonVisitorTest {
             + "item = 0\n"
             + "item2 = \"cc\"\n"
             + "def run():\n"
-            + "    global item, item2\n"
+            + "    pass\n"
             + "\n"
             + MAIN_METHOD;
 
@@ -358,7 +356,6 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
             + "def run():\n"
-            + "    global variablenName\n"
             + "    hal.drawText(str(test()), 0, 0)\n"
             + "    \n"
             + "def test():\n"
@@ -377,7 +374,6 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
             + "def run():\n"
-            + "    global variablenName\n"
             + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n"
             + "    \n"
             + "def test(x, x2):\n"
@@ -395,7 +391,6 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
             + "def run():\n"
-            + "    global variablenName\n"
             + "    hal.drawText(str(test()), 0, 0)\n"
             + "    \n"
             + "def test():\n"
@@ -464,7 +459,6 @@ public class AstToEv3PythonVisitorTest {
             + "variablenName = 0\n"
             + "variablenName2 = True\n"
             + "def run():\n"
-            + "    global variablenName, variablenName2\n"
             + "    test1(0, 0)\n"
             + "    test2()\n"
             + "    \n"
@@ -486,7 +480,6 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = hal.getColorSensorColour('3')\n"
             + "def run():\n"
-            + "    global variablenName\n"
             + "    macheEtwas(hal.getInfraredSensorDistance('4'))\n"
             + "    \n"
             + "def macheEtwas(x):\n"
@@ -554,7 +547,6 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith('none', 'red', 'blue')\n"
             + "def run():\n"
-            + "    global variablenName\n"
             + "    for variablenName2 in variablenName:\n"
             + "        hal.drawText(str(variablenName2), 0, 0)\n\n"
             + MAIN_METHOD;
@@ -655,7 +647,6 @@ public class AstToEv3PythonVisitorTest {
             + GLOBALS
             + "message = \"exit\"\n"
             + "def run():\n"
-            + "    global message\n"
             + "    if message == \"exit\":\n"
             + "        hal.drawText(\"done\", 0, 0)\n\n"
             + MAIN_METHOD;
@@ -697,6 +688,46 @@ public class AstToEv3PythonVisitorTest {
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/empty_program_with_empty_procedure.xml");
+    }
+
+    @Test
+    public void visitMainTask_OneGlobalDefinedVariable_CorrectPythonScript() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "Element = 0\n"
+            + "Element2 = 0\n"
+            + "Element3 = 'none'\n"
+            + "def run():\n"
+            + "    global Element3\n"
+            + "    \n"
+            + "def macheEtwas(x):\n"
+            + "    Element3 = 'none'\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/visitors/python_global_variables_check_one_used_variables.xml");
+    }
+
+    @Test
+    public void visitMainTask_TwoGlobalDefinedVariable_CorrectPythonScript() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "Element = 0\n"
+            + "Element2 = 0\n"
+            + "Element3 = 'none'\n"
+            + "def run():\n"
+            + "    global Element, Element3\n"
+            + "    \n"
+            + "def macheEtwas(x):\n"
+            + "    Element3 = 'none'\n"
+            + "    \n"
+            + "def macheEtwas2():\n"
+            + "    Element = 0\n"
+            + "    return Element2\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/visitors/python_global_variables_check_two_used_variables.xml");
     }
 
     // TODO: add tests for files from "/syntax/text/*.xml"

@@ -101,7 +101,7 @@ public class AssignStmt<V> extends Stmt<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         String varType =
-            getName().getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getName().getTypeVar().getBlocklyName().substring(1).toLowerCase();
+            getName().getVarType().getBlocklyName().substring(0, 1).toUpperCase() + getName().getVarType().getBlocklyName().substring(1).toLowerCase();
 
         Mutation mutation = new Mutation();
         mutation.setDatatype(varType);

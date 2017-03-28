@@ -66,6 +66,7 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     protected final StringBuilder sb = new StringBuilder();
     protected final Set<UsedSensor> usedSensors;
     protected final Set<UsedActor> usedActors;
+    protected final Set<String> usedGlobalVarInFunctions;
     protected int indentation;
     protected final StringBuilder indent = new StringBuilder();
     protected boolean isProgramEmpty = false;
@@ -78,11 +79,18 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2PythonVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, Set<UsedActor> usedActors, int indentation) {
+    Ast2PythonVisitor(
+        String programName,
+        Configuration brickConfiguration,
+        Set<UsedSensor> usedSensors,
+        Set<UsedActor> usedActors,
+        Set<String> usedGlobalVarInFunctions,
+        int indentation) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.usedSensors = usedSensors;
         this.usedActors = usedActors;
+        this.usedGlobalVarInFunctions = usedGlobalVarInFunctions;
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }

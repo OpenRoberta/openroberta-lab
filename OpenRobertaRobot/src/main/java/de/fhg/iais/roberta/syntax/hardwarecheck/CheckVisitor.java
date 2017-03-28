@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
@@ -76,6 +79,7 @@ import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public abstract class CheckVisitor implements AstVisitor<Void> {
+    protected List<String> globalVariables = new ArrayList<String>();
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
@@ -115,6 +119,7 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         var.getValue().visit(this);
+        this.globalVariables.add(var.getName());
         return null;
     }
 

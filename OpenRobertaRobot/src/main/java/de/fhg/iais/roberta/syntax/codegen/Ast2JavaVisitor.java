@@ -722,7 +722,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             case "STRING_CONST":
                 return true;
             case "VAR":
-                return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
+                return ((Var<?>) e).getVarType() == BlocklyType.STRING;
             case "FUNCTION_EXPR":
                 BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
                 return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");

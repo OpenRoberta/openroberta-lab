@@ -20,10 +20,8 @@ import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -47,14 +45,9 @@ import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
@@ -70,7 +63,6 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -85,7 +77,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -780,27 +771,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         this.sb.append("hal.waitForConnection()");
         return null;
-    }
-
-    private boolean isStringExpr(Expr<Void> e) {
-        switch ( e.getKind().getName() ) {
-            case "STRING_CONST":
-                return true;
-            case "VAR":
-                return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
-            case "FUNCTION_EXPR":
-                BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
-                return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");
-            case "METHOD_EXPR":
-                MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
-                return methodCall.getKind().hasName("METHOD_CALL") && methodCall.getReturnType() == BlocklyType.STRING;
-            case "ACTION_EXPR":
-                Action<?> action = ((ActionExpr<?>) e).getAction();
-                return action.getKind().hasName("BLUETOOTH_RECEIVED_ACTION");
-
-            default:
-                return false;
-        }
     }
 
     @Override

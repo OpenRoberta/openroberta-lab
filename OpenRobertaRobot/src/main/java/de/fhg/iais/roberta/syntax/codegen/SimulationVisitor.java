@@ -143,7 +143,7 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitVar(Var<V> var) {
-        this.sb.append("createVarReference(CONST." + var.getTypeVar() + ", \"" + var.getValue() + "\")");
+        this.sb.append("createVarReference(CONST." + var.getVarType() + ", \"" + var.getValue() + "\")");
         return null;
     }
 

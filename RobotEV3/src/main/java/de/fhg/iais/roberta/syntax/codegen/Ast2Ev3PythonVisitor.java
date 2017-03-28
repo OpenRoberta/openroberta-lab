@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,7 +45,6 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
@@ -61,6 +59,7 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
+import de.fhg.iais.roberta.syntax.programcheck.ev3.PythonGlobalVariableCheck;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -73,8 +72,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
@@ -102,8 +99,9 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         Configuration brickConfiguration,
         Set<UsedSensor> usedSensors,
         Set<UsedActor> usedActors,
+        Set<String> usedGlobalVarInFunctions,
         int indentation) {
-        super(programName, brickConfiguration, usedSensors, usedActors, indentation);
+        super(programName, brickConfiguration, usedSensors, usedActors, usedGlobalVarInFunctions, indentation);
     }
 
     /**
@@ -120,8 +118,16 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         Assert.isTrue(phrasesSet.size() >= 1);
 
         UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet, brickConfiguration);
+        PythonGlobalVariableCheck globalVarChecker = new PythonGlobalVariableCheck(phrasesSet);
+
         Ast2Ev3PythonVisitor astVisitor =
-            new Ast2Ev3PythonVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), checkVisitor.getUsedActors(), 0);
+            new Ast2Ev3PythonVisitor(
+                programName,
+                brickConfiguration,
+                checkVisitor.getUsedSensors(),
+                checkVisitor.getUsedActors(),
+                globalVarChecker.getMarkedVariablesAsGlobal(),
+                0);
         astVisitor.genearateCode(phrasesSet, withWrapping);
 
         return astVisitor.sb.toString();
@@ -464,35 +470,20 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         variables.visit(this);
         this.sb.append("\n").append("def run():");
         incrIndentation();
-        List<Stmt<Void>> variableList = variables.get();
-        if ( !variableList.isEmpty() ) {
+        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
-            // insert global statement for all variables
-            // TODO: there must be an easier way without the casts
-            // TODO: we'd only list variables that we change, ideally we'd do this in
-            // visitAssignStmt(), but we must only to this once per method and visitAssignStmt()
-            // would need the list of mainTask variables (store in the class?)
-            // TODO: I could store the names as a list in the instance and filter it against the parameters
-            // in visitMethodVoid, visitMethodReturn
-            this.sb.append("global ");
-            boolean first = true;
-            for ( Stmt<Void> s : variables.get() ) {
-                ExprStmt<Void> es = (ExprStmt<Void>) s;
-                VarDeclaration<Void> vd = (VarDeclaration<Void>) es.getExpr();
-                if ( first ) {
-                    first = false;
-                } else {
-                    this.sb.append(", ");
-                }
-                this.sb.append(vd.getName());
-            }
+            this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
         } else {
-            if ( this.isProgramEmpty ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
+            addPassIfProgramIsEmpty();
         }
         return null;
+    }
+
+    private void addPassIfProgramIsEmpty() {
+        if ( this.isProgramEmpty ) {
+            nlIndent();
+            this.sb.append("pass");
+        }
     }
 
     @Override

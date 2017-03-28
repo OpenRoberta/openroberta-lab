@@ -52,13 +52,6 @@ public class Var<V> extends Expr<V> {
         return this.name;
     }
 
-    /**
-     * @return the typeVar
-     */
-    public BlocklyType getTypeVar() {
-        return this.typeVar;
-    }
-
     @Override
     public int getPrecedence() {
         return 999;
@@ -102,7 +95,7 @@ public class Var<V> extends Expr<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         Mutation mutation = new Mutation();
-        mutation.setDatatype(getTypeVar().getBlocklyName());
+        mutation.setDatatype(getVarType().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, getValue());

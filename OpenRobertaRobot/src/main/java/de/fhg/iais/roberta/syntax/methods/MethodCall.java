@@ -138,7 +138,7 @@ public class MethodCall<V> extends Method<V> {
             for ( Expr<V> parameter : this.parameters.get() ) {
                 Arg arg = new Arg();
                 arg.setName(((Var<V>) parameter).getValue());
-                arg.setType(((Var<V>) parameter).getTypeVar().getBlocklyName());
+                arg.setType(((Var<V>) parameter).getVarType().getBlocklyName());
                 mutation.getArg().add(arg);
             }
         }
