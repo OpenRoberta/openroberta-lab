@@ -380,7 +380,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<suffix>-beate-${project.version}</suffix>
+							<suffix>-min-${project.version}</suffix>
 							<!-- Disable javascript compression - just use this plugin for gzip. 
 								If we want to use javascript compression we should execute this plugin twice, 
 								so we can exclude already-compressed files from the JS-compression but not 
