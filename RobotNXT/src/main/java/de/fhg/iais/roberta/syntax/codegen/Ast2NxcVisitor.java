@@ -1728,7 +1728,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
             this.sb.append("SetSensor(");
             switch ( entry.getValue().getType() ) {
                 case COLOR:
-                    this.sb.append("SENSOR_" + entry.getKey().getPortNumber() + ", SENSOR_COLORFULL);");
+                    this.sb.append(entry.getKey() + ", SENSOR_COLORFULL);");
                     break;
                 case HT_COLOR:
                     this.sb.append(entry.getKey() + ", SENSOR_LOWSPEED);");
