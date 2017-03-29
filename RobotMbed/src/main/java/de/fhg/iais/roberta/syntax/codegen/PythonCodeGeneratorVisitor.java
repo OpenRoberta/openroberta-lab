@@ -290,7 +290,7 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("'").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("'");
+        this.sb.append("'").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("'");
         return null;
     }
 

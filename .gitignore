@@ -11,3 +11,6 @@ OpenRobertaServer/userProjects/*
 OpenRobertaServer/db-*
 **/phantomjsdriver.log
 tags
+**/.classpath
+.settings/
+.*

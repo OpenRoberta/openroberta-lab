@@ -362,7 +362,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue().replaceAll("[^a-zA-Z0-9=+\"!?.%(){} ]", ""))).append("\"");
+        this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
         return null;
     }
 

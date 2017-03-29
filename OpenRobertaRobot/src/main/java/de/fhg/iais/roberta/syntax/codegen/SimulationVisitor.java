@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -115,7 +117,12 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     @Override
     public V visitStringConst(StringConst<V> stringConst) {
-        this.sb.append("createConstant(CONST." + stringConst.getKind().getName() + ", '" + stringConst.getValue() + "')");
+        this.sb.append(
+            "createConstant(CONST."
+                + stringConst.getKind().getName()
+                + ", '"
+                + StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))
+                + "')");
         return null;
     }
 

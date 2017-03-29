@@ -47,8 +47,8 @@ public class CppCodeGeneratorVisitorTest {
         String expectedResult = "" //
             + IMPORTS
             + MAIN
-            + "uBit.display.scroll(\"Hallo\");"
-            + "uBit.display.print(\"H\");"
+            + "uBit.display.scroll(ManagedString(\"Hallo\"));"
+            + "uBit.display.print(ManagedString(\"H\"));"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/display_text_show_hello.xml");
@@ -302,7 +302,7 @@ public class CppCodeGeneratorVisitorTest {
             + IMPORTS
             + MAIN
             + "uBit.radio.enable();\n"
-            + "uBit.radio.datagram.send(\"Hallo\");\n"
+            + "uBit.radio.datagram.send(ManagedString(\"Hallo\"));\n"
             + END;
 
         assertCodeIsOk(expectedResult, "/action/radio_send_message.xml");
@@ -405,11 +405,11 @@ public class CppCodeGeneratorVisitorTest {
             + MAIN
             + "while(1){"
             + "if(uBit.buttonA.isPressed()==true){"
-            + "uBit.display.scroll(\"Hallo\");"
+            + "uBit.display.scroll(ManagedString(\"Hallo\"));"
             + "break;"
             + "}"
             + "if(uBit.thermometer.getTemperature()>20){"
-            + "uBit.display.scroll(\"Hallo\");"
+            + "uBit.display.scroll(ManagedString(\"Hallo\"));"
             + "break;"
             + "}"
             + "uBit.sleep(100);"
