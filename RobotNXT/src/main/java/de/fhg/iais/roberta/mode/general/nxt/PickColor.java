@@ -14,12 +14,12 @@ public enum PickColor implements IPickColor {
     YELLOW( 4, "#F7D117" ),
     RED( 5, "#B30006" ),
     WHITE( 6, "#FFFFFF" ),
-    MAGENTA( 7, "#EE82EE" ),
-    ORANGE( 8, "#FFA500" ),
-    LIME( 9, "#7FFF00" ),
-    VIOLET( 10, "#D02090" ),
-    CRIMSON( 11, "#FF00FF" ),
-    PURPLE( 12, "#FF00FF" ),
+    VIOLET( 7, "#EE82EE" ),
+    PURPLE( 8, "#800080" ),
+    LIME( 9, "#00FF00" ),
+    ORANGE( 10, "#FFA500" ),
+    MAGENTA( 11, "#FF00FF" ),
+    CRIMSON( 12, "#DC143C" ),
     NONE( -1, "#585858" ),
     BROWN( 13, "#532115" );
 
