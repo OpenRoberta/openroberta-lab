@@ -76,7 +76,7 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor {
         } else {
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
-                    if ( usedSensor.getType() != SensorType.COLOR ) {
+                    if ( usedSensor.getType() != SensorType.COLOR && usedSensor.getType() != SensorType.HT_COLOR ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;

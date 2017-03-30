@@ -3,6 +3,11 @@
 	<name>OpenRobertaServer</name>
 	<comment></comment>
 	<projects>
+		<project>RobotArdu</project>
+		<project>RobotEV3</project>
+		<project>RobotMbed</project>
+		<project>RobotNAO</project>
+		<project>RobotNXT</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

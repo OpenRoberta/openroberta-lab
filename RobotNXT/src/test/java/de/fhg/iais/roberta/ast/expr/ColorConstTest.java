@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;

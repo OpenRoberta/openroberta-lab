@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.nxt.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -352,6 +352,21 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                 break;
             case "PickColor.WHITE":
                 value = "INPUT_WHITECOLOR";
+                break;
+            case "PickColor.PINK":
+                value = "INPUT_PINKCOLOR";
+                break;
+            case "PickColor.ORANGE":
+                value = "INPUT_ORANGECOLOR";
+                break;
+            case "PickColor.CHARTRESEUR":
+                value = "INPUT_CHARTRESEURCOLOR";
+                break;
+            case "PickColor.VIOLET":
+                value = "INPUT_VIOLETCOLOR";
+                break;
+            case "PickColor.MAGENTA":
+                value = "INPUT_MAGENTACOLOR";
                 break;
             default:
                 value = "NULL";

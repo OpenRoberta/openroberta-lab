@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
+import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
@@ -28,7 +29,8 @@ import de.fhg.iais.roberta.mode.action.nxt.BlinkMode;
 import de.fhg.iais.roberta.mode.action.nxt.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.action.nxt.ShowPicture;
-import de.fhg.iais.roberta.mode.general.WorkingState;
+import de.fhg.iais.roberta.mode.general.nxt.PickColor;
+import de.fhg.iais.roberta.mode.general.nxt.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.GyroSensorMode;
@@ -117,6 +119,25 @@ public class NxtFactory extends AbstractRobotFactory {
     public List<IActorPort> getActorPorts() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public IPickColor getPickColor(String color) {
+        if ( color == null || color.isEmpty() ) {
+            throw new DbcException("Invalid Color: " + color);
+        }
+        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
+        for ( PickColor po : PickColor.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Color: " + color);
     }
 
     @Override
