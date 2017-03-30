@@ -353,20 +353,23 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
             case "PickColor.WHITE":
                 value = "INPUT_WHITECOLOR";
                 break;
-            case "PickColor.PINK":
-                value = "INPUT_PINKCOLOR";
+            case "PickColor.MAGENTA":
+                value = "INPUT_MAGENTACOLOR";
                 break;
             case "PickColor.ORANGE":
                 value = "INPUT_ORANGECOLOR";
                 break;
-            case "PickColor.CHARTRESEUR":
-                value = "INPUT_CHARTRESEURCOLOR";
+            case "PickColor.LIME":
+                value = "INPUT_LIMECOLOR";
                 break;
             case "PickColor.VIOLET":
                 value = "INPUT_VIOLETCOLOR";
                 break;
-            case "PickColor.MAGENTA":
-                value = "INPUT_MAGENTACOLOR";
+            case "PickColor.CRIMSON":
+                value = "INPUT_CRIMSONCOLOR";
+                break;
+            case "PickColor.PURPLE":
+                value = "INPUT_PURPLECOLOR";
                 break;
             default:
                 value = "NULL";
