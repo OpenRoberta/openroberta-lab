@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Pašalinti komentarą";
 Blockly.Msg.RENAME_VARIABLE = "Pervardyti kintamajį...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Pervadinti visus '%1' kintamuosius į:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

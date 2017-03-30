@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "ಟಿಪ್ಪಣಿನ್ ದೆತ್ತ್‌ಪಾಡ್ಲೆ";
 Blockly.Msg.RENAME_VARIABLE = "ಬದಲಾವಣೆ ಆಯಿನ ಪುದರ್‍ನ್ ನಾನೊರೊ ಪನ್ಲೆ";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "ನಾನೊರೊ ಪುದರ್ ಬದಲಾವಣೆ ಆಯಿನ ಮಾಂತ '% 1':";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

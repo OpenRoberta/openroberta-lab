@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Паўтарыць";
 Blockly.Msg.REMOVE_COMMENT = "Выдаліць камэнтар";
 Blockly.Msg.RENAME_VARIABLE = "Перайменаваць зьменную…";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Перайменаваць усе назвы зьменных '%1' на:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "เอาคำอธิบายออก";
 Blockly.Msg.RENAME_VARIABLE = "เปลี่ยนชื่อตัวแปร...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "เปลี่ยนชื่อตัวแปร '%1' ทั้งหมดเป็น:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

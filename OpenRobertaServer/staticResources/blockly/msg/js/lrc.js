@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "نظر جا وه جا کو";
 Blockly.Msg.RENAME_VARIABLE = "د نو نوم نیائن آلشتگر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "د نو نوم نیائن %1 د تموم آلشتگریا د:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

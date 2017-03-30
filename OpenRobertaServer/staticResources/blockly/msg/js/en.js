@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";
 Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
 Blockly.Msg.RENAME_VARIABLE = "Rename variable...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";
+Blockly.Msg.RETURN = "return";
 Blockly.Msg.ROLL = "roll";
 Blockly.Msg.SEND_DATA = "data to send";
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";

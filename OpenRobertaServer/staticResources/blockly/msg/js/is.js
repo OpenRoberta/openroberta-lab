@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Endurtaka";
 Blockly.Msg.REMOVE_COMMENT = "Fjarlægja skýringu";
 Blockly.Msg.RENAME_VARIABLE = "Endurnefna breytu...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Endurnefna allar '%1' breyturnar:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Elimină comentariu";
 Blockly.Msg.RENAME_VARIABLE = "Redenumirea variabilei...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Redenumeşte toate variabilele '%1' în:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

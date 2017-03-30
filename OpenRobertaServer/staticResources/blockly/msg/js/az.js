@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Şərhi sil";
 Blockly.Msg.RENAME_VARIABLE = "Dəyişənin adını dəyiş...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Bütün '%1' dəyişənlərinin adını buna dəyiş:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

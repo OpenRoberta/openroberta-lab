@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "내용 제거";
 Blockly.Msg.RENAME_VARIABLE = "변수 이름 바꾸기:";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "'%1' 변수 이름을 바꾸기:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

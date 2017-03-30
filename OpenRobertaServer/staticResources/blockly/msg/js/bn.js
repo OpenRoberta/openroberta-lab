@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "পুনরায় করুন";
 Blockly.Msg.REMOVE_COMMENT = "মন্তব্য সরাও";
 Blockly.Msg.RENAME_VARIABLE = "চলকের নাম পরিবর্তন...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";  // untranslated
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

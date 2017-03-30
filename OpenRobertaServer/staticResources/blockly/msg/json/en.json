@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-03-28 13:27:17.829136",
+		"lastupdated": "2017-03-29 19:08:03.508520",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -442,6 +442,7 @@
 	"OFF": "off",
 	"FOR": "for",
 	"GET": "get",
+	"RETURN": "return",
 	"SET": "set",
 	"BRICK_WHEEL_DIAMETER": "wheel diameter",
 	"BRICK_TRACK_WIDTH": "track width",

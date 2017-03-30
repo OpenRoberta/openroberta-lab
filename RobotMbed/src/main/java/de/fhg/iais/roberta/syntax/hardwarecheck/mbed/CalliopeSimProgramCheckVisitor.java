@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
 public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisitor implements MbedAstVisitor<Void> {
@@ -200,19 +201,19 @@ public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisito
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        // TODO Auto-generated method stub
+        accelerometerSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
     public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
-        // TODO Auto-generated method stub
+        accelerometerOrientationSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
-        // TODO Auto-generated method stub
+        microphoneSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 }

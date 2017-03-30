@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "ဢဝ်ဢွၵ်ႇ ၶေႃႈၵႂၢမ်း";
 Blockly.Msg.RENAME_VARIABLE = "လိုမ်ႉၶိုၼ်း ဢၼ်လၢႆႈမႂ်ႇ";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "လိုမ်ႉၶိုၼ်း ဢၼ်လၢႆႈမႂ်ႇၸိူဝ်းၼၼ်ႉ '%1' ထိုင်";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

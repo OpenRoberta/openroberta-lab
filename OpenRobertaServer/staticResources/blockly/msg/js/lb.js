@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Widderhuelen";
 Blockly.Msg.REMOVE_COMMENT = "Bemierkung ewechhuelen";
 Blockly.Msg.RENAME_VARIABLE = "Variabel ëmbenennen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "All '%1' Variabelen ëmbenennen op:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

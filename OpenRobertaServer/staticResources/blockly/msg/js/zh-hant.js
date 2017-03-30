@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "重試";
 Blockly.Msg.REMOVE_COMMENT = "移除註解";
 Blockly.Msg.RENAME_VARIABLE = "重新命名變數...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "將所有 \"%1\" 變數重新命名為:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

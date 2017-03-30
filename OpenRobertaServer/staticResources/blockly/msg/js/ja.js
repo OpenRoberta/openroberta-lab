@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "やり直し";
 Blockly.Msg.REMOVE_COMMENT = "コメントを削除";
 Blockly.Msg.RENAME_VARIABLE = "変数の名前を変更.";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "%1の変数すべてを名前変更します。";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

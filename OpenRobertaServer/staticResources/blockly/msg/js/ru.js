@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Повторить";
 Blockly.Msg.REMOVE_COMMENT = "Удалить комментарий";
 Blockly.Msg.RENAME_VARIABLE = "Переименовать переменную…";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Переименовать все переменные '%1' в:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "данные, которые должны быть отосланы";
 Blockly.Msg.SENSOR_BATTERY = "Напряжение в В";

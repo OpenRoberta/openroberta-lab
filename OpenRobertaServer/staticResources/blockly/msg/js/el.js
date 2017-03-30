@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Αφαίρεσε Το Σχόλιο";
 Blockly.Msg.RENAME_VARIABLE = "Μετονόμασε τη μεταβλητή...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Μετονόμασε όλες τις μεταβλητές «%1» σε:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

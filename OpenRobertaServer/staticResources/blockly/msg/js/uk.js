@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Повторити";
 Blockly.Msg.REMOVE_COMMENT = "Видалити коментар";
 Blockly.Msg.RENAME_VARIABLE = "Перейменувати змінну...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Перейменувати усі змінні \"%1\" до:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

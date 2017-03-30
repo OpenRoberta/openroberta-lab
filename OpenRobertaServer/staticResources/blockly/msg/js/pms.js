@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Fé torna";
 Blockly.Msg.REMOVE_COMMENT = "Scancelé un coment";
 Blockly.Msg.RENAME_VARIABLE = "Arnomé la variàbil...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Arnomé tute le variàbij '%1' 'me:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

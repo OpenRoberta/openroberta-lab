@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "واگردانی";
 Blockly.Msg.REMOVE_COMMENT = "حذف نظر";
 Blockly.Msg.RENAME_VARIABLE = "تغییر نام متغیر...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "تغییر نام همهٔ متغیرهای «%1» به:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

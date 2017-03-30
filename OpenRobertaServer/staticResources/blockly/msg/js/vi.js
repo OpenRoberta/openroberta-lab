@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Xóa Chú Giải";
 Blockly.Msg.RENAME_VARIABLE = "Thay tên biến...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Thay tên tất cả \"%1\" biến này thành:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

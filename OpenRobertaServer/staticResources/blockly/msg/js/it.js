@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Ripeti";
 Blockly.Msg.REMOVE_COMMENT = "Rimuovi commento";
 Blockly.Msg.RENAME_VARIABLE = "Rinomina variabile...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rinomina tutte le variabili '%1' in:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "dati da inviare";
 Blockly.Msg.SENSOR_BATTERY = "Tensione in V";

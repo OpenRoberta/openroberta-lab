@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Redo";  // untranslated
 Blockly.Msg.REMOVE_COMMENT = "Odstrániť komentár";
 Blockly.Msg.RENAME_VARIABLE = "Premenovať premennú...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Premenovať všetky premenné '%1' na:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

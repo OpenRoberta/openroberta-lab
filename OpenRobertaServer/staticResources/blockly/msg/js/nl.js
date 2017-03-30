@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Opnieuw";
 Blockly.Msg.REMOVE_COMMENT = "Opmerking verwijderen";
 Blockly.Msg.RENAME_VARIABLE = "Variabele hernoemen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Alle variabelen \"%1\" hernoemen naar:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated

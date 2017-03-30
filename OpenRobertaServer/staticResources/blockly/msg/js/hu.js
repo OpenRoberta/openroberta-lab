@@ -902,6 +902,7 @@ Blockly.Msg.REDO = "Újra";
 Blockly.Msg.REMOVE_COMMENT = "Megjegyzés törlése";
 Blockly.Msg.RENAME_VARIABLE = "Változó átnevezése...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Minden \"%1\" változó átnevezése erre:";
+Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated
