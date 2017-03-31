@@ -1,17 +1,11 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ArduConfiguration;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -45,34 +39,16 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
@@ -86,19 +62,12 @@ import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -107,17 +76,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -129,20 +88,11 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code.</b> <br>
  */
-public class Ast2ArduVisitor implements AstVisitor<Void> {
+public class Ast2ArduVisitor extends Ast2CppVisitor {
     public static final String INDENT = "    ";
 
-    private final ArduConfiguration brickConfiguration;
-    private final StringBuilder sb = new StringBuilder();
-    private final Set<UsedSensor> usedSensors;
     private final boolean isTimeSensorUsed;
-    private int indentation;
     private final ArrayList<ArrayList<Phrase<Void>>> phrases;
-
-    private int loopCounter = 0;
-    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-
-    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the C code generator visitor.
@@ -151,16 +101,13 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-
     public Ast2ArduVisitor(
         ArrayList<ArrayList<Phrase<Void>>> phrases,
         ArduConfiguration brickConfiguration,
         UsedHardwareVisitor usedHardwareVisitor,
         int indentation) {
-        this.brickConfiguration = brickConfiguration;
-        this.indentation = indentation;
+        super(brickConfiguration, usedHardwareVisitor.getUsedSensors(), indentation);
         this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-        this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.phrases = phrases;
         this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
     }
@@ -180,157 +127,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         astVisitor.generatePrefix(withWrapping, phrasesSet);
         astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
         return astVisitor.sb.toString();
-    }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
-    }
-
-    @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append(numConst.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
-        return null;
-    };
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("PI");
-                break;
-            case E:
-                this.sb.append("M_E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("M_SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("M_SQRT1_2");
-                break;
-            // IEEE 754 floating point representation
-            case INFINITY:
-                this.sb.append("INFINITY");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("\"" + colorConst.getValue() + "\"");
-        return null;
-    }
-
-    @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
-
-        this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
-
-        return null;
-    }
-
-    @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("NULL");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append(var.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
-        this.sb.append(var.getName());
-        if ( var.getTypeVar().isArray() ) {
-            if ( var.toString().contains("false, false") ) {
-                this.sb.append("[]");
-            } else {
-                this.sb.append("Raw");
-                if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
-                    || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
-                    || var.getValue().toString().equals("ListCreate [STRING, ]")
-                    || var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                    this.sb.append("[0];");
-                    nlIndent();
-                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
-                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
-                } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
-                    this.sb.append("[3]");
-                } else {
-                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    this.sb.append("[" + list.getValue().get().size() + "]");
-                }
-                if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
-                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    if ( list.getValue().get().size() == 0 ) {
-                        return null;
-                    }
-                }
-            }
-
-        }
-
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(";");
-                    nlIndent();
-                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
-                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitUnary(Unary<Void> unary) {
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
-            this.sb.append(unary.getOp().getOpSymbol());
-        } else {
-            this.sb.append(unary.getOp().getOpSymbol());
-            generateExprCode(unary, this.sb);
-        }
-        return null;
     }
 
     @Override
@@ -356,112 +152,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
 
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal() ) {
-            case STRING:
-                this.sb.append("\"\"");
-                break;
-            case BOOLEAN:
-                this.sb.append("true");
-                break;
-            case NUMBER_INT:
-                this.sb.append("0");
-                break;
-            case ARRAY:
-                break;
-            case NULL:
-                break;
-            default:
-                this.sb.append("null");
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        boolean first = true;
-        for ( final Expr<Void> expr : exprList.get() ) {
-            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    this.sb.append(", ");
-                }
-                expr.visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
         }
         return null;
     }
@@ -540,33 +230,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("}");
         addBreakLabelToLoop(isWaitStmt);
 
-        return null;
-    }
-
-    @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
-                return null;
-            }
-        }
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
-        return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( final Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
-        }
         return null;
     }
 
@@ -1034,53 +697,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
-    }
-
-    //not used
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        functionExpr.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        return null;
-
-    }
-
-    @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
             this.sb.append("null");
@@ -1100,7 +716,7 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
+            this.sb.append("NULL");
             return null;
         }
         if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
@@ -1110,11 +726,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         } else {
             arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
         }
-        return null;
-    }
-
-    @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
         return null;
     }
 
@@ -1316,64 +927,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        switch ( mathSingleFunct.getFunctName() ) {
-            case ROOT:
-                this.sb.append("sqrt(");
-                break;
-            case ABS:
-                this.sb.append("abs(");
-                break;
-            case LN:
-                this.sb.append("log(");
-                break;
-            case LOG10:
-                this.sb.append("log10(");
-                break;
-            case EXP:
-                this.sb.append("exp(");
-                break;
-            case POW10:
-                this.sb.append("pow(10.0, ");
-                break;
-            case SIN:
-                this.sb.append("sin(PI / 180.0 * ");
-                break;
-            case COS:
-                this.sb.append("cos(PI / 180.0 * ");
-                break;
-            case TAN:
-                this.sb.append("tan(PI / 180.0 * ");
-                break;
-            case ASIN:
-                this.sb.append("180.0 / PI * asin(");
-                break;
-            case ATAN:
-                this.sb.append("180.0 / PI * atan(");
-                break;
-            case ACOS:
-                this.sb.append("180.0 / PI * acos(");
-                break;
-            case ROUND:
-                this.sb.append("round(");
-                break;
-            case ROUNDUP:
-                this.sb.append("ceil(");
-                break;
-            //check why there are double brackets
-            case ROUNDDOWN:
-                this.sb.append("floor(");
-                break;
-            default:
-                break;
-        }
-        mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-
-        return null;
-    }
-
-    @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append("pow(");
         mathPowerFunct.getParam().get(0).visit(this);
@@ -1385,61 +938,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append("void ");
-        this.sb.append(methodVoid.getMethodName() + "(");
-        methodVoid.getParameters().visit(this);
-        this.sb.append(") {");
-        methodVoid.getBody().visit(this);
-        this.sb.append("\n").append("}");
-        return null;
-    }
-
-    @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
-        this.sb.append(" " + methodReturn.getMethodName() + "(");
-        methodReturn.getParameters().visit(this);
-        this.sb.append(") {");
-        methodReturn.getBody().visit(this);
-        this.nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append("}");
-        return null;
-    }
-
-    @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        this.sb.append("if (");
-        methodIfReturn.getCondition().visit(this);
-        this.sb.append(") ");
-        this.sb.append("return ");
-        methodIfReturn.getReturnValue().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
-        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
-            this.sb.append(";");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
-        this.sb.append(")");
-        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            this.sb.append(";");
-        }
         return null;
     }
 
@@ -1465,41 +963,12 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
         return null;
-    }
-
-    private void incrIndentation() {
-        this.indentation += 1;
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-    }
-
-    private void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
-            }
-        }
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n");
-        indent();
-    }
-
-    private String whitespace() {
-        return " ";
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
@@ -1515,45 +984,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
             expr.visit(this);
             sb.append(")");
         }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
-            decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                nlIndent();
-                this.sb.append("}").append(whitespace());
-            }
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-        nlIndent();
-        this.sb.append("}");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
@@ -1670,21 +1100,6 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         this.sb.append("\n}\n");
     }
 
-    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                    }
-
-                }
-            }
-        }
-    }
-
     private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2ArduVisitor astVisitor) {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
@@ -1719,62 +1134,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
-    private String getBlocklyTypeCode(BlocklyType type) {
-        switch ( type ) {
-            case ANY:
-            case COMPARABLE:
-            case ADDABLE:
-            case NULL:
-            case REF:
-            case PRIM:
-            case NOTHING:
-            case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
-                return "";
-            case ARRAY:
-                return "double";
-            case ARRAY_NUMBER:
-                return "double";
-            case ARRAY_STRING:
-                return "String";
-            case ARRAY_BOOLEAN:
-                return "bool";
-            case BOOLEAN:
-                return "bool";
-            case NUMBER:
-                return "double";
-            case NUMBER_INT:
-                return "int";
-            case STRING:
-                return "String";
-            case VOID:
-                return "void";
-            case COLOR:
-                return "String";
-            case CONNECTION:
-                return "int";
-            default:
-                throw new IllegalArgumentException("unhandled type");
-        }
-    }
-
-    private String getEnumCode(IMode value) {
-        return value.getClass().getSimpleName() + "." + value;
-    }
-
     private void arrayLen(Var<Void> arr) {
         this.sb.append("sizeof(" + arr.getValue() + "Raw" + ")/sizeof(" + arr.getValue() + "Raw" + "[0])");
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
     private void addContinueLabelToLoop() {
@@ -1794,9 +1155,8 @@ public class Ast2ArduVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void increaseLoopCounter() {
-        this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        return null;
     }
-
 }

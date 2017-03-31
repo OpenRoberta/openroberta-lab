@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -29,6 +28,7 @@ import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
@@ -62,22 +62,22 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
- * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C++ code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct C++ code.</b> <br>
  */
-public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
+public abstract class Ast2CppVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
+
+    protected final Configuration brickConfiguration;
 
     protected final StringBuilder sb = new StringBuilder();
     protected final Set<UsedSensor> usedSensors;
-    protected final Configuration brickConfiguration;
-    protected final String programName;
 
     private int indentation;
-    private int loopCounter = 0;
+    protected int loopCounter = 0;
 
-    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-    private Map<Integer, Boolean> loopsLabels;
+    protected LinkedList<Integer> currenLoop = new LinkedList<Integer>();
+    protected Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Java code generator visitor.
@@ -87,8 +87,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public Ast2JavaVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
-        this.programName = programName;
+    public Ast2CppVisitor(Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
         this.usedSensors = usedSensors;
@@ -114,13 +113,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
-        if ( isInteger(numConst.getValue()) ) {
-            this.sb.append(numConst.getValue());
-        } else {
-            this.sb.append("((float) ");
-            this.sb.append(numConst.getValue());
-            this.sb.append(")");
-        }
+        this.sb.append(numConst.getValue());
         return null;
     }
 
@@ -134,22 +127,23 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("BlocklyMethods.PI");
+                this.sb.append("PI");
                 break;
             case E:
-                this.sb.append("BlocklyMethods.E");
+                this.sb.append("M_E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
+                this.sb.append("GOLDEN_RATIO");
                 break;
             case SQRT2:
-                this.sb.append("BlocklyMethods.sqrt(2)");
+                this.sb.append("M_SQRT2");
                 break;
             case SQRT1_2:
-                this.sb.append("BlocklyMethods.sqrt(1.0/2.0)");
+                this.sb.append("M_SQRT1_2");
                 break;
+            // IEEE 754 floating point representation
             case INFINITY:
-                this.sb.append("Float.POSITIVE_INFINITY");
+                this.sb.append("INFINITY");
                 break;
             default:
                 break;
@@ -159,19 +153,21 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
+        this.sb.append("\"" + colorConst.getValue() + "\"");
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
+
         this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
+
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("null");
+        this.sb.append("NULL");
         return null;
     }
 
@@ -185,6 +181,35 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
+        if ( var.getTypeVar().isArray() ) {
+            if ( var.toString().contains("false, false") ) {
+                this.sb.append("[]");
+            } else {
+                this.sb.append("Raw");
+                if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
+                    || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
+                    || var.getValue().toString().equals("ListCreate [STRING, ]")
+                    || var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                    this.sb.append("[0];");
+                    nlIndent();
+                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
+                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
+                } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
+                    this.sb.append("[3]");
+                } else {
+                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                    this.sb.append("[" + list.getValue().get().size() + "]");
+                }
+                if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
+                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                    if ( list.getValue().get().size() == 0 ) {
+                        return null;
+                    }
+                }
+            }
+
+        }
+
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" = ");
             if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
@@ -196,6 +221,12 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
                 }
             } else {
                 var.getValue().visit(this);
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(";");
+                    nlIndent();
+                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
+                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
+                }
             }
         }
         return null;
@@ -279,7 +310,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             case NULL:
                 break;
             default:
-                this.sb.append("null");
+                this.sb.append("NULL");
                 break;
         }
         return null;
@@ -419,7 +450,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
             if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("if (true) " + stmtFlowCon.getFlow().toString().toLowerCase() + " loop" + this.currenLoop.getLast() + ";");
+                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
                 return null;
             }
         }
@@ -458,25 +489,16 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        this.sb.append("System.out.println(");
-        textPrintFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append(
-            "new ArrayList<"
-                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
-                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
-                + ">()");
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        this.sb.append("BlocklyMethods.");
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
                 this.sb.append("sqrt(");
@@ -494,25 +516,25 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
                 this.sb.append("exp(");
                 break;
             case POW10:
-                this.sb.append("pow(10, ");
+                this.sb.append("pow(10.0, ");
                 break;
             case SIN:
-                this.sb.append("sin(");
+                this.sb.append("sin(PI / 180.0 * ");
                 break;
             case COS:
-                this.sb.append("cos(");
+                this.sb.append("cos(PI / 180.0 * ");
                 break;
             case TAN:
-                this.sb.append("tan(");
+                this.sb.append("tan(PI / 180.0 * ");
                 break;
             case ASIN:
-                this.sb.append("asin(");
+                this.sb.append("180.0 / PI * asin(");
                 break;
             case ATAN:
-                this.sb.append("atan(");
+                this.sb.append("180.0 / PI * atan(");
                 break;
             case ACOS:
-                this.sb.append("acos(");
+                this.sb.append("180.0 / PI * acos(");
                 break;
             case ROUND:
                 this.sb.append("round(");
@@ -520,6 +542,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             case ROUNDUP:
                 this.sb.append("ceil(");
                 break;
+            //check why there are double brackets
             case ROUNDDOWN:
                 this.sb.append("floor(");
                 break;
@@ -534,18 +557,18 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append(INDENT).append("private void ");
+        this.sb.append("\n").append("void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
         this.sb.append(") {");
         methodVoid.getBody().visit(this);
-        this.sb.append("\n").append(INDENT).append("}");
+        this.sb.append("\n").append("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append("private " + getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -553,7 +576,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         this.nlIndent();
         this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append(INDENT).append("}");
+        this.sb.append(";\n").append("}");
         return null;
     }
 
@@ -587,7 +610,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    protected String getBlocklyTypeCode(BlocklyType type) {
+    private String getBlocklyTypeCode(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -602,29 +625,27 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             case T:
                 return "";
             case ARRAY:
-                return "List";
+                return "double";
             case ARRAY_NUMBER:
-                return "ArrayList<Float>";
+                return "double";
             case ARRAY_STRING:
-                return "ArrayList<String>";
-            case ARRAY_COLOUR:
-                return "ArrayList<PickColor>";
+                return "String";
             case ARRAY_BOOLEAN:
-                return "ArrayList<Boolean>";
+                return "bool";
             case BOOLEAN:
-                return "boolean";
+                return "bool";
             case NUMBER:
-                return "float";
+                return "double";
             case NUMBER_INT:
                 return "int";
             case STRING:
                 return "String";
-            case COLOR:
-                return "PickColor";
             case VOID:
                 return "void";
+            case COLOR:
+                return "String";
             case CONNECTION:
-                return "NXTConnection";
+                return "int";
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
@@ -678,17 +699,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             }
         }
     }
-
-    protected void genearateCode(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        this.loopsLabels = new LoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
-        generatePrefix(phrasesSet, withWrapping);
-        generateCodeFromPhrases(phrasesSet, withWrapping);
-        generateSuffix(withWrapping);
-    }
-
-    abstract protected void generatePrefix(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping);
-
-    abstract protected void generateSuffix(boolean withWrapping);
 
     private boolean isStringExpr(Expr<Void> e) {
         switch ( e.getKind().getName() ) {
@@ -857,15 +867,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         this.sb.append("break;");
     }
 
-    private boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( NumberFormatException e ) {
-            return false;
-        }
-    }
-
     private boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             nlIndent();
@@ -875,7 +876,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         return mainBlock;
     }
 
-    private void increaseLoopCounter() {
+    protected void increaseLoopCounter() {
         this.loopCounter++;
         this.currenLoop.add(this.loopCounter);
     }

@@ -9,7 +9,7 @@ public class ListsLengthTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "null";
+        final String a = "NULL";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_length.xml", false);
     }
