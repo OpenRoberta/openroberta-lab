@@ -284,7 +284,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("\n").append(this.indent);
     }
 
-    private static String getEnumCode(IMode value) {
+    @Override
+    public String getEnumCode(IMode value) {
         return "'" + value.toString().toLowerCase() + "'";
     }
 
@@ -471,7 +472,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
             case NULL:
                 break;
             case COLOR:
-            	break;
+                break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;

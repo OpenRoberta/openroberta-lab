@@ -3,18 +3,12 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
@@ -22,52 +16,36 @@ import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
-import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
-    public static final String INDENT = "    ";
+public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
 
-    protected final Configuration brickConfiguration;
-    protected final StringBuilder sb = new StringBuilder();
     protected final Set<UsedSensor> usedSensors;
     protected final Set<UsedActor> usedActors;
     protected final Set<String> usedGlobalVarInFunctions;
-    protected int indentation;
     protected final StringBuilder indent = new StringBuilder();
     protected boolean isProgramEmpty = false;
 
@@ -80,14 +58,12 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     Ast2PythonVisitor(
-        String programName,
         Configuration brickConfiguration,
         Set<UsedSensor> usedSensors,
         Set<UsedActor> usedActors,
         Set<String> usedGlobalVarInFunctions,
         int indentation) {
-        this.brickConfiguration = brickConfiguration;
-        this.indentation = indentation;
+        super(brickConfiguration, indentation);
         this.usedSensors = usedSensors;
         this.usedActors = usedActors;
         this.usedGlobalVarInFunctions = usedGlobalVarInFunctions;
@@ -131,31 +107,26 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         return phrase.getKind().getName().equals("MAIN_TASK");
     }
 
+    @Override
     protected void incrIndentation() {
-        this.indentation += 1;
+        super.incrIndentation();
         this.indent.append(INDENT);
     }
 
+    @Override
     protected void decrIndentation() {
-        this.indentation -= 1;
+        super.decrIndentation();
         this.indent.delete(0, INDENT.length());
     }
 
-    protected void nlIndent() {
+    @Override
+    public void nlIndent() {
         this.sb.append("\n").append(this.indent);
     }
 
-    protected static String getEnumCode(IMode value) {
+    @Override
+    public String getEnumCode(IMode value) {
         return "'" + value.toString().toLowerCase() + "'";
-    }
-
-    protected boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( NumberFormatException e ) {
-            return false;
-        }
     }
 
     private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
@@ -193,17 +164,8 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+    @Override
+    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
         this.sb.append(" if ( ");
         ifStmt.getExpr().get(0).visit(this);
@@ -211,7 +173,8 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+    @Override
+    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
@@ -231,7 +194,8 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
+    @Override
+    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
             nlIndent();
             this.sb.append("else:");
@@ -266,24 +230,6 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
 
     public void setProgramIsEmpty(boolean isEmpty) {
         this.isProgramEmpty = isEmpty;
-    }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    public int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
     }
 
     @Override
@@ -338,20 +284,8 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
-        return null;
-    }
-
-    @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
         this.sb.append("None");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append(var.getValue());
         return null;
     }
 
@@ -417,24 +351,6 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
@@ -453,85 +369,6 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        functionExpr.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        boolean first = true;
-        for ( Expr<Void> expr : exprList.get() ) {
-            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    if ( expr.getKind().hasName("BINARY", "UNARY") ) {
-                        this.sb.append("; "); // FIXME
-                    } else {
-                        this.sb.append(", ");
-                    }
-                }
-                expr.visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
         }
         return null;
     }
@@ -576,44 +413,9 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
     }
 
     @Override
@@ -742,10 +544,7 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
-        this.sb.append(")");
-        return null;
+    protected String getBlocklyTypeCode(BlocklyType type) {
+        return "";
     }
 }

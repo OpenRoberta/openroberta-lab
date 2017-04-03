@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -1513,10 +1512,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         indent();
     }
 
-    private String whitespace() {
-        return " ";
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
@@ -1751,10 +1746,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
-    }
-
-    private String getEnumCode(IMode value) {
-        return value.getClass().getSimpleName() + "." + value;
     }
 
     private void generateCodeFromTernary(IfStmt<Void> ifStmt) {

@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -259,10 +258,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
-    }
-
-    private static String getEnumCode(IMode value) {
-        return value.getClass().getSimpleName() + "." + value;
     }
 
     /**
@@ -1649,10 +1644,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
     private void nlIndent() {
         this.sb.append("\n");
         indent();
-    }
-
-    private String whitespace() {
-        return " ";
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {

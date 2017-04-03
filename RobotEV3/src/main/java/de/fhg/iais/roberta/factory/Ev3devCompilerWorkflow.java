@@ -43,7 +43,7 @@ public class Ev3devCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = Ast2Ev3PythonVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
         try {
             storeGeneratedProgram(token, programName, sourceCode);
         } catch ( Exception e ) {
@@ -75,7 +75,7 @@ public class Ev3devCompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return Ast2Ev3PythonVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     /**

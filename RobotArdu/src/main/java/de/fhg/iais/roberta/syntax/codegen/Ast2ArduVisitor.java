@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ArduConfiguration;
@@ -43,6 +44,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
+import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
@@ -63,6 +65,7 @@ import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -89,10 +92,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct C code.</b> <br>
  */
 public class Ast2ArduVisitor extends Ast2CppVisitor {
-    public static final String INDENT = "    ";
 
     private final boolean isTimeSensorUsed;
     private final ArrayList<ArrayList<Phrase<Void>>> phrases;
+    private final Set<UsedSensor> usedSensors;
 
     /**
      * initialize the C code generator visitor.
@@ -106,7 +109,8 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         ArduConfiguration brickConfiguration,
         UsedHardwareVisitor usedHardwareVisitor,
         int indentation) {
-        super(brickConfiguration, usedHardwareVisitor.getUsedSensors(), indentation);
+        super(brickConfiguration, indentation);
+        this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
         this.phrases = phrases;
         this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
@@ -1157,6 +1161,18 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append("\"" + colorConst.getValue() + "\"");
+        return null;
+    }
+
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

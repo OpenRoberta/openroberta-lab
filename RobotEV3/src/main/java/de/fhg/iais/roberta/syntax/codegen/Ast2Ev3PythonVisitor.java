@@ -84,8 +84,6 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
-    public static final String INDENT = "    ";
-
     /**
      * initialize the Python code generator visitor.
      *
@@ -95,13 +93,12 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     private Ast2Ev3PythonVisitor(
-        String programName,
         Configuration brickConfiguration,
         Set<UsedSensor> usedSensors,
         Set<UsedActor> usedActors,
         Set<String> usedGlobalVarInFunctions,
         int indentation) {
-        super(programName, brickConfiguration, usedSensors, usedActors, usedGlobalVarInFunctions, indentation);
+        super(brickConfiguration, usedSensors, usedActors, usedGlobalVarInFunctions, indentation);
     }
 
     /**
@@ -111,9 +108,8 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
-        Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
@@ -122,7 +118,6 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
 
         Ast2Ev3PythonVisitor astVisitor =
             new Ast2Ev3PythonVisitor(
-                programName,
                 brickConfiguration,
                 checkVisitor.getUsedSensors(),
                 checkVisitor.getUsedActors(),
@@ -880,7 +875,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         sb.append("    },\n");
     }
 
-    private static String generateRegenerateActor(Actor actor, IActorPort port) {
+    private String generateRegenerateActor(Actor actor, IActorPort port) {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;

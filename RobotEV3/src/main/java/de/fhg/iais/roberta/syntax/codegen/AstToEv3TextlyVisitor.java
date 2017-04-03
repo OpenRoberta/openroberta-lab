@@ -697,10 +697,6 @@ public class AstToEv3TextlyVisitor implements AstVisitor<Void> {
         indent();
     }
 
-    private String whitespace() {
-        return " ";
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }

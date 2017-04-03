@@ -1,23 +1,15 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
@@ -33,51 +25,31 @@ import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
-    public static final String INDENT = "    ";
-
-    protected final StringBuilder sb = new StringBuilder();
+public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     protected final Set<UsedSensor> usedSensors;
-    protected final Configuration brickConfiguration;
     protected final String programName;
-
-    private int indentation;
-    private int loopCounter = 0;
-
-    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Java code generator visitor.
@@ -88,28 +60,9 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     public Ast2JavaVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
+        super(brickConfiguration, indentation);
         this.programName = programName;
-        this.brickConfiguration = brickConfiguration;
-        this.indentation = indentation;
         this.usedSensors = usedSensors;
-    }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    public int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
     }
 
     @Override
@@ -164,52 +117,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
-        return null;
-    }
-
-    @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
         this.sb.append("null");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append(var.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
-        this.sb.append(var.getName());
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitUnary(Unary<Void> unary) {
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
-            this.sb.append(unary.getOp().getOpSymbol());
-        } else {
-            this.sb.append(unary.getOp().getOpSymbol());
-            generateExprCode(unary, this.sb);
-        }
         return null;
     }
 
@@ -239,30 +148,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case STRING:
@@ -286,67 +171,16 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        functionExpr.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        boolean first = true;
-        for ( Expr<Void> expr : exprList.get() ) {
-            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    this.sb.append(", ");
-                }
-                expr.visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
+        super.visitAssignStmt(assignStmt);
         this.sb.append(";");
         return null;
     }
 
     @Override
     public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
+        super.visitExprStmt(exprStmt);
         this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
-        }
         return null;
     }
 
@@ -389,7 +223,7 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         if ( !isWaitStmt ) {
             this.currenLoop.removeLast();
         } else {
-            appendBreakStmt(repeatStmt);
+            appendBreakStmt();
         }
         decrIndentation();
         nlIndent();
@@ -403,14 +237,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
+        super.visitFunctionStmt(functionStmt);
         this.sb.append(";");
         return null;
     }
@@ -425,35 +253,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
         return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
     }
 
     @Override
@@ -578,15 +377,14 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
-        this.sb.append(")");
+        super.visitMethodCall(methodCall);
         if ( methodCall.getReturnType() == BlocklyType.VOID ) {
             this.sb.append(";");
         }
         return null;
     }
 
+    @Override
     protected String getBlocklyTypeCode(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -628,37 +426,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
-    }
-
-    protected String getEnumCode(IMode value) {
-        return value.getClass().getSimpleName() + "." + value;
-    }
-
-    protected void incrIndentation() {
-        this.indentation += 1;
-    }
-
-    protected void decrIndentation() {
-        this.indentation -= 1;
-    }
-
-    protected void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
-            }
-        }
-    }
-
-    protected void nlIndent() {
-        this.sb.append("\n");
-        indent();
-    }
-
-    protected String whitespace() {
-        return " ";
     }
 
     protected void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -752,17 +519,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+    @Override
+    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         this.sb.append("(" + whitespace());
         ifStmt.getExpr().get(0).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
@@ -771,7 +529,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+    @Override
+    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
@@ -788,7 +547,8 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         }
     }
 
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
+    @Override
+    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
@@ -852,18 +612,9 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
         this.sb.append(")");
     }
 
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+    private void appendBreakStmt() {
         nlIndent();
         this.sb.append("break;");
-    }
-
-    private boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( NumberFormatException e ) {
-            return false;
-        }
     }
 
     private boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
@@ -873,11 +624,6 @@ public abstract class Ast2JavaVisitor implements AstVisitor<Void> {
             mainBlock = true;
         }
         return mainBlock;
-    }
-
-    private void increaseLoopCounter() {
-        this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
     }
 
     private void addLabelToLoop() {

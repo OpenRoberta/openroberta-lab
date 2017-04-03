@@ -1409,10 +1409,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("\n").append(this.indent);
     }
 
-    private static String getEnumCode(IMode value) {
-        return value.toString().toLowerCase();
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Binary.Op.MINUS
             && binary.getRight().getKind().hasName("BINARY")
@@ -1626,6 +1622,11 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public String getEnumCode(IMode value) {
+        return value.toString().toLowerCase();
     }
 
 }
