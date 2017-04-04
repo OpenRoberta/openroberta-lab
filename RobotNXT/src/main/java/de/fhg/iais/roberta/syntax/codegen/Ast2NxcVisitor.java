@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -156,31 +155,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            this.sb.append("\n}\n");
-        }
-    }
-
-    @Override
-    protected void generateProgramMainBody(boolean withWrapping) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(mainBlock, phrase);
-                    phrase.visit(this);
-                }
-                if ( mainBlock ) {
-                    generateSuffix(withWrapping);
-                    mainBlock = false;
-                }
-            }
-        }
-
     }
 
     @Override
@@ -1622,7 +1596,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        // TODO Auto-generated method stub
+        if ( withWrapping ) {
+            this.sb.append("\n}\n");
+        }
 
     }
 

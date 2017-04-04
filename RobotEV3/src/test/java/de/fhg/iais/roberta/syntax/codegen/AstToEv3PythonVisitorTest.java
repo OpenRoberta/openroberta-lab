@@ -605,6 +605,7 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
+
             + "if True:\n"
             + "    print(\"1\")\n"
             + "    print(\"8\")\n"

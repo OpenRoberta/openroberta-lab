@@ -63,12 +63,13 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     protected void generateProgramMainBody(boolean withWrapping) {
         boolean mainBlock = false;
         boolean debugging = false;
+
         for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
             boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
             if ( isCreateMethodPhrase ) {
                 for ( Phrase<Void> phrase : phrases ) {
                     mainBlock = handleMainBlocks(mainBlock, phrase);
-                    if ( mainBlock && phrase.getKind().hasName("MAIN_TASK") ) {
+                    if ( mainBlock && isMainBlock(phrase) ) {
                         debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
                     }
                     phrase.visit(this);
@@ -599,15 +600,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     private void appendBreakStmt() {
         nlIndent();
         this.sb.append("break;");
-    }
-
-    private boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
     }
 
     private void addLabelToLoop() {

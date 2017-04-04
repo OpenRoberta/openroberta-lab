@@ -5,7 +5,6 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ArduConfiguration;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -1101,31 +1100,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         this.sb.append("\n}\n");
     }
 
-    @Override
-    protected void generateProgramMainBody(boolean withWrapping) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(mainBlock, phrase);
-                    phrase.visit(this);
-                }
-                if ( mainBlock ) {
-                    generateSuffix(withWrapping);
-                    mainBlock = false;
-                }
-            }
-        }
-
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            this.sb.append("\n}\n");
-        }
-    }
-
     private void arrayLen(Var<Void> arr) {
         this.sb.append("sizeof(" + arr.getValue() + "Raw" + ")/sizeof(" + arr.getValue() + "Raw" + "[0])");
     }
@@ -1166,8 +1140,9 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        // TODO Auto-generated method stub
-
+        if ( withWrapping ) {
+            this.sb.append("\n}\n");
+        }
     }
 
 }

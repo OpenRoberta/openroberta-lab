@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -33,7 +35,6 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  * StringBuilder. <b>This representation is correct C++ code.</b> <br>
  */
 public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
-    protected ArrayList<ArrayList<Phrase<Void>>> phrases;
 
     /**
      * initialize the cpp code generator visitor.
@@ -42,6 +43,24 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
      */
     public Ast2CppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
+    }
+
+    @Override
+    protected void generateProgramMainBody(boolean withWrapping) {
+        List<Phrase<Void>> mainBodyPhrases =
+            this.programPhrases
+                .stream()
+                .filter(phrases -> phrases.get(1).getKind().getCategory() != Category.METHOD)
+                .flatMap(e -> e.subList(1, e.size()).stream())
+                .collect(Collectors.toList());
+        incrIndentation();
+
+        mainBodyPhrases.forEach(p -> {
+            p.visit(this);
+            nlIndent();
+        });
+
+        decrIndentation();
     }
 
     @Override
@@ -491,15 +510,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     private void appendBreakStmt() {
         nlIndent();
         this.sb.append("break;");
-    }
-
-    protected boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
     }
 
     private void addLabelToLoop() {

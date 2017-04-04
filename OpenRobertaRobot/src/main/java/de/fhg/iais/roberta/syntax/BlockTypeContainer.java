@@ -39,7 +39,7 @@ public class BlockTypeContainer {
         add("SENSOR_STMT", Category.STMT);
         add("FUNCTION_STMT", Category.STMT);
         add("METHOD_STMT", Category.STMT);
-        add("LOCATION", Category.TASK);
+        add("LOCATION", Category.HELPER);
         add("TEXT_CHAR_AT_FUNCT", Category.FUNCTION);
         add("TEXT_TRIM_FUNCT", Category.FUNCTION);
         add("TEXT_PROMPT_FUNCT", Category.FUNCTION);

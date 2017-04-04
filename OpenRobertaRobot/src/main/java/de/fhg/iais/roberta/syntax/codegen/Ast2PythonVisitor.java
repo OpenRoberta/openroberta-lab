@@ -61,7 +61,7 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
             for ( Phrase<Void> phrase : phrases ) {
-                if ( phrase.getKind().getCategory() != Category.TASK ) {
+                if ( phrase.getKind().getCategory() != Category.TASK && phrase.getKind().getCategory() != Category.HELPER ) {
                     nlIndent();
                 }
                 mainBlock = isMainBlock(phrase);
@@ -519,7 +519,4 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         return phrases.size() == 2;
     }
 
-    protected boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
-    }
 }

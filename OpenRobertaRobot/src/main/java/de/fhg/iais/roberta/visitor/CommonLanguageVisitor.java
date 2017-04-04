@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
@@ -235,6 +236,19 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
 
     protected String getEnumCode(IMode value) {
         return value.getClass().getSimpleName() + "." + value;
+    }
+
+    protected boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
+        if ( phrase.getKind().getCategory() != Category.TASK ) {
+            nlIndent();
+        } else if ( !phrase.getKind().hasName("LOCATION") ) {
+            mainBlock = true;
+        }
+        return mainBlock;
+    }
+
+    protected boolean isMainBlock(Phrase<Void> phrase) {
+        return phrase.getKind().getName().equals("MAIN_TASK");
     }
 
     abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);

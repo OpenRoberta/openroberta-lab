@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -172,7 +171,7 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
@@ -730,12 +729,12 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        this.sb.append("int initTime = uBit.systemTime(); \n");
         decrIndentation();
+        this.sb.append("int initTime = uBit.systemTime(); \n");
         mainTask.getVariables().visit(this);
-        incrIndentation();
         this.sb.append("\n");
         generateUserDefinedMethods();
+        incrIndentation();
         this.sb.append("\n");
         this.sb.append("int main() \n");
         this.sb.append("{");
@@ -754,6 +753,7 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
             nlIndent();
             this.sb.append("uBit.accelerometer.updateSample();");
         }
+
         return null;
     }
 
@@ -1457,7 +1457,7 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         this.sb.append("#include \"MicroBit.h\" \n");
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("MicroBit uBit; \n \n");
+        this.sb.append("MicroBit uBit;\n\n");
     }
 
     @Override
@@ -1499,17 +1499,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
 
     private void arrayLen(Var<Void> arr) {
         this.sb.append(arr.getValue() + ".size()");
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            nlIndent();
-            // If main exits, there may still be other fibers running or registered event handlers etc.
-            // Simply release this fiber, which will mean we enter the scheduler. Worse case, we then
-            // sit in the idle task forever, in a power efficient sleep.
-            this.sb.append("release_fiber();");
-            this.sb.append("\n}\n");
-        }
     }
 
     @Override
@@ -1583,28 +1572,14 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
     }
 
     @Override
-    protected void generateProgramMainBody(boolean withWrapping) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(mainBlock, phrase);
-                    phrase.visit(this);
-                }
-                if ( mainBlock ) {
-                    generateSuffix(withWrapping);
-                    mainBlock = false;
-                }
-            }
-        }
-
-    }
-
-    @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        // TODO Auto-generated method stub
-
+        incrIndentation();
+        if ( withWrapping ) {
+            nlIndent();
+            this.sb.append("release_fiber();");
+            this.sb.append("\n}\n");
+        }
+        decrIndentation();
     }
 
 }
