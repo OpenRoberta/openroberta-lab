@@ -1,11 +1,13 @@
 package de.fhg.iais.roberta.visitor;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
@@ -22,7 +24,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
-    protected final Configuration brickConfiguration;
+    protected ArrayList<ArrayList<Phrase<Void>>> programPhrases;
 
     protected int indentation;
 
@@ -35,11 +37,10 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
     /**
      * initialize the common language code generator visitor.
      *
-     * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public CommonLanguageVisitor(Configuration brickConfiguration, int indentation) {
-        this.brickConfiguration = brickConfiguration;
+    public CommonLanguageVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        this.programPhrases = programPhrases;
         this.indentation = indentation;
     }
 
@@ -59,6 +60,12 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
      */
     public StringBuilder getSb() {
         return this.sb;
+    }
+
+    protected void generateCode(boolean withWrapping) {
+        generateProgramPrefix(withWrapping);
+        generateProgramMainBody(withWrapping);
+        generateProgramSuffix(withWrapping);
     }
 
     @Override
@@ -87,7 +94,7 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             this.sb.append(" = ");
@@ -175,8 +182,6 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
         return null;
     }
 
-    protected abstract String getBlocklyTypeCode(BlocklyType type);
-
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
             sb.append("(");
@@ -224,10 +229,26 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
         this.currenLoop.add(this.loopCounter);
     }
 
-    protected abstract void generateCodeFromTernary(IfStmt<Void> ifStmt);
+    protected String whitespace() {
+        return " ";
+    }
 
-    protected abstract void generateCodeFromIfElse(IfStmt<Void> ifStmt);
+    protected String getEnumCode(IMode value) {
+        return value.getClass().getSimpleName() + "." + value;
+    }
 
-    protected abstract void generateCodeFromElse(IfStmt<Void> ifStmt);
+    abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);
+
+    abstract protected void generateCodeFromTernary(IfStmt<Void> ifStmt);
+
+    abstract protected void generateCodeFromIfElse(IfStmt<Void> ifStmt);
+
+    abstract protected void generateCodeFromElse(IfStmt<Void> ifStmt);
+
+    abstract protected void generateProgramMainBody(boolean withWrapping);
+
+    abstract protected void generateProgramPrefix(boolean withWrapping);
+
+    abstract protected void generateProgramSuffix(boolean withWrapping);
 
 }

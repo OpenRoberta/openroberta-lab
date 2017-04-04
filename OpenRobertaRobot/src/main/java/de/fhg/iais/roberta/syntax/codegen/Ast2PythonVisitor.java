@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Binary;
@@ -42,45 +39,27 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
-
-    protected final Set<UsedSensor> usedSensors;
-    protected final Set<UsedActor> usedActors;
-    protected final Set<String> usedGlobalVarInFunctions;
+    protected Set<String> usedGlobalVarInFunctions;
     protected final StringBuilder indent = new StringBuilder();
     protected boolean isProgramEmpty = false;
 
     /**
      * initialize the Python code generator visitor.
      *
-     * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
-     * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2PythonVisitor(
-        Configuration brickConfiguration,
-        Set<UsedSensor> usedSensors,
-        Set<UsedActor> usedActors,
-        Set<String> usedGlobalVarInFunctions,
-        int indentation) {
-        super(brickConfiguration, indentation);
-        this.usedSensors = usedSensors;
-        this.usedActors = usedActors;
-        this.usedGlobalVarInFunctions = usedGlobalVarInFunctions;
+    Ast2PythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
+
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
     }
 
-    protected void genearateCode(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        generatePrefix(withWrapping);
-        generateCodeFromPhrases(phrasesSet, withWrapping);
-        generateSuffix(withWrapping);
-    }
-
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    @Override
+    protected void generateProgramMainBody(boolean withWrapping) {
         boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
             for ( Phrase<Void> phrase : phrases ) {
                 if ( phrase.getKind().getCategory() != Category.TASK ) {
                     nlIndent();
@@ -93,18 +72,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
             }
             mainBlock = mainBlock ? !mainBlock : mainBlock;
         }
-    }
-
-    abstract protected void generatePrefix(boolean withWrapping);
-
-    abstract protected void generateSuffix(boolean withWrapping);
-
-    protected static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
-        return phrases.size() == 2;
-    }
-
-    protected static boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
     }
 
     @Override
@@ -544,7 +511,15 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    protected String getBlocklyTypeCode(BlocklyType type) {
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         return "";
+    }
+
+    protected boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
+        return phrases.size() == 2;
+    }
+
+    protected boolean isMainBlock(Phrase<Void> phrase) {
+        return phrase.getKind().getName().equals("MAIN_TASK");
     }
 }

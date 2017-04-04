@@ -92,10 +92,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct C code.</b> <br>
  */
 public class Ast2ArduVisitor extends Ast2CppVisitor {
-
     private final boolean isTimeSensorUsed;
-    private final ArrayList<ArrayList<Phrase<Void>>> phrases;
     private final Set<UsedSensor> usedSensors;
+    private ArduConfiguration brickConfiguration;
 
     /**
      * initialize the C code generator visitor.
@@ -104,16 +103,14 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public Ast2ArduVisitor(
-        ArrayList<ArrayList<Phrase<Void>>> phrases,
-        ArduConfiguration brickConfiguration,
-        UsedHardwareVisitor usedHardwareVisitor,
-        int indentation) {
-        super(brickConfiguration, indentation);
+    public Ast2ArduVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, ArduConfiguration brickConfiguration, int indentation) {
+        super(phrases, indentation);
+        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrases);
+        this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-        this.phrases = phrases;
-        this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
+        this.brickConfiguration = brickConfiguration;
+
     }
 
     /**
@@ -121,15 +118,14 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
+     * @param programPhrases to generate the code from
      */
     public static String generate(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
-        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
-        Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
-        astVisitor.generatePrefix(withWrapping, phrasesSet);
-        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+
+        Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
 
@@ -690,7 +686,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         decrIndentation();
         mainTask.getVariables().visit(this);
         incrIndentation();
-        generateUserDefinedMethods(this.phrases);
+        generateUserDefinedMethods();
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
         if ( this.isTimeSensorUsed ) {
@@ -1046,7 +1042,8 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         }
     }
 
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
@@ -1104,37 +1101,28 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         this.sb.append("\n}\n");
     }
 
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2ArduVisitor astVisitor) {
+    @Override
+    protected void generateProgramMainBody(boolean withWrapping) {
         boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
             boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
             if ( isCreateMethodPhrase ) {
                 for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                    phrase.visit(astVisitor);
+                    mainBlock = handleMainBlocks(mainBlock, phrase);
+                    phrase.visit(this);
                 }
                 if ( mainBlock ) {
-                    generateSuffix(withWrapping, astVisitor);
+                    generateSuffix(withWrapping);
                     mainBlock = false;
                 }
             }
         }
+
     }
 
-    private boolean handleMainBlocks(Ast2ArduVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        //        if (phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        //        }
-        return mainBlock;
-    }
-
-    private void generateSuffix(boolean withWrapping, Ast2ArduVisitor astVisitor) {
+    private void generateSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            astVisitor.sb.append("\n}\n");
+            this.sb.append("\n}\n");
         }
     }
 
@@ -1175,4 +1163,11 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.AbstractCalliopeFactory;
 import de.fhg.iais.roberta.factory.Calliope2016Factory;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
@@ -72,7 +73,7 @@ public class Helper {
         Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
         String code = CppCodeGenerationVisitor.generate((CalliopeConfiguration) brickConfiguration, transformer.getTree(), false);
         if ( language.equals("python") ) {
-            code = PythonCodeGeneratorVisitor.generate(brickConfiguration, transformer.getTree(), false);
+            code = PythonCodeGeneratorVisitor.generate((MicrobitConfiguration) brickConfiguration, transformer.getTree(), false);
         }
         return code;
     }
@@ -234,7 +235,7 @@ public class Helper {
      */
     public static String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = PythonCodeGeneratorVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        String code = PythonCodeGeneratorVisitor.generate((MicrobitConfiguration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

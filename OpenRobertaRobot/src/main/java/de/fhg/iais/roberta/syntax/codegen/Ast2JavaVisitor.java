@@ -1,16 +1,12 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -48,7 +44,6 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
-    protected final Set<UsedSensor> usedSensors;
     protected final String programName;
 
     /**
@@ -59,10 +54,36 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public Ast2JavaVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
-        super(brickConfiguration, indentation);
+    Ast2JavaVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, String programName, int indentation) {
+        super(programPhrases, indentation);
         this.programName = programName;
-        this.usedSensors = usedSensors;
+    }
+
+    @Override
+    protected void generateProgramMainBody(boolean withWrapping) {
+        boolean mainBlock = false;
+        boolean debugging = false;
+        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(mainBlock, phrase);
+                    if ( mainBlock && phrase.getKind().hasName("MAIN_TASK") ) {
+                        debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
+                    }
+                    phrase.visit(this);
+                }
+                if ( mainBlock ) {
+                    this.sb.append("\n");
+                    // for testing
+                    if ( debugging ) {
+                        this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                    }
+                    this.sb.append("\n").append(INDENT).append("}");
+                    mainBlock = false;
+                }
+            }
+        }
     }
 
     @Override
@@ -267,8 +288,8 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     public Void visitEmptyList(EmptyList<Void> emptyList) {
         this.sb.append(
             "new ArrayList<"
-                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
-                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
+                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
+                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(1).toLowerCase()
                 + ">()");
         return null;
     }
@@ -344,7 +365,7 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append("private " + getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append("\n").append(INDENT).append("private " + getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -385,7 +406,7 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    protected String getBlocklyTypeCode(BlocklyType type) {
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -446,17 +467,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
         }
     }
 
-    protected void genearateCode(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        this.loopsLabels = new LoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
-        generatePrefix(phrasesSet, withWrapping);
-        generateCodeFromPhrases(phrasesSet, withWrapping);
-        generateSuffix(withWrapping);
-    }
-
-    abstract protected void generatePrefix(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping);
-
-    abstract protected void generateSuffix(boolean withWrapping);
-
     private boolean isStringExpr(Expr<Void> e) {
         switch ( e.getKind().getName() ) {
             case "STRING_CONST":
@@ -475,32 +485,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
 
             default:
                 return false;
-        }
-    }
-
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        boolean mainBlock = false;
-        boolean debugging = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(mainBlock, phrase);
-                    if ( mainBlock && phrase.getKind().hasName("MAIN_TASK") ) {
-                        debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
-                    }
-                    phrase.visit(this);
-                }
-                if ( mainBlock ) {
-                    this.sb.append("\n");
-                    // for testing
-                    if ( debugging ) {
-                        this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
-                    }
-                    this.sb.append("\n").append(INDENT).append("}");
-                    mainBlock = false;
-                }
-            }
         }
     }
 

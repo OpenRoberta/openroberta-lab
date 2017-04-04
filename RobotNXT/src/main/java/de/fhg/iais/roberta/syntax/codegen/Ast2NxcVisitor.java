@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -51,7 +49,6 @@ import de.fhg.iais.roberta.syntax.check.NxcLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -63,10 +60,8 @@ import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -104,11 +99,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
@@ -127,20 +118,11 @@ import de.fhg.iais.roberta.visitor.NxtAstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
-    public static final String INDENT = "  ";
-
+public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
-    private final StringBuilder sb = new StringBuilder();
-    private final ArrayList<ArrayList<Phrase<Void>>> phrases;
-    private int indentation;
+
     private boolean timeSensorUsed;
     private boolean volumeActionUsed;
-
-    private int loopCounter = 0;
-    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-
-    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Java code generator visitor.
@@ -149,18 +131,14 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
      * @param usedFunctions in the current program
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public Ast2NxcVisitor(
-        NxtConfiguration brickConfiguration,
-        int indentation,
-        boolean timeSensorUsed,
-        boolean volumeActionUsed,
-        ArrayList<ArrayList<Phrase<Void>>> phrases) {
-        this.brickConfiguration = brickConfiguration;
-        this.indentation = indentation;
-        this.timeSensorUsed = timeSensorUsed;
-        this.volumeActionUsed = volumeActionUsed;
-        this.phrases = phrases;
+    public Ast2NxcVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, NxtConfiguration brickConfiguration, int indentation) {
+        super(phrases, indentation);
         this.loopsLabels = new NxcLoopsCounterVisitor(phrases).getloopsLabelContainer();
+        this.timeSensorUsed = NxtUsedTimerVisitor.check(phrases);
+        this.volumeActionUsed = NxtUsedVolumeVisitor.check(phrases);
+        this.brickConfiguration = brickConfiguration;
+        this.programPhrases = phrases;
+
     }
 
     /**
@@ -168,39 +146,36 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
+     * @param programPhrases to generate the code from
      */
     public static String generate(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        boolean timeSensorUsed = NxtUsedTimerVisitor.check(phrasesSet);
-
-        boolean volumeActionUsed = NxtUsedVolumeVisitor.check(phrasesSet);
-        final Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(brickConfiguration, withWrapping ? 1 : 0, timeSensorUsed, volumeActionUsed, phrasesSet);
-        astVisitor.generatePrefix(withWrapping, phrasesSet);
-        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+        Ast2NxcVisitor astVisitor = new Ast2NxcVisitor(phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
 
-    private void generateSuffix(boolean withWrapping, Ast2NxcVisitor astVisitor) {
+    private void generateSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            astVisitor.sb.append("\n}\n");
+            this.sb.append("\n}\n");
         }
     }
 
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NxcVisitor astVisitor) {
+    @Override
+    protected void generateProgramMainBody(boolean withWrapping) {
         boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
             boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
             if ( isCreateMethodPhrase ) {
                 for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                    phrase.visit(astVisitor);
+                    mainBlock = handleMainBlocks(mainBlock, phrase);
+                    phrase.visit(this);
                 }
                 if ( mainBlock ) {
-                    generateSuffix(withWrapping, astVisitor);
+                    generateSuffix(withWrapping);
                     mainBlock = false;
                 }
             }
@@ -208,18 +183,8 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     }
 
-    private boolean handleMainBlocks(Ast2NxcVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        //        if (phrase.getProperty().isInTask() != false ) { //TODO: old unit tests have no inTask property
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        //        }
-        return mainBlock;
-    }
-
-    private String getBlocklyTypeCode(BlocklyType type) {
+    @Override
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -260,44 +225,12 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
     }
 
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
-    }
-
-    //nxc can't cast "(float)", it does it automatically
-    @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append(numConst.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
-        return null;
-    };
-
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
         this.sb.append(connectConst.getValue());
         return null;
     }
 
-    //now all these constants (except for PI that was originally in nxc) are defined in NEPODefs.h
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
@@ -393,7 +326,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append("[]");
@@ -520,54 +453,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                 }
                 expr.visit(this);
             }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
         }
         return null;
     }
@@ -1163,7 +1048,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         decrIndentation();
         mainTask.getVariables().visit(this);
         incrIndentation();
-        generateUserDefinedMethods(this.phrases);
+        generateUserDefinedMethods();
         this.sb.append("\n").append("task main() {");
         this.generateSensors();
         return null;
@@ -1501,7 +1386,7 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append("\n").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -1617,35 +1502,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         return null;
     }
 
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    private void incrIndentation() {
-        this.indentation += 1;
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-    }
-
-    private void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
-            }
-        }
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n");
-        indent();
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
@@ -1659,45 +1515,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
             expr.visit(this);
             sb.append(whitespace() + ")");
         }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
-            decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                nlIndent();
-                this.sb.append("}").append(whitespace());
-            }
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-        nlIndent();
-        this.sb.append("}");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
@@ -1769,7 +1586,8 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
     }
 
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
@@ -1777,22 +1595,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#define MAXLINES 8 \n");
         this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources\n");
-    }
-
-    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        //TODO: too many nested loops and condition there must be a better way this to be done
-        if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                    }
-
-                }
-            }
-        }
     }
 
     private void addBreakLabelToLoop(boolean isWaitStmt) {
@@ -1805,16 +1607,23 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
         }
     }
 
-    private void increaseLoopCounter() {
-        this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
-    }
-
     private void addContinueLabelToLoop() {
         if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
             nlIndent();
             this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
         }
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        // TODO Auto-generated method stub
+
     }
 
 }

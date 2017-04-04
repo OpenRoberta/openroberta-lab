@@ -79,7 +79,7 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
+     * @param programPhrases to generate the code from
      */
     public static Set<String> generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) //
     {

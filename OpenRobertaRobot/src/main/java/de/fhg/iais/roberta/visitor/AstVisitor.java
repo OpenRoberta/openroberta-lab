@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
@@ -777,13 +776,4 @@ public interface AstVisitor<V> {
      * @param voltageSensor to be visited
      */
     V visitVoltageSensor(VoltageSensor<V> voltageSensor);
-
-    default String getEnumCode(IMode value) {
-        return value.getClass().getSimpleName() + "." + value;
-    }
-
-    default String whitespace() {
-        return " ";
-    }
-
 }

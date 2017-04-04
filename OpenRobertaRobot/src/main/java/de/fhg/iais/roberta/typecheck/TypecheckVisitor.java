@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
@@ -109,8 +108,6 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
-    private final Configuration brickConfiguration;
-    private final String programName;
     private final Phrase<BlocklyType> phrase;
 
     private List<NepoInfo> infos = null;
@@ -124,9 +121,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase
      */
-    TypecheckVisitor(String programName, Configuration brickConfiguration, Phrase<BlocklyType> phrase) {
-        this.programName = programName;
-        this.brickConfiguration = brickConfiguration;
+    TypecheckVisitor(Phrase<BlocklyType> phrase) {
         this.phrase = phrase;
     }
 
@@ -138,13 +133,11 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param phrase to typecheck
      * @return the typecheck visitor (to get information about errors and the derived type)
      */
-    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, Configuration brickConfiguration, Phrase<BlocklyType> phrase) //
+    public static TypecheckVisitor makeVisitorAndTypecheck(Phrase<BlocklyType> phrase) //
     {
-        Assert.notNull(programName);
-        Assert.notNull(brickConfiguration);
         Assert.notNull(phrase);
 
-        TypecheckVisitor astVisitor = new TypecheckVisitor(programName, brickConfiguration, phrase);
+        TypecheckVisitor astVisitor = new TypecheckVisitor(phrase);
         astVisitor.resultType = phrase.visit(astVisitor);
         return astVisitor;
     }

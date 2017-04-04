@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
@@ -34,16 +33,15 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  * StringBuilder. <b>This representation is correct C++ code.</b> <br>
  */
 public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
+    protected ArrayList<ArrayList<Phrase<Void>>> phrases;
+
     /**
      * initialize the cpp code generator visitor.
      *
-     * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
-     * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public Ast2CppVisitor(Configuration brickConfiguration, int indentation) {
-        super(brickConfiguration, indentation);
+    public Ast2CppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
     }
 
     @Override
@@ -82,7 +80,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
             if ( var.toString().contains("false, false") ) {
@@ -95,7 +93,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
                     || var.getValue().getKind().hasName("EMPTY_EXPR") ) {
                     this.sb.append("[0];");
                     nlIndent();
-                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("* ");
                     this.sb.append(var.getName() + " = " + var.getName() + "Raw");
                 } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
                     this.sb.append("[3]");
@@ -127,7 +125,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
                 if ( var.getTypeVar().isArray() ) {
                     this.sb.append(";");
                     nlIndent();
-                    this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append("* ");
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("* ");
                     this.sb.append(var.getName() + " = " + var.getName() + "Raw");
                 }
             }
@@ -319,7 +317,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append("\n").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -360,7 +358,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    protected String getBlocklyTypeCode(BlocklyType type) {
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -401,10 +399,10 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
         }
     }
 
-    protected void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    protected void generateUserDefinedMethods() {
         //TODO: too many nested loops and condition there must be a better way this to be done
-        if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+        if ( this.programPhrases.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
                 for ( Phrase<Void> phrase : phrases ) {
                     boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
                     if ( isCreateMethodPhrase ) {
@@ -493,6 +491,15 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     private void appendBreakStmt() {
         nlIndent();
         this.sb.append("break;");
+    }
+
+    protected boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
+        if ( phrase.getKind().getCategory() != Category.TASK ) {
+            nlIndent();
+        } else if ( !phrase.getKind().hasName("LOCATION") ) {
+            mainBlock = true;
+        }
+        return mainBlock;
     }
 
     private void addLabelToLoop() {

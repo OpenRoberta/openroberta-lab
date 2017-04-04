@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.programcheck.ev3;
+package de.fhg.iais.roberta.syntax.programcheck;
 
 import java.util.ArrayList;
 import java.util.HashSet;

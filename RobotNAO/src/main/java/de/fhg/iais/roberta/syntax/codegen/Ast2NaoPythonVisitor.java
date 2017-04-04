@@ -284,8 +284,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
         this.sb.append("\n").append(this.indent);
     }
 
-    @Override
-    public String getEnumCode(IMode value) {
+    protected String getEnumCode(IMode value) {
         return "'" + value.toString().toLowerCase() + "'";
     }
 

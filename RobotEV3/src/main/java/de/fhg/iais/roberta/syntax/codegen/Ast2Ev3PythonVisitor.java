@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
@@ -59,7 +60,7 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.programcheck.ev3.PythonGlobalVariableCheck;
+import de.fhg.iais.roberta.syntax.programcheck.PythonGlobalVariableCheck;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -84,21 +85,31 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
+    protected final EV3Configuration brickConfiguration;
+
+    protected final Set<UsedSensor> usedSensors;
+    protected final Set<UsedActor> usedActors;
+
     /**
      * initialize the Python code generator visitor.
      *
-     * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private Ast2Ev3PythonVisitor(
-        Configuration brickConfiguration,
-        Set<UsedSensor> usedSensors,
-        Set<UsedActor> usedActors,
-        Set<String> usedGlobalVarInFunctions,
-        int indentation) {
-        super(brickConfiguration, usedSensors, usedActors, usedGlobalVarInFunctions, indentation);
+    private Ast2Ev3PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
+
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(programPhrases, brickConfiguration);
+        PythonGlobalVariableCheck gvChecker = new PythonGlobalVariableCheck(this.programPhrases);
+
+        this.brickConfiguration = brickConfiguration;
+
+        this.usedActors = checkVisitor.getUsedActors();
+        this.usedSensors = checkVisitor.getUsedSensors();
+
+        this.usedGlobalVarInFunctions = gvChecker.getMarkedVariablesAsGlobal();
+        this.loopsLabels = new LoopsCounterVisitor(this.programPhrases).getloopsLabelContainer();
     }
 
     /**
@@ -108,22 +119,12 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
-    {
+    public static String generate(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet, brickConfiguration);
-        PythonGlobalVariableCheck globalVarChecker = new PythonGlobalVariableCheck(phrasesSet);
-
-        Ast2Ev3PythonVisitor astVisitor =
-            new Ast2Ev3PythonVisitor(
-                brickConfiguration,
-                checkVisitor.getUsedSensors(),
-                checkVisitor.getUsedActors(),
-                globalVarChecker.getMarkedVariablesAsGlobal(),
-                0);
-        astVisitor.genearateCode(phrasesSet, withWrapping);
+        Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(brickConfiguration, phrasesSet, 0);
+        astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
     }
@@ -780,7 +781,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
     }
 
     @Override
-    protected void generatePrefix(boolean withWrapping) {
+    protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
@@ -796,7 +797,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
     }
 
     @Override
-    protected void generateSuffix(boolean withWrapping) {
+    protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }

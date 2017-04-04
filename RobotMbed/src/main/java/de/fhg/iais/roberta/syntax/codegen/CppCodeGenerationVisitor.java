@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -53,10 +51,8 @@ import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -67,12 +63,8 @@ import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
@@ -149,18 +141,9 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Cpp code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Cpp code.</b> <br>
  */
-public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
-    public static final String INDENT = "    ";
-
+public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstVisitor<Void> {
+    CalliopeConfiguration brickConfiguration;
     private final UsedHardwareVisitor usedHardwareVisitor;
-    private final StringBuilder sb = new StringBuilder();
-    private int indentation;
-    private ArrayList<ArrayList<Phrase<Void>>> phrases;
-
-    private int loopCounter = 0;
-    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-
-    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Cpp code generator visitor.
@@ -170,15 +153,12 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
 
-    public CppCodeGenerationVisitor(
-        ArrayList<ArrayList<Phrase<Void>>> phrases,
-        CalliopeConfiguration brickConfiguration,
-        UsedHardwareVisitor usedHardware,
-        int indentation) {
-        this.phrases = phrases;
-        this.usedHardwareVisitor = usedHardware;
-        this.indentation = indentation;
+    public CppCodeGenerationVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, CalliopeConfiguration brickConfiguration, int indentation) {
+        super(phrases, indentation);
         this.loopsLabels = new MbedLoopsCounterVisitor(phrases).getloopsLabelContainer();
+        this.usedHardwareVisitor = new UsedHardwareVisitor(phrases);
+
+        this.brickConfiguration = brickConfiguration;
     }
 
     /**
@@ -186,48 +166,16 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
+     * @param programPhrases to generate the code from
      */
     public static String generate(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
-        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, usedHardwareVisitor, withWrapping ? 1 : 0);
-        astVisitor.generatePrefix(withWrapping, phrasesSet);
-        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
-    }
-
-    @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append(numConst.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
-        return null;
-    };
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
@@ -269,22 +217,10 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
     }
 
     @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("NULL");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append(var.getValue());
-        return null;
-    }
-
-    @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         //TODO there must be a way to make this code simpler
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(getBlocklyTypeCode(var.getTypeVar()));
+            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
             if ( var.getTypeVar().isArray() ) {
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
                 this.sb.append(list.getValue().get().size() + ">");
@@ -293,7 +229,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             this.sb.append(whitespace() + "=" + whitespace());
             var.getValue().visit(this);
         } else {
-            this.sb.append(getBlocklyTypeCode(var.getTypeVar()));
+            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
             if ( var.getTypeVar().isArray() ) {
                 this.sb.append("N>");
             }
@@ -334,24 +270,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
 
-        return null;
-    }
-
-    @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
         return null;
     }
 
@@ -817,7 +735,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n");
-        generateUserDefinedMethods(this.phrases);
+        generateUserDefinedMethods();
         this.sb.append("\n");
         this.sb.append("int main() \n");
         this.sb.append("{");
@@ -1229,7 +1147,7 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
                 break;
             }
         }
-        this.sb.append("\n").append(getBlocklyTypeCode(methodReturn.getReturnType()));
+        this.sb.append("\n").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
@@ -1489,29 +1407,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    private void incrIndentation() {
-        this.indentation += 1;
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-    }
-
-    private void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
-            }
-        }
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n");
-        indent();
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
@@ -1525,45 +1420,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
             expr.visit(this);
             sb.append(")");
         }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
-            decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                nlIndent();
-                this.sb.append("}").append(whitespace());
-            }
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-        nlIndent();
-        this.sb.append("}");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
@@ -1604,27 +1460,13 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         this.sb.append("MicroBit uBit; \n \n");
     }
 
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
         this.addConstants();
 
-    }
-
-    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                    }
-
-                }
-            }
-        }
     }
 
     private void addSleepIfForeverLoop(RepeatStmt<Void> repeatStmt) {
@@ -1655,53 +1497,23 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    private void increaseLoopCounter() {
-        this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
-    }
-
     private void arrayLen(Var<Void> arr) {
         this.sb.append(arr.getValue() + ".size()");
     }
 
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, CppCodeGenerationVisitor astVisitor) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                    phrase.visit(astVisitor);
-                }
-                if ( mainBlock ) {
-                    generateSuffix(withWrapping, astVisitor);
-                    mainBlock = false;
-                }
-            }
-        }
-    }
-
-    private boolean handleMainBlocks(CppCodeGenerationVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
-    }
-
-    private void generateSuffix(boolean withWrapping, CppCodeGenerationVisitor astVisitor) {
+    private void generateSuffix(boolean withWrapping) {
         if ( withWrapping ) {
-            astVisitor.nlIndent();
+            nlIndent();
             // If main exits, there may still be other fibers running or registered event handlers etc.
             // Simply release this fiber, which will mean we enter the scheduler. Worse case, we then
             // sit in the idle task forever, in a power efficient sleep.
-            astVisitor.sb.append("release_fiber();");
-            astVisitor.sb.append("\n}\n");
+            this.sb.append("release_fiber();");
+            this.sb.append("\n}\n");
         }
     }
 
-    private String getBlocklyTypeCode(BlocklyType type) {
+    @Override
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
             case COMPARABLE:
@@ -1748,15 +1560,6 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
         if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
@@ -1778,4 +1581,30 @@ public class CppCodeGenerationVisitor implements MbedAstVisitor<Void> {
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
+
+    @Override
+    protected void generateProgramMainBody(boolean withWrapping) {
+        boolean mainBlock = false;
+        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
+            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+            if ( isCreateMethodPhrase ) {
+                for ( Phrase<Void> phrase : phrases ) {
+                    mainBlock = handleMainBlocks(mainBlock, phrase);
+                    phrase.visit(this);
+                }
+                if ( mainBlock ) {
+                    generateSuffix(withWrapping);
+                    mainBlock = false;
+                }
+            }
+        }
+
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.programcheck.PythonGlobalVariableCheck;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class PythonGlobalVariableCheckTest {

@@ -31,7 +31,6 @@ import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
-import de.fhg.iais.roberta.syntax.codegen.AstToEv3TextlyVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -87,7 +86,7 @@ public class Helper {
                 .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
-        String javaCode = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
+        String javaCode = Ast2Ev3JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), false);
         // System.out.println(javaCode); // only needed for EXTREME debugging
         // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
         // System.out.println(textlyCode); // only needed for EXTREME debugging
@@ -103,7 +102,7 @@ public class Helper {
      */
     public static String generateString(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+        String code = Ast2Ev3JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -117,7 +116,7 @@ public class Helper {
      */
     public static String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3PythonVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        String code = Ast2Ev3PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -133,20 +132,6 @@ public class Helper {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer(robotModeFactory);
         return transformer.transform(project);
-    }
-
-    /**
-     * Generate textly code as string from a given program . Prepend and append wrappings.
-     *
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the code as string
-     * @throws Exception
-     */
-    public static String generateString(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = AstToEv3TextlyVisitor.generate("Test", transformer.getTree(), true);
-        System.out.println(code); // only needed for EXTREME debugging
-        return code;
     }
 
     /**

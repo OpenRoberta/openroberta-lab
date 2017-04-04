@@ -6,7 +6,7 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
@@ -87,6 +88,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 
 public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
+    protected final EV3Configuration brickConfiguration;
+
+    protected final Set<UsedSensor> usedSensors;
+
     /**
      * initialize the Java code generator visitor.
      *
@@ -95,8 +100,15 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public Ast2Ev3JavaVisitor(String programName, Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
-        super(programName, brickConfiguration, usedSensors, indentation);
+    private Ast2Ev3JavaVisitor(String programName, ArrayList<ArrayList<Phrase<Void>>> programPhrases, EV3Configuration brickConfiguration, int indentation) {
+        super(programPhrases, programName, indentation);
+
+        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(programPhrases);
+
+        this.brickConfiguration = brickConfiguration;
+        this.usedSensors = checkVisitor.getUsedSensors();
+
+        this.loopsLabels = new LoopsCounterVisitor(this.programPhrases).getloopsLabelContainer();
     }
 
     /**
@@ -106,20 +118,47 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(
+        String programName,
+        EV3Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        boolean withWrapping) {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
-        Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, checkVisitor.getUsedSensors(), withWrapping ? 1 : 0);
-        astVisitor.genearateCode(phrasesSet, withWrapping);
-
+        Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
 
     @Override
-    protected void generateSuffix(boolean withWrapping) {
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        generateImports();
+
+        this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
+        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
+
+        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n");
+        generateUserDefinedMethods(this.programPhrases);
+        this.sb.append("\n");
+        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("}\n");
+
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
             this.sb.append("\n}\n");
         }
@@ -534,8 +573,8 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     public Void visitEmptyList(EmptyList<Void> emptyList) {
         this.sb.append(
             "new ArrayList<"
-                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
-                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
+                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
+                + getLanguageVarTypeFromBlocklyType(emptyList.getTypeVar()).substring(1).toLowerCase()
                 + ">()");
         return null;
     }
@@ -773,30 +812,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         return null;
     }
 
-    @Override
-    protected void generatePrefix(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        generateImports();
-
-        this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
-        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
-
-        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n");
-        generateUserDefinedMethods(phrasesSet);
-        this.sb.append("\n");
-        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n");
-    }
-
     private void generateImports() {
         this.sb.append("package generated.main;\n\n");
         this.sb.append("import de.fhg.iais.roberta.runtime.*;\n");
@@ -932,5 +947,4 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         // TODO Auto-generated method stub
         return null;
     }
-
 }

@@ -1,13 +1,11 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.MicrobitConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -147,46 +145,22 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
-    public static final String INDENT = "    ";
-
+public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements MbedAstVisitor<Void> {
+    MicrobitConfiguration brickConfiguration;
     private final UsedHardwareVisitor usedHardwareVisitor;
-    private final StringBuilder sb = new StringBuilder();
-    private int indentation;
-    private final StringBuilder indent = new StringBuilder();
-
-    private int loopCounter = 0;
-    private LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-
-    private Map<Integer, Boolean> loopsLabels;
 
     /**
      * initialize the Python code generator visitor.
      *
-     * @param programName
-     *        name of the program
-     * @param brickConfiguration
-     *        hardware configuration of the brick
-     * @param usedSensors
-     *        in the current program
      * @param indentation
      *        to start with. Will be ince/decr depending on block structure
      */
-    PythonCodeGeneratorVisitor(Configuration brickConfiguration, UsedHardwareVisitor usedHardware, int indentation) {
-        this.usedHardwareVisitor = usedHardware;
-        this.indentation = indentation;
-        for ( int i = 0; i < indentation; i++ ) {
-            this.indent.append(INDENT);
-        }
-    }
+    PythonCodeGeneratorVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
+        this.brickConfiguration = brickConfiguration;
 
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    int getIndentation() {
-        return this.indentation;
+        this.usedHardwareVisitor = new UsedHardwareVisitor(this.programPhrases);
+        this.loopsLabels = new MbedLoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
     /**
@@ -196,28 +170,16 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
      *        name of the program
      * @param brickConfiguration
      *        hardware configuration of the brick
-     * @param phrases
+     * @param programPhrases
      *        to generate the code from
      */
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
-        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrasesSet);
-        PythonCodeGeneratorVisitor astVisitor = new PythonCodeGeneratorVisitor(brickConfiguration, usedHardwareVisitor, 0);
-        astVisitor.generatePrefix(withWrapping, phrasesSet);
-        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
-        astVisitor.generateSuffix(withWrapping);
 
+        PythonCodeGeneratorVisitor astVisitor = new PythonCodeGeneratorVisitor(brickConfiguration, phrasesSet, 0);
+        astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
     }
 
     @Override
@@ -1368,47 +1330,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         return null;
     }
 
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, PythonCodeGeneratorVisitor astVisitor) {
-        this.loopsLabels = new MbedLoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
-            if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                    phrase.visit(astVisitor);
-                }
-                if ( mainBlock ) {
-                    mainBlock = false;
-                }
-            }
-
-        }
-    }
-
-    private boolean handleMainBlocks(PythonCodeGeneratorVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().getName().equals("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
-    }
-
-    private void incrIndentation() {
-        this.indentation += 1;
-        this.indent.append(INDENT);
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-        this.indent.delete(0, INDENT.length());
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n").append(this.indent);
-    }
-
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Binary.Op.MINUS
             && binary.getRight().getKind().hasName("BINARY")
@@ -1423,54 +1344,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
             sb.append("( ");
             expr.visit(this);
             sb.append(" )");
-        }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(" if ( ");
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(" ) else ");
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                nlIndent();
-                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            StmtList<Void> then = ifStmt.getThenList().get(i);
-            if ( then.get().isEmpty() ) {
-                nlIndent();
-                this.sb.append("pass");
-            } else {
-                then.visit(this);
-            }
-            decrIndentation();
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("else:");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
         }
     }
 
@@ -1493,7 +1366,8 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("):");
     }
 
-    private void generatePrefix(boolean withWrapping, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
         }
@@ -1510,22 +1384,14 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
         this.sb.append("timer1 = microbit.running_time()\n");
-        generateUserDefinedMethods(phrasesSet);
+        generateUserDefinedMethods();
 
     }
 
-    private void generateSuffix(boolean withWrapping) {
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
-        }
-    }
-
-    private boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( NumberFormatException e ) {
-            return false;
         }
     }
 
@@ -1547,10 +1413,10 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
         }
     }
 
-    private void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    private void generateUserDefinedMethods() {
         //TODO: too many nested loops and condition there must be a better way this to be done
-        if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+        if ( this.programPhrases.size() > 1 ) {
+            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
                 for ( Phrase<Void> phrase : phrases ) {
                     boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
                     if ( isCreateMethodPhrase ) {
@@ -1563,11 +1429,6 @@ public class PythonCodeGeneratorVisitor implements MbedAstVisitor<Void> {
                 }
             }
         }
-    }
-
-    private void increaseLoopCounter() {
-        this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
