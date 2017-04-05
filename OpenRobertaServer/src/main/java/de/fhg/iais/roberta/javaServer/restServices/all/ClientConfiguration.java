@@ -50,7 +50,10 @@ public class ClientConfiguration {
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientConfiguration.LOG, fullRequest);
         int userId = httpSessionState.getUserId();
-        final String robotName = httpSessionState.getRobotName();
+        final String robotName =
+            httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
+                ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
+                : httpSessionState.getRobotName();
         UserProcessor up = new UserProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
@@ -80,7 +83,7 @@ public class ClientConfiguration {
                         userId = user.getId();
                     }
                 }
-                Configuration configuration = cp.getConfiguration(configurationName, userId, httpSessionState.getRobotName());
+                Configuration configuration = cp.getConfiguration(configurationName, userId, robotName);
                 if ( configuration != null ) {
                     response.put("data", configuration.getConfigurationText());
                 }
@@ -88,11 +91,11 @@ public class ClientConfiguration {
 
             } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {
                 String configurationName = request.getString("name");
-                cp.deleteByName(configurationName, userId, httpSessionState.getRobotName());
+                cp.deleteByName(configurationName, userId, robotName);
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("loadCN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray configurationInfo = cp.getConfigurationInfo(userId, httpSessionState.getRobotName());
+                JSONArray configurationInfo = cp.getConfigurationInfo(userId, robotName);
                 response.put("configurationNames", configurationInfo);
                 Util.addResultInfo(response, cp);
 

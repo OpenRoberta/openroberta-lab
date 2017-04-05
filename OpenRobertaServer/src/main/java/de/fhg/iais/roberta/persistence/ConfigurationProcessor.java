@@ -66,7 +66,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             User owner = userDao.get(ownerId);
-            Robot robot = robotDao.loadRobot(this.httpSessionState.getRobotName());
+            Robot robot = robotDao.loadRobot(robotName);
             boolean success = configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist);
             if ( success ) {
                 setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
