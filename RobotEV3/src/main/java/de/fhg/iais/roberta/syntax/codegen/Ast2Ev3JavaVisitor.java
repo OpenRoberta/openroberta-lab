@@ -108,7 +108,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         this.brickConfiguration = brickConfiguration;
         this.usedSensors = checkVisitor.getUsedSensors();
 
-        this.loopsLabels = new LoopsCounterVisitor(this.programPhrases).getloopsLabelContainer();
+        this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
     /**
@@ -153,7 +153,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("}");
 
     }
 

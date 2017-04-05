@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -101,7 +102,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         super(programPhrases, indentation);
 
         UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(programPhrases, brickConfiguration);
-        PythonGlobalVariableCheck gvChecker = new PythonGlobalVariableCheck(this.programPhrases);
+        PythonGlobalVariableCheck gvChecker = new PythonGlobalVariableCheck(programPhrases);
 
         this.brickConfiguration = brickConfiguration;
 
@@ -110,7 +111,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
 
         this.usedGlobalVarInFunctions = gvChecker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = gvChecker.isProgramEmpty();
-        this.loopsLabels = new LoopsCounterVisitor(this.programPhrases).getloopsLabelContainer();
+        this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
     /**
@@ -465,6 +466,8 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
+
+        generateUserDefinedMethods();
         this.sb.append("\n").append("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
@@ -474,6 +477,18 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
             addPassIfProgramIsEmpty();
         }
         return null;
+    }
+
+    protected void generateUserDefinedMethods() {
+        this.incrIndentation();
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(e -> {
+                e.visit(this);
+                this.sb.append("\n");
+            });
+        this.decrIndentation();
     }
 
     private void addPassIfProgramIsEmpty() {
@@ -794,7 +809,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         this.sb.append("import math\n\n");
 
         this.sb.append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append("hal = Hal(_brickConfiguration)\n");
+        this.sb.append("hal = Hal(_brickConfiguration)");
     }
 
     @Override

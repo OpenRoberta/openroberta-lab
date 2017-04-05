@@ -44,20 +44,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    protected void generateProgramMainBody(boolean withWrapping) {
-        incrIndentation();
-        this.programPhrases
-            .stream()
-            .filter(phrases -> phrases.get(1).getKind().getCategory() != Category.METHOD)
-            .flatMap(e -> e.subList(1, e.size()).stream())
-            .forEach(p -> {
-                p.visit(this);
-                nlIndent();
-            });
-        decrIndentation();
-    }
-
-    @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
@@ -416,7 +402,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
         this.incrIndentation();
         this.programPhrases
             .stream()
-            .flatMap(p -> p.stream())
             .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
             .forEach(e -> {
                 e.visit(this);

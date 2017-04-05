@@ -222,7 +222,7 @@ public class PythonCodeGeneratorVisitorTest {
             + "if 20 == 30:\n"
             + "    while True:\n"
             + "        if microbit.button_a.is_pressed() == True:\n"
-            + "            break\n";
+            + "            break";
 
         assertCodeIsOk(a, "/stmts/no_loops.xml");
     }

@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Binary;
@@ -53,18 +52,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
-    }
-
-    @Override
-    protected void generateProgramMainBody(boolean withWrapping) {
-        this.programPhrases.stream().map(phrases -> phrases.subList(1, phrases.size())).forEach(p -> {
-            for ( Phrase<Void> phrase : p ) {
-                if ( phrase.getKind().getCategory() != Category.TASK ) {
-                    nlIndent();
-                }
-                phrase.visit(this);
-            }
-        });
     }
 
     @Override

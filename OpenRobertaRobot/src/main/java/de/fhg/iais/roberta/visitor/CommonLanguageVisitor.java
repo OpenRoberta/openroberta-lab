@@ -2,7 +2,9 @@ package de.fhg.iais.roberta.visitor;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -25,7 +27,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
-    protected ArrayList<ArrayList<Phrase<Void>>> programPhrases;
+    protected List<Phrase<Void>> programPhrases;
 
     protected int indentation;
 
@@ -41,7 +43,12 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     public CommonLanguageVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
-        this.programPhrases = programPhrases;
+        this.programPhrases =
+            programPhrases
+                .stream()
+                .flatMap(e -> e.subList(1, e.size()).stream())
+                .filter(p -> p.getProperty().isInTask() == null ? true : p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
+                .collect(Collectors.toList());
         this.indentation = indentation;
     }
 
@@ -251,6 +258,17 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
         return phrase.getKind().getName().equals("MAIN_TASK");
     }
 
+    protected void generateProgramMainBody(boolean withWrapping) {
+
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(p -> {
+                nlIndent();
+                p.visit(this);
+            });
+    }
+
     abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);
 
     abstract protected void generateCodeFromTernary(IfStmt<Void> ifStmt);
@@ -258,8 +276,6 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
     abstract protected void generateCodeFromIfElse(IfStmt<Void> ifStmt);
 
     abstract protected void generateCodeFromElse(IfStmt<Void> ifStmt);
-
-    abstract protected void generateProgramMainBody(boolean withWrapping);
 
     abstract protected void generateProgramPrefix(boolean withWrapping);
 

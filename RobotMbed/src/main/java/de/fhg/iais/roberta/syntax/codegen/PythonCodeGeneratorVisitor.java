@@ -159,7 +159,7 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         super(programPhrases, indentation);
         this.brickConfiguration = brickConfiguration;
 
-        this.usedHardwareVisitor = new UsedHardwareVisitor(this.programPhrases);
+        this.usedHardwareVisitor = new UsedHardwareVisitor(programPhrases);
         this.loopsLabels = new MbedLoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
@@ -1383,7 +1383,7 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         }
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
-        this.sb.append("timer1 = microbit.running_time()\n");
+        this.sb.append("timer1 = microbit.running_time()");
         generateUserDefinedMethods();
 
     }
@@ -1416,19 +1416,19 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     private void generateUserDefinedMethods() {
         //TODO: too many nested loops and condition there must be a better way this to be done
         if ( this.programPhrases.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        this.incrIndentation();
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                        this.decrIndentation();
-                    }
-
+            //            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
+            for ( Phrase<Void> phrase : this.programPhrases ) {
+                boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+                if ( isCreateMethodPhrase ) {
+                    this.incrIndentation();
+                    phrase.visit(this);
+                    this.sb.append("\n");
+                    this.decrIndentation();
                 }
+
             }
         }
+        //        }
     }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {

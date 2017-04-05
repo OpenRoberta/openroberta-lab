@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
@@ -63,28 +64,26 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     protected void generateProgramMainBody(boolean withWrapping) {
         boolean mainBlock = false;
         boolean debugging = false;
-
-        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-            boolean isCreateMethodPhrase = phrases.get(1).getKind().getCategory() != Category.METHOD;
+        for ( Phrase<Void> phrase : this.programPhrases ) {
+            boolean isCreateMethodPhrase = phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL");
             if ( isCreateMethodPhrase ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    mainBlock = handleMainBlocks(mainBlock, phrase);
-                    if ( mainBlock && isMainBlock(phrase) ) {
-                        debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
-                    }
-                    phrase.visit(this);
+                nlIndent();
+                //                handleMainBlocks(mainBlock, phrase);
+                if ( isMainBlock(phrase) ) {
+                    debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
+                    mainBlock = true;
                 }
-                if ( mainBlock ) {
-                    this.sb.append("\n");
-                    // for testing
-                    if ( debugging ) {
-                        this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
-                    }
-                    this.sb.append("\n").append(INDENT).append("}");
-                    mainBlock = false;
-                }
+                phrase.visit(this);
             }
         }
+        if ( debugging ) {
+            this.sb.append("\n");
+            this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+        }
+        if ( mainBlock ) {
+            this.sb.append("\n").append(INDENT).append("}");
+        }
+
     }
 
     @Override
@@ -450,20 +449,18 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
         }
     }
 
-    protected void generateUserDefinedMethods(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    protected void generateUserDefinedMethods(List<Phrase<Void>> phrasesSet) {
         //TODO: too many nested loops and condition there must be a better way this to be done
         if ( phrasesSet.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        this.incrIndentation();
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                        this.decrIndentation();
-                    }
-
+            for ( Phrase<Void> phrase : phrasesSet ) {
+                boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+                if ( isCreateMethodPhrase ) {
+                    this.incrIndentation();
+                    phrase.visit(this);
+                    this.sb.append("\n");
+                    this.decrIndentation();
                 }
+
             }
         }
     }

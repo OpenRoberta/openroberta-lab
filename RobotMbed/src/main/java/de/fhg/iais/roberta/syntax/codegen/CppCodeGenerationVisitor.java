@@ -729,15 +729,14 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        decrIndentation();
+        //        decrIndentation();
         this.sb.append("int initTime = uBit.systemTime(); \n");
         mainTask.getVariables().visit(this);
         this.sb.append("\n");
         generateUserDefinedMethods();
-        incrIndentation();
-        this.sb.append("\n");
-        this.sb.append("int main() \n");
+        this.sb.append("\n").append("int main() \n");
         this.sb.append("{");
+        incrIndentation();
         nlIndent();
         // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
@@ -1573,13 +1572,11 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        incrIndentation();
         if ( withWrapping ) {
-            nlIndent();
             this.sb.append("release_fiber();");
             this.sb.append("\n}\n");
         }
-        decrIndentation();
+
     }
 
 }
