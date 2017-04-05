@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
@@ -58,20 +59,17 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
 
     @Override
     protected void generateProgramMainBody(boolean withWrapping) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                if ( phrase.getKind().getCategory() != Category.TASK && phrase.getKind().getCategory() != Category.HELPER ) {
+        this.programPhrases.stream().map(phrases -> phrases.subList(1, phrases.size())).forEach(p -> {
+            for ( Phrase<Void> phrase : p ) {
+                if ( phrase.getKind().getCategory() != Category.TASK ) {
                     nlIndent();
                 }
-                mainBlock = isMainBlock(phrase);
-                if ( mainBlock ) {
-                    setProgramIsEmpty(checkIsProgramEmpty(phrases));
+                if ( isMainBlock(phrase) ) {
+                    setProgramIsEmpty(checkIsProgramEmpty(p));
                 }
                 phrase.visit(this);
             }
-            mainBlock = mainBlock ? !mainBlock : mainBlock;
-        }
+        });
     }
 
     @Override
@@ -515,8 +513,8 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         return "";
     }
 
-    protected boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
-        return phrases.size() == 2;
+    protected boolean checkIsProgramEmpty(List<Phrase<Void>> p) {
+        return p.size() == 1;
     }
 
 }

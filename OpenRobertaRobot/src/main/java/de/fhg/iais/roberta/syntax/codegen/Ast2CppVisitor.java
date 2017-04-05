@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -47,19 +45,15 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
 
     @Override
     protected void generateProgramMainBody(boolean withWrapping) {
-        List<Phrase<Void>> mainBodyPhrases =
-            this.programPhrases
-                .stream()
-                .filter(phrases -> phrases.get(1).getKind().getCategory() != Category.METHOD)
-                .flatMap(e -> e.subList(1, e.size()).stream())
-                .collect(Collectors.toList());
         incrIndentation();
-
-        mainBodyPhrases.forEach(p -> {
-            p.visit(this);
-            nlIndent();
-        });
-
+        this.programPhrases
+            .stream()
+            .filter(phrases -> phrases.get(1).getKind().getCategory() != Category.METHOD)
+            .flatMap(e -> e.subList(1, e.size()).stream())
+            .forEach(p -> {
+                p.visit(this);
+                nlIndent();
+            });
         decrIndentation();
     }
 
@@ -419,21 +413,16 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     protected void generateUserDefinedMethods() {
-        //TODO: too many nested loops and condition there must be a better way this to be done
-        if ( this.programPhrases.size() > 1 ) {
-            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-                for ( Phrase<Void> phrase : phrases ) {
-                    boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                    if ( isCreateMethodPhrase ) {
-                        this.incrIndentation();
-                        phrase.visit(this);
-                        this.sb.append("\n");
-                        this.decrIndentation();
-                    }
-
-                }
-            }
-        }
+        this.incrIndentation();
+        this.programPhrases
+            .stream()
+            .flatMap(p -> p.stream())
+            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(e -> {
+                e.visit(this);
+                this.sb.append("\n");
+            });
+        this.decrIndentation();
     }
 
     @Override

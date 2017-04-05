@@ -133,11 +133,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     public Ast2NxcVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, NxtConfiguration brickConfiguration, int indentation) {
         super(phrases, indentation);
         this.loopsLabels = new NxcLoopsCounterVisitor(phrases).getloopsLabelContainer();
-        this.timeSensorUsed = NxtUsedTimerVisitor.check(phrases);
+        this.timeSensorUsed = NxtUsedTimerVisitor.check(phrases); //TODO merge the two checkers into one
         this.volumeActionUsed = NxtUsedVolumeVisitor.check(phrases);
         this.brickConfiguration = brickConfiguration;
-        this.programPhrases = phrases;
-
     }
 
     /**
