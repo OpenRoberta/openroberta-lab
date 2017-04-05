@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Category;
@@ -51,7 +50,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
      */
     Ast2PythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
         }
@@ -63,9 +61,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
             for ( Phrase<Void> phrase : p ) {
                 if ( phrase.getKind().getCategory() != Category.TASK ) {
                     nlIndent();
-                }
-                if ( isMainBlock(phrase) ) {
-                    setProgramIsEmpty(checkIsProgramEmpty(p));
                 }
                 phrase.visit(this);
             }
@@ -187,14 +182,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         this.sb.append(", ");
         expressions.get().get(3).visit(this);
         this.sb.append("):");
-    }
-
-    public boolean isProgramEmpty() {
-        return this.isProgramEmpty;
-    }
-
-    public void setProgramIsEmpty(boolean isEmpty) {
-        this.isProgramEmpty = isEmpty;
     }
 
     @Override
@@ -511,10 +498,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         return "";
-    }
-
-    protected boolean checkIsProgramEmpty(List<Phrase<Void>> p) {
-        return p.size() == 1;
     }
 
 }

@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class PythonGlobalVariableCheck extends CheckVisitor {
     private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
+    private boolean isProgramEmpty = false;
     private boolean isInUserDefinedFunction = false;
 
     public PythonGlobalVariableCheck(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -44,13 +45,24 @@ public class PythonGlobalVariableCheck extends CheckVisitor {
         Assert.isTrue(phrasesSet.size() >= 1);
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
+                if ( isMainBlock(phrase) && phrases.size() == 2 ) {
+                    this.isProgramEmpty = true;
+                }
                 phrase.visit(this);
             }
         }
     }
 
+    protected boolean isMainBlock(Phrase<Void> phrase) {
+        return phrase.getKind().getName().equals("MAIN_TASK");
+    }
+
     public Set<String> getMarkedVariablesAsGlobal() {
         return this.markedVariablesAsGlobal;
+    }
+
+    public boolean isProgramEmpty() {
+        return this.isProgramEmpty;
     }
 
     @Override

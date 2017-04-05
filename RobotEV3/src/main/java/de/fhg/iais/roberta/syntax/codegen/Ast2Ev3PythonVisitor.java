@@ -109,6 +109,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         this.usedSensors = checkVisitor.getUsedSensors();
 
         this.usedGlobalVarInFunctions = gvChecker.getMarkedVariablesAsGlobal();
+        this.isProgramEmpty = gvChecker.isProgramEmpty();
         this.loopsLabels = new LoopsCounterVisitor(this.programPhrases).getloopsLabelContainer();
     }
 
