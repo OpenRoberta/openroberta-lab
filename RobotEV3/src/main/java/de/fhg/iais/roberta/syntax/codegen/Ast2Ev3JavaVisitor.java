@@ -160,8 +160,14 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
+            if ( this.isInDebugMode ) {
+                this.sb.append("\n");
+                this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+            }
+
             this.sb.append("\n}\n");
         }
+        this.sb.append("\n").append(INDENT).append("}");
     }
 
     @Override
@@ -512,6 +518,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         if ( mainTask.getDebug().equals("TRUE") ) {
             this.sb.append(INDENT).append(INDENT).append("hal.startLogging();");
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
+            this.isInDebugMode = true;
         }
         return null;
     }

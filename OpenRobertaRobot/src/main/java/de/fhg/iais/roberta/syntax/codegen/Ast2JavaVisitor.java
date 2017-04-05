@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -46,6 +45,7 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  */
 public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     protected final String programName;
+    protected boolean isInDebugMode = false;
 
     /**
      * initialize the Java code generator visitor.
@@ -58,32 +58,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
     Ast2JavaVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, String programName, int indentation) {
         super(programPhrases, indentation);
         this.programName = programName;
-    }
-
-    @Override
-    protected void generateProgramMainBody(boolean withWrapping) {
-        boolean mainBlock = false;
-        boolean debugging = false;
-        for ( Phrase<Void> phrase : this.programPhrases ) {
-            boolean isCreateMethodPhrase = phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL");
-            if ( isCreateMethodPhrase ) {
-                nlIndent();
-                //                handleMainBlocks(mainBlock, phrase);
-                if ( isMainBlock(phrase) ) {
-                    debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
-                    mainBlock = true;
-                }
-                phrase.visit(this);
-            }
-        }
-        if ( debugging ) {
-            this.sb.append("\n");
-            this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
-        }
-        if ( mainBlock ) {
-            this.sb.append("\n").append(INDENT).append("}");
-        }
-
     }
 
     @Override

@@ -76,6 +76,28 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
         generateProgramSuffix(withWrapping);
     }
 
+    protected void generateProgramMainBody(boolean withWrapping) {
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(p -> {
+                nlIndent();
+                p.visit(this);
+            });
+    }
+
+    protected void generateUserDefinedMethods() {
+        this.incrIndentation();
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(e -> {
+                e.visit(this);
+                this.sb.append("\n");
+            });
+        this.decrIndentation();
+    }
+
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
         this.sb.append(numConst.getValue());
@@ -245,28 +267,8 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
         return value.getClass().getSimpleName() + "." + value;
     }
 
-    protected boolean handleMainBlocks(boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            nlIndent();
-        } else if ( !phrase.getKind().hasName("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
-    }
-
     protected boolean isMainBlock(Phrase<Void> phrase) {
         return phrase.getKind().getName().equals("MAIN_TASK");
-    }
-
-    protected void generateProgramMainBody(boolean withWrapping) {
-
-        this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(p -> {
-                nlIndent();
-                p.visit(this);
-            });
     }
 
     abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);

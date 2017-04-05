@@ -488,41 +488,20 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createListFindElementFirst() throws Exception {
         String a =
-            "createListFindItem(CONST.FIRST, createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 5), createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 2)]), createConstant(CONST.NUM_CONST, 2))"
-                + "var blocklyProgram = {'programStmts': []};";
+            "var stmt0 = createMotorOnAction(createListFindItem(CONST.FIRST, createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), createConstant(CONST.NUM_CONST, 30)), CONST.MOTOR_RIGHT);\n"
+                + "var stmt1 = createMotorOnAction(createListFindItem(CONST.LAST, createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), createConstant(CONST.NUM_CONST, 30)), CONST.MOTOR_RIGHT);\n"
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1]};";
         assertCodeIsOk(a, "/syntax/lists/lists_occurrence.xml");
-    }
-
-    @Test
-    public void createListFindElementLast() throws Exception {
-        String a =
-            "createListFindItem(CONST.LAST, createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 5), createConstant(CONST.NUM_CONST, 1), createConstant(CONST.NUM_CONST, 2)]), createConstant(CONST.NUM_CONST, 2))"
-                + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/syntax/lists/lists_occurrence1.xml");
     }
 
     @Test
     public void createListsIndexGetFromStart() throws Exception {
         String a =
-            "createListsGetIndex(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 55), createConstant(CONST.NUM_CONST, 66), createConstant(CONST.NUM_CONST, 11)]), CONST.GET, CONST.FROM_START, createConstant(CONST.NUM_CONST, 1))"
-                + "var blocklyProgram = {'programStmts': []};";
+            "var stmt0 = createDriveAction(createListsGetIndex(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), CONST.GET, CONST.FROM_START, createConstant(CONST.NUM_CONST, 0)), CONST.FOREWARD);\n"
+                + "var stmt1 = createDriveAction(createListsGetIndex(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), CONST.GET_REMOVE, CONST.FIRST), CONST.FOREWARD);\n"
+                + "var stmt2 = createListsGetIndexStmt(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), CONST.REMOVE, CONST.LAST);\n"
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2]};";
         assertCodeIsOk(a, "/syntax/lists/lists_get_index.xml");
-    }
-
-    @Test
-    public void createListsIndexRemoveFromStart() throws Exception {
-        String a =
-            "var stmt0 = createListsGetIndexStmt(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 55), createConstant(CONST.NUM_CONST, 66), createConstant(CONST.NUM_CONST, 11)]), CONST.REMOVE, CONST.FROM_START, createConstant(CONST.NUM_CONST, 1));\n"
-                + "var blocklyProgram = {'programStmts': [stmt0]};";
-        assertCodeIsOk(a, "/syntax/lists/lists_get_index1.xml");
-    }
-
-    @Test
-    public void createListsIndexGetRemoveLast() throws Exception {
-        String a =
-            "createListsGetIndex(createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 55), createConstant(CONST.NUM_CONST, 66), createConstant(CONST.NUM_CONST, 11)]), CONST.GET_REMOVE, CONST.LAST)"
-                + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/syntax/lists/lists_get_index2.xml");
     }
 
     @Test
@@ -552,33 +531,13 @@ public class Ast2Ev3SimVisitorTest {
     @Test
     public void createGetSubListFromStartAndFromEnd() throws Exception {
         String a =
-            "createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 11), createConstant(CONST.NUM_CONST, 22), createConstant(CONST.NUM_CONST, 33), createConstant(CONST.NUM_CONST, 44)]), where1: CONST.FROM_START, at1: createConstant(CONST.NUM_CONST, 1), where2: CONST.FROM_END, at2: createConstant(CONST.NUM_CONST, 1)})"
-                + "var blocklyProgram = {'programStmts': []};";
+            "var stmt0 = createVarDeclaration(CONST.ARRAY_NUMBER, \"Element\", createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]));\n"
+                + "var stmt1 = createAssignStmt(\"Element\", createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), where1: CONST.FROM_START, at1: createConstant(CONST.NUM_CONST, 0), where2: CONST.FROM_START, at2: createConstant(CONST.NUM_CONST, 0)}));\n"
+                + "var stmt2 = createAssignStmt(\"Element\", createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), where1: CONST.FROM_END, at1: createConstant(CONST.NUM_CONST, 0), where2: CONST.FROM_END, at2: createConstant(CONST.NUM_CONST, 0)}));\n"
+                + "var stmt3 = createAssignStmt(\"Element\", createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), where1: CONST.FROM_START, at1: createConstant(CONST.NUM_CONST, 0), where2: CONST.LAST}));\n"
+                + "var stmt4 = createAssignStmt(\"Element\", createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0), createConstant(CONST.NUM_CONST, 0)]), where1: CONST.FIRST, where2: CONST.FROM_START, at2: createConstant(CONST.NUM_CONST, 0)}));\n"
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4]};";
         assertCodeIsOk(a, "/syntax/lists/lists_sub_list.xml");
-    }
-
-    @Test
-    public void createGetSubListFirstAndFromEnd() throws Exception {
-        String a =
-            "createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 11), createConstant(CONST.NUM_CONST, 22), createConstant(CONST.NUM_CONST, 33), createConstant(CONST.NUM_CONST, 44)]), where1: CONST.FIRST, where2: CONST.FROM_END, at2: createConstant(CONST.NUM_CONST, 1)})"
-                + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/syntax/lists/lists_sub_list1.xml");
-    }
-
-    @Test
-    public void createGetSubListFromStartAndLast() throws Exception {
-        String a =
-            "createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 11), createConstant(CONST.NUM_CONST, 22), createConstant(CONST.NUM_CONST, 33), createConstant(CONST.NUM_CONST, 44)]), where1: CONST.FROM_START, at1: createConstant(CONST.NUM_CONST, 1), where2: CONST.LAST})"
-                + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/syntax/lists/lists_sub_list2.xml");
-    }
-
-    @Test
-    public void createGetSubListFirstAndLast() throws Exception {
-        String a =
-            "createGetSubList({list: createCreateListWith(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 11), createConstant(CONST.NUM_CONST, 22), createConstant(CONST.NUM_CONST, 33), createConstant(CONST.NUM_CONST, 44)]), where1: CONST.FIRST, where2: CONST.LAST})"
-                + "var blocklyProgram = {'programStmts': []};";
-        assertCodeIsOk(a, "/syntax/lists/lists_sub_list3.xml");
     }
 
     @Test

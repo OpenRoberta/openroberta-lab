@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.MicrobitConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
@@ -1413,23 +1412,23 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         }
     }
 
-    private void generateUserDefinedMethods() {
-        //TODO: too many nested loops and condition there must be a better way this to be done
-        if ( this.programPhrases.size() > 1 ) {
-            //            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-            for ( Phrase<Void> phrase : this.programPhrases ) {
-                boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                if ( isCreateMethodPhrase ) {
-                    this.incrIndentation();
-                    phrase.visit(this);
-                    this.sb.append("\n");
-                    this.decrIndentation();
-                }
-
-            }
-        }
-        //        }
-    }
+    //    private void generateUserDefinedMethods() {
+    //        //TODO: too many nested loops and condition there must be a better way this to be done
+    //        if ( this.programPhrases.size() > 1 ) {
+    //            //            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
+    //            for ( Phrase<Void> phrase : this.programPhrases ) {
+    //                boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
+    //                if ( isCreateMethodPhrase ) {
+    //                    this.incrIndentation();
+    //                    phrase.visit(this);
+    //                    this.sb.append("\n");
+    //                    this.decrIndentation();
+    //                }
+    //
+    //            }
+    //        }
+    //        //        }
+    //    }
 
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         nlIndent();

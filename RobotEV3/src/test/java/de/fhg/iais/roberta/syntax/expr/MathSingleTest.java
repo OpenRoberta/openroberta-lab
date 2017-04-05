@@ -7,22 +7,9 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class MathSingleTest {
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.sqrt(0)BlocklyMethods.abs(0)-0BlocklyMethods.log(0)BlocklyMethods.log10(0)BlocklyMethods.exp(0)BlocklyMethods.pow(10,0)";
+        String a =
+            "floatElement=BlocklyMethods.sqrt(0);floatElement2=BlocklyMethods.abs(0);floatElement3=-0;floatElement4=BlocklyMethods.log(0);floatElement5=BlocklyMethods.log10(0);floatElement6=BlocklyMethods.exp(0);floatElement7=BlocklyMethods.pow(10,0);publicvoidrun()throwsException{}";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_single.xml");
-    }
-
-    @Test
-    public void Test1() throws Exception {
-        String a = "hal.setVolume(BlocklyMethods.sqrt(0));";
-
-        Helper.assertCodeIsOk(a, "/syntax/math/math_single1.xml");
-    }
-
-    @Test
-    public void Test2() throws Exception {
-        String a = "item=BlocklyMethods.sqrt(0);";
-
-        Helper.assertCodeIsOk(a, "/syntax/math/math_single2.xml");
     }
 }

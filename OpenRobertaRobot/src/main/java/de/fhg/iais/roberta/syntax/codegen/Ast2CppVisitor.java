@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
@@ -396,18 +395,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
             default:
                 throw new IllegalArgumentException("unhandled type");
         }
-    }
-
-    protected void generateUserDefinedMethods() {
-        this.incrIndentation();
-        this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(e -> {
-                e.visit(this);
-                this.sb.append("\n");
-            });
-        this.decrIndentation();
     }
 
     @Override

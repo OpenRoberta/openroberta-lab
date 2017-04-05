@@ -18,7 +18,7 @@ public class FlowControlStmtTest {
                 + "        break;\n"
                 + "    }\n"
                 + "    break;\n"
-                + "}";
+                + "}}";
 
         Helper.assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
     }

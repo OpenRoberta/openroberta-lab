@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.UsedActor;
@@ -477,18 +476,6 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
             addPassIfProgramIsEmpty();
         }
         return null;
-    }
-
-    protected void generateUserDefinedMethods() {
-        this.incrIndentation();
-        this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(e -> {
-                e.visit(this);
-                this.sb.append("\n");
-            });
-        this.decrIndentation();
     }
 
     private void addPassIfProgramIsEmpty() {

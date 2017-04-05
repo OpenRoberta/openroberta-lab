@@ -22,7 +22,7 @@ public class WhileUntilStmtTest {
                 + "    while ( !(15 == 20) ) {\n"
                 + "        variablenName += 1;\n"
                 + "    }\n"
-                + "}";
+                + "}}";
 
         Helper.assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
     }
@@ -37,7 +37,7 @@ public class WhileUntilStmtTest {
                 + "if ( true ) {\n"
                 + "while ( true ) {\n"
                 + "    System.out.println(\"\");\n"
-                + "}}";
+                + "}}}";
 
         Helper.assertCodeIsOk(a, "/syntax/control/repeat_stmt_loopForever.xml");
     }
