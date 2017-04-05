@@ -213,7 +213,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             setConfigurationName(robotGroup.toUpperCase() + 'basis');
             setProgramName('NEPOprog');
         }
-        $('#simRobot').removeClass('typcn-' + GUISTATE.gui.group);
+        $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#simRobot').addClass('typcn-' + robotGroup);
 
         if (isAutoconnected()) {
