@@ -719,8 +719,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     if (value) {
                         obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
-                        obj.repeatStmtExpr = {};
-                    }
+                    }  
+                    obj.repeatStmtExpr = {};
                 }
         }
     };
@@ -768,7 +768,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (stmtNotEvaluated) {
             obj.program.prepend([obj.repeatStmtExpr]);
         }
-        obj.repeatStmtExpr = {};            
+        obj.repeatStmtExpr = {};
     };
 
     var evalExpr = function(obj, propName, arrayIndex) {
