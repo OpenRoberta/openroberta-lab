@@ -94,7 +94,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
      * initialize the Python code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
-     * @param usedSensors in the current program
+     * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     private Ast2Ev3PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
@@ -116,15 +116,13 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
     /**
      * factory method to generate Python code from an AST.<br>
      *
-     * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
+     * @param programPhrases to generate the code from
      */
-    public static String generate(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrasesSet.size() >= 1);
 
-        Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(brickConfiguration, phrasesSet, 0);
+        Ast2Ev3PythonVisitor astVisitor = new Ast2Ev3PythonVisitor(brickConfiguration, programPhrases, 0);
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();

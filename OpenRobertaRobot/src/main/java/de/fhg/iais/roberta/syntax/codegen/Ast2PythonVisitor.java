@@ -25,10 +25,11 @@ import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
 
@@ -43,6 +44,7 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     /**
      * initialize the Python code generator visitor.
      *
+     * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     Ast2PythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
@@ -186,39 +188,57 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     }
 
     @Override
+    public Void visitExprList(ExprList<Void> exprList) {
+        boolean first = true;
+        for ( Expr<Void> expr : exprList.get() ) {
+            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
+                if ( first ) {
+                    first = false;
+                } else {
+                    if ( expr.getKind().hasName("BINARY", "UNARY") ) {
+                        this.sb.append("; "); // FIXME
+                    } else {
+                        this.sb.append(", ");
+                    }
+                }
+                expr.visit(this);
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                appendTry();
                 break;
             case TIMES:
             case FOR:
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                appendTry();
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                appendTry();
                 break;
             default:
-                break;
+                throw new DbcException("Invalide Repeat Statement!");
         }
         incrIndentation();
-        Mode mode = repeatStmt.getMode();
-        if ( repeatStmt.getList().get().isEmpty() ) {
-            if ( mode != Mode.WAIT ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
+        appendPassIfEmptyBody(repeatStmt);
+        repeatStmt.getList().visit(this);
+        if ( !isWaitStmt ) {
+            appendExceptionHandling();
         } else {
-            repeatStmt.getList().visit(this);
-        }
-        if ( mode == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break");
+            appendBreakStmt(repeatStmt);
         }
         decrIndentation();
         return null;
@@ -226,6 +246,12 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
     }
@@ -441,13 +467,56 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         this.sb.append(stmtType).append(' ');
         ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
-        this.sb.append(" in xrange(");
+        this.sb.append(" in range(");
         expressions.get().get(1).visit(this);
         this.sb.append(", ");
         expressions.get().get(2).visit(this);
         this.sb.append(", ");
         expressions.get().get(3).visit(this);
         this.sb.append("):");
+    }
+
+    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+        nlIndent();
+        this.sb.append("break");
+    }
+
+    private void appendTry() {
+        increaseLoopCounter();
+
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            incrIndentation();
+            nlIndent();
+            this.sb.append("try:");
+        }
+    }
+
+    private void appendExceptionHandling() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except BreakOutOfALoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("break");
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except ContinueLoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("continue");
+            decrIndentation();
+        }
+        this.currenLoop.removeLast();
+    }
+
+    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getList().get().isEmpty() ) {
+            if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
+                nlIndent();
+                this.sb.append("pass");
+            }
+        }
     }
 
 }

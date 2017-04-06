@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.MicrobitConfiguration;
 import de.fhg.iais.roberta.testutil.Helper;
 
-public class PythonCodeGeneratorVisitorTest {
+public class Ast2PythonMicroBitVisitorTest {
 
     private static final String IMPORTS = "" //
         + "import microbit\n"

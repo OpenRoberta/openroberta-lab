@@ -44,36 +44,15 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Unary;
-import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
@@ -86,22 +65,15 @@ import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -120,22 +92,10 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
@@ -144,18 +104,22 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements MbedAstVisitor<Void> {
-    MicrobitConfiguration brickConfiguration;
+public class Ast2PythonMicroBitVisitor extends Ast2PythonVisitor implements MbedAstVisitor<Void> {
+    @SuppressWarnings("unused")
+    private final MicrobitConfiguration brickConfiguration;
+
     private final UsedHardwareVisitor usedHardwareVisitor;
 
     /**
      * initialize the Python code generator visitor.
      *
-     * @param indentation
-     *        to start with. Will be ince/decr depending on block structure
+     * @param brickConfiguration hardware configuration of the brick
+     * @param programPhrases to generate the code from
+     * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    PythonCodeGeneratorVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private Ast2PythonMicroBitVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
+
         this.brickConfiguration = brickConfiguration;
 
         this.usedHardwareVisitor = new UsedHardwareVisitor(programPhrases);
@@ -165,88 +129,15 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     /**
      * factory method to generate Python code from an AST.<br>
      *
-     * @param programName
-     *        name of the program
-     * @param brickConfiguration
-     *        hardware configuration of the brick
-     * @param programPhrases
-     *        to generate the code from
+     * @param brickConfiguration hardware configuration of the brick
+     * @param programPhrases to generate the code from
      */
-    public static String generate(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrasesSet.size() >= 1);
 
-        PythonCodeGeneratorVisitor astVisitor = new PythonCodeGeneratorVisitor(brickConfiguration, phrasesSet, 0);
+        Ast2PythonMicroBitVisitor astVisitor = new Ast2PythonMicroBitVisitor(brickConfiguration, programPhrases, 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> sensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> sensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
-        if ( isInteger(numConst.getValue()) ) {
-            this.sb.append(numConst.getValue());
-        } else {
-            this.sb.append("float(");
-            this.sb.append(numConst.getValue());
-            this.sb.append(")");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue() ? "True" : "False");
-        return null;
-    }
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("math.pi");
-                break;
-            case E:
-                this.sb.append("math.e");
-                break;
-            case GOLDEN_RATIO:
-                // TODO
-                //                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("math.sqrt(2)");
-                break;
-            case SQRT1_2:
-                this.sb.append("math.sqrt(1.0/2.0)");
-                break;
-            case INFINITY:
-                this.sb.append("float('inf')");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        this.sb.append("microbit.Image." + predefinedImage.getImageName());
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
-        return null;
     }
 
     @Override
@@ -256,93 +147,8 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     }
 
     @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("None");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append(var.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(var.getName());
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitUnary(Unary<Void> unary) {
-        Unary.Op op = unary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        if ( op == Unary.Op.NOT ) {
-            sym = "not ";
-        }
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
-            this.sb.append(sym);
-        } else {
-            this.sb.append(sym);
-            generateExprCode(unary, this.sb);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitBinary(Binary<Void> binary) {
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        Binary.Op op = binary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        switch ( op ) {
-            case OR:
-                sym = "or";
-                break;
-            case AND:
-                sym = "and";
-                break;
-            case IN:
-                sym = "in";
-                break;
-            default:
-                break;
-        }
-        this.sb.append(' ').append(sym).append(' ');
-        generateCodeRightExpression(binary, op);
-        return null;
-    }
-
-    @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
+    public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
+        this.sb.append("microbit.Image." + predefinedImage.getImageName());
         return null;
     }
 
@@ -370,154 +176,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        boolean first = true;
-        for ( Expr<Void> expr : exprList.get() ) {
-            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    if ( expr.getKind().hasName("BINARY", "UNARY") ) {
-                        this.sb.append("; "); // FIXME
-                    } else {
-                        this.sb.append(", ");
-                    }
-                }
-                expr.visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
-        imageInvertFunction.getImage().visit(this);
-        this.sb.append(".invert()");
-        return null;
-    }
-
-    @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("math.pow(");
-        mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.getMode() ) {
-            case UNTIL:
-            case WHILE:
-            case FOREVER:
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                appendTry();
-                break;
-            case TIMES:
-            case FOR:
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
-                appendTry();
-                break;
-            case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
-                break;
-            case FOR_EACH:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
-                appendTry();
-                break;
-            default:
-                throw new DbcException("Invalide Repeat Statement!");
-        }
-        incrIndentation();
-        appendPassIfEmptyBody(repeatStmt);
-        repeatStmt.getList().visit(this);
-        if ( !isWaitStmt ) {
-            appendExceptionHandling();
-        } else {
-            appendBreakStmt(repeatStmt);
-        }
-        decrIndentation();
-        return null;
-    }
-
-    @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
-                return null;
-            }
-        }
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
-        return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
         }
         return null;
     }
@@ -630,6 +288,13 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     }
 
     @Override
+    public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+        imageInvertFunction.getImage().visit(this);
+        this.sb.append(".invert()");
+        return null;
+    }
+
+    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         return null;
     }
@@ -707,6 +372,16 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     }
 
     @Override
+    public Void visitSoundSensor(SoundSensor<Void> sensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> sensor) {
+        return null;
+    }
+
+    @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         if ( timerSensor.getMode() == TimerSensorMode.GET_SAMPLE ) {
             this.sb.append("( microbit.running_time() - timer1 )");
@@ -751,28 +426,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     }
 
     @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
-    }
-
-    @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         this.sb.append("\"" + gestureSensor.getMode().getPythonCode() + "\" == microbit.accelerometer.current_gesture()");
         return null;
@@ -783,18 +436,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         this.sb.append("print(");
         textPrintFunct.getParam().get(0).visit(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        functionExpr.getFunction().visit(this);
         return null;
     }
 
@@ -875,12 +516,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
             default:
                 break;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append("[]");
         return null;
     }
 
@@ -1049,126 +684,9 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        switch ( mathSingleFunct.getFunctName() ) {
-            case ROOT:
-                this.sb.append("math.sqrt(");
-                break;
-            case ABS:
-                this.sb.append("math.fabs(");
-                break;
-            case LN:
-                this.sb.append("math.log(");
-                break;
-            case LOG10:
-                this.sb.append("math.log10(");
-                break;
-            case EXP:
-                this.sb.append("math.exp(");
-                break;
-            case POW10:
-                this.sb.append("math.pow(10, ");
-                break;
-            case SIN:
-                this.sb.append("math.sin(");
-                break;
-            case COS:
-                this.sb.append("math.cos(");
-                break;
-            case TAN:
-                this.sb.append("math.tan(");
-                break;
-            case ASIN:
-                this.sb.append("math.asin(");
-                break;
-            case ATAN:
-                this.sb.append("math.atan(");
-                break;
-            case ACOS:
-                this.sb.append("math.acos(");
-                break;
-            case ROUND:
-                this.sb.append("round(");
-                break;
-            case ROUNDUP:
-                this.sb.append("math.ceil(");
-                break;
-            case ROUNDDOWN:
-                this.sb.append("math.floor(");
-                break;
-            default:
-                break;
-        }
-        mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-
-        return null;
-    }
-
-    @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         this.sb.append("\"\".join(");
         textJoinFunct.getParam().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
-        methodVoid.getParameters().visit(this);
-        this.sb.append("):");
-        boolean isMethodBodyEmpty = methodVoid.getBody().get().size() != 0;
-        if ( isMethodBodyEmpty ) {
-            methodVoid.getBody().visit(this);
-        } else {
-            nlIndent();
-            this.sb.append("pass");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
-        methodReturn.getParameters().visit(this);
-        this.sb.append("):");
-        boolean isMethodBodyEmpty = methodReturn.getBody().get().size() != 0;
-        if ( isMethodBodyEmpty ) {
-            methodReturn.getBody().visit(this);
-            nlIndent();
-            this.sb.append("return ");
-            methodReturn.getReturnValue().visit(this);
-        } else {
-            nlIndent();
-            this.sb.append("pass");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        this.sb.append("if ");
-        methodIfReturn.getCondition().visit(this);
-        if ( !methodIfReturn.getReturnValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(": return ");
-            methodIfReturn.getReturnValue().visit(this);
-        } else {
-            this.sb.append(": return None");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -1197,7 +715,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
 
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -1209,7 +726,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -1230,13 +746,11 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         return null;
     }
 
-    // not supported
     @Override
     public Void visitLedColor(LedColor<Void> ledColor) {
         return null;
     }
 
-    // not supported
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         return null;
@@ -1244,7 +758,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        // not supported in micropython
         return null;
     }
 
@@ -1262,7 +775,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         return null;
     }
 
-    // not supported
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
@@ -1294,13 +806,21 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
 
     @Override
     public Void visitDisplaySetBrightnessAction(DisplaySetBrightnessAction<Void> displaySetBrightnessAction) {
-        // not supported in micropython
         return null;
     }
 
     @Override
     public Void visitDisplayGetBrightnessAction(DisplayGetBrightnessAction<Void> displayGetBrightnessAction) {
-        // not supported in micropython
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
         return null;
     }
 
@@ -1324,25 +844,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         displayGetPixelAction.getY().visit(this);
         this.sb.append(")");
         return null;
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        expr.visit(this);
-        this.sb.append(":");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(" in range(");
-        expressions.get().get(1).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(2).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(3).visit(this);
-        this.sb.append("):");
     }
 
     @Override
@@ -1374,99 +875,8 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         }
     }
 
-    private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
-        switch ( op ) {
-            case TEXT_APPEND:
-                this.sb.append("str(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            case DIVIDE:
-                this.sb.append("float(");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                break;
-        }
-    }
-
-    //    private void generateUserDefinedMethods() {
-    //        //TODO: too many nested loops and condition there must be a better way this to be done
-    //        if ( this.programPhrases.size() > 1 ) {
-    //            //            for ( ArrayList<Phrase<Void>> phrases : this.programPhrases ) {
-    //            for ( Phrase<Void> phrase : this.programPhrases ) {
-    //                boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-    //                if ( isCreateMethodPhrase ) {
-    //                    this.incrIndentation();
-    //                    phrase.visit(this);
-    //                    this.sb.append("\n");
-    //                    this.decrIndentation();
-    //                }
-    //
-    //            }
-    //        }
-    //        //        }
-    //    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        nlIndent();
-        this.sb.append("break");
-    }
-
-    private void appendTry() {
-        increaseLoopCounter();
-
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            incrIndentation();
-            nlIndent();
-            this.sb.append("try:");
-        }
-    }
-
-    private void appendExceptionHandling() {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            decrIndentation();
-            nlIndent();
-            this.sb.append("except BreakOutOfALoop:");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("break");
-            decrIndentation();
-            nlIndent();
-            this.sb.append("except ContinueLoop:");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("continue");
-            decrIndentation();
-        }
-        this.currenLoop.removeLast();
-    }
-
-    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getList().get().isEmpty() ) {
-            if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
-        }
-    }
-
-    @Override
-    public Void visitAccelerometerOrientationSensor(AccelerometerOrientationSensor<Void> accelerometerOrientationSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     @Override
     public String getEnumCode(IMode value) {
         return value.toString().toLowerCase();
     }
-
 }
