@@ -162,12 +162,12 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         if ( withWrapping ) {
             if ( this.isInDebugMode ) {
                 this.sb.append("\n");
-                this.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                this.sb.append(INDENT).append(INDENT).append("hal.closeResources();\n");
             }
 
-            this.sb.append("\n}\n");
+            this.sb.append(INDENT).append("}");
         }
-        this.sb.append("\n").append(INDENT).append("}");
+        this.sb.append("\n").append("}");
     }
 
     @Override

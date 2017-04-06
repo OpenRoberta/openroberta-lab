@@ -43,6 +43,12 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
+    public Void visitNullConst(NullConst<Void> nullConst) {
+        this.sb.append("NULL");
+        return null;
+    }
+
+    @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
@@ -67,12 +73,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
             default:
                 break;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("NULL");
         return null;
     }
 

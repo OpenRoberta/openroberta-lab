@@ -10,8 +10,6 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -62,21 +60,22 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
+        // TODO Do we have always to cast to float
         if ( isInteger(numConst.getValue()) ) {
-            this.sb.append(numConst.getValue());
+            super.visitNumConst(numConst);
         } else {
             this.sb.append("((float) ");
-            this.sb.append(numConst.getValue());
+            super.visitNumConst(numConst);
             this.sb.append(")");
         }
         return null;
     }
 
     @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
+    public Void visitNullConst(NullConst<Void> nullConst) {
+        this.sb.append("null");
         return null;
-    };
+    }
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
@@ -102,18 +101,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
             default:
                 break;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
-        return null;
-    }
-
-    @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("null");
         return null;
     }
 

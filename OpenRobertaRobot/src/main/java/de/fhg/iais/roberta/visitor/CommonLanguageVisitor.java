@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
+import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
@@ -27,15 +28,16 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
-    protected List<Phrase<Void>> programPhrases;
-
-    protected int indentation;
-
-    protected final StringBuilder sb = new StringBuilder();
-
+    //TODO find more simple way of handling the loops
     protected int loopCounter = 0;
     protected LinkedList<Integer> currenLoop = new LinkedList<Integer>();
     protected Map<Integer, Boolean> loopsLabels;
+
+    protected final StringBuilder sb = new StringBuilder();
+    protected final List<Phrase<Void>> programPhrases;
+
+    private int indentation;
+    private final StringBuilder indent = new StringBuilder();
 
     /**
      * initialize the common language code generator visitor.
@@ -43,13 +45,16 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     public CommonLanguageVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        this.indentation = indentation;
+        for ( int i = 0; i < indentation; i++ ) {
+            this.indent.append(INDENT);
+        }
         this.programPhrases =
             programPhrases
                 .stream()
                 .flatMap(e -> e.subList(1, e.size()).stream())
                 .filter(p -> p.getProperty().isInTask() == null ? true : p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
                 .collect(Collectors.toList());
-        this.indentation = indentation;
     }
 
     /**
@@ -72,11 +77,11 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
 
     protected void generateCode(boolean withWrapping) {
         generateProgramPrefix(withWrapping);
-        generateProgramMainBody(withWrapping);
+        generateProgramMainBody();
         generateProgramSuffix(withWrapping);
     }
 
-    protected void generateProgramMainBody(boolean withWrapping) {
+    private void generateProgramMainBody() {
         this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
@@ -113,6 +118,12 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append(getEnumCode(colorConst.getValue()));
         return null;
     }
 
@@ -224,10 +235,12 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
 
     protected void incrIndentation() {
         this.indentation += 1;
+        this.indent.append(INDENT);
     }
 
     protected void decrIndentation() {
         this.indentation -= 1;
+        this.indent.delete(0, INDENT.length());
     }
 
     protected void indent() {
@@ -240,9 +253,8 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
         }
     }
 
-    protected void nlIndent() {
-        this.sb.append("\n");
-        indent();
+    public void nlIndent() {
+        this.sb.append("\n").append(this.indent);
     }
 
     protected boolean isInteger(String str) {

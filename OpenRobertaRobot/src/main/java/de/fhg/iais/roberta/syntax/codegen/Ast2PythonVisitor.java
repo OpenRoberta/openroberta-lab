@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -39,7 +38,6 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  */
 public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     protected Set<String> usedGlobalVarInFunctions;
-    protected final StringBuilder indent = new StringBuilder();
     protected boolean isProgramEmpty = false;
 
     /**
@@ -49,26 +47,58 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
      */
     Ast2PythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-        for ( int i = 0; i < indentation; i++ ) {
-            this.indent.append(INDENT);
+    }
+
+    @Override
+    public Void visitNumConst(NumConst<Void> numConst) {
+        // TODO Do we have always to cast to float
+        if ( isInteger(numConst.getValue()) ) {
+            super.visitNumConst(numConst);
+        } else {
+            this.sb.append("float(");
+            super.visitNumConst(numConst);
+            this.sb.append(")");
         }
+        return null;
     }
 
     @Override
-    protected void incrIndentation() {
-        super.incrIndentation();
-        this.indent.append(INDENT);
+    public Void visitBoolConst(BoolConst<Void> boolConst) {
+        this.sb.append(boolConst.isValue() ? "True" : "False");
+        return null;
     }
 
     @Override
-    protected void decrIndentation() {
-        super.decrIndentation();
-        this.indent.delete(0, INDENT.length());
+    public Void visitNullConst(NullConst<Void> nullConst) {
+        this.sb.append("None");
+        return null;
     }
 
     @Override
-    public void nlIndent() {
-        this.sb.append("\n").append(this.indent);
+    public Void visitMathConst(MathConst<Void> mathConst) {
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("math.pi");
+                break;
+            case E:
+                this.sb.append("math.e");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
+                break;
+            case SQRT2:
+                this.sb.append("math.sqrt(2)");
+                break;
+            case SQRT1_2:
+                this.sb.append("math.sqrt(1.0/2.0)");
+                break;
+            case INFINITY:
+                this.sb.append("float('inf')");
+                break;
+            default:
+                break;
+        }
+        return null;
     }
 
     @Override
@@ -169,63 +199,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
         this.sb.append(", ");
         expressions.get().get(3).visit(this);
         this.sb.append("):");
-    }
-
-    @Override
-    public Void visitNumConst(NumConst<Void> numConst) {
-        if ( isInteger(numConst.getValue()) ) {
-            this.sb.append(numConst.getValue());
-        } else {
-            this.sb.append("float(");
-            this.sb.append(numConst.getValue());
-            this.sb.append(")");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue() ? "True" : "False");
-        return null;
-    };
-
-    @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("math.pi");
-                break;
-            case E:
-                this.sb.append("math.e");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("math.sqrt(2)");
-                break;
-            case SQRT1_2:
-                this.sb.append("math.sqrt(1.0/2.0)");
-                break;
-            case INFINITY:
-                this.sb.append("float('inf')");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
-        return null;
-    }
-
-    @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("None");
-        return null;
     }
 
     @Override
