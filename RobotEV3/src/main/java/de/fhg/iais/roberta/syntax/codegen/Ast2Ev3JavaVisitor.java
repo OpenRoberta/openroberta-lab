@@ -125,7 +125,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         boolean withWrapping) {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrasesSet.size() >= 1);
 
         Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
@@ -144,7 +143,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
         this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n");
-        generateUserDefinedMethods(this.programPhrases);
+        generateUserDefinedMethods();
         this.sb.append("\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
@@ -760,10 +759,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append("BlocklyMethods.pow(");
-        mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
@@ -907,7 +903,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         }
 
         sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
-        if ( this.usedSensors.size() > 0 ) {
+        if ( !this.usedSensors.isEmpty() ) {
             sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
         }
         sb.append(");");

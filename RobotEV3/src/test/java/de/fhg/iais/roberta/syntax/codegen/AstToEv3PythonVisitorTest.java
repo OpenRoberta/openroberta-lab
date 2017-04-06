@@ -24,7 +24,9 @@ public class AstToEv3PythonVisitorTest {
         + "from roberta.ev3 import Hal\n"
         + "from roberta.BlocklyMethods import BlocklyMethods\n"
         + "from ev3dev import ev3 as ev3dev\n"
-        + "import math\n\n";
+        + "import math\n\n"
+        + "class BreakOutOfALoop(Exception): pass\n"
+        + "class ContinueLoop(Exception): pass\n\n";
 
     private static final String GLOBALS = "" //
         + "_brickConfiguration = {\n"

@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
@@ -123,6 +124,34 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
+    }
+
+    @Override
+    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("PI");
+                break;
+            case E:
+                this.sb.append("M_E");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("GOLDEN_RATIO");
+                break;
+            case SQRT2:
+                this.sb.append("M_SQRT2");
+                break;
+            case SQRT1_2:
+                this.sb.append("M_SQRT1_2");
+                break;
+            // IEEE 754 floating point representation
+            case INFINITY:
+                this.sb.append("INFINITY");
+                break;
+            default:
+                break;
+        }
+        return null;
     }
 
     @Override
@@ -264,21 +293,21 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
                 mode = ((ColorSensor<Void>) sens).getMode();
             }
         }
-    
+
         this.sb.append("one.lcd");
         if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
             showTextAction.getY().visit(this);
         } else {
             this.sb.append("1");
         }
-    
+
         this.sb.append("(");
-    
+
         if ( isVar && (varType.equals("STRING") || varType.equals("COLOR"))
             || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") ) {
             toChar = ".c_str()";
         }
-    
+
         if ( varType.equals("BOOLEAN") ) {
             this.sb.append("rob.boolToString(");
             showTextAction.getMsg().visit(this);
@@ -286,7 +315,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         } else {
             showTextAction.getMsg().visit(this);
         }
-    
+
         this.sb.append(toChar + ");");
         return null;
     }

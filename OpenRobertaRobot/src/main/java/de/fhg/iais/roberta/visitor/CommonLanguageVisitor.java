@@ -22,10 +22,12 @@ import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -223,6 +225,21 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
+        methodStmt.getMethod().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
         this.sb.append(")");
         return null;
     }

@@ -42,7 +42,7 @@ public class PythonGlobalVariableCheck extends CheckVisitor {
     }
 
     private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
+        Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
                 if ( isMainBlock(phrase) && phrases.size() == 2 ) {

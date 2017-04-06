@@ -106,7 +106,7 @@ public class MethodVoid<V> extends Method<V> {
 
     @Override
     public Block astToBlock() {
-        boolean declare = this.parameters.get().size() == 0 ? false : true;
+        boolean declare = !this.parameters.get().isEmpty();
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();

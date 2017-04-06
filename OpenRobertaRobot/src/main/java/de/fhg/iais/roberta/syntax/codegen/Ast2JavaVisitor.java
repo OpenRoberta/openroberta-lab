@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -331,7 +329,7 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
         methodReturn.getBody().visit(this);
-        this.nlIndent();
+        nlIndent();
         this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
         this.sb.append(";\n").append(INDENT).append("}");
@@ -350,7 +348,7 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
+        super.visitMethodStmt(methodStmt);
         if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
@@ -410,22 +408,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
         }
     }
 
-    protected void generateUserDefinedMethods(List<Phrase<Void>> phrasesSet) {
-        //TODO: too many nested loops and condition there must be a better way this to be done
-        if ( phrasesSet.size() > 1 ) {
-            for ( Phrase<Void> phrase : phrasesSet ) {
-                boolean isCreateMethodPhrase = phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL");
-                if ( isCreateMethodPhrase ) {
-                    this.incrIndentation();
-                    phrase.visit(this);
-                    this.sb.append("\n");
-                    this.decrIndentation();
-                }
-
-            }
-        }
-    }
-
     private boolean isStringExpr(Expr<Void> e) {
         switch ( e.getKind().getName() ) {
             case "STRING_CONST":
@@ -459,16 +441,15 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
 
     @Override
     protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
+        int exprSize = ifStmt.getExpr().size();
+        String conditionStmt = "if";
+        for ( int i = 0; i < exprSize; i++ ) {
+            generateCodeFromStmtCondition(conditionStmt, ifStmt.getExpr().get(i));
+            conditionStmt = "else" + whitespace() + "if";
             incrIndentation();
             ifStmt.getThenList().get(i).visit(this);
             decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
+            if ( i + 1 < exprSize ) {
                 nlIndent();
                 this.sb.append("}").append(whitespace());
             }
@@ -477,7 +458,7 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
 
     @Override
     protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
+        if ( !ifStmt.getElseList().get().isEmpty() ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
             incrIndentation();

@@ -848,12 +848,13 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        List<Expr<Void>> a = textJoinFunct.getParam().get();
-        for ( int i = 0; i < a.size(); i++ ) {
+        List<Expr<Void>> parameters = textJoinFunct.getParam().get();
+        int numberOfParameters = parameters.size();
+        for ( int i = 0; i < numberOfParameters; i++ ) {
             this.sb.append("ManagedString(");
-            a.get(i).visit(this);
+            parameters.get(i).visit(this);
             this.sb.append(")");
-            if ( i < a.size() - 1 ) {
+            if ( i < numberOfParameters - 1 ) {
                 this.sb.append(" + ");
             }
         }

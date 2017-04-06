@@ -64,7 +64,7 @@ public final class JaxbTransformerHelper {
     public static void addStatement(Block block, String name, Phrase<?> value) {
         Assert.isTrue(block != null && value != null && !name.equals(""));
         Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
-        if ( ((StmtList<?>) value).get().size() != 0 ) {
+        if ( !((StmtList<?>) value).get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractStmtList(value));
@@ -85,7 +85,7 @@ public final class JaxbTransformerHelper {
     public static void addStatement(Block block, String name, ExprList<?> exprList) {
         Assert.isTrue(block != null && exprList != null && !name.equals(""));
         Assert.isTrue(exprList.getKind().hasName("EXPR_LIST"), "Phrase is not EXPR_LIST");
-        if ( exprList.get().size() != 0 ) {
+        if ( !exprList.get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractExprList(exprList));
@@ -104,7 +104,7 @@ public final class JaxbTransformerHelper {
     public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
         Assert.isTrue(repetitions != null && value != null && !name.equals(""));
         Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
-        if ( ((StmtList<?>) value).get().size() != 0 ) {
+        if ( !((StmtList<?>) value).get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractStmtList(value));
@@ -125,7 +125,7 @@ public final class JaxbTransformerHelper {
     public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
         Assert.isTrue(repetitions != null && exprList != null && !name.equals(""));
         Assert.isTrue(exprList.getKind().hasName("EXPR_LIST"), "Phrase is not EXPR_LIST");
-        if ( exprList.get().size() != 0 ) {
+        if ( !exprList.get().isEmpty() ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractExprList(exprList));

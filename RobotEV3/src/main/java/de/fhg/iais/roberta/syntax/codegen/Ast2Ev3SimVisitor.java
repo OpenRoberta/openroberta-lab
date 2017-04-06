@@ -50,7 +50,7 @@ public class Ast2Ev3SimVisitor extends SimulationVisitor<Void> {
     }
 
     public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
+        Assert.isTrue(!phrasesSet.isEmpty());
         Assert.notNull(brickConfiguration);
 
         Ast2Ev3SimVisitor astVisitor = new Ast2Ev3SimVisitor(brickConfiguration);

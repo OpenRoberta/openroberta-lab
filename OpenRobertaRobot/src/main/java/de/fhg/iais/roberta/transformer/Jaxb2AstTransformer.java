@@ -351,7 +351,7 @@ abstract public class Jaxb2AstTransformer<V> {
      */
     public String getOperation(Block block, String operationType) {
         String op = operationType;
-        if ( block.getField().size() != 0 ) {
+        if ( !block.getField().isEmpty() ) {
             op = extractOperation(block, operationType);
         }
         return op;

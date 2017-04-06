@@ -10,11 +10,9 @@ import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
@@ -53,34 +51,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
-        switch ( mathConst.getMathConst() ) {
-            case PI:
-                this.sb.append("PI");
-                break;
-            case E:
-                this.sb.append("M_E");
-                break;
-            case GOLDEN_RATIO:
-                this.sb.append("GOLDEN_RATIO");
-                break;
-            case SQRT2:
-                this.sb.append("M_SQRT2");
-                break;
-            case SQRT1_2:
-                this.sb.append("M_SQRT1_2");
-                break;
-            // IEEE 754 floating point representation
-            case INFINITY:
-                this.sb.append("INFINITY");
-                break;
-            default:
-                break;
-        }
-        return null;
-    }
-
-    @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
         this.sb.append(connectConst.getValue());
         return null;
@@ -111,7 +81,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
                 }
                 if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
                     ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    if ( list.getValue().get().size() == 0 ) {
+                    if ( list.getValue().get().isEmpty() ) {
                         return null;
                     }
                 }
@@ -216,15 +186,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
@@ -300,7 +261,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
         methodReturn.getBody().visit(this);
-        this.nlIndent();
+        nlIndent();
         this.sb.append("return ");
         methodReturn.getReturnValue().visit(this);
         this.sb.append(";\n").append("}");
@@ -319,7 +280,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
+        super.visitMethodStmt(methodStmt);
         if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
             this.sb.append(";");
         }
@@ -417,25 +378,25 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
 
     @Override
     protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
+        int exprSize = ifStmt.getExpr().size();
+        String conditionStmt = "if";
+        for ( int i = 0; i < exprSize; i++ ) {
+            generateCodeFromStmtCondition(conditionStmt, ifStmt.getExpr().get(i));
+            conditionStmt = "else" + whitespace() + "if";
             incrIndentation();
             ifStmt.getThenList().get(i).visit(this);
             decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
+            if ( i + 1 < exprSize ) {
                 nlIndent();
                 this.sb.append("}").append(whitespace());
             }
         }
+
     }
 
     @Override
     protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
+        if ( !ifStmt.getElseList().get().isEmpty() ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
             incrIndentation();

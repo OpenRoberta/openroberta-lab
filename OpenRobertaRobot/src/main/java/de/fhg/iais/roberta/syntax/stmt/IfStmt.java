@@ -173,15 +173,16 @@ public class IfStmt<V> extends Stmt<V> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, null);
-        for ( int i = 0; i < this.expr.size(); i++ ) {
+        int exprListSize = this.expr.size();
+        for ( int i = 0; i < exprListSize; i++ ) {
             sb.append("if ").append(this.expr.get(i));
             appendNewLine(sb, 0, ",then");
             sb.append(this.thenList.get(i).toString());
-            if ( i + 1 < this.expr.size() ) {
+            if ( i + 1 < exprListSize ) {
                 appendNewLine(sb, 0, ",else ");
             }
         }
-        if ( this.elseList.get().size() != 0 ) {
+        if ( !this.elseList.get().isEmpty() ) {
             appendNewLine(sb, 0, ",else");
             sb.append(this.elseList.toString());
         }
@@ -257,7 +258,7 @@ public class IfStmt<V> extends Stmt<V> {
                 JaxbTransformerHelper.addValue(repetitions, BlocklyConstants.IF + i, getExpr().get(i));
                 JaxbTransformerHelper.addStatement(repetitions, BlocklyConstants.DO + i, getThenList().get(i));
             }
-            if ( elseList.get().size() != 0 ) {
+            if ( !elseList.get().isEmpty() ) {
                 JaxbTransformerHelper.addStatement(repetitions, BlocklyConstants.ELSE, getElseList());
             }
             jaxbDestination.setRepetitions(repetitions);
@@ -266,7 +267,7 @@ public class IfStmt<V> extends Stmt<V> {
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.IF + "0", getExpr().get(0));
         JaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.DO + "0", getThenList().get(0));
-        if ( elseList.get().size() != 0 ) {
+        if ( !elseList.get().isEmpty() ) {
             JaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.ELSE, getElseList());
         }
 

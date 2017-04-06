@@ -86,7 +86,7 @@ public class MainTask<V> extends Task<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         String debug = null;
         List<Field> fields = block.getField();
-        if ( fields.size() != 0 ) {
+        if ( !fields.isEmpty() ) {
             debug = helper.extractField(fields, "DEBUG");
         }
         if ( block.getMutation().isDeclare() == true ) {
@@ -101,7 +101,7 @@ public class MainTask<V> extends Task<V> {
 
     @Override
     public Block astToBlock() {
-        boolean declare = this.variables.get().size() == 0 ? false : true;
+        boolean declare = !this.variables.get().isEmpty();
 
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);

@@ -118,9 +118,10 @@ public class MethodCall<V> extends Method<V> {
         List<Arg> arguments = block.getMutation().getArg();
         ExprList<V> parameters = helper.argumentsToExprList(arguments);
         BlocklyType[] types = helper.argumentsToParametersType(arguments);
-        List<Value> values = helper.extractValues(block, (short) arguments.size());
+        int numberOfArguments = arguments.size();
+        List<Value> values = helper.extractValues(block, (short) numberOfArguments);
 
-        ExprList<V> parametersValues = helper.valuesToExprList(values, types, arguments.size(), BlocklyConstants.ARG);
+        ExprList<V> parametersValues = helper.valuesToExprList(values, types, numberOfArguments, BlocklyConstants.ARG);
 
         return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
     }
@@ -134,7 +135,7 @@ public class MethodCall<V> extends Method<V> {
         if ( this.returnType != BlocklyType.VOID ) {
             mutation.setOutputType(this.returnType.getBlocklyName());
         }
-        if ( this.parameters.get().size() != 0 ) {
+        if ( !this.parameters.get().isEmpty() ) {
             for ( Expr<V> parameter : this.parameters.get() ) {
                 Arg arg = new Arg();
                 arg.setName(((Var<V>) parameter).getValue());

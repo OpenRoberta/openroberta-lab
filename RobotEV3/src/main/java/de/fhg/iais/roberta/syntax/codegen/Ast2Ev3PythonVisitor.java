@@ -811,6 +811,9 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         this.sb.append("from ev3dev import ev3 as ev3dev\n");
         this.sb.append("import math\n\n");
 
+        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
+        this.sb.append("class ContinueLoop(Exception): pass\n\n");
+
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append("hal = Hal(_brickConfiguration)");
     }

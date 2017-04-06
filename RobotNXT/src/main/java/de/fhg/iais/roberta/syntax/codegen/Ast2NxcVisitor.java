@@ -208,7 +208,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
             this.sb.append("[]");
             if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
                 ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                if ( list.getValue().get().size() == 0 ) {
+                if ( list.getValue().get().isEmpty() ) {
                     return null;
                 }
             }

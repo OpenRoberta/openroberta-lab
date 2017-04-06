@@ -790,22 +790,23 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
     }
 
     protected void removeInStmt() {
-        if ( this.inStmt.size() != 0 ) {
+        if ( !this.inStmt.isEmpty() ) {
             this.inStmt.remove(this.inStmt.size() - 1);
         }
     }
 
     protected void appendIfStmtConditions(IfStmt<V> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+        int exprSize = ifStmt.getExpr().size();
+        for ( int i = 0; i < exprSize; i++ ) {
             ifStmt.getExpr().get(i).visit(this);
-            if ( i < ifStmt.getExpr().size() - 1 ) {
+            if ( i < exprSize - 1 ) {
                 this.sb.append(", ");
             }
         }
     }
 
     protected void appendElseStmt(IfStmt<V> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
+        if ( !ifStmt.getElseList().get().isEmpty() ) {
             addInStmt();
             ifStmt.getElseList().visit(this);
             removeInStmt();
@@ -813,11 +814,12 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
     }
 
     protected void appendThenStmts(IfStmt<V> ifStmt) {
-        for ( int i = 0; i < ifStmt.getThenList().size(); i++ ) {
+        int thenListSize = ifStmt.getThenList().size();
+        for ( int i = 0; i < thenListSize; i++ ) {
             addInStmt();
             this.sb.append("[");
             ifStmt.getThenList().get(i).visit(this);
-            boolean isLastStmt = i < ifStmt.getThenList().size() - 1;
+            boolean isLastStmt = i < thenListSize - 1;
             this.sb.append("]");
             if ( isLastStmt ) {
                 this.sb.append(", ");
@@ -828,7 +830,7 @@ public abstract class SimulationVisitor<V> implements AstVisitor<V> {
 
     protected void appendRepeatStmtStatements(RepeatStmt<V> repeatStmt) {
         if ( repeatStmt.getMode() == Mode.WAIT ) {
-            if ( repeatStmt.getList().get().size() != 0 ) {
+            if ( !repeatStmt.getList().get().isEmpty() ) {
                 this.sb.append("[");
                 repeatStmt.getList().visit(this);
                 this.sb.append("]");

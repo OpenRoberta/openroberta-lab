@@ -69,7 +69,7 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     }
 
     public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
+        Assert.isTrue(!phrasesSet.isEmpty());
         Assert.notNull(brickConfiguration);
 
         Ast2MbedSimVisitor astVisitor = new Ast2MbedSimVisitor(brickConfiguration);

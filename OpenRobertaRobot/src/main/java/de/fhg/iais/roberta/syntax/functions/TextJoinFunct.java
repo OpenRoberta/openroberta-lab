@@ -97,7 +97,7 @@ public class TextJoinFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        int numOfStrings = (getParam().get().size());
+        int numOfStrings = getParam().get().size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfStrings));
         jaxbDestination.setMutation(mutation);

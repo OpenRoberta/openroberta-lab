@@ -41,7 +41,7 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
     }
 
     public int check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
+        Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.visit(this);

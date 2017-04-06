@@ -216,7 +216,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrasesSet.size() >= 1);
+        Assert.isTrue(!phrasesSet.isEmpty());
 
         UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
         Ast2NaoPythonVisitor astVisitor = new Ast2NaoPythonVisitor(programName, brickConfiguration, checkVisitor, 0);

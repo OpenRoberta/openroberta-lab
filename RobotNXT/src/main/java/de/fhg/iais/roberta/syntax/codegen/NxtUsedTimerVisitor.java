@@ -40,7 +40,7 @@ public class NxtUsedTimerVisitor extends CheckVisitor implements NxtAstVisitor<V
     private boolean isUsed = false;
 
     public static boolean check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
+        Assert.isTrue(!phrasesSet.isEmpty());
         NxtUsedTimerVisitor checkVisitor = new NxtUsedTimerVisitor();
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
