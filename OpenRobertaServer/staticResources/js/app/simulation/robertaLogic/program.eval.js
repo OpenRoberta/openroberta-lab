@@ -762,13 +762,13 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 if (value) {
                     stmtNotEvaluated = false;
                     break;
-                } 
+                }
             }
         }
         if (stmtNotEvaluated) {
             obj.program.prepend([obj.repeatStmtExpr]);
-            obj.repeatStmtExpr = {};    
-        }        
+        }
+        obj.repeatStmtExpr = {};            
     };
 
     var evalExpr = function(obj, propName, arrayIndex) {
