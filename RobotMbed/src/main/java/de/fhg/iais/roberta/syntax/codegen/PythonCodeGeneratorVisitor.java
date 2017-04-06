@@ -467,13 +467,11 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
             case FOREVER:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 appendTry();
-
                 break;
             case TIMES:
             case FOR:
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 appendTry();
-
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
@@ -481,7 +479,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
             case FOR_EACH:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 appendTry();
-
                 break;
             default:
                 throw new DbcException("Invalide Repeat Statement!");
@@ -1327,23 +1324,6 @@ public class PythonCodeGeneratorVisitor extends Ast2PythonVisitor implements Mbe
         displayGetPixelAction.getY().visit(this);
         this.sb.append(")");
         return null;
-    }
-
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Binary.Op.MINUS
-            && binary.getRight().getKind().hasName("BINARY")
-            && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("( ");
-            expr.visit(this);
-            sb.append(" )");
-        }
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {

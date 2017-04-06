@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -11,7 +13,10 @@ import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
@@ -21,7 +26,6 @@ import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -38,7 +42,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
      *
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public Ast2CppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    protected Ast2CppVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
     }
 
@@ -49,7 +53,7 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    public Void visitMathConst(MathConst<Void> mathConst) {
+    public Void visitMathConst(MathConst<Void> mathConst) { // TODO Unify the math consts for all systems
         switch ( mathConst.getMathConst() ) {
             case PI:
                 this.sb.append("PI");
@@ -73,6 +77,12 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
             default:
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        this.sb.append(connectConst.getValue());
         return null;
     }
 
@@ -169,58 +179,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean additionalClosingBracket = false;
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.getMode() ) {
-            case FOREVER:
-                /*
-                 *This ""if ( true ) {" statement is needed because when we have code after the "while ( true ) "
-                 *statement is unreachable
-                 */
-                this.sb.append("if ( true ) {");
-                additionalClosingBracket = true;
-                incrIndentation();
-                nlIndent();
-            case UNTIL:
-            case WHILE:
-                addLabelToLoop();
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                break;
-            case TIMES:
-            case FOR:
-                addLabelToLoop();
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
-                break;
-            case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
-                break;
-            case FOR_EACH:
-                addLabelToLoop();
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
-                break;
-            default:
-                break;
-        }
-        incrIndentation();
-        repeatStmt.getList().visit(this);
-        if ( !isWaitStmt ) {
-            this.currenLoop.removeLast();
-        } else {
-            appendBreakStmt();
-        }
-        decrIndentation();
-        nlIndent();
-        this.sb.append("}");
-        if ( additionalClosingBracket ) {
-            decrIndentation();
-            nlIndent();
-            this.sb.append("}");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         super.visitFunctionStmt(functionStmt);
         this.sb.append(";");
@@ -241,6 +199,28 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
+        return null;
+    }
+
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        this.sb.append("{");
+        listCreate.getValue().visit(this);
+        this.sb.append("}");
+        return null;
+    }
+
+    @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -356,6 +336,34 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append("\"" + colorConst.getValue() + "\"");
+        return null;
+    }
+
+    protected void addContinueLabelToLoop() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            nlIndent();
+            this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
+        }
+    }
+
+    protected void addBreakLabelToLoop(boolean isWaitStmt) {
+        if ( !isWaitStmt ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("break_loop" + this.currenLoop.getLast() + ":");
+                nlIndent();
+            }
+            this.currenLoop.removeLast();
+        }
+    }
+
+    @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         switch ( type ) {
             case ANY:
@@ -438,47 +446,34 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
         this.sb.append("}");
     }
 
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+    protected void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
         expr.visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
-        ExprList<Void> expressions = (ExprList<Void>) expr;
+    protected void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType + whitespace() + "(" + "int" + whitespace());
+        final ExprList<Void> expressions = (ExprList<Void>) expr;
         expressions.get().get(0).visit(this);
         this.sb.append(whitespace() + "=" + whitespace());
         expressions.get().get(1).visit(this);
         this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
-        int posOpenBracket = expressions.get().toString().lastIndexOf("[");
-        int posClosedBracket = expressions.get().toString().lastIndexOf("]");
-        int counterPos = expressions.get().toString().lastIndexOf("-");
-        if ( counterPos > posOpenBracket && counterPos < posClosedBracket ) {
-            this.sb.append(">" + whitespace());
-        } else {
-            this.sb.append("<" + whitespace());
-        }
+        this.sb.append(whitespace());
+        this.sb.append("<" + whitespace());
         expressions.get().get(2).visit(this);
         this.sb.append(";" + whitespace());
         expressions.get().get(0).visit(this);
+        this.sb.append(whitespace());
         this.sb.append("+=" + whitespace());
         expressions.get().get(3).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "{");
+        this.sb.append(")" + whitespace() + "{");
     }
 
-    private void appendBreakStmt() {
+    protected void appendBreakStmt() {
         nlIndent();
         this.sb.append("break;");
-    }
-
-    private void addLabelToLoop() {
-        increaseLoopCounter();
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            this.sb.append("loop" + this.currenLoop.getLast() + ":");
-            nlIndent();
-        }
     }
 
 }

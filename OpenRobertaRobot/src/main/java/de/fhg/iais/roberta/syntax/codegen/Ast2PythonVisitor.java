@@ -102,106 +102,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    public String getEnumCode(IMode value) {
-        return "'" + value.toString().toLowerCase() + "'";
-    }
-
-    private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
-        switch ( op ) {
-            case TEXT_APPEND:
-                this.sb.append("str(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            case DIVIDE:
-                this.sb.append("float(");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                break;
-        }
-    }
-
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Binary.Op.MINUS
-            && binary.getRight().getKind().hasName("BINARY")
-            && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("( ");
-            expr.visit(this);
-            sb.append(" )");
-        }
-    }
-
-    @Override
-    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(" if ( ");
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(" ) else ");
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
-    @Override
-    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                nlIndent();
-                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            StmtList<Void> then = ifStmt.getThenList().get(i);
-            if ( then.get().isEmpty() ) {
-                nlIndent();
-                this.sb.append("pass");
-            } else {
-                then.visit(this);
-            }
-            decrIndentation();
-        }
-    }
-
-    @Override
-    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("else:");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        expr.visit(this);
-        this.sb.append(":");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(" in xrange(");
-        expressions.get().get(1).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(2).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(3).visit(this);
-        this.sb.append("):");
-    }
-
-    @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(var.getName());
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -456,8 +356,98 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     }
 
     @Override
+    public String getEnumCode(IMode value) {
+        return "'" + value.toString().toLowerCase() + "'";
+    }
+
+    @Override
+    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        this.sb.append(" if ( ");
+        ifStmt.getExpr().get(0).visit(this);
+        this.sb.append(" ) else ");
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+    }
+
+    @Override
+    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+            if ( i == 0 ) {
+                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
+            } else {
+                nlIndent();
+                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
+            }
+            incrIndentation();
+            StmtList<Void> then = ifStmt.getThenList().get(i);
+            if ( then.get().isEmpty() ) {
+                nlIndent();
+                this.sb.append("pass");
+            } else {
+                then.visit(this);
+            }
+            decrIndentation();
+        }
+    }
+
+    @Override
+    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
+        if ( ifStmt.getElseList().get().size() != 0 ) {
+            nlIndent();
+            this.sb.append("else:");
+            incrIndentation();
+            ifStmt.getElseList().visit(this);
+            decrIndentation();
+        }
+    }
+
+    @Override
     protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
         return "";
+    }
+
+    protected void addPassIfProgramIsEmpty() {
+        if ( this.isProgramEmpty ) {
+            nlIndent();
+            this.sb.append("pass");
+        }
+    }
+
+    private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
+        switch ( op ) {
+            case TEXT_APPEND:
+                this.sb.append("str(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            case DIVIDE:
+                this.sb.append("float(");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                break;
+        }
+    }
+
+    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType).append(' ');
+        expr.visit(this);
+        this.sb.append(":");
+    }
+
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType).append(' ');
+        ExprList<Void> expressions = (ExprList<Void>) expr;
+        expressions.get().get(0).visit(this);
+        this.sb.append(" in xrange(");
+        expressions.get().get(1).visit(this);
+        this.sb.append(", ");
+        expressions.get().get(2).visit(this);
+        this.sb.append(", ");
+        expressions.get().get(3).visit(this);
+        this.sb.append("):");
     }
 
 }

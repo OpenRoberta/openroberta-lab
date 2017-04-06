@@ -819,6 +819,45 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         return null;
     }
 
+    @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        return null;
+    }
+
+    /**
+     * @return Java code used in the code generation to regenerates the same brick configuration
+     */
+    public String generateRegenerateConfiguration() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(" brickConfiguration = new EV3Configuration.Builder()\n");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
+        appendActors(sb);
+        appendSensors(sb);
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
+        return sb.toString();
+    }
+
     private void generateImports() {
         this.sb.append("package generated.main;\n\n");
         this.sb.append("import de.fhg.iais.roberta.runtime.*;\n");
@@ -837,20 +876,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         this.sb.append("import java.util.Arrays;\n\n");
 
         this.sb.append("import lejos.remote.nxt.NXTConnection;\n\n");
-    }
-
-    /**
-     * @return Java code used in the code generation to regenerates the same brick configuration
-     */
-    public String generateRegenerateConfiguration() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(" brickConfiguration = new EV3Configuration.Builder()\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
-        appendActors(sb);
-        appendSensors(sb);
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
-        return sb.toString();
     }
 
     private void appendSensors(StringBuilder sb) {
@@ -923,35 +948,5 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
 
     private String getSensorTypeCode(SensorType type) {
         return type.getClass().getSimpleName() + "." + type.name();
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

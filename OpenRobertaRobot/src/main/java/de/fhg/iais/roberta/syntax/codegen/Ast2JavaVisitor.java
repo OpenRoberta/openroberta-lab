@@ -447,21 +447,6 @@ public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
         }
     }
 
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("(" + whitespace());
-            expr.visit(this);
-            sb.append(whitespace() + ")");
-        }
-    }
-
     @Override
     protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         this.sb.append("(" + whitespace());

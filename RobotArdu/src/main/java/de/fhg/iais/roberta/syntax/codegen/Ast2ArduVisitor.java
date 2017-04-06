@@ -42,12 +42,7 @@ import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
@@ -55,7 +50,6 @@ import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
@@ -88,42 +82,45 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
- * StringBuilder. <b>This representation is correct C code.</b> <br>
+ * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
 public class Ast2ArduVisitor extends Ast2CppVisitor {
+    private final ArduConfiguration brickConfiguration;
+
     private final boolean isTimeSensorUsed;
     private final Set<UsedSensor> usedSensors;
-    private ArduConfiguration brickConfiguration;
 
     /**
-     * initialize the C code generator visitor.
+     * Initialize the C++ code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
-     * @param usedFunctions in the current program
+     * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public Ast2ArduVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, ArduConfiguration brickConfiguration, int indentation) {
+    private Ast2ArduVisitor(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
+
+        this.brickConfiguration = brickConfiguration;
+
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrases);
-        this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-        this.brickConfiguration = brickConfiguration;
+
+        this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
 
     }
 
     /**
-     * factory method to generate C code from an AST.<br>
+     * factory method to generate C++ code from an AST.<br>
      *
-     * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
+     * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrasesSet.size() >= 1);
 
-        Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
@@ -132,7 +129,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-
         switch ( binary.getOp() ) {
             case TEXT_APPEND:
                 if ( binary.getRight().getVarType() == BlocklyType.BOOLEAN ) {
@@ -150,7 +146,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
                 break;
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-
         }
         return null;
     }
@@ -175,7 +170,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
                 break;
             case FOR_EACH:
                 increaseLoopCounter();
-                //generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 String varType;
                 String expression = repeatStmt.getExpr().toString();
                 String segments[] = expression.split(",");
@@ -210,7 +204,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
                     this.sb.append("while(false){");
                 }
                 break;
-
             case FOREVER_ARDU:
                 repeatStmt.getList().visit(this);
                 return null;
@@ -222,7 +215,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
         } else {
-            appendBreakStmt(repeatStmt);
+            appendBreakStmt();
         }
         decrIndentation();
         nlIndent();
@@ -250,6 +243,51 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         this.sb.append("delay(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        String toChar = "";
+        String varType = showTextAction.getMsg().getVarType().toString();
+        boolean isVar = showTextAction.getMsg().getKind().getName().toString().equals("VAR");
+        IColorSensorMode mode = null;
+        Expr<Void> tt = showTextAction.getMsg();
+        if ( tt.getKind().hasName("SENSOR_EXPR") ) {
+            de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
+            if ( sens.getKind().hasName("COLOR_SENSING") ) {
+                mode = ((ColorSensor<Void>) sens).getMode();
+            }
+        }
+    
+        this.sb.append("one.lcd");
+        if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
+            showTextAction.getY().visit(this);
+        } else {
+            this.sb.append("1");
+        }
+    
+        this.sb.append("(");
+    
+        if ( isVar && (varType.equals("STRING") || varType.equals("COLOR"))
+            || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") ) {
+            toChar = ".c_str()";
+        }
+    
+        if ( varType.equals("BOOLEAN") ) {
+            this.sb.append("rob.boolToString(");
+            showTextAction.getMsg().visit(this);
+            this.sb.append(")");
+        } else {
+            showTextAction.getMsg().visit(this);
+        }
+    
+        this.sb.append(toChar + ");");
         return null;
     }
 
@@ -282,61 +320,13 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
 
     }
 
-    //won't be used
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         return null;
     }
 
-    //won't be used
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    //won't be used
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        String toChar = "";
-        String varType = showTextAction.getMsg().getVarType().toString();
-        boolean isVar = showTextAction.getMsg().getKind().getName().toString().equals("VAR");
-        IColorSensorMode mode = null;
-        Expr<Void> tt = showTextAction.getMsg();
-        if ( tt.getKind().hasName("SENSOR_EXPR") ) {
-            de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
-            if ( sens.getKind().hasName("COLOR_SENSING") ) {
-                mode = ((ColorSensor<Void>) sens).getMode();
-            }
-        }
-
-        this.sb.append("one.lcd");
-        if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
-            showTextAction.getY().visit(this);
-        } else {
-            this.sb.append("1");
-        }
-
-        this.sb.append("(");
-
-        if ( isVar && (varType.equals("STRING") || varType.equals("COLOR"))
-            || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") ) {
-            toChar = ".c_str()";
-        }
-
-        if ( varType.equals("BOOLEAN") ) {
-            this.sb.append("rob.boolToString(");
-            showTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            showTextAction.getMsg().visit(this);
-        }
-
-        this.sb.append(toChar + ");");
         return null;
     }
 
@@ -382,13 +372,11 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         return null;
     }
 
-    // not needed
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         return null;
     }
 
-    //impossible to implement it without encoder
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         return null;
@@ -484,7 +472,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         return null;
     }
 
-    // TURN ACTIONS
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         Actor leftMotor = this.brickConfiguration.getLeftMotor();
@@ -603,7 +590,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         return null;
     }
 
-    //no such sensor
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         return null;
@@ -663,7 +649,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         return null;
     }
 
-    //no such sensor
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         return null;
@@ -725,20 +710,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         } else {
             arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
         }
-        return null;
-    }
-
-    //TODO: check the change of the list
-    @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("{");
-        listCreate.getValue().visit(this);
-        this.sb.append("}");
-        return null;
-    }
-
-    @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         return null;
     }
 
@@ -928,10 +899,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append("pow(");
-        mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
@@ -961,84 +929,18 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        return null;
-    }
-
-    @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
         return null;
     }
 
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        return null;
     }
 
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("(");
-            expr.visit(this);
-            sb.append(")");
-        }
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(");
-        expr.visit(this);
-        this.sb.append(")" + whitespace() + "{");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(" + "float" + whitespace());
-        final ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace() + "=" + whitespace());
-        expressions.get().get(1).visit(this);
-        this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace());
-        this.sb.append("<" + whitespace());
-        expressions.get().get(2).visit(this);
-        this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace());
-        this.sb.append("+=" + whitespace());
-        expressions.get().get(3).visit(this);
-        this.sb.append(")" + whitespace() + "{");
-    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        nlIndent();
-        this.sb.append("break;");
-    }
-
-    private void generateSensors() {
-        for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
-                case COLOR:
-                    nlIndent();
-                    this.sb.append("brm.setRgbStatus(ENABLE);");
-                    break;
-                case INFRARED:
-                    nlIndent();
-                    this.sb.append("one.obstacleEmitters(ON);");
-                    break;
-                case ULTRASONIC:
-                    nlIndent();
-                    this.sb.append("brm.setSonarStatus(ENABLE);");
-                    break;
-                case LIGHT:
-                case COMPASS:
-                case SOUND:
-                case TOUCH:
-                    break;
-                default:
-                    throw new DbcException("Sensor is not supported!");
-            }
-        }
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        return null;
     }
 
     @Override
@@ -1100,44 +1002,6 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         this.sb.append("\n}\n");
     }
 
-    private void arrayLen(Var<Void> arr) {
-        this.sb.append("sizeof(" + arr.getValue() + "Raw" + ")/sizeof(" + arr.getValue() + "Raw" + "[0])");
-    }
-
-    private void addContinueLabelToLoop() {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            nlIndent();
-            this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
-        }
-    }
-
-    private void addBreakLabelToLoop(boolean isWaitStmt) {
-        if ( !isWaitStmt ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("break_loop" + this.loopCounter + ":");
-                nlIndent();
-            }
-            this.currenLoop.removeLast();
-        }
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append("\"" + colorConst.getValue() + "\"");
-        return null;
-    }
-
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
@@ -1145,4 +1009,33 @@ public class Ast2ArduVisitor extends Ast2CppVisitor {
         }
     }
 
+    private void arrayLen(Var<Void> arr) {
+        this.sb.append("sizeof(" + arr.getValue() + "Raw" + ")/sizeof(" + arr.getValue() + "Raw" + "[0])");
+    }
+
+    private void generateSensors() {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case COLOR:
+                    nlIndent();
+                    this.sb.append("brm.setRgbStatus(ENABLE);");
+                    break;
+                case INFRARED:
+                    nlIndent();
+                    this.sb.append("one.obstacleEmitters(ON);");
+                    break;
+                case ULTRASONIC:
+                    nlIndent();
+                    this.sb.append("brm.setSonarStatus(ENABLE);");
+                    break;
+                case LIGHT:
+                case COMPASS:
+                case SOUND:
+                case TOUCH:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported!");
+            }
+        }
+    }
 }

@@ -478,13 +478,6 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         return null;
     }
 
-    private void addPassIfProgramIsEmpty() {
-        if ( this.isProgramEmpty ) {
-            nlIndent();
-            this.sb.append("pass");
-        }
-    }
-
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         this.sb.append("print(");
@@ -784,6 +777,31 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
     }
 
     @Override
+    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        return null;
+    }
+
+    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
@@ -929,34 +947,6 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor {
         }
         sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

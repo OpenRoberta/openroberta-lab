@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2MbedSimVisitor;
-import de.fhg.iais.roberta.syntax.codegen.CppCodeGenerationVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2CppCalliopeVisitor;
 import de.fhg.iais.roberta.syntax.codegen.PythonCodeGeneratorVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -71,7 +71,7 @@ public class Helper {
     public static String generateStringWithoutWrapping(String pathToProgramXml, String language) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        String code = CppCodeGenerationVisitor.generate((CalliopeConfiguration) brickConfiguration, transformer.getTree(), false);
+        String code = Ast2CppCalliopeVisitor.generate((CalliopeConfiguration) brickConfiguration, transformer.getTree(), false);
         if ( language.equals("python") ) {
             code = PythonCodeGeneratorVisitor.generate((MicrobitConfiguration) brickConfiguration, transformer.getTree(), false);
         }
@@ -87,7 +87,7 @@ public class Helper {
      */
     public static String generateString(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = CppCodeGenerationVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        final String code = Ast2CppCalliopeVisitor.generate(brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

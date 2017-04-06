@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
@@ -45,29 +43,17 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
@@ -78,7 +64,6 @@ import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
 import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
@@ -86,19 +71,14 @@ import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -117,17 +97,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -137,43 +107,53 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Cpp code representation of a phrase to a
- * StringBuilder. <b>This representation is correct Cpp code.</b> <br>
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C++ code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
-public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstVisitor<Void> {
-    CalliopeConfiguration brickConfiguration;
+public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVisitor<Void> {
+    @SuppressWarnings("unused")
+    private final CalliopeConfiguration brickConfiguration;
+
     private final UsedHardwareVisitor usedHardwareVisitor;
 
     /**
-     * initialize the Cpp code generator visitor.
+     * initialize the C++ code generator visitor.
      *
      * @param brickConfiguration hardware configuration of the brick
-     * @param usedFunctions in the current program
+     * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-
-    public CppCodeGenerationVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, CalliopeConfiguration brickConfiguration, int indentation) {
-        super(phrases, indentation);
-        this.loopsLabels = new MbedLoopsCounterVisitor(phrases).getloopsLabelContainer();
-        this.usedHardwareVisitor = new UsedHardwareVisitor(phrases);
+    private Ast2CppCalliopeVisitor(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
 
         this.brickConfiguration = brickConfiguration;
+
+        this.usedHardwareVisitor = new UsedHardwareVisitor(programPhrases);
+
+        this.loopsLabels = new MbedLoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
     /**
-     * factory method to generate Cpp code from an AST.<br>
+     * factory method to generate C++ code from an AST.<br>
      *
-     * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
+     * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    public static String generate(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrasesSet.size() >= 1);
 
-        CppCodeGenerationVisitor astVisitor = new CppCodeGenerationVisitor(phrasesSet, brickConfiguration, 0);
+        Ast2CppCalliopeVisitor astVisitor = new Ast2CppCalliopeVisitor(brickConfiguration, programPhrases, 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
+    }
+
+    @Override
+    public Void visitStringConst(StringConst<Void> stringConst) {
+        this.sb.append("ManagedString(");
+        super.visitStringConst(stringConst);
+        this.sb.append(")");
+        return null;
     }
 
     @Override
@@ -204,18 +184,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(" \"" + colorConst.getValue() + "\"");
-        return null;
-    }
-
-    @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("ManagedString(\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\")");
-        return null;
-    }
-
-    @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         //TODO there must be a way to make this code simpler
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -233,19 +201,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
                 this.sb.append("N>");
             }
             this.sb.append(whitespace() + var.getName());
-        }
-
-        return null;
-    }
-
-    @Override
-    public Void visitUnary(Unary<Void> unary) {
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
-            this.sb.append(unary.getOp().getOpSymbol());
-        } else {
-            this.sb.append(unary.getOp().getOpSymbol());
-            generateExprCode(unary, this.sb);
         }
         return null;
     }
@@ -298,73 +253,8 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
                 this.sb.append("MicroBitImage()");
                 break;
             default:
-                this.sb.append("null");
+                this.sb.append("NULL");
                 break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        boolean first = true;
-        for ( final Expr<Void> expr : exprList.get() ) {
-            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    this.sb.append(", ");
-                }
-                expr.visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
         }
         return null;
     }
@@ -399,7 +289,7 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
         } else {
-            appendBreakStmt(repeatStmt);
+            appendBreakStmt();
         }
         addSleepIfForeverLoop(repeatStmt);
         decrIndentation();
@@ -407,33 +297,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         this.sb.append("}");
         addBreakLabelToLoop(isWaitStmt);
 
-        return null;
-    }
-
-    @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("goto " + stmtFlowCon.getFlow().toString().toLowerCase() + "_loop" + this.currenLoop.getLast() + ";");
-                return null;
-            }
-        }
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
-        return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( final Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
-        }
         return null;
     }
 
@@ -455,6 +318,32 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         this.sb.append("uBit.sleep(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
+        String ending = ")";
+        String varType = displayTextAction.getMsg().getVarType().toString();
+        this.sb.append("uBit.display.");
+        appendTextDisplayType(displayTextAction);
+        if ( !varType.equals("STRING") ) {
+            ending = wrapInManageStringToDisplay(displayTextAction, ending);
+        } else {
+            displayTextAction.getMsg().visit(this);
+        }
+
+        this.sb.append(ending + ";");
         return null;
     }
 
@@ -483,32 +372,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        String ending = ")";
-        String varType = displayTextAction.getMsg().getVarType().toString();
-        this.sb.append("uBit.display.");
-        appendTextDisplayType(displayTextAction);
-        if ( !varType.equals("STRING") ) {
-            ending = wrapInManageStringToDisplay(displayTextAction, ending);
-        } else {
-            displayTextAction.getMsg().visit(this);
-        }
-
-        this.sb.append(ending + ";");
         return null;
     }
 
@@ -581,7 +444,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         return null;
     }
 
-    // TURN ACTIONS
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
 
@@ -648,7 +510,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         return null;
     }
 
-    //no such sensor
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         return null;
@@ -757,47 +618,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
     }
 
     @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
-    }
-
-    //not used
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        this.sb.append(";");
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        functionExpr.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
         return null;
 
@@ -840,24 +660,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
             lengthOfIsEmptyFunct.getParam().get(0).visit(this);
             this.sb.append(".size())");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
-        return null;
-    }
-
-    @Override
-    public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("{");
-        listCreate.getValue().visit(this);
-        this.sb.append("}");
-        return null;
-    }
-
-    @Override
-    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         return null;
     }
 
@@ -1038,70 +840,9 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        switch ( mathSingleFunct.getFunctName() ) {
-            case ROOT:
-                this.sb.append("sqrt(");
-                break;
-            case ABS:
-                this.sb.append("abs(");
-                break;
-            case LN:
-                this.sb.append("log(");
-                break;
-            case LOG10:
-                this.sb.append("log10(");
-                break;
-            case EXP:
-                this.sb.append("exp(");
-                break;
-            case POW10:
-                this.sb.append("pow(10.0, ");
-                break;
-            case SIN:
-                this.sb.append("sin(PI / 180.0 * ");
-                break;
-            case COS:
-                this.sb.append("cos(PI / 180.0 * ");
-                break;
-            case TAN:
-                this.sb.append("tan(PI / 180.0 * ");
-                break;
-            case ASIN:
-                this.sb.append("180.0 / PI * asin(");
-                break;
-            case ATAN:
-                this.sb.append("180.0 / PI * atan(");
-                break;
-            case ACOS:
-                this.sb.append("180.0 / PI * acos(");
-                break;
-            case ROUND:
-                this.sb.append("round(");
-                break;
-            case ROUNDUP:
-                this.sb.append("ceil(");
-                break;
-            //check why there are double brackets
-            case ROUNDDOWN:
-                this.sb.append("floor(");
-                break;
-            default:
-                break;
-        }
-        mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-
-        return null;
-    }
-
-    @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append("pow(");
-        mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
@@ -1122,70 +863,24 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
         List<Expr<Void>> parameters = methodVoid.getParameters().get();
-        for ( Expr<Void> parameter : parameters ) {
-            if ( parameter.getVarType().isArray() ) {
-                this.sb.append("\ntemplate<size_t N>");
-                break;
-            }
-        }
-        this.sb.append("\n").append("void ");
-        this.sb.append(methodVoid.getMethodName() + "(");
-        methodVoid.getParameters().visit(this);
-        this.sb.append(") {");
-        methodVoid.getBody().visit(this);
-        this.sb.append("\n").append("}");
+        appendTemplateIfArrayParameter(parameters);
+        super.visitMethodVoid(methodVoid);
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
         List<Expr<Void>> parameters = methodReturn.getParameters().get();
-        for ( Expr<Void> parameter : parameters ) {
-            if ( parameter.getVarType().isArray() ) {
-                this.sb.append("\ntemplate<size_t N>");
-                break;
-            }
-        }
-        this.sb.append("\n").append(getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.sb.append(" " + methodReturn.getMethodName() + "(");
-        methodReturn.getParameters().visit(this);
-        this.sb.append(") {");
-        methodReturn.getBody().visit(this);
-        this.nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
-        this.sb.append(";\n").append("}");
+        appendTemplateIfArrayParameter(parameters);
+        super.visitMethodReturn(methodReturn);
         return null;
     }
 
-    @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        this.sb.append("if (");
-        methodIfReturn.getCondition().visit(this);
-        this.sb.append(") ");
-        this.sb.append("return ");
-        methodIfReturn.getReturnValue().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
-        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
-            this.sb.append(";");
+    private void appendTemplateIfArrayParameter(List<Expr<Void>> parameters) {
+        boolean isContainedArrayParameter = parameters.stream().filter(p -> p.getVarType().isArray()).findFirst().isPresent();
+        if ( isContainedArrayParameter ) {
+            this.sb.append("\ntemplate<size_t N>");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
-        this.sb.append(")");
-        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            this.sb.append(";");
-        }
-        return null;
     }
 
     @Override
@@ -1209,14 +904,7 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -1406,59 +1094,6 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         return null;
     }
 
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("(");
-            expr.visit(this);
-            sb.append(")");
-        }
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(");
-        expr.visit(this);
-        this.sb.append(")" + whitespace() + "{");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(" + "int" + whitespace());
-        final ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace() + "=" + whitespace());
-        expressions.get().get(1).visit(this);
-        this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace());
-        this.sb.append("<" + whitespace());
-        expressions.get().get(2).visit(this);
-        this.sb.append(";" + whitespace());
-        expressions.get().get(0).visit(this);
-        this.sb.append(whitespace());
-        this.sb.append("+=" + whitespace());
-        expressions.get().get(3).visit(this);
-        this.sb.append(")" + whitespace() + "{");
-    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        nlIndent();
-        this.sb.append("break;");
-    }
-
-    private void addConstants() {
-        this.sb.append("#define _GNU_SOURCE\n\n");
-        this.sb.append("#include \"MicroBit.h\" \n");
-        this.sb.append("#include <array>\n");
-        this.sb.append("#include <stdlib.h>\n");
-        this.sb.append("MicroBit uBit;\n\n");
-    }
-
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
@@ -1468,36 +1103,13 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
 
     }
 
-    private void addSleepIfForeverLoop(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == RepeatStmt.Mode.FOREVER ) {
-            nlIndent();
-            this.sb.append("uBit.sleep(1);");
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( withWrapping ) {
+            this.sb.append("release_fiber();");
+            this.sb.append("\n}\n");
         }
-    }
 
-    private void addContinueLabelToLoop() {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            nlIndent();
-            this.sb.append("continue_loop" + this.currenLoop.getLast() + ":");
-        }
-    }
-
-    private int map(int x, int in_min, int in_max, int out_min, int out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
-
-    private void addBreakLabelToLoop(boolean isWaitStmt) {
-        if ( !isWaitStmt ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("break_loop" + this.currenLoop.getLast() + ":");
-                nlIndent();
-            }
-            this.currenLoop.removeLast();
-        }
-    }
-
-    private void arrayLen(Var<Void> arr) {
-        this.sb.append(arr.getValue() + ".size()");
     }
 
     @Override
@@ -1548,6 +1160,21 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         }
     }
 
+    private void addSleepIfForeverLoop(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getMode() == RepeatStmt.Mode.FOREVER ) {
+            nlIndent();
+            this.sb.append("uBit.sleep(1);");
+        }
+    }
+
+    private int map(int x, int in_min, int in_max, int out_min, int out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
+    private void arrayLen(Var<Void> arr) {
+        this.sb.append(arr.getValue() + ".size()");
+    }
+
     private void appendTextDisplayType(DisplayTextAction<Void> displayTextAction) {
         if ( displayTextAction.getMode() == DisplayTextMode.TEXT ) {
             this.sb.append("scroll(");
@@ -1570,13 +1197,11 @@ public class CppCodeGenerationVisitor extends Ast2CppVisitor implements MbedAstV
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        if ( withWrapping ) {
-            this.sb.append("release_fiber();");
-            this.sb.append("\n}\n");
-        }
-
+    private void addConstants() {
+        this.sb.append("#define _GNU_SOURCE\n\n");
+        this.sb.append("#include \"MicroBit.h\" \n");
+        this.sb.append("#include <array>\n");
+        this.sb.append("#include <stdlib.h>\n");
+        this.sb.append("MicroBit uBit;\n\n");
     }
-
 }

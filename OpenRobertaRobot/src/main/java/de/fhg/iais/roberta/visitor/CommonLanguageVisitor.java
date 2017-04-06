@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -26,6 +28,7 @@ import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 
 public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
     //TODO find more simple way of handling the loops
@@ -45,6 +48,7 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     public CommonLanguageVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        Assert.isTrue(!programPhrases.isEmpty());
         this.indentation = indentation;
         for ( int i = 0; i < indentation; i++ ) {
             this.indent.append(INDENT);
@@ -281,6 +285,21 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
 
     protected boolean isMainBlock(Phrase<Void> phrase) {
         return phrase.getKind().getName().equals("MAIN_TASK");
+    }
+
+    protected boolean parenthesesCheck(Binary<Void> binary) {
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind().hasName("BINARY") && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    }
+
+    protected void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
+            // parentheses are omitted
+            expr.visit(this);
+        } else {
+            sb.append("(" + whitespace());
+            expr.visit(this);
+            sb.append(whitespace() + ")");
+        }
     }
 
     abstract protected String getLanguageVarTypeFromBlocklyType(BlocklyType type);
