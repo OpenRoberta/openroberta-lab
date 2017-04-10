@@ -455,12 +455,6 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                     generateSubExpr(this.sb, false, binary.getRight(), binary);
                 }
                 break;
-            case DIVIDE:
-                this.sb.append("((float) ");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
