@@ -82,10 +82,10 @@ A successful build looks like:
     
 #### Step 2: Make sure you have a database
 If you have a fresh clone of the server, make sure that the OpenRobertaServer folder has a subfolder **db** with the database inside. You can either 
-* copy the folder **dbBase** (also in OpenRobertaServer) under the name **db**
+* copy the folder **dbBase** (also in OpenRobertaServer) under the name **db-2.2.0**
 * or create an empty an empty database with
 
-    ./ora.sh --createemptydb OpenRobertaServer/db/openroberta-db (from the root folder)
+    ./ora.sh --createemptydb OpenRobertaServer/db-2.2.0/openroberta-db (from the root folder)
     
 If you update the server with git pull, your database will not be changed. 
 
