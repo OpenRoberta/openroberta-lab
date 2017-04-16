@@ -49,12 +49,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'lo
         });
         $('#logTable').bootstrapTable('togglePagination');
         $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('title', '').attr('rel', 'tooltip').attr('data-placement', 'left').attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST').attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST).tooltip('fixTitle');
-//        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('rel', 'tooltip');
-//        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-placement', 'left');
-//        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST');
-//        $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-original-title', Blockly.Msg.BUTTON_EMPTY_LIST).tooltip('fixTitle');
-
-        //$('#logList>.bootstrap-table').find('button[name="refresh"]').attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST');
     }
 
     function initLogListEvents() {

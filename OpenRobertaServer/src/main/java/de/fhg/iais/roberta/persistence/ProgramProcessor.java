@@ -109,10 +109,8 @@ public class ProgramProcessor extends AbstractProcessor {
         List<AccessRight> accessRights2 = accessRightDao.loadAccessRightsForUser(owner);
         for ( AccessRight accessRight : accessRights2 ) {
             // Don't return programs with wrong robot type
-            System.out.println(accessRight.getProgram().getName());
             Program program = programDao.load(accessRight.getProgram().getName(), accessRight.getProgram().getOwner(), robot);
             if ( program != null ) {
-                System.out.println(accessRight.getProgram().getName());
                 JSONArray programInfo2 = new JSONArray();
                 programInfo2.put(accessRight.getProgram().getName());
                 programInfo2.put(accessRight.getProgram().getOwner().getAccount());

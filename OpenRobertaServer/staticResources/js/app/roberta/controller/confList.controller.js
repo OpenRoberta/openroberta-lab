@@ -31,12 +31,13 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
             },
             columns : [
                     {
-                        title : "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>Name der Configuration</span>",
+                        title : "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>"
+                                + (Blockly.Msg.DATATABLE_CONFIGURATION_NAME || "Name der Configuration") + "</span>",
                         sortable : true,
                         field : '0',
                     },
                     {
-                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
+                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
                         sortable : true,
                         field : '1',
                     },
@@ -50,27 +51,25 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                         valign : 'middle',
                     },
                     {
-                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
+                        title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
                         sortable : true,
                         field : '3',
                         formatter : UTIL.formatDate
                     },
                     {
-                        title : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
+                        title : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || "Letzte Aktualisierung")
+                                + "</span>",
                         sortable : true,
                         field : '4',
                         formatter : UTIL.formatDate
-                    },
-                    {
+                    }, {
                         field : '5',
                         checkbox : true,
                         valign : 'middle',
-                    },
-                    {
+                    }, {
                         field : '7',
                         events : eventsDeleteShareLoad,
-                        title : '<a href="#" class="deleteSomeConf disabled" title="Delete selected configurations">'
-                                + '<span class="typcn typcn-delete"></span></a>',
+                        title : titleActions,
                         align : 'left',
                         valign : 'top',
                         formatter : formatDeleteShareLoad,
@@ -168,8 +167,15 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
                 $('#confNameTable').bootstrapTable({});
                 $('#confNameTable').bootstrapTable("load", result.configurationNames);
                 $('#confNameTable').bootstrapTable("hideColumn", '2');
-                $('#confNameTable').bootstrapTable("hideColumn", '3');            
+                $('#confNameTable').bootstrapTable("hideColumn", '3');
             }
+            $('#deleteSomeConf').attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP
+                    || "Click here to delete all selected robot configurations.");
+            $('#confNameTable').find('.delete').attr('data-original-title', Blockly.Msg.CONFLIST_DELETE_TOOLTIP
+                    || 'Click here to delete your robot configuration.');
+            $('#confNameTable').find('.load').attr('data-original-title', Blockly.Msg.CONFLIST_LOAD_TOOLTIP
+                    || 'Click here to load your robot configuration in the configuration environment.');
+            $('#confNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
 
@@ -259,8 +265,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
 
     var formatDeleteShareLoad = function(value, row, index) {
         var result = '';
-        result += '<a href="#" class="delete" title="Delete configuration"><span class="typcn typcn-delete"></span></a>';
-        result += '<a href="#" class="load" title="Load configuration"><span class="typcn typcn-document"></span></a>';
+        result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+        result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
         return result;
     }
 
@@ -310,4 +316,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'confList.model', 'configu
         }
         return -1;
     }
+    var titleActions = '<a href="#" id="deleteSomeConf" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">'
+            + '<span class="typcn typcn-delete"></span></a>';
 });

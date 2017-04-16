@@ -30,33 +30,27 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 refresh : 'typcn-refresh',
             },
             columns : [ {
-                title : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>Name des Programms</span>",
+                title : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || "Name des Programms") + "</span>",
                 sortable : true,
-                field : '0',
             }, {
-                title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
+                title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || "Erzeugt von") + "</span>",
                 sortable : true,
-                field : '1',
             }, {
                 title : "<span class='typcn typcn-flow-merge'></span>",
-                field : '2',
                 sortable : true,
                 sorter : sortRelations,
                 formatter : formatRelations,
                 align : 'left',
                 valign : 'middle',
             }, {
-                title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
+                title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
                 sortable : true,
-                field : '3',
                 formatter : UTIL.formatDate
             }, {
-                title : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
+                title : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || "Letzte Aktualisierung") + "</span>",
                 sortable : true,
-                field : '4',
                 formatter : UTIL.formatDate
             }, {
-                field : '5',
                 checkbox : true,
                 valign : 'middle',
             },
@@ -66,9 +60,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
 //                                field : '6',
 //                            },
             {
-                field : '7',
                 events : eventsDeleteShareLoad,
-                title : '<a href="#" class="deleteSomeProg disabled" title="Delete selected programs">' + '<span class="typcn typcn-delete"></span></a>',
+                title : titleActions,
                 align : 'left',
                 valign : 'top',
                 formatter : formatDeleteShareLoad,
@@ -170,7 +163,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         function update(result) {
             UTIL.response(result);
             if (result.rc === 'ok') {
-                //$('#programNameTable').bootstrapTable({});
                 $('#programNameTable').bootstrapTable("load", result.programNames);
                 $('#programNameTable').bootstrapTable("showColumn", '2');
                 $('#programNameTable').bootstrapTable("showColumn", '3');
@@ -180,6 +172,14 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                     $('.deleteSomeProg').hide();
                 }
             }
+
+            $('#deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || "Click here to delete all selected programs.");
+            $('#programNameTable').find('.delete').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
+            $('#programNameTable').find('.share').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP
+                    || "Click here to share your program with a friend.");
+            $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP
+                    || 'Click here to load your program in the programming environment.');
+            $('#programNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
 
@@ -227,7 +227,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                     if (right === 'READ') {
                         result += '<span class="typcn typcn-eye"></span>';
                     } else {
-                        result += '<span title="WRITE" class="typcn typcn-pencil"></span>';
+                        result += '<span rel="tooltip" data-original-title="WRITE" class="typcn typcn-pencil"></span>';
                     }
                     result += '&nbsp;';
                     result += user;
@@ -243,9 +243,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                     if (i == 0) {
                         result += '<div style="white-space:nowrap;"><span style="float:left;">'
                         if (right === 'READ') {
-                            result += '<span title="READ" class="typcn typcn-eye"></span>';
+                            result += '<span data-original-title="READ" class="typcn typcn-eye"></span>';
                         } else {
-                            result += '<span title="WRITE" class="typcn typcn-pencil"></span>';
+                            result += '<span data-original-title="WRITE" class="typcn typcn-pencil"></span>';
                         }
                         result += '&nbsp;';
                         result += user;
@@ -254,9 +254,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                     } else {
                         result += '<div style="clear:both;" class="collapse relation' + index + '">';
                         if (right == 'READ') {
-                            result += '<span title="READ" class="typcn typcn-eye"></span>';
+                            result += '<span data-original-title="READ" class="typcn typcn-eye"></span>';
                         } else {
-                            result += '<span title="WRITE" class="typcn typcn-pencil"></span>';
+                            result += '<span data-original-title="WRITE" class="typcn typcn-pencil"></span>';
                         }
                         result += '&nbsp';
                         result += user;
@@ -271,14 +271,14 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
     var formatDeleteShareLoad = function(value, row, index) {
         var result = '';
         if ($('#tabProgList').data('type') === 'userProgram') {
-            result += '<a href="#" class="delete" title="Delete program"><span class="typcn typcn-delete"></span></a>';
+            result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
             if (row[2].sharedFrom) {
-                result += '<a href="#" class="share disabled" title="Share program"><span class="typcn typcn-flow-merge"></span></a>';
+                result += '<a href="#" class="share disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
             } else {
-                result += '<a href="#" class="share" title="Share program"><span class="typcn typcn-flow-merge"></span></a>';
+                result += '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
             }
         }
-        result += '<a href="#" class="load "  title="Load program"><span class="typcn typcn-document"></span></a>';
+        result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
         return result;
     }
 
@@ -328,4 +328,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         }
         return -1;
     }
+    var titleActions = '<a href="#" id="deleteSomeProg" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">'
+            + '<span class="typcn typcn-delete"></span></a>';
 });
