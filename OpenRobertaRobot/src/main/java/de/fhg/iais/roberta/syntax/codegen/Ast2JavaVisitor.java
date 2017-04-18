@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
 
@@ -39,7 +40,7 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public abstract class Ast2JavaVisitor extends CommonLanguageVisitor {
+public abstract class Ast2JavaVisitor extends CommonLanguageVisitor implements AstSensorsVisitor<Void> {
     protected final String programName;
     protected boolean isInDebugMode = false;
 

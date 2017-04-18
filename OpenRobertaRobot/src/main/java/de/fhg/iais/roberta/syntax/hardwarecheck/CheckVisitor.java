@@ -76,9 +76,10 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public abstract class CheckVisitor implements AstVisitor<Void> {
+public abstract class CheckVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void> {
     protected List<String> globalVariables = new ArrayList<String>();
 
     @Override

@@ -53,11 +53,11 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 
 /**
  * This class a DEPRECATED implementation of {@link AstVisitor}. All methods are implemented empty ... and may be overwritten in subclasses
- * 
+ *
  * @deprecated
  */
 @Deprecated
-public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void> {
+public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void>, AstSensorsVisitor<Void> {
     /**
      * initialize the Java code generator visitor.
      *

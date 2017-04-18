@@ -81,9 +81,10 @@ import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public abstract class SimulationVisitor<V> implements AstVisitor<V> {
+public abstract class SimulationVisitor<V> implements AstVisitor<V>, AstSensorsVisitor<V> {
     protected int loopsCounter = 0;
     protected int currentLoop = 0;
     protected int stmtsNumber = 0;

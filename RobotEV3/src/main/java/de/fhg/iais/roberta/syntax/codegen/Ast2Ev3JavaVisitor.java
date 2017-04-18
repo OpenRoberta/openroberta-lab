@@ -78,6 +78,7 @@ import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -85,7 +86,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 
-public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
+public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVisitor<Void> {
     protected final EV3Configuration brickConfiguration;
 
     protected final Set<UsedSensor> usedSensors;

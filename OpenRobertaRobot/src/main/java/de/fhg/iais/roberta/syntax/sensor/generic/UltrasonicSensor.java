@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -69,7 +70,7 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitUltrasonicSensor(this);
+        return ((AstSensorsVisitor<V>) visitor).visitUltrasonicSensor(this);
     }
 
     /**

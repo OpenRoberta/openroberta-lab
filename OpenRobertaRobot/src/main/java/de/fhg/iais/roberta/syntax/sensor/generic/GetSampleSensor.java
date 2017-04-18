@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -129,7 +130,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitGetSampleSensor(this);
+        return ((AstSensorsVisitor<V>) visitor).visitGetSampleSensor(this);
     }
 
     /**
