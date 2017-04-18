@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.testutil.Helper;
 
 public class BinaryTest {
 
@@ -50,13 +50,6 @@ public class BinaryTest {
         Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
         Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.LEFT, binary.getAssoc());
-    }
-
-    @Test
-    public void getOpSymbol() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("+", binary.getOp().getOpSymbol());
     }
 
     @Test(expected = DbcException.class)

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
+import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
 import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 
 public class NxcLoopsCounterVisitor extends LoopsCounterVisitor implements NxtAstVisitor<Void> {

@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.Image;
@@ -206,8 +207,10 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-        switch ( binary.getOp() ) {
+        Op op = binary.getOp();
+        String sym = getBinaryOperatorSymbol(op);
+        this.sb.append(whitespace() + sym + whitespace());
+        switch ( op ) {
             case TEXT_APPEND:
                 this.sb.append("ManagedString(");
                 generateSubExpr(this.sb, false, binary.getRight(), binary);

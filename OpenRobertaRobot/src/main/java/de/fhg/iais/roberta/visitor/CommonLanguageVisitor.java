@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.visitor;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -161,11 +164,13 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
+        Unary.Op op = unary.getOp();
+        String sym = getUnaryOperatorSymbol(op);
+        if ( op == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
-            this.sb.append(unary.getOp().getOpSymbol());
+            this.sb.append(sym);
         } else {
-            this.sb.append(unary.getOp().getOpSymbol());
+            this.sb.append(sym + whitespace());
             generateExprCode(unary, this.sb);
         }
         return null;
@@ -330,5 +335,21 @@ public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
     abstract protected void generateProgramPrefix(boolean withWrapping);
 
     abstract protected void generateProgramSuffix(boolean withWrapping);
+
+    abstract protected String getBinaryOperatorSymbol(Binary.Op op);
+
+    abstract protected String getUnaryOperatorSymbol(Unary.Op op);
+
+    protected static <K, V> Map.Entry<K, V> entry(K key, V value) {
+        return new AbstractMap.SimpleEntry<>(key, value);
+    }
+
+    protected static <K, U> Collector<Map.Entry<K, U>, ?, Map<K, U>> entriesToMap() {
+        return Collectors.toMap((e) -> e.getKey(), (e) -> e.getValue());
+    }
+
+    protected static <K, U> Collector<Map.Entry<K, U>, ?, ConcurrentMap<K, U>> entriesToConcurrentMap() {
+        return Collectors.toConcurrentMap((e) -> e.getKey(), (e) -> e.getValue());
+    }
 
 }

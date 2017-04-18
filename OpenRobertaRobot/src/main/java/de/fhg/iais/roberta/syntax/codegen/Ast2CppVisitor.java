@@ -1,8 +1,12 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -11,6 +15,7 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
+import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
@@ -435,6 +440,57 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     protected void appendBreakStmt() {
         nlIndent();
         this.sb.append("break;");
+    }
+
+    @Override
+    protected String getBinaryOperatorSymbol(Binary.Op op) {
+        return binaryOpSymbols().get(op);
+    }
+
+    @Override
+    protected String getUnaryOperatorSymbol(Unary.Op op) {
+        return unaryOpSymbols().get(op);
+    }
+
+    protected static Map<Binary.Op, String> binaryOpSymbols() {
+        return Collections.unmodifiableMap(Stream.of(
+
+            entry(Binary.Op.ADD, "+"),
+            entry(Binary.Op.MINUS, "-"),
+            entry(Binary.Op.MULTIPLY, "*"),
+            entry(Binary.Op.DIVIDE, "/"),
+            entry(Binary.Op.MOD, "%"),
+            entry(Binary.Op.EQ, "=="),
+            entry(Binary.Op.NEQ, "!="),
+            entry(Binary.Op.LT, "<"),
+            entry(Binary.Op.LTE, "<="),
+            entry(Binary.Op.GT, ">"),
+            entry(Binary.Op.GTE, ">="),
+            entry(Binary.Op.AND, "&&"),
+            entry(Binary.Op.OR, "||"),
+            entry(Binary.Op.MATH_CHANGE, "+="),
+            entry(Binary.Op.TEXT_APPEND, "+="),
+            entry(Binary.Op.IN, ":"),
+            entry(Binary.Op.ASSIGNMENT, "="),
+            entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+            entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+            entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+            entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+            entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+
+        ).collect(entriesToMap()));
+    }
+
+    protected static Map<Unary.Op, String> unaryOpSymbols() {
+        return Collections.unmodifiableMap(Stream.of(
+
+            entry(Unary.Op.PLUS, "+"),
+            entry(Unary.Op.NEG, "-"),
+            entry(Unary.Op.NOT, "!"),
+            entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+            entry(Unary.Op.PREFIX_INCREMENTS, "++")
+
+        ).collect(entriesToMap()));
     }
 
 }

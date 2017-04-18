@@ -53,12 +53,12 @@ public class BinaryTest {
         Assert.assertEquals(Assoc.LEFT, binary.getAssoc());
     }
 
-    @Test
-    public void getOpSymbol() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_arithmetic.xml");
-        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("+", binary.getOp().getOpSymbol());
-    }
+    //    @Test
+    //    public void getOpSymbol() throws Exception {
+    //        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_arithmetic.xml");
+    //        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0).get(1);
+    //        Assert.assertEquals("+", binary.getOp().getOpSymbol());
+    //    }
 
     @Test(expected = DbcException.class)
     public void invalid() {

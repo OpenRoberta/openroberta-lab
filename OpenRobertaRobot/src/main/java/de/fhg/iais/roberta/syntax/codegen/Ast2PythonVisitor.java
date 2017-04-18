@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -124,42 +127,10 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor implements
     }
 
     @Override
-    public Void visitUnary(Unary<Void> unary) {
-        Unary.Op op = unary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        if ( op == Unary.Op.NOT ) {
-            sym = "not ";
-        }
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
-            this.sb.append(sym);
-        } else {
-            this.sb.append(sym);
-            generateExprCode(unary, this.sb);
-        }
-        return null;
-    }
-
-    @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         Binary.Op op = binary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        switch ( op ) {
-            case OR:
-                sym = "or";
-                break;
-            case AND:
-                sym = "and";
-                break;
-            case IN:
-                sym = "in";
-                break;
-            default:
-                break;
-        }
+        String sym = getBinaryOperatorSymbol(op);
         this.sb.append(' ').append(sym).append(' ');
         generateCodeRightExpression(binary, op);
         return null;
@@ -187,26 +158,6 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor implements
         }
         return null;
     }
-
-    //    @Override
-    //    public Void visitExprList(ExprList<Void> exprList) {
-    //        boolean first = true;
-    //        for ( Expr<Void> expr : exprList.get() ) {
-    //            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-    //                if ( first ) {
-    //                    first = false;
-    //                } else {
-    //                    if ( expr.getKind().hasName("BINARY", "UNARY") ) {
-    //                        this.sb.append("; "); // FIXME
-    //                    } else {
-    //                        this.sb.append(", ");
-    //                    }
-    //                }
-    //                expr.visit(this);
-    //            }
-    //        }
-    //        return null;
-    //    }
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
@@ -512,4 +463,54 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor implements
         }
     }
 
+    @Override
+    protected String getBinaryOperatorSymbol(Binary.Op op) {
+        return binaryOpSymbols().get(op);
+    }
+
+    @Override
+    protected String getUnaryOperatorSymbol(Unary.Op op) {
+        return unaryOpSymbols().get(op);
+    }
+
+    protected static Map<Binary.Op, String> binaryOpSymbols() {
+        return Collections.unmodifiableMap(Stream.of(
+
+            entry(Binary.Op.ADD, "+"),
+            entry(Binary.Op.MINUS, "-"),
+            entry(Binary.Op.MULTIPLY, "*"),
+            entry(Binary.Op.DIVIDE, "/"),
+            entry(Binary.Op.MOD, "%"),
+            entry(Binary.Op.EQ, "=="),
+            entry(Binary.Op.NEQ, "!="),
+            entry(Binary.Op.LT, "<"),
+            entry(Binary.Op.LTE, "<="),
+            entry(Binary.Op.GT, ">"),
+            entry(Binary.Op.GTE, ">="),
+            entry(Binary.Op.AND, "and"),
+            entry(Binary.Op.OR, "or"),
+            entry(Binary.Op.MATH_CHANGE, "+="),
+            entry(Binary.Op.TEXT_APPEND, "+="),
+            entry(Binary.Op.IN, "in"),
+            entry(Binary.Op.ASSIGNMENT, "="),
+            entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+            entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+            entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+            entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+            entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+
+        ).collect(entriesToMap()));
+    }
+
+    protected static Map<Unary.Op, String> unaryOpSymbols() {
+        return Collections.unmodifiableMap(Stream.of(
+
+            entry(Unary.Op.PLUS, "+"),
+            entry(Unary.Op.NEG, "-"),
+            entry(Unary.Op.NOT, "not"),
+            entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+            entry(Unary.Op.PREFIX_INCREMENTS, "++")
+
+        ).collect(entriesToMap()));
+    }
 }

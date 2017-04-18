@@ -90,7 +90,7 @@ public class Unary<V> extends Expr<V> {
     public static enum Op {
         PLUS( 10, Assoc.LEFT, "+" ),
         NEG( 10, Assoc.LEFT, "-" ),
-        NOT( 300, Assoc.RIGHT, "!" ),
+        NOT( 300, Assoc.RIGHT, "!", "not" ),
         POSTFIX_INCREMENTS( 1, Assoc.LEFT, "++" ),
         PREFIX_INCREMENTS( 1, Assoc.RIGHT, "++" );
 

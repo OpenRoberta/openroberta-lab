@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.NxcLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
@@ -233,8 +234,10 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-        switch ( binary.getOp() ) {
+        Op op = binary.getOp();
+        String sym = getBinaryOperatorSymbol(op);
+        this.sb.append(whitespace() + sym + whitespace());
+        switch ( op ) {
             case TEXT_APPEND:
                 if ( binary.getRight().getVarType().toString().contains("NUMBER") ) {
                     this.sb.append("NumToStr(");

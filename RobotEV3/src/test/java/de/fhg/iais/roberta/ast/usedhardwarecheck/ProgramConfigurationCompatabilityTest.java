@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.generic.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class ProgramConfigurationCompatabilityTest {

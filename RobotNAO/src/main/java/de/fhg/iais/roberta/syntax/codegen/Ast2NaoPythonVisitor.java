@@ -1,15 +1,11 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.components.NAOConfiguration;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.action.nao.Frame;
@@ -77,9 +73,11 @@ import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.check.NaoLoopsCounterVisitor;
+import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
+import de.fhg.iais.roberta.syntax.check.program.PythonGlobalVariableCheck;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
+import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
@@ -113,14 +111,8 @@ import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.nao.UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -151,13 +143,8 @@ import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
@@ -169,38 +156,27 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
-    public static final String INDENT = "    ";
+public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVisitor<Void> {
 
-    //private final Configuration brickConfiguration;
-    //private final String programName;
-    private final StringBuilder sb = new StringBuilder();
-    //private final UsedHardwareVisitor usedHardware;
-
-    private int indentation;
-    private final StringBuilder indent = new StringBuilder();
-
-    private int loopCounter = 0;
-    private final LinkedList<Integer> currenLoop = new LinkedList<Integer>();
-
-    private Map<Integer, Boolean> loopsLabels;
+    private final NAOConfiguration brickConfiguration;
 
     /**
      * initialize the Python code generator visitor.
      *
-     * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param usedHardware in the current program
+     * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2NaoPythonVisitor(String programName, Configuration brickConfiguration, UsedHardwareVisitor usedHardwareVisitor, int indentation) {
-        //this.programName = programName;
-        //this.brickConfiguration = brickConfiguration;
-        this.indentation = indentation;
-        //this.usedHardware = usedHardwareVisitor;
-        for ( int i = 0; i < indentation; i++ ) {
-            this.indent.append(INDENT);
-        }
+    private Ast2NaoPythonVisitor(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
+
+        PythonGlobalVariableCheck gvChecker = new PythonGlobalVariableCheck(programPhrases);
+
+        this.brickConfiguration = brickConfiguration;
+
+        this.usedGlobalVarInFunctions = gvChecker.getMarkedVariablesAsGlobal();
+        this.isProgramEmpty = gvChecker.isProgramEmpty();
+        this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
     /**
@@ -210,81 +186,20 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
+    public static String generate(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
-        Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(!phrasesSet.isEmpty());
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(phrasesSet);
-        Ast2NaoPythonVisitor astVisitor = new Ast2NaoPythonVisitor(programName, brickConfiguration, checkVisitor, 0);
-        astVisitor.generatePrefix(withWrapping);
-
-        astVisitor.generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
-
-        astVisitor.generateSuffix(withWrapping);
+        Ast2NaoPythonVisitor astVisitor = new Ast2NaoPythonVisitor(brickConfiguration, phrasesSet, 0);
+        astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
     }
 
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2NaoPythonVisitor astVisitor) {
-        this.loopsLabels = new NaoLoopsCounterVisitor(phrasesSet).getloopsLabelContainer();
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
-                phrase.visit(astVisitor);
-            }
-            if ( mainBlock ) {
-                mainBlock = false;
-            }
-        }
-    }
-
-    private static boolean handleMainBlocks(Ast2NaoPythonVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
-        if ( phrase.getKind().getCategory() != Category.TASK ) {
-            astVisitor.nlIndent();
-        } else if ( !phrase.getKind().getName().equals("LOCATION") ) {
-            mainBlock = true;
-        }
-        return mainBlock;
-    }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
-    }
-
-    private void incrIndentation() {
-        this.indentation += 1;
-        this.indent.append(INDENT);
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-        this.indent.delete(0, INDENT.length());
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n").append(this.indent);
-    }
-
-    protected String getEnumCode(IMode value) {
-        return "'" + value.toString().toLowerCase() + "'";
-    }
+    //    @Override
+    //    protected String getEnumCode(IMode value) {
+    //        return "'" + value.toString().toLowerCase() + "'";
+    //    }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
@@ -395,22 +310,9 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        Binary.Op op = binary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        switch ( op ) {
-            case OR:
-                sym = "or";
-                break;
-            case AND:
-                sym = "and";
-                break;
-            case IN:
-                sym = "in";
-                break;
-            default:
-                break;
-        }
+        Op op = binary.getOp();
+        String sym = getBinaryOperatorSymbol(op);
+
         this.sb.append(' ').append(sym).append(' ');
         generateCodeRightExpression(binary, op);
         return null;
@@ -555,114 +457,8 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.getMode() ) {
-            case UNTIL:
-            case WHILE:
-            case FOREVER:
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                appendTry();
-                break;
-            case TIMES:
-            case FOR:
-                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
-                appendTry();
-                break;
-            case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
-                break;
-            case FOR_EACH:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
-                appendTry();
-                break;
-            default:
-                break;
-        }
-        incrIndentation();
-        appendPassIfEmptyBody(repeatStmt);
-        repeatStmt.getList().visit(this);
-        if ( !isWaitStmt ) {
-            appendExceptionHandling();
-        } else {
-            appendBreakStmt(repeatStmt);
-        }
-        decrIndentation();
-        return null;
-    }
-
-    @Override
     public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
         sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    private void increaseLoopCounter() {
-        this.loopCounter++;
-        this.currenLoop.add(this.loopCounter);
-    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        nlIndent();
-        this.sb.append("break");
-    }
-
-    private void appendTry() {
-        increaseLoopCounter();
-
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            incrIndentation();
-            nlIndent();
-            this.sb.append("try:");
-        }
-    }
-
-    private void appendExceptionHandling() {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-            decrIndentation();
-            nlIndent();
-            this.sb.append("except BreakOutOfALoop:");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("break");
-            decrIndentation();
-            nlIndent();
-            this.sb.append("except ContinueLoop:");
-            incrIndentation();
-            nlIndent();
-            this.sb.append("continue");
-            decrIndentation();
-        }
-        this.currenLoop.removeLast();
-    }
-
-    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getList().get().isEmpty() ) {
-            if ( repeatStmt.getMode() != Mode.WAIT ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
-        }
-    }
-
-    @Override
-    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
-            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
-                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
-                return null;
-            }
-        }
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
-        return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
-        }
         return null;
     }
 
@@ -1004,239 +800,11 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        switch ( mathSingleFunct.getFunctName() ) {
-            case ROOT:
-                this.sb.append("math.sqrt(");
-                break;
-            case ABS:
-                this.sb.append("math.fabs(");
-                break;
-            case LN:
-                this.sb.append("math.log(");
-                break;
-            case LOG10:
-                this.sb.append("math.log10(");
-                break;
-            case EXP:
-                this.sb.append("math.exp(");
-                break;
-            case POW10:
-                this.sb.append("math.pow(10, ");
-                break;
-            case SIN:
-                this.sb.append("math.sin(");
-                break;
-            case COS:
-                this.sb.append("math.cos(");
-                break;
-            case TAN:
-                this.sb.append("math.tan(");
-                break;
-            case ASIN:
-                this.sb.append("math.asin(");
-                break;
-            case ATAN:
-                this.sb.append("math.atan(");
-                break;
-            case ACOS:
-                this.sb.append("math.acos(");
-                break;
-            case ROUND:
-                this.sb.append("round(");
-                break;
-            case ROUNDUP:
-                this.sb.append("math.ceil(");
-                break;
-            case ROUNDDOWN:
-                this.sb.append("math.floor(");
-                break;
-            default:
-                break;
-        }
-        mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-
-        return null;
-    }
-
-    @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         this.sb.append("BlocklyMethods.textJoin(");
         textJoinFunct.getParam().visit(this);
         this.sb.append(")");
         return null;
-    }
-
-    @Override
-    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
-        methodVoid.getParameters().visit(this);
-        this.sb.append("):");
-        methodVoid.getBody().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
-        methodReturn.getParameters().visit(this);
-        this.sb.append("):");
-        methodReturn.getBody().visit(this);
-        this.nlIndent();
-        this.sb.append("return ");
-        methodReturn.getReturnValue().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        this.sb.append("if ");
-        methodIfReturn.getCondition().visit(this);
-        if ( !methodIfReturn.getReturnValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(": return ");
-            methodIfReturn.getReturnValue().visit(this);
-        } else {
-            this.sb.append(": return None");
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Binary.Op.MINUS
-            && binary.getRight().getKind().hasName("BINARY")
-            && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("( ");
-            expr.visit(this);
-            sb.append(" )");
-        }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(" if ( ");
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(" ) else ");
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                nlIndent();
-                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            StmtList<Void> then = ifStmt.getThenList().get(i);
-            if ( then.get().isEmpty() ) {
-                nlIndent();
-                this.sb.append("pass");
-            } else {
-                then.visit(this);
-            }
-            decrIndentation();
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("else:");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        expr.visit(this);
-        this.sb.append(":");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(" in xrange(");
-        expressions.get().get(1).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(2).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(3).visit(this);
-        this.sb.append("):");
-    }
-
-    private void generatePrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("#!/usr/bin/python\n\n");
-        this.sb.append("import math\n");
-        this.sb.append("import time\n");
-        this.sb.append("from hal import Hal\n");
-        this.sb.append("h = Hal()\n\n");
-
-        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
-        this.sb.append("class ContinueLoop(Exception): pass\n\n");
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("\n\n");
-        this.sb.append("def main():\n");
-        this.sb.append(INDENT).append("try:\n");
-        this.sb.append(INDENT).append(INDENT).append("run()\n");
-        this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\")\n");
-
-        this.sb.append("\n");
-        this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(INDENT).append("main()");
-    }
-
-    private static boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( NumberFormatException e ) {
-            return false;
-        }
     }
 
     @Override
@@ -2073,5 +1641,38 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("#!/usr/bin/python\n\n");
+        this.sb.append("import math\n");
+        this.sb.append("import time\n");
+        this.sb.append("from hal import Hal\n");
+        this.sb.append("h = Hal()\n\n");
+
+        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
+        this.sb.append("class ContinueLoop(Exception): pass\n\n");
+
+    }
+
+    @Override
+    protected void generateProgramSuffix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("\n\n");
+        this.sb.append("def main():\n");
+        this.sb.append(INDENT).append("try:\n");
+        this.sb.append(INDENT).append(INDENT).append("run()\n");
+        this.sb.append(INDENT).append("except Exception as e:\n");
+        this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\")\n");
+
+        this.sb.append("\n");
+        this.sb.append("if __name__ == \"__main__\":\n");
+        this.sb.append(INDENT).append("main()");
     }
 }

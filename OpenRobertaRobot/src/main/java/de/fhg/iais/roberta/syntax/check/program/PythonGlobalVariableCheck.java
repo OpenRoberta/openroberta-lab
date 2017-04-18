@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.programcheck;
+package de.fhg.iais.roberta.syntax.check.program;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -29,6 +28,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.CheckVisitor;
 
 public class PythonGlobalVariableCheck extends CheckVisitor {
     private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
