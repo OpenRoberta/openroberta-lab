@@ -555,18 +555,11 @@ hidden
 
 
 }
-.tooltip.right>.tooltip-inner {
+.tooltip>.tooltip-inner {
 	background-color: #333;
 }
 
-.tooltip.right>.tooltip-arrow {
-	border-right-color: #333;
-}
-.tooltip.left>.tooltip-inner {
-	background-color: #333;
-}
-
-.tooltip.left>.tooltip-arrow {
+.tooltip>.tooltip-arrow {
 	border-right-color: #333;
 }
 

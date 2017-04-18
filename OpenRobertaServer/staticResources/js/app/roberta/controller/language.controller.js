@@ -1,5 +1,5 @@
-define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'progHelp.controller'], function(exports, LOG, $,
-        GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, HELP_C) {
+define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller', 'configuration.controller', 'user.controller', 'progHelp.controller' ], function(
+        exports, LOG, $, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, USER_C, HELP_C) {
 
     /**
      * Initialize language switching
@@ -106,8 +106,10 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#head-navi-tooltip-configuration').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_SHOW_CODE') {
                 $('#progCode').attr('data-original-title', value);
+                $('#menuShowCode').html(value);
             } else if (lkey == 'Blockly.Msg.MENU_START_SIM') {
                 $('#progSim').attr('data-original-title', value);
+                $('#menuRunSim').html(value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_INFO_TOOLTIP') {
                 $('#progInfo').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP') {
@@ -140,6 +142,22 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#codeRefresh').attr('data-original-title', value);
             } else if (lkey === "Blockly.Msg.BUTTON_EMPTY_LIST") {
                 $('#logList>.bootstrap-table').find('button[name="refresh"]').attr('data-original-title', value);
+            } else if (lkey === "Blockly.Msg.LIST_BACK_TOOLTIP") {
+                $('.bootstrap-table').find('.backList').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP') {
+                $('#deleteSomeProg').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.PROGLIST_DELETE_TOOLTIP') {
+                $('#programNameTable').find('.delete').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.PROGLIST_SHARE_TOOLTIP') {
+                $('#programNameTable').find('.share').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.PROGLIST_LOAD_TOOLTIP') {
+                $('#programNameTable').find('.load').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP') {
+                $('#deleteSomeConf').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.CONFLIST_DELETE_TOOLTIP') {
+                $('#confNameTable').find('.delete').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.CONFLIST_LOAD_TOOLTIP') {
+                $('#confNameTable').find('.load').attr('data-original-title', value);
             } else {
                 $(this).html(value);
                 $(this).attr('value', value);

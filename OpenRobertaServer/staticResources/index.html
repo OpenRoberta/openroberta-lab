@@ -88,7 +88,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								class="typcn typcn-media-play"
 								lkey="Blockly.Msg.MENU_START_BRICK">run on brick</a></li>
 							<li><a href="#" id="menuRunSim"
-								class="typcn typcn-media-play-outline"
+								class="typcn typcn-simulation"
 								lkey="Blockly.Msg.MENU_START_SIM">run in simulation</a></li>
 							<li><a href="#" id="menuNewProg"
 								class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu
@@ -517,7 +517,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		</div>
 		<div id="progList" class="tab-pane fade">
 			<div id="progListToolbar">
-				<button id="backProgList" class="btn">
+				<button id="backProgList" class="btn backList"
+					lkey="Blockly.Msg.LIST_BACK_TOOLTIP" rel="tooltip"
+					data-original-title="Back to previous view.">
 					<i class="typcn typcn-arrow-left"></i>
 				</button>
 			</div>
@@ -527,7 +529,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		<div id="confList" class="tab-pane fade">
 			<!-- <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2> -->
 			<div id="confListToolbar">
-				<button id="backConfList" class="btn">
+				<button id="backConfList" class="btn backList"
+					lkey="Blockly.Msg.LIST_BACK_TOOLTIP" rel="tooltip"
+					data-original-title="Back to previous view.">
 					<i class="typcn typcn-arrow-left"></i>
 				</button>
 			</div>
@@ -537,7 +541,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		<div id="logList" class="tab-pane fade">
 			<!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>-->
 			<div id="logListToolbar">
-				<button id="backLogList" class="btn">
+				<button id="backLogList" class="btn backList"
+					lkey="Blockly.Msg.LIST_BACK_TOOLTIP" rel="tooltip"
+					data-original-title="Back to previous view.">
 					<i class="typcn typcn-arrow-left"></i>
 				</button>
 			</div>
@@ -950,8 +956,9 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		data-backdrop="static">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content" style="padding-top: 10px;">
-				<a href="https://github.com/OpenRoberta/robertalab/releases" class="modal-body" target="_blank">Release <span id="startupVersion"font-size: 18px;">
-						2.0.0 </span></a>
+				<a href="https://github.com/OpenRoberta/robertalab/releases"
+					class="modal-body" target="_blank">Release <span
+					id="startupVersion"font-size: 18px;"> 2.0.0 </span></a>
 				<div class="modal-header"
 					style="text-align: center; font-size: 18px;">
 					<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
@@ -960,8 +967,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					style="text-align: center;">
 					<div id="popup-sim" class="popup-robot robot-container">
 						<span href="#" class='typcn typcn-open robot-icon'></span><span
-							class="robot-label">Open Roberta Sim</span><img class="img-beta" src="/css/img/beta.png"
-							alt="beta" /><a href="#" target="_blank"
+							class="robot-label">Open Roberta Sim</span><img class="img-beta"
+							src="/css/img/beta.png" alt="beta" /><a href="#" target="_blank"
 							style="display: inline;"> <span
 							class='robot-info typcn typcn-info-large'></span>
 						</a>
