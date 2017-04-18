@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class DriveActionTest {

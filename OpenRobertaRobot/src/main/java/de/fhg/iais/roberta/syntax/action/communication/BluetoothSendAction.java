@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic.communication;
+package de.fhg.iais.roberta.syntax.action.communication;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic;
+package de.fhg.iais.roberta.syntax.action.light;
 
 import java.util.List;
 

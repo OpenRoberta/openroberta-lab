@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.action.generic.PlayFileAction;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class PlayFileActionTest {

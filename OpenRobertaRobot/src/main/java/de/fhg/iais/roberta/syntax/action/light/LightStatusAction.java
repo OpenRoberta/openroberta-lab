@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic;
+package de.fhg.iais.roberta.syntax.action.light;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;

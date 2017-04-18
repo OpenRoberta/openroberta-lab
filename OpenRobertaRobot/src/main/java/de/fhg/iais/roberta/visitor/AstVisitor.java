@@ -224,6 +224,30 @@ public interface AstVisitor<V> {
     }
 
     /**
+     * visit a {@link StmtExpr}.
+     *
+     * @param stmtExpr to be visited
+     */
+    default V visitStmtExpr(StmtExpr<V> stmtExpr) {
+        stmtExpr.getStmt().visit(this);
+        return null;
+    }
+
+    /**
+     * visit a {@link ShadowExpr}.
+     *
+     * @param shadowExpr to be visited
+     */
+    default V visitShadowExpr(ShadowExpr<V> shadowExpr) {
+        if ( shadowExpr.getBlock() != null ) {
+            shadowExpr.getBlock().visit(this);
+        } else {
+            shadowExpr.getShadow().visit(this);
+        }
+        return null;
+    }
+
+    /**
      * visit a {@link IfStmt}.
      *
      * @param ifStmt to be visited
@@ -469,29 +493,4 @@ public interface AstVisitor<V> {
      * @param methodStmt to be visited
      */
     V visitMethodCall(MethodCall<V> methodCall);
-
-    /**
-     * visit a {@link StmtExpr}.
-     *
-     * @param stmtExpr to be visited
-     */
-    default V visitStmtExpr(StmtExpr<V> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    /**
-     * visit a {@link ShadowExpr}.
-     *
-     * @param shadowExpr to be visited
-     */
-    default V visitShadowExpr(ShadowExpr<V> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
 }

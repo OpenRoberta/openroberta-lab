@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic.communication;
+package de.fhg.iais.roberta.syntax.action.communication;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
@@ -19,39 +20,39 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public class BluetoothCheckConnectAction<V> extends Action<V> {
-    private final Expr<V> _connection;
+public class BluetoothConnectAction<V> extends Action<V> {
+    private final Expr<V> _address;
 
-    private BluetoothCheckConnectAction(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("BLUETOOTH_CHECK_CONNECT_ACTION"), properties, comment);
-        Assert.isTrue(_connection.isReadOnly() && _connection != null);
-        this._connection = _connection;
+    private BluetoothConnectAction(Expr<V> address, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_CONNECT_ACTION"), properties, comment);
+        Assert.isTrue(address.isReadOnly() && address != null);
+        this._address = address;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link BluetoothCheckConnectAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link MotorDriveStopAction}. This instance is read only and can not be modified.
      *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link BluetoothCheckConnectAction}
+     * @return read only object of class {@link MotorDriveStopAction}
      */
-    public static <V> BluetoothCheckConnectAction<V> make(Expr<V> _connection, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BluetoothCheckConnectAction<V>(_connection, properties, comment);
+    public static <V> BluetoothConnectAction<V> make(Expr<V> address, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new BluetoothConnectAction<V>(address, properties, comment);
     }
 
-    public Expr<V> getConnection() {
-        return this._connection;
+    public Expr<V> get_address() {
+        return this._address;
     }
 
     @Override
     public String toString() {
-        return "BluetoothConnectAction [" + getConnection().toString() + "]";
+        return "BluetoothConnectAction [" + get_address().toString() + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorsVisitor<V>) visitor).visitBluetoothCheckConnectAction(this);
+        return ((AstActorsVisitor<V>) visitor).visitBluetoothConnectAction(this);
     }
 
     /**
@@ -63,8 +64,8 @@ public class BluetoothCheckConnectAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> bluetoothConnectAddress = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, BlocklyType.STRING));
-        return BluetoothCheckConnectAction
+        Phrase<V> bluetoothConnectAddress = helper.extractValue(values, new ExprParam(BlocklyConstants.ADDRESS, BlocklyType.STRING));
+        return BluetoothConnectAction
             .make(helper.convertPhraseToExpr(bluetoothConnectAddress), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -73,7 +74,7 @@ public class BluetoothCheckConnectAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADDRESS, get_address());
 
         return jaxbDestination;
     }

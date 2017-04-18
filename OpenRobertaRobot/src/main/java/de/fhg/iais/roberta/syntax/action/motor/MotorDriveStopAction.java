@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic;
+package de.fhg.iais.roberta.syntax.action.motor;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -12,34 +12,35 @@ import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
- * This class represents the <b>robActions_display_clear</b> block from Blockly into the AST (abstract syntax tree).
+ * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code to stop the work of the motors.<br/>
  */
-public final class ClearDisplayAction<V> extends Action<V> {
+public class MotorDriveStopAction<V> extends Action<V> {
 
-    private ClearDisplayAction(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("CLEAR_DISPLAY_ACTION"), properties, comment);
+    private MotorDriveStopAction(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("STOP_ACTION"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link ClearDisplayAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link MotorDriveStopAction}. This instance is read only and can not be modified.
      *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link ClearDisplayAction}
+     * @return read only object of class {@link MotorDriveStopAction}
      */
-    public static <V> ClearDisplayAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ClearDisplayAction<V>(properties, comment);
+    public static <V> MotorDriveStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MotorDriveStopAction<V>(properties, comment);
     }
 
     @Override
     public String toString() {
-        return "ClearDisplayAction []";
+        return "StopAction []";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorsVisitor<V>) visitor).visitClearDisplayAction(this);
+        return ((AstActorsVisitor<V>) visitor).visitMotorDriveStopAction(this);
     }
 
     /**
@@ -50,7 +51,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        return ClearDisplayAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorDriveStopAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

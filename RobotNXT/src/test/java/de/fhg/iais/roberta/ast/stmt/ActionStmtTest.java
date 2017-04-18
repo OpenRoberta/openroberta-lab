@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 
 public class ActionStmtTest {

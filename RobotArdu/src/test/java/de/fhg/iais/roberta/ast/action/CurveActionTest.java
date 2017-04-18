@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class CurveActionTest {

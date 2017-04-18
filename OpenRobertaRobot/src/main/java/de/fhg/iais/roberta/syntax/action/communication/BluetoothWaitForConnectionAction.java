@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic;
+package de.fhg.iais.roberta.syntax.action.communication;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -6,19 +6,16 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
+import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-/**
- * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code to stop the work of the motors.<br/>
- */
-public class MotorDriveStopAction<V> extends Action<V> {
+public class BluetoothWaitForConnectionAction<V> extends Action<V> {
 
-    private MotorDriveStopAction(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("STOP_ACTION"), properties, comment);
+    private BluetoothWaitForConnectionAction(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("BLUETOOTH_WAIT_FOR_CONNECTION_ACTION"), properties, comment);
         setReadOnly();
     }
 
@@ -29,18 +26,18 @@ public class MotorDriveStopAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorDriveStopAction}
      */
-    public static <V> MotorDriveStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MotorDriveStopAction<V>(properties, comment);
+    public static <V> BluetoothWaitForConnectionAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new BluetoothWaitForConnectionAction<V>(properties, comment);
     }
 
     @Override
     public String toString() {
-        return "StopAction []";
+        return "BluetoothWaitForConnectionAction []";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorsVisitor<V>) visitor).visitMotorDriveStopAction(this);
+        return ((AstActorsVisitor<V>) visitor).visitBluetoothWaitForConnectionAction(this);
     }
 
     /**
@@ -51,7 +48,7 @@ public class MotorDriveStopAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        return MotorDriveStopAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return BluetoothWaitForConnectionAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
