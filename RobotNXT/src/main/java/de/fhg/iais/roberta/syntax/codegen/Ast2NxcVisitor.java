@@ -244,6 +244,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
                     generateSubExpr(this.sb, false, binary.getRight(), binary);
                 }
                 break;
+
             default:
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
