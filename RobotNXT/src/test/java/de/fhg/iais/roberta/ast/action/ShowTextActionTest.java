@@ -4,16 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 
 public class ShowTextActionTest {
-
-    @Test
-    public void makeHelloWorld() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-76, y=1], ShowHelloWorldAction [HelloWorld], ShowHelloWorldAction [HelloWorld]]]]";
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowHelloWorld.xml"));
-    }
 
     @Test
     public void make() throws Exception {

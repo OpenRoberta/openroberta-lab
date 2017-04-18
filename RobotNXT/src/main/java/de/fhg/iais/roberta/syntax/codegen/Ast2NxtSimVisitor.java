@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -28,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -40,8 +40,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 
-public class Ast2NxtSimVisitor extends SimulationVisitor<Void> {
+public class Ast2NxtSimVisitor extends SimulationVisitor<Void> implements NxtAstVisitor<Void> {
     private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
     private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
 
@@ -313,4 +314,5 @@ public class Ast2NxtSimVisitor extends SimulationVisitor<Void> {
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         return null;
     }
+
 }

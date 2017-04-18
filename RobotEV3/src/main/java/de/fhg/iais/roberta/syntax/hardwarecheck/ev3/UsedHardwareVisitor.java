@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
@@ -212,12 +211,6 @@ public class UsedHardwareVisitor extends CheckVisitor {
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
         this.usedSensors.add(new UsedSensor(soundSensor.getPort(), SensorType.SOUND, soundSensor.getMode()));
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 

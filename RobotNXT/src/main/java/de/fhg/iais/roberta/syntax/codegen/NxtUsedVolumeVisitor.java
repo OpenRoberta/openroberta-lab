@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
@@ -15,7 +14,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
-import de.fhg.iais.roberta.syntax.action.nxt.addition.ShowHelloWorldAction;
+import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -184,11 +183,6 @@ public class NxtUsedVolumeVisitor extends CheckVisitor implements NxtAstVisitor<
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
         // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
         return null;
     }
 

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic;
+package de.fhg.iais.roberta.syntax.action.nxt;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.nxt.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -18,6 +19,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 
 /**
  * This class represents the <b>robActions_brickLight_on</b> block from Blockly
@@ -83,7 +85,7 @@ public class LightSensorAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitLightSensorAction(this);
+        return ((NxtAstVisitor<V>) visitor).visitLightSensorAction(this);
     }
 
     /**

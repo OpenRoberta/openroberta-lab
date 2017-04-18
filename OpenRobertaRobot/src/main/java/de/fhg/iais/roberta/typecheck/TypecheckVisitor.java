@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -677,12 +676,6 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitSoundSensor(SoundSensor<BlocklyType> lightSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public BlocklyType visitLightSensorAction(LightSensorAction<BlocklyType> lightSensorAction) {
         // TODO Auto-generated method stub
         return null;
     }

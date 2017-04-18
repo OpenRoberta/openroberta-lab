@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -37,7 +36,7 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
-import de.fhg.iais.roberta.syntax.action.nxt.addition.ShowHelloWorldAction;
+import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.NxcLoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
@@ -1146,12 +1145,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowHelloWorldAction(ShowHelloWorldAction<Void> showHelloWorldAction) {
-        this.sb.append("!!!Hello World!!!");
         return null;
     }
 

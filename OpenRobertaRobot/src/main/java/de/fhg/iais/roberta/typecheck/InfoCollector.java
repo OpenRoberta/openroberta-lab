@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -634,12 +633,6 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitSoundSensor(SoundSensor<T> lightSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public T visitLightSensorAction(LightSensorAction<T> lightSensorAction) {
         // TODO Auto-generated method stub
         return null;
     }

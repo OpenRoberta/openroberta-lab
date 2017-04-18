@@ -36,7 +36,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -1904,19 +1903,7 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
     }
 
     @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -2085,6 +2072,12 @@ public class Ast2NaoPythonVisitor implements NaoAstVisitor<Void> {
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         // TODO Auto-generated method stub
         return null;
     }

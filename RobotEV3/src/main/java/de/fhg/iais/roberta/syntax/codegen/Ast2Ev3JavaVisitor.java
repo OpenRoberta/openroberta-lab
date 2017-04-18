@@ -31,7 +31,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -167,18 +166,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
             this.sb.append(INDENT).append("}");
         }
         this.sb.append("\n").append("}");
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> sensor) {
-        //TODO: is this sensors supported by the EV3
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> sensor) {
-        //TODO: is this sensors supported by the EV3
-        return null;
     }
 
     @Override
@@ -509,6 +496,26 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     }
 
     @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> sensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> sensor) {
+        return null;
+    }
+
+    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
         this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
@@ -816,27 +823,12 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     }
 
     @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
         return null;
     }
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         return null;
     }
 

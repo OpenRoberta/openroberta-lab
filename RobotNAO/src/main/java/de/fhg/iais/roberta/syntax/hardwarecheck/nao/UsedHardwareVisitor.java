@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.nao;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -41,12 +40,6 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     public boolean isGreyScale() {
         return this.greyScale;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

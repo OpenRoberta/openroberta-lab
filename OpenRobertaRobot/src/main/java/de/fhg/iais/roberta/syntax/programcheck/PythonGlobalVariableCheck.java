@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
@@ -103,11 +102,6 @@ public class PythonGlobalVariableCheck extends CheckVisitor {
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         return null;
     }
 

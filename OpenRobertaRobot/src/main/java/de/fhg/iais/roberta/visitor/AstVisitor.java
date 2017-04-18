@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -317,13 +316,6 @@ public interface AstVisitor<V> {
      * @param lightAction to be visited
      */
     V visitLightAction(LightAction<V> lightAction);
-
-    /**
-     * visit a {@link LightAction}.
-     *
-     * @param lightAction to be visited
-     */
-    V visitLightSensorAction(LightSensorAction<V> lightSensorAction);
 
     /**
      * visit a {@link LightStatusAction}.

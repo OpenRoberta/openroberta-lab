@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.mbed;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -58,11 +57,6 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     public boolean isGreyScale() {
         return this.greyScale;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        return null;
     }
 
     @Override

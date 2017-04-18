@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -286,11 +285,6 @@ public class LoopsCounterVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         return null;
     }
 
@@ -629,5 +623,4 @@ public class LoopsCounterVisitor implements AstVisitor<Void> {
         count = this.waitsInLoops.get(this.loopCounter);
         this.waitsInLoops.put(this.loopCounter, ++count);
     }
-
 }

@@ -16,7 +16,6 @@ import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
-import de.fhg.iais.roberta.syntax.action.generic.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorGetPowerAction;
@@ -115,14 +114,6 @@ public class Ast2Ev3SimVisitor extends SimulationVisitor<Void> {
     public Void visitLightAction(LightAction<Void> lightAction) {
         String end = createClosingBracket();
         this.sb.append("createTurnLight(CONST." + lightAction.getColor() + ", CONST." + lightAction.getBlinkMode());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
-        String end = createClosingBracket();
-        this.sb.append("createLightSensorAction(CONST.COLOR_ENUM." + lightSensorAction.getLight() + ", CONST." + lightSensorAction.getState());
         this.sb.append(end);
         return null;
     }
@@ -313,4 +304,5 @@ public class Ast2Ev3SimVisitor extends SimulationVisitor<Void> {
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         return null;
     }
+
 }
