@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -55,7 +56,7 @@ public class CompassSensor<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitCompassSensor(this);
+        return ((AstSensorsVisitor<V>) visitor).visitCompassSensor(this);
     }
 
     /**

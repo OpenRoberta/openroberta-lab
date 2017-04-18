@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -86,7 +87,7 @@ public class LightAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitLightAction(this);
+        return ((AstActorsVisitor<V>) visitor).visitLightAction(this);
     }
 
     /**

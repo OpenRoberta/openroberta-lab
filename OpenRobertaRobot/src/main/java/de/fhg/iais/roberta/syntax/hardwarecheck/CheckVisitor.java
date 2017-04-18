@@ -3,10 +3,6 @@ package de.fhg.iais.roberta.syntax.hardwarecheck;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightAction;
 import de.fhg.iais.roberta.syntax.action.generic.LightStatusAction;
@@ -16,6 +12,10 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -76,10 +76,11 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public abstract class CheckVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void> {
+public abstract class CheckVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorsVisitor<Void> {
     protected List<String> globalVariables = new ArrayList<String>();
 
     @Override

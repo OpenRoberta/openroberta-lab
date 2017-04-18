@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.mbed;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -82,6 +83,13 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
      * @param ultrasonicSensor to be visited
      */
     V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+
+    /**
+     * visit a {@link CompassSensor}.
+     *
+     * @param compassSensor to be visited
+     */
+    V visitCompassSensor(CompassSensor<V> compassSensor);
 
     /**
      * visit a {@link GetSampleSensor}.

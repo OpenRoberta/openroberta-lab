@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
@@ -25,6 +20,11 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
@@ -93,6 +93,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -100,7 +101,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class InfoCollector<T> implements AstVisitor<T>, AstSensorsVisitor<T> {
+public class InfoCollector<T> implements AstVisitor<T>, AstSensorsVisitor<T>, AstActorsVisitor<T> {
 
     private final List<NepoInfo> infos = new ArrayList<>();
 

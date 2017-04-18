@@ -22,11 +22,6 @@ import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
@@ -43,6 +38,11 @@ import de.fhg.iais.roberta.syntax.action.generic.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
@@ -78,6 +78,7 @@ import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -86,7 +87,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 
-public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVisitor<Void> {
+public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVisitor<Void>, AstActorsVisitor<Void> {
     protected final EV3Configuration brickConfiguration;
 
     protected final Set<UsedSensor> usedSensors;

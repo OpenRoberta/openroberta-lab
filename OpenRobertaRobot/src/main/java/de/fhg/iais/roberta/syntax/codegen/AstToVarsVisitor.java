@@ -5,12 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;

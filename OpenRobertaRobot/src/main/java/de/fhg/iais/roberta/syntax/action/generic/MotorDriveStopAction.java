@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -39,7 +40,7 @@ public class MotorDriveStopAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitMotorDriveStopAction(this);
+        return ((AstActorsVisitor<V>) visitor).visitMotorDriveStopAction(this);
     }
 
     /**

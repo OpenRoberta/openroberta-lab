@@ -1,10 +1,5 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.nao;
 
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.generic.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.generic.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.CurveAction;
 import de.fhg.iais.roberta.syntax.action.generic.DriveAction;
@@ -22,6 +17,11 @@ import de.fhg.iais.roberta.syntax.action.generic.ToneAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.syntax.action.generic.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;

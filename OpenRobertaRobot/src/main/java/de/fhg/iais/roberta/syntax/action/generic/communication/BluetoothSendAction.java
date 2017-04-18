@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.generic;
+package de.fhg.iais.roberta.syntax.action.generic.communication;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.visitor.AstActorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class BluetoothSendAction<V> extends Action<V> {
@@ -84,7 +85,7 @@ public class BluetoothSendAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitBluetoothSendAction(this);
+        return ((AstActorsVisitor<V>) visitor).visitBluetoothSendAction(this);
     }
 
     /**
