@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NxtAstVisitor;
@@ -186,9 +185,4 @@ public class NxtUsedVolumeVisitor extends CheckVisitor implements NxtAstVisitor<
         return null;
     }
 
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

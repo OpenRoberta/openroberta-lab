@@ -74,7 +74,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -178,6 +177,11 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
         decrIndentation();
         nlIndent();
         this.sb.append("}");
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         return null;
     }
 
@@ -501,11 +505,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitSoundSensor(SoundSensor<Void> sensor) {
         return null;
     }
@@ -819,11 +818,6 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor {
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         this.sb.append("hal.waitForConnection()");
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         return null;
     }
 

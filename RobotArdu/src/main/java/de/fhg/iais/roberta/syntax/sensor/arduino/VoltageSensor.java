@@ -1,6 +1,7 @@
-package de.fhg.iais.roberta.syntax.sensor.generic;
+package de.fhg.iais.roberta.syntax.sensor.arduino;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -8,6 +9,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.visitor.ArduAstVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -49,7 +51,7 @@ public class VoltageSensor<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitVoltageSensor(this);
+        return ((ArduAstVisitor<V>) visitor).visitVoltageSensor(this);
     }
 
     /**

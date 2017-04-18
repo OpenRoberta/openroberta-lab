@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.action.generic.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.generic.TurnAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.hardwarecheck.CheckVisitor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -28,15 +29,15 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.ArduAstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author kcvejoski
  */
-public class UsedHardwareVisitor extends CheckVisitor {
+public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<Void> {
     private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     private boolean isTimerSensorUsed;
 
