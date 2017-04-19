@@ -105,17 +105,6 @@ public class Unary<V> extends Expr<V> {
         }
 
         /**
-         * @return mathematical symbol of the operation.
-         */
-        public String getOpSymbol() {
-            if ( this.values.length == 0 ) {
-                return this.toString();
-            } else {
-                return this.values[0];
-            }
-        }
-
-        /**
          * @return precedence of the operator.
          */
         public int getPrecedence() {

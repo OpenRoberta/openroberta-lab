@@ -47,13 +47,6 @@ public class UnaryTest {
         Assert.assertEquals(Assoc.LEFT, unary.getAssoc());
     }
 
-    @Test
-    public void getOpSymbol() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
-        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals("-", unary.getOp().getOpSymbol());
-    }
-
     @Test(expected = DbcException.class)
     public void invalid() {
         Unary.Op.get("");
