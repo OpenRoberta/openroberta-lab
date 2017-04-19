@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
-import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
+import de.fhg.iais.roberta.syntax.check.program.PythonGlobalVariableCheck;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
@@ -44,11 +44,10 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
-public class NaoLoopsCounterVisitor extends LoopsCounterVisitor implements NaoAstVisitor<Void> {
+public class NaoPythonGlobalVariableCheck extends PythonGlobalVariableCheck implements NaoAstVisitor<Void> {
 
-    public NaoLoopsCounterVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public NaoPythonGlobalVariableCheck(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         super(phrasesSet);
-
     }
 
     @Override
@@ -149,6 +148,18 @@ public class NaoLoopsCounterVisitor extends LoopsCounterVisitor implements NaoAs
 
     @Override
     public Void visitPlayFile(PlayFile<Void> playFile) {
+
+        return null;
+    }
+
+    @Override
+    public Void visitDialog(Dialog<Void> dialog) {
+
+        return null;
+    }
+
+    @Override
+    public Void visitRecognizedWord(RecognizedWord<Void> recognizedWord) {
 
         return null;
     }
@@ -263,18 +274,6 @@ public class NaoLoopsCounterVisitor extends LoopsCounterVisitor implements NaoAs
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-
-        return null;
-    }
-
-    @Override
-    public Void visitDialog(Dialog<Void> dialog) {
-
-        return null;
-    }
-
-    @Override
-    public Void visitRecognizedWord(RecognizedWord<Void> recognizedWord) {
 
         return null;
     }

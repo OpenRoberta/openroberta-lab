@@ -32,8 +32,6 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
-import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
 
@@ -41,7 +39,7 @@ import de.fhg.iais.roberta.visitor.CommonLanguageVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public abstract class Ast2PythonVisitor extends CommonLanguageVisitor implements AstSensorsVisitor<Void>, AstActorsVisitor<Void> {
+public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
     protected Set<String> usedGlobalVarInFunctions;
     protected boolean isProgramEmpty = false;
 
