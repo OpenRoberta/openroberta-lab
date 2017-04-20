@@ -107,6 +107,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     Blockly.svgResize(blocklyWorkspace);
                     $('#infoContent').on('change', function() {
                         blocklyWorkspace.description = $('#infoContent').html();
+                        if (GUISTATE_C.isProgramSaved()) {
+                            GUISTATE_C.setProgramSaved(false);
+                        }
                     });
                 }
             });

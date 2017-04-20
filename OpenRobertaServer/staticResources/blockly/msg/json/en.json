@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-04-17 18:47:55.675622",
+		"lastupdated": "2017-04-20 12:50:05.911549",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1134,5 +1134,7 @@
 	"MENU_GALLERY": "gallery",
 	"MENU_GALLERY_TOOLTIP": "gallery",
 	"PROGLIST_DELETE_SHARE_WITH_GALLERY": "Your program is allready shared with the gallery. If you change it, it will be automatically updated. Do you want to remove your program from the gallery?",
-	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody?"
+	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody?",
+	"MENU_CREATE_LINK": "create program link ...",
+	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$"
 }
