@@ -774,7 +774,12 @@ public class Ast2NxcVisitor implements NxtAstVisitor<Void> {
                 }
                 break;
             case CAPTURED_TYPE:
-                if ( showTextAction.getMsg().toString().contains("Number") ) {
+                if ( showTextAction.getMsg().toString().contains("Number")
+                    || showTextAction.getMsg().toString().contains("ADD")
+                    || showTextAction.getMsg().toString().contains("MINUS")
+                    || showTextAction.getMsg().toString().contains("MULTIPLY")
+                    || showTextAction.getMsg().toString().contains("DIVIDE")
+                    || showTextAction.getMsg().toString().contains("MOD") ) {
                     methodName = "NumOut";
                 } else if ( showTextAction.getMsg().toString().contains("String") ) {
                     methodName = "TextOut";
