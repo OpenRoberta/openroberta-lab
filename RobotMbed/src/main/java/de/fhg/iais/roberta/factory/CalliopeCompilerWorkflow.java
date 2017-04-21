@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.codegen.CppCodeGenerationVisitor;
+import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.UsedHardwareVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -70,6 +71,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode =
             CppCodeGenerationVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(data.getProgramTransformer().getTree());
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".cpp");
         } catch ( Exception e ) {
@@ -77,7 +79,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
 
-        Key messageKey = runBuild(token, programName, "generated.main");
+        Key messageKey = runBuild(token, programName, "generated.main", usedHardwareVisitor.isRadioUsed());
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             CalliopeCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
@@ -134,17 +136,18 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
      * @param mainFile
      * @param mainPackage
      */
-    Key runBuild(String token, String mainFile, String mainPackage) {
+    Key runBuild(String token, String mainFile, String mainPackage, boolean radioUsed) {
         final StringBuilder sb = new StringBuilder();
 
         String scriptName = this.robotCompilerResourcesDir + "/../compile.sh";
 
         if ( SystemUtils.IS_OS_WINDOWS ) {
             scriptName = this.robotCompilerResourcesDir + "/../compile.bat";
-            if (robotCompilerDir.equals("")) {
-            	robotCompilerDir = "\"\"";
+            if ( this.robotCompilerDir.equals("") ) {
+                this.robotCompilerDir = "\"\"";
             }
         }
+        String microbitDal = radioUsed ? "microbit-dal" : "microbit-dal-b";
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
@@ -154,7 +157,8 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
                 this.robotCompilerDir,
                 mainFile,
                 base.resolve(path).toAbsolutePath().normalize().toString() + "/",
-                this.robotCompilerResourcesDir
+                this.robotCompilerResourcesDir,
+                microbitDal
             });
 
             procBuilder.redirectInput(Redirect.INHERIT);
