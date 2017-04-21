@@ -147,7 +147,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
                 this.robotCompilerDir = "\"\"";
             }
         }
-        String microbitDal = radioUsed ? "microbit-dal" : "microbit-dal-b";
+        String bluetooth = radioUsed ? "" : "-b";
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + mainFile);
         Path base = Paths.get("");
 
@@ -158,7 +158,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
                 mainFile,
                 base.resolve(path).toAbsolutePath().normalize().toString() + "/",
                 this.robotCompilerResourcesDir,
-                microbitDal
+                bluetooth
             });
 
             procBuilder.redirectInput(Redirect.INHERIT);
