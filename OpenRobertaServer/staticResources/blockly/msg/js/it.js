@@ -793,6 +793,8 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Si è verificato un errore durante il salv
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Si è verificato un errore durante il salvataggio della configurazione nel database.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Toolbox salvata";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Controlla che tutti gli campi di input richiesti sono stati compilati.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Il nome utente esiste già nel database.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Il utente è stato creato";
@@ -1097,7 +1099,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";  // untra
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Ottiene lettura corrente del sensore ad ultrasuoni.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Rappresenta il sensore ad ultrasuoni del EV3.";
 Blockly.Msg.UNDO = "Annulla";
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "Questo campo non può essere vuoto!";
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "La lunghezza minima della password è 6!";

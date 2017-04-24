@@ -793,12 +793,14 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "An error has occurred while saving the too
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "An error error has occurred while saving the configuration in the database.";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Toolbox saved";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
-Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Check all required input fields have been filled out.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Please make sure you have filled in all required fields! Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "The given user name already exists in the database, please choose another user name.";  // untranslated
-Blockly.Msg.ORA_USER_CREATE_SUCCESS = "The user was successfully created";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Your user account »$« was successfully created!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Error while deleting user.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB = "Error while deleting user in database.";  // untranslated
-Blockly.Msg.ORA_USER_DELETE_SUCCESS = "The user was successfully deleted";  // untranslated
+Blockly.Msg.ORA_USER_DELETE_SUCCESS = "Your account »$« was successfully deleted. Hope to see you soon again!";  // untranslated
 Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = "This email address is unknown, maybe you have spelled it wrong!";  // untranslated
 Blockly.Msg.ORA_USER_ERROR_EMAIL_USED = "There is already an account with this email address registered. Please enter another email address!";  // untranslated
 Blockly.Msg.ORA_USER_GET_ALL_SUCCESS = "Users loaded";  // untranslated
@@ -1097,7 +1099,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";  // untra
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor.";  // untranslated
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Represents an ultrasonic sensor.";  // untranslated
 Blockly.Msg.UNDO = "끄르다";
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "This field cannot be empty!";  // untranslated
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Password min. length is 6!";  // untranslated

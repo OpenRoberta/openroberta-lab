@@ -793,6 +793,8 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Во время сохранения па�
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Во время сохранения базы данных произошла ошибка.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Панель инструментов сохранена";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Проверить, все ли необходимые поля ввода были заполнены.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Данное имя пользователя уже существует в базе данных. Пожалуйста, выберите другое имя пользователя.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Пользователь был успешно создан";
@@ -1097,7 +1099,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "До свидания и увлекатель
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Возвращает текущее показание от ультразвукового датчика.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Представляет ультразвуковой датчик.";
 Blockly.Msg.UNDO = "Отменить";
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "Это поле не может быть пустым!";
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Минимальная длина пароля - 6 символов!";

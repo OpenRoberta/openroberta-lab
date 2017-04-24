@@ -793,6 +793,8 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Wystąpił błąd podczas zapisywania Przy
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Błąd wystąpił błąd podczas zapisywania konfiguracji w bazie danych.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Przybornik został zapisany";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Sprawdź czy wszystkie wymagane pola wejściowe zostały wypełnione.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Podana nazwa użytkownika już istnieje w bazie danych, wybierz inną nazwę użytkownika.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Użytkownik został utworzony";
@@ -1097,7 +1099,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";  // untra
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor.";  // untranslated
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Represents an ultrasonic sensor.";  // untranslated
 Blockly.Msg.UNDO = "Cofnij";
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "This field cannot be empty!";  // untranslated
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Password min. length is 6!";  // untranslated

@@ -793,6 +793,8 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "An error has occurred while saving the too
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "An error error has occurred while saving the configuration in the database.";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Toolbox saved";  // untranslated
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Mangler obligatorisk felt.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Kunne ikke gemme bruger.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Bruger oprettet";
@@ -1097,7 +1099,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";  // untra
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Aflæser ultralydssensoren.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Repræsenterer EV3 ultralydssensoren.";
 Blockly.Msg.UNDO = "Undo";  // untranslated
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "This field cannot be empty!";  // untranslated
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Password min. length is 6!";  // untranslated
