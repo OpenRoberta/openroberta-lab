@@ -34,7 +34,7 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     public User getUser(String account, String password) throws Exception {
-        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_ ]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
         if ( account_check ) {
@@ -78,15 +78,17 @@ public class UserProcessor extends AbstractProcessor {
     }
 
     public void createUser(String account, String password, String userName, String roleAsString, String email, String tags) throws Exception {
-        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_ ]", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
         Matcher userName_symbols = p.matcher(userName);
         boolean userName_check = userName_symbols.find();
         if ( account == null || account.equals("") || password == null || password.equals("") ) {
             setError(Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, account);
-        } else if ( account_check || account.length() > 15 || userName_check || userName.length() > 15 ) {
+        } else if ( account_check || userName_check ) {
             setError(Key.USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS, account, userName);
+        } else if ( account.length() > 25 || userName.length() > 25 ) {
+            setError(Key.USER_CREATE_ERROR_ACCOUNT_LENGTH, account, userName);
         } else {
             if ( !isMailUsed(account, email) ) {
                 UserDao userDao = new UserDao(this.dbSession);

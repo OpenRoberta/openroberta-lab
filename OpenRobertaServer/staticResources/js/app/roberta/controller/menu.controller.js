@@ -1,4 +1,6 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM, ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
+        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
+        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -19,9 +21,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 3000);
         LOG.info('init menu view');
 
-        var target = document.location.hash.split("&");
+        var target = decodeURI(document.location.hash).split("&");
         if (target[0] === "#forgotPassword") {
             USER_C.showResetPassword(target[1]);
+        }
+        if (target[0] === "#loadProgram" && target.length >= 4) {
+            PROGRAM_C.openProgramFromXML(target);
         }
     }
 
@@ -167,6 +172,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 PROGRAM_C.importXml();
             } else if (domId === 'menuExportProg') {
                 PROGRAM_C.exportXml();
+            } else if (domId === 'menuLinkProg') {
+                PROGRAM_C.linkProgram();
             } else if (domId === 'menuToolboxBeginner') {
                 $('#beginner').trigger('click');
             } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
@@ -379,8 +386,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('.popup-robot').onWrap('click', function(event) {
             event.preventDefault();
             $('#startPopupBack').trigger('click');
-            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type || event.target.dataset.type;
-            var choosenRobottGroup = event.target.parentElement.parentElement.dataset.group || event.target.parentElement.dataset.group || event.target.dataset.group;
+            var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
+                    || event.target.dataset.type;
+            var choosenRobottGroup = event.target.parentElement.parentElement.dataset.group || event.target.parentElement.dataset.group
+                    || event.target.dataset.group;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {
@@ -394,7 +403,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                     } else {
                         ROBOT_C.switchRobot(choosenRobotType, true);
                     }
-
                 }
                 if ($('#checkbox_id').is(':checked')) {
                     $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {

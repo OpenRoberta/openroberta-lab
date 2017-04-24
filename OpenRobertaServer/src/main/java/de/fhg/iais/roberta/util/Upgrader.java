@@ -30,7 +30,9 @@ public class Upgrader {
             System.exit(4);
         }
         LOG.info("upgrading to server version " + serverVersion);
-        if ( serverVersion.equals("2.2.2") ) {
+        if ( serverVersion.equals("2.2.3") ) {
+            // do nothing
+        } else if ( serverVersion.equals("2.2.2") ) {
             // do nothing
         } else if ( serverVersion.equals("2.2.1") ) {
             // do nothing

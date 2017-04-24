@@ -24,7 +24,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                     $('#loginPassword').val($('#registerPass').val());
                     login();
                 }
-                MSG.displayInformation(result, "", result.message);
+                MSG.displayInformation(result, result.message, result.message, $("#registerAccountName").val());
             });
         }
     }
@@ -143,7 +143,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 if (result.rc === "ok") {
                     logout();
                 }
-                MSG.displayInformation(result, "MESSAGE_USER_DELETED", result.message, GUISTATE_C.getUserName());
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getUserAccountName());
             });
         }
     }
@@ -151,11 +151,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function validateLoginUser() {
         $formLogin.removeData('validator')
         $.validator.addMethod("loginRegex", function(value, element) {
-            return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_ ]+$/gi.test(value);
+            return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         }, "This field contains nonvalid symbols.");
         $formLogin.validate({
             rules : {
-            	loginAccountName : {
+                loginAccountName : {
                     required : true,
                     loginRegex : true
                 },
@@ -170,7 +170,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             messages : {
                 loginAccountName : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-            		loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
+                    loginRegex : Blockly.Msg["VALIDATION_CONTAINS_SPECIAL_CHARACTERS"]
                 },
                 loginPassword : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"]
@@ -182,7 +182,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function validateRegisterUser() {
         $formRegister.removeData('validator');
         $.validator.addMethod("loginRegex", function(value, element) {
-            return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_ ]+$/gi.test(value);
+            return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         }, "This field must contain only letters, numbers, or dashes.");
         $formRegister.validate({
             rules : {

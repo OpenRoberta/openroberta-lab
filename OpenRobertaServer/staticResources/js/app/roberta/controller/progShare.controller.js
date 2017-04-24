@@ -26,7 +26,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
                 field : 'owner',
                 visible : false,
             }, {
-                title : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
+                title : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>" + (Blockly.Msg.DATATABLE_SHARED_WITH || "Geteilt mit") + "</span>",
                 field : 'sharedWith',
                 events : eventAddShare,
                 formatter : formatSharedWith,

@@ -6,7 +6,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 
     /**
      * Creates a new Scene.
-     * 
+     *
      * @constructor
      */
     function Scene(backgroundImg, robot, obstacle, pattern, ruler) {
@@ -633,15 +633,15 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
                 values['pin' + i] = {};
                 values['pin' + i].touched = this.robot['pin' + i].touched;
                 if (this.robot['pin' + i].digitalIn != undefined) {
-                    values['pin' + i].digital = this.robot['pin' + i].digitalIn;           
+                    values['pin' + i].digital = this.robot['pin' + i].digitalIn;
                 } else if (this.robot['pin' + i].analogIn != undefined) {
                     values['pin' + i].analog = this.robot['pin' + i].analogIn;
                 }
             }
         }
-        values.correctDrive = SIM.getBackground() == 5;
+        values.correctDrive = SIM.getBackground() == 7;
         values.frameTime = SIM.getDt();
-        
+
         return values;
     }
     return Scene;
