@@ -57,7 +57,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
  * @deprecated
  */
 @Deprecated
-public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
+public abstract class AstDefaultVisitorInspecting implements AstLanguageVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
     AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     /**
      * initialize the Java code generator visitor.

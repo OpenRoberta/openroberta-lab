@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.methods.Method;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -38,7 +39,7 @@ public class MethodStmt<V> extends Stmt<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitMethodStmt(this);
+        return ((AstLanguageVisitor<V>) visitor).visitMethodStmt(this);
 
     }
 

@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -83,7 +84,7 @@ public class MethodVoid<V> extends Method<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitMethodVoid(this);
+        return ((AstLanguageVisitor<V>) visitor).visitMethodVoid(this);
     }
 
     /**

@@ -43,7 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface NaoAstVisitor<V> extends AstVisitor<V> {
+public interface NaoAstVisitor<V> extends AstLanguageVisitor<V> {
     /**
      * visit a {@link SetMode}.
      *

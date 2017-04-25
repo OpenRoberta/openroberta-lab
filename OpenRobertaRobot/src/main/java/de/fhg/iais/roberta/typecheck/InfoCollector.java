@@ -98,6 +98,7 @@ import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -105,7 +106,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class InfoCollector<T> implements AstVisitor<T>, AstSensorsVisitor<T>, AstActorCommunicationVisitor<T>, AstActorDisplayVisitor<T>,
+public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisitor<T>, AstActorCommunicationVisitor<T>, AstActorDisplayVisitor<T>,
     AstActorMotorVisitor<T>, AstActorLightVisitor<T>, AstActorSoundVisitor<T> {
 
     private final List<NepoInfo> infos = new ArrayList<>();

@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-public abstract class CommonLanguageVisitor implements AstVisitor<Void> {
+public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> {
     //TODO find more simple way of handling the loops
     protected int loopCounter = 0;
     protected LinkedList<Integer> currenLoop = new LinkedList<Integer>();

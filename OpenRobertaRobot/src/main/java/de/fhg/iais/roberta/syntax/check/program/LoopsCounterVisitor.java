@@ -101,10 +101,10 @@ import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
-import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public class LoopsCounterVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
+public class LoopsCounterVisitor implements AstLanguageVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
     AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private int loopCounter = 0;
     private int currenLoop = 0;

@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -98,7 +99,7 @@ public class StmtFlowCon<V> extends Stmt<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitStmtFlowCon(this);
+        return ((AstLanguageVisitor<V>) visitor).visitStmtFlowCon(this);
     }
 
     /**

@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -57,7 +58,7 @@ public class StmtList<V> extends Stmt<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitStmtList(this);
+        return ((AstLanguageVisitor<V>) visitor).visitStmtList(this);
     }
 
     @Override

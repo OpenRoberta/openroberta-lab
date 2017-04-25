@@ -86,10 +86,10 @@ import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
-import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public abstract class SimulationVisitor<V> implements AstVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>,
+public abstract class SimulationVisitor<V> implements AstLanguageVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>,
     AstActorMotorVisitor<V>, AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
     protected int loopsCounter = 0;
     protected int currentLoop = 0;

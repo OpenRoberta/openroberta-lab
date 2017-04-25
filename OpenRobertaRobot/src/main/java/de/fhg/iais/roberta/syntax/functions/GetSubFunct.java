@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -100,7 +101,7 @@ public class GetSubFunct<V> extends Function<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitGetSubFunct(this);
+        return ((AstLanguageVisitor<V>) visitor).visitGetSubFunct(this);
     }
 
     @Override
