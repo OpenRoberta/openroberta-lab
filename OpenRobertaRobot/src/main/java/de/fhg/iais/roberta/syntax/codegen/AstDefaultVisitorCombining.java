@@ -50,14 +50,14 @@ import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
-import de.fhg.iais.roberta.visitor.AstActorCommunicationVisitor;
-import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
-import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class is THE default implementation of {@link AstVisitor}. All methods are implemented empty ... and may be overwritten in subclasses
