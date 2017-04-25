@@ -78,7 +78,11 @@ import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -87,7 +91,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 
-public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVisitor<Void>, AstActorsVisitor<Void> {
+public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     protected final EV3Configuration brickConfiguration;
 
     protected final Set<UsedSensor> usedSensors;

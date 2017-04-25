@@ -30,7 +30,8 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface MbedAstVisitor<V> extends AstVisitor<V>, AstSensorsVisitor<V>, AstActorsVisitor<V> {
+public interface MbedAstVisitor<V> extends AstVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>,
+    AstActorMotorVisitor<V>, AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
 
     /**
      * visit a {@link DisplayTextAction}.

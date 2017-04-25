@@ -50,7 +50,11 @@ import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -58,7 +62,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is THE default implementation of {@link AstVisitor}. All methods are implemented empty ... and may be overwritten in subclasses
  */
 @Deprecated
-public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V>, AstSensorsVisitor<V>, AstActorsVisitor<V> {
+public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>,
+    AstActorMotorVisitor<V>, AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
     /**
      * initialize the Java code generator visitor.
      *

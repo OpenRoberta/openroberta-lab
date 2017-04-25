@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -39,7 +39,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorsVisitor<V>) visitor).visitClearDisplayAction(this);
+        return ((AstActorDisplayVisitor<V>) visitor).visitClearDisplayAction(this);
     }
 
     /**

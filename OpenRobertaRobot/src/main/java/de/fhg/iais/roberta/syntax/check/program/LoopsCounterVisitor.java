@@ -96,11 +96,16 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
-public class LoopsCounterVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorsVisitor<Void> {
+public class LoopsCounterVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private int loopCounter = 0;
     private int currenLoop = 0;
     private HashMap<Integer, Boolean> loopsLabelContainer = new HashMap<Integer, Boolean>();

@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorCommunicationVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
@@ -70,7 +70,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorsVisitor<V>) visitor).visitBluetoothReceiveAction(this);
+        return ((AstActorCommunicationVisitor<V>) visitor).visitBluetoothReceiveAction(this);
     }
 
     /**

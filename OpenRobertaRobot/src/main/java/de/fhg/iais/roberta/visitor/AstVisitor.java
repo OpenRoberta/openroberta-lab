@@ -149,16 +149,6 @@ public interface AstVisitor<V> {
     V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct);
 
     /**
-     * visit a {@link ActionExpr}.
-     *
-     * @param actionExpr to be visited
-     */
-    default V visitActionExpr(ActionExpr<V> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    /**
      * visit a {@link SensorExpr}.
      *
      * @param sensorExpr to be visited
@@ -177,6 +167,23 @@ public interface AstVisitor<V> {
         methodExpr.getMethod().visit(this);
         return null;
     }
+
+    /**
+     * visit a {@link ActionExpr}.
+     *
+     * @param actionExpr to be visited
+     */
+    default V visitActionExpr(ActionExpr<V> actionExpr) {
+        actionExpr.getAction().visit(this);
+        return null;
+    }
+
+    /**
+     * visit a {@link ActionStmt}.
+     *
+     * @param actionStmt to be visited
+     */
+    V visitActionStmt(ActionStmt<V> actionStmt);
 
     /**
      * visit a {@link EmptyList}.
@@ -198,13 +205,6 @@ public interface AstVisitor<V> {
      * @param exprList to be visited
      */
     V visitExprList(ExprList<V> exprList);
-
-    /**
-     * visit a {@link ActionStmt}.
-     *
-     * @param actionStmt to be visited
-     */
-    V visitActionStmt(ActionStmt<V> actionStmt);
 
     /**
      * visit a {@link AssignStmt}.

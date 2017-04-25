@@ -77,7 +77,8 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 
-public abstract class CheckVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorsVisitor<Void> {
+public abstract class CheckVisitor implements AstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     protected List<String> globalVariables = new ArrayList<String>();
 
     @Override

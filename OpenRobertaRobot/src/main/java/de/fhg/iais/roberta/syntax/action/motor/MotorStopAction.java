@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.syntax.action.MoveAction;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -63,7 +63,7 @@ public class MotorStopAction<V> extends MoveAction<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((AstActorsVisitor<V>) visitor).visitMotorStopAction(this);
+        return ((AstActorMotorVisitor<V>) visitor).visitMotorStopAction(this);
     }
 
     /**

@@ -76,7 +76,11 @@ import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.visitor.AstActorsVisitor;
+import de.fhg.iais.roberta.visitor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.AstSensorsVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -84,7 +88,8 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstActorsVisitor<Void>, AstSensorsVisitor<Void> {
+public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
+    AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     protected final EV3Configuration brickConfiguration;
 
     protected final Set<UsedSensor> usedSensors;
