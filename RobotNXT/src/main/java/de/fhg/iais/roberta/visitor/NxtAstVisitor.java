@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface NxtAstVisitor<V> extends AstVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>,
-    AstActorMotorVisitor<V>, AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
+public interface NxtAstVisitor<V> extends AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>, AstActorMotorVisitor<V>,
+    AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
 
     /**
      * visit a {@link LightSensorAction}.

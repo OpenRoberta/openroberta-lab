@@ -10,11 +10,6 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -873,31 +868,6 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         if ( isContainedArrayParameter ) {
             this.sb.append("\ntemplate<size_t N>");
         }
-    }
-
-    @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
     }
 
     @Override

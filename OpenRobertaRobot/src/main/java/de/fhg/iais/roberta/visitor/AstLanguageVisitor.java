@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
+import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
+import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
@@ -8,10 +12,15 @@ import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
+import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
+import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
+import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -35,10 +44,14 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
+import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
@@ -346,5 +359,81 @@ public interface AstLanguageVisitor<V> extends AstVisitor<V> {
      * @param methodStmt to be visited
      */
     V visitMethodCall(MethodCall<V> methodCall);
+
+    default V visitSensorExpr(SensorExpr<V> sensorExpr) {
+        sensorExpr.getSens().visit(this);
+        return null;
+    }
+
+    default V visitMethodExpr(MethodExpr<V> methodExpr) {
+        methodExpr.getMethod().visit(this);
+        return null;
+    }
+
+    default V visitActionStmt(ActionStmt<V> actionStmt) {
+        actionStmt.getAction().visit(this);
+        return null;
+    }
+
+    /**
+     * visit a {@link ActionExpr}.
+     *
+     * @param actionExpr to be visited
+     */
+    default V visitActionExpr(ActionExpr<V> actionExpr) {
+        actionExpr.getAction().visit(this);
+        return null;
+    }
+
+    default V visitExprStmt(ExprStmt<V> exprStmt) {
+        exprStmt.getExpr().visit(this);
+        return null;
+    }
+
+    default V visitStmtExpr(StmtExpr<V> stmtExpr) {
+        stmtExpr.getStmt().visit(this);
+        return null;
+    }
+
+    default V visitShadowExpr(ShadowExpr<V> shadowExpr) {
+        if ( shadowExpr.getBlock() != null ) {
+            shadowExpr.getBlock().visit(this);
+        } else {
+            shadowExpr.getShadow().visit(this);
+        }
+        return null;
+    }
+
+    default V visitSensorStmt(SensorStmt<V> sensorStmt) {
+        sensorStmt.getSensor().visit(this);
+        return null;
+    }
+
+    /**
+     * visit a {@link ActivityTask}.
+     *
+     * @param activityTask to be visited
+     */
+    default V visitActivityTask(ActivityTask<V> activityTask) {
+        return null;
+    }
+
+    default V visitStartActivityTask(StartActivityTask<V> startActivityTask) {
+        return null;
+    }
+
+    default V visitLocation(Location<V> location) {
+        return null;
+    }
+
+    default V visitFunctionStmt(FunctionStmt<V> functionStmt) {
+        functionStmt.getFunction().visit(this);
+        return null;
+    }
+
+    default V visitFunctionExpr(FunctionExpr<V> functionExpr) {
+        functionExpr.getFunction().visit(this);
+        return null;
+    }
 
 }

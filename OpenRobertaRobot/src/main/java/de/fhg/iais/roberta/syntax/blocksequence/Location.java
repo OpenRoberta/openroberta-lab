@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.expr.Assoc;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -61,7 +62,7 @@ public class Location<V> extends Task<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitLocation(this);
+        return ((AstLanguageVisitor<V>) visitor).visitLocation(this);
     }
 
     @Override

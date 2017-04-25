@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -60,7 +61,7 @@ public class StmtExpr<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitStmtExpr(this);
+        return ((AstLanguageVisitor<V>) visitor).visitStmtExpr(this);
     }
 
     @Override

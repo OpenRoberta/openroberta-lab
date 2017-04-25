@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -54,7 +55,7 @@ public final class ActionExpr<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitActionExpr(this);
+        return ((AstLanguageVisitor<V>) visitor).visitActionExpr(this);
     }
 
     @Override

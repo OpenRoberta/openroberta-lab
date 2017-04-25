@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class ShadowExpr<V> extends Expr<V> {
@@ -56,7 +57,7 @@ public class ShadowExpr<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitShadowExpr(this);
+        return ((AstLanguageVisitor<V>) visitor).visitShadowExpr(this);
     }
 
     @Override

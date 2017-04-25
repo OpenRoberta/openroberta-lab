@@ -16,11 +16,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
@@ -28,15 +24,10 @@ import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -60,18 +51,10 @@ import de.fhg.iais.roberta.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
@@ -144,27 +127,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        for ( Expr<Void> expr : mathPowerFunct.getParam() ) {
-            expr.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
+        mathPowerFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
@@ -180,27 +143,13 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitExprList(ExprList<Void> exprList) {
-        for ( Expr<Void> expr : exprList.get() ) {
-            expr.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
+        exprList.get().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
         assignStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
         return null;
     }
 
@@ -222,21 +171,13 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
     }
 
     @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         return null;
     }
 
     @Override
     public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt<Void> stmt : stmtList.get() ) {
-            stmt.visit(this);
-        }
+        stmtList.get().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
@@ -291,34 +232,8 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        sensorGetSample.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
         return null;
     }
 
@@ -335,34 +250,14 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
     }
 
     @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        for ( Expr<Void> expr : textPrintFunct.getParam() ) {
-            expr.visit(this);
-        }
+        textPrintFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        return functionExpr.getFunction().visit(this);
     }
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        for ( Expr<Void> expr : getSubFunct.getParam() ) {
-            expr.visit(this);
-        }
+        getSubFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
@@ -376,9 +271,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        for ( Expr<Void> expr : lengthOfIsEmptyFunct.getParam() ) {
-            expr.visit(this);
-        }
+        lengthOfIsEmptyFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
@@ -390,49 +283,37 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        for ( Expr<Void> expr : listGetIndex.getParam() ) {
-            expr.visit(this);
-        }
+        listGetIndex.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        for ( Expr<Void> expr : listRepeat.getParam() ) {
-            expr.visit(this);
-        }
+        listRepeat.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        for ( Expr<Void> expr : listSetIndex.getParam() ) {
-            expr.visit(this);
-        }
+        listSetIndex.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        for ( Expr<Void> expr : mathConstrainFunct.getParam() ) {
-            expr.visit(this);
-        }
+        mathConstrainFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        for ( Expr<Void> expr : mathNumPropFunct.getParam() ) {
-            expr.visit(this);
-        }
+        mathNumPropFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        for ( Expr<Void> expr : mathOnListFunct.getParam() ) {
-            expr.visit(this);
-        }
+        mathOnListFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
@@ -443,17 +324,13 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        for ( Expr<Void> expr : mathRandomIntFunct.getParam() ) {
-            expr.visit(this);
-        }
+        mathRandomIntFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        for ( Expr<Void> expr : mathSingleFunct.getParam() ) {
-            expr.visit(this);
-        }
+        mathSingleFunct.getParam().stream().forEach(expr -> expr.visit(this));
         return null;
     }
 
@@ -496,12 +373,6 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
     }
 
     @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
         return null;
     }
@@ -520,15 +391,6 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        return null;
-    }
-
-    @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        shadowExpr.getShadow().visit(this);
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        }
         return null;
     }
 
