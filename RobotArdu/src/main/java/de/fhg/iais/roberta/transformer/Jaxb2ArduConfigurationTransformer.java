@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.ArduConfiguration;
+import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
@@ -116,7 +116,7 @@ public class Jaxb2ArduConfigurationTransformer {
                 List<Value> values = extractValues(block, (short) 14);
                 extractHardwareComponent(values, sensors, actors);
 
-                return new ArduConfiguration.Builder().addActors(actors).addSensors(sensors).build();
+                return new BotNrollConfiguration.Builder().addActors(actors).addSensors(sensors).build();
             default:
                 throw new DbcException("There was no correct configuration block found! " + block.getType());
         }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ArduConfiguration;
+import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -82,7 +82,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
 public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Void> {
-    private final ArduConfiguration brickConfiguration;
+    private final BotNrollConfiguration brickConfiguration;
 
     private final boolean isTimeSensorUsed;
     private final Set<UsedSensor> usedSensors;
@@ -94,7 +94,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Vo
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private Ast2ArduVisitor(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
+    private Ast2ArduVisitor(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
 
         this.brickConfiguration = brickConfiguration;
@@ -114,7 +114,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Vo
      * @param programPhrases to generate the code from
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
 
         Ast2ArduVisitor astVisitor = new Ast2ArduVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);

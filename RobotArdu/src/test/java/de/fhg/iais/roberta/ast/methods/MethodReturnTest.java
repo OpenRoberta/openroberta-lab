@@ -4,12 +4,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.ArduFactory;
+import de.fhg.iais.roberta.factory.BotNrollFactory;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class MethodReturnTest {
     Helper h = new Helper();
-    ArduFactory robotFactory = new ArduFactory(null);
+    BotNrollFactory robotFactory = new BotNrollFactory(null);
 
     @Before
     public void setUp() throws Exception {

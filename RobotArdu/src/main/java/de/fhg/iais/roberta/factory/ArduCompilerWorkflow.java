@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.ArduConfiguration;
+import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
@@ -66,7 +66,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2ArduVisitor.generate((ArduConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = Ast2ArduVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
@@ -111,7 +111,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2ArduVisitor.generate((ArduConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return Ast2ArduVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
@@ -201,7 +201,6 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        // TODO Auto-generated method stub
         return null;
     }
 }

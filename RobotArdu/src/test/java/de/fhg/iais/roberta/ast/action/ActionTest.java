@@ -4,14 +4,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.ArduFactory;
+import de.fhg.iais.roberta.factory.BotNrollFactory;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class ActionTest {
     Helper h = new Helper();
-    ArduFactory robotFactory = new ArduFactory(null);
+    BotNrollFactory robotFactory = new BotNrollFactory(null);
 
     @Before
     public void setUp() throws Exception {

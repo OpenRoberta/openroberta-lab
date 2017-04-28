@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import de.fhg.iais.roberta.components.ArduConfiguration;
+import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -47,26 +47,26 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class ArduFactory extends AbstractRobotFactory {
+public class BotNrollFactory extends AbstractRobotFactory {
     private ArduCompilerWorkflow compilerWorkflow;
     private final Properties arduProperties;
     private final String name;
     private final int robotPropertyNumber;
 
-    public ArduFactory(RobotCommunicator robotCommunicator) {
+    public BotNrollFactory(RobotCommunicator robotCommunicator) {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.name = "ardu";
+        this.name = "botnroll";
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new ArduCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
-        addBlockTypesFromProperties("Ardu.properties", this.arduProperties);
+        this.arduProperties = Util1.loadProperties("classpath:BotNroll.properties");
+        addBlockTypesFromProperties("BotNroll.properties", this.arduProperties);
     }
 
     @Override
@@ -528,6 +528,6 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return Ast2ArduVisitor.generate((ArduConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return Ast2ArduVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 }
