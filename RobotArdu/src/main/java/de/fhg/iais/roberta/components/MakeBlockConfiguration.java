@@ -12,9 +12,9 @@ import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class MakeAblockConfiguration extends Configuration {
+public class MakeBlockConfiguration extends Configuration {
 
-    public MakeAblockConfiguration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
+    public MakeBlockConfiguration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super(actors, sensors, wheelDiameterCM, trackWidthCM);
 
     }
@@ -229,7 +229,7 @@ public class MakeAblockConfiguration extends Configuration {
 
         @Override
         public Configuration build() {
-            return new MakeAblockConfiguration(this.actorMapping, this.sensorMapping, this.wheelDiameter, this.trackWidth);
+            return new MakeBlockConfiguration(this.actorMapping, this.sensorMapping, this.wheelDiameter, this.trackWidth);
         }
 
         @Override

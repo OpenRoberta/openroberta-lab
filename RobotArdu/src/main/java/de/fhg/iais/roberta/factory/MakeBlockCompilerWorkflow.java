@@ -15,23 +15,25 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.syntax.codegen.Ast2ArduVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2BotNrollVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2MakeBlockVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
-public class ArduCompilerWorkflow implements ICompilerWorkflow {
+public class MakeBlockCompilerWorkflow implements ICompilerWorkflow {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ArduCompilerWorkflow.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MakeBlockCompilerWorkflow.class);
 
     public final String pathToCrosscompilerBaseDir;
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
 
-    public ArduCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
+    public MakeBlockCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
         this.robotCompilerDir = robotCompilerDir;
@@ -66,20 +68,20 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2ArduVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = Ast2MakeBlockVisitor.generate((MakeBlockConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
         } catch ( Exception e ) {
-            ArduCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
+            MakeBlockCompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
 
         Key messageKey = runBuild(token, programName, "generated.main");
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-            ArduCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
+            MakeBlockCompilerWorkflow.LOG.info("hex for program {} generated successfully", programName);
         } else {
-            ArduCompilerWorkflow.LOG.info(messageKey.toString());
+            MakeBlockCompilerWorkflow.LOG.info(messageKey.toString());
         }
         return messageKey;
     }
@@ -111,7 +113,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2ArduVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return Ast2BotNrollVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
@@ -119,7 +121,7 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
         File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/src/" + programName + ext);
         Path path = Paths.get(this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target/");
         Files.createDirectories(path);
-        ArduCompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
+        MakeBlockCompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
         FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
     }
 
@@ -175,9 +177,9 @@ public class ArduCompilerWorkflow implements ICompilerWorkflow {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
-                ArduCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
+                MakeBlockCompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
             } else {
-                ArduCompilerWorkflow.LOG.error("exception when preparing the build", e);
+                MakeBlockCompilerWorkflow.LOG.error("exception when preparing the build", e);
             }
             e.printStackTrace();
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;

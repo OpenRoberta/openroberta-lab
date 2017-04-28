@@ -42,13 +42,13 @@ import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2ArduVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2BotNrollVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BotNrollFactory extends AbstractRobotFactory {
-    private ArduCompilerWorkflow compilerWorkflow;
+    private BotNrollCompilerWorkflow compilerWorkflow;
     private final Properties arduProperties;
     private final String name;
     private final int robotPropertyNumber;
@@ -61,7 +61,7 @@ public class BotNrollFactory extends AbstractRobotFactory {
         this.name = "botnroll";
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
-            new ArduCompilerWorkflow(
+            new BotNrollCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
@@ -528,6 +528,6 @@ public class BotNrollFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return Ast2ArduVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return Ast2BotNrollVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 }
