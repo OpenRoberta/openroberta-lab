@@ -334,7 +334,7 @@ public class Ast2PythonMicroBitVisitor extends Ast2PythonVisitor implements Mbed
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("microbit." + getEnumCode(brickSensor.getKey()) + ".is_pressed()");
+        this.sb.append("microbit." + brickSensor.getKey() + ".is_pressed()");
         return null;
     }
 

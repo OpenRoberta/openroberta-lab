@@ -174,7 +174,8 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getKey() + ")");
+        String key = brickSensor.getKey().toString().toUpperCase();
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + key + ")");
         return null;
     }
 
@@ -277,11 +278,19 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
+        this.sb.append("createImageShiftAction(CONST." + imageShiftFunction.getShiftDirection() + ", ");
+        imageShiftFunction.getPositions().visit(this);
+        this.sb.append(", ");
+        imageShiftFunction.getImage().visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+        this.sb.append("createImageInvertAction(");
+        imageInvertFunction.getImage().visit(this);
+        this.sb.append(")");
         return null;
     }
 

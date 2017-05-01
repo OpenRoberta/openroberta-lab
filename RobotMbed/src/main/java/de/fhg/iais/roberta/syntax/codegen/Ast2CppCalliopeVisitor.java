@@ -459,7 +459,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String key = brickSensor.getKey().toString();
-        key = key.substring(key.length() - 1);
+        key = key.substring(key.length() - 1).toUpperCase();
         this.sb.append("uBit.button" + key + ".isPressed()");
         return null;
     }
@@ -1068,6 +1068,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( withWrapping ) {
+            nlIndent();
             this.sb.append("release_fiber();");
             this.sb.append("\n}\n");
         }
