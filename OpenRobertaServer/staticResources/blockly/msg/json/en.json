@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-04-24 11:37:55.182524",
+		"lastupdated": "2017-05-01 11:29:19.737043",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -552,6 +552,7 @@
 	"CONNECTION_TO_ROBOT": "to robot",
 	"CONNECTION_FROM_ROBOT": "from robot",
 	"CONNECTION_TO_CONNECTION": "to connection",
+	"CONNECTION_FROM_CONNECTION": "from connection",
 	"CONNECTION_OVER_CHANNEL": "over channel",
 	"CONNECTION_RECEIVED_DATA": "receive message",
 	"CONNECTION_CONNECT": "connect to robot name",
@@ -1138,5 +1139,7 @@
 	"PROGLIST_DELETE_SHARE_WITH_GALLERY": "Your program is allready shared with the gallery. If you change it, it will be automatically updated. Do you want to remove your program from the gallery?",
 	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody?",
 	"MENU_CREATE_LINK": "create program link ...",
-	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$"
+	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$",
+	"IMAGE_INVERT": "invert",
+	"IMAGE_SHIFT": "shift"
 }

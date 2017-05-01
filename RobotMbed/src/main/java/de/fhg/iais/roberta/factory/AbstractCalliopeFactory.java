@@ -106,13 +106,13 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
         if ( brickKey == null || brickKey.isEmpty() ) {
             throw new DbcException("Invalid Brick Key: " + brickKey);
         }
-        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
+        // String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
         for ( BrickKey sp : BrickKey.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
+            if ( sp.toString().equals(brickKey) ) {
                 return sp;
             }
             for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
+                if ( brickKey.equals(value) ) {
                     return sp;
                 }
             }

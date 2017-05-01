@@ -1,4 +1,4 @@
-define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
+define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
 
     function build(program) {
         eval(program);
@@ -145,7 +145,6 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         return result;
     }
 
-
     function createShowPictureAction(picture, x, y) {
         var result = {};
         result[CONST.STMT] = CONST.SHOW_PICTURE_ACTION;
@@ -159,6 +158,22 @@ define(['exports', 'robertaLogic.constants'], function(exports, CONST) {
         var result = {};
         result[CONST.STMT] = CONST.DISPLAY_IMAGE_ACTION;
         result[CONST.MODE] = mode;
+        result[CONST.IMAGE] = image;
+        return result;
+    }
+
+    function createImageShiftAction(direction, n, image) {
+        var result = {};
+        result[CONST.EXPR] = CONST.IMAGE_SHIFT_ACTION;
+        result[CONST.DIRECTION] = direction;
+        result[CONST.N] = n;
+        result[CONST.IMAGE] = image;
+        return result;
+    }
+
+    function createImageInvertAction(image) {
+        var result = {};
+        result[CONST.EXPR] = CONST.IMAGE_INVERT_ACTION;
         result[CONST.IMAGE] = image;
         return result;
     }
