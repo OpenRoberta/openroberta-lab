@@ -1,10 +1,14 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.arduino;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -38,12 +42,22 @@ import de.fhg.iais.roberta.visitor.CheckVisitor;
  *
  * @author kcvejoski
  */
-public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<Void> {
-    private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
+public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<Void> {
+    private final Set<UsedSensor> usedSensors = new HashSet<UsedSensor>();
+    private final Set<UsedActor> usedActors = new HashSet<UsedActor>();
+
     private boolean isTimerSensorUsed;
 
-    public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    private Configuration brickConfiguration;
+
+    public MakeBlockUsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         check(phrasesSet);
+    }
+
+    public MakeBlockUsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
+        this.brickConfiguration = brickConfiguration;
+        check(phrasesSet);
+
     }
 
     /**
@@ -53,6 +67,15 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
      */
     public Set<UsedSensor> getUsedSensors() {
         return this.usedSensors;
+    }
+
+    /**
+     * Returns set of used actors in Blockly program.
+     *
+     * @return set of used actors
+     */
+    public Set<UsedActor> getUsedActors() {
+        return this.usedActors;
     }
 
     public boolean isTimerSensorUsed() {
@@ -80,6 +103,10 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        }
         return null;
     }
 
@@ -88,6 +115,10 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
         turnAction.getParam().getSpeed().visit(this);
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
+        }
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
         }
         return null;
     }
@@ -99,11 +130,19 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
         if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
+        }
         return null;
     }
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorGetPowerAction.getPort());
+            this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
@@ -113,17 +152,29 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
         if ( motorOnAction.getParam().getDuration() != null ) {
             motorOnAction.getDurationValue().visit(this);
         }
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
+            this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         motorSetPowerAction.getPower().visit(this);
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorSetPowerAction.getPort());
+            this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(motorStopAction.getPort());
+            this.usedActors.add(new UsedActor(motorStopAction.getPort(), actor.getName()));
+        }
         return null;
     }
 
@@ -140,6 +191,10 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        if ( this.brickConfiguration != null ) {
+            Actor actor = this.brickConfiguration.getActors().get(encoderSensor.getMotorPort());
+            this.usedActors.add(new UsedActor(encoderSensor.getMotorPort(), actor.getName()));
+        }
         return null;
     }
 
@@ -151,37 +206,37 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.INFRARED, null));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SensorType.INFRARED, null));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.TOUCH, null));
+        this.usedSensors.add(new UsedSensor(touchSensor.getPort(), SensorType.TOUCH, null));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.ULTRASONIC, null));
+        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), SensorType.ULTRASONIC, null));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.LIGHT, null));
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LIGHT, null));
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.SOUND, null));
+        this.usedSensors.add(new UsedSensor(soundSensor.getPort(), SensorType.SOUND, null));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.COMPASS, null));
         return null;
     }
 
@@ -192,7 +247,6 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -203,7 +257,6 @@ public class UsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 

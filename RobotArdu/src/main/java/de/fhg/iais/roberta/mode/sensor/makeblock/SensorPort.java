@@ -1,9 +1,9 @@
-package de.fhg.iais.roberta.mode.sensor.arduino;
+package de.fhg.iais.roberta.mode.sensor.makeblock;
 
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public enum SensorPort implements ISensorPort {
-    S0( "0" ), S1( "1" ), S2( "2" ), S3( "3" ), S4( "4" ), S5( "5" ), S6( "6" ), S7( "7" ), S8( "8" ), S9( "9" ), S10( "10" ), ANY( "3" ), BOTH( "3" );
+    PORT_1( "1", "S1" ), PORT_2( "2", "S2" ), PORT_3( "3", "S3" ), PORT_4( "4", "S4" );
 
     private final String[] values;
 
@@ -18,7 +18,6 @@ public enum SensorPort implements ISensorPort {
 
     @Override
     public String getPortNumber() {
-
         return this.values[0];
     }
 

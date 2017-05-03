@@ -4,8 +4,7 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 <script src="../blockly_compressed.js"></script>
-<script src="../msg/js/cs.js"></script>
-
+<script src="../msg/js/de.js"></script>
 <script src="../core/blockly.js"></script>
 <script src="../core/css.js"></script>
 <script src="../core/inject.js"></script>
@@ -89,7 +88,7 @@ function start() {
            variableDeclaration: true,
            robControls: true
           });
-  workspace.setDevice('ev3');
+  workspace.setDevice('nxt');
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');

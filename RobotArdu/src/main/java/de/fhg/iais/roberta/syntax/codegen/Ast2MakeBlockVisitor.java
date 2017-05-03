@@ -2,19 +2,13 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.MakeBlockConfiguration;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
-import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
+import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
+import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -33,8 +27,6 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.expr.Var;
 import de.fhg.iais.roberta.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
@@ -46,6 +38,7 @@ import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.MakeBlockUsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -68,6 +61,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
     private final MakeBlockConfiguration brickConfiguration;
+    private boolean isTimerSensorUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -79,6 +73,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
     private Ast2MakeBlockVisitor(MakeBlockConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
+        MakeBlockUsedHardwareVisitor usedHardwareVisitor = new MakeBlockUsedHardwareVisitor(phrases, brickConfiguration);
+        this.usedSensors = usedHardwareVisitor.getUsedSensors();
+        this.usedActors = usedHardwareVisitor.getUsedActors();
+        this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
     }
 
     /**
@@ -103,47 +101,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        String toChar = "";
-        String varType = showTextAction.getMsg().getVarType().toString();
-        boolean isVar = showTextAction.getMsg().getKind().getName().toString().equals("VAR");
-        IColorSensorMode mode = null;
-        Expr<Void> tt = showTextAction.getMsg();
-        if ( tt.getKind().hasName("SENSOR_EXPR") ) {
-            de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
-            if ( sens.getKind().hasName("COLOR_SENSING") ) {
-                mode = ((ColorSensor<Void>) sens).getMode();
-            }
-        }
-
-        this.sb.append("one.lcd");
-        if ( showTextAction.getY().toString().equals("NumConst [1]") || showTextAction.getY().toString().equals("NumConst [2]") ) {
-            showTextAction.getY().visit(this);
-        } else {
-            this.sb.append("1");
-        }
-
-        this.sb.append("(");
-
-        if ( isVar && (varType.equals("STRING") || varType.equals("COLOR"))
-            || mode != null && !mode.toString().equals("RED") && !mode.toString().equals("RGB") ) {
-            toChar = ".c_str()";
-        }
-
-        if ( varType.equals("BOOLEAN") ) {
-            this.sb.append("rob.boolToString(");
-            showTextAction.getMsg().visit(this);
-            this.sb.append(")");
-        } else {
-            showTextAction.getMsg().visit(this);
-        }
-
-        this.sb.append(toChar + ");");
         return null;
     }
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("rob.lcdClear();");
         return null;
     }
 
@@ -154,18 +116,6 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        BlinkMode blinkingMode = (BlinkMode) lightAction.getBlinkMode();
-
-        switch ( blinkingMode ) {
-            case ON:
-                this.sb.append("one.led(HIGH);");
-                break;
-            case OFF:
-                this.sb.append("one.led(LOW);");
-                break;
-            default:
-                throw new DbcException("Invalide blinking mode: " + blinkingMode);
-        }
         return null;
 
     }
@@ -182,42 +132,25 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        //9 - sound port
-        this.sb.append("tone(9, ");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
-        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        final boolean reverse =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
-        String methodName;
-        String port = null;
-        final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        final boolean isServo = motorOnAction.getPort() == ActorPort.A || motorOnAction.getPort() == ActorPort.D;
-        if ( isServo ) {
-            methodName = motorOnAction.getPort() == ActorPort.A ? "one.servo1(" : "one.servo2(";
+        MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
+        this.sb.append(motorOnAction.getPort().getValues()[1]);
+        if ( duration != null ) {
+            if ( duration.getType() == MotorMoveMode.ROTATIONS ) {
+                this.sb.append(".runTurns(");
+            } else if ( duration.getType() == MotorMoveMode.DEGREE ) {
+                this.sb.append(".move(");
+            }
+            duration.getValue().visit(this);
+            this.sb.append(", ");
         } else {
-            methodName = isDuration ? "rob.move1mTime(" : "one.move1m(";
-            port = motorOnAction.getPort() == ActorPort.B ? "1" : "2";
-        }
-        this.sb.append(methodName);
-        if ( !isServo ) {
-            this.sb.append(port + ", ");
-        }
-        if ( reverse ) {
-            this.sb.append("-");
+            this.sb.append(".runSpeed(");
         }
         motorOnAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            motorOnAction.getParam().getDuration().getValue().visit(this);
-        }
         this.sb.append(");");
         return null;
     }
@@ -234,204 +167,55 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        String port = motorStopAction.getPort() == ActorPort.B ? "1" : "2";
-        if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
-            this.sb.append("one.stop1m(");
-
-        } else {
-            this.sb.append("one.brake1m(");
-        }
-        this.sb.append(port + ")");
+        this.sb.append(motorStopAction.getPort().getValues()[1] + ".reset()");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        //this.sb.append(this.brickConfiguration.generateText("q") + "\n");
-        final boolean isRegulatedDrive =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
-        final boolean isDuration = driveAction.getParam().getDuration() != null;
-        final boolean reverse =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
-        final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
-        String methodName;
-        String sign = "";
-        if ( isDuration ) {
-            methodName = "rob.moveTime";
-        } else {
-            methodName = "one.move";
-        }
-        if ( isRegulatedDrive ) {
-            methodName = methodName + "PID";
-        }
-        methodName = methodName + "(";
-        this.sb.append(methodName);
-        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
-            sign = "-";
-        }
-        this.sb.append(sign);
+        this.sb.append("motor1.runSpeedAndTime(");
         driveAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
-        this.sb.append(sign);
+        driveAction.getParam().getDuration().getValue().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("motor2.runSpeedAndTime(");
         driveAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
-        }
+        this.sb.append(", ");
+        driveAction.getParam().getDuration().getValue().visit(this);
         this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        final boolean isRegulatedDrive =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated()
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).isRegulated();
-        final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
-        final boolean reverse =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
-                || this.brickConfiguration.getActorOnPort(ActorPort.A).getRotationDirection() == DriveDirection.BACKWARD;
-        final boolean localReverse = curveAction.getDirection() == DriveDirection.BACKWARD;
-        String methodName;
-        String sign = "";
-        if ( isDuration ) {
-            methodName = "rob.moveTime";
-        } else {
-            methodName = "one.move";
-        }
-        if ( isRegulatedDrive ) {
-            methodName = methodName + "PID";
-        }
-        methodName = methodName + "(";
-        this.sb.append(methodName);
-        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
-            sign = "-";
-        }
-        this.sb.append(sign);
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(", ");
-        this.sb.append(sign);
-        curveAction.getParamRight().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            curveAction.getParamLeft().getDuration().getValue().visit(this);
-        }
-        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        Actor leftMotor = this.brickConfiguration.getLeftMotor();
-        Actor rightMotor = this.brickConfiguration.getRightMotor();
-        boolean isRegulatedDrive = leftMotor.isRegulated() || rightMotor.isRegulated();
-        boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isReverseLeftMotor = leftMotor.getRotationDirection() == DriveDirection.BACKWARD;
-        boolean isReverseRightMotor = rightMotor.getRotationDirection() == DriveDirection.BACKWARD;
-        boolean isTurnRight = turnAction.getDirection() == TurnDirection.RIGHT;
-
-        String methodName;
-        String rightMotorSign = "";
-        String leftMotorSign = "";
-
-        if ( isTurnRight && !isReverseRightMotor ) {
-            rightMotorSign = "-";
-        }
-
-        if ( !isTurnRight && !isReverseLeftMotor ) {
-            leftMotorSign = "-";
-        }
-
-        if ( isDuration ) {
-            methodName = "rob.moveTime";
-        } else {
-            methodName = "one.move";
-        }
-        if ( isRegulatedDrive ) {
-            methodName = methodName + "PID";
-        }
-        methodName = methodName + "(";
-        this.sb.append(methodName);
-        this.sb.append(leftMotorSign);
-        turnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", ");
-        this.sb.append(rightMotorSign);
-        turnAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().visit(this);
-        }
-        this.sb.append(");");
-
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        this.sb.append("one.stop();");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("one.readAdc(");
-        //ports from 0 to 7
-        this.sb.append(lightSensor.getPort().getPortNumber()); // we could add "-1" so the number of ports would be 1-8 for users
-        this.sb.append(") / 10.23");
         return null;
     }
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        IBrickKey button = brickSensor.getKey();
-        String btnNumber;
-        switch ( button.toString() ) {
-            case "ENTER":
-                btnNumber = "2";
-                break;
-            case "LEFT":
-                btnNumber = "1";
-                break;
-            case "RIGHT":
-                btnNumber = "3";
-                break;
-            default:
-                btnNumber = "123";
-                break;
-        }
-        this.sb.append("rob.buttonIsPressed(" + btnNumber + ")");
+
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String port = colorSensor.getPort().getPortNumber();
-        String colors;
-        if ( port == "1" ) {
-            colors = "colorsLeft, ";
-        } else {
-            colors = "colorsRight, ";
-        }
-        switch ( getEnumCode(colorSensor.getMode()) ) {
-            case "ColorSensorMode.COLOUR":
-                this.sb.append("rob.colorSensorColor(");
-                this.sb.append(colors);
-                this.sb.append(colorSensor.getPort().getPortNumber());
-                this.sb.append(")");
-                break;
-            case "ColorSensorMode.RGB":
-                this.sb.append("{(double) rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[0], (double) rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[1], (double) rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[2]}");
-                break;
-            case "ColorSensorMode.RED":
-                this.sb.append("rob.colorSensorLight(" + colors + port);
-                this.sb.append(")");
-                break;
-        }
+
         return null;
     }
 
@@ -447,13 +231,13 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.sb.append("rob.readBearing()");
+
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.sb.append("one.readBattery()");
+
         return null;
     }
 
@@ -464,18 +248,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String port = infraredSensor.getPort().getPortNumber();
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case OBSTACLE:
-                this.sb.append("rob.infraredSensorObstacle(");
-                break;
-            case SEEK:
-                this.sb.append("rob.infraredSensorPresence(");
-                break;
-            default:
-                throw new DbcException("Invalid Infrared Sensor Mode!");
-        }
-        this.sb.append(port + ")");
+
         return null;
     }
 
@@ -501,12 +274,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String port = ultrasonicSensor.getPort().getPortNumber();
-        if ( ultrasonicSensor.getPort().getPortNumber().equals("3") ) {
-            this.sb.append("rob.sonar()");
-        } else {
-            this.sb.append("rob.ultrasonicDistance(" + port + ")");
-        }
+        this.sb.append("ultraSensor.distanceCm()");
         return null;
     }
 
@@ -518,7 +286,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
         generateUserDefinedMethods();
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-        if ( this.isTimeSensorUsed ) {
+        if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
         }
@@ -748,56 +516,28 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
         }
 
         this.sb.append("#include <math.h> \n");
-        this.sb.append("#include <CountUpDownTimer.h> \n");
-        // Bot'n Roll ONE A library:
-        this.sb.append("#include <BnrOneA.h>   // Bot'n Roll ONE A library \n");
-        //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
-        this.sb.append("#include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library \n");
-        //additional Roberta functions:
-        this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
-        // SPI communication library required by BnrOne.cpp"
-        this.sb.append("#include <SPI.h>   // SPI communication library required by BnrOne.cpp \n");
-        // required by BnrRescue.cpp (for the additional sonar kit):
-        this.sb.append("#include <Wire.h>   //a library required by BnrRescue.cpp for the additional sonar  \n");
-        // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
-        this.sb.append("BnrOneA one; \n");
-        this.sb.append("BnrRescue brm; \n");
-        this.sb.append("RobertaFunctions rob(one, brm);  \n");
-        if ( this.isTimeSensorUsed ) {
-            this.sb.append("CountUpDownTimer T(UP, HIGH); \n");
+        this.sb.append("#include <CountUpDownTimer.h> \n\n");
+        this.sb.append("#include \"MeOrion.h\" \n");
+        this.sb.append("#include <Wire.h>\n");
+        this.sb.append("#include <SoftwareSerial.h>\n\n");
+
+        if ( this.isTimerSensorUsed ) {
+            this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
-        this.sb.append("#define SSPIN  2 \n");
-        this.sb.append("#define MODULE_ADDRESS 0x2C \n");
-        this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
-        this.sb.append("byte colorsRight[3]={0,0,0}; \n \n");
-        this.sb.append("void setup() \n");
+        for ( UsedActor actor : this.usedActors ) {
+            this.sb.append("MeEncoderMotor " + actor.getPort().getValues()[1] + "(0x09, " + actor.getPort() + ");\n");
+        }
+        this.generateSensors();
+        this.sb.append("\nvoid setup() \n");
         this.sb.append("{");
         nlIndent();
-        this.sb.append("Wire.begin();");
-        nlIndent();
-        //set baud rate to 9600 for printing values at serial monitor:
-        this.sb.append("Serial.begin(9600);   // sets baud rate to 9600bps for printing values at serial monitor.");
-        nlIndent();
-        // start the communication module:
-        this.sb.append("one.spiConnect(SSPIN);   // starts the SPI communication module");
-        nlIndent();
-        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);   // starts I2C communication");
-        nlIndent();
-        this.sb.append("brm.setModuleAddress(0x2C);");
-        nlIndent();
-        // stop motors:
-        this.sb.append("one.stop();");
-        nlIndent();
-        this.sb.append("rob.setOne(one);");
-        nlIndent();
-        this.sb.append("rob.setBrm(brm);");
-        nlIndent();
-        this.generateSensors();
-        if ( this.isTimeSensorUsed ) {
+        this.generateActors();
+        this.sb.append("Serial.begin(9600);");
+        if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
-        this.sb.append("\n}\n");
+        this.sb.append("\n}");
     }
 
     @Override
@@ -811,16 +551,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
         for ( UsedSensor usedSensor : this.usedSensors ) {
             switch ( usedSensor.getType() ) {
                 case COLOR:
-                    nlIndent();
-                    this.sb.append("brm.setRgbStatus(ENABLE);");
                     break;
                 case INFRARED:
-                    nlIndent();
-                    this.sb.append("one.obstacleEmitters(ON);");
                     break;
                 case ULTRASONIC:
-                    nlIndent();
-                    this.sb.append("brm.setSonarStatus(ENABLE);");
+                    this.sb.append("MeUltrasonicSensor ultraSensor(" + usedSensor.getPort() + ");\n");
                     break;
                 case LIGHT:
                 case COMPASS:
@@ -830,6 +565,13 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
                 default:
                     throw new DbcException("Sensor is not supported!");
             }
+        }
+    }
+
+    private void generateActors() {
+        for ( UsedActor usedActor : this.usedActors ) {
+            this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
+            nlIndent();
         }
     }
 }

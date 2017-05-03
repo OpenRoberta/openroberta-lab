@@ -1,13 +1,14 @@
-package de.fhg.iais.roberta.mode.sensor.arduino;
+package de.fhg.iais.roberta.mode.sensor.botnroll;
 
-import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 
-public enum LightSensorMode implements ILightSensorMode {
-    RED( "light", "getSample" ), AMBIENTLIGHT( "getColorSensorAmbient", "Ambient" );
+public enum InfraredSensorMode implements IInfraredSensorMode {
+    OBSTACLE( "Distance" ), SEEK( "Seek" );
 
     private final String[] values;
 
-    private LightSensorMode(String... values) {
+    private InfraredSensorMode(String... values) {
+
         this.values = values;
     }
 

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
@@ -14,7 +15,6 @@ import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
@@ -22,15 +22,12 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.ArduAstVisitor;
 
 public abstract class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Void> {
-    protected final boolean isTimeSensorUsed;
-    protected final Set<UsedSensor> usedSensors;
+
+    protected Set<UsedSensor> usedSensors;
+    protected Set<UsedActor> usedActors;
 
     protected Ast2ArduVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-
-        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(programPhrases);
-        this.usedSensors = usedHardwareVisitor.getUsedSensors();
-        this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
 
         this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }

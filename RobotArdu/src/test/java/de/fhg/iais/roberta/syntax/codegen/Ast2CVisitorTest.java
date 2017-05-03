@@ -129,7 +129,7 @@ public class Ast2CVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + MAIN_METHOD2
-            + "one.obstacleEmitters(ON);brm.setSonarStatus(ENABLE);"
+            + "brm.setSonarStatus(ENABLE);one.obstacleEmitters(ON);"
             + "}"
             + "voidloop(){"
             + "if (rob.infraredSensorObstacle(1)) {"

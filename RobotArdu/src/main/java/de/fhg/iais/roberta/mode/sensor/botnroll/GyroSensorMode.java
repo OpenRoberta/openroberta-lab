@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.mode.sensor.arduino;
+package de.fhg.iais.roberta.mode.sensor.botnroll;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 
-public enum InfraredSensorMode implements IInfraredSensorMode {
-    OBSTACLE( "Distance" ), SEEK( "Seek" );
+public enum GyroSensorMode implements IGyroSensorMode {
+    RATE( "Rate" ), ANGLE( "Angle" ), RESET( "resetGyroSensor" );
 
     private final String[] values;
 
-    private InfraredSensorMode(String... values) {
+    private GyroSensorMode(String... values) {
 
         this.values = values;
     }

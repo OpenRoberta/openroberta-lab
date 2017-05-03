@@ -7,8 +7,8 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -25,30 +25,30 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
-import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
-import de.fhg.iais.roberta.mode.action.arduino.BrickLedColor;
-import de.fhg.iais.roberta.mode.sensor.arduino.BrickKey;
-import de.fhg.iais.roberta.mode.sensor.arduino.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.arduino.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
+import de.fhg.iais.roberta.mode.action.botnroll.BrickLedColor;
+import de.fhg.iais.roberta.mode.action.makeblock.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.botnroll.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.SoundSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.SensorPort;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2BotNrollVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2MakeBlockVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class MakeBlockFactory extends AbstractRobotFactory {
-    private BotNrollCompilerWorkflow compilerWorkflow;
+    private MakeBlockCompilerWorkflow compilerWorkflow;
     private final Properties properties;
     private final String name;
     private final int robotPropertyNumber;
@@ -58,15 +58,15 @@ public class MakeBlockFactory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.name = "makeblock";
+        this.name = "mbot";
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
-            new BotNrollCompilerWorkflow(
+            new MakeBlockCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.properties = Util1.loadProperties("classpath:Makeblock.properties");
-        addBlockTypesFromProperties("Makeblock.properties", this.properties);
+        this.properties = Util1.loadProperties("classpath:Mbot.properties");
+        addBlockTypesFromProperties("Mbot.properties", this.properties);
     }
 
     @Override
@@ -528,6 +528,6 @@ public class MakeBlockFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return Ast2BotNrollVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return Ast2MakeBlockVisitor.generate((MakeBlockConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 }

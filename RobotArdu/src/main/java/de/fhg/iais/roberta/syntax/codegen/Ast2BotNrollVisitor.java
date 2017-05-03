@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
-import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
+import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
+import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.BotNrollUsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -68,6 +69,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class Ast2BotNrollVisitor extends Ast2ArduVisitor {
     private final BotNrollConfiguration brickConfiguration;
+    private boolean isTimerSensorUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -79,6 +81,11 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor {
     private Ast2BotNrollVisitor(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
+        BotNrollUsedHardwareVisitor usedHardwareVisitor = new BotNrollUsedHardwareVisitor(phrases, brickConfiguration);
+        this.usedSensors = usedHardwareVisitor.getUsedSensors();
+        this.usedActors = usedHardwareVisitor.getUsedActors();
+        this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
+
     }
 
     /**
@@ -518,7 +525,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor {
         generateUserDefinedMethods();
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-        if ( this.isTimeSensorUsed ) {
+        if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
         }
@@ -763,7 +770,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor {
         this.sb.append("BnrOneA one; \n");
         this.sb.append("BnrRescue brm; \n");
         this.sb.append("RobertaFunctions rob(one, brm);  \n");
-        if ( this.isTimeSensorUsed ) {
+        if ( this.isTimerSensorUsed ) {
             this.sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
         this.sb.append("#define SSPIN  2 \n");
@@ -793,7 +800,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor {
         this.sb.append("rob.setBrm(brm);");
         nlIndent();
         this.generateSensors();
-        if ( this.isTimeSensorUsed ) {
+        if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }

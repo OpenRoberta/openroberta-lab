@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.sensor.arduino;
+package de.fhg.iais.roberta.mode.sensor.botnroll;
 
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 

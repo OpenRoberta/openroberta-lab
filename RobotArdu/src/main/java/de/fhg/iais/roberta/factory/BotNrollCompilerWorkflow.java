@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.codegen.Ast2BotNrollVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -195,7 +195,7 @@ public class BotNrollCompilerWorkflow implements ICompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(factory);
+        Jaxb2BotNrollConfigurationTransformer transformer = new Jaxb2BotNrollConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 
