@@ -31,6 +31,8 @@ public class MakeBlockCompilerWorkflow implements ICompilerWorkflow {
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
 
+    private String compiledHex = "";
+
     public MakeBlockCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
@@ -172,6 +174,7 @@ public class MakeBlockCompilerWorkflow implements ICompilerWorkflow {
             if ( ecode != 0 ) {
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
+            this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
@@ -201,6 +204,6 @@ public class MakeBlockCompilerWorkflow implements ICompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        return null;
+        return this.compiledHex;
     }
 }

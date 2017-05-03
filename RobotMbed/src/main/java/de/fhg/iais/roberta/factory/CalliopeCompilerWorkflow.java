@@ -69,8 +69,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode =
-            Ast2CppCalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = Ast2CppCalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
         UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(data.getProgramTransformer().getTree());
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".cpp");
