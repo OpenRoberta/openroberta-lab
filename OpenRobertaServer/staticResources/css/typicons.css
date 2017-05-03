@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'typicons';
   src:
-    url('fonts/typicons.ttf?pllwuy') format('truetype'),
-    url('fonts/typicons.woff?pllwuy') format('woff'),
-    url('fonts/typicons.svg?pllwuy#typicons') format('svg');
+    url('fonts/typicons.ttf?c7454l') format('truetype'),
+    url('fonts/typicons.woff?c7454l') format('woff'),
+    url('fonts/typicons.svg?c7454l#typicons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -22,6 +22,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.typcn-makeblock:before {
+  content: "\ea67";
+}
 .typcn-walk:before {
   content: "\e900";
 }
@@ -76,7 +79,7 @@
 .typcn-open:before {
   content: "\e90e";
 }
-.typcn-ardu:before {
+.typcn-botnroll:before {
   content: "\e90f";
 }
 .typcn-microduino:before {
