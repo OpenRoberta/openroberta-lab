@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.mode.sensor.botnroll.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class InfraredSensorTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void sensorSetInfrared() throws Exception {

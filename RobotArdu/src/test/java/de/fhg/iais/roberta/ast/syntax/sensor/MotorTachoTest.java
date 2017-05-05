@@ -1,11 +1,11 @@
-package de.fhg.iais.roberta.ast.syntax.sensors;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MotorTachoTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void setMotorTacho() throws Exception {

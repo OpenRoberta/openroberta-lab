@@ -47,7 +47,7 @@ import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.BotNrollUsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -62,12 +62,13 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.BotnrollAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public class Ast2BotNrollVisitor extends Ast2ArduVisitor {
+public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstVisitor<Void> {
     private final BotNrollConfiguration brickConfiguration;
     private boolean isTimerSensorUsed;
 

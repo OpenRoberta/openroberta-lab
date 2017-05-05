@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -33,16 +32,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.ArduAstVisitor;
 import de.fhg.iais.roberta.visitor.CheckVisitor;
+import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author kcvejoski
  */
-public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements ArduAstVisitor<Void> {
+public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements MakeblockAstVisitor<Void> {
     private final Set<UsedSensor> usedSensors = new HashSet<UsedSensor>();
     private final Set<UsedActor> usedActors = new HashSet<UsedActor>();
 
@@ -235,6 +235,12 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements ArduAs
     }
 
     @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        this.usedSensors.add(new UsedSensor(temperatureSensor.getPort(), SensorType.TEMPERATURE, null));
+        return null;
+    }
+
+    @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         this.usedSensors.add(new UsedSensor(null, SensorType.COMPASS, null));
         return null;
@@ -247,11 +253,6 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements ArduAs
 
     @Override
     public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         return null;
     }
 

@@ -19,9 +19,8 @@ import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.visitor.ArduAstVisitor;
 
-public abstract class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Void> {
+public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
 
     protected Set<UsedSensor> usedSensors;
     protected Set<UsedActor> usedActors;

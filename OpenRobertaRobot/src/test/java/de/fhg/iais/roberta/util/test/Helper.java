@@ -157,7 +157,7 @@ public class Helper {
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
-        // System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 

@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.mode.sensor.botnroll.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class GyroSensorTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void sensorSetGyro() throws Exception {

@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class Ast2CVisitorTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     private static final String MAIN_METHOD1 = ""
         + "#include<math.h>\n"

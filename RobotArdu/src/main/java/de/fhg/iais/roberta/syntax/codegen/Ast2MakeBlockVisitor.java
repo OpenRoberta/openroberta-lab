@@ -39,7 +39,6 @@ import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.MakeBlockUsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -51,15 +50,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
+public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
     private final MakeBlockConfiguration brickConfiguration;
     private boolean isTimerSensorUsed;
 
@@ -236,12 +237,6 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
     }
 
     @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-
-        return null;
-    }
-
-    @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         return null;
     }
@@ -249,6 +244,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
 
+        return null;
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        this.sb.append("myTemp" + temperatureSensor.getPort().getPortNumber() + ".temperature()");
         return null;
     }
 
@@ -269,6 +270,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+        this.sb.append("myTouch" + touchSensor.getPort().getPortNumber() + ".touched()");
         return null;
     }
 
@@ -557,11 +559,17 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor {
                 case ULTRASONIC:
                     this.sb.append("MeUltrasonicSensor ultraSensor(" + usedSensor.getPort() + ");\n");
                     break;
+                case TEMPERATURE:
+                    this.sb.append("MeTemperature myTemp" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
+                case TOUCH:
+                    this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
                 case LIGHT:
                 case COMPASS:
                 case SOUND:
-                case TOUCH:
                     break;
+
                 default:
                     throw new DbcException("Sensor is not supported!");
             }

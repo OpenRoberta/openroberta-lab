@@ -3,11 +3,11 @@ package de.fhg.iais.roberta.ast.syntax.actors.communication;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 @Ignore
 public class BluetoothTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void connection() throws Exception {
