@@ -56,6 +56,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         // fill start popup
         proto = $('#popup-sim');
         var newGroup = false;
+        var group = false;
+        var oldRobotGroup = "";
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
                 i++;
@@ -63,6 +65,30 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
             }
             var robotName = robots[i].name;
             var robotGroup = robots[i].group;
+            if (robotGroup != oldRobotGroup){
+                newGroup = false;
+                group = false;
+            }
+            if (robotName != robotGroup) {
+                if (group === true) {
+                    newGroup = false;
+                } else {
+                    newGroup = true;
+                    group = true;
+                }
+            } 
+            if (newGroup) {
+                var clone = proto.clone().prop('id', 'menu-' + robotGroup);
+                clone.find('span:eq( 0 )').removeClass('typcn-open');
+                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+                clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
+                clone.find('a').remove();
+                clone.attr('data-type', robotGroup);
+                clone.attr('data-group', true);
+                clone.find('img').css('visibility', 'hidden');
+                $("#popup-robot-container").append(clone);
+            }
+
             var clone = proto.clone().prop('id', 'menu-' + robotName);
             clone.find('span:eq( 0 )').removeClass('typcn-open');
             if (robotName != robotGroup) {
@@ -80,22 +106,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
                 clone.find('img.img-beta').css('visibility', 'hidden');
             }
             $("#popup-robot-container").append(clone);
-            if (robotName != robotGroup && !newGroup) {
-                newGroup = true;
-            } else {
-                if (newGroup) {
-                    var clone = proto.clone().prop('id', 'menu-' + robotGroup);
-                    clone.find('span:eq( 0 )').removeClass('typcn-open');
-                    clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
-                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
-                    clone.find('a').remove();
-                    clone.attr('data-type', robotGroup);
-                    clone.attr('data-group', true);
-                    clone.find('img').css('visibility', 'hidden');
-                    $("#popup-robot-container").append(clone);
-                }
-                newGroup = false;
-            }
+            oldRobotGroup = robotGroup;
         }
         if (robots[0].name != 'sim') {
             proto.remove();

@@ -1183,6 +1183,11 @@ table [data-toggle="collapse"].collapsed:after {
 	height: 157px;
 }
 
+.robotSpecial span.img-mbot {
+	background-image: url("/css/img/mblock.jpg");	
+	background-size: 100% 100%;	
+}
+
 .startupImages {
 	top: 50%;
     position: relative;
