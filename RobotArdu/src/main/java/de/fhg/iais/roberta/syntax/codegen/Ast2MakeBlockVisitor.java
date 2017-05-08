@@ -170,7 +170,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append(motorStopAction.getPort().getValues()[1] + ".reset()");
+        this.sb.append(motorStopAction.getPort().getValues()[1] + ".stop()");
         return null;
     }
 
@@ -226,6 +226,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+        for ( UsedActor actor : this.usedActors ) {
+            this.sb.append(actor.getPort().getValues()[1] + ".stop();");
+            nlIndent();
+        }
         return null;
     }
 
@@ -557,20 +561,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         for ( UsedActor actor : this.usedActors ) {
             String actorPort = actor.getPort().getValues()[1];
             actorPorts += actor.getPort().getValues()[0] + ", ";
-            switch ( actorPort ) {
-                case "motor1":
-                    this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
-                    break;
-                case "motor2":
-                    this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
-                    break;
-                default:
-                    break;
-
-            }
+            this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
         }
 
-        actorPorts = actorPorts.substring(0, actorPorts.length() - 2);
+        if ( this.usedActors.size() > 1 ) {
+            actorPorts = actorPorts.substring(0, actorPorts.length() - 2);
+        }
         this.sb.append(
             "MeDrive myDrive("
                 + this.brickConfiguration.getLeftMotorPort().getValues()[0]
