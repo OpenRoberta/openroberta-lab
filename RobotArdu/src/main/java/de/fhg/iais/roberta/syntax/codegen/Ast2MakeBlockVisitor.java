@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
+import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -205,12 +206,13 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        return null;
+    	 this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+    	        return null;
     }
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-
+    	
         return null;
     }
 
@@ -222,6 +224,8 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+    	
+    	   this.sb.append("mySound" + soundSensor.getPort().getPortNumber() + ".strength()");
         return null;
     }
 
@@ -238,9 +242,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+    	//the axis names(getAxis) should be taken as input for gyro sensor however the implementations for that don't exist in GyroSensor.java
+    	//this.sb.append("myGyro.getAngle" + "(" + gyroSensor.getAxis() + ")");
         return null;
     }
 
+    
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
 
@@ -273,11 +280,21 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.sb.append("myTouch" + touchSensor.getPort().getPortNumber() + ".touched()");
         return null;
     }
+    
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        this.sb.append("tone(8, ");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(", ");
+        toneAction.getDuration().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         this.sb.append("ultraSensor.distanceCm()");
-        return null;
     }
 
     @Override
@@ -522,6 +539,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.sb.append("#include \"MeOrion.h\" \n");
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n\n");
+        this.sb.append("#include <MeMCore.h>\n\n");
 
         if ( this.isTimerSensorUsed ) {
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
@@ -566,8 +584,15 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LIGHT:
+                	 this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                     break;
                 case COMPASS:
+                case GYRO:
+          
+                this.sb.append("MEGyro myGyro");
+                  break;
                 case SOUND:
+                	this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
 
                 default:
