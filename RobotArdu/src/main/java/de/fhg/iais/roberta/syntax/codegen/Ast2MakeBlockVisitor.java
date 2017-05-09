@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
-import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
