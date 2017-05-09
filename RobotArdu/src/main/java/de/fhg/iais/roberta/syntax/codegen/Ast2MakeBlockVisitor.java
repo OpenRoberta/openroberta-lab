@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -132,6 +134,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     }
 
     @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        return null;
+    }
+
+    @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
         this.sb.append(motorOnAction.getPort().getValues()[1]);
@@ -144,7 +151,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             duration.getValue().visit(this);
             this.sb.append(", ");
         } else {
-            this.sb.append(".runSpeed(");
+            this.sb.append(".run(");
         }
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(");");
@@ -163,38 +170,101 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append(motorStopAction.getPort().getValues()[1] + ".reset()");
+        this.sb.append(motorStopAction.getPort().getValues()[1] + ".stop()");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        this.sb.append("motor1.runSpeedAndTime(");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(", ");
-        driveAction.getParam().getDuration().getValue().visit(this);
-        this.sb.append(");");
-        nlIndent();
-        this.sb.append("motor2.runSpeedAndTime(");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(", ");
-        driveAction.getParam().getDuration().getValue().visit(this);
-        this.sb.append(");");
+        MotorDuration<Void> duration = driveAction.getParam().getDuration();
+        if ( driveAction.getDirection() == DriveDirection.FOREWARD ) {
+            this.sb.append("myDrive.drive(");
+            driveAction.getParam().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", 1, ");
+                duration.getValue().visit(this);
+                this.sb.append(");");
+            } else {
+                this.sb.append(", 1);");
+            }
+        } else {
+            this.sb.append("myDrive.drive(");
+            driveAction.getParam().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", 0, ");
+                duration.getValue().visit(this);
+                this.sb.append(");");
+            } else {
+                this.sb.append(", 0);");
+            }
+        }
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
+        MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
+        if ( curveAction.getDirection() == DriveDirection.FOREWARD ) {
+            this.sb.append("myDrive.steer(");
+            curveAction.getParamLeft().getSpeed().visit(this);
+            this.sb.append(", ");
+            curveAction.getParamRight().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", 1, ");
+                duration.getValue().visit(this);
+                this.sb.append(");");
+            } else {
+                this.sb.append(", 1);");
+            }
+        } else {
+            this.sb.append("myDrive.steer(");
+            curveAction.getParamLeft().getSpeed().visit(this);
+            this.sb.append(", ");
+            curveAction.getParamRight().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", 0, ");
+                duration.getValue().visit(this);
+                this.sb.append(");");
+            } else {
+                this.sb.append(", 0);");
+            }
+        }
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
+        MotorDuration<Void> duration = turnAction.getParam().getDuration();
+        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
+            this.sb.append("myDrive.turn(");
+            turnAction.getParam().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", 1, ");
+                duration.getValue().visit(this);
+                this.sb.append(");");
+            } else {
+                this.sb.append(", 1);");
+            }
+        } else {
+            this.sb.append("myDrive.turn(");
+            turnAction.getParam().getSpeed().visit(this);
+            if ( duration != null ) {
+                this.sb.append(", 0, ");
+                duration.getValue().visit(this);
+                this.sb.append(");");
+            } else {
+                this.sb.append(", 0);");
+            }
+        }
         return null;
     }
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+        for ( UsedActor actor : this.usedActors ) {
+            this.sb.append(actor.getPort().getValues()[1] + ".stop();");
+            nlIndent();
+        }
         return null;
     }
 
@@ -271,16 +341,6 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         this.sb.append("myTouch" + touchSensor.getPort().getPortNumber() + ".touched()");
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("tone(8, ");
-        toneAction.getFrequency().visit(this);
-        this.sb.append(", ");
-        toneAction.getDuration().visit(this);
-        this.sb.append(");");
         return null;
     }
 
@@ -528,17 +588,34 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         }
 
         this.sb.append("#include <math.h> \n");
-        this.sb.append("#include <CountUpDownTimer.h> \n\n");
-        this.sb.append("#include \"MeOrion.h\" \n");
+        this.sb.append("#include <MeOrion.h> \n");
         this.sb.append("#include <Wire.h>\n");
-        this.sb.append("#include <SoftwareSerial.h>\n\n");
-        this.sb.append("#include <MeMCore.h>\n\n");
+        this.sb.append("#include <SoftwareSerial.h>\n");
+        this.sb.append("#include <CountUpDownTimer.h>\n");
+        this.sb.append("#include <RobertaFunctions.h>\n");
+        this.sb.append("#include \"MeDrive.h\"\n\n");
 
         if ( this.isTimerSensorUsed ) {
+            this.sb.append("#include <CountUpDown.h>\n\n");
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
+
+        this.sb.append("RobertaFunctions rob;\n");
+
+        String actorPorts = "";
         for ( UsedActor actor : this.usedActors ) {
-            this.sb.append("MeEncoderMotor " + actor.getPort().getValues()[1] + "(0x09, " + actor.getPort() + ");\n");
+            actorPorts += actor.getPort().getValues()[0] + ", ";
+            this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
+        }
+
+        if ( this.usedActors.size() > 1 ) {
+            actorPorts = actorPorts.substring(0, actorPorts.length() - 2);
+            this.sb.append(
+                "MeDrive myDrive("
+                    + this.brickConfiguration.getLeftMotorPort().getValues()[0]
+                    + ", "
+                    + this.brickConfiguration.getRightMotorPort().getValues()[0]
+                    + ");\n");
         }
         this.generateSensors();
         this.sb.append("\nvoid setup() \n");
@@ -596,8 +673,8 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     private void generateActors() {
         for ( UsedActor usedActor : this.usedActors ) {
-            this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
-            nlIndent();
+            //this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
+            //nlIndent();
         }
     }
 }

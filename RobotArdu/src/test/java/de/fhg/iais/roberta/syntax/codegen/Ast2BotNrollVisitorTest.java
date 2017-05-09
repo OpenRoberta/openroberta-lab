@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
-public class Ast2CVisitorTest {
+public class Ast2BotNrollVisitorTest {
     HelperBotNroll h = new HelperBotNroll();
 
     private static final String MAIN_METHOD1 = ""
@@ -47,7 +47,7 @@ public class Ast2CVisitorTest {
             + "        one.lcd1(\"Hallo\");\n"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator.xml", true);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class Ast2CVisitorTest {
             + "        }\n"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator1.xml", true);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class Ast2CVisitorTest {
             + "    delay(15);}"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator2.xml", true);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class Ast2CVisitorTest {
             + "    one.stop();}}"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator3.xml", true);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class Ast2CVisitorTest {
             + "tone(9, 300, 100);}}"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator4.xml", true);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class Ast2CVisitorTest {
             + "       tone(9,0,0);"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator5.xml", true);
     }
 
     @Test
@@ -175,7 +175,7 @@ public class Ast2CVisitorTest {
             + "        tone(9,300, 3000);\n"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator6.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator6.xml", true);
     }
 
     @Test
@@ -189,7 +189,7 @@ public class Ast2CVisitorTest {
             + "          bnr.move1mTime(1,30,1);\n"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator7.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator7.xml", true);
     }
 
     @Test
@@ -209,7 +209,7 @@ public class Ast2CVisitorTest {
             + "        item3 = false;\n"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator8.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator8.xml", true);
     }
 
     @Test
@@ -321,7 +321,7 @@ public class Ast2CVisitorTest {
             + "voidloop(){"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator11.xml", true);
     }
 
     @Test
