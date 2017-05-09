@@ -138,7 +138,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         }
 
         if ( varType.equals("BOOLEAN") ) {
-            this.sb.append("rob.boolToString(");
+            this.sb.append("bnr.boolToString(");
             showTextAction.getMsg().visit(this);
             this.sb.append(")");
         } else {
@@ -151,7 +151,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("rob.lcdClear();");
+        this.sb.append("bnr.lcdClear();");
         return null;
     }
 
@@ -211,7 +211,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         if ( isServo ) {
             methodName = motorOnAction.getPort() == ActorPort.A ? "one.servo1(" : "one.servo2(";
         } else {
-            methodName = isDuration ? "rob.move1mTime(" : "one.move1m(";
+            methodName = isDuration ? "bnr.move1mTime(" : "one.move1m(";
             port = motorOnAction.getPort() == ActorPort.B ? "1" : "2";
         }
         this.sb.append(methodName);
@@ -267,7 +267,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         String methodName;
         String sign = "";
         if ( isDuration ) {
-            methodName = "rob.moveTime";
+            methodName = "bnr.moveTime";
         } else {
             methodName = "one.move";
         }
@@ -305,7 +305,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         String methodName;
         String sign = "";
         if ( isDuration ) {
-            methodName = "rob.moveTime";
+            methodName = "bnr.moveTime";
         } else {
             methodName = "one.move";
         }
@@ -353,7 +353,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         }
 
         if ( isDuration ) {
-            methodName = "rob.moveTime";
+            methodName = "bnr.moveTime";
         } else {
             methodName = "one.move";
         }
@@ -385,8 +385,10 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("one.readAdc(");
-        //ports from 0 to 7
+        // ports from 0 to 7
         this.sb.append(lightSensor.getPort().getPortNumber()); // we could add "-1" so the number of ports would be 1-8 for users
+        // botnroll's light sensor returns values from 0 to 1023, so to get a range from 0 to 100 we divide
+        // the result by 10.23
         this.sb.append(") / 10.23");
         return null;
     }
@@ -409,7 +411,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
                 btnNumber = "123";
                 break;
         }
-        this.sb.append("rob.buttonIsPressed(" + btnNumber + ")");
+        this.sb.append("bnr.buttonIsPressed(" + btnNumber + ")");
         return null;
     }
 
@@ -424,19 +426,19 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         }
         switch ( getEnumCode(colorSensor.getMode()) ) {
             case "ColorSensorMode.COLOUR":
-                this.sb.append("rob.colorSensorColor(");
+                this.sb.append("bnr.colorSensorColor(");
                 this.sb.append(colors);
                 this.sb.append(colorSensor.getPort().getPortNumber());
                 this.sb.append(")");
                 break;
             case "ColorSensorMode.RGB":
-                this.sb.append("{(double) rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[0], (double) rob.colorSensorRGB(" + colors + port);
-                this.sb.append(")[1], (double) rob.colorSensorRGB(" + colors + port);
+                this.sb.append("{(double) bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[0], (double) bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[1], (double) bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[2]}");
                 break;
             case "ColorSensorMode.RED":
-                this.sb.append("rob.colorSensorLight(" + colors + port);
+                this.sb.append("bnr.colorSensorLight(" + colors + port);
                 this.sb.append(")");
                 break;
         }
@@ -455,7 +457,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.sb.append("rob.readBearing()");
+        this.sb.append("bnr.readBearing()");
         return null;
     }
 
@@ -475,10 +477,10 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         String port = infraredSensor.getPort().getPortNumber();
         switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
             case OBSTACLE:
-                this.sb.append("rob.infraredSensorObstacle(");
+                this.sb.append("bnr.infraredSensorObstacle(");
                 break;
             case SEEK:
-                this.sb.append("rob.infraredSensorPresence(");
+                this.sb.append("bnr.infraredSensorPresence(");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
@@ -511,9 +513,9 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         String port = ultrasonicSensor.getPort().getPortNumber();
         if ( ultrasonicSensor.getPort().getPortNumber().equals("3") ) {
-            this.sb.append("rob.sonar()");
+            this.sb.append("bnr.sonar()");
         } else {
-            this.sb.append("rob.ultrasonicDistance(" + port + ")");
+            this.sb.append("bnr.ultrasonicDistance(" + port + ")");
         }
         return null;
     }
@@ -763,6 +765,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         this.sb.append("#include <BnrRescue.h>   // Bot'n Roll CoSpace Rescue Module library \n");
         //additional Roberta functions:
         this.sb.append("#include <RobertaFunctions.h>   // Open Roberta library \n");
+        this.sb.append("#include <BnrRoberta.h>    // Open Roberta library \n");
         // SPI communication library required by BnrOne.cpp"
         this.sb.append("#include <SPI.h>   // SPI communication library required by BnrOne.cpp \n");
         // required by BnrRescue.cpp (for the additional sonar kit):
@@ -770,7 +773,8 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         // declaration of object variable to control the Bot'n Roll ONE A and Rescue:
         this.sb.append("BnrOneA one; \n");
         this.sb.append("BnrRescue brm; \n");
-        this.sb.append("RobertaFunctions rob(one, brm);  \n");
+        this.sb.append("RobertaFunctions rob;  \n");
+        this.sb.append("BnrRoberta bnr(one, brm);  \n");
         if ( this.isTimerSensorUsed ) {
             this.sb.append("CountUpDownTimer T(UP, HIGH); \n");
         }
@@ -796,9 +800,9 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         // stop motors:
         this.sb.append("one.stop();");
         nlIndent();
-        this.sb.append("rob.setOne(one);");
+        this.sb.append("bnr.setOne(one);");
         nlIndent();
-        this.sb.append("rob.setBrm(brm);");
+        this.sb.append("bnr.setBrm(brm);");
         nlIndent();
         this.generateSensors();
         if ( this.isTimerSensorUsed ) {

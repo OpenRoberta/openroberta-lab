@@ -13,11 +13,13 @@ public class Ast2BotNrollVisitorTest {
         + "#include<BnrOneA.h>//Bot'nRollONEAlibrary"
         + "#include<BnrRescue.h>//Bot'nRollCoSpaceRescueModulelibrary"
         + "#include<RobertaFunctions.h>//OpenRobertalibrary"
+        + "#include<BnrRoberta.h>//OpenRobertalibrary"
         + "#include<SPI.h>//SPIcommunicationlibraryrequiredbyBnrOne.cpp"
         + "#include<Wire.h>//alibraryrequiredbyBnrRescue.cppfortheadditionalsonar"
-        + "BnrOneA one;"
-        + "BnrRescue brm;"
-        + "RobertaFunctions rob(one,brm);";
+        + "BnrOneAone;"
+        + "BnrRescuebrm;"
+        + "RobertaFunctionsrob;"
+        + "BnrRoberta bnr(one, brm);";
 
     private static final String MAIN_METHOD2 = ""
         + "#defineSSPIN2"
@@ -31,8 +33,8 @@ public class Ast2BotNrollVisitorTest {
         + "brm.i2cConnect(MODULE_ADDRESS);//startsI2Ccommunication"
         + "brm.setModuleAddress(0x2C);"
         + "one.stop();"
-        + "rob.setOne(one);"
-        + "rob.setBrm(brm);";
+        + "bnr.setOne(one);"
+        + "bnr.setBrm(brm);";
 
     @Test
     public void test() throws Exception {
@@ -78,13 +80,13 @@ public class Ast2BotNrollVisitorTest {
             + "voidloop(){"
             + "item += \"zzz\";"
             + "while (true) {"
-            + "    if (rob.infraredSensorObstacle(1) == true) {"
+            + "    if (bnr.infraredSensorObstacle(1) == true) {"
             + "        break;"
             + "    }"
             + "    delay(15);"
             + "}"
             + "while (true) {"
-            + "    if (( rob.buttonIsPressed(2) ) ? rob.buttonIsPressed(123) : rob.buttonIsPressed(3)) {"
+            + "    if (( bnr.buttonIsPressed(2) ) ? bnr.buttonIsPressed(123) : bnr.buttonIsPressed(3)) {"
             + "        break;"
             + "    }"
             + "    delay(15);}"
@@ -115,8 +117,8 @@ public class Ast2BotNrollVisitorTest {
             + "    item3 = one.readAdc(1) / 10.23;"
             + "}"
             + "for(double  item5 = 0; item5 < sizeof(item2Raw) / sizeof(item2Raw[0]);  item5++) {"
-            + "    one.movePID(rob.readBearing(), rob.readBearing());"
-            + "if (rob.infraredSensorPresence(3)) {"
+            + "    one.movePID(bnr.readBearing(), bnr.readBearing());"
+            + "if (bnr.infraredSensorPresence(3)) {"
             + "    one.stop();}}"
             + "}\n";
 
@@ -132,12 +134,12 @@ public class Ast2BotNrollVisitorTest {
             + "brm.setSonarStatus(ENABLE);one.obstacleEmitters(ON);"
             + "}"
             + "voidloop(){"
-            + "if (rob.infraredSensorObstacle(1)) {"
-            + "rob.move1mTime(1, 30, 100);"
-            + "rob.moveTimePID(10, 30, 100);"
+            + "if (bnr.infraredSensorObstacle(1)) {"
+            + "bnr.move1mTime(1, 30, 100);"
+            + "bnr.moveTimePID(10, 30, 100);"
             + "}"
-            + "if (rob.ultrasonicDistance(0) == 55) {"
-            + "while (rob.buttonIsPressed(1)) {"
+            + "if (bnr.ultrasonicDistance(0) == 55) {"
+            + "while (bnr.buttonIsPressed(1)) {"
             + "tone(9, 300, 100);}}"
             + "}\n";
 
@@ -153,7 +155,7 @@ public class Ast2BotNrollVisitorTest {
             + "}"
             + "voidloop(){"
             + "       one.move1m(1, 0);"
-            + "       rob.move1mTime(1,30,0);"
+            + "       bnr.move1mTime(1,30,0);"
             + "       one.movePID(0,-0);"
             + "       tone(9,0,0);"
             + "}\n";
@@ -184,7 +186,7 @@ public class Ast2BotNrollVisitorTest {
             + "}"
             + "voidloop(){"
             + "          one.move1m(1,30);\n"
-            + "          rob.move1mTime(1,30,1);\n"
+            + "          bnr.move1mTime(1,30,1);\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/botnroll/java_code_generator7.xml", true);
@@ -203,7 +205,7 @@ public class Ast2BotNrollVisitorTest {
             + "voidloop(){"
             + "        one.lcd1(item);\n"
             + "        one.lcd1(item2.c_str());\n"
-            + "        one.lcd1(rob.boolToString(item3));\n"
+            + "        one.lcd1(bnr.boolToString(item3));\n"
             + "        item3 = false;\n"
             + "}\n";
 
@@ -332,7 +334,7 @@ public class Ast2BotNrollVisitorTest {
             + "double* item2 = item2Raw;"
             + "voidloop(){"
             + "for(double  item = 0; item < sizeof(item2Raw)/sizeof(item2Raw[0]);  item++) {"
-            + "    rob.moveTimePID(item, item, 100);}"
+            + "    bnr.moveTimePID(item, item, 100);}"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml", true);

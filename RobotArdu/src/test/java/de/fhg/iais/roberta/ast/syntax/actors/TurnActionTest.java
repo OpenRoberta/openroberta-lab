@@ -17,7 +17,7 @@ public class TurnActionTest {
 
     @Test
     public void turnFor() throws Exception {
-        final String a = "\nrob.moveTimePID(50,-50,20);";
+        final String a = "\nbnr.moveTimePID(50,-50,20);";
 
         this.h.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurnFor.xml", false);
     }

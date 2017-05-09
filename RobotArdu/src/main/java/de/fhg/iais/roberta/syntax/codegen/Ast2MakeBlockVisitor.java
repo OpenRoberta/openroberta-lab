@@ -270,6 +270,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
         return null;
     }
 
@@ -287,6 +288,8 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+
+        this.sb.append("mySound" + soundSensor.getPort().getPortNumber() + ".strength()");
         return null;
     }
 
@@ -303,6 +306,8 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        //the axis names(getAxis) should be taken as input for gyro sensor however the implementations for that don't exist in GyroSensor.java
+        //this.sb.append("myGyro.getAngle" + "(" + gyroSensor.getAxis() + ")");
         return null;
     }
 
@@ -649,8 +654,15 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LIGHT:
+                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
                 case COMPASS:
+                case GYRO:
+
+                    this.sb.append("MEGyro myGyro");
+                    break;
                 case SOUND:
+                    this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
 
                 default:
