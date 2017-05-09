@@ -9,7 +9,7 @@ public class MathConstrainTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "rob.clamp(rob.ultrasonicDistance(4),1,100)";
+        final String a = "rob.clamp(bnr.ultrasonicDistance(4),1,100)";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_constrain.xml", false);
     }

@@ -9,7 +9,7 @@ public class UltrasonicSensorTest {
 
     @Test
     public void setUltrasonic() throws Exception {
-        final String a = "\nrob.ultrasonicDistance(4)rob.ultrasonicDistance(2)";
+        final String a = "\nbnr.ultrasonicDistance(4)bnr.ultrasonicDistance(2)";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_setUltrasonic.xml", false);
     }
