@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.factory.MakeBlockFactory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
+import de.fhg.iais.roberta.mode.action.makeblock.ActorPort;
 
 public class HelperMakeBlock extends de.fhg.iais.roberta.util.test.Helper {
 
@@ -16,10 +16,8 @@ public class HelperMakeBlock extends de.fhg.iais.roberta.util.test.Helper {
         MakeBlockFactory robotFactory = new MakeBlockFactory(null);
         Configuration brickConfiguration =
             new MakeBlockConfiguration.Builder()
-                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.M2, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.M1, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         setRobotFactory(robotFactory);
         setRobotConfiguration(brickConfiguration);

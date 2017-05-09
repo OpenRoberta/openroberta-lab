@@ -587,12 +587,16 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n");
         this.sb.append("#include <CountUpDownTimer.h>\n");
+        this.sb.append("#include <RobertaFunctions.h>\n");
         this.sb.append("#include \"MeDrive.h\"\n\n");
 
         if ( this.isTimerSensorUsed ) {
             this.sb.append("#include <CountUpDown.h>\n\n");
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
+
+        this.sb.append("RobertaFunctions rob;\n");
+
         String actorPorts = "";
         for ( UsedActor actor : this.usedActors ) {
             actorPorts += actor.getPort().getValues()[0] + ", ";
