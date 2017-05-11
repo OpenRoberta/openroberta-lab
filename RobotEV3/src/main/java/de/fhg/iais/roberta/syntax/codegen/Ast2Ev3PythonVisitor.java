@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.check.hardware.Ev3UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.check.program.PythonGlobalVariableCheck;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
@@ -59,7 +60,6 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -105,7 +105,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensor
     private Ast2Ev3PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(programPhrases, brickConfiguration);
+        Ev3UsedHardwareVisitor checkVisitor = new Ev3UsedHardwareVisitor(programPhrases, brickConfiguration);
         PythonGlobalVariableCheck gvChecker = new PythonGlobalVariableCheck(programPhrases);
 
         this.brickConfiguration = brickConfiguration;
@@ -746,12 +746,12 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensor
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
         this.sb.append("hal.establishConnectionTo(");
-        if ( !bluetoothConnectAction.get_address().getKind().hasName("STRING_CONST") ) {
+        if ( !bluetoothConnectAction.getAddress().getKind().hasName("STRING_CONST") ) {
             this.sb.append("str(");
-            bluetoothConnectAction.get_address().visit(this);
+            bluetoothConnectAction.getAddress().visit(this);
             this.sb.append(")");
         } else {
-            bluetoothConnectAction.get_address().visit(this);
+            bluetoothConnectAction.getAddress().visit(this);
         }
         this.sb.append(")");
         return null;

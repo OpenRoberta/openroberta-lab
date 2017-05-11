@@ -26,8 +26,8 @@ import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
+import de.fhg.iais.roberta.syntax.check.hardware.CalliopeSimProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 

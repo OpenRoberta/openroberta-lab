@@ -788,8 +788,8 @@ public class Ast2NxcVisitorTest {
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        System.out.println(a.replaceAll("\\s+", ""));
-        System.out.println(Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        //        System.out.println(a.replaceAll("\\s+", ""));
+        //        System.out.println(Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

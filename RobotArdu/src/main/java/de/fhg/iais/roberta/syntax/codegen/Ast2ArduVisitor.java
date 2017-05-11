@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.check.hardware.BotNrollUsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
@@ -55,7 +56,6 @@ import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -76,12 +76,18 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.ArduAstVisitor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Void> {
+public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final ArduConfiguration brickConfiguration;
 
     private final boolean isTimeSensorUsed;
@@ -99,7 +105,7 @@ public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Vo
 
         this.brickConfiguration = brickConfiguration;
 
-        UsedHardwareVisitor usedHardwareVisitor = new UsedHardwareVisitor(phrases);
+        BotNrollUsedHardwareVisitor usedHardwareVisitor = new BotNrollUsedHardwareVisitor(phrases, brickConfiguration);
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
 

@@ -166,7 +166,6 @@ public class MbedLoopsCounterVisitor extends LoopsCounterVisitor implements Mbed
 
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 

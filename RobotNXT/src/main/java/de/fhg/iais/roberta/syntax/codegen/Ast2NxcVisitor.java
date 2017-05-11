@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.NxcLoopsCounterVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.NxtUsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
@@ -79,12 +80,19 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NxtAstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable NXC code representation of a phrase to a
  * StringBuilder. <b>This representation is correct NXC code for NXT.</b> <br>
  */
-public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void> {
+public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
+    AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
 
     private boolean timeSensorUsed;
@@ -99,11 +107,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
      */
     private Ast2NxcVisitor(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-
         this.brickConfiguration = brickConfiguration;
 
-        this.timeSensorUsed = NxtUsedTimerVisitor.check(programPhrases); //TODO merge the two checkers into one
-        this.volumeActionUsed = NxtUsedVolumeVisitor.check(programPhrases);
+        NxtUsedHardwareVisitor usedHardware = new NxtUsedHardwareVisitor(programPhrases, brickConfiguration);
+
+        this.timeSensorUsed = usedHardware.isTimerSensorUsed();
+        this.volumeActionUsed = usedHardware.isToneUsed();
 
         this.loopsLabels = new NxcLoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }

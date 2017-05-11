@@ -3,23 +3,12 @@ package de.fhg.iais.roberta.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
+import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.expr.Expr;
@@ -59,16 +48,15 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
+import de.fhg.iais.roberta.util.dbc.Assert;
 
-public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
-    AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
     protected List<String> globalVariables = new ArrayList<String>();
+
+    protected void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        Assert.isTrue(!phrasesSet.isEmpty());
+        phrasesSet.stream().flatMap(phrases -> phrases.stream()).forEach(phrase -> phrase.visit(this));
+    }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
@@ -87,6 +75,11 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
+        return null;
+    }
+
+    @Override
+    public Void visitConnectConst(ConnectConst<Void> connectConst) {
         return null;
     }
 
@@ -178,56 +171,6 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
     @Override
     public Void visitStmtList(StmtList<Void> stmtList) {
         stmtList.get().stream().forEach(expr -> expr.visit(this));
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getMode() == Mode.SET ) {
-            volumeAction.getVolume().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        showPictureAction.getX().visit(this);
-        showPictureAction.getY().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        showTextAction.getMsg().visit(this);
-        showTextAction.getX().visit(this);
-        showTextAction.getY().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        toneAction.getDuration().visit(this);
-        toneAction.getFrequency().visit(this);
         return null;
     }
 
@@ -369,28 +312,6 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void>, AstSenso
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
         methodCall.getParametersValues().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        bluetoothConnectAction.get_address().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        bluetoothSendAction.getMsg().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         return null;
     }
 

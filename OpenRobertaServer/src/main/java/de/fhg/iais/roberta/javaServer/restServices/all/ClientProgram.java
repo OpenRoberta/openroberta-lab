@@ -327,7 +327,8 @@ public class ClientProgram {
     private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, ProgramCheckVisitor programChecker)
         throws JSONException,
         JAXBException {
-        final int errorCounter = programChecker.check(program);
+        programChecker.check(program);
+        final int errorCounter = programChecker.getErrorCount();
         response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
         response.put("errorCounter", errorCounter);
         if ( errorCounter > 0 ) {

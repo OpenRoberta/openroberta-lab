@@ -41,13 +41,13 @@ public class BluetoothConnectAction<V> extends Action<V> {
         return new BluetoothConnectAction<V>(address, properties, comment);
     }
 
-    public Expr<V> get_address() {
+    public Expr<V> getAddress() {
         return this._address;
     }
 
     @Override
     public String toString() {
-        return "BluetoothConnectAction [" + get_address().toString() + "]";
+        return "BluetoothConnectAction [" + getAddress().toString() + "]";
     }
 
     @Override
@@ -74,7 +74,7 @@ public class BluetoothConnectAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADDRESS, get_address());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADDRESS, getAddress());
 
         return jaxbDestination;
     }

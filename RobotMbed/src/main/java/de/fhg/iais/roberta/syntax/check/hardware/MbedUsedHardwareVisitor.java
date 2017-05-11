@@ -1,7 +1,8 @@
-package de.fhg.iais.roberta.syntax.hardwarecheck.mbed;
+package de.fhg.iais.roberta.syntax.check.hardware;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
@@ -9,42 +10,44 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
+import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.check.hardware.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.expr.Image;
+import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
+import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
+import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
  *
  * @author kcvejoski
  */
-public class UsedHardwareVisitor extends CheckVisitor {
+public class MbedUsedHardwareVisitor extends UsedHardwareVisitor implements MbedAstVisitor<Void> {
 
     private boolean radioUsed;
     private boolean accelerometerUsed;
     private boolean greyScale;
 
-    public UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public MbedUsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
+        super(configuration);
         check(phrasesSet);
-    }
-
-    private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(!phrasesSet.isEmpty());
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(this);
-            }
-        }
     }
 
     public boolean isRadioUsed() {
@@ -163,6 +166,52 @@ public class UsedHardwareVisitor extends CheckVisitor {
 
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitMbedGetSampleSensor(MbedGetSampleSensor<Void> mbedGetSampleSensor) {
+        mbedGetSampleSensor.getSensor().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
+        return null;
+    }
+
+    @Override
+    public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+        return null;
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedColor(LedColor<Void> ledColor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
         return null;
     }
 

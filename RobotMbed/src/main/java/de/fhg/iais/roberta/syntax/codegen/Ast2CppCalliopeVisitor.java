@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.MbedUsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.expr.Binary;
 import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -67,7 +68,6 @@ import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -99,16 +99,22 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C++ code representation of a phrase to a
  * StringBuilder. <b>This representation is correct C++ code for Calliope systems.</b> <br>
  */
-public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVisitor<Void> {
+public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
+    AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     @SuppressWarnings("unused")
     private final CalliopeConfiguration brickConfiguration;
 
-    private final UsedHardwareVisitor usedHardwareVisitor;
+    private final MbedUsedHardwareVisitor usedHardwareVisitor;
 
     /**
      * initialize the C++ code generator visitor.
@@ -122,7 +128,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
         this.brickConfiguration = brickConfiguration;
 
-        this.usedHardwareVisitor = new UsedHardwareVisitor(programPhrases);
+        this.usedHardwareVisitor = new MbedUsedHardwareVisitor(programPhrases, brickConfiguration);
 
         this.loopsLabels = new MbedLoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }

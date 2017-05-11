@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -23,13 +24,16 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.CheckVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public abstract class ProgramCheckVisitor extends CheckVisitor {
+public abstract class ProgramCheckVisitor extends CheckVisitor implements AstActorMotorVisitor<Void>, AstSensorsVisitor<Void> {
 
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
@@ -39,7 +43,8 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
         this.brickConfiguration = brickConfiguration;
     }
 
-    public int check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    @Override
+    public void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
@@ -47,7 +52,6 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
             }
         }
         this.checkedProgram = phrasesSet;
-        return this.errorCount;
     }
 
     /**
@@ -182,6 +186,16 @@ public abstract class ProgramCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         return null;
     }
 

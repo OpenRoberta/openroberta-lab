@@ -55,7 +55,7 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                 this.sensor = GestureSensor.make(GestureSensor.GestureMode.valueOf(port), properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
-                this.sensor = CompassSensor.make(1, properties, comment);
+                this.sensor = CompassSensor.make(factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.MICROPHONE:
                 this.sensor = MicrophoneSensor.make(1, properties, comment);
@@ -75,7 +75,6 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.TIME:
                 this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
                 break;
-
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }
