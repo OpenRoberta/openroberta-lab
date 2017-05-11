@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.expr.Assoc;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.Helper;
 

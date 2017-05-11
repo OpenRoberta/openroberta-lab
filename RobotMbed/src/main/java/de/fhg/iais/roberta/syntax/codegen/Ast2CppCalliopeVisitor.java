@@ -37,39 +37,41 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.check.MbedLoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.check.hardware.MbedUsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.syntax.check.program.MbedCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.expr.Image;
-import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
-import de.fhg.iais.roberta.syntax.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -91,9 +93,6 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -114,7 +113,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @SuppressWarnings("unused")
     private final CalliopeConfiguration brickConfiguration;
 
-    private final MbedUsedHardwareVisitor usedHardwareVisitor;
+    private final MbedCodePreprocessVisitor usedHardwareVisitor;
 
     /**
      * initialize the C++ code generator visitor.
@@ -128,9 +127,9 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
         this.brickConfiguration = brickConfiguration;
 
-        this.usedHardwareVisitor = new MbedUsedHardwareVisitor(programPhrases, brickConfiguration);
+        this.usedHardwareVisitor = new MbedCodePreprocessVisitor(programPhrases, brickConfiguration);
 
-        this.loopsLabels = new MbedLoopsCounterVisitor(programPhrases).getloopsLabelContainer();
+        this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
     }
 
     /**

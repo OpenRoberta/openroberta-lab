@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.check.CheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -29,7 +30,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.CheckVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 

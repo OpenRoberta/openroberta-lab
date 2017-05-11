@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class IfStmtTest {

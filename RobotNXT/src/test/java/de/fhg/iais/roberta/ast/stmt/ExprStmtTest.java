@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 
 public class ExprStmtTest {
 

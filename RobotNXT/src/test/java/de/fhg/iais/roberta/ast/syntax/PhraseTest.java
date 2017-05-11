@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
+import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 
 public class PhraseTest {
 

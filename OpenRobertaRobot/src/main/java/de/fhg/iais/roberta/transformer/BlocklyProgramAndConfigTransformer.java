@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
  * This class stores the AST representation of the program and the brick configuration if transformation is successful, otherwise we have error message

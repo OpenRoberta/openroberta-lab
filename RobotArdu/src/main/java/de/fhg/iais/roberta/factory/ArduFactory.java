@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;

@@ -22,18 +22,18 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.factory.NxtFactory;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxtSimVisitor;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.testutil.Helper;
 
 /**

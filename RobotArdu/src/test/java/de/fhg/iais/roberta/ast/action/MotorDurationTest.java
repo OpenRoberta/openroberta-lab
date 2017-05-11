@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotorDuration;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class MotorDurationTest {

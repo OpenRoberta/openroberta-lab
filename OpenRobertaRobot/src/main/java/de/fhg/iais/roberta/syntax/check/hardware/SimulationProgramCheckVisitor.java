@@ -8,13 +8,13 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 

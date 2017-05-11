@@ -15,14 +15,13 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.syntax.check.hardware.MbedUsedHardwareVisitor;
+import de.fhg.iais.roberta.syntax.check.program.MbedCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2CppCalliopeVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
 
@@ -70,7 +69,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = Ast2CppCalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-        MbedUsedHardwareVisitor usedHardwareVisitor = new MbedUsedHardwareVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
+        MbedCodePreprocessVisitor usedHardwareVisitor = new MbedCodePreprocessVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".cpp");
         } catch ( Exception e ) {

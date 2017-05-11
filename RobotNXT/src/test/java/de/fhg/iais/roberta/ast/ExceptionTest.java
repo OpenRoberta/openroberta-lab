@@ -8,10 +8,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.factory.NxtFactory;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class ExceptionTest {
     @BeforeClass

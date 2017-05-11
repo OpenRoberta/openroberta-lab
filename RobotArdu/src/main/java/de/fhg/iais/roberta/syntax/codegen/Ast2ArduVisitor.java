@@ -33,29 +33,31 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.check.hardware.BotNrollUsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
-import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.check.program.BotNrollCodePreprocessVisitor;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -68,9 +70,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -102,14 +101,12 @@ public class Ast2ArduVisitor extends Ast2CppVisitor implements ArduAstVisitor<Vo
      */
     private Ast2ArduVisitor(ArduConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
-
         this.brickConfiguration = brickConfiguration;
 
-        BotNrollUsedHardwareVisitor usedHardwareVisitor = new BotNrollUsedHardwareVisitor(phrases, brickConfiguration);
+        BotNrollCodePreprocessVisitor usedHardwareVisitor = new BotNrollCodePreprocessVisitor(phrases, brickConfiguration);
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.isTimeSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-
-        this.loopsLabels = new LoopsCounterVisitor(phrases).getloopsLabelContainer();
+        this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
 
     }
 

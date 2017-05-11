@@ -14,13 +14,12 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.NxtConfiguration;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class NxtCompilerWorkflow implements ICompilerWorkflow {
 

@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon.Flow;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class StmtFlowContrTest {

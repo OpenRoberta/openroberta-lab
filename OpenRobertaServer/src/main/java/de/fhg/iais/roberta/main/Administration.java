@@ -19,13 +19,13 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.Encryption;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
  * a class with a static main method, responsible for some administrative work, like<br>

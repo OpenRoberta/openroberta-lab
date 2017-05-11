@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.expr.Assoc;
+import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 
 public class ActionExprTest {
 

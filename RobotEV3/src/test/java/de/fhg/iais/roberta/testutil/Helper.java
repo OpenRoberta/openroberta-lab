@@ -22,19 +22,19 @@ import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.factory.EV3lejosFactory;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.

@@ -41,25 +41,26 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.check.hardware.Ev3UsedHardwareVisitor;
-import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.check.program.PythonGlobalVariableCheck;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.check.program.Ev3CodePreprocessVisitor;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -71,9 +72,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -105,17 +103,16 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensor
     private Ast2Ev3PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        Ev3UsedHardwareVisitor checkVisitor = new Ev3UsedHardwareVisitor(programPhrases, brickConfiguration);
-        PythonGlobalVariableCheck gvChecker = new PythonGlobalVariableCheck(programPhrases);
+        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(programPhrases, brickConfiguration);
 
         this.brickConfiguration = brickConfiguration;
 
         this.usedActors = checkVisitor.getUsedActors();
         this.usedSensors = checkVisitor.getUsedSensors();
 
-        this.usedGlobalVarInFunctions = gvChecker.getMarkedVariablesAsGlobal();
-        this.isProgramEmpty = gvChecker.isProgramEmpty();
-        this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
+        this.usedGlobalVarInFunctions = checkVisitor.getMarkedVariablesAsGlobal();
+        this.isProgramEmpty = checkVisitor.isProgramEmpty();
+        this.loopsLabels = checkVisitor.getloopsLabelContainer();
     }
 
     /**

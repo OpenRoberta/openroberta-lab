@@ -42,7 +42,6 @@ import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
