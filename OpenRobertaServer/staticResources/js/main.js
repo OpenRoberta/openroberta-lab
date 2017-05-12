@@ -15,8 +15,9 @@ require.config({
         'jquery-hotkeys' : 'jquery/jquery.hotkeys',
         'prettify' : 'code-prettify/prettify',
         'volume-meter' : 'sound/volume-meter',
-        'bootstrap.wysiwyg': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
-        
+        'bootstrap.wysiwyg' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
+        'socket.io' : '../socket.io',
+
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
         'configuration.model' : '../app/roberta/models/configuration.model',
@@ -110,8 +111,8 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller','progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
-        'configuration.controller', 'language.controller', 'volume-meter' ], function(require) {
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller',
+        'program.controller', 'configuration.controller', 'language.controller', 'volume-meter', 'socket.io' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -129,6 +130,7 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     progShareController = require('progShare.controller');
     robotController = require('robot.controller');
     userController = require('user.controller');
+    socketIo = require('socket.io');
 
     $(document).ready(WRAP.fn3(init, 'page init'));
 });
@@ -154,7 +156,23 @@ function init() {
         configurationController.init();
         programController.init();
         menuController.init();
-        $(".cover").fadeOut(100, function(){
+
+        var socket = socketIo("ws://localhost:8991/");
+        socket.on('connect', function() {
+            console.log("connect");
+            console.log(socket.id);
+            socket.emit('command', 'log on');
+            socket.emit('command', 'list');
+            console.log('done');
+        });
+        socket.on('message', function(data) {
+            console.log(data);
+        });
+        socket.on('disconnect', function() {
+        });
+
+        //console.log(robotList);
+        $(".cover").fadeOut(100, function() {
             if (guiStateController.noCookie()) {
                 $("#show-startup-message").modal("show");
             }
