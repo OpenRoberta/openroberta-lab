@@ -20,6 +20,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             GUISTATE.user.id = -1;
             GUISTATE.user.accountName = '';
             GUISTATE.user.name = '';
+            
+            //GUISTATE.socket.portNames = [];
+            //GUISTATE.socket.vendorIds = [];
 
             GUISTATE.program.name = 'NEPOprog';
             GUISTATE.program.shared = false;
@@ -505,6 +508,28 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.program.name = name;
     }
     exports.setProgramName = setProgramName;
+    
+    
+    /*function getSocketPorts() {
+        return GUISTATE.socket.portNames;
+    }
+    exports.getSocketPorts = getSocketPorts;
+
+    function setSocketPorts(ports) {
+        GUISTATE.socket.portNames = ports;
+    }
+    exports.setSocketPorts = setSocketPorts;
+    
+    function getSocketVendorIds() {
+        return GUISTATE.socket.vendorIds;
+    }
+    exports.getSocketVendorIds = getSocketVendorIds;
+
+    function setSocketVendorIds(vendorIds) {
+        GUISTATE.socket.vendorIds = vendorIds;
+    }
+    exports.setSocketVendorIds = setSocketVendorIds;*/
+    
 
     function getConfigurationName() {
         return GUISTATE.configuration.name;

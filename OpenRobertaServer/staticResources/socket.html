@@ -21,11 +21,17 @@ socket.on('message', function(data){
    if(data.includes('"Network": false')) {
         jsonObject = JSON.parse(data);
         console.log(jsonObject['Ports'][0]['Name']);
+        console.log(jsonObject['Ports'][1]['Name']);
     }
 });
 function getBobotPort() {
   socket.emit('command', 'list');
-  document.getElementById("bobotPorts").innerHTML += "<p>Found Bobot at " + jsonObject['Ports'][0]['Name'] + "</p>";
+  var i = 0;
+  while (jsonObject['Ports'][i] != null){ 
+	  document.getElementById("bobotPorts").innerHTML += "<p>Found Bobot at " + jsonObject['Ports'][i]['Name']  + "</p>";
+	  i++;
+  }
+
 }
   
   socket.on('disconnect', function(){});
