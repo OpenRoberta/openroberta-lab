@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -409,7 +409,7 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
     }
 
     @Override
-    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+    public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         String end = createClosingBracket();
         this.sb.append("createPinWriteValueSensor(CONST." + pinWriteValueSensor.getValueType().toString());
         this.sb.append(", " + pinWriteValueSensor.getPin().getPinNumber() + ", ");

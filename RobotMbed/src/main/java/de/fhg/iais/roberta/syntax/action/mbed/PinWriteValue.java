@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -29,12 +29,12 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class PinWriteValueSensor<V> extends Sensor<V> {
+public class PinWriteValue<V> extends Action<V> {
     private final ValueType valueType;
     private final MbedPins pin;
     private final Expr<V> value;
 
-    private PinWriteValueSensor(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinWriteValue(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"), properties, comment);
         Assert.notNull(value);
         Assert.notNull(pin);
@@ -46,16 +46,16 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
     }
 
     /**
-     * Create object of the class {@link PinWriteValueSensor}.
+     * Create object of the class {@link PinWriteValue}.
      *
      * @param pin
      * @param valueType see {@link ValueType}
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link PinWriteValueSensor}
+     * @return read only object of {@link PinWriteValue}
      */
-    public static <V> PinWriteValueSensor<V> make(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinWriteValueSensor<V>(pin, valueType, value, properties, comment);
+    public static <V> PinWriteValue<V> make(MbedPins pin, ValueType valueType, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PinWriteValue<V>(pin, valueType, value, properties, comment);
     }
 
     public ValueType getValueType() {
@@ -94,7 +94,7 @@ public class PinWriteValueSensor<V> extends Sensor<V> {
         String pinNumber = helper.extractField(fields, BlocklyConstants.PIN);
         String valueType = helper.extractField(fields, BlocklyConstants.VALUETYPE);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        return PinWriteValueSensor.make(
+        return PinWriteValue.make(
             MbedPins.findPin(pinNumber),
             ValueType.get(valueType),
             helper.convertPhraseToExpr(value),

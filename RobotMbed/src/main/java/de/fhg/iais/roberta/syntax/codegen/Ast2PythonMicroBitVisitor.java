@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -750,7 +750,7 @@ public class Ast2PythonMicroBitVisitor extends Ast2PythonVisitor implements Mbed
     }
 
     @Override
-    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+    public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         this.sb.append("microbit.pin" + pinWriteValueSensor.getPin().getPinNumber());
         String valueType = "analog(";
         if ( pinWriteValueSensor.getValueType() == ValueType.DIGITAL ) {

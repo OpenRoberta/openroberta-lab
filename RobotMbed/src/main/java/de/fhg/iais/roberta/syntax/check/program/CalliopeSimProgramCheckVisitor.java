@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
-import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValueSensor;
+import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
@@ -177,7 +177,7 @@ public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisito
     }
 
     @Override
-    public Void visitPinWriteValueSensor(PinWriteValueSensor<Void> pinWriteValueSensor) {
+    public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         return null;
     }
 
