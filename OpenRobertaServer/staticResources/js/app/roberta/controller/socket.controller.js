@@ -3,8 +3,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', '
 	function init() {
 		var socket = IO('ws://localhost:8991/');
 		var portList = [];
-		var vendorList = []; //ProductID ?
+		var vendorList = []; 
+		var productList = [];
 		var system;
+		var cmd;
 		socket.on('connect', function(){
 		    console.log('connect');
 			  socket.emit('command', 'log on');
@@ -18,19 +20,37 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', '
 		  	    while (jsonObject['Ports'][i] != null){ 
 			        portList.push(jsonObject['Ports'][i]['Name'])
 			        vendorList.push(jsonObject['Ports'][i]['VendorID'])
+			        productList.push(jsonObject['Ports'][i]['ProductID'])
 			        i++;
+		  	    }
+		  	    if (i === 1) {
+		  	    	GUISTATE_C.setConnected(true);
+		  	    }
+		  	    else{
+		  	    	GUISTATE_C.setConnected(false);
 		  	    }
 		  	    console.log(portList);
 		  	    console.log(vendorList);
+		  	    console.log(productList);
 		    }
 		   else if (data.includes('OS')) {
 			   jsonObject = JSON.parse(data);
-			   console.log(jsonObject['OS']);
+			   system = jsonObject['OS'];
+			   console.log(system);
 		   }
 		});
 
 		socket.on('disconnect', function(){});
+		
 	}
 	
 	exports.init = init;
+	
+	function showListModal() {
+	    UTIL.showSingleListModal();
+	}
+	exports.showListModal = showListModal;
+	
 });
+
+

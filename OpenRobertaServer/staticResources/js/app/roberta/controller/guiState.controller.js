@@ -20,7 +20,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             GUISTATE.user.id = -1;
             GUISTATE.user.accountName = '';
             GUISTATE.user.name = '';
-            
+
             //GUISTATE.socket.portNames = [];
             //GUISTATE.socket.vendorIds = [];
 
@@ -61,7 +61,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set gui state
-     * 
+     *
      * @param {result}
      *            result of server call
      */
@@ -188,7 +188,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
-        GUISTATE.gui.connection = result.connection;
+        //TODO: change from ardu to botnroll and mbot with friends
+        if (robot != 'ardu'){
+        	GUISTATE.gui.connection = result.connection;
+        }
         GUISTATE.gui.configurationUsed = result.configurationUsed;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
@@ -508,8 +511,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.program.name = name;
     }
     exports.setProgramName = setProgramName;
-    
-    
+
+
     /*function getSocketPorts() {
         return GUISTATE.socket.portNames;
     }
@@ -519,7 +522,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.socket.portNames = ports;
     }
     exports.setSocketPorts = setSocketPorts;
-    
+
     function getSocketVendorIds() {
         return GUISTATE.socket.vendorIds;
     }
@@ -529,7 +532,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.socket.vendorIds = vendorIds;
     }
     exports.setSocketVendorIds = setSocketVendorIds;*/
-    
+
 
     function getConfigurationName() {
         return GUISTATE.configuration.name;
@@ -712,7 +715,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set program name
-     * 
+     *
      * @param {name}
      *            Name to be set
      */
@@ -741,6 +744,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.gui.connection;
     }
     exports.isAutoconnected = isAutoconnected;
+    
+    function setConnected(isConnected) {
+    	GUISTATE.gui.connection = isConnected;
+    }
+    exports.setConnected = setConnected;
 
     function setProgramToDownload() {
         return GUISTATE.gui.program.download = true;

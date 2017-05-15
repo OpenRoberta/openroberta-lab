@@ -1,6 +1,6 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.controller', 'guiState.controller', 'program.controller',
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'guiState.controller', 'program.controller',
         'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
-        ROBOT_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+        ROBOT_C, SOCKET_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -213,14 +213,24 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         $('#head-navigation-robot').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide');
             var choosenRobotType = event.target.parentElement.dataset.type;
+            //TODO: change from ardu to botnroll and mbot with friends
+            if (GUISTATE_C.getRobot() == "ardu") {
+              console.log("bobot is ardu");
+            }
             if (choosenRobotType) {
                 ROBOT_C.switchRobot(choosenRobotType);
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
-                    $('#buttonCancelFirmwareUpdate').css('display', 'inline');
-                    $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
-                    ROBOT_C.showSetTokenModal();
+                	if (GUISTATE_C.getRobot() == "ardu") {
+                		$('#singleModalListInput').append("<option value=\"volvo\">Volvo</option>");
+                		SOCKET_C.showListModal();
+                	}
+                	else{
+                        $('#buttonCancelFirmwareUpdate').css('display', 'inline');
+                        $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
+                        ROBOT_C.showSetTokenModal();
+                	}
                 } else if (domId === 'menuRobotInfo') {
                     ROBOT_C.showRobotInfo();
                 }

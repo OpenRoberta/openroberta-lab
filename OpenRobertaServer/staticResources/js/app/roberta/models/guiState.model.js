@@ -32,7 +32,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.user.id = -1;
         exports.user.accountName = '';
         exports.user.name = '';
-        
+
         //exports.socket.portNames = [];
         //exports.socket.vendorIds = [];
 
