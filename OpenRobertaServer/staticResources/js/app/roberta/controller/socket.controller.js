@@ -1,58 +1,81 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', 'socket.io' ], function(exports, UTIL, LOG, MSG, $, GUISTATE_C, IO) {
-	
-	var socket = IO('ws://localhost:8991/');
-	var portList = [];
-	var vendorList = []; 
-	var productList = [];
-	var system;
-	var cmd;
-	
-	function init() {
+define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', 'guiState.model', 'socket.io' ], function(exports, UTIL, LOG, MSG, $,
+        GUISTATE_C, GUISTATE, IO) {
 
-		socket.on('connect', function(){
-		    console.log('connect');
-			  socket.emit('command', 'log on');
-			  socket.emit('command', 'list');
-			  console.log('listed');
-		});
-		socket.on('message', function(data){
-		   if(data.includes('"Network": false')) {
-		        jsonObject = JSON.parse(data);
-		        var i = 0;
-		  	    while (jsonObject['Ports'][i] != null){ 
-			        portList.push(jsonObject['Ports'][i]['Name'])
-			        vendorList.push(jsonObject['Ports'][i]['VendorID'])
-			        productList.push(jsonObject['Ports'][i]['ProductID'])
-			        i++;
-		  	    }
-		  	    if (i === 1) {
-		  	    	GUISTATE_C.setConnected(true);
-		  	    }
-		  	    else{
-		  	    	GUISTATE_C.setConnected(false);
-		  	    }
-		  	    console.log(portList);
-		  	    console.log(vendorList);
-		  	    console.log(productList);
-		    }
-		   else if (data.includes('OS')) {
-			   jsonObject = JSON.parse(data);
-			   system = jsonObject['OS'];
-			   console.log(system);
-		   }
-		});
+    var socket = IO('ws://localhost:8991/');
+    console.log(socket);
+    var portList = [];
+    var vendorList = [];
+    var productList = [];
+    var system;
+    var cmd;
 
-		socket.on('disconnect', function(){});
-		
-	}
-	
-	exports.init = init;
-	
-	function getPortList(){
-		return portList;
-	}
-	exports.getPortList = getPortList;
-	
+    socket.on('connect', function() {
+        console.log('connect');
+        socket.emit('command', 'log on');
+        socket.emit('command', 'list');
+        console.log('listed');
+        window.setInterval(function() {
+            portList = [];
+            vendorList = [];
+            productList = [];
+            socket.emit('command', 'list');
+            console.log('refreshed robot ports');
+        }, 3000);
+    });
+
+    socket.on('message', function(data) {
+        if (data.includes('"Network": false')) {
+            jsonObject = JSON.parse(data);
+            jsonObject['Ports'].forEach(function(port) {
+                portList.push(port['Name']);
+                vendorList.push(port['VendorID']);
+                productList.push(port['ProductID']);
+            });
+
+            if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
+                GUISTATE_C.setRobotPort("");
+                console.log("port is not in the list");
+                $('#head-navi-icon-robot').removeClass('wait');
+                $('#head-navi-icon-robot').addClass('error');
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
+            if (portList.length === 1) {
+                console.log('turn off choise of ports');
+                GUISTATE_C.setConnected(true);
+                $('#head-navi-icon-robot').addClass('wait');
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#menuConnect').parent().addClass('disabled');
+                GUISTATE_C.setRobotPort(portList[0]);
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            } else {
+                console.log('turn on choise of ports');
+            }
+            console.log(new Date() + " " + portList);
+            console.log(new Date() + " " + vendorList);
+            console.log(new Date() + " " + productList);
+        } else if (data.includes('OS')) {
+            jsonObject = JSON.parse(data);
+            system = jsonObject['OS'];
+            console.log(system);
+        }
+    });
+
+    socket.on('disconnect', function() {
+    });
+
+    socket.on('error', function(err) {
+        console.log("Socket.IO Error");
+        console.log(err.stack);
+    });
+
+    function init() {
+    }
+
+    exports.init = init;
+
+    function getPortList() {
+        return portList;
+    }
+    exports.getPortList = getPortList;
+
 });
-
-

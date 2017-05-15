@@ -215,25 +215,26 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             var choosenRobotType = event.target.parentElement.dataset.type;
             //TODO: change from ardu to botnroll and mbot with friends
             if (GUISTATE_C.getRobot() == "ardu") {
-              console.log("bobot is ardu");
+                console.log("bobot is ardu");
             }
             if (choosenRobotType) {
                 ROBOT_C.switchRobot(choosenRobotType);
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
-                	if (GUISTATE_C.getRobot() == "ardu") {
-                		var ports = SOCKET_C.getPortList();
-                		ports.forEach(function(port){
-                			$('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + port + "</option>");
-                		});                		
-                		ROBOT_C.showListModal();
-                	}
-                	else{
+                    if (GUISTATE_C.getRobot() == "ardu") {
+                        var ports = SOCKET_C.getPortList();
+                        $('#singleModalListInput').empty();
+                        ports.forEach(function(port) {
+                            console.log('APPENDED');
+                            $('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + port + "</option>");
+                        });
+                        ROBOT_C.showListModal();
+                    } else {
                         $('#buttonCancelFirmwareUpdate').css('display', 'inline');
                         $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
                         ROBOT_C.showSetTokenModal();
-                	}
+                    }
                 } else if (domId === 'menuRobotInfo') {
                     ROBOT_C.showRobotInfo();
                 }
@@ -342,28 +343,32 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 'beta logo was clicked');
 
         $('.menuGeneral').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
+            if (GUISTATE_C.getLanguage() == 'de') {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Das+Open+Roberta+Lab");
-            else
+            } else {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/The+Open+Roberta+Lab");
+            }
         }, 'head navigation menu item clicked');
         $('.menuEV3conf').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
+            if (GUISTATE_C.getLanguage() == 'de') {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung");
-            else
+            } else {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Set+up");
+            }
         }, 'head navigation menu item clicked');
         $('.menuProgramming').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
+            if (GUISTATE_C.getLanguage() == 'de') {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Das+Open+Roberta+Lab");
-            else
+            } else {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/The+Open+Roberta+Lab");
+            }
         }, 'head navigation menu item clicked');
         $('.menuFaq').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
+            if (GUISTATE_C.getLanguage() == 'de') {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
-            else
+            } else {
                 window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+            }
         }, 'head navigation menu item clicked');
         $('.menuBuildingInstructions').onWrap('click', function(event) {
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung#Vorbereitung-Bauanleitung");
@@ -468,8 +473,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
         }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {
-            if (GUISTATE_C.getRobotGroup() !== 'ev3')
+            if (GUISTATE_C.getRobotGroup() !== 'ev3') {
                 ROBOT_C.switchRobot('ev3lejos', true);
+            }
             if (GUISTATE_C.getProgramToolboxLevel() !== 'beginner') {
                 $('#beginner').trigger('click');
             }

@@ -21,6 +21,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             GUISTATE.user.accountName = '';
             GUISTATE.user.name = '';
 
+            GUISTATE.robot.name = '';
+            GUISTATE.robot.robotPort = '';
+
             //GUISTATE.socket.portNames = [];
             //GUISTATE.socket.vendorIds = [];
 
@@ -61,7 +64,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set gui state
-     *
+     * 
      * @param {result}
      *            result of server call
      */
@@ -189,8 +192,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         //TODO: change from ardu to botnroll and mbot with friends
-        if (robot != 'ardu'){
-        	GUISTATE.gui.connection = result.connection;
+        if (robot != 'ardu') {
+            GUISTATE.gui.connection = result.connection;
         }
         GUISTATE.gui.configurationUsed = result.configurationUsed;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
@@ -226,16 +229,18 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace)
+            if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            }
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
         } else {
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace)
+            if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled')
         }
@@ -248,8 +253,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             value = value.replace("$", getRobotRealName());
         }
         $('#menuRunProg').text(value);
-        if (GUISTATE.gui.blocklyWorkspace)
+        if (GUISTATE.gui.blocklyWorkspace) {
             GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
+        }
     }
 
     exports.setRobot = setRobot;
@@ -287,10 +293,21 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     }
     exports.getRobotGroup = getRobotGroup;
 
+    function setRobotPort(port) {
+        GUISTATE.robot.robotPort = port;
+    }
+    exports.setRobotPort = setRobotPort;
+
+    function getRobotPort() {
+        return GUISTATE.robot.robotPort;
+    }
+    exports.getRobotPort = getRobotPort;
+
     function getRobotRealName() {
         for ( var robot in getRobots()) {
-            if (!getRobots().hasOwnProperty(robot))
+            if (!getRobots().hasOwnProperty(robot)) {
                 continue;
+            }
             if (getRobots()[robot].name == getRobot()) {
                 return getRobots()[robot].realName;
             }
@@ -512,27 +529,19 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     }
     exports.setProgramName = setProgramName;
 
-
-    /*function getSocketPorts() {
-        return GUISTATE.socket.portNames;
-    }
-    exports.getSocketPorts = getSocketPorts;
-
-    function setSocketPorts(ports) {
-        GUISTATE.socket.portNames = ports;
-    }
-    exports.setSocketPorts = setSocketPorts;
-
-    function getSocketVendorIds() {
-        return GUISTATE.socket.vendorIds;
-    }
-    exports.getSocketVendorIds = getSocketVendorIds;
-
-    function setSocketVendorIds(vendorIds) {
-        GUISTATE.socket.vendorIds = vendorIds;
-    }
-    exports.setSocketVendorIds = setSocketVendorIds;*/
-
+    /*
+     * function getSocketPorts() { return GUISTATE.socket.portNames; }
+     * exports.getSocketPorts = getSocketPorts;
+     * 
+     * function setSocketPorts(ports) { GUISTATE.socket.portNames = ports; }
+     * exports.setSocketPorts = setSocketPorts;
+     * 
+     * function getSocketVendorIds() { return GUISTATE.socket.vendorIds; }
+     * exports.getSocketVendorIds = getSocketVendorIds;
+     * 
+     * function setSocketVendorIds(vendorIds) { GUISTATE.socket.vendorIds =
+     * vendorIds; } exports.setSocketVendorIds = setSocketVendorIds;
+     */
 
     function getConfigurationName() {
         return GUISTATE.configuration.name;
@@ -715,7 +724,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
 
     /**
      * Set program name
-     *
+     * 
      * @param {name}
      *            Name to be set
      */
@@ -744,9 +753,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         return GUISTATE.gui.connection;
     }
     exports.isAutoconnected = isAutoconnected;
-    
+
     function setConnected(isConnected) {
-    	GUISTATE.gui.connection = isConnected;
+        GUISTATE.gui.connection = isConnected;
     }
     exports.setConnected = setConnected;
 

@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery',
-        'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.model', 'robot.model', 'program.controller', 'configuration.controller',
+        'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
 
     var $formSingleModal;
     var $formSingleListModal;
@@ -48,16 +48,21 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             });
         }
     }
-    
+
     /*
      * Set port
      */
-    
+
     function setPort(port) {
         robotPort = port;
         $('.modal').modal('hide');
+        GUISTATE_C.setRobotPort(port);
+        GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+        $('#head-navi-icon-robot').addClass('wait');
+        $('#head-navi-icon-robot').removeClass('error');
+        GUISTATE_C.setConnected(true);
     }
-    
+
     function getPort() {
         return robotPort;
     }
@@ -111,20 +116,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         });
     }
     exports.showSetTokenModal = showSetTokenModal;
-    
-	function showListModal() {
-	    UTIL.showSingleListModal(function() {
+
+    function showListModal() {
+        UTIL.showSingleListModal(function() {
             $('#single-modal-list h3').text(Blockly.Msg["MENU_CONNECT"]);
             $('#single-modal-list label').text(Blockly.Msg["POPUP_VALUE"]);
             $('#single-modal-list a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
             $('#single-modal-list a[href]').attr("href", "https://wiki.open-roberta.org");
         }, function() {
-        	console.log(document.getElementById("singleModalListInput").value);
+            console.log(document.getElementById("singleModalListInput").value);
             setPort(document.getElementById("singleModalListInput").value);
         }, function() {
         });
-	}
-	exports.showListModal = showListModal;
+    }
+    exports.showListModal = showListModal;
 
     /**
      * Show robot info
