@@ -2,6 +2,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
 
     var $formSingleModal;
+    var $formSingleListModal;
+    var robotPort;
 
     /**
      * Initialize robot
@@ -46,6 +48,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             });
         }
     }
+    
+    /*
+     * Set port
+     */
+    
+    function setPort(port) {
+        robotPort = port;
+        $('.modal').modal('hide');
+    }
+    
+    function getPort() {
+        return robotPort;
+    }
+    exports.getPort = getPort;
 
     function initRobotForms() {
         $('#iconDisplayRobotState').onWrap('click', function() {
@@ -95,6 +111,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         });
     }
     exports.showSetTokenModal = showSetTokenModal;
+    
+	function showListModal() {
+	    UTIL.showSingleListModal(function() {
+            $('#single-modal-list h3').text(Blockly.Msg["MENU_CONNECT"]);
+            $('#single-modal-list label').text(Blockly.Msg["POPUP_VALUE"]);
+            $('#single-modal-list a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
+            $('#single-modal-list a[href]').attr("href", "https://wiki.open-roberta.org");
+        }, function() {
+        	console.log(document.getElementById("singleModalListInput").value);
+            setPort(document.getElementById("singleModalListInput").value);
+        }, function() {
+        });
+	}
+	exports.showListModal = showListModal;
 
     /**
      * Show robot info

@@ -1,12 +1,14 @@
 define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', 'socket.io' ], function(exports, UTIL, LOG, MSG, $, GUISTATE_C, IO) {
 	
+	var socket = IO('ws://localhost:8991/');
+	var portList = [];
+	var vendorList = []; 
+	var productList = [];
+	var system;
+	var cmd;
+	
 	function init() {
-		var socket = IO('ws://localhost:8991/');
-		var portList = [];
-		var vendorList = []; 
-		var productList = [];
-		var system;
-		var cmd;
+
 		socket.on('connect', function(){
 		    console.log('connect');
 			  socket.emit('command', 'log on');
@@ -46,10 +48,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', '
 	
 	exports.init = init;
 	
-	function showListModal() {
-	    UTIL.showSingleListModal();
+	function getPortList(){
+		return portList;
 	}
-	exports.showListModal = showListModal;
+	exports.getPortList = getPortList;
 	
 });
 

@@ -223,8 +223,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
                 	if (GUISTATE_C.getRobot() == "ardu") {
-                		$('#singleModalListInput').append("<option value=\"volvo\">Volvo</option>");
-                		SOCKET_C.showListModal();
+                		var ports = SOCKET_C.getPortList();
+                		ports.forEach(function(port){
+                			$('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + port + "</option>");
+                		});                		
+                		ROBOT_C.showListModal();
                 	}
                 	else{
                         $('#buttonCancelFirmwareUpdate').css('display', 'inline');
