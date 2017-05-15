@@ -30,10 +30,14 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public abstract class ProgramCheckVisitor extends CheckVisitor implements AstActorMotorVisitor<Void>, AstSensorsVisitor<Void> {
+public abstract class ProgramCheckVisitor extends CheckVisitor
+    implements AstActorMotorVisitor<Void>, AstSensorsVisitor<Void>, AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
 
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
