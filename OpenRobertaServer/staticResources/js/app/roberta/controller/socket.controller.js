@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', 'guiState.model', 'socket.io' ], function(exports, UTIL, LOG, MSG, $,
-        GUISTATE_C, GUISTATE, IO) {
+define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'guiState.model', 'socket.io' ], function(exports, UTIL, LOG, MSG, $,
+        ROBOT_C, GUISTATE_C, GUISTATE, IO) {
 
     var socket = IO('ws://localhost:8991/');
     console.log(socket);
@@ -35,20 +35,28 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'guiState.controller', '
             if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
                 GUISTATE_C.setRobotPort("");
                 console.log("port is not in the list");
-                $('#head-navi-icon-robot').removeClass('wait');
-                $('#head-navi-icon-robot').addClass('error');
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+                $('#menuConnect').parent().addClass('disabled');
+                GUISTATE_C.setConnected(false);
             }
             if (portList.length === 1) {
                 console.log('turn off choise of ports');
                 GUISTATE_C.setConnected(true);
-                $('#head-navi-icon-robot').addClass('wait');
-                $('#head-navi-icon-robot').removeClass('error');
                 $('#menuConnect').parent().addClass('disabled');
-                GUISTATE_C.setRobotPort(portList[0]);
+                ROBOT_C.setPort(portList[0]);
                 GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            } else {
+            } else if (portList.length > 1) {
+            	$('#menuConnect').parent().removeClass('disabled');
+            	//GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 console.log('turn on choise of ports');
+            }
+            else {
+            	GUISTATE_C.setConnected(false);
+            	$('#head-navi-icon-robot').removeClass('wait');
+                $('#head-navi-icon-robot').addClass('error');
+            	$('#menuConnect').parent().addClass('disabled');
+            	GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            	$('#menuRunProg').parent().addClass('disabled');
+                console.log('turn off choise of ports');
             }
             console.log(new Date() + " " + portList);
             console.log(new Date() + " " + vendorList);

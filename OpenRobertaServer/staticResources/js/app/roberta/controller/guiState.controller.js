@@ -141,7 +141,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         }
 
         if (!isAutoconnected()) {
-            $('#menuConnect').parent().removeClass('disabled');
+        	if (robot != 'ardu') {
+        		$('#menuConnect').parent().removeClass('disabled');
+        	}
             if (GUISTATE.robot.state === 'wait') {
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');

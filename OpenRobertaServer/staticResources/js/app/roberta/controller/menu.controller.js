@@ -226,7 +226,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         var ports = SOCKET_C.getPortList();
                         $('#singleModalListInput').empty();
                         ports.forEach(function(port) {
-                            console.log('APPENDED');
                             $('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + port + "</option>");
                         });
                         ROBOT_C.showListModal();

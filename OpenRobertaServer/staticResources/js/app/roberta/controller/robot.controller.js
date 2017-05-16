@@ -58,10 +58,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         $('.modal').modal('hide');
         GUISTATE_C.setRobotPort(port);
         GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+        $('#menuRunProg').parent().removeClass('disabled');
         $('#head-navi-icon-robot').addClass('wait');
         $('#head-navi-icon-robot').removeClass('error');
         GUISTATE_C.setConnected(true);
     }
+    exports.setPort = setPort;
 
     function getPort() {
         return robotPort;
