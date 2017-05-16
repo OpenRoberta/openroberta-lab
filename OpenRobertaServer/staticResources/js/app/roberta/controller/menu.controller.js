@@ -224,9 +224,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 if (domId === 'menuConnect') {
                     if (GUISTATE_C.getRobot() == "ardu") {
                         var ports = SOCKET_C.getPortList();
+                        var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
+                        i = 0;
                         ports.forEach(function(port) {
-                            $('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + port + "</option>");
+                            $('#singleModalListInput').append("<option value=\""  + port + "\" selected>" + robots[i] + " " + port + "</option>");
+                            i++;
                         });
                         ROBOT_C.showListModal();
                     } else {

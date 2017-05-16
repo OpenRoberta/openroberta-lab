@@ -8,6 +8,8 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var productList = [];
     var system;
     var cmd;
+    var port;
+    var robotList = [];
 
     socket.on('connect', function() {
         console.log('connect');
@@ -18,24 +20,54 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
             portList = [];
             vendorList = [];
             productList = [];
+            robotList = [];
             socket.emit('command', 'list');
             console.log('refreshed robot ports');
         }, 3000);
     });
+    
+    // Botnroll:
+    // /dev/ttyUSB0
+    // 0x10c4
+    // 0xea60
+    // Mbot:
+    ///dev/ttyUSB0
+    // 0x1a86
+    // 0x7523
+    // ArduinoUno:
+    // /dev/ttyACM0
+    // 0x2a03
+    // 0x0043
 
     socket.on('message', function(data) {
         if (data.includes('"Network": false')) {
+        	var robot;
             jsonObject = JSON.parse(data);
-            jsonObject['Ports'].forEach(function(port) {
+            jsonObject['Ports'].forEach(function(port) {          	
                 portList.push(port['Name']);
                 vendorList.push(port['VendorID']);
                 productList.push(port['ProductID']);
+                //TODO: replace with a dictionary or something
+                if (port['VendorID'] === "0x10c4"){
+                	robot = "Bot'n Roll";
+                }
+                else if (port['VendorID'] === "0x1a86"){
+                	robot = "MBot";
+                }
+                else{
+                	robot = "Arduino Uno";
+                }
+                robotList.push(robot);
             });
 
             if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
+            	if (GUISTATE_C.getRobotPort() != ""){
+            		MSG.displayMessage('An active robot was disconnected', 'POPUP', '');
+            	}
                 GUISTATE_C.setRobotPort("");
                 console.log("port is not in the list");
                 $('#menuConnect').parent().addClass('disabled');
+                
                 GUISTATE_C.setConnected(false);
             }
             if (portList.length === 1) {
@@ -85,5 +117,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         return portList;
     }
     exports.getPortList = getPortList;
+    
+    function getRobotList() {
+        return robotList;
+    }
+    exports.getRobotList = getRobotList;
 
 });
