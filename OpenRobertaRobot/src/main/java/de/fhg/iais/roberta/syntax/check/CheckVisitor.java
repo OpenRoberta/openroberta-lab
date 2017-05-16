@@ -187,7 +187,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
         assignStmt.getExpr().visit(this);
         String variableName = assignStmt.getName().getValue();
-        if ( this.globalVariables.contains(variableName) && this.isInUserDefinedFunction ) {
+        if ( this.globalVariables.contains(variableName) ) {
             this.markedVariablesAsGlobal.add(variableName);
         }
         return null;
@@ -346,18 +346,14 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.isInUserDefinedFunction = true;
         methodVoid.getBody().visit(this);
-        this.isInUserDefinedFunction = false;
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.isInUserDefinedFunction = true;
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
-        this.isInUserDefinedFunction = false;
         return null;
     }
 

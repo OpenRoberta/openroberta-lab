@@ -209,6 +209,7 @@ public class AstToEv3PythonVisitorTest {
             + "item2 = \"TTTT\"\n"
             + "item3 = True\n"
             + "def run():\n"
+            + "    global item3\n"
             + "    hal.drawText(str(item), 0, 0)\n"
             + "    hal.drawText(str(item2), 0, 0)\n"
             + "    hal.drawText(str(item3), 0, 0)\n"
