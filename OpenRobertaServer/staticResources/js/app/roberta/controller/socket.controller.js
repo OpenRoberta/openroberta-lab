@@ -38,6 +38,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     // /dev/ttyACM0
     // 0x2a03
     // 0x0043
+    
 
     socket.on('message', function(data) {
         if (data.includes('"Network": false')) {
@@ -122,5 +123,15 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         return robotList;
     }
     exports.getRobotList = getRobotList;
+    
+    function uploadProgram() {
+    	var filename = GUISTATE_C.getProgramName() + '.hex';
+    	var fileContentHex = null;
+    	var board = null;
+    	window.alert("uploading " + filename);
+    	var signature = null;
+        var postRequest = "{\"board\":\"" + board + "\"," + "\"port\":\"" + GUISTATE_C.getRobotPort() + "\";" + "\"commandline\":\"\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega32u4 -cavr109 -P{serial.port} -b57600 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"\",:\"signature\":\"" + signature + "\"," + "\"hex\":\"" + fileContentHex + "\"," + "\"filename\":\"" + filename + "\"," + "\"extra\":{\n \"auth\":{\n \"password\":null \n },\"wait_for_upload_port]\:true,\"use_1200bps_touch\":true,\n \"network\":false,\n \"params_verbose\":\"-v\",\n \"params_quiet\":\"-q -q\",\n \"verbose\":true \ \n }\n}";
+    }
+    exports.uploadProgram = uploadProgram;
 
 });
