@@ -1,12 +1,6 @@
 package de.fhg.iais.roberta.syntax.check.program;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayGetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayImageAction;
@@ -18,11 +12,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
@@ -30,7 +19,6 @@ import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
@@ -53,28 +41,6 @@ public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisito
 
     public CalliopeSimProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        //motorOnAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        //motorStopAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
-        return null;
-    }
-
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
     }
 
     @Override
@@ -216,46 +182,6 @@ public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisito
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
         microphoneSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 }
