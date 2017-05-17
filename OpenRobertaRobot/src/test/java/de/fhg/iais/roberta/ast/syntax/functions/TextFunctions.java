@@ -12,10 +12,11 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class TextFunctions {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void getPresedence() {

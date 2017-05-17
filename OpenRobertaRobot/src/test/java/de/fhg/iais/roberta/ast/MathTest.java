@@ -4,10 +4,11 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class MathTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void mathArithmetic() throws Exception {

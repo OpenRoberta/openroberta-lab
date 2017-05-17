@@ -6,13 +6,14 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class TimerSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
@@ -21,7 +22,7 @@ public class TimerSensorTest {
 
     @Test
     public void getTimer() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
@@ -32,23 +33,23 @@ public class TimerSensorTest {
     public void sensorResetTimer() throws Exception {
         String a = "BlockAST [project=[[Location [x=-96, y=73], TimerSensor [mode=RESET, timer=1]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetTimer.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetTimer.xml"));
     }
 
     @Test
     public void sensorGetSampleTimer() throws Exception {
         String a = "BlockAST [project=[[Location [x=1, y=1], TimerSensor [mode=GET_SAMPLE, timer=1]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleTimer.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSampleTimer.xml"));
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_resetTimer.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_resetTimer.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleTimer.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_getSampleTimer.xml");
     }
 }

@@ -7,10 +7,11 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.PreprocessProgramVisitor;
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class LoopCounterVisitorTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     private class TestUsedHardware extends PreprocessProgramVisitor {
         //TODO create fake for this class

@@ -18,9 +18,10 @@ import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.Ev3CodePreprocessVisitor;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class ProgramConfigurationCompatabilityTest {
+    Helper h = new Helper();
 
     public void test() throws Exception {
         EV3Configuration.Builder builder = new EV3Configuration.Builder();
@@ -31,7 +32,7 @@ public class ProgramConfigurationCompatabilityTest {
         builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
 
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/syntax/code_generator/java_code_generator2.xml");
 
         Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, brickConfiguration);
         Set<UsedSensor> usedSensors = checkVisitor.getUsedSensors();

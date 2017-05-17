@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class MotorTachoTest {
+    Helper h = new Helper();
 
     @Test
     public void setMotorTacho() throws Exception {
@@ -12,13 +13,13 @@ public class MotorTachoTest {
             "\nhal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION)"
                 + "hal.getUnregulatedMotorTachoValue(ActorPort.D, MotorTachoMode.DEGREE)}";
 
-        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_setEncoder.xml");
+        this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_setEncoder.xml");
     }
 
     @Test
     public void resetMotorTacho() throws Exception {
         String a = "\nhal.resetRegulatedMotorTacho(ActorPort.A);}";
 
-        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_resetEncoder.xml");
+        this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_resetEncoder.xml");
     }
 }

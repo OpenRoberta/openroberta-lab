@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.testutil.Helper;
 
 public class TextFunctions {
 
@@ -59,13 +58,5 @@ public class TextFunctions {
     @Test(expected = DbcException.class)
     public void invalid2() {
         FunctionNames.get("asdf");
-    }
-
-    @Test
-    public void concatenation() throws Exception {
-        Helper.generateTransformerString("/ast/functions/text_concat.xml");
-
-        String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
-        // Assert.assertEquals(a, transformer.toString());
     }
 }

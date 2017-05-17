@@ -5,21 +5,22 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction.Status;
-import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class LightStatusActionTest {
+    Helper h = new Helper();
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [OFF]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BrickLightStatus.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLightStatus.xml"));
     }
 
     @Test
     public void getStatus() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
         LightStatusAction<Void> lsa = (LightStatusAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }
@@ -39,17 +40,17 @@ public class LightStatusActionTest {
     public void brickLightStatus1() throws Exception {
         String a = "BlockAST [project=[[Location [x=-8, y=105], LightStatusAction [RESET]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BrickLightStatus1.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLightStatus1.xml"));
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        Helper.assertTransformationIsOk("/ast/actions/action_BrickLightStatus.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_BrickLightStatus.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/actions/action_BrickLightStatus1.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_BrickLightStatus1.xml");
     }
 
 }

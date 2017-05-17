@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.syntax.stmt;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class WhileUntilStmtTest {
+    Helper h = new Helper();
 
     @Test
     public void whileUntilStmt() throws Exception {
@@ -24,7 +25,7 @@ public class WhileUntilStmtTest {
                 + "    }\n"
                 + "}}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
     }
 
     @Test
@@ -39,11 +40,11 @@ public class WhileUntilStmtTest {
                 + "    System.out.println(\"\");\n"
                 + "}}}";
 
-        Helper.assertCodeIsOk(a, "/syntax/control/repeat_stmt_loopForever.xml");
+        this.h.assertCodeIsOk(a, "/syntax/control/repeat_stmt_loopForever.xml");
     }
 
     @Test
     public void reverseTransformationWhileUntil() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/whileUntil_stmt.xml");
+        this.h.assertTransformationIsOk("/syntax/stmt/whileUntil_stmt.xml");
     }
 }

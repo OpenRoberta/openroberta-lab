@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class SampleSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void sensorGetSample1() throws Exception {
@@ -24,6 +25,6 @@ public class SampleSensorTest {
                 + "[Location [x=236, y=439], GetSampleSensor [sensor=GyroSensor [mode=RATE, port=S2]]], "
                 + "[Location [x=256, y=479], GetSampleSensor [sensor=TimerSensor [mode=GET_SAMPLE, timer=1]]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleSensor.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSampleSensor.xml"));
     }
 }
