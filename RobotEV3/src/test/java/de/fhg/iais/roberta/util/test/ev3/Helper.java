@@ -37,13 +37,9 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      * @return the code fragment as string
      * @throws Exception
      */
-    public String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
+    private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-
         String javaCode = Ast2Ev3JavaVisitor.generate("Test", (EV3Configuration) this.robotConfiguration, transformer.getTree(), false);
-        // System.out.println(javaCode); // only needed for EXTREME debugging
-        // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
-        // System.out.println(textlyCode); // only needed for EXTREME debugging
         return javaCode;
     }
 
@@ -66,7 +62,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      * @return the code as string
      * @throws Exception
      */
-    public String generateString(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
+    public String generateJava(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ast2Ev3JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging

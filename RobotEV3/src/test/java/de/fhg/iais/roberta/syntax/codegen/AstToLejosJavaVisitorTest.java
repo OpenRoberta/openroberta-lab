@@ -921,6 +921,6 @@ public class AstToLejosJavaVisitorTest {
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateJava(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

@@ -791,6 +791,6 @@ public class Ast2NxcVisitorTest {
         // Assert.assertEquals(a, h.generateString(fileName, brickConfiguration));
         //        System.out.println(a.replaceAll("\\s+", ""));
         //        System.out.println(h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

@@ -821,6 +821,6 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateCpp(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

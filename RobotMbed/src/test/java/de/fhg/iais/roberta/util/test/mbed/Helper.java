@@ -16,7 +16,9 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
 
     public Helper() {
         super();
+        Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
         this.robotFactory = new Calliope2016Factory(null);
+        setRobotConfiguration(brickConfiguration);
     }
 
     /**
@@ -28,23 +30,20 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        String code = Ast2MbedSimVisitor.generate(brickConfiguration, transformer.getTree());
-        // System.out.println(code); // only needed for EXTREME debugging
+        String code = Ast2MbedSimVisitor.generate(this.robotConfiguration, transformer.getTree());
         return code;
     }
 
     /**
-     * Generate java code as string from a given program . Prepend and append wrappings.
+     * Generate cpp code as string from a given program . Prepend and append wrappings.
      *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code as string
      * @throws Exception
      */
-    public String generateString(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
+    public String generateCpp(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         final String code = Ast2CppCalliopeVisitor.generate(brickConfiguration, transformer.getTree(), true);
-        // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
 
