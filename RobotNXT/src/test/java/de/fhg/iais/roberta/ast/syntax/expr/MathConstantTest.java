@@ -2,16 +2,18 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class MathConstantTest {
+    Helper h = new Helper();
+
     @Test
     public void Test() throws Exception {
 
         String a = "PIEGOLDEN_RATIOSQRT2SQRT1_2INFINITY";
         //"Float.POSITIVE_INFINITY";
 
-        Helper.assertCodeIsOk(a, "/syntax/math/math_constant.xml");
+        this.h.assertCodeIsOk(a, "/syntax/math/math_constant.xml");
     }
 
     //ignore
@@ -19,7 +21,7 @@ public class MathConstantTest {
 
         final String a = "RotateMotor(B,PI,360.0*((1.0+sqrt(5.0))/2.0)))";
 
-        Helper.assertCodeIsOk(a, "/syntax/math/math_constant1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/math/math_constant1.xml");
     }
 
 }

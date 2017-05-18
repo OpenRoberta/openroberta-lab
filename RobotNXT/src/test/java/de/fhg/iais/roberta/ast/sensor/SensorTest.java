@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class SensorTest {
+    Helper h = new Helper();
 
     @Test
     public void sensorReset() throws Exception {
@@ -18,7 +19,7 @@ public class SensorTest {
                 + "SensorStmt TimerSensor [mode=RESET, timer=1]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_reset.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_reset.xml"));
     }
 
     @Test
@@ -32,7 +33,7 @@ public class SensorTest {
                 + "Var [item] := SensorExpr [TimerSensor [mode=GET_SAMPLE, timer=1]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSample.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_getSample.xml"));
     }
 
 }

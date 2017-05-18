@@ -2,13 +2,15 @@ package de.fhg.iais.roberta.ast.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class BrickSensorTest {
+    Helper h = new Helper();
+
     @Test
     public void isPressed() throws Exception {
         String a = "\nButtonPressed(BTNCENTER,false)";
 
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
+        this.h.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
     }
 }

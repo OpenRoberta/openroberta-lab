@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class IfStmtTest {
+    Helper h = new Helper();
 
     @Test
     public void ifStmt() throws Exception {
@@ -38,14 +39,14 @@ public class IfStmtTest {
                 + "    item = 3 * 9;\n"
                 + "}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt.xml");
     }
 
     @Test
     public void ifStmt1() throws Exception {
         final String a = "\nif ( ( (5 + 7)== (5 + 7) ) >= (((5 + 7) ==( 5 + 7)) &&(( 5 + 7) <= (5 + 7)))) {\n}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt1.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt1.xml");
     }
 
     //
@@ -66,7 +67,7 @@ public class IfStmtTest {
                 + "    ;\n"
                 + "}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt2.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt2.xml");
     }
 
     //
@@ -83,26 +84,26 @@ public class IfStmtTest {
                 + "    item = 3 * 9;\n"
                 + "}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt3.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/if_stmt3.xml");
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt.xml");
+        this.h.assertTransformationIsOk("/syntax/stmt/if_stmt.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt1.xml");
+        this.h.assertTransformationIsOk("/syntax/stmt/if_stmt1.xml");
     }
 
     @Test
     public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt2.xml");
+        this.h.assertTransformationIsOk("/syntax/stmt/if_stmt2.xml");
     }
 
     @Test
     public void reverseTransformation3() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt3.xml");
+        this.h.assertTransformationIsOk("/syntax/stmt/if_stmt3.xml");
     }
 }
