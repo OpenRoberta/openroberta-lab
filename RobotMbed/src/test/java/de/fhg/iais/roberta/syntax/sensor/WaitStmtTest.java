@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class WaitStmtTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
@@ -18,14 +19,14 @@ public class WaitStmtTest {
                 + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
                 + ")]]]]";
 
-        String result = Helper.generateTransformerString("/sensor/wait_stmt_two_cases.xml");
+        String result = this.h.generateTransformerString("/sensor/wait_stmt_two_cases.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/sensor/wait_stmt_two_cases.xml");
+        this.h.assertTransformationIsOk("/sensor/wait_stmt_two_cases.xml");
     }
 
 }

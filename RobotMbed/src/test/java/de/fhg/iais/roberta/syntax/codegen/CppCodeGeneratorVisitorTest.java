@@ -7,9 +7,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class CppCodeGeneratorVisitorTest {
+    Helper h = new Helper();
 
     private static final String IMPORTS = //
         "#define_GNU_SOURCE\n\n"
@@ -820,6 +821,6 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

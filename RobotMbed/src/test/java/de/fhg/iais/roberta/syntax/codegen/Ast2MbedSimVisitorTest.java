@@ -1,17 +1,13 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class Ast2MbedSimVisitorTest {
 
-    @BeforeClass
-    public static void setupConfigurationForAllTests() {
-
-    }
+    Helper h = new Helper();
 
     @Test
     public void visitLightStatusAction_TurnOffLed_ReturnsCorrectJavaScriptProgram() throws Exception {
@@ -163,6 +159,6 @@ public class Ast2MbedSimVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        Assert.assertEquals(a, Helper.generateJavaScript(fileName));
+        Assert.assertEquals(a, this.h.generateJavaScript(fileName));
     }
 }

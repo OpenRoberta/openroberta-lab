@@ -129,22 +129,26 @@ public abstract class Helper {
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
-        BlockSet blockSet = astToJaxb(transformer.getTree());
+        BlockSet blockSet = astToJaxb(transformer);
+
         //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
-        // System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
     }
 
-    public BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
+    public BlockSet astToJaxb(Jaxb2BlocklyProgramTransformer<Void> transformer) {
         BlockSet blockSet = new BlockSet();
+        blockSet.setXmlversion(transformer.getData().getXmlVersion());
+        blockSet.setRobottype(transformer.getData().getRobotType());
+        blockSet.setDescription(transformer.getData().getDescription());
 
         Instance instance = null;
-        for ( ArrayList<Phrase<Void>> tree : astProgram ) {
+        for ( ArrayList<Phrase<Void>> tree : transformer.getTree() ) {
             for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
                     blockSet.getInstance().add(instance);
@@ -186,7 +190,7 @@ public abstract class Helper {
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(null);
         transformer.transform(program);
 
-        BlockSet blockSet = astToJaxb(transformer.getTree());
+        BlockSet blockSet = astToJaxb(transformer);
         String newXml = jaxbToXml(blockSet);
 
         XMLUnit.setIgnoreWhitespace(true);

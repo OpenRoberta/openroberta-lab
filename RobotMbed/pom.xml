@@ -20,6 +20,13 @@
 			<artifactId>OpenRobertaRobot</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>OpenRobertaRobot</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-guice</artifactId>
 		</dependency>		

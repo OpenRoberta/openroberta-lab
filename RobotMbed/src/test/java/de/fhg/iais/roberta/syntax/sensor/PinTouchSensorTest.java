@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class PinTouchSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfPinTouchedSensorClass() throws Exception {
@@ -14,14 +15,14 @@ public class PinTouchSensorTest {
                 + "MainTask [], "
                 + "DisplayTextAction [TEXT, SensorExpr [PinTouchSensor [0]]], DisplayTextAction [TEXT, SensorExpr [PinTouchSensor [2]]]]]]";
 
-        String result = Helper.generateTransformerString("/sensor/pin_is_touched.xml");
+        String result = this.h.generateTransformerString("/sensor/pin_is_touched.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/sensor/pin_is_touched.xml");
+        this.h.assertTransformationIsOk("/sensor/pin_is_touched.xml");
     }
 
 }

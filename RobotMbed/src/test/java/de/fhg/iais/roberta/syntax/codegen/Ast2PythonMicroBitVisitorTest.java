@@ -6,9 +6,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.MicrobitConfiguration;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class Ast2PythonMicroBitVisitorTest {
+    Helper h = new Helper();
 
     private static final String IMPORTS = "" //
         + "import microbit\n"
@@ -1021,7 +1022,7 @@ public class Ast2PythonMicroBitVisitorTest {
     //    }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        String b = Helper.generatePython(fileName, brickConfiguration);
+        String b = this.h.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);
         //Assert.assertEquals(a.replaceAll("\\s+", ""), b.replaceAll("\\s+", ""));
     }

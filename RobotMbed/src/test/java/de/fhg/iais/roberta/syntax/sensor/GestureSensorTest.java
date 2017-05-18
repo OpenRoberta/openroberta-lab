@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class GestureSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfDisplayImageActionClass() throws Exception {
@@ -16,14 +17,14 @@ public class GestureSensorTest {
                 + "DisplayTextAction [TEXT, SensorExpr [GestureSensor [ LEFT ]]]"
                 + "]]]";
 
-        String result = Helper.generateTransformerString("/sensor/check_gesture.xml");
+        String result = this.h.generateTransformerString("/sensor/check_gesture.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/sensor/check_gesture.xml");
+        this.h.assertTransformationIsOk("/sensor/check_gesture.xml");
     }
 
 }
