@@ -82,34 +82,34 @@ public class ClientProgram {
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientProgram.LOG, fullRequest);
-        final int userId = httpSessionState.getUserId();
-        final String robot =
+        int userId = httpSessionState.getUserId();
+        String robot =
             httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
                 ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()
                 : httpSessionState.getRobotName();
-        final JSONObject response = new JSONObject();
-        final DbSession dbSession = this.sessionFactoryWrapper.getSession();
+        JSONObject response = new JSONObject();
+        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
             final JSONObject request = fullRequest.getJSONObject("data");
             final String cmd = request.getString("cmd");
             ClientProgram.LOG.info("command is: " + cmd + ", userId is " + userId);
             response.put("cmd", cmd);
-            final ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
-            final AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
-            final UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
+            AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
+            UserProcessor up = new UserProcessor(dbSession, httpSessionState);
 
-            final IRobotFactory robotFactory = httpSessionState.getRobotFactory();
-            final ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
+            IRobotFactory robotFactory = httpSessionState.getRobotFactory();
+            ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
 
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
-                final String programName = request.getString("name");
-                final String programText = request.getString("program");
+                String programName = request.getString("name");
+                String programText = request.getString("program");
                 Program program;
                 if ( cmd.equals("saveP") ) {
                     // update an already existing program
-                    final Long timestamp = request.getLong("timestamp");
-                    final Timestamp programTimestamp = new Timestamp(timestamp);
-                    final boolean isShared = request.optBoolean("shared", false);
+                    Long timestamp = request.getLong("timestamp");
+                    Timestamp programTimestamp = new Timestamp(timestamp);
+                    boolean isShared = request.optBoolean("shared", false);
                     program = pp.persistProgramText(programName, userId, robot, programText, programTimestamp, !isShared);
                 } else {
                     program = pp.persistProgramText(programName, userId, robot, programText, null, true);
@@ -124,13 +124,13 @@ public class ClientProgram {
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("showSourceP") ) {
-                final String token = httpSessionState.getToken();
-                final String programName = request.getString("name");
-                final String programText = request.getString("programText");
-                final String configurationText = request.getString("configurationText");
-                final String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText);
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.getString("programText");
+                String configurationText = request.getString("configurationText");
+                String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText);
 
-                final AbstractProcessor forMessages = new DummyProcessor();
+                AbstractProcessor forMessages = new DummyProcessor();
                 if ( sourceCode == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
                 } else {
@@ -141,11 +141,11 @@ public class ClientProgram {
                 Util.addResultInfo(response, forMessages);
 
             } else if ( cmd.equals("loadP") && (httpSessionState.isUserLoggedIn() || request.getString("owner").equals("Roberta")) ) {
-                final String programName = request.getString("name");
-                final String ownerName = request.getString("owner");
-                final User owner = up.getUser(ownerName);
-                final int ownerID = owner.getId();
-                final Program program = pp.getProgram(programName, ownerID, robot);
+                String programName = request.getString("name");
+                String ownerName = request.getString("owner");
+                User owner = up.getUser(ownerName);
+                int ownerID = owner.getId();
+                Program program = pp.getProgram(programName, ownerID, robot);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
                     response.put("lastChanged", program.getLastChanged().getTime());
@@ -153,12 +153,12 @@ public class ClientProgram {
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("importXML") ) {
-                final String xmlText = request.getString("program");
+                String xmlText = request.getString("program");
                 String programName = request.getString("name");
-                final InputStream xsdStream = ClientProgram.class.getClassLoader().getResourceAsStream("blockly.xsd");
-                final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                final Schema schema = schemaFactory.newSchema(new StreamSource(xsdStream));
-                final Validator validator = schema.newValidator();
+                InputStream xsdStream = ClientProgram.class.getClassLoader().getResourceAsStream("blockly.xsd");
+                SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+                Schema schema = schemaFactory.newSchema(new StreamSource(xsdStream));
+                Validator validator = schema.newValidator();
 
                 if ( !Util1.isValidJavaIdentifier(programName) ) {
                     programName = "NEPOprog";
@@ -171,8 +171,8 @@ public class ClientProgram {
                     xmlIsValid = false;
                 }
                 if ( xmlIsValid ) {
-                    final BlockSet jaxbProgramSet = JaxbHelper.xml2BlockSet(xmlText);
-                    final String robotType = jaxbProgramSet.getRobottype();
+                    BlockSet jaxbProgramSet = JaxbHelper.xml2BlockSet(xmlText);
+                    String robotType = jaxbProgramSet.getRobottype();
                     if ( robotType.equals(robot) ) {
                         response.put("name", programName);
                         response.put("data", xmlText);
@@ -184,52 +184,52 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
                 }
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
-                final String programName = request.getString("programName");
-                final String userToShareName = request.getString("userToShare");
-                final String right = request.getString("right");
+                String programName = request.getString("programName");
+                String userToShareName = request.getString("userToShare");
+                String right = request.getString("right");
                 upp.shareToUser(userId, robot, programName, userToShareName, right);
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("shareDelete") && httpSessionState.isUserLoggedIn() ) {
-                final String programName = request.getString("programName");
-                final String owner = request.getString("owner");
+                String programName = request.getString("programName");
+                String owner = request.getString("owner");
                 upp.shareDelete(owner, robot, programName, userId);
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("deleteP") && httpSessionState.isUserLoggedIn() ) {
-                final String programName = request.getString("name");
+                String programName = request.getString("name");
                 pp.deleteByName(programName, userId, robot);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadPN") && httpSessionState.isUserLoggedIn() ) {
-                final JSONArray programInfo = pp.getProgramInfo(userId, robot);
+                JSONArray programInfo = pp.getProgramInfo(userId, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadEN") ) {
-                final JSONArray programInfo = pp.getProgramInfo(1, robot);
+                JSONArray programInfo = pp.getProgramInfo(1, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
-                final String programName = request.getString("name");
-                final JSONArray relations = pp.getProgramRelations(programName, userId, robot);
+                String programName = request.getString("name");
+                JSONArray relations = pp.getProgramRelations(programName, userId, robot);
                 response.put("relations", relations);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("runP") ) {
                 Key messageKey = null;
-                final String token = httpSessionState.getToken();
-                final String programName = request.getString("name");
-                final String programText = request.optString("programText");
-                final String configurationText = request.optString("configurationText");
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 // TODO: this is quick fix not to check the program for arduino
                 if ( !(httpSessionState.getRobotName().equals("ardu") || httpSessionState.getRobotName().equals("nao")) ) {
-                    final RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                    RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 } else {
                     response.put("data", programText);
@@ -249,12 +249,12 @@ public class ClientProgram {
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
             } else if ( cmd.equals("runPBack") ) {
                 Key messageKey = null;
-                final String token = httpSessionState.getToken();
-                final String programName = request.getString("name");
-                final String programText = request.optString("programText");
-                final String configurationText = request.optString("configurationText");
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                String configurationText = request.optString("configurationText");
 
-                final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
 
@@ -278,13 +278,13 @@ public class ClientProgram {
 
             } else if ( cmd.equals("runPsim") ) {
                 Key messageKey = null;
-                final String token = httpSessionState.getToken();
-                final String programName = request.getString("name");
-                final String programText = request.optString("programText");
-                final String configurationText = request.optString("configurationText");
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 //TODO program checks should be in compiler workflow
@@ -311,7 +311,7 @@ public class ClientProgram {
             dbSession.commit();
         } catch ( final Exception e ) {
             dbSession.rollback();
-            final String errorTicketId = Util1.getErrorTicketId();
+            String errorTicketId = Util1.getErrorTicketId();
             ClientProgram.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
