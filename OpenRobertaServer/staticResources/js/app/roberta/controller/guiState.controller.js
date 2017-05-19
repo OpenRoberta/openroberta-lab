@@ -1,4 +1,4 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, SOCKET_C, $) {
 
     /**
      * Init robot
@@ -140,10 +140,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             $('#iconDisplayLogin').addClass('error');
         }
 
-        if (!isAutoconnected()) {
-        	if (robot != 'ardu') {
-        		$('#menuConnect').parent().removeClass('disabled');
-        	}
+        switch (getConnection()) {
+        case 'token':
+            $('#menuConnect').parent().removeClass('disabled');
             if (GUISTATE.robot.state === 'wait') {
                 $('#head-navi-icon-robot').removeClass('error');
                 $('#head-navi-icon-robot').removeClass('busy');
@@ -163,6 +162,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
                 $('#menuRunProg').parent().addClass('disabled');
             }
+            break;
+        case 'autoConnection':
+            break;
+        case 'arduinoAgent':
+            break;
+        default:
+            break;
         }
     }
     exports.setState = setState;
@@ -193,10 +199,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
-        //TODO: change from ardu to botnroll and mbot with friends
-        if (robot != 'ardu') {
-            GUISTATE.gui.connection = result.connection;
-        }
+        GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
@@ -226,8 +229,19 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
         }
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#simRobot').addClass('typcn-' + robotGroup);
-
-        if (isAutoconnected()) {
+        switch (getConnection()) {
+        case 'token':
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
+            $('#menuRunProg').parent().addClass('disabled');
+            $('#menuConnect').parent().removeClass('disabled');
+            break;
+        case 'autoConnection':
+            console.log('autoConnection');
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
@@ -236,15 +250,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
             }
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
-        } else {
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace) {
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            }
-            $('#menuRunProg').parent().addClass('disabled');
-            $('#menuConnect').parent().removeClass('disabled')
+            break;
+        case 'arduinoAgent':
+            SOCKET_C.updateMenuStatus();
+            break;
+        default:
+            console.log('unknown connection');
+            break;
         }
 
         GUISTATE.gui.robot = robot;
@@ -751,15 +763,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'jquery' ], func
     }
     exports.checkSim = checkSim;
 
-    function isAutoconnected() {
+    function getConnection() {
         return GUISTATE.gui.connection;
     }
-    exports.isAutoconnected = isAutoconnected;
-
-    function setConnected(isConnected) {
-        GUISTATE.gui.connection = isConnected;
-    }
-    exports.setConnected = setConnected;
+    exports.getConnection = getConnection;
 
     function setProgramToDownload() {
         return GUISTATE.gui.program.download = true;

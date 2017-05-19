@@ -147,7 +147,7 @@ public class ClientAdmin {
                         configuration.put("conf", robotFactory.getConfigurationDefault());
                         response.put("configuration", configuration);
                         response.put("sim", robotFactory.hasSim());
-                        response.put("connection", robotFactory.isAutoconnected());
+                        response.put("connection", robotFactory.getConnectionType());
                         response.put("configurationUsed", robotFactory.hasConfiguration());
 
                         LOG.info("set robot to {}", robot);

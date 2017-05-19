@@ -493,8 +493,8 @@ public class BotNrollFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.arduProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.arduProperties.getProperty("robot.connection");
     }
 
     @Override

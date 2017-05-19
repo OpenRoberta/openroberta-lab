@@ -488,8 +488,8 @@ public class EV3devFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.ev3Properties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.ev3Properties.getProperty("robot.connection");
     }
 
     @Override

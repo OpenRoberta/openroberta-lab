@@ -347,8 +347,8 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.calliopeProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.calliopeProperties.getProperty("robot.connection");
     }
 
     @Override
@@ -363,8 +363,8 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
     }
 

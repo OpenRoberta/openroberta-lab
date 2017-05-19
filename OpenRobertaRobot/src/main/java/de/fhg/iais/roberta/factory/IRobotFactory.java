@@ -365,7 +365,7 @@ public interface IRobotFactory {
 
     Boolean isBeta();
 
-    Boolean isAutoconnected();
+    String getConnectionType();
 
     Boolean hasConfiguration();
 

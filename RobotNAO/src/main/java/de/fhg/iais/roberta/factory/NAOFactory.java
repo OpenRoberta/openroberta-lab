@@ -502,8 +502,8 @@ public class NAOFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.naoProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.naoProperties.getProperty("robot.connection");
     }
 
     @Override

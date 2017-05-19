@@ -26,19 +26,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         }, 3000);
     });
 
-    // Botnroll:
-    // /dev/ttyUSB0
-    // 0x10c4
-    // 0xea60
-    // Mbot:
-    ///dev/ttyUSB0
-    // 0x1a86
-    // 0x7523
-    // ArduinoUno:
-    // /dev/ttyACM0
-    // 0x2a03
-    // 0x0043
-
+    /*
+     * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0, VID:
+     * 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID: 0x7523
+     * ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
+     */
     socket.on('message', function(data) {
         if (data.includes('"Network": false')) {
             var robot;
@@ -70,32 +62,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                 }
                 GUISTATE_C.setRobotPort("");
                 console.log("port is not in the list");
-                $('#menuConnect').parent().addClass('disabled');
-
-                GUISTATE_C.setConnected(false);
             }
-            if (portList.length === 1) {
-                console.log('turn off choise of ports');
-                GUISTATE_C.setConnected(true);
-                $('#menuConnect').parent().addClass('disabled');
-                ROBOT_C.setPort(portList[0]);
-                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            } else if (portList.length > 1) {
-                $('#menuConnect').parent().removeClass('disabled');
-                //GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                console.log('turn on choise of ports');
-            } else {
-                GUISTATE_C.setConnected(false);
-                $('#head-navi-icon-robot').removeClass('wait');
-                $('#head-navi-icon-robot').addClass('error');
-                $('#menuConnect').parent().addClass('disabled');
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                $('#menuRunProg').parent().addClass('disabled');
-                console.log('turn off choise of ports');
-            }
-            console.log(new Date() + " " + portList);
-            console.log(new Date() + " " + vendorList);
-            console.log(new Date() + " " + productList);
+            updateMenuStatus();
+            //console.log(new Date() + " " + portList);
+            //console.log(new Date() + " " + vendorList);
+            //console.log(new Date() + " " + productList);
         } else if (data.includes('OS')) {
             jsonObject = JSON.parse(data);
             system = jsonObject['OS'];
@@ -126,19 +97,99 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     }
     exports.getRobotList = getRobotList;
 
+    function updateMenuStatus() {
+        console.log(getPortList().length)
+        switch (getPortList().length) {
+        case 0:
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
+            $('#menuRunProg').parent().addClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');
+            break;
+        case 1:
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').addClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            }
+            $('#menuRunProg').parent().removeClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');
+            break;
+        default:
+            // Always:
+            $('#menuConnect').parent().removeClass('disabled');
+            // If the port is not chosen:
+            if (GUISTATE_C.getRobotPort() == "") {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').removeClass('wait');
+                if (GUISTATE.gui.blocklyWorkspace) {
+                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+                }
+                $('#menuRunProg').parent().addClass('disabled');
+                //$('#menuConnect').parent().addClass('disabled');
+            } else {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').addClass('wait');
+                if (GUISTATE.gui.blocklyWorkspace) {
+                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+                }
+                $('#menuRunProg').parent().removeClass('disabled')
+            }
+            break;
+        }
+    }
+    exports.updateMenuStatus = updateMenuStatus;
+
     function uploadProgram() {
+        var URL = 'http://localhost:8991/upload';
         var filename = GUISTATE_C.getProgramName() + '.hex';
         var fileContentHex = null;
-        var board = null;
-        window.alert("uploading " + filename);
-        var signature = null;
+        var board = 'arduino:avr:leonardo';
+        console.log("uploading " + filename);
+        var signature = "67d5a421776c68df026b8b01a181e1cf3ff3e6bd2b96c44fbc1240d82191f81924b6ebb8a54015b2ef6600e9f73d52db0c2a95f0461e7b0422399ab1209d97d9b2de3af5bf7f1b2b3589ee3a905209d29a410963fb656e52492037d986731552f610488444429021d909e6fd9448442e053c41ceae815ccc211093561a39f704";
+        var commandLine = "\"/usr/bin/avrdude\"\"-C/etc/avrdude/avrdude.conf\" {upload.verbose} -patmega328p -carduino  -P{} -b115200 -D \"-Uflash:w:/tmp/build4940972228428756877.tmp/MotorsVariableSpeed.cpp.hex:i\""
+
+        var request = {
+            'board' : board,
+            'port' : port,
+            'commandline' : commandLine,
+            'signature' : signature,
+            'hex' : fileContentHex,
+            'filename' : filename,
+            'extra' : {
+                'auth' : {
+                    'password' : null
+                }
+            },
+            'wait_for_upload_port' : true,
+            'use_1200bps_touch' : true,
+            'network' : false,
+            'params_verbose' : '-v',
+            'params_quiet' : '-q -q',
+            'verbose' : true
+        }
+
+        console.log(JSON.stringify(request));
+
+        JSONrequest = JSON.parse(JSON.stringify(request));
+
         var postRequest = "{\"board\":\""
                 + board
                 + "\","
                 + "\"port\":\""
                 + GUISTATE_C.getRobotPort()
                 + "\";"
-                + "\"commandline\":\"\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega32u4 -cavr109 -P{serial.port} -b57600 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"\",:\"signature\":\""
+                + "commandline"
+                + ":"
+                + "\"/usr/bin/avrdude\"\"-C/etc/avrdude/avrdude.conf\" {upload.verbose} -patmega328p -carduino  -P/dev/ttyACM0 -b115200 -D \"-Uflash:w:/tmp/build4940972228428756877.tmp/MotorsVariableSpeed.cpp.hex:i\""
+                + "signature:"
                 + signature
                 + "\","
                 + "\"hex\":\""
@@ -148,6 +199,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                 + filename
                 + "\","
                 + "\"extra\":{\n \"auth\":{\n \"password\":null \n },\"wait_for_upload_port]\:true,\"use_1200bps_touch\":true,\n \"network\":false,\n \"params_verbose\":\"-v\",\n \"params_quiet\":\"-q -q\",\n \"verbose\":true \ \n }\n}";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", URL, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSONrequest);
     }
     exports.uploadProgram = uploadProgram;
 

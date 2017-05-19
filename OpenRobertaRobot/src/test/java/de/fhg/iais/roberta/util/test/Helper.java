@@ -527,7 +527,7 @@ public class Helper {
         }
 
         @Override
-        public Boolean isAutoconnected() {
+        public String getConnectionType() {
             // TODO Auto-generated method stub
             return null;
         }
