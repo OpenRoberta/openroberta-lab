@@ -493,11 +493,6 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.properties.getProperty("robot.connection.server") != null ? true : false;
-    }
-
-    @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
@@ -529,5 +524,10 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         return Ast2MakeBlockVisitor.generate((MakeBlockConfiguration) brickConfiguration, phrasesSet, withWrapping);
+    }
+
+    @Override
+    public String getConnectionType() {
+        return this.properties.getProperty("robot.connection");
     }
 }

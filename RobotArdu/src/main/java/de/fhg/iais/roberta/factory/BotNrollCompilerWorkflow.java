@@ -31,6 +31,8 @@ public class BotNrollCompilerWorkflow implements ICompilerWorkflow {
     public final String robotCompilerResourcesDir;
     public final String robotCompilerDir;
 
+    private String compiledHex = "";
+
     public BotNrollCompilerWorkflow(String pathToCrosscompilerBaseDir, String robotCompilerResourcesDir, String robotCompilerDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.robotCompilerResourcesDir = robotCompilerResourcesDir;
