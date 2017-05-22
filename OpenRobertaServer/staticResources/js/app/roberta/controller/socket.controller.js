@@ -150,11 +150,35 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     function uploadProgram() {
         var URL = 'http://localhost:8991/upload';
         var filename = GUISTATE_C.getProgramName() + '.hex';
-        var fileContentHex = null;
+        var fileContentHex = 'OjEwMDAwMDAwMEM5NDVDMDAwQzk0NkUwMDBDOTQ2RTAwMEM5NDZFMDBDQQ0KOjEwMDAxMDAwMEM5NDZFMDAwQzk0NkUwMDBDOTQ2RTAwMEM5NDZFMDBBOA0KOjEwMDAyMDAwMEM5NDZF'
+                + 'MDAwQzk0NkUwMDBDOTQ2RTAwMEM5NDZFMDA5OA0KOjEwMDAzMDAwMEM5NDZFMDAwQzk0NkUwMDBDOTQ2RTAwMEM5NDZFMDA4OA0KOjEwMDA0MDAwMEM5NDE0MDEwQzk0NkUwMDBDOTQ2RTAwMEM5N'
+                + 'DZFMDBEMQ0KOjEwMDA1MDAwMEM5NDZFMDAwQzk0NkUwMDBDOTQ2RTAwMEM5NDZFMDA2OA0KOjEwMDA2MDAwMEM5NDZFMDAwQzk0NkUwMDAwMDAwMDAwMjQwMDI3MDAyOQ0KOjEwMDA3MDAwMkEwMD'
+                + 'AwMDAwMDAwMjUwMDI4MDAyQjAwMDQwNDA0MDRDRQ0KOjEwMDA4MDAwMDQwNDA0MDQwMjAyMDIwMjAyMDIwMzAzMDMwMzAzMDM0Mg0KOjEwMDA5MDAwMDEwMjA0MDgxMDIwNDA4MDAxMDIwNDA4MTA'
+                + 'yMDAxMDIxRg0KOjEwMDBBMDAwMDQwODEwMjAwMDAwMDAwODAwMDIwMTAwMDAwMzA0MDdGQg0KOjEwMDBCMDAwMDAwMDAwMDAwMDAwMDAwMDExMjQxRkJFQ0ZFRkQ4RTBCOA0KOjEwMDBDMDAwREVC'
+                + 'RkNEQkYyMUUwQTBFMEIxRTAwMUMwMUQ5MkE5MzBBQw0KOjEwMDBEMDAwQjIwN0UxRjcwRTk0NUUwMTBDOTRDRDAxMEM5NDAwMDA4MA0KOjEwMDBFMDAwRTFFQkYwRTAyNDkxRURFOUYwRTA5NDkxR'
+                + 'TlFOEYwRTA1Mw0KOjEwMDBGMDAwRTQ5MUVFMjMwOUY0M0JDMDIyMjMzOUYxMjMzMDkxRjAzRg0KOjEwMDEwMDAwMzhGNDIxMzBBOUYwMjIzMDAxRjUyNEI1MkY3RDEyQzAzQQ0KOjEwMDExMDAwMj'
+                + 'czMDkxRjAyODMwQTFGMDI0MzBCOUY0MjA5MTgwMDBFQw0KOjEwMDEyMDAwMkY3RDAzQzAyMDkxODAwMDJGNzcyMDkzODAwMDBEQzA4OQ0KOjEwMDEzMDAwMjRCNTJGNzcyNEJEMDlDMDIwOTFCMDA'
+                + 'wMkY3NzAzQzBDQw0KOjEwMDE0MDAwMjA5MUIwMDAyRjdEMjA5M0IwMDBGMEUwRUUwRkZGMUY1NA0KOjEwMDE1MDAwRUU1OEZGNEZBNTkxQjQ5MTJGQjdGODk0RUM5MTgxMTEwRg0KOjEwMDE2MDAw'
+                + 'MDNDMDkwOTU5RTIzMDFDMDlFMkI5QzkzMkZCRjA4OTVBMg0KOjEwMDE3MDAwM0ZCN0Y4OTQ4MDkxMDUwMTkwOTEwNjAxQTA5MTA3MDE4NQ0KOjEwMDE4MDAwQjA5MTA4MDEyNkI1QTg5QjA1QzAyR'
+                + 'jNGMTlGMDAxOTYzNA0KOjEwMDE5MDAwQTExREIxMUQzRkJGQkEyRkE5MkY5ODJGODgyNzgyMEYwRA0KOjEwMDFBMDAwOTExREExMURCMTFEQkMwMUNEMDE0MkUwNjYwRjc3MUY1RA0KOjEwMDFCMD'
+                + 'AwODgxRjk5MUY0QTk1RDFGNzA4OTU4RjkyOUY5MkFGOTIwOQ0KOjEwMDFDMDAwQkY5MkNGOTJERjkyRUY5MkZGOTIwRTk0QjgwMDRCMDE1NA0KOjEwMDFEMDAwNUMwMTg0RTZDODJFRDEyQ0UxMkN'
+                + 'GMTJDMEU5NEI4MDBFMQ0KOjEwMDFFMDAwREMwMUNCMDE4ODE5OTkwOUFBMDlCQjA5ODgzRTkzNDAxMw0KOjEwMDFGMDAwQTEwNUIxMDU1OEYwMjFFMEMyMUFEMTA4RTEwOEYxMDhDMw0KOjEwMDIw'
+                + 'MDAwODhFRTg4MEU4M0UwOTgxRUExMUNCMTFDQzExNEQxMDQ5NQ0KOjEwMDIxMDAwRTEwNEYxMDQxOUY3RkY5MEVGOTBERjkwQ0Y5MEJGOTBDOQ0KOjEwMDIyMDAwQUY5MDlGOTA4RjkwMDg5NTFGO'
+                + 'TIwRjkyMEZCNjBGOTJFQw0KOjEwMDIzMDAwMTEyNDJGOTMzRjkzOEY5MzlGOTNBRjkzQkY5MzgwOTFGQw0KOjEwMDI0MDAwMDEwMTkwOTEwMjAxQTA5MTAzMDFCMDkxMDQwMTMwOTE0Qw0KOjEwMD'
+                + 'I1MDAwMDAwMTIzRTAyMzBGMkQzNzIwRjQwMTk2QTExREIxMURDRA0KOjEwMDI2MDAwMDVDMDI2RTgyMzBGMDI5NkExMURCMTFEMjA5MzAwMDFCMQ0KOjEwMDI3MDAwODA5MzAxMDE5MDkzMDIwMUE'
+                + 'wOTMwMzAxQjA5MzA0MDFDNA0KOjEwMDI4MDAwODA5MTA1MDE5MDkxMDYwMUEwOTEwNzAxQjA5MTA4MDFBQw0KOjEwMDI5MDAwMDE5NkExMURCMTFEODA5MzA1MDE5MDkzMDYwMUEwOTNDNQ0KOjEw'
+                + 'MDJBMDAwMDcwMUIwOTMwODAxQkY5MUFGOTE5RjkxOEY5MTNGOTE0QQ0KOjEwMDJCMDAwMkY5MTBGOTAwRkJFMEY5MDFGOTAxODk1Nzg5NDg0QjVEMg0KOjEwMDJDMDAwODI2MDg0QkQ4NEI1ODE2M'
+                + 'Dg0QkQ4NUI1ODI2MDg1QkQ1Mg0KOjEwMDJEMDAwODVCNTgxNjA4NUJEODA5MTZFMDA4MTYwODA5MzZFMDBFMA0KOjEwMDJFMDAwMTA5MjgxMDA4MDkxODEwMDgyNjA4MDkzODEwMDgwOTFEMg0KOj'
+                + 'EwMDJGMDAwODEwMDgxNjA4MDkzODEwMDgwOTE4MDAwODE2MDgwOTM4Mw0KOjEwMDMwMDAwODAwMDgwOTFCMTAwODQ2MDgwOTNCMTAwODA5MUIwMDA0Mg0KOjEwMDMxMDAwODE2MDgwOTNCMDAwODA'
+                + '5MTdBMDA4NDYwODA5MzdBMDAzRA0KOjEwMDMyMDAwODA5MTdBMDA4MjYwODA5MzdBMDA4MDkxN0EwMDgxNjA2Nw0KOjEwMDMzMDAwODA5MzdBMDA4MDkxN0EwMDgwNjg4MDkzN0EwMDEwOTI4RQ0K'
+                + 'OjEwMDM0MDAwQzEwMEVERTlGMEUwMjQ5MUU5RThGMEUwODQ5MTg4MjMzMA0KOjEwMDM1MDAwOTlGMDkwRTA4ODBGOTkxRkZDMDFFODU5RkY0RkE1OTE5Mw0KOjEwMDM2MDAwQjQ5MUZDMDFFRTU4R'
+                + 'kY0Rjg1OTE5NDkxOEZCN0Y4OTRBQQ0KOjEwMDM3MDAwRUM5MUUyMkJFQzkzOEZCRkMwRTBEMEUwODFFMDBFOTREMw0KOjEwMDM4MDAwNzAwMDBFOTRERDAwODBFMDBFOTQ3MDAwMEU5NEREMDA4RA'
+                + '0KOjBFMDM5MDAwMjA5N0ExRjMwRTk0MDAwMEYxQ0ZGODk0RkZDRjU4DQo6MDAwMDAwMDFGRg0K';
+        var port = 'COM6';
         var board = 'arduino:avr:leonardo';
         console.log("uploading " + filename);
-        var signature = "67d5a421776c68df026b8b01a181e1cf3ff3e6bd2b96c44fbc1240d82191f81924b6ebb8a54015b2ef6600e9f73d52db0c2a95f0461e7b0422399ab1209d97d9b2de3af5bf7f1b2b3589ee3a905209d29a410963fb656e52492037d986731552f610488444429021d909e6fd9448442e053c41ceae815ccc211093561a39f704";
-        var commandLine = "\"/usr/bin/avrdude\"\"-C/etc/avrdude/avrdude.conf\" {upload.verbose} -patmega328p -carduino  -P{} -b115200 -D \"-Uflash:w:/tmp/build4940972228428756877.tmp/MotorsVariableSpeed.cpp.hex:i\""
+        var signature = "8ca56849f32e00f72e8a9a67360513761f8b25d25b9a0fd4b6bbc3eb68dfbbca1a8e40159456ef8c375186af9cdfaeb3ceabaa198a0313d0ab7f4ce67229381c3d84bd3b2632538957dab40d17f7bdc560cf82e540d51bf29f70f9ebee1abab1c0a18bdeb74e0d8b94b966744563251e0e868d4195719961ce0c5023c1f0a489";
+        var commandLine = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega328p -carduino -P{serial.port} -b115200 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\""
 
         var request = {
             'board' : board,
@@ -178,30 +202,34 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
 
         console.log(JSON.stringify(request));
 
-        JSONrequest = JSON.parse(JSON.stringify(request));
+        var JSONrequest = JSON.stringify(request);
 
-        var postRequest = "{\"board\":\""
-                + board
-                + "\","
-                + "\"port\":\""
-                + GUISTATE_C.getRobotPort()
-                + "\";"
-                + "commandline"
-                + ":"
-                + "\"/usr/bin/avrdude\"\"-C/etc/avrdude/avrdude.conf\" {upload.verbose} -patmega328p -carduino  -P/dev/ttyACM0 -b115200 -D \"-Uflash:w:/tmp/build4940972228428756877.tmp/MotorsVariableSpeed.cpp.hex:i\""
-                + "signature:"
-                + signature
-                + "\","
-                + "\"hex\":\""
-                + fileContentHex
-                + "\","
-                + "\"filename\":\""
-                + filename
-                + "\","
-                + "\"extra\":{\n \"auth\":{\n \"password\":null \n },\"wait_for_upload_port]\:true,\"use_1200bps_touch\":true,\n \"network\":false,\n \"params_verbose\":\"-v\",\n \"params_quiet\":\"-q -q\",\n \"verbose\":true \ \n }\n}";
+        console.log(JSONrequest);
+
+        /*
+         * var postRequest = "{\"board\":\"" + board + "\"," + "\"port\":\"" +
+         * GUISTATE_C.getRobotPort() + "\";" + "commandline" + ":" +
+         * "\"/usr/bin/avrdude\"\"-C/etc/avrdude/avrdude.conf\" {upload.verbose}
+         * -patmega328p -carduino -P/dev/ttyACM0 -b115200 -D
+         * \"-Uflash:w:/tmp/build4940972228428756877.tmp/MotorsVariableSpeed.cpp.hex:i\"" +
+         * "signature:" + signature + "\"," + "\"hex\":\"" + fileContentHex +
+         * "\"," + "\"filename\":\"" + filename + "\"," + "\"extra\":{\n
+         * \"auth\":{\n \"password\":null \n
+         * },\"wait_for_upload_port]\:true,\"use_1200bps_touch\":true,\n
+         * \"network\":false,\n \"params_verbose\":\"-v\",\n
+         * \"params_quiet\":\"-q -q\",\n \"verbose\":true \ \n }\n}";
+         */
         var xhr = new XMLHttpRequest();
         xhr.open("POST", URL, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {//Call a function when the state changes.
+            if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 202) {
+                console.log('Accepted for flashing');
+            } else {
+                console.log('something went wrong');
+                console.log(xhr.readyState + ' ' + xhr.status);
+            }
+        }
         xhr.send(JSONrequest);
     }
     exports.uploadProgram = uploadProgram;
