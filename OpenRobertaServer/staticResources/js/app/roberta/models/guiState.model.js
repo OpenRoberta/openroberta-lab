@@ -68,6 +68,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.robot.nepoExitValue = 0;
         exports.robot.time = -1;
         exports.robot.robotPort = '';
+        exports.robot.socket = null;
         return COMM.json("/admin", {
             "cmd" : "init"
         }, function(result) {
