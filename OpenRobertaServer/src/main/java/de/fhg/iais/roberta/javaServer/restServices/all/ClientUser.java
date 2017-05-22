@@ -117,7 +117,8 @@ public class ClientUser {
                 String userName = request.getString("userName");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                up.createUser(account, password, userName, role, email, null);
+                boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
+                up.createUser(account, password, userName, role, email, null, youngerThen14);
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("updateUser") ) {

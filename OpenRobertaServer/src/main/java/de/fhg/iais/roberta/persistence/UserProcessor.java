@@ -77,7 +77,8 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void createUser(String account, String password, String userName, String roleAsString, String email, String tags) throws Exception {
+    public void createUser(String account, String password, String userName, String roleAsString, String email, String tags, boolean youngerThen14)
+        throws Exception {
         Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
@@ -98,6 +99,7 @@ public class UserProcessor extends AbstractProcessor {
                     user.setUserName(userName);
                     user.setEmail(email);
                     user.setTags(tags);
+                    user.setYoungerThen14(youngerThen14);
                 } else {
                     setError(Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
                 }

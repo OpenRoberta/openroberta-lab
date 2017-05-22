@@ -136,19 +136,19 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': 'true'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'youngerThen14': 'false'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'cavy2@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'cavy2@home';'role':'STUDENT', 'youngerThen14': 'true'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
