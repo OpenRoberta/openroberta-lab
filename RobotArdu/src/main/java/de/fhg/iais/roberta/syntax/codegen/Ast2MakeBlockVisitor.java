@@ -65,6 +65,8 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
     private final MakeBlockConfiguration brickConfiguration;
     private boolean isTimerSensorUsed;
+    private boolean isTemperatureSensorUsed;
+    private String temperatureSensorPort;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -80,6 +82,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.usedActors = usedHardwareVisitor.getUsedActors();
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
+        this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
     }
 
     /**
@@ -319,7 +322,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("myTemp" + temperatureSensor.getPort().getPortNumber() + ".temperature()");
+        this.sb.append("myTemp" + temperatureSensor.getPort().getPortNumber() + ".getTemperature()");
         return null;
     }
 
@@ -358,9 +361,24 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         generateUserDefinedMethods();
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
+	
         if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
+        }
+        
+        if(this.isTemperatureSensorUsed)
+        {
+        for ( UsedSensor sensor : this.usedSensors ) {
+     
+        if(sensor.getType().toString().equalsIgnoreCase("TEMPERATURE")) 
+        {	
+        		this.temperatureSensorPort = sensor.getPort().getPortNumber();
+        	}
+        }
+        
+        nlIndent();
+        this.sb.append("myTemp" + this.temperatureSensorPort + ".update()");
         }
         return null;
     }
@@ -588,7 +606,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         }
 
         this.sb.append("#include <math.h> \n");
-        this.sb.append("#include <MeOrion.h> \n");
+        this.sb.append("#include <MeMCore.h> \n");
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n");
         this.sb.append("#include <CountUpDownTimer.h>\n");
@@ -648,7 +666,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     this.sb.append("MeUltrasonicSensor ultraSensor(" + usedSensor.getPort() + ");\n");
                     break;
                 case TEMPERATURE:
-                    this.sb.append("MeTemperature myTemp" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeHumiture myTemp" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case TOUCH:
                     this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
