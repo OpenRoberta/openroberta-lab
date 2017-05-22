@@ -378,7 +378,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         }
         
         nlIndent();
-        this.sb.append("myTemp" + this.temperatureSensorPort + ".update()");
+        this.sb.append("myTemp" + this.temperatureSensorPort + ".update();");
         }
         return null;
     }

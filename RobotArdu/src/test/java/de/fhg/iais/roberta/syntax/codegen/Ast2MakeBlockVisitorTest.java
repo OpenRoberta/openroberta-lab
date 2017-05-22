@@ -9,7 +9,7 @@ public class Ast2MakeBlockVisitorTest {
 
     private static final String MAIN_METHOD1 = ""
         + "#include <math.h> \n"
-        + "#include <MeOrion.h> \n"
+        + "#include <MeMCore.h> \n"
         + "#include <Wire.h>\n"
         + "#include <SoftwareSerial.h>\n"
         + "#include <CountUpDownTimer.h>\n"
@@ -69,6 +69,7 @@ public class Ast2MakeBlockVisitorTest {
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", true);
     }
     
+    @Test
     public void TouchSensorTest() throws Exception {
 
         final String a = "" //
@@ -85,6 +86,7 @@ public class Ast2MakeBlockVisitorTest {
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_touch_sensor.xml", true);
     }
     
+    @Test
     public void SoundSensorTest() throws Exception {
 
         final String a = "" //
@@ -97,9 +99,33 @@ public class Ast2MakeBlockVisitorTest {
             + "void loop(){"
             + "if (mySound3.strength() > 0) {"
             + "        delay(500);}\n"
+            
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_sound_sensor.xml", true);
+    }
+    
+    @Test
+    public void TemperatureSensorTest() throws Exception {
+
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeDCMotor motor2(M2);"
+            + "MeDCMotor motor1(M1);"
+            + "MeDrive myDrive(M2,M1);"
+            + "MeHumiture myTemp1(PORT_1);"
+            + MAIN_METHOD2
+            + "}"
+            + "double item;"
+            + "void loop(){"
+            + "myTemp1.update();"
+            + "if (myTemp1.getTemperature() < 20) {"
+            + "        myDrive.drive(30, 1);}\n"
+            
+            + "}\n";
+
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml", true);
     }
 
 }
