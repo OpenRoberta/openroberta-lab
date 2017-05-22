@@ -21,8 +21,10 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.LostPasswordProcessor;
+import de.fhg.iais.roberta.persistence.PendingEmailConfirmationsProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
+import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -64,6 +66,7 @@ public class ClientUser {
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
             if ( cmd.equals("clear") ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
@@ -119,6 +122,20 @@ public class ClientUser {
                 //String tag = request.getString("tag");
                 boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
                 up.createUser(account, password, userName, role, email, null, youngerThen14);
+                if ( !email.equals("") && up.isOk() ) {
+                    String lang = request.getString("language");
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    String[] body = {
+                        account,
+                        confirmation.getUrlPostfix()
+                    };
+                    try {
+                        this.mailManagement.send(email, "activate", body, lang);
+                        up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
+                    } catch ( MessagingException e ) {
+                        up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+                    }
+                }
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("updateUser") ) {
@@ -147,7 +164,6 @@ public class ClientUser {
                     lostPasswordProcessor.deleteLostPassword(resetPasswordLink);
                 }
                 Util.addResultInfo(response, up);
-
             } else if ( cmd.equals("isResetPasswordLinkExpired") ) {
                 String resetPasswordLink = request.getString("resetPasswordLink");
                 LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
@@ -179,6 +195,16 @@ public class ClientUser {
                     } catch ( MessagingException e ) {
                         up.setError(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
                     }
+                }
+                Util.addResultInfo(response, up);
+            } else if ( cmd.equals("activateUser") ) {
+                String userActivationLink = request.getString("userActivationLink");
+                PendingEmailConfirmations confirmation = pendingConfirmationProcessor.loadConfirmation(userActivationLink);
+                if ( confirmation != null ) {
+                    up.activateAccount(confirmation.getUserID());
+                }
+                if ( up.getMessage() == Key.USER_ACTIVATION_SUCCESS ) {
+                    pendingConfirmationProcessor.deleteEmailConfirmation(userActivationLink);
                 }
                 Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {

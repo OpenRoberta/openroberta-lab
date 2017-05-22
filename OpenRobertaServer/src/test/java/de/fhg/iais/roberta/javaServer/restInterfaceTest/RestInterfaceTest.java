@@ -105,6 +105,7 @@ public class RestInterfaceTest {
     public void test() throws Exception {
         this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
         createTwoUsers();
+        activateUser();
         updateUser();
         changeUserPassword();
         loginLogoutPid();
@@ -136,7 +137,7 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': 'true'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'';'role':'STUDENT', 'youngerThen14': 'true'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
@@ -148,11 +149,34 @@ public class RestInterfaceTest {
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'cavy2@home';'role':'STUDENT', 'youngerThen14': 'true'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'youngerThen14': 'true'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+        }
+    }
+
+    /**
+     * activate user account:<br>
+     * <b>PRE:</b> two user exists with no activated accounts<br>
+     * <b>POST:</b> one user with activated account, no user has logged in
+     * <ul>
+     * </ul>
+     */
+    private void activateUser() throws Exception {
+        {
+            Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+            Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
+            Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
+            //
+            //            String url = this.memoryDbSetup.getOne("select URL_POSTFIX from PENDING_EMAIL_CONFIRMATIONS WHERE USER_ID = 3").toString();
+            //            restUser(
+            //                this.sPid,
+            //                "{'cmd':'activateUser';'accountName':'pid'; 'userActivationLink': '" + url + "';}",
+            //                "error",
+            //                Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
+            Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
         }
     }
 
@@ -184,8 +208,8 @@ public class RestInterfaceTest {
         restUser(
             this.sMinscha,
             "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT'}",
-            "error",
-            Key.USER_ERROR_EMAIL_USED);
+            "ok",
+            Key.USER_UPDATE_SUCCESS);
 
         restUser(this.sMinscha, "{'cmd':'getUser';'accountName':'minscha'}", "ok", Key.USER_GET_ONE_SUCCESS);
         this.response.getEntity().toString().contains("cavy1231");
