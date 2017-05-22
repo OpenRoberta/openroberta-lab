@@ -157,7 +157,7 @@ function init() {
         configurationController.init();
         programController.init();
         menuController.init();
-        socketController.init();
+        //socketController.init();
 
         //console.log(robotList);
         $(".cover").fadeOut(100, function() {

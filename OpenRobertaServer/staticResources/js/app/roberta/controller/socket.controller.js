@@ -1,8 +1,6 @@
 define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'guiState.model', 'socket.io' ], function(exports, UTIL,
         LOG, MSG, $, ROBOT_C, GUISTATE_C, GUISTATE, IO) {
 
-    var socket = IO('ws://localhost:8991/');
-    console.log(socket);
     var portList = [];
     var vendorList = [];
     var productList = [];
@@ -11,84 +9,89 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var port;
     var robotList = [];
 
-    socket.on('connect', function() {
-        console.log('connect');
-        socket.emit('command', 'log on');
-        socket.emit('command', 'list');
-        console.log('listed');
-        window.setInterval(function() {
-            portList = [];
-            vendorList = [];
-            productList = [];
-            robotList = [];
-            socket.emit('command', 'list');
-            //console.log('refreshed robot ports');
-        }, 3000);
-    });
-
-    /*
-     * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0, VID:
-     * 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID: 0x7523
-     * ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
-     */
-    socket.on('message', function(data) {
-        if (data.includes('"Network": false')) {
-            var robot;
-            jsonObject = JSON.parse(data);
-            jsonObject['Ports'].forEach(function(port) {
-                portList.push(port['Name']);
-                vendorList.push(port['VendorID']);
-                productList.push(port['ProductID']);
-                console.log(port['VendorID'].toUpperCase());
-                switch (port['VendorID']) {
-                case '0x10C4':
-                    robot = 'Bot\'n Roll';
-                    break;
-                case '0x1A86':
-                    robot = 'MBot';
-                    break;
-                case '0x2A03':
-                    robot = 'Arduino Uno';
-                    break;
-                default:
-                    robot = 'Unknown robot';
-                }
-                robotList.push(robot);
-            });
-            console.log(GUISTATE_C.getRobotPort());
-            if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
-                if (GUISTATE_C.getRobotPort() != "") {
-                    MSG.displayMessage('An active robot was disconnected', 'POPUP', '');
-                }
-                GUISTATE_C.setRobotPort("");
-                //console.log("port is not in the list");
-            }
-            if (portList.length == 1) {
-                ROBOT_C.setPort(portList[0]);
-            }
-            updateMenuStatus();
-            //console.log(new Date() + " " + portList);
-            //console.log(new Date() + " " + vendorList);
-            //console.log(new Date() + " " + productList);
-        } else if (data.includes('OS')) {
-            jsonObject = JSON.parse(data);
-            system = jsonObject['OS'];
-            console.log(system);
-        }
-    });
-
-    socket.on('disconnect', function() {
-    });
-
-    socket.on('error', function(err) {
-        console.log("Socket.IO Error");
-        console.log(err.stack);
-    });
-
     function init() {
+        socket = IO('ws://localhost:8991/');
+        socket.on('connect', function() {
+            console.log('connect');
+            socket.emit('command', 'log on');
+            socket.emit('command', 'list');
+            console.log('listed');
+            window.setInterval(function() {
+                portList = [];
+                vendorList = [];
+                productList = [];
+                robotList = [];
+                socket.emit('command', 'list');
+                //console.log('refreshed robot ports');
+            }, 3000);
+        });
+
+        /*
+         * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0, VID:
+         * 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID: 0x7523
+         * ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
+         */
+        socket.on('message', function(data) {
+            if (data.includes('"Network": false')) {
+                var robot;
+                jsonObject = JSON.parse(data);
+                jsonObject['Ports'].forEach(function(port) {
+                    portList.push(port['Name']);
+                    vendorList.push(port['VendorID']);
+                    productList.push(port['ProductID']);
+                    console.log(port['VendorID'].toUpperCase());
+                    switch (port['VendorID']) {
+                    case '0x10C4':
+                        robot = 'Bot\'n Roll';
+                        break;
+                    case '0x1A86':
+                        robot = 'MBot';
+                        break;
+                    case '0x2A03':
+                        robot = 'Arduino Uno';
+                        break;
+                    default:
+                        robot = 'Unknown robot';
+                    }
+                    robotList.push(robot);
+                });
+                console.log(GUISTATE_C.getRobotPort());
+                if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
+                    if (GUISTATE_C.getRobotPort() != "") {
+                        MSG.displayMessage('An active robot was disconnected', 'POPUP', '');
+                    }
+                    GUISTATE_C.setRobotPort("");
+                    //console.log("port is not in the list");
+                }
+                if (portList.length == 1) {
+                    ROBOT_C.setPort(portList[0]);
+                }
+                updateMenuStatus();
+                //console.log(new Date() + " " + portList);
+                //console.log(new Date() + " " + vendorList);
+                //console.log(new Date() + " " + productList);
+            } else if (data.includes('OS')) {
+                jsonObject = JSON.parse(data);
+                system = jsonObject['OS'];
+                console.log(system);
+            }
+        });
+
+        socket.on('disconnect', function() {
+        });
+
+        socket.on('error', function(err) {
+            console.log("Socket.IO Error");
+            console.log(err.stack);
+        });
     }
 
     exports.init = init;
+
+    function closeConnection() {
+        socket.disconnect();
+    }
+    exports.closeConnection = closeConnection;
 
     function getPortList() {
         return portList;

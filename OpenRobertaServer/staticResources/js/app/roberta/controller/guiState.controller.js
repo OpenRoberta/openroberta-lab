@@ -239,6 +239,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             }
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
+
             break;
         case 'autoConnection':
             console.log('autoConnection');
@@ -252,7 +253,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuConnect').parent().addClass('disabled');
             break;
         case 'arduinoAgent':
+            SOCKET_C.init();
             SOCKET_C.updateMenuStatus();
+            console.log('arduino based bobot was selected');
             break;
         default:
             console.log('unknown connection');

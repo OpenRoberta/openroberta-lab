@@ -1,5 +1,6 @@
 define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.model', 'robot.model', 'program.controller', 'configuration.controller',
-        'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
+        'socket.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C, CONFIGURATION_C,
+        SOCKET_C, $) {
 
     var $formSingleModal;
     var $formSingleListModal;
