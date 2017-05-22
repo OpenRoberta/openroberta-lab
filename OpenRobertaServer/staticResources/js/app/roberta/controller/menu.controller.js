@@ -65,7 +65,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             var robotName = robots[i].name;
             var robotGroup = robots[i].group;
-            if (robotGroup != oldRobotGroup){
+            if (robotGroup != oldRobotGroup) {
                 newGroup = false;
                 group = false;
             }
@@ -76,7 +76,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     newGroup = true;
                     group = true;
                 }
-            } 
+            }
             if (newGroup) {
                 var clone = proto.clone().prop('id', 'menu-' + robotGroup);
                 clone.find('span:eq( 0 )').removeClass('typcn-open');
@@ -214,6 +214,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.modal').modal('hide');
             var choosenRobotType = event.target.parentElement.dataset.type;
             //TODO: change from ardu to botnroll and mbot with friends
+            //I guess it is changed now, check downstairs at menuConnect
             if (GUISTATE_C.getRobot() == "ardu") {
                 console.log("bobot is ardu");
             }
@@ -222,13 +223,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
-                    if (GUISTATE_C.getRobot() == "ardu") {
+                    //if (GUISTATE_C.getRobot() == "botnroll" || GUISTATE_C.getRobot() == "mbot") {
+                    if (GUISTATE_C.getConnection() == 'arduinoAgent') {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
                         i = 0;
                         ports.forEach(function(port) {
-                            $('#singleModalListInput').append("<option value=\""  + port + "\" selected>" + robots[i] + " " + port + "</option>");
+                            $('#singleModalListInput').append("<option value=\"" + port + "\" selected>" + robots[i] + " " + port + "</option>");
                             i++;
                         });
                         ROBOT_C.showListModal();
