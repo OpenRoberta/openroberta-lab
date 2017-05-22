@@ -47,6 +47,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     private final Set<UsedActor> usedActors = new HashSet<UsedActor>();
 
     private boolean isTimerSensorUsed;
+    private boolean isTemperatureSensorUsed;
 
     private Configuration brickConfiguration;
 
@@ -82,6 +83,11 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
         return this.isTimerSensorUsed;
     }
 
+    public boolean isTemperatureSensorUsed() {
+        return this.isTemperatureSensorUsed;
+    }
+    
+    
     private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
@@ -237,6 +243,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
         this.usedSensors.add(new UsedSensor(temperatureSensor.getPort(), SensorType.TEMPERATURE, null));
+        this.isTemperatureSensorUsed = true;
         return null;
     }
 

@@ -16,7 +16,7 @@ public enum SensorType {
     SOUND( "robBrick_sound" ),
     LIGHT( "robBrick_light" ),
     COMPASS( "robBrick_compass" ),
-    TEMPERATURE( "robBrick_temerautre" );
+    TEMPERATURE( "robBrick_temperature" );
 
     private final String[] values;
 
