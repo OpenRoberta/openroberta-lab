@@ -580,6 +580,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         case 'arduinoAgent':
             GUISTATE_C.setAutoConnectedBusy(true);
             MSG.displayMessage('Compiling program', 'TOAST', GUISTATE_C.getProgramName());
+            GUISTATE_C.setAutoConnectedBusy(true);
+            $('#head-navi-icon-robot').addClass('busy');
             PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 GUISTATE_C.setState(result);
                 if (result.rc == "ok") {
@@ -588,9 +590,13 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     console.log(GUISTATE_C.getRobotPort());
                     SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
                     MSG.displayMessage("Done flashing", 'TOAST', '');
+                    GUISTATE_C.setAutoConnectedBusy(false);
+                    $('#head-navi-icon-robot').removeClass('busy');
                 } else {
                     console.log('result not ok');
                     MSG.displayInformation(result, "", result.message, "");
+                    GUISTATE_C.setAutoConnectedBusy(false);
+                    $('#head-navi-icon-robot').removeClass('busy');
                 }
             });
             break;
