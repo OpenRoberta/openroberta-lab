@@ -15,14 +15,14 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
             GUISTATE.robot.socket.on('connect', function() {
                 console.log('connect');
                 GUISTATE.robot.socket.emit('command', 'log on');
-                GUISTATE.robot.socket.emit('command', 'list');
+                //GUISTATE.robot.socket.emit('command', 'list');
                 console.log('listed');
                 window.setInterval(function() {
                     portList = [];
                     vendorList = [];
                     productList = [];
                     robotList = [];
-                    GUISTATE.robot.socket.emit('command', 'list');
+                    //GUISTATE.robot.socket.emit('command', 'list');
                     //console.log('refreshed robot ports');
                 }, 3000);
             });
@@ -159,7 +159,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         var filename = GUISTATE_C.getProgramName() + '.hex';
         var fileContentHex = programHex;
         var port = robotPort;
-        var board = 'arduino:avr:leonardo';
+        var board = 'arduino:avr:uno';
         console.log("uploading " + filename);
         var signature = "8ca56849f32e00f72e8a9a67360513761f8b25d25b9a0fd4b6bbc3eb68dfbbca1a8e40159456ef8c375186af9cdfaeb3ceabaa198a0313d0ab7f4ce67229381c3d84bd3b2632538957dab40d17f7bdc560cf82e540d51bf29f70f9ebee1abab1c0a18bdeb74e0d8b94b966744563251e0e868d4195719961ce0c5023c1f0a489";
         var commandLine = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega328p -carduino -P{serial.port} -b115200 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\""

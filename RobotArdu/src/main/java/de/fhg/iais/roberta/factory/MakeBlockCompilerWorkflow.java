@@ -154,6 +154,7 @@ public class MakeBlockCompilerWorkflow implements ICompilerWorkflow {
         Path base = Paths.get("");
 
         try {
+            System.out.println(this.robotCompilerResourcesDir);
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 scriptName,
                 "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
@@ -162,6 +163,7 @@ public class MakeBlockCompilerWorkflow implements ICompilerWorkflow {
                 "-fqbn=arduino:avr:uno",
                 "-prefs=compiler.path=" + this.robotCompilerDir,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                "-verbose",
                 base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
             });
 
