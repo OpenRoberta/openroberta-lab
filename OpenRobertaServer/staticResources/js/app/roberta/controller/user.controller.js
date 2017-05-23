@@ -17,7 +17,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function createUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(), function(
+            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(),  function(
                     result) {
                 if (result.rc === "ok") {
                     $('#loginAccountName').val($("#registerAccountName").val());
@@ -35,7 +35,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function updateUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), function(result) {
+            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), function(result) {
                 if (result.rc === "ok") {
                     USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
                         if (result.rc === "ok") {
@@ -87,9 +87,41 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 $("#registerAccountName").val(result.userAccountName);
                 $("#registerUserEmail").val(result.userEmail);
                 $("#registerUserName").val(result.userName);
+                $("#registerUserAge").val(result.isYoungerThen14);
             }
         });
     }
+
+    /**
+     * Send account activation
+     */
+    function sendAccountActivation() {
+        if ($("#registerUserEmail").val() != "") {
+          USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
+              if (result.rc === "ok") {
+                  MSG.displayInformation(result, result.message, result.message);
+              }
+              MSG.displayInformation(result, result.message, result.message);
+          });
+        } else {
+
+        }
+    }
+
+
+    /**
+     * Send account activation
+     */
+    function activateAccount(url) {
+          USER.userActivateAccount(url, function(result) {
+              if (result.rc === "ok") {
+                  MSG.displayInformation(result, result.message, result.message);
+              }
+              MSG.displayInformation(result, result.message, result.message)
+          });
+    }
+
+    exports.activateAccount = activateAccount;
 
     /**
      * Login user
@@ -324,7 +356,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     /**
      * Resets the validation of every form in login modal
-     * 
+     *
      */
     function resetForm() {
         $formLogin.validate().resetForm();
@@ -337,6 +369,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      */
     function clearInputs() {
         $divForms.find('input').val('');
+        $("#registerUserAge").val('none');
     }
 
     function initRegisterForm() {
@@ -352,6 +385,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#fgRegisterPass").show()
         $("#fgRegisterPassConfirm").show()
         $("#showChangeUserPassword").addClass('hidden');
+        $("#resendActivation").addClass('hidden');
         $("#register_login_btn").show()
         $("#register_lost_btn").show()
         $formLogin.hide()
@@ -426,6 +460,10 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             $('#change-user-password').modal('show');
         });
 
+        $('#resendActivation').onWrap('click', function() {
+          sendAccountActivation()
+        });
+
         $('#change-user-password').onWrap('hidden.bs.modal', function() {
             $formUserPasswordChange.validate().resetForm();
             $('#grOldPassword').show();
@@ -486,6 +524,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#fgRegisterPassConfirm").hide()
         $("#register_login_btn").hide()
         $("#showChangeUserPassword").removeClass('hidden');
+        $("#resendActivation").removeClass('hidden');
         $("#register_lost_btn").hide()
         $formLogin.hide()
         $formRegister.show();

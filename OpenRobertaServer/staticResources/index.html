@@ -677,10 +677,23 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 										name="registerUserEmail" />
 								</div>
 							</div>
+							<div class="form-group">
+								<label for="registerUserAge" lkey="Blockly.Msg.POPUP_AGE">Age</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-at"></span>
+									<select class="form-control" id="registerUserAge" name="registerUserAge">
+										<option value="none"></option>
+										<option value="true" lkey="Blockly.Msg.YOUNGER_THEN_14">B</option>
+										<option value="false" lkey="Blockly.Msg.OLDER_THEN_14">C</option>
+									</select>
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button id="showChangeUserPassword" type="button"
 								class="btn-link hidden" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"></button>
+								<button id="resendActivation" type="button"
+									class="btn-link hidden" lkey="Blockly.Msg.RESEND_ACTIVATION">resend activation</button>
 							<button type="submit" class="btn btn-primary btn-block"
 								id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER"
 								value="register"></button>

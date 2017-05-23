@@ -161,7 +161,7 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void updateUser(String account, String userName, String roleAsString, String email, String tags) throws Exception {
+    public void updateUser(String account, String userName, String roleAsString, String email, String tags, boolean youngerThen14) throws Exception {
         if ( account == null || account.equals("") ) {
             setError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, account);
         } else {
@@ -173,6 +173,7 @@ public class UserProcessor extends AbstractProcessor {
                     user.setRole(Role.valueOf(roleAsString));
                     user.setEmail(email);
                     user.setTags(tags);
+                    user.setYoungerThen14(youngerThen14);
                     setSuccess(Key.USER_UPDATE_SUCCESS);
                 }
             } else {

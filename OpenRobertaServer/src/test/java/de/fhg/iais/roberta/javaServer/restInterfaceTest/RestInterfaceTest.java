@@ -137,19 +137,19 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'';'role':'STUDENT', 'youngerThen14': 'true'}",
-                "ok",
-                Key.USER_CREATE_SUCCESS);
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'youngerThen14': 'true', 'language': 'de'}",
+                "error",
+                Key.USER_ACTIVATION_SENT_MAIL_FAIL);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'youngerThen14': 'false'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'youngerThen14': 'false', 'language': 'de'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'youngerThen14': 'true'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'youngerThen14': 'true', 'language': 'de'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
@@ -165,19 +165,13 @@ public class RestInterfaceTest {
      * </ul>
      */
     private void activateUser() throws Exception {
-        {
-            Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
-            Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
-            Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
-            //
-            //            String url = this.memoryDbSetup.getOne("select URL_POSTFIX from PENDING_EMAIL_CONFIRMATIONS WHERE USER_ID = 3").toString();
-            //            restUser(
-            //                this.sPid,
-            //                "{'cmd':'activateUser';'accountName':'pid'; 'userActivationLink': '" + url + "';}",
-            //                "error",
-            //                Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
-            Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
-        }
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
+        Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
+
+        String url = this.memoryDbSetup.getOne("select URL_POSTFIX from PENDING_EMAIL_CONFIRMATIONS").toString();
+        restUser(this.sPid, "{'cmd':'activateUser';'accountName':'pid'; 'userActivationLink': '" + url + "';}", "ok", Key.USER_ACTIVATION_SUCCESS);
+        Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PENDING_EMAIL_CONFIRMATIONS"));
     }
 
     /**
@@ -198,16 +192,16 @@ public class RestInterfaceTest {
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT'}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false}",
             "error",
             Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
 
-        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12'}", "ok", Key.USER_GET_ONE_SUCCESS);
+        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12', 'youngerThen14': false}", "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(!this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
 
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT'}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false}",
             "ok",
             Key.USER_UPDATE_SUCCESS);
 
@@ -351,6 +345,34 @@ public class RestInterfaceTest {
      * </ul>
      */
     private void minschaCreate2Programs() throws Exception {
+        int pidId = this.sPid.getUserId();
+        int minschaId = this.sMinscha.getUserId();
+        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+        Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
+        Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
+
+        saveAs(this.sMinscha, minschaId, "p1", "<program>.1.minscha</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
+        saveAs(this.sMinscha, minschaId, "p2", "<program>.2.minscha</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
+        Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
+        Assert.assertEquals(6, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
+
+        String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
+        Assert.assertTrue(program.contains(".2.minscha"));
+        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+    }
+
+    /**
+     * activate user account<br>
+     * <b>INVARIANT:</b> two user exist, both user have logged in, "pid" owns four programs<br>
+     * <b>PRE:</b> "minscha" owns no programs<br>
+     * <b>POST:</b> "minscha" owns two programs
+     * <ul>
+     * <li>store 2 programs and check the count in the db
+     * <li>check the content of program 'p2' in the db
+     * </ul>
+     */
+    private void activateUserAccount() throws Exception {
         int pidId = this.sPid.getUserId();
         int minschaId = this.sMinscha.getUserId();
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());

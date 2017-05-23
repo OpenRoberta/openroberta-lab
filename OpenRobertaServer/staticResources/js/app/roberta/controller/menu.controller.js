@@ -24,9 +24,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         var target = decodeURI(document.location.hash).split("&");
         if (target[0] === "#forgotPassword") {
             USER_C.showResetPassword(target[1]);
-        }
-        if (target[0] === "#loadProgram" && target.length >= 4) {
+        } else if (target[0] === "#loadProgram" && target.length >= 4) {
             PROGRAM_C.openProgramFromXML(target);
+        } else if (target[0] === "#activateAccount") {
+          USER_C.activateAccount(target[1]);
         }
     }
 

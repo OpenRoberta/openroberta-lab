@@ -66,7 +66,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
     /**
      * Set gui state
-     * 
+     *
      * @param {result}
      *            result of server call
      */
@@ -714,6 +714,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.getUserAccountName = getUserAccountName;
 
+    function isUserAccountActivated() {
+        return GUISTATE.user.isAccountActivated;
+    }
+    exports.isUserAccountActivated = isUserAccountActivated;
+
     function setLogin(result) {
         setState(result);
         GUISTATE.user.accountName = result.userAccountName;
@@ -723,6 +728,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             GUISTATE.user.name = result.userName;
         }
         GUISTATE.user.id = result.userId;
+        GUISTATE.user.isAccountActivated = result.isAccountActivated;
 
         $('.nav > li > ul > .login, .logout').removeClass('disabled');
         $('.nav > li > ul > .logout').addClass('disabled');
@@ -786,7 +792,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
     /**
      * Set program name
-     * 
+     *
      * @param {name}
      *            Name to be set
      */

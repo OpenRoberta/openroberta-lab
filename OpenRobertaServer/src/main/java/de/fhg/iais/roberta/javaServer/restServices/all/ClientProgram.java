@@ -184,11 +184,16 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
                 }
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
-                String programName = request.getString("programName");
-                String userToShareName = request.getString("userToShare");
-                String right = request.getString("right");
-                upp.shareToUser(userId, robot, programName, userToShareName, right);
-                Util.addResultInfo(response, upp);
+                User user = up.getUser(userId);
+                if ( user != null && user.isActivated() ) {
+                    String programName = request.getString("programName");
+                    String userToShareName = request.getString("userToShare");
+                    String right = request.getString("right");
+                    upp.shareToUser(userId, robot, programName, userToShareName, right);
+                    Util.addResultInfo(response, upp);
+                } else {
+                    Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
+                }
 
             } else if ( cmd.equals("shareWithGallery") && httpSessionState.isUserLoggedIn() ) {
                 final String programName = request.getString("programName");

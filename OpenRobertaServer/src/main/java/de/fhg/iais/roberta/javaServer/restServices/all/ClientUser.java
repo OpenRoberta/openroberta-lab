@@ -88,6 +88,7 @@ public class ClientUser {
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
                     response.put("userName", name);
+                    response.put("isAccountActivated", user.isActivated());
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
@@ -101,10 +102,12 @@ public class ClientUser {
                     String account = user.getAccount();
                     String userName = user.getUserName();
                     String email = user.getEmail();
+                    boolean age = user.isYoungerThen14();
                     response.put("userId", id);
                     response.put("userAccountName", account);
                     response.put("userName", userName);
                     response.put("userEmail", email);
+                    response.put("youngerThen14", age);
                 }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
@@ -112,7 +115,6 @@ public class ClientUser {
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
                 ClientUser.LOG.info("logout of user " + userId);
-
             } else if ( cmd.equals("createUser") ) {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
@@ -132,7 +134,7 @@ public class ClientUser {
                     try {
                         this.mailManagement.send(email, "activate", body, lang);
                         up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
-                    } catch ( MessagingException e ) {
+                    } catch ( Exception e ) {
                         up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
                     }
                 }
@@ -144,7 +146,8 @@ public class ClientUser {
                 String email = request.getString("userEmail");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                up.updateUser(account, userName, role, email, null);
+                boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
+                up.updateUser(account, userName, role, email, null, youngerThen14);
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("changePassword") ) {
@@ -205,6 +208,24 @@ public class ClientUser {
                 }
                 if ( up.getMessage() == Key.USER_ACTIVATION_SUCCESS ) {
                     pendingConfirmationProcessor.deleteEmailConfirmation(userActivationLink);
+                }
+                Util.addResultInfo(response, up);
+            } else if ( cmd.equals("resendActivation") ) {
+                String account = request.getString("accountName");
+                String lang = request.getString("language");
+                User user = up.getUser(account);
+                if ( user != null && !user.getEmail().equals("") ) {
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    String[] body = {
+                        account,
+                        confirmation.getUrlPostfix()
+                    };
+                    try {
+                        this.mailManagement.send(user.getEmail(), "activate", body, lang);
+                        up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
+                    } catch ( MessagingException e ) {
+                        up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+                    }
                 }
                 Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {
