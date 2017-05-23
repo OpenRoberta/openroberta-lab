@@ -131,7 +131,7 @@ public class Ast2BotNrollVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + MAIN_METHOD2
-            + "brm.setSonarStatus(ENABLE);one.obstacleEmitters(ON);"
+            + "one.obstacleEmitters(ON);brm.setSonarStatus(ENABLE);"
             + "}"
             + "voidloop(){"
             + "if (bnr.infraredSensorObstacle(1)) {"
