@@ -59,7 +59,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     console.log(GUISTATE_C.getRobotPort());
                     if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
                         if (GUISTATE_C.getRobotPort() != "") {
-                            MSG.displayMessage('An active robot was disconnected', 'POPUP', '');
+                            MSG.displayMessage(Blockly.Msg["MESSAGE_ROBOT_DISCONNECTED"], 'POPUP', '');
                         }
                         GUISTATE_C.setRobotPort("");
                         //console.log("port is not in the list");
