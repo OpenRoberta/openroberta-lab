@@ -579,14 +579,18 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             break;
         case 'arduinoAgent':
             GUISTATE_C.setAutoConnectedBusy(true);
+            MSG.displayMessage('Compiling program', 'TOAST', GUISTATE_C.getProgramName());
             PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 GUISTATE_C.setState(result);
                 if (result.rc == "ok") {
+                	MSG.displayMessage("Flashing the program, please wait", 'TOAST', '');
                     console.log(result.compiledCode);
                     console.log(GUISTATE_C.getRobotPort());
                     SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
+                    MSG.displayMessage("Done flashing", 'TOAST', '');
                 } else {
                     console.log('result not ok');
+                    MSG.displayInformation(result, "", result.message, "");
                 }
             });
             break;

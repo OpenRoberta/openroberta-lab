@@ -22,7 +22,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     vendorList = [];
                     productList = [];
                     robotList = [];
-                    //GUISTATE.robot.socket.emit('command', 'list');
+                    GUISTATE.robot.socket.emit('command', 'list');
                     //console.log('refreshed robot ports');
                 }, 3000);
             });
