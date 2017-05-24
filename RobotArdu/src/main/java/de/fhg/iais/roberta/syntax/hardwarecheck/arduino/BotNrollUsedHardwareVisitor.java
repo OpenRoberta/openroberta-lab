@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.arduino;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
@@ -43,8 +44,8 @@ import de.fhg.iais.roberta.visitor.CheckVisitor;
  * @author kcvejoski
  */
 public class BotNrollUsedHardwareVisitor extends CheckVisitor implements BotnrollAstVisitor<Void> {
-    private final Set<UsedSensor> usedSensors = new HashSet<UsedSensor>();
-    private final Set<UsedActor> usedActors = new HashSet<UsedActor>();;
+    private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
+    private final Set<UsedActor> usedActors = new LinkedHashSet<UsedActor>();;
 
     private boolean isTimerSensorUsed;
 

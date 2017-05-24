@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.hardwarecheck.arduino;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
@@ -43,8 +44,8 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
  * @author kcvejoski
  */
 public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements MakeblockAstVisitor<Void> {
-    private final Set<UsedSensor> usedSensors = new HashSet<UsedSensor>();
-    private final Set<UsedActor> usedActors = new HashSet<UsedActor>();
+    private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
+    private final Set<UsedActor> usedActors = new LinkedHashSet<UsedActor>();
 
     private boolean isTimerSensorUsed;
     private boolean isTemperatureSensorUsed;
@@ -86,8 +87,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
     }
-    
-    
+
     private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
