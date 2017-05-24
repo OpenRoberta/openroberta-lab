@@ -118,7 +118,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
 
         String nbcCompilerFileName = this.robotCompilerResourcesDir + "/windows/nbc.exe";
         if ( SystemUtils.IS_OS_LINUX ) {
-            nbcCompilerFileName = this.robotCompilerResourcesDir + "/linux/nbc";
+            nbcCompilerFileName = "nbc";
         } else if ( SystemUtils.IS_OS_MAC ) {
             nbcCompilerFileName = this.robotCompilerResourcesDir + "/osx/nbc";
         }
