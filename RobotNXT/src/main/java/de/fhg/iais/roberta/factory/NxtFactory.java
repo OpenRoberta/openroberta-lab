@@ -575,7 +575,7 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.nxtProperties.getProperty("robot.sim") != null ? true : false;
+        return this.nxtProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override

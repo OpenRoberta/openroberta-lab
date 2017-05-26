@@ -474,7 +474,7 @@ public class EV3devFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.ev3Properties.getProperty("robot.sim") != null ? true : false;
+        return this.ev3Properties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override

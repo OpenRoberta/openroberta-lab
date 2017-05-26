@@ -488,7 +488,7 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.naoProperties.getProperty("robot.sim") != null ? true : false;
+        return this.naoProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override

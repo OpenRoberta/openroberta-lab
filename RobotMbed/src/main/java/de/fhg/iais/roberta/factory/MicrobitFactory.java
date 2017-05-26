@@ -331,7 +331,7 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.calliopeProperties.getProperty("robot.sim") != null ? true : false;
+        return this.calliopeProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override

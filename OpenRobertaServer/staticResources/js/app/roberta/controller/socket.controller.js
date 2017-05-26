@@ -17,20 +17,21 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                 GUISTATE.robot.socket.emit('command', 'log on');
                 //GUISTATE.robot.socket.emit('command', 'list');
                 console.log('listed');
+                GUISTATE_C.setIsAgent(true);
                 window.setInterval(function() {
                     portList = [];
                     vendorList = [];
                     productList = [];
                     robotList = [];
                     GUISTATE.robot.socket.emit('command', 'list');
-                    //console.log('refreshed robot ports');
+                    console.log('refreshed robot ports');
                 }, 3000);
             });
 
             /*
-             * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0, VID:
-             * 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID: 0x7523
-             * ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
+             * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0,
+             * VID: 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID:
+             * 0x7523 ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
              */
             GUISTATE.robot.socket.on('message', function(data) {
                 if (data.includes('"Network": false')) {
@@ -75,6 +76,14 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     jsonObject = JSON.parse(data);
                     system = jsonObject['OS'];
                     console.log(system);
+                }
+            });
+
+            socket.on('reconnecting', function reconnectCallback(tries) {
+                console.log('server offline');
+                if (tries === 3) {
+                    console.log('server offline');
+                    socket.disconnect();
                 }
             });
 

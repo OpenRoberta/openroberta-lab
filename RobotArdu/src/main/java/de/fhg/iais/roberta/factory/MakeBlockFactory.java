@@ -479,7 +479,7 @@ public class MakeBlockFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.properties.getProperty("robot.sim") != null ? true : false;
+        return this.properties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override

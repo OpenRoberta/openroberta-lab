@@ -23,6 +23,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
             GUISTATE.robot.name = '';
             GUISTATE.robot.robotPort = '';
+            GUISTATE.gui.isAgent = null;
 
             //GUISTATE.socket.portNames = [];
             //GUISTATE.socket.vendorIds = [];
@@ -173,6 +174,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.setState = setState;
 
+    function getIsAgent() {
+        return GUISTATE.gui.isAgent;
+    }
+    exports.getIsAgent = getIsAgent;
+
+    function setIsAgent(isAgent) {
+        GUISTATE.gui.isAgent = isAgent;
+    }
+    exports.setIsAgent = setIsAgent;
+
     function getBlocklyWorkspace() {
         return GUISTATE.gui.blocklyWorkspace;
     }
@@ -256,6 +267,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             SOCKET_C.init();
             SOCKET_C.updateMenuStatus();
             console.log('arduino based bobot was selected');
+            break;
+        case 'arduinoAgentOrToken':
+            try {
+                SOCKET_C.init();
+            } catch (err) {
+                console.log(err);
+            }
             break;
         default:
             console.log('unknown connection');
@@ -756,7 +774,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.setConfiguration = setConfiguration;
 
     function checkSim() {
-        if (GUISTATE.gui.sim === true) {
+        if (GUISTATE.gui.sim == true) {
             $('#menuRunSim').parent().removeClass('disabled');
             $('#progSim').show();
         } else {

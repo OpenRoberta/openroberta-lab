@@ -479,7 +479,7 @@ public class BotNrollFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.arduProperties.getProperty("robot.sim") != null ? true : false;
+        return this.arduProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
