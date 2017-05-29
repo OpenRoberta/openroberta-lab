@@ -142,6 +142,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
 
         switch (getConnection()) {
+        case 'arduinoAgentOrToken':
         case 'token':
             $('#menuConnect').parent().removeClass('disabled');
             if (GUISTATE.robot.state === 'wait') {
