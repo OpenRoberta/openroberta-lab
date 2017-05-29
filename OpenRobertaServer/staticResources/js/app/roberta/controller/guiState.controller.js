@@ -23,7 +23,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
             GUISTATE.robot.name = '';
             GUISTATE.robot.robotPort = '';
-            GUISTATE.gui.isAgent = null;
+            GUISTATE.gui.isAgent = false;
 
             //GUISTATE.socket.portNames = [];
             //GUISTATE.socket.vendorIds = [];
@@ -263,17 +263,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
             break;
+        case 'arduinoAgentOrToken':
         case 'arduinoAgent':
             SOCKET_C.init();
             SOCKET_C.updateMenuStatus();
             console.log('arduino based bobot was selected');
-            break;
-        case 'arduinoAgentOrToken':
-            try {
-                SOCKET_C.init();
-            } catch (err) {
-                console.log(err);
-            }
             break;
         default:
             console.log('unknown connection');

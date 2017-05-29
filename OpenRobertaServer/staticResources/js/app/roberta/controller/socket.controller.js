@@ -10,8 +10,25 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var robotList = [];
 
     function init() {
-        if (GUISTATE.robot.socket == null) {
+        if (GUISTATE.robot.socket == null || GUISTATE_C.getIsAgent == false) {
             GUISTATE.robot.socket = IO('ws://localhost:8991/');
+            GUISTATE_C.setIsAgent(true);
+        	//so it would not be active when the socket cannot connect
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
+            $('#menuRunProg').parent().addClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');
+            
+            GUISTATE.robot.socket.on('connect_error', function(err) {
+            	GUISTATE_C.setIsAgent(false);
+            	$('#menuConnect').parent().removeClass('disabled');
+            	console.log('Error connecting to server');
+            });
+            
             GUISTATE.robot.socket.on('connect', function() {
                 console.log('connect');
                 GUISTATE.robot.socket.emit('command', 'log on');
