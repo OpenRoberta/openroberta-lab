@@ -206,8 +206,12 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
         Op op = binary.getOp();
+        if ( op == Op.MOD ) {
+            this.sb.append("(int) ");
+        }
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
         switch ( op ) {
@@ -218,6 +222,11 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
                 break;
             case DIVIDE:
                 this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            case MOD:
+                this.sb.append("((int) ");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
                 this.sb.append(")");
                 break;
