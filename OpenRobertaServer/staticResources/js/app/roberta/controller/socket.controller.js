@@ -96,13 +96,13 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                 }
             });
 
-            socket.on('reconnecting', function reconnectCallback(tries) {
+            /*socket.on('reconnecting', function reconnectCallback(tries) {
                 console.log('server offline');
                 if (tries === 3) {
                     console.log('server offline');
                     socket.disconnect();
                 }
-            });
+            });*/
 
             GUISTATE.robot.socket.on('disconnect', function() {
             });

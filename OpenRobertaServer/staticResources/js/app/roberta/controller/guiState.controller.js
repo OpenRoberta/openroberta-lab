@@ -207,25 +207,32 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     function setRobot(robot, result, opt_init) {
         // make sure we use the group instead of the specific robottype if the robot belongs to a group
         var robotGroup = findGroup(robot);
+        console.log(robotGroup);
         GUISTATE.gui.program = result.program;
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
+        console.log('1');
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
-
+        console.log('2');
+        
         if (!isConfigurationUsed()) {
             $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'BackgroundConf.svg) no-repeat');
             $('#bricklyDiv').css('background-position', 'center');
             $('#bricklyDiv').css('background-size', '75% auto');
         }
+        console.log('3');
+        
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+        console.log('4');
+        
         if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
@@ -238,8 +245,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             setConfigurationName(robotGroup.toUpperCase() + 'basis');
             setProgramName('NEPOprog');
         }
+        console.log('5');
+        
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#simRobot').addClass('typcn-' + robotGroup);
+        console.log('6');
+        
         switch (getConnection()) {
         case 'token':
             $('#head-navi-icon-robot').removeClass('error');
@@ -273,9 +284,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             console.log('unknown connection');
             break;
         }
-
+        console.log('7');
+        
         GUISTATE.gui.robot = robot;
         GUISTATE.gui.robotGroup = robotGroup;
+        console.log(robotGroup );
+        console.log(GUISTATE.gui.robotGroup );
 
         var value = Blockly.Msg.MENU_START_BRICK;
         if (value.indexOf("$") >= 0) {
