@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.mode.sensor.botnroll.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.JoystickMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.SensorPort;
 import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -534,8 +535,21 @@ public class MakeBlockFactory extends AbstractRobotFactory {
 
     @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
-        // TODO Auto-generated method stub
-        return null;
+        if ( joystickMode == null || joystickMode.isEmpty() ) {
+            throw new DbcException("Invalid joystick axis: " + joystickMode);
+        }
+        String sUpper = joystickMode.trim().toUpperCase(Locale.GERMAN);
+        for ( JoystickMode po : JoystickMode.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid joystick axis: " + joystickMode);
     }
 
     @Override
