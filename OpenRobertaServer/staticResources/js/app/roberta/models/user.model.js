@@ -107,13 +107,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - user email address
      *
      */
-    function updateUserToServer(accountName, userName, userEmail, youngerThen14, successFn) {
+    function updateUserToServer(accountName, userName, userEmail, youngerThen14, language, successFn) {
         COMM.json("/user", {
             "cmd" : "updateUser",
             "accountName" : accountName,
             "userName" : userName,
             "userEmail" : userEmail,
             "youngerThen14" : youngerThen14,
+            "language": language,
             "role" : 'TEACHER'
         }, successFn, "update user '" + accountName + "' to server");
     }

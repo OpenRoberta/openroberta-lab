@@ -142,7 +142,15 @@ public class ClientUser {
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
                 boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
+                User user = up.getUser(account);
+                String oldEmail = user.getEmail();
                 up.updateUser(account, userName, role, email, null, youngerThen14);
+                if ( this.isPublicServer && !oldEmail.equals(email) && up.isOk() ) {
+                    String lang = request.getString("language");
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang);
+                    up.deactivateAccount(user.getId());
+                }
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("changePassword") ) {

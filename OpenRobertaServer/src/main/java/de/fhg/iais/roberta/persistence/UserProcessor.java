@@ -161,6 +161,20 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
+    public void deactivateAccount(int userID) throws Exception {
+        if ( userID <= 0 ) {
+            setError(Key.USER_ACTIVATION_WRONG_ACCOUNT, String.valueOf(userID));
+        } else {
+            User user = getUser(userID);
+            if ( user != null ) {
+                user.setActivated(false);
+                setSuccess(Key.USER_DEACTIVATION_SUCCESS);
+            } else {
+                setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, String.valueOf(userID));
+            }
+        }
+    }
+
     public void updateUser(String account, String userName, String roleAsString, String email, String tags, boolean youngerThen14) throws Exception {
         if ( account == null || account.equals("") ) {
             setError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, account);

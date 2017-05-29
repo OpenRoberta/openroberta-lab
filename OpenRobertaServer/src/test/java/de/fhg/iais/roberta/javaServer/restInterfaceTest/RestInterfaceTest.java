@@ -192,7 +192,7 @@ public class RestInterfaceTest {
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false, 'language': 'de'}",
             "error",
             Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
 
@@ -201,9 +201,9 @@ public class RestInterfaceTest {
 
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false, 'language': 'de'}",
             "ok",
-            Key.USER_UPDATE_SUCCESS);
+            Key.USER_DEACTIVATION_SUCCESS);
 
         restUser(this.sMinscha, "{'cmd':'getUser';'accountName':'minscha'}", "ok", Key.USER_GET_ONE_SUCCESS);
         this.response.getEntity().toString().contains("cavy1231");

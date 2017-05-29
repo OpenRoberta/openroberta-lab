@@ -35,7 +35,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function updateUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), function(result) {
+            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(result) {
                 if (result.rc === "ok") {
                     USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
                         if (result.rc === "ok") {
