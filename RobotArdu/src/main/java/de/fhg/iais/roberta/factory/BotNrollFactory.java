@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -529,5 +530,17 @@ public class BotNrollFactory extends AbstractRobotFactory {
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         return Ast2BotNrollVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -270,7 +270,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        this.usedSensors.add(new UsedSensor(null, SensorType.JOYSTICK, null));
+        this.usedSensors.add(new UsedSensor(joystick.getPort(), SensorType.JOYSTICK, null));
         return null;
     }
 

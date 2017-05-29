@@ -1,8 +1,10 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -26,6 +28,18 @@ public class Calliope2016Factory extends AbstractCalliopeFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
         // TODO Auto-generated method stub
         return null;
     }

@@ -356,7 +356,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        this.sb.append("myJoystick.readX()");
+        this.sb.append("myJoystick" + joystick.getPort().getPortNumber() + ".read" + joystick.getAxis() + "()");
         return null;
     }
 

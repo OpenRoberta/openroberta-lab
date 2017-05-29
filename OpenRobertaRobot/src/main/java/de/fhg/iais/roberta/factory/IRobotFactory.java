@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -231,6 +232,10 @@ public interface IRobotFactory {
     IColorSensorMode getColorSensorMode(String colorSensorMode);
 
     List<IColorSensorMode> getColorSensorModes();
+
+    IJoystickMode getJoystickMode(String joystickMode);
+
+    List<IJoystickMode> getJoystickMode();
 
     ILightSensorMode getLightSensorMode(String lightrSensorMode);
 
