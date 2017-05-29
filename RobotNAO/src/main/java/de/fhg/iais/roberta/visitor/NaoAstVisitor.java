@@ -44,7 +44,7 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface NaoAstVisitor<V> extends AstLanguageVisitor<V> {
+public interface NaoAstVisitor<V> extends AstVisitor<V> {
     /**
      * visit a {@link SetMode}.
      *

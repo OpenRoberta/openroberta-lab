@@ -4,8 +4,7 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 <script src="../blockly_compressed.js"></script>
-<script src="../msg/js/cs.js"></script>
-
+<script src="../msg/js/de.js"></script>
 <script src="../core/blockly.js"></script>
 <script src="../core/css.js"></script>
 <script src="../core/inject.js"></script>
@@ -50,6 +49,8 @@
 <script src="../blocks/robCommunication.js"></script>
 <script src="../blocks/robControls.js"></script>
 <script src="../blocks/robSensors.js"></script>
+<script src="../blocks/arduActions.js"></script>
+<script src="../blocks/arduSensors.js"></script>
 <script src="../blocks/simActions.js"></script>
 <script src="../blocks/simSensors.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
@@ -89,7 +90,7 @@ function start() {
            variableDeclaration: true,
            robControls: true
           });
-  workspace.setDevice('ev3');
+  workspace.setDevice('nxt');
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -449,6 +450,9 @@ h1 {
         </category> 
     </category> 
     <category name='TOOLBOX_SENSOR' svg="true">
+
+        <block type='arduSensors_joystick_getSample'>
+        </block>
         <block type='robSensors_touch_isPressed'>
         </block>
         <block type='sim_touch_isPressed'>
@@ -535,22 +539,7 @@ h1 {
                     <block type='logic_compare'>
                     <mutation operator_range='BOOL'></mutation>
                         <value name='A'>
-                            <block type='robSensors_getSample'>
-                            </block> 
-                        </value>
-                        <value name='B'>
-                            <block type='logic_boolean'>
-                            </block> 
-                        </value>
-                    </block> 
-                </value>
-            </block> 
-            <block type='robControls_wait_for'>
-                <value name='WAIT0'>
-                    <block type='logic_compare'>
-                    <mutation operator_range='BOOL'></mutation>
-                        <value name='A'>
-                            <block type='robSensors_getSample_ardu'>
+                            <block type='arduSensors_getSample'>
                             </block> 
                         </value>
                         <value name='B'>
