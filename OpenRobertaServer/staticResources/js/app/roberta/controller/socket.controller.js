@@ -12,7 +12,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     function init() {
         if (GUISTATE.robot.socket == null || GUISTATE_C.getIsAgent == false) {
             GUISTATE.robot.socket = IO('ws://localhost:8991/');
-            GUISTATE_C.setIsAgent(true);
+            GUISTATE_C.setIsAgent(true);         
         	//so it would not be active when the socket cannot connect
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
@@ -22,10 +22,8 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
             }
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
-            
             GUISTATE.robot.socket.on('connect_error', function(err) {
             	GUISTATE_C.setIsAgent(false);
-            	$('#menuConnect').parent().removeClass('disabled');
             	console.log('Error connecting to server');
             });
             
@@ -74,6 +72,12 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                         }
                         robotList.push(robot);
                     });
+                    GUISTATE_C.setIsAgent(true);           
+                    GUISTATE.robot.socket.on('connect_error', function(err) {
+                    	GUISTATE_C.setIsAgent(false);
+                    	$('#menuConnect').parent().removeClass('disabled');
+                    	console.log('Error connecting to server');
+                    });
                     console.log(GUISTATE_C.getRobotPort());
                     if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
                         if (GUISTATE_C.getRobotPort() != "") {
@@ -95,14 +99,6 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     console.log(system);
                 }
             });
-
-            /*socket.on('reconnecting', function reconnectCallback(tries) {
-                console.log('server offline');
-                if (tries === 3) {
-                    console.log('server offline');
-                    socket.disconnect();
-                }
-            });*/
 
             GUISTATE.robot.socket.on('disconnect', function() {
             });

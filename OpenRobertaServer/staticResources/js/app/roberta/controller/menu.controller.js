@@ -223,8 +223,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
-                    //if (GUISTATE_C.getRobot() == "botnroll" || GUISTATE_C.getRobot() == "mbot") {
-                    if (GUISTATE_C.getConnection() == 'arduinoAgent' || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getAgent() == true)) {
+                	console.log(GUISTATE_C.getIsAgent());
+                	console.log(GUISTATE_C.getConnection());
+                    if (GUISTATE_C.getConnection() == 'arduinoAgent' || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
