@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -42,10 +43,13 @@ public class ClientUser {
     private final RobotCommunicator brickCommunicator;
     private final MailManagement mailManagement;
 
+    private final boolean isPublicServer;
+
     @Inject
     public ClientUser(RobotCommunicator brickCommunicator, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
         this.mailManagement = mailManagement;
+        this.isPublicServer = RobertaProperties.getBooleanProperty("server.public");
     }
 
     @POST
@@ -124,19 +128,10 @@ public class ClientUser {
                 //String tag = request.getString("tag");
                 boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
                 up.createUser(account, password, userName, role, email, null, youngerThen14);
-                if ( !email.equals("") && up.isOk() ) {
+                if ( this.isPublicServer && !email.equals("") && up.isOk() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                    String[] body = {
-                        account,
-                        confirmation.getUrlPostfix()
-                    };
-                    try {
-                        this.mailManagement.send(email, "activate", body, lang);
-                        up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
-                    } catch ( Exception e ) {
-                        up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
-                    }
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang);
                 }
                 Util.addResultInfo(response, up);
 
@@ -214,18 +209,9 @@ public class ClientUser {
                 String account = request.getString("accountName");
                 String lang = request.getString("language");
                 User user = up.getUser(account);
-                if ( user != null && !user.getEmail().equals("") ) {
+                if ( this.isPublicServer && user != null && !user.getEmail().equals("") ) {
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                    String[] body = {
-                        account,
-                        confirmation.getUrlPostfix()
-                    };
-                    try {
-                        this.mailManagement.send(user.getEmail(), "activate", body, lang);
-                        up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
-                    } catch ( MessagingException e ) {
-                        up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
-                    }
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, user.getEmail(), lang);
                 }
                 Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {
@@ -263,5 +249,18 @@ public class ClientUser {
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();
+    }
+
+    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang) throws Exception {
+        String[] body = {
+            account,
+            urlPostfix
+        };
+        try {
+            this.mailManagement.send(email, "activate", body, lang);
+            up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
+        } catch ( Exception e ) {
+            up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+        }
     }
 }

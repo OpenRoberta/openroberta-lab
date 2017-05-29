@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -64,11 +65,13 @@ public class ClientProgram {
 
     private final SessionFactoryWrapper sessionFactoryWrapper;
     private final RobotCommunicator brickCommunicator;
+    private final boolean isPublicServer;
 
     @Inject
     public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
+        this.isPublicServer = RobertaProperties.getBooleanProperty("server.public");
 
     }
 
@@ -185,7 +188,7 @@ public class ClientProgram {
                 }
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
                 User user = up.getUser(userId);
-                if ( user != null && user.isActivated() ) {
+                if ( !this.isPublicServer || (user != null && user.isActivated()) ) {
                     String programName = request.getString("programName");
                     String userToShareName = request.getString("userToShare");
                     String right = request.getString("right");

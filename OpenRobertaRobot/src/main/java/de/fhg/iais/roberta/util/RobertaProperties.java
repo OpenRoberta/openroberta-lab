@@ -83,6 +83,12 @@ public class RobertaProperties {
         return Integer.parseInt(property);
     }
 
+    public static boolean getBooleanProperty(String propertyName) {
+        Assert.notNull(robertaProperties);
+        String property = robertaProperties.getProperty(propertyName);
+        return Boolean.parseBoolean(property);
+    }
+
     public static int getRobotNumberFromProperty(String robotName) {
         Assert.notNull(robertaProperties);
         for ( int i = 1; i < 1000; i++ ) {
