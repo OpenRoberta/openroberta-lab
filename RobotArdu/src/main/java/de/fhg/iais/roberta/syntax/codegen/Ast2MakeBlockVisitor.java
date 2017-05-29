@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -354,6 +355,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     }
 
     @Override
+    public Void visitJoystick(Joystick<Void> joystick) {
+        this.sb.append("myJoystick.readX()");
+        return null;
+    }
+
+    @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
@@ -361,24 +368,22 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         generateUserDefinedMethods();
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-	
+
         if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
         }
-        
-        if(this.isTemperatureSensorUsed)
-        {
-        for ( UsedSensor sensor : this.usedSensors ) {
-     
-        if(sensor.getType().toString().equalsIgnoreCase("TEMPERATURE")) 
-        {	
-        		this.temperatureSensorPort = sensor.getPort().getPortNumber();
-        	}
-        }
-        
-        nlIndent();
-        this.sb.append("myTemp" + this.temperatureSensorPort + ".update();");
+
+        if ( this.isTemperatureSensorUsed ) {
+            for ( UsedSensor sensor : this.usedSensors ) {
+
+                if ( sensor.getType().toString().equalsIgnoreCase("TEMPERATURE") ) {
+                    this.temperatureSensorPort = sensor.getPort().getPortNumber();
+                }
+            }
+
+            nlIndent();
+            this.sb.append("myTemp" + this.temperatureSensorPort + ".update();");
         }
         return null;
     }
@@ -676,13 +681,14 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     break;
                 case COMPASS:
                 case GYRO:
-
                     this.sb.append("MEGyro myGyro");
                     break;
                 case SOUND:
                     this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
-
+                case JOYSTICK:
+                    this.sb.append("MeJoystick myJoystick" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
                 default:
                     throw new DbcException("Sensor is not supported!");
             }

@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.arduino;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -33,6 +32,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.CheckVisitor;
@@ -265,6 +265,12 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitJoystick(Joystick<Void> joystick) {
+        this.usedSensors.add(new UsedSensor(null, SensorType.JOYSTICK, null));
         return null;
     }
 

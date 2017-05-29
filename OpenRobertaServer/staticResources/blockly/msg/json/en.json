@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-05-23 16:03:00.581217",
+		"lastupdated": "2017-05-26 17:18:11.950289",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1120,6 +1120,8 @@
 	"MESSAGE_ADDED_USER": "User »$« was added",
 	"ORA_USER_TO_ADD_NOT_FOUND": "User was not found",
 	"MESSAGE_EDIT_SAVE_GROUP_AS": "Your group has been created",
+	"ORA_GROUP_CREATE_ERROR_NOT_SAVED_TO_DB": "This group already exists",
+	"ORA_USER_GROUP_SAVE_AS_ERROR_USER_GROUP_EXISTS": "This user already belongs to the group",
 	"MESSAGE_PROGRAM_COMPILING": "Compiling program",
 	"MESSAGE_PROGRAM_FLASHING": "Flashing the program, please wait",
 	"MESSAGE_PROGRAM_FLASHED": "Done flashing",
@@ -1140,5 +1142,7 @@
 	"PROGLIST_DELETE_SHARE_WITH_GALLERY": "Your program is allready shared with the gallery. If you change it, it will be automatically updated. Do you want to remove your program from the gallery?",
 	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody?",
 	"MENU_CREATE_LINK": "create program link ...",
-	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$"
+	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$",
+	"SENSOR_JOYSTICK": "joystick",
+	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick"
 }

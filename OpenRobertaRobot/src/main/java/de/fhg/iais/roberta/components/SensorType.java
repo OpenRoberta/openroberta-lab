@@ -16,7 +16,8 @@ public enum SensorType {
     SOUND( "robBrick_sound" ),
     LIGHT( "robBrick_light" ),
     COMPASS( "robBrick_compass" ),
-    TEMPERATURE( "robBrick_temperature" );
+    TEMPERATURE( "robBrick_temperature" ),
+    JOYSTICK( "arduSensors_joystick_getSample" );
 
     private final String[] values;
 
