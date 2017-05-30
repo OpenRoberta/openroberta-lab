@@ -23,7 +23,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
             GUISTATE.robot.name = '';
             GUISTATE.robot.robotPort = '';
-            GUISTATE.gui.isAgent = false;
+            GUISTATE.gui.isAgent = true;
 
             //GUISTATE.socket.portNames = [];
             //GUISTATE.socket.vendorIds = [];
@@ -141,8 +141,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#iconDisplayLogin').addClass('error');
         }
 
+        connectionType = getConnection();
         switch (getConnection()) {
         case 'arduinoAgentOrToken':
+        	if (GUISTATE.gui.isAgent === true){
+        		break;
+        	}
         case 'token':
             $('#menuConnect').parent().removeClass('disabled');
             if (GUISTATE.robot.state === 'wait') {
@@ -258,6 +262,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#simRobot').addClass('typcn-' + robotGroup);
         
+        connectionType = getConnection();
         switch (getConnection()) {
         case 'token':
             $('#head-navi-icon-robot').removeClass('error');
@@ -268,7 +273,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             }
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
-
             break;
         case 'autoConnection':
             console.log('autoConnection');
@@ -283,7 +287,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             break;
         case 'arduinoAgentOrToken':
         	 SOCKET_C.init();
-             if (GUISTATE.isAgent == true){
+             if (GUISTATE.gui.isAgent == true){
                  SOCKET_C.updateMenuStatus();
                  console.log('arduino based bobot was selected');
              }
@@ -296,6 +300,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             if (GUISTATE.isAgent == true){
                 SOCKET_C.updateMenuStatus();
                 console.log('arduino based bobot was selected');
+            }
+            else{
+            	$('#menuConnect').parent().addClass('disabled');
             }
             break;
         default:

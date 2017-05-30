@@ -13,15 +13,16 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         if (GUISTATE.robot.socket == null || GUISTATE_C.getIsAgent == false) {
             GUISTATE.robot.socket = IO('ws://localhost:8991/');
             GUISTATE_C.setIsAgent(true);         
+            $('#menuConnect').parent().addClass('disabled');
         	//so it would not be active when the socket cannot connect
-            $('#head-navi-icon-robot').removeClass('error');
+            /*$('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
             if (GUISTATE.gui.blocklyWorkspace) {
                 GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             }
             $('#menuRunProg').parent().addClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');*/
             GUISTATE.robot.socket.on('connect_error', function(err) {
             	GUISTATE_C.setIsAgent(false);
             	console.log('Error connecting to server');
@@ -57,14 +58,14 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                         vendorList.push(port['VendorID']);
                         productList.push(port['ProductID']);
                         console.log(port['VendorID'].toUpperCase());
-                        switch (port['VendorID']) {
-                        case '0x10C4':
+                        switch (port['VendorID'].toLowerCase()) {
+                        case '0x10c4':
                             robot = 'Bot\'n Roll';
                             break;
-                        case '0x1A86':
+                        case '0x1a86':
                             robot = 'MBot';
                             break;
-                        case '0x2A03':
+                        case '0x2a03':
                             robot = 'Arduino Uno';
                             break;
                         default:

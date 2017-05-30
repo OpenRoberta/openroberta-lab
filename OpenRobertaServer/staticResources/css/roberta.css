@@ -1190,7 +1190,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .robotSpecial span.img-botnroll {
 	background-image: url("/css/img/botnroll.jpg");	
-	background-size: 100% 100%;	
+	background-size: 80% 100%;	
 }
 
 .startupImages {
