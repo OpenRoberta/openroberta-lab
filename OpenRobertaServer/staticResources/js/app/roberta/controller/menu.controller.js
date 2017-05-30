@@ -45,7 +45,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             var clone = proto.clone();
             var robotName = robots[i].name;
             var robotGroup = robots[i].group;
-            clone.find('.typcn').addClass('typcn-' + robotGroup);
+        	typcGroup = robotGroup;
+            if (robotGroup === 'ardu' && robotName === 'botnroll'){
+            	typcGroup = robotName;
+            }
+            clone.find('.typcn').addClass('typcn-' + typcGroup);
             clone.find('.typcn').text(robots[i].realName);
             clone.find('.typcn').attr('id', 'menu-' + robotName);
             clone.attr('data-type', robotName);
@@ -65,6 +69,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             var robotName = robots[i].name;
             var robotGroup = robots[i].group;
+        	typcGroup = robotGroup;
+            if (robotGroup === 'ardu' && robotName === 'botnroll'){
+            	typcGroup = robotName;
+            }
             if (robotGroup != oldRobotGroup) {
                 newGroup = false;
                 group = false;
@@ -78,9 +86,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 }
             }
             if (newGroup) {
-                var clone = proto.clone().prop('id', 'menu-' + robotGroup);
+                var clone = proto.clone().prop('id', 'menu-' + typcGroup);
                 clone.find('span:eq( 0 )').removeClass('typcn-open');
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+                clone.find('span:eq( 0 )').addClass('typcn-' + typcGroup);
                 clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
                 clone.find('a').remove();
                 clone.attr('data-type', robotGroup);
@@ -97,7 +105,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 clone.addClass(robotGroup);
                 clone.find('span:eq( 0 )').addClass('img-' + robotName);
             } else {
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+                clone.find('span:eq( 0 )').addClass('typcn-' + typcGroup);
             }
             clone.find('span:eq( 1 )').text(robots[i].realName);
             clone.find('a').attr('onclick', 'window.open("' + robots[i].info + '");return false;');

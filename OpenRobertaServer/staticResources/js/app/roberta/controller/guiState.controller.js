@@ -227,7 +227,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
-        $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+    	typcGroup = robotGroup;
+        if (robotGroup === 'ardu' && robot === 'botnroll'){
+        	typcGroup = robot;
+        }
+        $('#head-navi-icon-robot').addClass('typcn-' + typcGroup);
         
         if (!opt_init) {
             setProgramSaved(true);
