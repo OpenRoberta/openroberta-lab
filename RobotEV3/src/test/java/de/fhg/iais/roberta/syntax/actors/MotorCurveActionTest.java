@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class MotorCurveActionTest {
+    Helper h = new Helper();
 
     @Test
     public void visitCurveAction_curveForwardThenBackward_generateValidJavaCode() throws Exception {
@@ -14,7 +15,7 @@ public class MotorCurveActionTest {
                 + "hal.driveInCurve(DriveDirection.BACKWARD, 50, 20);"
                 + "}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorCurveOn.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorCurveOn.xml");
     }
 
     @Test
@@ -25,6 +26,6 @@ public class MotorCurveActionTest {
                 + "hal.driveInCurve(DriveDirection.BACKWARD, 50, 20, 20);"
                 + "}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorCurveOnFor.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorCurveOnFor.xml");
     }
 }

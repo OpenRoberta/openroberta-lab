@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.syntax.stmt;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class FlowControlStmtTest {
+    Helper h = new Helper();
 
     @Test
     public void flowControlStmt() throws Exception {
@@ -18,8 +19,8 @@ public class FlowControlStmtTest {
                 + "        break;\n"
                 + "    }\n"
                 + "    break;\n"
-                + "}";
+                + "}}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
     }
 }

@@ -1,12 +1,16 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import org.junit.Ignore;
+
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class TextAppendTest {
-    //
-    public void Test() throws Exception {
-        final String a = "item+String(SENSOR_1)item+String(0)item+String(\"aaa\")";
+    Helper h = new Helper();
 
-        Helper.assertCodeIsOk(a, "/syntax/text/text_append.xml");
+    @Ignore
+    public void Test() throws Exception {
+        final String a = "item+=String(S1);item+=NumToStr(0);item+=\"aaa\";";
+
+        this.h.assertCodeIsOk(a, "/syntax/text/text_append.xml");
     }
 }

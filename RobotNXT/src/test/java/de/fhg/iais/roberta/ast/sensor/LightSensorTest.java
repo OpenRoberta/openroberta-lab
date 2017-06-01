@@ -7,9 +7,10 @@ import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class LightSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void sensorSetLight() throws Exception {
@@ -17,12 +18,12 @@ public class LightSensorTest {
             "BlockAST [project=[[Location [x=162, y=238], LightSensor [mode=RED, port=S3]], "
                 + "[Location [x=163, y=263], LightSensor [mode=AMBIENTLIGHT, port=S4]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setLight.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setLight.xml"));
     }
 
     @Test
     public void getMode() throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setLight.xml");
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setLight.xml");
 
         final LightSensor<Void> cs = (LightSensor<Void>) transformer.getTree().get(0).get(1);
 
@@ -32,7 +33,7 @@ public class LightSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setLight.xml");
+        final Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setLight.xml");
 
         final LightSensor<Void> cs = (LightSensor<Void>) transformer.getTree().get(0).get(1);
         final LightSensor<Void> cs1 = (LightSensor<Void>) transformer.getTree().get(1).get(1);
@@ -43,6 +44,6 @@ public class LightSensorTest {
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_setLight.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_setLight.xml");
     }
 }

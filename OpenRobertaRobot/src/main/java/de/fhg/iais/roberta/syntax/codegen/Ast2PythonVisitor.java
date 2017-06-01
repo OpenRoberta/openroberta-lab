@@ -1,298 +1,65 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.blocksequence.ActivityTask;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
-import de.fhg.iais.roberta.syntax.expr.ActionExpr;
-import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.expr.Expr;
-import de.fhg.iais.roberta.syntax.expr.ExprList;
-import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
-import de.fhg.iais.roberta.syntax.expr.MathConst;
-import de.fhg.iais.roberta.syntax.expr.MethodExpr;
-import de.fhg.iais.roberta.syntax.expr.NullConst;
-import de.fhg.iais.roberta.syntax.expr.NumConst;
-import de.fhg.iais.roberta.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
-import de.fhg.iais.roberta.syntax.expr.StmtExpr;
-import de.fhg.iais.roberta.syntax.expr.StringConst;
-import de.fhg.iais.roberta.syntax.expr.Unary;
-import de.fhg.iais.roberta.syntax.expr.Var;
-import de.fhg.iais.roberta.syntax.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.syntax.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodReturn;
-import de.fhg.iais.roberta.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
-import de.fhg.iais.roberta.syntax.stmt.ActionStmt;
-import de.fhg.iais.roberta.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.syntax.stmt.FunctionStmt;
-import de.fhg.iais.roberta.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.syntax.stmt.MethodStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.syntax.stmt.Stmt;
-import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
+import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
+import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
+import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
-    public static final String INDENT = "    ";
-
-    protected final Configuration brickConfiguration;
-    protected final StringBuilder sb = new StringBuilder();
-    protected final Set<UsedSensor> usedSensors;
-    protected final Set<UsedActor> usedActors;
-    protected final Set<String> usedGlobalVarInFunctions;
-    protected int indentation;
-    protected final StringBuilder indent = new StringBuilder();
+public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
+    protected Set<String> usedGlobalVarInFunctions;
     protected boolean isProgramEmpty = false;
 
     /**
      * initialize the Python code generator visitor.
      *
-     * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
-     * @param usedSensors in the current program
+     * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2PythonVisitor(
-        String programName,
-        Configuration brickConfiguration,
-        Set<UsedSensor> usedSensors,
-        Set<UsedActor> usedActors,
-        Set<String> usedGlobalVarInFunctions,
-        int indentation) {
-        this.brickConfiguration = brickConfiguration;
-        this.indentation = indentation;
-        this.usedSensors = usedSensors;
-        this.usedActors = usedActors;
-        this.usedGlobalVarInFunctions = usedGlobalVarInFunctions;
-        for ( int i = 0; i < indentation; i++ ) {
-            this.indent.append(INDENT);
-        }
-    }
-
-    protected void genearateCode(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        generatePrefix(withWrapping);
-        generateCodeFromPhrases(phrasesSet, withWrapping);
-        generateSuffix(withWrapping);
-    }
-
-    private void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        boolean mainBlock = false;
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                if ( phrase.getKind().getCategory() != Category.TASK ) {
-                    nlIndent();
-                }
-                mainBlock = isMainBlock(phrase);
-                if ( mainBlock ) {
-                    setProgramIsEmpty(checkIsProgramEmpty(phrases));
-                }
-                phrase.visit(this);
-            }
-            mainBlock = mainBlock ? !mainBlock : mainBlock;
-        }
-    }
-
-    abstract protected void generatePrefix(boolean withWrapping);
-
-    abstract protected void generateSuffix(boolean withWrapping);
-
-    protected static boolean checkIsProgramEmpty(ArrayList<Phrase<Void>> phrases) {
-        return phrases.size() == 2;
-    }
-
-    protected static boolean isMainBlock(Phrase<Void> phrase) {
-        return phrase.getKind().getName().equals("MAIN_TASK");
-    }
-
-    protected void incrIndentation() {
-        this.indentation += 1;
-        this.indent.append(INDENT);
-    }
-
-    protected void decrIndentation() {
-        this.indentation -= 1;
-        this.indent.delete(0, INDENT.length());
-    }
-
-    protected void nlIndent() {
-        this.sb.append("\n").append(this.indent);
-    }
-
-    protected static String getEnumCode(IMode value) {
-        return "'" + value.toString().toLowerCase() + "'";
-    }
-
-    protected boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch ( NumberFormatException e ) {
-            return false;
-        }
-    }
-
-    private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
-        switch ( op ) {
-            case TEXT_APPEND:
-                this.sb.append("str(");
-                generateSubExpr(this.sb, false, binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            case DIVIDE:
-                this.sb.append("float(");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                break;
-        }
-    }
-
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Binary.Op.MINUS
-            && binary.getRight().getKind().hasName("BINARY")
-            && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption && !expr.getKind().hasName("BINARY") ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("( ");
-            expr.visit(this);
-            sb.append(" )");
-        }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(" if ( ");
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(" ) else ");
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                nlIndent();
-                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            StmtList<Void> then = ifStmt.getThenList().get(i);
-            if ( then.get().isEmpty() ) {
-                nlIndent();
-                this.sb.append("pass");
-            } else {
-                then.visit(this);
-            }
-            decrIndentation();
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("else:");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        expr.visit(this);
-        this.sb.append(":");
-    }
-
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType).append(' ');
-        ExprList<Void> expressions = (ExprList<Void>) expr;
-        expressions.get().get(0).visit(this);
-        this.sb.append(" in xrange(");
-        expressions.get().get(1).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(2).visit(this);
-        this.sb.append(", ");
-        expressions.get().get(3).visit(this);
-        this.sb.append("):");
-    }
-
-    public boolean isProgramEmpty() {
-        return this.isProgramEmpty;
-    }
-
-    public void setProgramIsEmpty(boolean isEmpty) {
-        this.isProgramEmpty = isEmpty;
-    }
-
-    /**
-     * Get the current indentation of the visitor. Meaningful for tests only.
-     *
-     * @return indentation value of the visitor.
-     */
-    public int getIndentation() {
-        return this.indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor. Meaningful for tests only.
-     *
-     * @return (current state of) the string builder
-     */
-    public StringBuilder getSb() {
-        return this.sb;
+    Ast2PythonVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+        super(programPhrases, indentation);
     }
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
+        // TODO Do we have always to cast to float
         if ( isInteger(numConst.getValue()) ) {
-            this.sb.append(numConst.getValue());
+            super.visitNumConst(numConst);
         } else {
             this.sb.append("float(");
-            this.sb.append(numConst.getValue());
+            super.visitNumConst(numConst);
             this.sb.append(")");
         }
         return null;
@@ -302,7 +69,13 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     public Void visitBoolConst(BoolConst<Void> boolConst) {
         this.sb.append(boolConst.isValue() ? "True" : "False");
         return null;
-    };
+    }
+
+    @Override
+    public Void visitNullConst(NullConst<Void> nullConst) {
+        this.sb.append("None");
+        return null;
+    }
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
@@ -332,30 +105,6 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
-        return null;
-    }
-
-    @Override
-    public Void visitStringConst(StringConst<Void> stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeEcmaScript(stringConst.getValue().replaceAll("[<>\\$]", ""))).append("\"");
-        return null;
-    }
-
-    @Override
-    public Void visitNullConst(NullConst<Void> nullConst) {
-        this.sb.append("None");
-        return null;
-    }
-
-    @Override
-    public Void visitVar(Var<Void> var) {
-        this.sb.append(var.getValue());
-        return null;
-    }
-
-    @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(var.getName());
         if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
@@ -375,62 +124,12 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitUnary(Unary<Void> unary) {
-        Unary.Op op = unary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        if ( op == Unary.Op.NOT ) {
-            sym = "not ";
-        }
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb);
-            this.sb.append(sym);
-        } else {
-            this.sb.append(sym);
-            generateExprCode(unary, this.sb);
-        }
-        return null;
-    }
-
-    @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         Binary.Op op = binary.getOp();
-        String sym = op.getOpSymbol();
-        // fixup language specific symbols
-        switch ( op ) {
-            case OR:
-                sym = "or";
-                break;
-            case AND:
-                sym = "and";
-                break;
-            case IN:
-                sym = "in";
-                break;
-            default:
-                break;
-        }
+        String sym = getBinaryOperatorSymbol(op);
         this.sb.append(' ').append(sym).append(' ');
         generateCodeRightExpression(binary, op);
-        return null;
-    }
-
-    @Override
-    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        actionExpr.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        sensorExpr.getSens().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        methodExpr.getMethod().visit(this);
         return null;
     }
 
@@ -458,162 +157,52 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
-        if ( shadowExpr.getBlock() != null ) {
-            shadowExpr.getBlock().visit(this);
-        } else {
-            shadowExpr.getShadow().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
-        stmtExpr.getStmt().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        functionExpr.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExprList(ExprList<Void> exprList) {
-        boolean first = true;
-        for ( Expr<Void> expr : exprList.get() ) {
-            if ( !expr.getKind().hasName("EMPTY_EXPR") ) {
-                if ( first ) {
-                    first = false;
-                } else {
-                    if ( expr.getKind().hasName("BINARY", "UNARY") ) {
-                        this.sb.append("; "); // FIXME
-                    } else {
-                        this.sb.append(", ");
-                    }
-                }
-                expr.visit(this);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        actionStmt.getAction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        assignStmt.getName().visit(this);
-        this.sb.append(" = ");
-        assignStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        exprStmt.getExpr().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt);
-        } else {
-            generateCodeFromIfElse(ifStmt);
-            generateCodeFromElse(ifStmt);
-        }
-        return null;
-    }
-
-    @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        boolean isWaitStmt = repeatStmt.getMode() == RepeatStmt.Mode.WAIT;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                appendTry();
                 break;
             case TIMES:
             case FOR:
                 generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+                appendTry();
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                appendTry();
                 break;
             default:
-                break;
+                throw new DbcException("Invalide Repeat Statement!");
         }
         incrIndentation();
-        Mode mode = repeatStmt.getMode();
-        if ( repeatStmt.getList().get().isEmpty() ) {
-            if ( mode != Mode.WAIT ) {
-                nlIndent();
-                this.sb.append("pass");
-            }
+        appendPassIfEmptyBody(repeatStmt);
+        repeatStmt.getList().visit(this);
+        if ( !isWaitStmt ) {
+            appendExceptionHandling();
         } else {
-            repeatStmt.getList().visit(this);
-        }
-        if ( mode == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break");
+            appendBreakStmt(repeatStmt);
         }
         decrIndentation();
         return null;
     }
 
     @Override
-    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        sensorStmt.getSensor().visit(this);
-        return null;
-    }
-
-    @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) != null ) {
+            if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+                this.sb.append("raise " + (stmtFlowCon.getFlow() == Flow.BREAK ? "BreakOutOfALoop" : "ContinueLoop"));
+                return null;
+            }
+        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
-    }
-
-    @Override
-    public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt<Void> stmt : stmtList.get() ) {
-            nlIndent();
-            stmt.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        return null;
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        return null;
-    }
-
-    @Override
-    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        return sensorGetSample.getSensor().visit(this);
     }
 
     @Override
@@ -625,10 +214,7 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         this.sb.append("math.pow(");
-        mathPowerFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
+        super.visitMathPowerFunct(mathPowerFunct);
         return null;
     }
 
@@ -694,12 +280,12 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
-        boolean isMethodBodyEmpty = methodVoid.getBody().get().size() != 0;
+        boolean isMethodBodyEmpty = methodVoid.getBody().get().isEmpty();
         if ( isMethodBodyEmpty ) {
-            methodVoid.getBody().visit(this);
-        } else {
             nlIndent();
             this.sb.append("pass");
+        } else {
+            methodVoid.getBody().visit(this);
         }
         return null;
     }
@@ -709,15 +295,15 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
         this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
-        boolean isMethodBodyEmpty = methodReturn.getBody().get().size() != 0;
+        boolean isMethodBodyEmpty = methodReturn.getBody().get().isEmpty();
         if ( isMethodBodyEmpty ) {
+            nlIndent();
+            this.sb.append("pass");
+        } else {
             methodReturn.getBody().visit(this);
             this.nlIndent();
             this.sb.append("return ");
             methodReturn.getReturnValue().visit(this);
-        } else {
-            nlIndent();
-            this.sb.append("pass");
         }
         return null;
     }
@@ -736,16 +322,192 @@ public abstract class Ast2PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        methodStmt.getMethod().visit(this);
-        return null;
+    public String getEnumCode(IMode value) {
+        return "'" + value.toString().toLowerCase() + "'";
     }
 
     @Override
-    public Void visitMethodCall(MethodCall<Void> methodCall) {
-        this.sb.append(methodCall.getMethodName() + "(");
-        methodCall.getParametersValues().visit(this);
-        this.sb.append(")");
-        return null;
+    protected void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        this.sb.append(whitespace() + "if" + whitespace() + "(" + whitespace());
+        ifStmt.getExpr().get(0).visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "else" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+    }
+
+    @Override
+    protected void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+        int stmtSize = ifStmt.getExpr().size();
+        for ( int i = 0; i < stmtSize; i++ ) {
+            if ( i == 0 ) {
+                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
+            } else {
+                nlIndent();
+                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
+            }
+            incrIndentation();
+            StmtList<Void> then = ifStmt.getThenList().get(i);
+            if ( then.get().isEmpty() ) {
+                nlIndent();
+                this.sb.append("pass");
+            } else {
+                then.visit(this);
+            }
+            decrIndentation();
+        }
+    }
+
+    @Override
+    protected void generateCodeFromElse(IfStmt<Void> ifStmt) {
+        if ( !ifStmt.getElseList().get().isEmpty() ) {
+            nlIndent();
+            this.sb.append("else:");
+            incrIndentation();
+            ifStmt.getElseList().visit(this);
+            decrIndentation();
+        }
+    }
+
+    @Override
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
+        return "";
+    }
+
+    protected void addPassIfProgramIsEmpty() {
+        if ( this.isProgramEmpty ) {
+            nlIndent();
+            this.sb.append("pass");
+        }
+    }
+
+    private void generateCodeRightExpression(Binary<Void> binary, Binary.Op op) {
+        switch ( op ) {
+            case TEXT_APPEND:
+                this.sb.append("str(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            case DIVIDE:
+                this.sb.append("float(");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
+                break;
+            default:
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                break;
+        }
+    }
+
+    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType).append(whitespace());
+        expr.visit(this);
+        this.sb.append(":");
+    }
+
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType).append(whitespace());
+        ExprList<Void> expressions = (ExprList<Void>) expr;
+        expressions.get().get(0).visit(this);
+        this.sb.append(whitespace() + "in range(");
+        expressions.get().get(1).visit(this);
+        this.sb.append("," + whitespace());
+        expressions.get().get(2).visit(this);
+        this.sb.append("," + whitespace());
+        expressions.get().get(3).visit(this);
+        this.sb.append("):");
+    }
+
+    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+        nlIndent();
+        this.sb.append("break");
+    }
+
+    private void appendTry() {
+        increaseLoopCounter();
+
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            incrIndentation();
+            nlIndent();
+            this.sb.append("try:");
+        }
+    }
+
+    private void appendExceptionHandling() {
+        if ( this.loopsLabels.get(this.currenLoop.getLast()) ) {
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except BreakOutOfALoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("break");
+            decrIndentation();
+            nlIndent();
+            this.sb.append("except ContinueLoop:");
+            incrIndentation();
+            nlIndent();
+            this.sb.append("continue");
+            decrIndentation();
+        }
+        this.currenLoop.removeLast();
+    }
+
+    private void appendPassIfEmptyBody(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getList().get().isEmpty() ) {
+            if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
+                nlIndent();
+                this.sb.append("pass");
+            }
+        }
+    }
+
+    @Override
+    protected String getBinaryOperatorSymbol(Binary.Op op) {
+        return binaryOpSymbols().get(op);
+    }
+
+    @Override
+    protected String getUnaryOperatorSymbol(Unary.Op op) {
+        return unaryOpSymbols().get(op);
+    }
+
+    protected static Map<Binary.Op, String> binaryOpSymbols() {
+        return Collections.unmodifiableMap(Stream.of(
+
+            entry(Binary.Op.ADD, "+"),
+            entry(Binary.Op.MINUS, "-"),
+            entry(Binary.Op.MULTIPLY, "*"),
+            entry(Binary.Op.DIVIDE, "/"),
+            entry(Binary.Op.MOD, "%"),
+            entry(Binary.Op.EQ, "=="),
+            entry(Binary.Op.NEQ, "!="),
+            entry(Binary.Op.LT, "<"),
+            entry(Binary.Op.LTE, "<="),
+            entry(Binary.Op.GT, ">"),
+            entry(Binary.Op.GTE, ">="),
+            entry(Binary.Op.AND, "and"),
+            entry(Binary.Op.OR, "or"),
+            entry(Binary.Op.MATH_CHANGE, "+="),
+            entry(Binary.Op.TEXT_APPEND, "+="),
+            entry(Binary.Op.IN, "in"),
+            entry(Binary.Op.ASSIGNMENT, "="),
+            entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+            entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+            entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+            entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+            entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+
+        ).collect(entriesToMap()));
+    }
+
+    protected static Map<Unary.Op, String> unaryOpSymbols() {
+        return Collections.unmodifiableMap(Stream.of(
+
+            entry(Unary.Op.PLUS, "+"),
+            entry(Unary.Op.NEG, "-"),
+            entry(Unary.Op.NOT, "not"),
+            entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+            entry(Unary.Op.PREFIX_INCREMENTS, "++")
+
+        ).collect(entriesToMap()));
     }
 }

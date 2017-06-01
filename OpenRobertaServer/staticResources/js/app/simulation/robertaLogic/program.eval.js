@@ -386,7 +386,6 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var x = evalExpr(obj, "x");
         var y = evalExpr(obj, "y");
 
-
         if (!isObject(x) && !isObject(y) && !isObject(text) && !obj.modifiedStmt) {
             obj.outputCommands.display = {};
             obj.outputCommands.display.text = String(roundIfSensorData(text, stmt.text.expr));
@@ -421,6 +420,17 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.program.setTimer(duration);
         }
     };
+
+    var evalImageShiftAction = function(obj, image, direction, n) {
+        var image = evalExpr(obj, image);
+        var n = evalExpr(obj, n);
+        return shiftImage(image,direction,n );
+    }
+
+    var evalImageInvertAction = function(obj, image) {
+        var image = evalExpr(obj, image);
+        return invertImage(image);
+    }
 
     var evalDisplaySetBrightnessAction = function(obj, simulationData, stmt) {
         var value = evalExpr(obj, "value");
@@ -719,7 +729,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     if (value) {
                         obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
-                    }  
+                    }
                     obj.repeatStmtExpr = {};
                 }
         }
@@ -855,6 +865,12 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 return value;
             case CONSTANTS.RGB_COLOR_CONST:
                 return evalRgbColorConst(obj, propName + ".value");
+            case CONSTANTS.IMAGE_SHIFT_ACTION:
+                return evalImageShiftAction(obj, propName + ".image", expr.direction, propName + ".n");
+                break;
+            case CONSTANTS.IMAGE_INVERT_ACTION:
+                return evalImageInvertAction(obj, propName + ".image");
+                break;
 
             default:
                 throw "Invalid Expression Type!";
@@ -1357,10 +1373,11 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         return list.slice(at1, at2);
     };
 
-    var evalTextJoin = function(obj, values) {
+    var evalTextJoin = function(obj, propName) {
+        var values = UTIL.getPropertyFromObject(obj.currentStatement, propName);
         var result = "";
         for (var i = 0; i < values.length; i++) {
-            var val = evalExpr(obj, "values", i);
+            var val = evalExpr(obj, propName, i);
             val = roundIfSensorData(val, values[i].expr)
             result += String(val);
         }
@@ -1473,6 +1490,57 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var isNumber = function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     };
+
+    var invertImage = function (image) {
+        for (var i = 0; i < image.length; i++) {
+            for (var j = 0; j < image[i].length; j++) {
+                image[i][j] = Math.abs(255 - image[i][j]);
+            }
+        }
+        return image;
+    }
+
+    var shiftImage = function(image, direction, n) {
+        n = Math.round(n);
+        var shift = {
+            down: function() {
+                image.pop();
+                image.unshift([0, 0, 0, 0, 0]);
+            },
+            up: function() {
+                image.shift();
+                image.push([0, 0, 0, 0, 0]);
+            },
+            right: function() {
+                image.forEach(function(array) {
+                    array.pop();
+                    array.unshift(0);
+                })
+            },
+            left: function() {
+                image.forEach(function(array) {
+                    array.shift();
+                    array.push(0);
+                })
+            }
+        };
+        if (n < 0) {
+            n *= -1;
+            if (direction === "up") {
+                direction = "down";
+            } else if (direction === "down") {
+                direction = "up";
+            } else if (direction === "left") {
+                direction = "right";
+            } else if (direction === "right") {
+                direction = "left";
+            }
+        }
+        for (var i = 0; i < n; i++) {
+            shift[direction]();
+        }
+        return image;
+    }
 
     return ProgramEval;
 });

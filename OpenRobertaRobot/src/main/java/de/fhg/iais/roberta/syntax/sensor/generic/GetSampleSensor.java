@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class represents the <b>robSensors_getSample</b> block from Blockly
@@ -75,7 +76,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = LightSensor.make(factory.getLightSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
-                this.sensor = CompassSensor.make(1, properties, comment);
+                this.sensor = CompassSensor.make(factory.getSensorPort(port), properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
@@ -129,7 +130,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitGetSampleSensor(this);
+        return ((AstSensorsVisitor<V>) visitor).visitGetSampleSensor(this);
     }
 
     /**

@@ -25,11 +25,10 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.MicrobitSimProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.MicrobitSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -104,13 +103,13 @@ public class MicrobitFactory extends AbstractRobotFactory {
         if ( brickKey == null || brickKey.isEmpty() ) {
             throw new DbcException("Invalid Brick Key: " + brickKey);
         }
-        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
+        //String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
         for ( BrickKey sp : BrickKey.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
+            if ( sp.toString().equals(brickKey) ) {
                 return sp;
             }
             for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
+                if ( brickKey.equals(value) ) {
                     return sp;
                 }
             }

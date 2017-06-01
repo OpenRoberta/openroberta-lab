@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.mbed;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 
 public enum BrickKey implements IBrickKey {
-    BUTTON_A( "A" ), BUTTON_B( "B" );
+    button_a( "A" ), button_b( "B" );
 
     private final String[] values;
 

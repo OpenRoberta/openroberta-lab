@@ -4,13 +4,14 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.expr.Assoc;
-import de.fhg.iais.roberta.syntax.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class VariableTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void variableSet() throws Exception {

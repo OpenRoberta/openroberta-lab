@@ -93,7 +93,7 @@ public class EV3Configuration extends Configuration {
             sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
             sb.append("  }\n");
         }
-        if ( this.sensors.size() > 0 ) {
+        if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
                 sb.append("    ").append(port.getPortNumber()).append(": ");
@@ -102,7 +102,7 @@ public class EV3Configuration extends Configuration {
             }
             sb.append("  }\n");
         }
-        if ( this.actors.size() > 0 ) {
+        if ( !this.actors.isEmpty() ) {
             sb.append("  actor port {\n");
             for ( IActorPort port : this.actors.keySet() ) {
                 sb.append("    ").append(port.toString()).append(": ");

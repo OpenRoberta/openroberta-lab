@@ -3,15 +3,16 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class LightActionTest {
+    Helper h = new Helper();
 
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Location [x=-9, y=1], LightAction [GREEN, ON]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BrickLight.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLight.xml"));
     }
 
     //    @Test
@@ -32,26 +33,26 @@ public class LightActionTest {
     public void lightAction() throws Exception {
         String a = "BlockAST [project=[[Location [x=46, y=109], LightAction [GREEN, DOUBLE_FLASH]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BrickLight3.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/actions/action_BrickLight3.xml"));
     }
 
     @Test
     public void reverseTransformatin() throws Exception {
-        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight.xml");
     }
 
     @Test
     public void reverseTransformatin1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight1.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight1.xml");
     }
 
     @Test
     public void reverseTransformatin2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight2.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight2.xml");
     }
 
     @Test
     public void reverseTransformatin3() throws Exception {
-        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight3.xml");
+        this.h.assertTransformationIsOk("/ast/actions/action_BrickLight3.xml");
     }
 }

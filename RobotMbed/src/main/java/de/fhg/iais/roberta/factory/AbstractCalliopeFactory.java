@@ -25,9 +25,8 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
-import de.fhg.iais.roberta.syntax.hardwarecheck.generic.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.hardwarecheck.mbed.CalliopeSimProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.CalliopeSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -106,13 +105,13 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
         if ( brickKey == null || brickKey.isEmpty() ) {
             throw new DbcException("Invalid Brick Key: " + brickKey);
         }
-        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
+        // String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
         for ( BrickKey sp : BrickKey.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
+            if ( sp.toString().equals(brickKey) ) {
                 return sp;
             }
             for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
+                if ( brickKey.equals(value) ) {
                     return sp;
                 }
             }

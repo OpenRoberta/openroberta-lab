@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class AstToLejosJavaVisitorTest {
 
@@ -63,6 +63,7 @@ public class AstToLejosJavaVisitorTest {
         + "    }\n\n";
     private static final String SUFFIX = "";
     private static Configuration brickConfiguration;
+    Helper h = new Helper();
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
@@ -920,6 +921,6 @@ public class AstToLejosJavaVisitorTest {
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateJava(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

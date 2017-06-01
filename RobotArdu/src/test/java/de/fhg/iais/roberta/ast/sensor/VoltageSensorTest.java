@@ -9,7 +9,7 @@ public class VoltageSensorTest {
     Helper h = new Helper();
 
     @Test
-    public void sensorSetGyro() throws Exception {
+    public void voltageSensorJaxbToAstTransformation() throws Exception {
         String a = "BlockAST [project=[[Location [x=38, y=238], VoltageSensor []]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Voltage.xml"));

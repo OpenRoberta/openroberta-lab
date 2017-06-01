@@ -83,7 +83,8 @@ public class RobotCommand {
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
                 String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
-                if ( command == null ) {
+
+                if ( command == null || this.brickCommunicator.getState(token) == null ) {
                     LOG.error("No valid command issued by the server as response to a push command request for token " + token);
                     return Response.serverError().build();
                 } else {

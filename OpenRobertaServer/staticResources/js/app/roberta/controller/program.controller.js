@@ -342,8 +342,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         var xml = Blockly.Xml.domToText(dom);
         var input = $(document.createElement('input'));
         input.attr("type", "file");
-        input.attr("accept", ".xml");
-        input.trigger('click'); // opening dialog
+        input.attr("accept", ".xml");        
         input.change(function(event) {
             var file = event.target.files[0]
             var reader = new FileReader()
@@ -353,6 +352,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 loadProgramFromXML(name, event.target.result);
             }
         })
+        input.trigger('click'); // opening dialog
     }
     exports.importXml = importXml;
 

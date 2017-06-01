@@ -4,9 +4,10 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class ImageInvertFunctionTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfImageInvertFunctionClass() throws Exception {
@@ -15,7 +16,7 @@ public class ImageInvertFunctionTest {
                 + "DisplayImageAction [IMAGE, FunctionExpr [ImageInvertFunction [PredefinedImage [HEART]]]"
                 + "]]]]";
 
-        String result = Helper.generateTransformerString("/function/image_invert_heart_image.xml");
+        String result = this.h.generateTransformerString("/function/image_invert_heart_image.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
@@ -27,18 +28,18 @@ public class ImageInvertFunctionTest {
                 + "DisplayImageAction [IMAGE, FunctionExpr [ImageInvertFunction [EmptyExpr [defVal=PREDEFINED_IMAGE]]]"
                 + "]]]]";
 
-        String result = Helper.generateTransformerString("/function/image_invert_missing_image.xml");
+        String result = this.h.generateTransformerString("/function/image_invert_missing_image.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/function/image_invert_heart_image.xml");
+        this.h.assertTransformationIsOk("/function/image_invert_heart_image.xml");
     }
 
     @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingImage_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/function/image_invert_missing_image.xml");
+        this.h.assertTransformationIsOk("/function/image_invert_missing_image.xml");
     }
 }

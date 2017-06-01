@@ -2,14 +2,16 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class MathModuloTest {
+    Helper h = new Helper();
+
     @Test
     public void Test() throws Exception {
         String a = "floatvariablenName=1%0;taskmain(){";
 
-        Helper.assertCodeIsOk(a, "/syntax/math/math_modulo.xml");
+        this.h.assertCodeIsOk(a, "/syntax/math/math_modulo.xml");
     }
 
 }

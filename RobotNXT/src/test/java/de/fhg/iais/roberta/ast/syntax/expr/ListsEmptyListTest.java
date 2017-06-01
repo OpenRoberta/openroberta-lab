@@ -2,14 +2,16 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class ListsEmptyListTest {
+    Helper h = new Helper();
+
     @Test
     public void Test() throws Exception {
         String a = "";
 
-        Helper.assertCodeIsOk(a, "/syntax/lists/lists_empty_list.xml");
+        this.h.assertCodeIsOk(a, "/syntax/lists/lists_empty_list.xml");
     }
 
 }

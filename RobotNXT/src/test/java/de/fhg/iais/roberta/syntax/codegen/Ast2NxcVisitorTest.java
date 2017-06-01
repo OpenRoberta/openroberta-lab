@@ -14,9 +14,10 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class Ast2NxcVisitorTest {
+    Helper h = new Helper();
     //TODO: change diameter and trackwidth to changeable
     // when sensors are added to nxt, fix the sensors description here
 
@@ -67,7 +68,7 @@ public class Ast2NxcVisitorTest {
             + IMPORTS_CONSTANTS
             + MASMETHOD
 
-            + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
+            + "        for ( int k0 = 0; k0 < 10; k0+=1 ) {\n"
             + "           TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");"
             + "        }\n"
             + SUFFIX
@@ -499,7 +500,7 @@ public class Ast2NxcVisitorTest {
             + "     Wait(15);"
             + "   }"
             + "}"
-            + "for (float i = 1; i < 10; i += 1) {"
+            + "for (int i = 1; i < 10; i += 1) {"
             + "}"
             + "}"
             + "}";
@@ -519,7 +520,7 @@ public class Ast2NxcVisitorTest {
             + "     continue;"
             + "}"
             + "}"
-            + "for (float i = 1; i < 10; i += 1) {"
+            + "for (int i = 1; i < 10; i += 1) {"
             + "if (30 == 20) {"
             + "     continue;"
             + "} else if (30 == 12) {"
@@ -540,7 +541,7 @@ public class Ast2NxcVisitorTest {
             + "     break;"
             + "}"
             + "}"
-            + "for (float k0 = 0; k0 < 10; k0 += 1) {"
+            + "for (int k0 = 0; k0 < 10; k0 += 1) {"
             + "if (30 == 20) {"
             + "     break;"
             + "} else if (30 == 20) {"
@@ -604,7 +605,7 @@ public class Ast2NxcVisitorTest {
             + "continue_loop1:"
             + "}"
             + "break_loop1:"
-            + "for (float i = 1; i < 10; i += 1) {"
+            + "for (int i = 1; i < 10; i += 1) {"
             + "     if (i < 10) {"
             + "         continue;"
             + "     }"
@@ -631,7 +632,7 @@ public class Ast2NxcVisitorTest {
             + "     }"
             + "     Wait(15);"
             + "   }"
-            + "for (float i = 1; i < 10; i += 1) {"
+            + "for (int i = 1; i < 10; i += 1) {"
             + "     if (i < 10) {"
             + "        continue;"
             + "     }"
@@ -651,7 +652,7 @@ public class Ast2NxcVisitorTest {
             + "while (true) {"
             + "   while (true) {"
             + "     if (Sensor(S1) == true) {"
-            + "         for (float i = 1; i < 10; i += 1) {"
+            + "         for (int i = 1; i < 10; i += 1) {"
             + "             if (i < 10) {"
             + "                 continue;"
             + "             }"
@@ -660,7 +661,7 @@ public class Ast2NxcVisitorTest {
             + "         break;"
             + "     }"
             + "     if (Sensor(S1) == true) {"
-            + "         for (float j = 1; j < 10; j += 1) {"
+            + "         for (int j = 1; j < 10; j += 1) {"
             + "             if (j < 10) {"
             + "                 continue;"
             + "             }"
@@ -686,7 +687,7 @@ public class Ast2NxcVisitorTest {
             + "while (true) {"
             + "   while (true) {"
             + "     if (Sensor(S1) == true) {"
-            + "         for (float j = 1; j < 10; j += 1) {"
+            + "         for (int j = 1; j < 10; j += 1) {"
             + "             if (j < 10) {"
             + "                 continue;"
             + "             }"
@@ -695,7 +696,7 @@ public class Ast2NxcVisitorTest {
             + "         break;"
             + "     }"
             + "     if (Sensor(S1) == true) {"
-            + "         for (float i = 1; i < 10; i += 1) {"
+            + "         for (int i = 1; i < 10; i += 1) {"
             + "         while (true) {"
             + "             if (Sensor(S1) == true) {"
             + "                 goto continue_loop3;"
@@ -730,7 +731,7 @@ public class Ast2NxcVisitorTest {
             + "while (true) {"
             + "   while (true) {"
             + "     if (Sensor(S1) == true) {"
-            + "         for (float j = 1; j < 10; j += 1) {"
+            + "         for (int j = 1; j < 10; j += 1) {"
             + "             if (j < 10) {"
             + "                 continue;"
             + "             }"
@@ -739,7 +740,7 @@ public class Ast2NxcVisitorTest {
             + "         break;"
             + "     }"
             + "     if (Sensor(S1) == true) {"
-            + "         for (float i = 1; i < 10; i += 1) {"
+            + "         for (int i = 1; i < 10; i += 1) {"
             + "         while (true) {"
             + "             if (Sensor(S1) == true) {"
             + "                 goto continue_loop3;"
@@ -787,9 +788,9 @@ public class Ast2NxcVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        System.out.println(a.replaceAll("\\s+", ""));
-        System.out.println(Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        // Assert.assertEquals(a, h.generateString(fileName, brickConfiguration));
+        //        System.out.println(a.replaceAll("\\s+", ""));
+        //        System.out.println(h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**
  * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into
@@ -63,7 +64,7 @@ public class TouchSensor<V> extends BaseSensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitTouchSensor(this);
+        return ((AstSensorsVisitor<V>) visitor).visitTouchSensor(this);
     }
 
     /**

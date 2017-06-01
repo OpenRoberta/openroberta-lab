@@ -56,7 +56,7 @@ public class Ast2CVisitorTest {
             + MAIN_METHOD2
             + "}"
             + "voidloop(){"
-            + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
+            + "        for ( int k0 = 0; k0 < 10; k0+=1 ) {\n"
             + "           one.lcd1(\"Hallo\");"
             + "        }\n"
             + "}\n";

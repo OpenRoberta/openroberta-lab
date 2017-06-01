@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.syntax.sensors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class ColorSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void setColor() throws Exception {
@@ -12,8 +13,8 @@ public class ColorSensorTest {
             "\nhal.getColorSensorColour(SensorPort.S3)"
                 + "hal.getColorSensorRed(SensorPort.S1)"
                 + "hal.getColorSensorRgb(SensorPort.S2)"
-                + "hal.getColorSensorAmbient(SensorPort.S4)";
+                + "hal.getColorSensorAmbient(SensorPort.S4)}";
 
-        Helper.assertCodeIsOk(a, "/syntax/sensors/sensor_setColor.xml");
+        this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_setColor.xml");
     }
 }
