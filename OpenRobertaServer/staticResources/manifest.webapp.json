@@ -1,5 +1,6 @@
 {
   "name": "Open Roberta Lab",
+  "short_name": "Open Roberta Lab",
   "version": "${project.version}",
   "description": "Roberta – Learning with Robots",
   "developer": {
@@ -13,8 +14,8 @@
   "orientation": "landscape",
   "icons": [
     {
-      "src": "NEPO.ico",
-      "sizes": "16x16 24x24 32x32 48x48 64x64 128x128 256x256"
+      "src": "/css/img/NEPO.ico",
+      "sizes": "16x16 24x24 32x32 48x48 64x64 128x128 144x144 256x256"
     }
   ]
 }
