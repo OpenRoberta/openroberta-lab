@@ -144,9 +144,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         connectionType = getConnection();
         switch (getConnection()) {
         case 'arduinoAgentOrToken':
-        	if (GUISTATE.gui.isAgent === true){
-        		break;
-        	}
+            if (GUISTATE.gui.isAgent === true) {
+                break;
+            }
         case 'token':
             $('#menuConnect').parent().removeClass('disabled');
             if (GUISTATE.robot.state === 'wait') {
@@ -220,32 +220,29 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
         $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
-        
+
         if (!isConfigurationUsed()) {
             $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'BackgroundConf.svg) no-repeat');
             $('#bricklyDiv').css('background-position', 'center');
             $('#bricklyDiv').css('background-size', '75% auto');
         }
-        
+
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
-        if (GUISTATE.gui.robotGroup === 'ardu' && tmpRob === 'botnroll'){
-        	$('#head-navi-icon-robot').removeClass('typcn-' + tmpRob);
+        if (GUISTATE.gui.robotGroup === 'ardu' && tmpRob === 'botnroll') {
+            $('#head-navi-icon-robot').removeClass('typcn-' + tmpRob);
+        } else {
+            $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         }
-        else{
-        	$('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
+        if (robotGroup === 'ardu' && robot === 'botnroll') {
+            $('#head-navi-icon-robot').addClass('typcn-' + robot);
+            tmpRob = robot;
+        } else {
+            $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+            tmpRob = '';
         }
-        if (robotGroup === 'ardu' && robot === 'botnroll'){
-        	$('#head-navi-icon-robot').addClass('typcn-' + robot);
-        	tmpRob = robot;
-        }
-        else{
-        	$('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
-        	tmpRob = '';
-        }
-        
-        
+
         if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
@@ -258,13 +255,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             setConfigurationName(robotGroup.toUpperCase() + 'basis');
             setProgramName('NEPOprog');
         }
-        
+
         $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#simRobot').addClass('typcn-' + robotGroup);
-        
+
         connectionType = getConnection();
         switch (getConnection()) {
         case 'token':
+            SOCKET_C.closeConnection();
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
@@ -275,6 +273,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuConnect').parent().removeClass('disabled');
             break;
         case 'autoConnection':
+            SOCKET_C.closeConnection();
             console.log('autoConnection');
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
@@ -286,30 +285,28 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuConnect').parent().addClass('disabled');
             break;
         case 'arduinoAgentOrToken':
-        	 SOCKET_C.init();
-             if (GUISTATE.gui.isAgent == true){
-                 SOCKET_C.updateMenuStatus();
-                 console.log('arduino based bobot was selected');
-             }
-             else{
-                 $('#menuConnect').parent().removeClass('disabled');
-             }
-             break;
-        case 'arduinoAgent':
             SOCKET_C.init();
-            if (GUISTATE.isAgent == true){
+            if (GUISTATE.gui.isAgent == true) {
                 SOCKET_C.updateMenuStatus();
                 console.log('arduino based bobot was selected');
+            } else {
+                $('#menuConnect').parent().removeClass('disabled');
             }
-            else{
-            	$('#menuConnect').parent().addClass('disabled');
+            break;
+        case 'arduinoAgent':
+            SOCKET_C.init();
+            if (GUISTATE.isAgent == true) {
+                SOCKET_C.updateMenuStatus();
+                console.log('arduino based bobot was selected');
+            } else {
+                $('#menuConnect').parent().addClass('disabled');
             }
             break;
         default:
             console.log('unknown connection');
             break;
         }
-        
+
         GUISTATE.gui.robot = robot;
         GUISTATE.gui.robotGroup = robotGroup;
 

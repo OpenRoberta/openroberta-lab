@@ -10,24 +10,25 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var robotList = [];
 
     function init() {
-        if (GUISTATE.robot.socket == null || GUISTATE_C.getIsAgent == false) {
+        if (GUISTATE.robot.socket == null || GUISTATE_C.getIsAgent() == false) {
             GUISTATE.robot.socket = IO('ws://localhost:8991/');
-            GUISTATE_C.setIsAgent(true);         
+            GUISTATE_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');
-        	//so it would not be active when the socket cannot connect
-            /*$('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace) {
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            }
-            $('#menuRunProg').parent().addClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');*/
+            //so it would not be active when the socket cannot connect
+            /*
+             * $('#head-navi-icon-robot').removeClass('error');
+             * $('#head-navi-icon-robot').removeClass('busy');
+             * $('#head-navi-icon-robot').removeClass('wait'); if
+             * (GUISTATE.gui.blocklyWorkspace) {
+             * GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick'); }
+             * $('#menuRunProg').parent().addClass('disabled');
+             * $('#menuConnect').parent().addClass('disabled');
+             */
             GUISTATE.robot.socket.on('connect_error', function(err) {
-            	GUISTATE_C.setIsAgent(false);
-            	console.log('Error connecting to server');
+                GUISTATE_C.setIsAgent(false);
+                console.log('Error connecting to server');
             });
-            
+
             GUISTATE.robot.socket.on('connect', function() {
                 console.log('connect');
                 GUISTATE.robot.socket.emit('command', 'log on');
@@ -73,11 +74,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                         }
                         robotList.push(robot);
                     });
-                    GUISTATE_C.setIsAgent(true);           
+                    GUISTATE_C.setIsAgent(true);
                     GUISTATE.robot.socket.on('connect_error', function(err) {
-                    	GUISTATE_C.setIsAgent(false);
-                    	$('#menuConnect').parent().removeClass('disabled');
-                    	console.log('Error connecting to server');
+                        GUISTATE_C.setIsAgent(false);
+                        $('#menuConnect').parent().removeClass('disabled');
+                        console.log('Error connecting to server');
                     });
                     console.log(GUISTATE_C.getRobotPort());
                     if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
@@ -114,7 +115,12 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     exports.init = init;
 
     function closeConnection() {
-        GUISTATE.robot.socket.disconnect();
+
+        if (GUISTATE.robot.socket != null) {
+
+            GUISTATE.robot.socket.disconnect();
+            GUISTATE.robot.socket = null;
+        }
     }
     exports.closeConnection = closeConnection;
 
