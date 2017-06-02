@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -174,6 +175,9 @@ public class BotNrollCompilerWorkflow implements ICompilerWorkflow {
             if ( ecode != 0 ) {
                 return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
             }
+            this.compiledHex = FileUtils.readFileToString(new File(path + "/target/" + mainFile + ".ino.hex"), "UTF-8");
+            Base64.Encoder urec = Base64.getEncoder();
+            this.compiledHex = urec.encodeToString(this.compiledHex.getBytes());
             return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
@@ -203,6 +207,6 @@ public class BotNrollCompilerWorkflow implements ICompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        return null;
+        return this.compiledHex;
     }
 }
