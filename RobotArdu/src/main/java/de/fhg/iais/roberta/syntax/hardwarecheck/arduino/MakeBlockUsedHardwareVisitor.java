@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -49,6 +50,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     private boolean isTimerSensorUsed;
     private boolean isTemperatureSensorUsed;
+    private boolean isToneActionUsed;
 
     private Configuration brickConfiguration;
 
@@ -86,6 +88,10 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
+    }
+    
+    public boolean isToneActionUsed() {
+        return this.isToneActionUsed;
     }
 
     private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -265,6 +271,12 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        return null;
+    }
+    
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        this.isToneActionUsed = true;
         return null;
     }
 

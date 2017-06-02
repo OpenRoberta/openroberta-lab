@@ -68,6 +68,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     private boolean isTimerSensorUsed;
     private boolean isTemperatureSensorUsed;
     private String temperatureSensorPort;
+    private boolean isToneActionUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -84,6 +85,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.usedActors = usedHardwareVisitor.getUsedActors();
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
         this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
+        this.isToneActionUsed = usedHardwareVisitor.isToneActionUsed();
     }
 
     /**
@@ -139,9 +141,16 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        //8 - sound port
+        this.sb.append("buzzer.tone(8, ");
+        toneAction.getFrequency().visit(this);
+        this.sb.append(", ");
+        toneAction.getDuration().visit(this);
+        this.sb.append(");");
+        this.sb.append("\n");
+        this.sb.append("delay(20); ");
         return null;
     }
-
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
@@ -626,6 +635,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             this.sb.append("#include <CountUpDown.h>\n\n");
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
+        
+        if ( this.isToneActionUsed) {
+            this.sb.append("MeBuzzer buzzer;\n");
+        }
+
 
         this.sb.append("RobertaFunctions rob;\n");
 
