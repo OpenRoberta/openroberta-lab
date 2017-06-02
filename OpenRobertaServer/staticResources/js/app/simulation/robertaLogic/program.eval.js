@@ -839,7 +839,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.MATH_PROP_FUNCT:
                 return evalMathPropFunct(obj, expr.op, propName + ".arg1", propName + ".arg2");
             case CONSTANTS.MATH_CONST:
-                return evalMathConst(obj, propName + ".value");
+                return evalMathConst(obj, expr.value);
             case CONSTANTS.GET_SAMPLE:
                 return evalSensor(obj, propName + ".sensorType", propName + ".sensorMode");
             case CONSTANTS.PIN_TOUCH_SENSOR:
