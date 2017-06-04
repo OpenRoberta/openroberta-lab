@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 
-public class SimulationProgramCheckVisitor extends ProgramCheckVisitor implements AstActorCommunicationVisitor<Void> {
+public abstract class SimulationProgramCheckVisitor extends ProgramCheckVisitor implements AstActorCommunicationVisitor<Void> {
 
     public SimulationProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

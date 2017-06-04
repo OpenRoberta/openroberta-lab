@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.MicrobitSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -351,6 +352,11 @@ public class MicrobitFactory extends AbstractRobotFactory {
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return new MicrobitSimProgramCheckVisitor(brickConfiguration);
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
     }
 
     @Override

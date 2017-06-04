@@ -38,7 +38,10 @@ import de.fhg.iais.roberta.mode.sensor.ev3.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.Ev3RobProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.Ev3SimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -493,7 +496,12 @@ public class EV3devFactory extends AbstractRobotFactory {
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationProgramCheckVisitor(brickConfiguration);
+        return new Ev3SimProgramCheckVisitor(brickConfiguration);
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new Ev3RobProgramCheckVisitor(brickConfiguration);
     }
 
     @Override

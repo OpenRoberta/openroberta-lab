@@ -30,14 +30,8 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>,
-    AstActorMotorVisitor<Void>, AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisitor implements MbedAstVisitor<Void> {
 
     public CalliopeSimProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

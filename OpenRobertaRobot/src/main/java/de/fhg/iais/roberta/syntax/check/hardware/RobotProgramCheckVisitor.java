@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
-public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
+public abstract class RobotProgramCheckVisitor extends ProgramCheckVisitor {
 
     public RobotProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);

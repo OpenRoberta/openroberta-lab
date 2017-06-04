@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 
 public interface IRobotFactory {
@@ -369,6 +370,8 @@ public interface IRobotFactory {
     Boolean hasConfiguration();
 
     SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
+
+    RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
     String getGroup();
 
