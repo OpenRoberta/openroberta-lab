@@ -53,26 +53,29 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
             GUISTATE.robot.socket.on('message', function(data) {
                 if (data.includes('"Network": false')) {
                     var robot;
+                    var robotVendors = { 'botnroll':'0x10c4', 'mbot':'0x1a86', 'arduUno':'0x2a03'};
                     jsonObject = JSON.parse(data);
                     jsonObject['Ports'].forEach(function(port) {
-                        portList.push(port['Name']);
-                        vendorList.push(port['VendorID']);
-                        productList.push(port['ProductID']);
-                        console.log(port['VendorID'].toUpperCase());
-                        switch (port['VendorID'].toLowerCase()) {
-                        case '0x10c4':
-                            robot = 'Bot\'n Roll';
-                            break;
-                        case '0x1a86':
-                            robot = 'MBot';
-                            break;
-                        case '0x2a03':
-                            robot = 'Arduino Uno';
-                            break;
-                        default:
-                            robot = 'Unknown robot';
-                        }
-                        robotList.push(robot);
+                    	if (robotVendors[GUISTATE_C.getRobot()] === port['VendorID'].toLowerCase()) {
+                    		portList.push(port['Name']);
+                            vendorList.push(port['VendorID']);
+                            productList.push(port['ProductID']);
+                            console.log(port['VendorID'].toUpperCase());
+                            switch (port['VendorID'].toLowerCase()) {
+                            case '0x10c4':
+                                robot = 'Bot\'n Roll';
+                                break;
+                            case '0x1a86':
+                                robot = 'MBot';
+                                break;
+                            case '0x2a03':
+                                robot = 'Arduino Uno';
+                                break;
+                            default:
+                                robot = 'Unknown robot';
+                            }
+                            robotList.push(robot);
+                    	}  
                     });
                     GUISTATE_C.setIsAgent(true);
                     GUISTATE.robot.socket.on('connect_error', function(err) {
