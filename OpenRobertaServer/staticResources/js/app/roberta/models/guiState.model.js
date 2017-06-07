@@ -27,6 +27,7 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.gui.configuration.toolbox = '';
         exports.gui.configuration.conf = '';
         exports.gui.connection = '';
+        exports.gui.vendor = '';
         exports.gui.sim = '';
 
         exports.user = {};
