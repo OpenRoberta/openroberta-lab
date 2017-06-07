@@ -534,6 +534,11 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public String getVendorId() {
+        return this.properties.getProperty("robot.vendor");
+    }
+
+    @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
         if ( joystickMode == null || joystickMode.isEmpty() ) {
             throw new DbcException("Invalid joystick axis: " + joystickMode);

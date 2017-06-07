@@ -216,7 +216,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         GUISTATE.gui.configuration = result.configuration;
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.connection = result.connection;
-        GUISTATE.gui.connection = result.vendor;
+        GUISTATE.gui.vendor = result.vendor;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');

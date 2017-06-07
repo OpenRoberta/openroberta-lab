@@ -499,6 +499,11 @@ public class BotNrollFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public String getVendorId() {
+        return this.arduProperties.getProperty("robot.vendor");
+    }
+
+    @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }

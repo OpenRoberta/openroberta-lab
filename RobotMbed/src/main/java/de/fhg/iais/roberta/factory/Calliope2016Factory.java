@@ -43,4 +43,10 @@ public class Calliope2016Factory extends AbstractCalliopeFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getVendorId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

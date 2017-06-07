@@ -569,6 +569,12 @@ public class Helper {
             return null;
         }
 
+        @Override
+        public String getVendorId() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
 }

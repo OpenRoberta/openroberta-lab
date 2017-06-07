@@ -541,4 +541,10 @@ public class NAOFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getVendorId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
