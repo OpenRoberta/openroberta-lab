@@ -23,6 +23,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
             GUISTATE.robot.name = '';
             GUISTATE.robot.robotPort = '';
+            GUISTATE.robot.socket = null;
             GUISTATE.gui.isAgent = true;
 
             //GUISTATE.socket.portNames = [];
@@ -288,7 +289,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         case 'arduinoAgentOrToken':
             SOCKET_C.init();
             if (GUISTATE.gui.isAgent == true) {
-                SOCKET_C.updateMenuStatus();
+                updateMenuStatus();
                 console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().removeClass('disabled');
@@ -297,7 +298,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         case 'arduinoAgent':
             SOCKET_C.init();
             if (GUISTATE.isAgent == true) {
-                SOCKET_C.updateMenuStatus();
+                updateMenuStatus();
                 console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().addClass('disabled');
@@ -816,7 +817,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         return GUISTATE.gui.connection;
     }
     exports.getConnection = getConnection;
-    
+
     function getVendor() {
         return GUISTATE.gui.vendor;
     }
@@ -841,4 +842,63 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         return GUISTATE.server.ping;
     }
     exports.doPing = doPing;
+
+    function setSocket(socket) {
+        GUISTATE.robot.socket = socket;
+    }
+    exports.setSocket = setSocket;
+
+    function getSocket() {
+        return GUISTATE.robot.socket;
+    }
+    exports.getSocket = getSocket;
+
+    function updateMenuStatus() {
+        switch (SOCKET_C.getPortList().length) {
+        case 0:
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').removeClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            }
+            $('#menuRunProg').parent().addClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');
+            break;
+        case 1:
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').addClass('wait');
+            if (GUISTATE.gui.blocklyWorkspace) {
+                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            }
+            $('#menuRunProg').parent().removeClass('disabled');
+            $('#menuConnect').parent().addClass('disabled');
+            break;
+        default:
+            // Always:
+            $('#menuConnect').parent().removeClass('disabled');
+            // If the port is not chosen:
+            if (getRobotPort() == "") {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').removeClass('wait');
+                if (GUISTATE.gui.blocklyWorkspace) {
+                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+                }
+                $('#menuRunProg').parent().addClass('disabled');
+                //$('#menuConnect').parent().addClass('disabled');
+            } else {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').addClass('wait');
+                if (GUISTATE.gui.blocklyWorkspace) {
+                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+                }
+                $('#menuRunProg').parent().removeClass('disabled')
+            }
+            break;
+        }
+    }
+    exports.updateMenuStatus = updateMenuStatus;
 });

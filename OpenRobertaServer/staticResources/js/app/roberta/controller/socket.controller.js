@@ -10,8 +10,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var robotList = [];
 
     function init() {
-        if (GUISTATE.robot.socket == null || GUISTATE_C.getIsAgent() == false) {
-            GUISTATE.robot.socket = IO('ws://localhost:8991/');
+        robotSocket = GUISTATE_C.getSocket()
+        if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
+            robotSocket = IO('ws://localhost:8991/');
+            GUISTATE_C.setSocket(robotSocket);
+            //GUISTATE.robot.socket = IO('ws://localhost:8991/');
             GUISTATE_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');
             //so it would not be active when the socket cannot connect
@@ -24,15 +27,14 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
              * $('#menuRunProg').parent().addClass('disabled');
              * $('#menuConnect').parent().addClass('disabled');
              */
-            GUISTATE.robot.socket.on('connect_error', function(err) {
+            robotSocket.on('connect_error', function(err) {
                 GUISTATE_C.setIsAgent(false);
                 console.log('Error connecting to server');
             });
 
-            GUISTATE.robot.socket.on('connect', function() {
+            robotSocket.on('connect', function() {
                 console.log('connect');
-                GUISTATE.robot.socket.emit('command', 'log on');
-                //GUISTATE.robot.socket.emit('command', 'list');
+                robotSocket.emit('command', 'log on');
                 console.log('listed');
                 GUISTATE_C.setIsAgent(true);
                 window.setInterval(function() {
@@ -40,7 +42,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     vendorList = [];
                     productList = [];
                     robotList = [];
-                    GUISTATE.robot.socket.emit('command', 'list');
+                    robotSocket.emit('command', 'list');
                     console.log('refreshed robot ports');
                 }, 3000);
             });
@@ -50,14 +52,18 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
              * VID: 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID:
              * 0x7523 ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
              */
-            GUISTATE.robot.socket.on('message', function(data) {
+            robotSocket.on('message', function(data) {
                 if (data.includes('"Network": false')) {
                     var robot;
-                    var robotVendors = { 'botnroll':'0x10c4', 'mbot':'0x1a86', 'arduUno':'0x2a03'};
+                    var robotVendors = {
+                        'botnroll' : '0x10c4',
+                        'mbot' : '0x1a86',
+                        'arduUno' : '0x2a03'
+                    };
                     jsonObject = JSON.parse(data);
                     jsonObject['Ports'].forEach(function(port) {
-                    	if (robotVendors[GUISTATE_C.getRobot()] === port['VendorID'].toLowerCase()) {
-                    		portList.push(port['Name']);
+                        if (robotVendors[GUISTATE_C.getRobot()] === port['VendorID'].toLowerCase()) {
+                            portList.push(port['Name']);
                             vendorList.push(port['VendorID']);
                             productList.push(port['ProductID']);
                             console.log(port['VendorID'].toUpperCase());
@@ -75,10 +81,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                                 robot = 'Unknown robot';
                             }
                             robotList.push(robot);
-                    	}  
+                        }
                     });
                     GUISTATE_C.setIsAgent(true);
-                    GUISTATE.robot.socket.on('connect_error', function(err) {
+
+                    robotSocket.on('connect_error', function(err) {
                         GUISTATE_C.setIsAgent(false);
                         $('#menuConnect').parent().removeClass('disabled');
                         console.log('Error connecting to server');
@@ -94,7 +101,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     if (portList.length == 1) {
                         ROBOT_C.setPort(portList[0]);
                     }
-                    updateMenuStatus();
+                    GUISTATE_C.updateMenuStatus();
                     //console.log(new Date() + " " + portList);
                     //console.log(new Date() + " " + vendorList);
                     //console.log(new Date() + " " + productList);
@@ -105,10 +112,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                 }
             });
 
-            GUISTATE.robot.socket.on('disconnect', function() {
+            robotSocket.on('disconnect', function() {
             });
 
-            GUISTATE.robot.socket.on('error', function(err) {
+            robotSocket.on('error', function(err) {
                 console.log("Socket.IO Error");
                 console.log(err.stack);
             });
@@ -118,11 +125,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     exports.init = init;
 
     function closeConnection() {
+        robotSocket = GUISTATE_C.getSocket()
 
-        if (GUISTATE.robot.socket != null) {
-
-            GUISTATE.robot.socket.disconnect();
-            GUISTATE.robot.socket = null;
+        if (robotSocket != null) {
+            robotSocket.disconnect();
+            GUISTATE_C.setSocket(null);
         }
     }
     exports.closeConnection = closeConnection;
@@ -136,55 +143,6 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         return robotList;
     }
     exports.getRobotList = getRobotList;
-
-    function updateMenuStatus() {
-        switch (getPortList().length) {
-        case 0:
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace) {
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            }
-            $('#menuRunProg').parent().addClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
-            break;
-        case 1:
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').addClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace) {
-                GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-            }
-            $('#menuRunProg').parent().removeClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
-            break;
-        default:
-            // Always:
-            $('#menuConnect').parent().removeClass('disabled');
-            // If the port is not chosen:
-            if (GUISTATE_C.getRobotPort() == "") {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').removeClass('wait');
-                if (GUISTATE.gui.blocklyWorkspace) {
-                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-                }
-                $('#menuRunProg').parent().addClass('disabled');
-                //$('#menuConnect').parent().addClass('disabled');
-            } else {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').addClass('wait');
-                if (GUISTATE.gui.blocklyWorkspace) {
-                    GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
-                }
-                $('#menuRunProg').parent().removeClass('disabled')
-            }
-            break;
-        }
-    }
-    exports.updateMenuStatus = updateMenuStatus;
 
     function uploadProgram(programHex, robotPort) {
         var URL = 'http://localhost:8991/upload';
