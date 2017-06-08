@@ -17,6 +17,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,17 +94,26 @@ public class JavaSourceCompiler {
         compilationOptions.add("-target");
         compilationOptions.add("1.7");
         compilationOptions.add("-classpath");
+        String separator = ":";
+        if ( SystemUtils.IS_OS_WINDOWS ) {
+            separator = ";";
+        }
         compilationOptions.add(
             this.classPath
-                + "dbusjava.jar:"
+                + "dbusjava.jar"
+                + separator
                 + this.classPath
-                + "ev3classes.jar:"
+                + "ev3classes.jar"
+                + separator
                 + this.classPath
-                + "EV3Runtime.jar:"
+                + "EV3Runtime.jar"
+                + separator
                 + this.classPath
-                + "Java-WebSocket.jar:"
+                + "Java-WebSocket.jar"
+                + separator
                 + this.classPath
-                + "jna.jar:"
+                + "jna.jar"
+                + separator
                 + this.classPath
                 + "json.jar");
         return compilationOptions;
