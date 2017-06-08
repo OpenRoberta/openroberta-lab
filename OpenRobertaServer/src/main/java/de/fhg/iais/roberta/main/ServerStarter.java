@@ -91,6 +91,7 @@ public class ServerStarter {
             System.out.println(robertaProperties.get("openRobertaServer.version"));
             System.exit(0);
         } else {
+            System.out.println(options.hasOptions());
             ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
             checkForUpgrade();
             Server server = serverStarter.start();

@@ -33,6 +33,17 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.persistence.AbstractProcessor;
+import de.fhg.iais.roberta.persistence.AccessRightProcessor;
+import de.fhg.iais.roberta.persistence.DummyProcessor;
+import de.fhg.iais.roberta.persistence.ProgramProcessor;
+import de.fhg.iais.roberta.persistence.UserProcessor;
+import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.ProgramCheckVisitor;
@@ -43,20 +54,9 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
-import src.main.java.de.fhg.iais.roberta.javaServer.provider.OraData;
-import src.main.java.de.fhg.iais.roberta.persistence.AbstractProcessor;
-import src.main.java.de.fhg.iais.roberta.persistence.AccessRightProcessor;
-import src.main.java.de.fhg.iais.roberta.persistence.DummyProcessor;
-import src.main.java.de.fhg.iais.roberta.persistence.ProgramProcessor;
-import src.main.java.de.fhg.iais.roberta.persistence.UserProcessor;
-import src.main.java.de.fhg.iais.roberta.persistence.bo.Program;
-import src.main.java.de.fhg.iais.roberta.persistence.bo.User;
-import src.main.java.de.fhg.iais.roberta.persistence.util.DbSession;
-import src.main.java.de.fhg.iais.roberta.persistence.util.HttpSessionState;
-import src.main.java.de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import src.main.java.de.fhg.iais.roberta.util.Util;
 
 @Path("/program")
 public class ClientProgram {
@@ -100,7 +100,6 @@ public class ClientProgram {
 
             final IRobotFactory robotFactory = httpSessionState.getRobotFactory();
             final ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
-            System.out.println(cmd);
 
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
@@ -146,7 +145,6 @@ public class ClientProgram {
                 final String ownerName = request.getString("owner");
                 final User owner = up.getUser(ownerName);
                 final int ownerID = owner.getId();
-                System.out.println(ownerID);
                 final Program program = pp.getProgram(programName, ownerID, robot);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
