@@ -218,6 +218,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         GUISTATE.gui.sim = result.sim;
         GUISTATE.gui.connection = result.connection;
         GUISTATE.gui.vendor = result.vendor;
+        GUISTATE.gui.signature = result.signature;
+        GUISTATE.gui.commandLine = result.commandLine;
         GUISTATE.gui.configurationUsed = result.configurationUsed;
         $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
         $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
@@ -822,6 +824,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         return GUISTATE.gui.vendor;
     }
     exports.getVendor = getVendor;
+    
+    function getSignature() {
+        return GUISTATE.gui.signature;
+    }
+    exports.getSignature = getSignature;
+    
+    function getCommandLine() {
+        return GUISTATE.gui.commandLine;
+    }
+    exports.getCommandLine = getCommandLine;
 
     function setProgramToDownload() {
         return GUISTATE.gui.program.download = true;

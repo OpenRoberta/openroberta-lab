@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'guiState.model', 'socket.io' ], function(exports, UTIL,
-        LOG, MSG, $, ROBOT_C, GUISTATE_C, GUISTATE, IO) {
+define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'socket.io' ], function(exports, UTIL,
+        LOG, MSG, $, ROBOT_C, GUISTATE_C, IO) {
 
     var portList = [];
     var vendorList = [];
@@ -14,19 +14,8 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
             robotSocket = IO('ws://localhost:8991/');
             GUISTATE_C.setSocket(robotSocket);
-            //GUISTATE.robot.socket = IO('ws://localhost:8991/');
             GUISTATE_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');
-            //so it would not be active when the socket cannot connect
-            /*
-             * $('#head-navi-icon-robot').removeClass('error');
-             * $('#head-navi-icon-robot').removeClass('busy');
-             * $('#head-navi-icon-robot').removeClass('wait'); if
-             * (GUISTATE.gui.blocklyWorkspace) {
-             * GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick'); }
-             * $('#menuRunProg').parent().addClass('disabled');
-             * $('#menuConnect').parent().addClass('disabled');
-             */
             robotSocket.on('connect_error', function(err) {
                 GUISTATE_C.setIsAgent(false);
                 console.log('Error connecting to server');
@@ -91,15 +80,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                             MSG.displayMessage(Blockly.Msg["MESSAGE_ROBOT_DISCONNECTED"], 'POPUP', '');
                         }
                         GUISTATE_C.setRobotPort("");
-                        //console.log("port is not in the list");
                     }
                     if (portList.length == 1) {
                         ROBOT_C.setPort(portList[0]);
                     }
                     GUISTATE_C.updateMenuStatus();
-                    //console.log(new Date() + " " + portList);
-                    //console.log(new Date() + " " + vendorList);
-                    //console.log(new Date() + " " + productList);
                 } else if (data.includes('OS')) {
                     jsonObject = JSON.parse(data);
                     system = jsonObject['OS'];
@@ -146,11 +131,11 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         var port = robotPort;
         var board = 'arduino:avr:uno';
         console.log("uploading " + filename);
-        var signature = "8ca56849f32e00f72e8a9a67360513761f8b25d25b9a0fd4b6bbc3eb68dfbbca1a8e40159456ef8c375186af9cdfaeb3ceabaa198a0313d0ab7f4ce67229381c3d84bd3b2632538957dab40d17f7bdc560cf82e540d51bf29f70f9ebee1abab1c0a18bdeb74e0d8b94b966744563251e0e868d4195719961ce0c5023c1f0a489";
-        var commandLine = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega328p -carduino -P{serial.port} -b115200 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"";
-
+        // TODO: add to property file after BOB3 implementation 
         // signatureBob3 = "009de3ed2c8fbfaa5fa0b796f71a5f7b61081d82461dd73d626c288adeffd845fdd2eb1e801b4da5609fc9eb9c149d17e1d551b74313e698260a8e02436197b4bd0893232515609ab2a55b5d35232e0653f6f716f816e2acb81654c85f2fe1075f5c168804584a3e315df43d63c4c8762ab5fc618cf83b84cc9162d595379e17";
         // commandLineBob3 = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega88 -cavrisp2 -P{serial.port} -b38400 -D -e \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"";
+        var signature = GUISTATE_C.getSignature();
+        var commandLine = GUISTATE_C.getCommandLine();
 
         var request = {
             'board' : board,
