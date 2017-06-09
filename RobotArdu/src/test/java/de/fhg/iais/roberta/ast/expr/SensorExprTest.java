@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class SensorExprTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void make() throws Exception {

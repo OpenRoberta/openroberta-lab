@@ -40,9 +40,9 @@ import de.fhg.iais.roberta.mode.sensor.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.UltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.JoystickMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.SensorPort;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2MakeBlockVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -572,4 +572,10 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     public String getSignature() {
         return this.properties.getProperty("robot.connection.signature");
     }
+
+	@Override
+	public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

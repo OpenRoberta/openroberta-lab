@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.hardwarecheck.arduino;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -12,7 +11,11 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -21,7 +24,9 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -36,7 +41,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.BotnrollAstVisitor;
-import de.fhg.iais.roberta.visitor.CheckVisitor;
+import de.fhg.iais.roberta.syntax.check.CheckVisitor;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
@@ -83,7 +89,7 @@ public class BotNrollUsedHardwareVisitor extends CheckVisitor implements Botnrol
         return this.isTimerSensorUsed;
     }
 
-    private void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    protected void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
@@ -256,9 +262,52 @@ public class BotNrollUsedHardwareVisitor extends CheckVisitor implements Botnrol
         return null;
     }
 
-    @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
-        return null;
-    }
+	@Override
+	public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitLightAction(LightAction<Void> lightAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitToneAction(ToneAction<Void> toneAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

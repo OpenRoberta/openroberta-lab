@@ -11,7 +11,6 @@ import org.junit.Test;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.BotNrollFactory;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;

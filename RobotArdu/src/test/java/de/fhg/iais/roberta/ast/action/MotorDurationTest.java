@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MotorDurationTest {
-    Helper helper = new Helper();
+	HelperBotNroll helper = new HelperBotNroll();
 
     @Test
     public void clearDisplay() throws Exception {

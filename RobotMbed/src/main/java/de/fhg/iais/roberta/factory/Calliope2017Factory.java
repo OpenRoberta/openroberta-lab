@@ -59,6 +59,7 @@ public class Calliope2017Factory extends AbstractCalliopeFactory {
 
     @Override
     public String getSignature() {
+		return null;
         // TODO Auto-generated method stub
     }
     

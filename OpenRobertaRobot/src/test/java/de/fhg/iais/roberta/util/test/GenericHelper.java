@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -310,12 +311,6 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public Boolean isAutoconnected() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public Boolean hasConfiguration() {
             // TODO Auto-generated method stub
             return null;
@@ -344,6 +339,42 @@ public class GenericHelper extends Helper {
             // TODO Auto-generated method stub
             return null;
         }
+
+		@Override
+		public IJoystickMode getJoystickMode(String joystickMode) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public List<IJoystickMode> getJoystickMode() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getConnectionType() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getVendorId() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getCommandline() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String getSignature() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
     }
 }

@@ -1,11 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< HEAD
 		"lastupdated": "2017-06-09 11:20:51.590771",
-=======
-		"lastupdated": "2017-05-29 18:15:56.758160",
->>>>>>> develop
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1128,13 +1124,7 @@
 	"MESSAGE_EDIT_SAVE_GROUP_AS": "Your group has been created",
 	"ORA_GROUP_CREATE_ERROR_NOT_SAVED_TO_DB": "This group already exists",
 	"ORA_USER_GROUP_SAVE_AS_ERROR_USER_GROUP_EXISTS": "This user already belongs to the group",
-<<<<<<< HEAD
-=======
-	"MESSAGE_PROGRAM_COMPILING": "Compiling program",
-	"MESSAGE_PROGRAM_FLASHING": "Flashing the program, please wait",
-	"MESSAGE_PROGRAM_FLASHED": "Done flashing",
 	"MESSAGE_ROBOT_DISCONNECTED": "An active robot was disconnected",
->>>>>>> develop
 	"LIST_BACK_TOOLTIP": "Back to previous view.",
 	"PROGLIST_DELETE_ALL_TOOLTIP": "Click here to delete all selected programs.",
 	"PROGLIST_DELETE_TOOLTIP": "Click here to delete your program.",
@@ -1152,7 +1142,6 @@
 	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody?",
 	"MENU_CREATE_LINK": "create program link ...",
 	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$",
-<<<<<<< HEAD
 	"IMAGE_INVERT": "invert",
 	"IMAGE_SHIFT": "shift",
 	"POPUP_AGE": "Age",
@@ -1161,9 +1150,7 @@
 	"ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS": "We send a mail to you, please check your mailbox!",
 	"ORA_USER_ACTIVATION_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«",
 	"ORA_USER_ACTIVATION_SUCCESS": "Activation of the user account is successful!",
-	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!"
-=======
+	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!",
 	"SENSOR_JOYSTICK": "joystick",
 	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick"
->>>>>>> develop
 }

@@ -9,10 +9,10 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MotorStopActionTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
     BotNrollFactory robotFactory = new BotNrollFactory(null);
 
     @Before

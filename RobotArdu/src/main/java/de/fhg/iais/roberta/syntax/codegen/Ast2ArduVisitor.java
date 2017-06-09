@@ -47,7 +47,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.arduino.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -59,9 +58,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -80,8 +76,6 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
 
     protected Ast2ArduVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-
-        this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
     }
 
     @Override

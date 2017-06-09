@@ -36,8 +36,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;

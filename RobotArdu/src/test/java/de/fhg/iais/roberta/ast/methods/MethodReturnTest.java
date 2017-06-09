@@ -5,10 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.BotNrollFactory;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MethodReturnTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
     BotNrollFactory robotFactory = new BotNrollFactory(null);
 
     @Before
