@@ -9,7 +9,7 @@ public class CompassSensorTest {
     HelperBotNroll h = new HelperBotNroll();
 
     @Test
-    public void sensorSetGyro() throws Exception {
+    public void jaxb2astTransformation() throws Exception {
         String a = "BlockAST [project=[[Location [x=137, y=263], CompassSensor []]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Compass.xml"));

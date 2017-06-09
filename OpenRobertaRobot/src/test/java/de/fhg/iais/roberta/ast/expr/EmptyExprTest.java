@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.syntax.expr.Assoc;
-import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 
 public class EmptyExprTest {

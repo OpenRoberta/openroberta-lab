@@ -432,6 +432,17 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         return invertImage(image);
     }
 
+    var evalImageShiftAction = function(obj, image, direction, n) {
+        var image = evalExpr(obj, image);
+        var n = evalExpr(obj, n);
+        return shiftImage(image,direction,n );
+    }
+
+    var evalImageInvertAction = function(obj, image) {
+        var image = evalExpr(obj, image);
+        return invertImage(image);
+    }
+
     var evalDisplaySetBrightnessAction = function(obj, simulationData, stmt) {
         var value = evalExpr(obj, "value");
         if (!isObject(value) && !obj.modifiedStmt) {
@@ -729,7 +740,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                     if (value) {
                         obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
-                    }  
+                    }
                     obj.repeatStmtExpr = {};
                 }
         }
@@ -839,7 +850,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.MATH_PROP_FUNCT:
                 return evalMathPropFunct(obj, expr.op, propName + ".arg1", propName + ".arg2");
             case CONSTANTS.MATH_CONST:
-                return evalMathConst(obj, propName + ".value");
+                return evalMathConst(obj, expr.value);
             case CONSTANTS.GET_SAMPLE:
                 return evalSensor(obj, propName + ".sensorType", propName + ".sensorMode");
             case CONSTANTS.PIN_TOUCH_SENSOR:
@@ -867,7 +878,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 return evalRgbColorConst(obj, propName + ".value");
             case CONSTANTS.IMAGE_SHIFT_ACTION:
                 return evalImageShiftAction(obj, propName + ".image", expr.direction, propName + ".n");
-                break;           
+                break;
             case CONSTANTS.IMAGE_INVERT_ACTION:
                 return evalImageInvertAction(obj, propName + ".image");
                 break;
@@ -1373,10 +1384,11 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         return list.slice(at1, at2);
     };
 
-    var evalTextJoin = function(obj, values) {
+    var evalTextJoin = function(obj, propName) {
+        var values = UTIL.getPropertyFromObject(obj.currentStatement, propName);
         var result = "";
         for (var i = 0; i < values.length; i++) {
-            var val = evalExpr(obj, "values", i);
+            var val = evalExpr(obj, propName, i);
             val = roundIfSensorData(val, values[i].expr)
             result += String(val);
         }
@@ -1489,16 +1501,16 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var isNumber = function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     };
-    
+
     var invertImage = function (image) {
         for (var i = 0; i < image.length; i++) {
             for (var j = 0; j < image[i].length; j++) {
                 image[i][j] = Math.abs(255 - image[i][j]);
-            }           
+            }
         }
         return image;
     }
-    
+
     var shiftImage = function(image, direction, n) {
         n = Math.round(n);
         var shift = {

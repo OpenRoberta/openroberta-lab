@@ -3,10 +3,11 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class WaitTimeStmtTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void test() throws Exception {

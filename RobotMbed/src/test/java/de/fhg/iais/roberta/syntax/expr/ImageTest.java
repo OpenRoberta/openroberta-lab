@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class ImageTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstancesOfImageClass() throws Exception {
@@ -18,14 +19,14 @@ public class ImageTest {
                 + "[  ,   ,   , #,   ]\n"
                 + "[  , 2,   ,   ,   ]"
                 + "]]]]]";
-        String result = Helper.generateTransformerString("/expr/image_create.xml");
+        String result = this.h.generateTransformerString("/expr/image_create.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/expr/image_create.xml");
+        this.h.assertTransformationIsOk("/expr/image_create.xml");
     }
 
 }

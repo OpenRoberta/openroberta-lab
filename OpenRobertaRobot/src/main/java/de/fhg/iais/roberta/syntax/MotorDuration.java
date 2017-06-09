@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.syntax;
 
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
-import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 
 /**
  * This class is parameter class used to set the type of the motor duration mode {@link MotorMoveMode} and value for the duration.

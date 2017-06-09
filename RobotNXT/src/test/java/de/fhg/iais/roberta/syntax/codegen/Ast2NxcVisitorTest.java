@@ -14,9 +14,10 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class Ast2NxcVisitorTest {
+    Helper h = new Helper();
     //TODO: change diameter and trackwidth to changeable
     // when sensors are added to nxt, fix the sensors description here
 
@@ -787,9 +788,9 @@ public class Ast2NxcVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        System.out.println(a.replaceAll("\\s+", ""));
-        System.out.println(Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        // Assert.assertEquals(a, h.generateString(fileName, brickConfiguration));
+        //        System.out.println(a.replaceAll("\\s+", ""));
+        //        System.out.println(h.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), this.h.generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

@@ -2,9 +2,10 @@ package de.fhg.iais.roberta.syntax.stmt;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class ForStmtTest {
+    Helper h = new Helper();
 
     @Test
     public void forStmt() throws Exception {
@@ -22,7 +23,7 @@ public class ForStmtTest {
                 + "    }\n"
                 + "}}";
 
-        Helper.assertCodeIsOk(a, "/syntax/stmt/for_stmt.xml");
+        this.h.assertCodeIsOk(a, "/syntax/stmt/for_stmt.xml");
     }
 
     @Test
@@ -30,11 +31,11 @@ public class ForStmtTest {
         String a =
             "for ( float k0 = 0; k0 < 10; k0+=1 ) {item3 += String.valueOf(\"Proba\");item3 += String.valueOf(\"Proba1\");for ( float k1 = 0; k1 < 10; k1+=1 ) {}}}";
 
-        Helper.assertCodeIsOk(a, "/syntax/control/repeat_stmt.xml");
+        this.h.assertCodeIsOk(a, "/syntax/control/repeat_stmt.xml");
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/syntax/stmt/for_stmt.xml");
+        this.h.assertTransformationIsOk("/syntax/stmt/for_stmt.xml");
     }
 }

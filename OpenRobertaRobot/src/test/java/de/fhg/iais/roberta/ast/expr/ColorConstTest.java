@@ -4,13 +4,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.general.PickColor;
-import de.fhg.iais.roberta.syntax.expr.Assoc;
-import de.fhg.iais.roberta.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class ColorConstTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void make() throws Exception {

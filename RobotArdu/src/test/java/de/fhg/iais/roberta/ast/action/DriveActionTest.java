@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class DriveActionTest {
     Helper h = new Helper();

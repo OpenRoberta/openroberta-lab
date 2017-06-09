@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -41,13 +41,13 @@ public class BluetoothConnectAction<V> extends Action<V> {
         return new BluetoothConnectAction<V>(address, properties, comment);
     }
 
-    public Expr<V> get_address() {
+    public Expr<V> getAddress() {
         return this._address;
     }
 
     @Override
     public String toString() {
-        return "BluetoothConnectAction [" + get_address().toString() + "]";
+        return "BluetoothConnectAction [" + getAddress().toString() + "]";
     }
 
     @Override
@@ -74,7 +74,7 @@ public class BluetoothConnectAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADDRESS, get_address());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADDRESS, getAddress());
 
         return jaxbDestination;
     }

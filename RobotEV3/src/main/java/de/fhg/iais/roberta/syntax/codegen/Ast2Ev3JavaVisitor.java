@@ -43,26 +43,27 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.check.program.LoopsCounterVisitor;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.expr.EmptyList;
-import de.fhg.iais.roberta.syntax.expr.ListCreate;
-import de.fhg.iais.roberta.syntax.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.functions.GetSubFunct;
-import de.fhg.iais.roberta.syntax.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.functions.TextJoinFunct;
-import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedHardwareVisitor;
+import de.fhg.iais.roberta.syntax.check.program.Ev3CodePreprocessVisitor;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
+import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -74,8 +75,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
-import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -108,12 +107,12 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVis
     private Ast2Ev3JavaVisitor(String programName, ArrayList<ArrayList<Phrase<Void>>> programPhrases, EV3Configuration brickConfiguration, int indentation) {
         super(programPhrases, programName, indentation);
 
-        UsedHardwareVisitor checkVisitor = new UsedHardwareVisitor(programPhrases);
+        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(programPhrases, brickConfiguration);
 
         this.brickConfiguration = brickConfiguration;
         this.usedSensors = checkVisitor.getUsedSensors();
 
-        this.loopsLabels = new LoopsCounterVisitor(programPhrases).getloopsLabelContainer();
+        this.loopsLabels = checkVisitor.getloopsLabelContainer();
     }
 
     /**
@@ -795,12 +794,12 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVis
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
         this.sb.append("hal.establishConnectionTo(");
-        if ( !bluetoothConnectAction.get_address().getKind().hasName("STRING_CONST") ) {
+        if ( !bluetoothConnectAction.getAddress().getKind().hasName("STRING_CONST") ) {
             this.sb.append("String.valueOf(");
-            bluetoothConnectAction.get_address().visit(this);
+            bluetoothConnectAction.getAddress().visit(this);
             this.sb.append(")");
         } else {
-            bluetoothConnectAction.get_address().visit(this);
+            bluetoothConnectAction.getAddress().visit(this);
         }
         this.sb.append(")");
         return null;

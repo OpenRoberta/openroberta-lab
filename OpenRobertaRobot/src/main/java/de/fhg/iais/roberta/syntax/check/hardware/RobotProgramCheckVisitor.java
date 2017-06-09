@@ -3,14 +3,19 @@ package de.fhg.iais.roberta.syntax.check.hardware;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
-import de.fhg.iais.roberta.syntax.expr.ConnectConst;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
-public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
+public abstract class RobotProgramCheckVisitor extends ProgramCheckVisitor {
 
     public RobotProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
@@ -74,24 +79,50 @@ public class RobotProgramCheckVisitor extends ProgramCheckVisitor {
     }
 
     @Override
-    public Void visitConnectConst(ConnectConst<Void> connectConst) {
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         return null;
     }
 
     @Override
-    public Void visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<Void> bluetoothCheckConnectAction) {
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         return null;
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        // TODO Auto-generated method stub
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        showTextAction.getMsg().visit(this);
+        showTextAction.getX().visit(this);
+        showTextAction.getY().visit(this);
         return null;
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        // TODO Auto-generated method stub
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        toneAction.getDuration().visit(this);
+        toneAction.getFrequency().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        if ( volumeAction.getMode() == Mode.SET ) {
+            volumeAction.getVolume().visit(this);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 

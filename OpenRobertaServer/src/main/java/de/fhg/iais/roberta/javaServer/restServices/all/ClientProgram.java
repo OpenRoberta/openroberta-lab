@@ -31,9 +31,9 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.DummyProcessor;
@@ -44,19 +44,19 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.check.hardware.ProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 @Path("/program")
 public class ClientProgram {
@@ -153,7 +153,7 @@ public class ClientProgram {
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("importXML") ) {
-                final String xmlText = request.getString("program");
+                String xmlText = request.getString("program");
                 String programName = request.getString("name");
                 InputStream xsdStream = ClientProgram.class.getClassLoader().getResourceAsStream("blockly.xsd");
                 SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -190,6 +190,11 @@ public class ClientProgram {
                 upp.shareToUser(userId, robot, programName, userToShareName, right);
                 Util.addResultInfo(response, upp);
 
+            } else if ( cmd.equals("shareWithGallery") && httpSessionState.isUserLoggedIn() ) {
+                final String programName = request.getString("programName");
+                upp.shareToUser(userId, robot, programName, "Gallery", "READ");
+                Util.addResultInfo(response, upp);
+
             } else if ( cmd.equals("shareDelete") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("programName");
                 String owner = request.getString("owner");
@@ -206,10 +211,27 @@ public class ClientProgram {
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
+            } else if ( cmd.equals("loadGallery") ) {
+                final JSONArray programInfo = pp.getProgramGallery(2);
+                response.put("programNames", programInfo);
+                Util.addResultInfo(response, pp);
+
+            } else if ( cmd.equals("loadProgramEntity") && httpSessionState.isUserLoggedIn() ) {
+                final String programName = request.getString("name");
+                final String ownerName = request.getString("owner");
+                final User owner = up.getUser(ownerName);
+                final int ownerID = owner.getId();
+                final JSONArray program = pp.getProgramEntity(programName, ownerID, robot);
+                if ( program != null ) {
+                    response.put("program", program);
+                }
+                Util.addResultInfo(response, pp);
+
             } else if ( cmd.equals("loadEN") ) {
                 JSONArray programInfo = pp.getProgramInfo(1, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
+
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
                 JSONArray relations = pp.getProgramRelations(programName, userId, robot);
@@ -224,12 +246,13 @@ public class ClientProgram {
                 String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
+                //TODO: Add the checkers in workflow compiler
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 // TODO: this is quick fix not to check the program for arduino
-                if ( !(httpSessionState.getRobotName().equals("ardu") || httpSessionState.getRobotName().equals("nao")) ) {
-                    final RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                if ( !(httpSessionState.getRobotName().equals("ardu") || httpSessionState.getRobotName().equals("nao")) && messageKey == null ) {
+                    RobotProgramCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 } else {
                     response.put("data", programText);
@@ -327,7 +350,8 @@ public class ClientProgram {
     private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, ProgramCheckVisitor programChecker)
         throws JSONException,
         JAXBException {
-        int errorCounter = programChecker.check(program);
+        programChecker.check(program);
+        final int errorCounter = programChecker.getErrorCount();
         response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
         response.put("errorCounter", errorCounter);
         if ( errorCounter > 0 ) {

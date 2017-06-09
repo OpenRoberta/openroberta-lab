@@ -231,6 +231,7 @@ Blockly.Msg.IMAGE_TOOLTIP = "Creates an image for the display.";  // untranslate
 Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = "Pobiera aktualny odczyt z czujnika podczerwieni.";
 Blockly.Msg.INFRARED_TOOLTIP = "Reprezentuje czujnik podczerwieni.";
 Blockly.Msg.INLINE_INPUTS = "Wbudowane wejścia";
+Blockly.Msg.JOYSTICK_GETSAMPLE_TOOLTIP = "Gets the current reading of one of the axises of the joystick";  // untranslated
 Blockly.Msg.KEY_ISPRESSED_TOOLTIP = "Czy wybrany przycisk zostal wciśnięty?";
 Blockly.Msg.LED_OFF = "turn LED off";  // untranslated
 Blockly.Msg.LED_ON = "turn LED on";  // untranslated
@@ -523,9 +524,13 @@ Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Istnieje konflikt z wersją firmware swoje
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Group »$« was deleted";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "Proszę wypełnić właściwą nazwą. Prawidłowa nazwa zaczyna się literą i może zawierać tylko litery lub cyfry.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Nie dostępne";
+Blockly.Msg.MESSAGE_PROGRAM_COMPILING = "Compiling program";  // untranslated
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "Program '$' został usunięty";
+Blockly.Msg.MESSAGE_PROGRAM_FLASHED = "Done flashing";  // untranslated
+Blockly.Msg.MESSAGE_PROGRAM_FLASHING = "Flashing the program, please wait";  // untranslated
 Blockly.Msg.MESSAGE_RESTART_ROBOT = "Proszę podłączyć robota do Oepn Roberta Lab.";
 Blockly.Msg.MESSAGE_ROBOT_CONNECTED = "Twoj robot $ jest podłączony";
+Blockly.Msg.MESSAGE_ROBOT_DISCONNECTED = "An active robot was disconnected";  // untranslated
 Blockly.Msg.MESSAGE_USER_DELETED = "Użytkownik został usunięty";
 Blockly.Msg.MESSAGE_USER_GROUP_DELETED = "User »$« was deleted";  // untranslated
 Blockly.Msg.MESSAGE_USER_LOGIN = "Witaj '$'";
@@ -799,11 +804,14 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "Wystąpił błąd podczas zapisywania Przy
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "Błąd wystąpił błąd podczas zapisywania konfiguracji w bazie danych.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Przybornik został zapisany";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
+<<<<<<< HEAD
 Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_FAIL = "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«";  // untranslated
 Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS = "We send a mail to you, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_ACTIVATION_SUCCESS = "Activation of the user account is successful!";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
+=======
+>>>>>>> develop
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Sprawdź czy wszystkie wymagane pola wejściowe zostały wypełnione.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Podana nazwa użytkownika już istnieje w bazie danych, wybierz inną nazwę użytkownika.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Użytkownik został utworzony";
@@ -960,6 +968,7 @@ Blockly.Msg.SENSOR_INFRARED = "infrared sensor";  // untranslated
 Blockly.Msg.SENSOR_IS_PIN = "is";  // untranslated
 Blockly.Msg.SENSOR_IS_PRESSED = "pressed?";  // untranslated
 Blockly.Msg.SENSOR_IS_TOUCHED = "touched?";  // untranslated
+Blockly.Msg.SENSOR_JOYSTICK = "joystick";  // untranslated
 Blockly.Msg.SENSOR_KEY = "button";  // untranslated
 Blockly.Msg.SENSOR_KEY_ANY = "any";  // untranslated
 Blockly.Msg.SENSOR_KEY_DOWN = "down";  // untranslated
@@ -1110,7 +1119,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";  // untra
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor.";  // untranslated
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Represents an ultrasonic sensor.";  // untranslated
 Blockly.Msg.UNDO = "Cofnij";
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "This field cannot be empty!";  // untranslated
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Password min. length is 6!";  // untranslated

@@ -4,9 +4,10 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class ImageShiftFunctionTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfImageShiftFunctionClass() throws Exception {
@@ -16,7 +17,7 @@ public class ImageShiftFunctionTest {
                 + "DisplayImageAction [IMAGE, FunctionExpr [ImageShiftFunction [PredefinedImage [SILLY], NumConst [2], DOWN]]"
                 + "]]]]";
 
-        String result = Helper.generateTransformerString("/function/image_shift_up_down.xml");
+        String result = this.h.generateTransformerString("/function/image_shift_up_down.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
@@ -28,18 +29,18 @@ public class ImageShiftFunctionTest {
                 + "DisplayImageAction [IMAGE, FunctionExpr [ImageShiftFunction [EmptyExpr [defVal=PREDEFINED_IMAGE], EmptyExpr [defVal=NUMBER_INT], UP]]]"
                 + "]]]";
 
-        String result = Helper.generateTransformerString("/function/image_shift_missing_image_and_position.xml");
+        String result = this.h.generateTransformerString("/function/image_shift_missing_image_and_position.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/function/image_shift_up_down.xml");
+        this.h.assertTransformationIsOk("/function/image_shift_up_down.xml");
     }
 
     @Ignore
     public void astToBlock_XMLtoJAXBtoASTtoXMLWithMissingImagePosition_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/function/image_shift_missing_image_and_position.xml");
+        this.h.assertTransformationIsOk("/function/image_shift_missing_image_and_position.xml");
     }
 }

@@ -1,11 +1,10 @@
 package de.fhg.iais.roberta.ast.methods;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.BotNrollFactory;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class MethodCallTest {
     Helper h = new Helper();

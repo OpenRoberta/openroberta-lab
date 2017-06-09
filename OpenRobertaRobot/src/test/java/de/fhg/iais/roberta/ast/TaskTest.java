@@ -3,10 +3,11 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
 public class TaskTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void mainTask() throws Exception {

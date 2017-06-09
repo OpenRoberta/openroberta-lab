@@ -1,17 +1,12 @@
 package de.fhg.iais.roberta.syntax.codegen;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class Ast2Ev3SimVisitorTest {
-
-    @BeforeClass
-    public static void setupConfigurationForAllTests() {
-
-    }
+    Helper h = new Helper();
 
     @Test
     public void test() throws Exception {
@@ -686,6 +681,6 @@ public class Ast2Ev3SimVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        Assert.assertEquals(a, Helper.generateJavaScript(fileName));
+        Assert.assertEquals(a, this.h.generateJavaScript(fileName));
     }
 }

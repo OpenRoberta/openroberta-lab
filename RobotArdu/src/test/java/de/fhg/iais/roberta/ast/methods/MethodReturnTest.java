@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.BotNrollFactory;
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 public class MethodReturnTest {
     Helper h = new Helper();

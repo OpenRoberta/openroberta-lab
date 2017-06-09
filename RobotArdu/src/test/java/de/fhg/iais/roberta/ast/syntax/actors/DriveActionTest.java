@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.actors;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.Helper;
+import de.fhg.iais.roberta.util.test.ardu.Helper;
 
 @Ignore
 public class DriveActionTest {

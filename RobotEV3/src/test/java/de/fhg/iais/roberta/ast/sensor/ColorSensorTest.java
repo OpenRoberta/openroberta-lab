@@ -7,9 +7,10 @@ import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class ColorSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void sensorSetColor() throws Exception {
@@ -19,12 +20,12 @@ public class ColorSensorTest {
                 + "[Location [x=-11, y=187], ColorSensor [mode=RGB, port=S2]], "
                 + "[Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=S4]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
         ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
@@ -39,7 +40,7 @@ public class ColorSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
         ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
@@ -54,6 +55,6 @@ public class ColorSensorTest {
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_setColor.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_setColor.xml");
     }
 }

@@ -1354,6 +1354,22 @@ td.bs-checkbox {
 	padding: 0;
 }
 
+.galleryTable .typcn:before {
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    color: #eee;
+    font-size: 100px;
+}
+
+.galleryTable td {
+	border: none;
+	color: #fff;
+	width: 100vw;
+    position: relative;
+    border: none !important;
+}
+
 .dataTables_wrapper {
 	margin: 0px 68px;
 }

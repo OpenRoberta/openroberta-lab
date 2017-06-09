@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.transformer.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class ArduConfigurationTest {
     BotNrollFactory factory = new BotNrollFactory(null);

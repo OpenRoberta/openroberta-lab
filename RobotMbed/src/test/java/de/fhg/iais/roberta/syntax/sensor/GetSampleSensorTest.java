@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class GetSampleSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfGetSampleSensorClass() throws Exception {
@@ -36,14 +37,14 @@ public class GetSampleSensorTest {
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [AmbientLightSensor []]], NumConst [50]]]\n"
                 + ")]]]]";
 
-        String result = Helper.generateTransformerString("/sensor/get_sample_sensor.xml");
+        String result = this.h.generateTransformerString("/sensor/get_sample_sensor.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/sensor/get_sample_sensor.xml");
+        this.h.assertTransformationIsOk("/sensor/get_sample_sensor.xml");
     }
 
 }

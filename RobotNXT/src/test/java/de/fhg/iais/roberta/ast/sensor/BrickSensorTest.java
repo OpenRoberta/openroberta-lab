@@ -6,26 +6,27 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class BrickSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void main() throws Exception {
         String a = "BlockAST [project=[[Location [x=-19, y=1], BrickSensor [key=ENTER, mode=IS_PRESSED]]]]";
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick1.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick1.xml"));
     }
 
     @Test
     public void getKey() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(BrickKey.ENTER, bs.getKey());
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(BrickSensor.Mode.IS_PRESSED, bs.getMode());
     }
@@ -51,16 +52,16 @@ public class BrickSensorTest {
                 + "Var [item] := SensorExpr [BrickSensor [key=ENTER, mode=IS_PRESSED]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_brick.xml"));
     }
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_brick1.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_brick1.xml");
     }
 
     @Test
     public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_brick.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_brick.xml");
     }
 }

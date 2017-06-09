@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.syntax.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class AccelerometerSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfAccelerometerSensorClass() throws Exception {
@@ -17,14 +18,14 @@ public class AccelerometerSensorTest {
                 + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [Z]]], "
                 + "DisplayTextAction [TEXT, SensorExpr [AccelerometerSensor [STRENGTH]]]]]]";
 
-        String result = Helper.generateTransformerString("/sensor/acceleration_sensor.xml");
+        String result = this.h.generateTransformerString("/sensor/acceleration_sensor.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
 
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
-        Helper.assertTransformationIsOk("/sensor/acceleration_sensor.xml");
+        this.h.assertTransformationIsOk("/sensor/acceleration_sensor.xml");
     }
 
 }

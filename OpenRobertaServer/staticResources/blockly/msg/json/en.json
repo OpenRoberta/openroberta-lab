@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< HEAD
 		"lastupdated": "2017-06-09 11:20:51.590771",
+=======
+		"lastupdated": "2017-05-29 18:15:56.758160",
+>>>>>>> develop
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -740,9 +744,9 @@
 	"ORA_PROGRAM_IMPORT_ERROR": "This program is not a valid NEPO program and cannot be uploaded!",
 	"ORA_USER_GET_ONE_SUCCESS": "Login successful",
 	"ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG": "You have entered wrong user name or password. Please try again!",
-	"ORA_USER_CREATE_SUCCESS": "Your user account »$« was successfully created!",
+	"ORA_USER_CREATE_SUCCESS": "The user was successfully created",
 	"ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB": "The given user name already exists in the database, please choose another user name.",
-	"ORA_USER_DELETE_SUCCESS": "Your account »$« was successfully deleted. Hope to see you soon again!",
+	"ORA_USER_DELETE_SUCCESS": "The user was successfully deleted",
 	"ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB": "Error while deleting user in database.",
 	"ORA_USER_DELETE_ERROR_ID_NOT_FOUND": "Error while deleting user.",
 	"ORA_USER_GET_ALL_SUCCESS": "Users loaded",
@@ -762,9 +766,7 @@
 	"ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST": "The program that you would like to share does not exist.",
 	"ORA_USER_TO_SHARE_DOES_NOT_EXIST": "The user with which you would like to share the program does not exist. <br />Try it again!",
 	"ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER": "You cannot share any programs with yourself.",
-	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Please make sure you have filled in all required fields! Your account couldn't be created.",
-	"ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS": "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.",
-	"ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH": "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.",
+	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Check all required input fields have been filled out.",
 	"ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL": "This email address is unknown, maybe you have spelled it wrong!",
 	"ORA_SERVER_ERROR": "Server-Error",
 	"CONFIGURATION_ERROR_SENSOR_MISSING": "This sensor is not set to the port!",
@@ -789,7 +791,7 @@
 	"VALIDATION_TOKEN_LENGTH": "Token length is 8 characters!",
 	"VALIDATION_SECOND_PASSWORD_EQUAL": "The two passwords must be equal!",
 	"VALIDATION_VALID_EMAIL_ADDRESS": "Please enter a valid email address!",
-	"VALIDATION_CONTAINS_SPECIAL_CHARACTERS": "Valid special characters: »=+!?.,%#+&^@_-«",
+	"VALIDATION_CONTAINS_SPECIAL_CHARACTERS": "Valid special characters: »=+!?.,%#+&^@_«",
 	"VALIDATION_MAX_LENGTH": "The max. lenght is 25 characters!",
 	"SIM_BLOCK_NOT_SUPPORTED": "Unfortunately you can not use this block in the simulation!",
 	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behavior of the program on the real robot will be different than expected!",
@@ -1126,6 +1128,13 @@
 	"MESSAGE_EDIT_SAVE_GROUP_AS": "Your group has been created",
 	"ORA_GROUP_CREATE_ERROR_NOT_SAVED_TO_DB": "This group already exists",
 	"ORA_USER_GROUP_SAVE_AS_ERROR_USER_GROUP_EXISTS": "This user already belongs to the group",
+<<<<<<< HEAD
+=======
+	"MESSAGE_PROGRAM_COMPILING": "Compiling program",
+	"MESSAGE_PROGRAM_FLASHING": "Flashing the program, please wait",
+	"MESSAGE_PROGRAM_FLASHED": "Done flashing",
+	"MESSAGE_ROBOT_DISCONNECTED": "An active robot was disconnected",
+>>>>>>> develop
 	"LIST_BACK_TOOLTIP": "Back to previous view.",
 	"PROGLIST_DELETE_ALL_TOOLTIP": "Click here to delete all selected programs.",
 	"PROGLIST_DELETE_TOOLTIP": "Click here to delete your program.",
@@ -1143,6 +1152,7 @@
 	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody?",
 	"MENU_CREATE_LINK": "create program link ...",
 	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$",
+<<<<<<< HEAD
 	"IMAGE_INVERT": "invert",
 	"IMAGE_SHIFT": "shift",
 	"POPUP_AGE": "Age",
@@ -1152,4 +1162,8 @@
 	"ORA_USER_ACTIVATION_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«",
 	"ORA_USER_ACTIVATION_SUCCESS": "Activation of the user account is successful!",
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!"
+=======
+	"SENSOR_JOYSTICK": "joystick",
+	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick"
+>>>>>>> develop
 }

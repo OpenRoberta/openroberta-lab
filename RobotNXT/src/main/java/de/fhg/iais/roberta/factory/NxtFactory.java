@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.action.nxt.ShowPicture;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.general.nxt.WorkingState;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.GyroSensorMode;
@@ -40,13 +41,14 @@ import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.NxtRobProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.NxtSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -596,7 +598,12 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationProgramCheckVisitor(brickConfiguration);
+        return new NxtSimProgramCheckVisitor(brickConfiguration);
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new NxtRobProgramCheckVisitor(brickConfiguration);
     }
 
     @Override

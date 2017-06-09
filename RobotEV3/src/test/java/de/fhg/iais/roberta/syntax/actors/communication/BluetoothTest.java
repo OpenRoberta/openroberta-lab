@@ -2,28 +2,30 @@ package de.fhg.iais.roberta.syntax.actors.communication;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class BluetoothTest {
+    Helper h = new Helper();
+
     @Test
     public void connection() throws Exception {
         String a = "NXTConnectionvariablenName=hal.establishConnectionTo(\"101010\");publicvoidrun()throwsException{}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnection.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnection.xml");
     }
 
     @Test
     public void connectionWait() throws Exception {
         String a = "NXTConnectionvariablenName=hal.waitForConnection();publicvoidrun()throwsException{}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnectionWait.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothConnectionWait.xml");
     }
 
     @Test
     public void send() throws Exception {
         String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun()throwsException{hal.sendMessage(\"\", variablenName2);}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothSend.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothSend.xml");
     }
 
     @Test
@@ -31,6 +33,6 @@ public class BluetoothTest {
         String a =
             "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun()throwsException{hal.drawText(String.valueOf(hal.readMessage(variablenName2)),0,0);}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_BluetoothReceive.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_BluetoothReceive.xml");
     }
 }

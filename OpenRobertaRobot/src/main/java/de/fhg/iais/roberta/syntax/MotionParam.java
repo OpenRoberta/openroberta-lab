@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.syntax;
 
-import de.fhg.iais.roberta.syntax.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 
 /**
  * This class is parameter class used to set the speed of a motor and the type of movement the motor {@link MotorDuration.Mode}.

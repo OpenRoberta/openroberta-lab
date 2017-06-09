@@ -6,20 +6,21 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.nxt.Helper;
 
 public class SoundSensorTest {
+    Helper h = new Helper();
 
     @Test
     public void sensorSound() throws Exception {
         String a = "BlockAST [project=[[Location [x=137, y=338], SoundSensor [port=S2]]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_Sound.xml"));
+        Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Sound.xml"));
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_Sound.xml");
+        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_Sound.xml");
 
         SoundSensor<Void> cs = (SoundSensor<Void>) transformer.getTree().get(0).get(1);
 
@@ -28,6 +29,6 @@ public class SoundSensorTest {
 
     @Test
     public void reverseTransformation() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_Sound.xml");
+        this.h.assertTransformationIsOk("/ast/sensors/sensor_Sound.xml");
     }
 }

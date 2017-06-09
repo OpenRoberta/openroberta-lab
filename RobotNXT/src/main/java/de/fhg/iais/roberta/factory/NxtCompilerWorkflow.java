@@ -14,13 +14,12 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.NxtConfiguration;
-import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class NxtCompilerWorkflow implements ICompilerWorkflow {
 
@@ -119,7 +118,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
 
         String nbcCompilerFileName = this.robotCompilerResourcesDir + "/windows/nbc.exe";
         if ( SystemUtils.IS_OS_LINUX ) {
-            nbcCompilerFileName = this.robotCompilerResourcesDir + "/linux/nbc";
+            nbcCompilerFileName = "nbc";
         } else if ( SystemUtils.IS_OS_MAC ) {
             nbcCompilerFileName = this.robotCompilerResourcesDir + "/osx/nbc";
         }
@@ -127,6 +126,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 nbcCompilerFileName,
+                "-q",
                 this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
                 "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
                 "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()

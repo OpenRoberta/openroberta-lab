@@ -2,21 +2,22 @@ package de.fhg.iais.roberta.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class DriveActionTest {
+    Helper h = new Helper();
 
     @Test
     public void drive() throws Exception {
         String a = "\nhal.regulatedDrive(DriveDirection.FOREWARD, 50);}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffOn.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffOn.xml");
     }
 
     @Test
     public void driveFor() throws Exception {
         String a = "\nhal.driveDistance(DriveDirection.FOREWARD, 50, 20);}";
 
-        Helper.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffOnFor.xml");
+        this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffOnFor.xml");
     }
 }

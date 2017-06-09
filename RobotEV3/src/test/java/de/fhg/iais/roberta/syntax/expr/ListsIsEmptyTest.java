@@ -2,13 +2,15 @@ package de.fhg.iais.roberta.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class ListsIsEmptyTest {
+    Helper h = new Helper();
+
     @Test
     public void Test() throws Exception {
         String a = "BlocklyMethods.isEmpty(BlocklyMethods.createListWithNumber(0, 0, 0))}";
 
-        Helper.assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
+        this.h.assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
     }
 }

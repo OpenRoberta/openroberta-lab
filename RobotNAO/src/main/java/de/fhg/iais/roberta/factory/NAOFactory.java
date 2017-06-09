@@ -29,18 +29,18 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.nao.ActorPort;
 import de.fhg.iais.roberta.mode.action.nao.BlinkMode;
 import de.fhg.iais.roberta.mode.action.nao.BrickLedColor;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nao.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.nao.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.UltrasonicSensorMode;
-import de.fhg.iais.roberta.robotCommunication.ICompilerWorkflow;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -509,6 +509,11 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 

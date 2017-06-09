@@ -1,11 +1,16 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -19,11 +24,11 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class CompassSensor<V> extends Sensor<V> {
-    private final int port;
+public class CompassSensor<V> extends BaseSensor<V> {
+    private final ISensorPort port;
 
-    private CompassSensor(int port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
+    private CompassSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(port, BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
         this.port = port;
         setReadOnly();
     }
@@ -37,11 +42,12 @@ public class CompassSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link CompassSensor}
      */
-    public static <V> CompassSensor<V> make(int port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> CompassSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new CompassSensor<>(port, properties, comment);
     }
 
-    public int getPort() {
+    @Override
+    public ISensorPort getPort() {
         return this.port;
     }
 
@@ -67,14 +73,21 @@ public class CompassSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-
-        return CompassSensor.make(1, helper.extractBlockProperties(block), helper.extractComment(block));
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String port = "1";
+        if ( !block.getType().equals("robSensors_compass_getSample") && !block.getType().equals("mbedSensors_compass_getSample") ) {
+            port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+        }
+        return CompassSensor.make(helper.getModeFactory().getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        if ( !getProperty().getBlockType().equals("robSensors_compass_getSample") && !getProperty().getBlockType().equals("mbedSensors_compass_getSample") ) {
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.port.getPortNumber());
+        }
         return jaxbDestination;
     }
 }

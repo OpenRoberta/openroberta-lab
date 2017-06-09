@@ -76,7 +76,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.isProgramStandard = isProgramStandard;
 
     function isProgramWritable() {
-        if (GUISTATE.program.shared == 'READ') {
+        if (GUISTATE.program.shared == 'WRITE') {
+            return true;
+        } else if (GUISTATE.program.shared == 'READ') {
             return false;
         }
         return true;
@@ -454,13 +456,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#head-navigation-program-edit').css('display', 'inline');
             $('#menuTabConfiguration').parent().removeClass('disabled');
             $('#menuTabProgram').parent().addClass('disabled');
-        } else if (view === 'tabProgList') {
-            $('#head-navigation-program-edit > ul > li').addClass('disabled');
-            $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
-        } else if (view === 'tabConfList') {
-            $('#head-navigation-program-edit > ul > li').addClass('disabled');
-            $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
-        } else if (view === 'tabLogList') {
+        } else {
             $('#head-navigation-program-edit > ul > li').addClass('disabled');
             $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
         }
@@ -769,7 +765,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.setLogout = setLogout;
 
-    function setProgram(result, opt_owner) {
+    function setProgram(result, opt_owner, opt_gallery) {
         if (result) {
             GUISTATE.program.name = result.name;
             GUISTATE.program.shared = result.programShared;
@@ -777,10 +773,19 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             setProgramSaved(true);
             var name = result.name;
             if (opt_owner) {
-                if (GUISTATE.program.shared == 'WRITE') {
-                    name += ' (<span class="typcn typcn-pencil progName"></span>' + opt_owner + ')';
+                if (opt_gallery) {
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-puzzle-outline progName"></span></b><span style="color:#33B8CA;">' + opt_owner
+                            + '</span>';
+                } else if (opt_owner === 'Roberta') {
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-roberta progName"></span></b>';
+                } else if (GUISTATE.program.shared == 'WRITE') {
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner
+                            + '</span>';
+                } else if (GUISTATE.program.shared == 'READ') {
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner
+                            + '</span>';
                 } else {
-                    name += ' (<span class="typcn typcn-eye progName"></span>' + opt_owner + ')';
+                    console.log("Program with undefined rights from " + opt_owner + " loaded.");
                 }
             }
             $('#tabProgramName').html(name);
