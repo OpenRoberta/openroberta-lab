@@ -55,14 +55,9 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
             robotSocket.on('message', function(data) {
                 if (data.includes('"Network": false')) {
                     var robot;
-                    var robotVendors = {
-                        'botnroll' : '0x10c4',
-                        'mbot' : '0x1a86',
-                        'arduUno' : '0x2a03'
-                    };
                     jsonObject = JSON.parse(data);
                     jsonObject['Ports'].forEach(function(port) {
-                        if (robotVendors[GUISTATE_C.getRobot()] === port['VendorID'].toLowerCase()) {
+                        if (GUISTATE_C.getVendor() === port['VendorID'].toLowerCase()) {
                             portList.push(port['Name']);
                             vendorList.push(port['VendorID']);
                             productList.push(port['ProductID']);
