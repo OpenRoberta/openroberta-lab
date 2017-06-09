@@ -547,4 +547,16 @@ public class NAOFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getCommandline() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getSignature() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -575,6 +575,18 @@ public class Helper {
             return null;
         }
 
+        @Override
+        public String getCommandline() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public String getSignature() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
 }

@@ -147,7 +147,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         var board = 'arduino:avr:uno';
         console.log("uploading " + filename);
         var signature = "8ca56849f32e00f72e8a9a67360513761f8b25d25b9a0fd4b6bbc3eb68dfbbca1a8e40159456ef8c375186af9cdfaeb3ceabaa198a0313d0ab7f4ce67229381c3d84bd3b2632538957dab40d17f7bdc560cf82e540d51bf29f70f9ebee1abab1c0a18bdeb74e0d8b94b966744563251e0e868d4195719961ce0c5023c1f0a489";
-        var commandLine = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega328p -carduino -P{serial.port} -b115200 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\""
+        var commandLine = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega328p -carduino -P{serial.port} -b115200 -D \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"";
+
+        // signatureBob3 = "009de3ed2c8fbfaa5fa0b796f71a5f7b61081d82461dd73d626c288adeffd845fdd2eb1e801b4da5609fc9eb9c149d17e1d551b74313e698260a8e02436197b4bd0893232515609ab2a55b5d35232e0653f6f716f816e2acb81654c85f2fe1075f5c168804584a3e315df43d63c4c8762ab5fc618cf83b84cc9162d595379e17";
+        // commandLineBob3 = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega88 -cavrisp2 -P{serial.port} -b38400 -D -e \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"";
 
         var request = {
             'board' : board,

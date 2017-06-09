@@ -562,4 +562,14 @@ public class MakeBlockFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getCommandline() {
+        return this.properties.getProperty("robot.connection.commandLine");
+    }
+
+    @Override
+    public String getSignature() {
+        return this.properties.getProperty("robot.connection.signature");
+    }
 }

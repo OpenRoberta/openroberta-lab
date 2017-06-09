@@ -374,6 +374,10 @@ public interface IRobotFactory {
 
     String getVendorId();
 
+    String getCommandline();
+
+    String getSignature();
+
     Boolean hasConfiguration();
 
     SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);

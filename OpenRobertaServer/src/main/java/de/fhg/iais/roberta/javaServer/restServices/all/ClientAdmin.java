@@ -150,6 +150,8 @@ public class ClientAdmin {
                         response.put("connection", robotFactory.getConnectionType());
                         response.put("vendor", robotFactory.getVendorId());
                         response.put("configurationUsed", robotFactory.hasConfiguration());
+                        response.put("commandLine", robotFactory.getCommandline());
+                        response.put("signature", robotFactory.getSignature());
 
                         LOG.info("set robot to {}", robot);
                     } else {

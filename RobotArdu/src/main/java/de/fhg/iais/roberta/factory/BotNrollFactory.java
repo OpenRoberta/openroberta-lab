@@ -548,4 +548,14 @@ public class BotNrollFactory extends AbstractRobotFactory {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public String getCommandline() {
+        return this.arduProperties.getProperty("robot.connection.commandLine");
+    }
+
+    @Override
+    public String getSignature() {
+        return this.arduProperties.getProperty("robot.connection.signature");
+    }
 }
