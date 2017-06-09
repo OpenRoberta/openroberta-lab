@@ -147,10 +147,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
         this.sb.append(");");
-        this.sb.append("\n");
+        nlIndent();
         this.sb.append("delay(20); ");
         return null;
     }
+
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
@@ -635,11 +636,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             this.sb.append("#include <CountUpDown.h>\n\n");
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
-        
-        if ( this.isToneActionUsed) {
+
+        if ( this.isToneActionUsed ) {
             this.sb.append("MeBuzzer buzzer;\n");
         }
-
 
         this.sb.append("RobertaFunctions rob;\n");
 
