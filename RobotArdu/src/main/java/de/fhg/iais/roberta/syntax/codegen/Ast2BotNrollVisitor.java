@@ -86,7 +86,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.usedActors = usedHardwareVisitor.getUsedActors();
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-
+        this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
     }
 
     /**

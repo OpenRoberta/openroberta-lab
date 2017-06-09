@@ -86,6 +86,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
         this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
         this.isToneActionUsed = usedHardwareVisitor.isToneActionUsed();
+        this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
     }
 
     /**
