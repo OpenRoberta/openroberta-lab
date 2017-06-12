@@ -29,7 +29,7 @@ public class TemperatureSensor<V> extends Sensor<V> {
     private final ISensorPort port;
 
     private TemperatureSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAKEBLOCK_TEMP_SENSING"), properties, comment);
+        super(BlockTypeContainer.getByName("TEMP_SENSING"), properties, comment);
         this.port = port;
         setReadOnly();
     }
