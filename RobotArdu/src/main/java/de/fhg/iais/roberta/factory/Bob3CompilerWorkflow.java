@@ -14,11 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.components.Bob3Configuration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.MakeBlockConfiguration;
+import de.fhg.iais.roberta.syntax.codegen.Ast2Bob3Visitor;
 import de.fhg.iais.roberta.syntax.codegen.Ast2MakeBlockVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2MakeBlockConfigurationTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2Bob3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -113,7 +115,7 @@ public class Bob3CompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2MakeBlockVisitor.generate((MakeBlockConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return Ast2Bob3Visitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
@@ -202,7 +204,7 @@ public class Bob3CompilerWorkflow implements ICompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2MakeBlockConfigurationTransformer transformer = new Jaxb2MakeBlockConfigurationTransformer(factory);
+        Jaxb2Bob3ConfigurationTransformer transformer = new Jaxb2Bob3ConfigurationTransformer(factory);
         return transformer.transform(project);
     }
 

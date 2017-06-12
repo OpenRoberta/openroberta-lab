@@ -231,7 +231,6 @@ Blockly.Msg.IMAGE_TOOLTIP = "Creates an image for the display.";  // untranslate
 Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = "donne la valeur actuelle du capteur infrarouge";
 Blockly.Msg.INFRARED_TOOLTIP = "bloc pour le capteur infrarouge";
 Blockly.Msg.INLINE_INPUTS = "Entrées en ligne";
-Blockly.Msg.JOYSTICK_GETSAMPLE_TOOLTIP = "Gets the current reading of one of the axises of the joystick";  // untranslated
 Blockly.Msg.KEY_ISPRESSED_TOOLTIP = "bouton enfoncé?";
 Blockly.Msg.LED_OFF = "turn LED off";  // untranslated
 Blockly.Msg.LED_ON = "turn LED on";  // untranslated
@@ -524,13 +523,9 @@ Blockly.Msg.MESSAGE_FIRMWARE_ERROR = "Incomptabilité entre le firmware de Open 
 Blockly.Msg.MESSAGE_GROUP_DELETED = "Group »$« was deleted";  // untranslated
 Blockly.Msg.MESSAGE_INVALID_NAME = "Utilise uniquement des lettres et des chiffres et commance TOUJOURS par une letrre. Réessaie de nouveau !";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Cette fonction n'existe pas encore, désolé !";
-Blockly.Msg.MESSAGE_PROGRAM_COMPILING = "Compiling program";  // untranslated
 Blockly.Msg.MESSAGE_PROGRAM_DELETED = "Tu as effacé ton programme '$'.";
-Blockly.Msg.MESSAGE_PROGRAM_FLASHED = "Done flashing";  // untranslated
-Blockly.Msg.MESSAGE_PROGRAM_FLASHING = "Flashing the program, please wait";  // untranslated
 Blockly.Msg.MESSAGE_RESTART_ROBOT = "Connecte de nouveau ton robot avec Open Roberta Lab.";
 Blockly.Msg.MESSAGE_ROBOT_CONNECTED = "Ton robot $ est maintenant connecté.";
-Blockly.Msg.MESSAGE_ROBOT_DISCONNECTED = "An active robot was disconnected";  // untranslated
 Blockly.Msg.MESSAGE_USER_DELETED = "Tu as effacé ton compte d'utilisateur. Nous espérons que tu reviennes bientôt !";
 Blockly.Msg.MESSAGE_USER_GROUP_DELETED = "User »$« was deleted";  // untranslated
 Blockly.Msg.MESSAGE_USER_LOGIN = "Salut '$' !";
@@ -804,14 +799,11 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = "erreur de sauvegarde de la palette.";
 Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "erreur de sauvegarde de la palette";
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "la palette a été enrégistrée!";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation error?";  // untranslated
-<<<<<<< HEAD
 Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_FAIL = "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«";  // untranslated
 Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS = "We send a mail to you, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_ACTIVATION_SUCCESS = "Activation of the user account is successful!";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Your account name or your user name is to long. Please make sure that they are not longer then 25 digits. Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using some one or more special characters in your account name! Please remove them. Your account couldn't be created.";  // untranslated
-=======
->>>>>>> develop
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Vérifie si toutes les cases ont été remplies.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Erreur de sauvegarde; l'utilisateur existe déjà ou réesaie !";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "L'utilisateur a été créé !";
@@ -968,7 +960,6 @@ Blockly.Msg.SENSOR_INFRARED = "capteur infrarouge";
 Blockly.Msg.SENSOR_IS_PIN = "is";  // untranslated
 Blockly.Msg.SENSOR_IS_PRESSED = "enfoncé?";
 Blockly.Msg.SENSOR_IS_TOUCHED = "touched?";  // untranslated
-Blockly.Msg.SENSOR_JOYSTICK = "joystick";  // untranslated
 Blockly.Msg.SENSOR_KEY = "la touche";
 Blockly.Msg.SENSOR_KEY_ANY = "n'importe lequel";
 Blockly.Msg.SENSOR_KEY_DOWN = "bas";
@@ -1119,7 +1110,7 @@ Blockly.Msg.TOUR1_DESCRIPTION16 = "Salut et amuse-toi en essayant encore plus!";
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Donne la valeur actuelle du capteur ultra-son.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Bloc pour le capteur ultyra-son.";
 Blockly.Msg.UNDO = "Annuler";
-Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_«";  // untranslated
+Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";  // untranslated
 Blockly.Msg.VALIDATION_FIELD_REQUIRED = "Il faut remplir cette case!";
 Blockly.Msg.VALIDATION_MAX_LENGTH = "The max. lenght is 25 characters!";  // untranslated
 Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = "Le mot de passe doit contenir au moins 6 caractères!";
