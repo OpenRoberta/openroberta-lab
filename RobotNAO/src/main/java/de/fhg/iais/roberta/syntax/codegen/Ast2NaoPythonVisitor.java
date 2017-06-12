@@ -1139,7 +1139,7 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append(INDENT).append("try:\n");
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\")\n");
+        this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\" + str(e))\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
