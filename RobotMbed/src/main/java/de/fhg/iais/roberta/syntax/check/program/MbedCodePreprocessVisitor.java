@@ -15,7 +15,9 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
-import de.fhg.iais.roberta.syntax.check.program.PreprocessProgramVisitor;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
@@ -212,6 +214,22 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+
         return null;
     }
 
