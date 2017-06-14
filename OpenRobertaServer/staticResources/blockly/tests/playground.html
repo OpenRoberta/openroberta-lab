@@ -52,6 +52,7 @@
 <script src="../blocks/arduActions.js"></script>
 <script src="../blocks/arduSensors.js"></script>
 <script src="../blocks/makeblockSensors.js"></script>
+<script src="../blocks/makeblockActions.js"></script>
 <script src="../blocks/simActions.js"></script>
 <script src="../blocks/simSensors.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
@@ -199,7 +200,7 @@ function toggleDevice() {
       device = 'ardu';
       else
           device = 'ev3';
-  workspace.setDevice(device);  
+  workspace.setDevice(device);
 }
 
 var spaghettiXml = [
@@ -265,6 +266,7 @@ h1 {
 <toolbox_set id='toolbox' style='display: none'>
     <category name='TOOLBOX_ACTION' svg="true">
         <category name='brick'>
+        <block type='makeblockActions_leds_on'></block>
         <block type='robBrick_EV3-Brick'></block>
         <block type='robBrick_ardu-Brick'></block>
         <block type='robBrick_ultrasonic'></block>
@@ -311,7 +313,7 @@ h1 {
                 <field name='MOTORPORT'>A</field>
             </block>
             <block type='robActions_motor_on_for_ardu'>
-            </block>       
+            </block>
         </category>
         <category name='TOOLBOX_DRIVE' svg="true">
             <block type='robActions_motorDiff_on'>
@@ -383,7 +385,7 @@ h1 {
                     </block>
                 </value>
             </block>
-        </category> 
+        </category>
         <category name='TOOLBOX_DISPLAY' svg="true">
             <block type='robActions_display_text'>
                 <value name='OUT'>
@@ -448,8 +450,8 @@ h1 {
             <block type='robActions_sensorLight_on'></block>
             <block type='robActions_brickLight_off'></block>
             <block type='robActions_brickLight_reset'></block>
-        </category> 
-    </category> 
+        </category>
+    </category>
     <category name='TOOLBOX_SENSOR' svg="true">
 
         <block type='arduSensors_joystick_getSample'>
@@ -473,7 +475,7 @@ h1 {
         <block type='robSensors_key_isPressed'>
         </block>
         <block type='robSensors_gyro_reset'>
-            <field name='SENSORPORT'>2</field> 
+            <field name='SENSORPORT'>2</field>
         </block>
         <block type='robSensors_compass_getSample'>
         </block>
@@ -492,46 +494,46 @@ h1 {
         <category name='TOOLBOX_DECISION'>
             <block type='robControls_if'></block>
             <block type='robControls_ifElse'></block>
-        </category> 
+        </category>
         <category name='TOOLBOX_LOOP'>
             <block type='robControls_loopForever'></block>
             <block type='controls_repeat_ext'>
                 <value name='TIMES'>
                     <block type='math_number'>
                         <field name='NUM'>10</field>
-                    </block> 
+                    </block>
                 </value>
             </block>
             <block type='controls_whileUntil'></block>
             <block type='robControls_for'>
-                <value name='FROM'> 
-                    <block type='math_number'> 
-                        <field name='NUM'>1</field> 
-                    </block>             
-                </value> 
-                <value name='TO'>  
-                    <block type='math_number'> 
-                        <field name='NUM'>10</field>  
-                    </block>  
-                </value>  
-                <value name='BY'>  
-                    <block type='math_number'>  
-                        <field name='NUM'>1</field>  
+                <value name='FROM'>
+                    <block type='math_number'>
+                        <field name='NUM'>1</field>
                     </block>
-                </value>  
-            </block> 
+                </value>
+                <value name='TO'>
+                    <block type='math_number'>
+                        <field name='NUM'>10</field>
+                    </block>
+                </value>
+                <value name='BY'>
+                    <block type='math_number'>
+                        <field name='NUM'>1</field>
+                    </block>
+                </value>
+            </block>
             <block type='robControls_forEach'>
-            </block> 
+            </block>
             <block type='controls_flow_statements'></block>
-        </category> 
+        </category>
         <category name=TOOLBOX_WAIT>
-            <block type='robControls_wait'> 
+            <block type='robControls_wait'>
             </block>
             <block type='robControls_wait_time'>
                 <value name='WAIT'>
                     <block type='math_number'>
                         <field name='NUM'>500</field>
-                    </block> 
+                    </block>
                 </value>
             </block>
             <block type='robControls_wait_for'>
@@ -540,20 +542,20 @@ h1 {
                     <mutation operator_range='BOOL'></mutation>
                         <value name='A'>
                             <block type='arduSensors_getSample'>
-                            </block> 
+                            </block>
                         </value>
                         <value name='B'>
                             <block type='logic_boolean'>
-                            </block> 
+                            </block>
                         </value>
-                    </block> 
+                    </block>
                 </value>
-            </block> 
+            </block>
         </category>
-        <category name='Tasks'> 
-            <block type='robControls_start'></block> 
-            <block type='robControls_start_ardu'></block> 
-        </category> 
+        <category name='Tasks'>
+            <block type='robControls_start'></block>
+            <block type='robControls_start_ardu'></block>
+        </category>
     </category>
     <category name='TOOLBOX_LOGIC' svg="true">
         <block type='logic_compare'></block>
@@ -561,7 +563,7 @@ h1 {
         <block type='logic_negate'></block>
         <block type='logic_boolean'></block>
         <block type='logic_null'></block>
-        <block type='logic_ternary'></block> 
+        <block type='logic_ternary'></block>
     </category>
     <category name='TOOLBOX_MATH' svg="true">
         <block type='math_number'></block>
@@ -574,7 +576,7 @@ h1 {
             <value name='DELTA'>
                 <block type='math_number'>
                     <field name='NUM'>1</field>
-                </block> 
+                </block>
             </value>
         </block>
         <block type='math_round'></block>
@@ -584,72 +586,72 @@ h1 {
             <value name='LOW'>
                 <block type='math_number'>
                     <field name='NUM'>1</field>
-                </block> 
+                </block>
             </value>
             <value name='HIGH'>
                 <block type='math_number'>
                     <field name='NUM'>100</field>
-                </block> 
-            </value> 
+                </block>
+            </value>
         </block>
         <block type='math_random_int'>
             <value name='FROM'>
                 <block type='math_number'>
                     <field name='NUM'>1</field>
-                </block> 
+                </block>
             </value>
             <value name='TO'>
                 <block type='math_number'>
                     <field name='NUM'>100</field>
-                </block> 
-            </value> 
+                </block>
+            </value>
         </block>
-        <block type='math_random_float'></block> 
+        <block type='math_random_float'></block>
     </category>
     <category name='TOOLBOX_TEXT' svg="true">
         <block type='text'></block>
         <block type='robText_join'></block>
         <block type='robText_append'>
             <value name='TEXT'>
-                <shadow type='text'></shadow> 
+                <shadow type='text'></shadow>
             </value>
         </block>
     </category>
     <category name='TOOLBOX_LIST' svg="true">
         <block type='robLists_create_with'>
             <mutation items="0" list_type="Number"></mutation>
-        </block>  
+        </block>
         <block type='robLists_create_with'>
             <value name='ADD0'>
-                <block type='math_number'></block> 
-            </value> 
+                <block type='math_number'></block>
+            </value>
             <value name='ADD1'>
-                <block type='math_number'></block> 
-            </value> 
+                <block type='math_number'></block>
+            </value>
             <value name='ADD2'>
-                <block type='math_number'></block> 
-            </value> 
-        </block>  
+                <block type='math_number'></block>
+            </value>
+        </block>
         <block type='robLists_repeat'>
             <value name='NUM'>
                 <block type='math_number'>
                     <field name='NUM'>5</field>
-                </block> 
-            </value> 
+                </block>
+            </value>
         </block>
         <block type='robLists_length'></block>
         <block type='robLists_isEmpty'></block>
-        <block type='robLists_indexOf'> 
+        <block type='robLists_indexOf'>
         </block>
-        <block type='robLists_getIndex'> 
+        <block type='robLists_getIndex'>
         </block>
-        <block type='robLists_setIndex'> 
+        <block type='robLists_setIndex'>
         </block>
-        <block type='robLists_getSublist'> 
+        <block type='robLists_getSublist'>
         </block>
-    </category> 
+    </category>
     <category name='TOOLBOX_COLOUR' svg="true">
-        <block type='robColour_picker'> 
+        <block type='robColour_picker'>
         </block>
     </category>
     <category name='TOOLBOX_VARIABLE' custom='VARIABLE' svg="true"></category>
@@ -663,7 +665,7 @@ h1 {
         <block type='robCommunication_checkConnection'>
            <value name='CONNECTION'>
            <block type='robCommunication_connection'></block>
-           </value> 
+           </value>
         </block>
     </category>
 </toolbox_set>

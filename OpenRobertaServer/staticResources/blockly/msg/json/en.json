@@ -1,11 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< HEAD
-		"lastupdated": "2017-06-08 21:08:26.911862",
-=======
-		"lastupdated": "2017-06-09 11:20:51.590771",
->>>>>>> bob3integration
+		"lastupdated": "2017-06-14 11:45:53.466103",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1155,5 +1151,7 @@
 	"ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS": "We send a mail to you, please check your mailbox!",
 	"ORA_USER_ACTIVATION_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »roberta-zentrale@iais.fraunhofer.de«",
 	"ORA_USER_ACTIVATION_SUCCESS": "Activation of the user account is successful!",
-	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!"
+	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!",
+	"SENSOR_JOYSTICK": "joystick",
+	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick"
 }
