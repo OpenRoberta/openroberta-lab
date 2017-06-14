@@ -323,33 +323,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
         }, 'beta logo was clicked');
 
         $('.menuGeneral').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Das+Open+Roberta+Lab");
-            else
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/The+Open+Roberta+Lab");
-        }, 'head navigation menu item clicked');
-        $('.menuEV3conf').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung");
-            else
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Set+up");
-        }, 'head navigation menu item clicked');
-        $('.menuProgramming').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Das+Open+Roberta+Lab");
-            else
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/The+Open+Roberta+Lab");
+            window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo");
         }, 'head navigation menu item clicked');
         $('.menuFaq').onWrap('click', function(event) {
-            if (GUISTATE_C.getLanguage() == 'de')
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
-            else
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
+            window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
         }, 'head navigation menu item clicked');
-        $('.menuBuildingInstructions').onWrap('click', function(event) {
-            window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Vorbereitung#Vorbereitung-Bauanleitung");
-        }, 'head navigation menu item clicked');
-
         $('.menuPrivacy').onWrap('click', function(event) {
             window.open("TODO");
         }, 'head navigation menu item clicked');
@@ -460,7 +438,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'user.
 
         $('#goToWiki').onWrap('click', function(event) {
             event.preventDefault();
-            window.open('https://wiki.open-roberta.org', '_blank');
+            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo', '_blank');
             event.stopPropagation();
             $("#show-startup-message").modal("show");
 
