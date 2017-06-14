@@ -465,7 +465,6 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensor
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
-
         generateUserDefinedMethods();
         this.sb.append("\n").append("def run():");
         incrIndentation();

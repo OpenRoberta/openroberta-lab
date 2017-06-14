@@ -441,8 +441,7 @@ public class EV3devFactory extends AbstractRobotFactory {
 
     @Override
     public String getFileExtension() {
-        //FIX ME: when the ev3lejos and ev3dev are splitted then we will have different file extension
-        return "java";
+        return "py";
     }
 
     @Override
