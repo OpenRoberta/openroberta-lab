@@ -523,6 +523,7 @@
 	"SENSOR_PRESSED": "",
 	"PITCH": "",
 	"ROLL": "",
+	"YAW": "",
 	"WAIT_UNTIL": "",
 	"START": "",
 	"START_ACTIVITY": "",

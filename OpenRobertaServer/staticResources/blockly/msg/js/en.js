@@ -1150,6 +1150,7 @@ Blockly.Msg.WAIT_UNTIL = "wait until";
 Blockly.Msg.WRITE_TO_PIN_TOOLTIP = "Sends the value to chosen pin.";
 Blockly.Msg.X = "x";
 Blockly.Msg.Y = "y";
+Blockly.Msg.YAW = "yaw";
 Blockly.Msg.YES = "yes";
 Blockly.Msg.YOUNGER_THEN_14 = "I am younger then 14!";
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;

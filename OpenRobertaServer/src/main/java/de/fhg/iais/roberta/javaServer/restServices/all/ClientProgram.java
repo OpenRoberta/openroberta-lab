@@ -90,16 +90,16 @@ public class ClientProgram {
         JSONObject response = new JSONObject();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
-            final JSONObject request = fullRequest.getJSONObject("data");
-            final String cmd = request.getString("cmd");
+            JSONObject request = fullRequest.getJSONObject("data");
+            String cmd = request.getString("cmd");
             ClientProgram.LOG.info("command is: " + cmd + ", userId is " + userId);
             response.put("cmd", cmd);
             ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
 
-            final IRobotFactory robotFactory = httpSessionState.getRobotFactory();
-            final ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
+            IRobotFactory robotFactory = httpSessionState.getRobotFactory();
+            ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
 
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
@@ -141,11 +141,11 @@ public class ClientProgram {
                 Util.addResultInfo(response, forMessages);
 
             } else if ( cmd.equals("loadP") && (httpSessionState.isUserLoggedIn() || request.getString("owner").equals("Roberta")) ) {
-                final String programName = request.getString("name");
-                final String ownerName = request.getString("owner");
-                final User owner = up.getUser(ownerName);
-                final int ownerID = owner.getId();
-                final Program program = pp.getProgram(programName, ownerID, robot);
+                String programName = request.getString("name");
+                String ownerName = request.getString("owner");
+                User owner = up.getUser(ownerName);
+                int ownerID = owner.getId();
+                Program program = pp.getProgram(programName, ownerID, robot);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
                     response.put("lastChanged", program.getLastChanged().getTime());
@@ -316,7 +316,7 @@ public class ClientProgram {
 
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                    final String javaScriptCode =
+                    String javaScriptCode =
                         robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, programText, configurationText);
 
                     ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
@@ -361,10 +361,10 @@ public class ClientProgram {
     }
 
     private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
-        final JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        final Marshaller m = jaxbContext.createMarshaller();
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        final StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         return writer.toString();
     }

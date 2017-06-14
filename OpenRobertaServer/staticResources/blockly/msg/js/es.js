@@ -1150,6 +1150,7 @@ Blockly.Msg.WAIT_UNTIL = "esperar hasta";
 Blockly.Msg.WRITE_TO_PIN_TOOLTIP = "Sends the value to chosen pin.";  // untranslated
 Blockly.Msg.X = "x";  // untranslated
 Blockly.Msg.Y = "y";  // untranslated
+Blockly.Msg.YAW = "yaw";  // untranslated
 Blockly.Msg.YES = "sí";
 Blockly.Msg.YOUNGER_THEN_14 = "I am younger then 14!";  // untranslated
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;

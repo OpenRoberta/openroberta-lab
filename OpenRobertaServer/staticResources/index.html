@@ -777,6 +777,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
+	
 	<!-- Single Modal -->
 	<div id="single-modal" class="modal fade">
 		<div class="modal-dialog modal-sm">
@@ -809,6 +810,41 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
+	
+	<!-- Single Modal List -->
+	<div id="single-modal-list" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 class="modal-title">connect ...</h3>
+				</div>
+				<form id="single-modal-list-form">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="singleModalListInput">Please, choose a robot</label>
+							<div class="input-group">
+								<span class="input-group-addon typcn input-typcn typcn-pencil"></span>
+								<select class="form-control" id="singleModalListInput"
+									name="singleModalListInput">
+								</select>
+							</div>
+							<div align="right">
+								<a href="#" target="_blank" style="display: inline;"></a>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary" id="singleModalListOk">OK</button>
+						<input type="button" class="btn backButton" data-dismiss="modal"
+							lkey="Blockly.Msg.POPUP_CANCEL"></input>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
 	<!-- Popup show about info -->
 	<div id="show-about" class="modal fade">
 		<div class="modal-dialog">
@@ -967,10 +1003,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						lkey="Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE">Update now</button>
 					<input id="buttonCancelFirmwareUpdate" type="button"
 						class="btn backButton" data-dismiss="modal"
-						lkey="Blockly.Msg.POPUP_CANCEL"></input> <input
-						id="buttonCancelFirmwareUpdateAndRun" type="button"
-						class="btn backButton" data-dismiss="modal"
 						lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				    <input id="buttonCancelFirmwareUpdateAndRun" type="button"
+						class="btn backButton" data-dismiss="modal"
+						lkey="Blockly.Msg.POPUP_CANCEL"></input>					
 				</div>
 			</div>
 		</div>

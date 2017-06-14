@@ -34,7 +34,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Initialize the program that is executed in the simulation.
-     *
+     * 
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -54,7 +54,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Function that executes one step of the program.
-     *
+     * 
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -116,7 +116,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
                 case CONSTANTS.DISPLAY_TEXT_ACTION:
                     evalDisplayTextAction(internal(this), simulationData, stmt);
-                    break;
+                    break;           
 
                 case CONSTANTS.DISPLAY_SET_BRIGHTNESS_ACTION:
                     evalDisplaySetBrightnessAction(internal(this), simulationData, stmt);
@@ -420,6 +420,17 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.program.setTimer(duration);
         }
     };
+    
+    var evalImageShiftAction = function(obj, image, direction, n) {
+        var image = evalExpr(obj, image);
+        var n = evalExpr(obj, n);
+        return shiftImage(image,direction,n );
+    }
+    
+    var evalImageInvertAction = function(obj, image) {
+        var image = evalExpr(obj, image);
+        return invertImage(image);
+    }
 
     var evalImageShiftAction = function(obj, image, direction, n) {
         var image = evalExpr(obj, image);

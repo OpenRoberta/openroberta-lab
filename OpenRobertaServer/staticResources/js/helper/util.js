@@ -262,6 +262,21 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         $("#single-modal").modal('show');
     }
     exports.showSingleModal = showSingleModal;
+    
+    
+    function showSingleListModal(customize, onSubmit, onHidden, validator) {
+    	$('#single-modal-list-form').onWrap('submit', function(e) {
+            e.preventDefault();
+            onSubmit();
+        });
+    	$('#single-modal-list').onWrap('hidden.bs.modal', function() {
+            $('#single-modal-list-form').unbind('submit');
+            onHidden();
+        });
+        setFocusOnElement($("#singleModalListInput"));
+        $("#single-modal-list").modal('show');
+    }
+    exports.showSingleListModal = showSingleListModal;
 
     /**
      * Helper to show the information on top of the share modal.

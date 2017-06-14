@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< HEAD
 		"lastupdated": "2017-06-08 21:08:26.911862",
+=======
+		"lastupdated": "2017-06-09 11:20:51.590771",
+>>>>>>> bob3integration
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -529,6 +533,7 @@
 	"SENSOR_PRESSED": " (pressed)",
 	"PITCH": "pitch",
 	"ROLL": "roll",
+	"YAW": "yaw",
 	"WAIT_UNTIL": "wait until",
 	"START": "start",
 	"START_ACTIVITY": "activity",

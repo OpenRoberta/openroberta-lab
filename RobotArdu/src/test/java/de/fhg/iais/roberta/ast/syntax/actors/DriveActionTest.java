@@ -3,11 +3,11 @@ package de.fhg.iais.roberta.ast.syntax.actors;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 @Ignore
 public class DriveActionTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void drive() throws Exception {

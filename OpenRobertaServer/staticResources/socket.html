@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<button onclick="getBobotPort()">Click me</button> 
+<div id="bobotPorts"></div>
+<script src="js/libs/socket.io/socket.io.js"></script>
+<script>
+var jsonObject;
+var socket = io('ws://localhost:8991/');
+socket.on('connect', function(){
+    console.log('connect');
+	  socket.emit('command', 'log on');
+	  socket.emit('command', 'list');
+	  console.log('listed');
+});
+socket.on('message', function(data){
+   if(data.includes('"Network": false')) {
+        jsonObject = JSON.parse(data);
+        console.log(jsonObject['Ports'][0]['Name']);
+        console.log(jsonObject['Ports'][1]['Name']);
+    }
+});
+function getBobotPort() {
+  socket.emit('command', 'list');
+  var i = 0;
+  while (jsonObject['Ports'][i] != null){ 
+	  document.getElementById("bobotPorts").innerHTML += "<p>Found Bobot at " + jsonObject['Ports'][i]['Name']  + "</p>";
+	  i++;
+  }
+
+}
+  
+  socket.on('disconnect', function(){});
+</script>
+</body>
+</html>

@@ -1,12 +1,20 @@
 package de.fhg.iais.roberta.ast.methods;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.factory.BotNrollFactory;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MethodReturnTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
+    BotNrollFactory robotFactory = new BotNrollFactory(null);
+
+    @Before
+    public void setUp() throws Exception {
+        this.h.setRobotFactory(this.robotFactory);
+    }
 
     @Test
     public void methodReturn1() throws Exception {

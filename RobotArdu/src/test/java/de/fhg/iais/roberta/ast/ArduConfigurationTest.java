@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.ArduFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2ArduConfigurationTransformer;
+import de.fhg.iais.roberta.factory.BotNrollFactory;
+import de.fhg.iais.roberta.transformer.Jaxb2BotNrollConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class ArduConfigurationTest {
-    ArduFactory factory = new ArduFactory(null);
+    BotNrollFactory factory = new BotNrollFactory(null);
 
     @BeforeClass
     public static void loadPropertiesForTests() {
@@ -46,7 +46,7 @@ public class ArduConfigurationTest {
                 + "actorport{A:ardumotor,regulated,forward;B:ardumotor,regulated,forward;C:ardumotor,regulated,forward;D:ardumotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
-        Jaxb2ArduConfigurationTransformer transformer = new Jaxb2ArduConfigurationTransformer(this.factory);
+        Jaxb2BotNrollConfigurationTransformer transformer = new Jaxb2BotNrollConfigurationTransformer(this.factory);
         Configuration b = transformer.transform(project);
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }

@@ -23,15 +23,20 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.gui.program.toolbox = {};
         exports.gui.program.prog = {};
         exports.gui.program.download = false;
-        exports.gui.configuration = {}
+        exports.gui.configuration = {};
         exports.gui.configuration.toolbox = '';
         exports.gui.configuration.conf = '';
+        exports.gui.connection = '';
+        exports.gui.vendor = '';
         exports.gui.sim = '';
 
         exports.user = {};
         exports.user.id = -1;
         exports.user.accountName = '';
         exports.user.name = '';
+
+        //exports.socket.portNames = [];
+        //exports.socket.vendorIds = [];
 
         exports.program = {};
         exports.program.name = '';
@@ -63,6 +68,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.robot.sensorValues = '';
         exports.robot.nepoExitValue = 0;
         exports.robot.time = -1;
+        exports.robot.robotPort = '';
+        exports.robot.socket = null;
         return COMM.json("/admin", {
             "cmd" : "init"
         }, function(result) {

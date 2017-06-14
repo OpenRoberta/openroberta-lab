@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -488,7 +489,7 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.naoProperties.getProperty("robot.sim") != null ? true : false;
+        return this.naoProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
@@ -502,8 +503,8 @@ public class NAOFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.naoProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.naoProperties.getProperty("robot.connection");
     }
 
     @Override
@@ -530,6 +531,36 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getVendorId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getCommandline() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getSignature() {
         // TODO Auto-generated method stub
         return null;
     }
