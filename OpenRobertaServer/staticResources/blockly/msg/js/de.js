@@ -941,6 +941,7 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = "Alle \"%1\" Variablen umbenennen in:";
 Blockly.Msg.RETURN = "gib zurück";
 Blockly.Msg.ROLL = "Drehung";
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
+Blockly.Msg.SENSOR_AMBIENTLIGHT = "ambientlight sensor";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "voltage in V";  // untranslated
 Blockly.Msg.SENSOR_COLOUR = "Farbsensor";
 Blockly.Msg.SENSOR_COMPASS = "Kompasssensor";

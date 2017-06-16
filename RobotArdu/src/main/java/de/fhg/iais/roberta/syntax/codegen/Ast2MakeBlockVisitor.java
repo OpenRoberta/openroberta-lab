@@ -284,16 +284,17 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         return null;
     }
 
+    // TODO: separate the block:
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
+            // should go to ambientlight sensor block
             case RED:
                 this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
                 break;
+            //should go to light sensor block
             case AMBIENTLIGHT:
                 this.sb.append("lineFinder.readSensor" + lightSensor.getPort().getPortNumber() + "()");
-                //TODO: here instead of this port number we should read left/rigth sensor.
-                // Fix it after we change the block: lightSensor.getSide()
                 break;
             default:
                 break;
@@ -709,6 +710,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LIGHT:
+                    //TODO: change it according to new blocks
                     if ( usedSensor.getMode() == LightSensorMode.RED ) {
                         this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     } else if ( usedSensor.getMode() == LightSensorMode.AMBIENTLIGHT ) {

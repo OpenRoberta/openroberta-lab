@@ -941,6 +941,7 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = "Переименовать все пере�
 Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "данные, которые должны быть отосланы";
+Blockly.Msg.SENSOR_AMBIENTLIGHT = "ambientlight sensor";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "Напряжение в В";
 Blockly.Msg.SENSOR_COLOUR = "цветовой датчик ";
 Blockly.Msg.SENSOR_COMPASS = "компас";

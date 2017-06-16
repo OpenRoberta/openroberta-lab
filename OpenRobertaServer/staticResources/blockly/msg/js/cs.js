@@ -941,6 +941,7 @@ Blockly.Msg.RENAME_VARIABLE_TITLE = "Přejmenuj všech '%1' proměnných na:";
 Blockly.Msg.RETURN = "return";  // untranslated
 Blockly.Msg.ROLL = "roll";  // untranslated
 Blockly.Msg.SEND_DATA = "poslat data";
+Blockly.Msg.SENSOR_AMBIENTLIGHT = "ambientlight sensor";  // untranslated
 Blockly.Msg.SENSOR_BATTERY = "napětí ve V";
 Blockly.Msg.SENSOR_COLOUR = "barevný senzor";
 Blockly.Msg.SENSOR_COMPASS = "kompas";
