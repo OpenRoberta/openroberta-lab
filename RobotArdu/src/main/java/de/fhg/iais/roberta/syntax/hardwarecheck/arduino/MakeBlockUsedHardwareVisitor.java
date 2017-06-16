@@ -97,11 +97,6 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
         return this.isTemperatureSensorUsed;
     }
 
-
-    public boolean isInfraredSensorUsed() {
-        return this.isInfraredSensorUsed;
-    }
-
     public boolean isToneActionUsed() {
         return this.isToneActionUsed;
     }
@@ -225,7 +220,13 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYROSCOPE, gyroSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getCoordinate()));
         return null;
     }
 
@@ -335,11 +336,4 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
         // TODO Auto-generated method stub
         return null;
     }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

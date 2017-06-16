@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.makeblock.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -55,6 +54,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -68,7 +68,7 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
     private final MakeBlockConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
-    private final boolean isInfraredSensorUsed;
+    //    private final boolean isInfraredSensorUsed;
     private final boolean isTemperatureSensorUsed;
     private String temperatureSensorPort;
     private final boolean isToneActionUsed;
@@ -87,7 +87,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.usedActors = usedHardwareVisitor.getUsedActors();
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
+        //        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
         this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
         this.isToneActionUsed = usedHardwareVisitor.isToneActionUsed();
         this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
@@ -350,17 +350,17 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case DISTANCE: // TODO: change to send or create actor
-
-                break;
-            case SEEK: // TODO: change to receive or remove mode
-                //  ">> 16 & 0xff" add
-                this.sb.append("ir.value");
-                break;
-            default:
-                throw new DbcException("Invalid Infrared Sensor Mode!");
-        }
+        //        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
+        //            case DISTANCE: // TODO: change to send or create actor
+        //
+        //                break;
+        //            case SEEK: // TODO: change to receive or remove mode
+        //                //  ">> 16 & 0xff" add
+        //                this.sb.append("ir.value");
+        //                break;
+        //            default:
+        //                throw new DbcException("Invalid Infrared Sensor Mode!");
+        //        }
         return null;
     }
 
@@ -701,10 +701,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
-        if ( this.isInfraredSensorUsed ) {
-            nlIndent();
-            this.sb.append("ir.begin();");
-        }
+        //        if ( this.isInfraredSensorUsed ) {
+        //            nlIndent();
+        //            this.sb.append("ir.begin();");
+        //        }
         this.sb.append("\n}");
     }
 
@@ -740,7 +740,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     }
                     break;
                 case COMPASS:
-                case GYRO:
+                case GYROSCOPE:
                     this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
                 case ACCELEROMETER:
