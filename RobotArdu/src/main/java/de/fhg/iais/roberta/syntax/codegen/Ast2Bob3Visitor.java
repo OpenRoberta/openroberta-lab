@@ -151,6 +151,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         ITouchSensorMode arm = touchSensor.getMode();
+        System.out.println(arm.toString());
         this.sb.append("bob3.getArm(" + "here be arm side" + ")"); //TODO: extend touch sensor for this robot to support arm sides.
         return null;
     }
