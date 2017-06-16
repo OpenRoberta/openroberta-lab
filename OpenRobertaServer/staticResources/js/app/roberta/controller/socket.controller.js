@@ -51,20 +51,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                             vendorList.push(port['VendorID']);
                             productList.push(port['ProductID']);
                             console.log(port['VendorID'].toUpperCase());
-                            switch (port['VendorID'].toLowerCase()) {
-                            case '0x10c4':
-                                robot = 'Bot\'n Roll';
-                                break;
-                            case '0x1a86':
-                                robot = 'MBot';
-                                break;
-                            case '0x2a03':
-                                robot = 'Arduino Uno';
-                                break;
-                            default:
-                                robot = 'Unknown robot';
-                            }
-                            robotList.push(robot);
+                            robotList.push(GUISTATE_C.getRobotRealName());
                         }
                     });
                     GUISTATE_C.setIsAgent(true);
