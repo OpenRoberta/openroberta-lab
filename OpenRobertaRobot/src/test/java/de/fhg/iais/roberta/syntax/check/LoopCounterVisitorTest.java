@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.PreprocessProgramVisitor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.GenericHelper;
 import de.fhg.iais.roberta.util.test.Helper;
 
@@ -18,6 +19,12 @@ public class LoopCounterVisitorTest {
         public TestUsedHardware(ArrayList<ArrayList<Phrase<Void>>> phrases) {
             super(null);
             check(phrases);
+        }
+
+        @Override
+        public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+            // TODO Auto-generated method stub
+            return null;
         }
 
     }

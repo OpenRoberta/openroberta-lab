@@ -90,6 +90,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -664,6 +665,12 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
 
     @Override
     public T visitBluetoothCheckConnectAction(BluetoothCheckConnectAction<T> bluetoothCheckConnectAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTemperatureSensor(TemperatureSensor<T> temperatureSensor) {
         // TODO Auto-generated method stub
         return null;
     }

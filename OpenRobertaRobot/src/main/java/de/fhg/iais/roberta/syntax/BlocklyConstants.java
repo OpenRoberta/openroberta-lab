@@ -122,6 +122,9 @@ public final class BlocklyConstants {
     public static final String ROB_COLOUR_PICKER = "robColour_picker";
     public static final String CONNECTION_NXT = "robCommunication_connection";
 
+    public static final String MBED_SENSOR_TEMPERATURE_GET_SAMPLE = "mbedSensors_temperature_getSample";
+    public static final String ROB_SENSOR_TEMPERATURE_GET_SAMPLE = "makeblockSensors_temperature_getSample";
+
     public static final String ROB_GLOBAL_VARIABLES_DECLARE = "robGlobalvariables_declare";
     public static final String ROB_LOCAL_VARIABLES_DECLARE = "robLocalVariables_declare";
     public static final String VARIABLE_SET = "variables_set";

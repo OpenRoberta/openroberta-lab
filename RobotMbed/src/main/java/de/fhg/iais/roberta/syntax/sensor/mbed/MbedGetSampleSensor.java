@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -61,7 +62,7 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                 this.sensor = MicrophoneSensor.make(1, properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
-                this.sensor = TemperatureSensor.make(properties, comment);
+                this.sensor = TemperatureSensor.make(null, properties, comment);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
                 this.sensor = AmbientLightSensor.make(properties, comment);

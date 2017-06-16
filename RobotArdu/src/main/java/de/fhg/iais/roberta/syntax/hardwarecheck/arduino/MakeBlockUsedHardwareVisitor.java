@@ -27,6 +27,8 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
+import de.fhg.iais.roberta.syntax.check.CheckVisitor;
+import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -35,14 +37,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
-import de.fhg.iais.roberta.syntax.sensor.makeblock.TemperatureSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.syntax.check.CheckVisitor;
-import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 
 /**
@@ -100,6 +100,7 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
         return this.isToneActionUsed;
     }
 
+    @Override
     protected void check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
@@ -287,46 +288,46 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
         return null;
     }
 
-	@Override
-	public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitLightAction(LightAction<Void> lightAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

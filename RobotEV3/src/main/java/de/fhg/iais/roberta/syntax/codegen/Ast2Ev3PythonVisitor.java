@@ -69,6 +69,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -939,6 +940,12 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensor
         }
         sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

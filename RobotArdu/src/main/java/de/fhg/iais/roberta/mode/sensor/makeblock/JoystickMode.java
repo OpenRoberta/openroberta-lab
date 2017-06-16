@@ -7,13 +7,20 @@ public enum JoystickMode implements IJoystickMode {
 
     private final String[] values;
 
-    private JoystickMode(String... values) {
+    private final String axis;
+
+    private JoystickMode(String axis, String... values) {
+        this.axis = axis;
         this.values = values;
     }
 
     @Override
     public String[] getValues() {
         return this.values;
+    }
+
+    public String getAxis() {
+        return this.axis;
     }
 
 }

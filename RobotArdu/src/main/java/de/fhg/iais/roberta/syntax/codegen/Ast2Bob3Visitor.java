@@ -9,22 +9,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
-import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.Bob3UsedHardwareVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -38,7 +22,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.sensor.bob3.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -47,6 +30,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -94,87 +78,6 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         Ast2Bob3Visitor astVisitor = new Ast2Bob3Visitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLightAction(LightAction<Void> lightAction) {
-        return null;
-
-    }
-
-    @Override
-    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitToneAction(ToneAction<Void> toneAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return null;
     }
 
     @Override

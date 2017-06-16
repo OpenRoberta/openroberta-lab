@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -91,6 +92,13 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
      * @param compassSensor to be visited
      */
     V visitCompassSensor(CompassSensor<V> compassSensor);
+
+    /**
+     * visit a {@link TemperatureSensor}.
+     *
+     * @param temperatureSensor to be visited
+     */
+    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
 
     /**
      * visit a {@link GetSampleSensor}.

@@ -539,7 +539,7 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public IJoystickMode getJoystickMode(String joystickMode) {
+    public JoystickMode getJoystickMode(String joystickMode) {
         if ( joystickMode == null || joystickMode.isEmpty() ) {
             throw new DbcException("Invalid joystick axis: " + joystickMode);
         }
@@ -573,9 +573,9 @@ public class MakeBlockFactory extends AbstractRobotFactory {
         return this.properties.getProperty("robot.connection.signature");
     }
 
-	@Override
-	public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
