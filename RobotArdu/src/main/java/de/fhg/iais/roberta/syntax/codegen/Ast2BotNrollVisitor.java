@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -14,6 +13,8 @@ import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.botnroll.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -163,7 +164,6 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         BlinkMode blinkingMode = (BlinkMode) lightAction.getBlinkMode();
-
         switch ( blinkingMode ) {
             case ON:
                 this.sb.append("one.led(HIGH);");
@@ -395,16 +395,15 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        IBrickKey button = brickSensor.getKey();
         String btnNumber;
-        switch ( button.toString() ) {
-            case "ENTER":
+        switch ( (BrickKey) brickSensor.getKey() ) {
+            case ENTER:
                 btnNumber = "2";
                 break;
-            case "LEFT":
+            case LEFT:
                 btnNumber = "1";
                 break;
-            case "RIGHT":
+            case RIGHT:
                 btnNumber = "3";
                 break;
             default:
@@ -424,20 +423,20 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         } else {
             colors = "colorsRight, ";
         }
-        switch ( getEnumCode(colorSensor.getMode()) ) {
-            case "ColorSensorMode.COLOUR":
+        switch ( (ColorSensorMode) colorSensor.getMode() ) {
+            case COLOUR:
                 this.sb.append("bnr.colorSensorColor(");
                 this.sb.append(colors);
                 this.sb.append(colorSensor.getPort().getPortNumber());
                 this.sb.append(")");
                 break;
-            case "ColorSensorMode.RGB":
+            case RGB:
                 this.sb.append("{(double) bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[0], (double) bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[1], (double) bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[2]}");
                 break;
-            case "ColorSensorMode.RED":
+            case RED:
                 this.sb.append("bnr.colorSensorLight(" + colors + port);
                 this.sb.append(")");
                 break;

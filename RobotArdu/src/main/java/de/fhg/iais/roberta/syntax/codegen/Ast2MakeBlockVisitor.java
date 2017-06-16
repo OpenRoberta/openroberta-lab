@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -285,7 +286,19 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+        switch ( (LightSensorMode) lightSensor.getMode() ) {
+            case RED:
+                this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+                break;
+            case AMBIENTLIGHT:
+                this.sb.append("lineFinder.readSensor" + lightSensor.getPort().getPortNumber() + "()");
+                //TODO: here instead of this port number we should read left/rigth sensor.
+                // Fix it after we change the block: lightSensor.getSide()
+                break;
+            default:
+                break;
+        }
+
         return null;
     }
 
@@ -696,7 +709,11 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LIGHT:
-                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    if ( usedSensor.getMode() == LightSensorMode.RED ) {
+                        this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    } else if ( usedSensor.getMode() == LightSensorMode.AMBIENTLIGHT ) {
+                        this.sb.append("MeLineFollower lineFinder(" + usedSensor.getPort() + ");\n");
+                    }
                     break;
                 case COMPASS:
                 case GYRO:

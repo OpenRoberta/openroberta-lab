@@ -12,7 +12,11 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.general.nxt.IndexLocation;
+import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -135,41 +139,41 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String value;
-        switch ( getEnumCode(colorConst.getValue()) ) {
-            case "PickColor.BLACK":
+        switch ( (PickColor) colorConst.getValue() ) {
+            case BLACK:
                 value = "INPUT_BLACKCOLOR";
                 break;
-            case "PickColor.BLUE":
+            case BLUE:
                 value = "INPUT_BLUECOLOR";
                 break;
-            case "PickColor.GREEN":
+            case GREEN:
                 value = "INPUT_GREENCOLOR";
                 break;
-            case "PickColor.YELLOW":
+            case YELLOW:
                 value = "INPUT_YELLOWCOLOR";
                 break;
-            case "PickColor.RED":
+            case RED:
                 value = "INPUT_REDCOLOR";
                 break;
-            case "PickColor.WHITE":
+            case WHITE:
                 value = "INPUT_WHITECOLOR";
                 break;
-            case "PickColor.MAGENTA":
+            case MAGENTA:
                 value = "INPUT_MAGENTACOLOR";
                 break;
-            case "PickColor.ORANGE":
+            case ORANGE:
                 value = "INPUT_ORANGECOLOR";
                 break;
-            case "PickColor.LIME":
+            case LIME:
                 value = "INPUT_LIMECOLOR";
                 break;
-            case "PickColor.VIOLET":
+            case VIOLET:
                 value = "INPUT_VIOLETCOLOR";
                 break;
-            case "PickColor.CRIMSON":
+            case CRIMSON:
                 value = "INPUT_CRIMSONCOLOR";
                 break;
-            case "PickColor.PURPLE":
+            case PURPLE:
                 value = "INPUT_PURPLECOLOR";
                 break;
             default:
@@ -687,15 +691,14 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        //final String Port = getEnumCode(lightSensor.getPort());
         this.sb.append("SensorLight(");
         this.sb.append(lightSensor.getPort());
         this.sb.append(", ");
-        switch ( getEnumCode(lightSensor.getMode()) ) {
-            case "LightSensorMode.RED":
+        switch ( (LightSensorMode) lightSensor.getMode() ) {
+            case RED:
                 this.sb.append("\"LIGHT\"");
                 break;
-            case "LightSensorMode.AMBIENTLIGHT":
+            case AMBIENTLIGHT:
                 this.sb.append("\"AMBIENTLIGHT\"");
                 break;
             default:
@@ -708,14 +711,14 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String button = null;
-        switch ( getEnumCode(brickSensor.getKey()) ) {
-            case "BrickKey.ENTER":
+        switch ( (BrickKey) brickSensor.getKey() ) {
+            case ENTER:
                 button = "BTNCENTER";
                 break;
-            case "BrickKey.LEFT":
+            case LEFT:
                 button = "BTNLEFT";
                 break;
-            case "BrickKey.RIGHT":
+            case RIGHT:
                 button = "BTNRIGHT";
                 break;
         }
@@ -732,18 +735,16 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         }
         this.sb.append(colorSensor.getPort());
         this.sb.append(", ");
-        switch ( getEnumCode(colorSensor.getMode()) ) {
-            case "ColorSensorMode.COLOUR":
+        switch ( (ColorSensorMode) colorSensor.getMode() ) {
+            case COLOUR:
                 this.sb.append("\"COLOR\"");
                 break;
-            case "ColorSensorMode.AMBIENTLIGHT":
+            case AMBIENTLIGHT:
                 this.sb.append("\"AMBIENTLIGHT\"");
                 break;
-            case "ColorSensorMode.RED":
+            case RED:
                 this.sb.append("\"LIGHT\"");
                 break;
-            /*default:
-            throw new DbcException("Invalide mode for Color Sensor!");*/
         }
         this.sb.append(")");
         return null;
@@ -877,9 +878,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
         this.sb.append(")");
-        //this.sb.append(methodName);
-        //lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        //this.sb.append(")");
         return null;
     }
 
