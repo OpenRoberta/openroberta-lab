@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< HEAD
 		"lastupdated": "2017-06-16 15:33:13.620142",
+=======
+		"lastupdated": "2017-06-16 11:36:14.076496",
+>>>>>>> 181ab04... #496 accelerometer and gyro sensor for makeblock
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},

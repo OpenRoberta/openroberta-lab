@@ -50,7 +50,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class MakeBlockFactory extends AbstractRobotFactory {
-    private MakeBlockCompilerWorkflow compilerWorkflow;
+    private final MakeBlockCompilerWorkflow compilerWorkflow;
     private final Properties properties;
     private final String name;
     private final int robotPropertyNumber;

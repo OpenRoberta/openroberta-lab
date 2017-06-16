@@ -10,7 +10,8 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.botnroll.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.makeblock.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -66,10 +67,11 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
  */
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
     private final MakeBlockConfiguration brickConfiguration;
-    private boolean isTimerSensorUsed;
-    private boolean isTemperatureSensorUsed;
+    private final boolean isTimerSensorUsed;
+    private final boolean isInfraredSensorUsed;
+    private final boolean isTemperatureSensorUsed;
     private String temperatureSensorPort;
-    private boolean isToneActionUsed;
+    private final boolean isToneActionUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -85,6 +87,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.usedSensors = usedHardwareVisitor.getUsedSensors();
         this.usedActors = usedHardwareVisitor.getUsedActors();
         this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
+        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
         this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
         this.isToneActionUsed = usedHardwareVisitor.isToneActionUsed();
         this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
@@ -335,14 +338,29 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        //the axis names(getAxis) should be taken as input for gyro sensor however the implementations for that don't exist in GyroSensor.java
-        //this.sb.append("myGyro.getAngle" + "(" + gyroSensor.getAxis() + ")");
+        this.sb.append("myGyro.getGyro" + gyroSensor.getMode().toString() + "()");
+        return null;
+    }
+
+    @Override
+    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
+        this.sb.append("myGyro.getAngle" + accelerometer.getCoordinate() + "()");
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
+        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
+            case DISTANCE: // TODO: change to send or create actor
 
+                break;
+            case SEEK: // TODO: change to receive or remove mode
+                //  ">> 16 & 0xff" add
+                this.sb.append("ir.value");
+                break;
+            default:
+                throw new DbcException("Invalid Infrared Sensor Mode!");
+        }
         return null;
     }
 
@@ -683,6 +701,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
+        if ( this.isInfraredSensorUsed ) {
+            nlIndent();
+            this.sb.append("ir.begin();");
+        }
         this.sb.append("\n}");
     }
 
@@ -719,7 +741,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     break;
                 case COMPASS:
                 case GYRO:
-                    this.sb.append("MEGyro myGyro");
+                    this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
+                    break;
+                case ACCELEROMETER:
+                    this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
                 case SOUND:
                     this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");

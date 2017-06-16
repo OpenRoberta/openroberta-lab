@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
@@ -94,6 +95,11 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
+    }
+
+
+    public boolean isInfraredSensorUsed() {
+        return this.isInfraredSensorUsed;
     }
 
     public boolean isToneActionUsed() {
@@ -326,6 +332,12 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         // TODO Auto-generated method stub
         return null;
     }
