@@ -79,8 +79,14 @@
 .typcn-open:before {
   content: "\e90e";
 }
+.typcn-ardu:before {
+  content: "\e9d3";
+}
 .typcn-botnroll:before {
   content: "\e90f";
+}
+.typcn-nibo:before {
+  content: "\e935";
 }
 .typcn-microduino:before {
   content: "\e910";

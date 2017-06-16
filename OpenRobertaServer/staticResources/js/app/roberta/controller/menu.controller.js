@@ -71,7 +71,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 clone.addClass(robotGroup);
                 clone.find('span:eq( 0 )').addClass('img-' + robotName);
             } else {
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+                clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
             }
             clone.find('span:eq( 1 )').text(robots[i].realName);
             clone.find('a').attr('onclick', 'window.open("' + robots[i].info + '");return false;');
@@ -82,18 +82,16 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $("#popup-robot-container").append(clone);
             if (robotName != robotGroup && !newGroup) {
                 newGroup = true;
+                var clone = proto.clone().prop('id', 'menu-' + robotGroup);           
+            	clone.find('span:eq( 0 )').removeClass('typcn-open');
+                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);   
+                clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
+                clone.find('a').remove();
+                clone.attr('data-type', robotGroup);
+                clone.attr('data-group', true);
+                clone.find('img').css('visibility', 'hidden');
+                $("#popup-robot-container").append(clone);
             } else {
-                if (newGroup) {
-                    var clone = proto.clone().prop('id', 'menu-' + robotGroup);
-                    clone.find('span:eq( 0 )').removeClass('typcn-open');
-                    clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
-                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
-                    clone.find('a').remove();
-                    clone.attr('data-type', robotGroup);
-                    clone.attr('data-group', true);
-                    clone.find('img').css('visibility', 'hidden');
-                    $("#popup-robot-container").append(clone);
-                }
                 newGroup = false;
             }
         }

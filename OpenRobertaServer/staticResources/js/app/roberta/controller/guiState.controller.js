@@ -236,18 +236,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('.robotType').removeClass('disabled');
         $('.' + robot).addClass('disabled');
         $('#head-navi-icon-robot').removeClass('typcn-open');
-        if (GUISTATE.gui.robotGroup === 'ardu' && tmpRob === 'botnroll') {
-            $('#head-navi-icon-robot').removeClass('typcn-' + tmpRob);
-        } else {
-            $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
-        }
-        if (robotGroup === 'ardu' && robot === 'botnroll') {
-            $('#head-navi-icon-robot').addClass('typcn-' + robot);
-            tmpRob = robot;
-        } else {
-            $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
-            tmpRob = '';
-        }
+        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
+        $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+
 
         if (!opt_init) {
             setProgramSaved(true);
