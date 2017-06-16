@@ -15,7 +15,7 @@ public class WaitStmtTest {
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [BrickSensor [key=button_a, mode=IS_PRESSED]]], BoolConst [true]]]\n"
                 + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
                 + ")\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor []]], NumConst [20]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [null]]], NumConst [20]]]\n"
                 + "AktionStmt [DisplayTextAction [TEXT, StringConst [Hallo]]]\n"
                 + ")]]]]";
 
