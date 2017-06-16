@@ -38,6 +38,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         var robots = GUISTATE_C.getRobots();
         var proto = $('.robotType');
         var length = Object.keys(robots).length
+
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
                 i++;
@@ -55,6 +56,64 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         proto.remove();
         // fill start popup
         proto = $('#popup-sim');
+
+        var groupsDict = {};
+
+        var addPair = function(my_key, my_value) {
+            if (typeof groupsDict[my_key] != 'undefined') {
+                groupsDict[my_key].push(my_value);
+            } else {
+                groupsDict[my_key] = [ my_value ];
+            }
+        }
+        var giveValue = function(my_key) {
+            return groupsDict[my_key];
+        }
+
+        for (var i = 0; i < length; i++) {
+            if (robots[i].name == 'sim') {
+                i++;
+                proto.attr('data-type', robots[i].name);
+            }
+            addPair(robots[i].group, robots[i].name);
+        }
+/*
+        for ( var key in groupsDict) {
+            if (groupsDict.hasOwnProperty(key)) {
+                if (groupsDict[key] == key) {
+                    var clone = proto.clone().prop('id', 'menu-' + groupsDict[key]);
+                    clone.attr('data-type', groupsDict[key]);
+                    clone.find('span:eq( 0 )').addClass('typcn-' + groupsDict[key]);
+                    clone.find('span:eq( 0 )').removeClass('typcn-open');
+                    clone.find('span:eq( 1 )').text(groupsDict[key]);
+                    $("#popup-robot-container").append(clone);
+
+                } else {
+                    $("#popup-robot-container").append(proto.clone().prop('id', 'menu-' + key));
+                    var robotGroup = key;
+                    for (var i = 0; i < groupsDict[key].length; i++){
+                        var robotName = groupsDict[key][i];
+                        var clone = proto.clone().prop('id', 'menu-' + robotName);
+                        clone.addClass('hidden');
+                        clone.addClass('robotSubGroup');
+                        clone.addClass(robotGroup);
+                        clone.attr('data-type', robotName);
+                        clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
+                        clone.find('span:eq( 0 )').addClass('img-' + robotName);
+                        clone.attr('data-type', robotGroup);
+                        clone.attr('data-group', true);
+                        clone.find('span:eq( 0 )').removeClass('typcn-open');
+                        clone.find('span:eq( 1 )').text(robotName);
+                        $("#popup-robot-container").append(clone);
+                    }
+                    groupsDict[key].forEach(function(item, index, groupsDict){
+                        //console.log(item, index, groupsDict, groupsDict[index]);
+
+                    });
+                }
+            }
+        }
+*/        
         var newGroup = false;
         for (var i = 0; i < length; i++) {
             if (robots[i].name == 'sim') {
@@ -80,11 +139,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 clone.find('img.img-beta').css('visibility', 'hidden');
             }
             $("#popup-robot-container").append(clone);
-            if (robotName != robotGroup && !newGroup) {
+            if(robotGroup == "makeblock") {
+                newGroup = false;
+            }
+            if ((robotName != robotGroup) && !newGroup) {
+                console.log(robotGroup);
                 newGroup = true;
-                var clone = proto.clone().prop('id', 'menu-' + robotGroup);           
-            	clone.find('span:eq( 0 )').removeClass('typcn-open');
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);   
+                var clone = proto.clone().prop('id', 'menu-' + robotGroup);
+                clone.find('span:eq( 0 )').removeClass('typcn-open');
+                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
                 clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
                 clone.find('a').remove();
                 clone.attr('data-type', robotGroup);
@@ -98,11 +161,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         if (robots[0].name != 'sim') {
             proto.remove();
         }
+        
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
-
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
-
         GUISTATE_C.setInitialState();
     }
 
@@ -210,9 +272,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
-                	console.log(GUISTATE_C.getIsAgent());
-                	console.log(GUISTATE_C.getConnection());
-                    if (GUISTATE_C.getConnection() == 'arduinoAgent' || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
+                    console.log(GUISTATE_C.getIsAgent());
+                    console.log(GUISTATE_C.getConnection());
+                    if (GUISTATE_C.getConnection() == 'arduinoAgent'
+                            || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
