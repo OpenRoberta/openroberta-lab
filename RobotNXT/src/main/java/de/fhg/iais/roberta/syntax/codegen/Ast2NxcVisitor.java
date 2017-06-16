@@ -464,6 +464,8 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        this.sb.append("byte volume = 0x02;");
+        nlIndent();
         this.sb.append("PlayToneEx(");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
@@ -1241,15 +1243,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
                     break;
             }
         }
+        // TODO: also move outside main
         if ( this.timeSensorUsed ) {
             nlIndent();
             this.sb.append("long timer1;");
             nlIndent();
             this.sb.append("SetTimerValue(timer1);");
-        }
-        if ( this.volumeActionUsed ) {
-            nlIndent();
-            this.sb.append("byte volume = 0x02;");
         }
     }
 

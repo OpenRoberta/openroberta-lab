@@ -9,7 +9,7 @@ public class ToneActionTest {
 
     @Test
     public void playTone() throws Exception {
-        final String a = "PlayToneEx(300, 100, volume, false);Wait(100);";
+        final String a = "bytevolume=0x02;PlayToneEx(300, 100, volume, false);Wait(100);";
 
         this.h.assertCodeIsOk(a, "/ast/actions/action_PlaySound.xml");
     }
