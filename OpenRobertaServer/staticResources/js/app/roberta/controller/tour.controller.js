@@ -62,32 +62,32 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         },
         'showSkip' : false
     }, /*
-     * { 'event_type' : 'next', 'selector' : '#head-navigation',
-     * 'description' : 'TOUR1_DESCRIPTION02', 'nextButton' : { text :
-     * 'TOUR1_DESCRIPTION00' }, 'showSkip' : false }, { 'event_type' :
-     * 'next', 'selector' : '.navbar-nav', 'description' :
-     * 'TOUR1_DESCRIPTION03', 'nextButton' : { text : 'TOUR1_DESCRIPTION00' },
-     * 'showSkip' : false }, { 'event' : 'click', 'selector' :
-     * 'a#tabConfiguration', 'description' : 'TOUR1_DESCRIPTION04',
-     * 'nextButton' : { text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false }, {
-     * 'event_type' : 'next', 'selector' : '#bricklyDiv
-     * .blocklyBlockCanvas', 'description' : 'TOUR1_DESCRIPTION05',
-     * 'nextButton' : { text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false,
-     * onBeforeStart : function() { $('#tabConfiguration').trigger('click'); } }, {
-     * 'event' : 'click', 'selector' : 'a#tabProgram', 'description' :
-     * 'TOUR1_DESCRIPTION06', 'nextButton' : { text : 'TOUR1_DESCRIPTION00' },
-     * 'showSkip' : false }, { 'event_type' : 'next', 'selector' :
-     * '.blocklyTreeRoot', 'description' : 'TOUR1_DESCRIPTION07',
-     * 'nextButton' : { text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false,
-     * onBeforeStart : function() { $('#tabProgram').trigger('click'); } }, {
-     * 'event_type' : 'next', 'selector' : '#blocklyDiv>svg>g>g:eq(1)',
-     * 'description' : 'TOUR1_DESCRIPTION08', 'bottom' : -100, 'nextButton' : {
-     * text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false, onBeforeStart :
-     * function() { Blockly.hideChaff(); } }, { 'event_type' : 'next',
-     * 'selector' : '.blocklyButtons:eq(1)', 'description' :
-     * 'TOUR1_DESCRIPTION09', 'right' : -50, 'nextButton' : { text :
-     * 'TOUR1_DESCRIPTION00' }, 'showSkip' : false },
-     */
+         * { 'event_type' : 'next', 'selector' : '#head-navigation',
+         * 'description' : 'TOUR1_DESCRIPTION02', 'nextButton' : { text :
+         * 'TOUR1_DESCRIPTION00' }, 'showSkip' : false }, { 'event_type' :
+         * 'next', 'selector' : '.navbar-nav', 'description' :
+         * 'TOUR1_DESCRIPTION03', 'nextButton' : { text : 'TOUR1_DESCRIPTION00' },
+         * 'showSkip' : false }, { 'event' : 'click', 'selector' :
+         * 'a#tabConfiguration', 'description' : 'TOUR1_DESCRIPTION04',
+         * 'nextButton' : { text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false }, {
+         * 'event_type' : 'next', 'selector' : '#bricklyDiv
+         * .blocklyBlockCanvas', 'description' : 'TOUR1_DESCRIPTION05',
+         * 'nextButton' : { text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false,
+         * onBeforeStart : function() { $('#tabConfiguration').trigger('click'); } }, {
+         * 'event' : 'click', 'selector' : 'a#tabProgram', 'description' :
+         * 'TOUR1_DESCRIPTION06', 'nextButton' : { text : 'TOUR1_DESCRIPTION00' },
+         * 'showSkip' : false }, { 'event_type' : 'next', 'selector' :
+         * '.blocklyTreeRoot', 'description' : 'TOUR1_DESCRIPTION07',
+         * 'nextButton' : { text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false,
+         * onBeforeStart : function() { $('#tabProgram').trigger('click'); } }, {
+         * 'event_type' : 'next', 'selector' : '#blocklyDiv>svg>g>g:eq(1)',
+         * 'description' : 'TOUR1_DESCRIPTION08', 'bottom' : -100, 'nextButton' : {
+         * text : 'TOUR1_DESCRIPTION00' }, 'showSkip' : false, onBeforeStart :
+         * function() { Blockly.hideChaff(); } }, { 'event_type' : 'next',
+         * 'selector' : '.blocklyButtons:eq(1)', 'description' :
+         * 'TOUR1_DESCRIPTION09', 'right' : -50, 'nextButton' : { text :
+         * 'TOUR1_DESCRIPTION00' }, 'showSkip' : false },
+         */
     {
         'event' : 'click touchend',
         'selector' : '.blocklyTreeRow:eq(1)',
@@ -113,7 +113,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#progSim', //'.blocklyButtons>g:eq(1)>rect',
         'description' : 'TOUR1_DESCRIPTION13',
         'showSkip' : false,
-        'showNext' : false,
+        'showNext' : true,
         onBeforeStart : function() {
             var blocks = Blockly.getMainWorkspace().getTopBlocks();
             if (!blocks[0].getNextBlock()) {
@@ -130,7 +130,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#simDiv',
         'description' : 'TOUR1_DESCRIPTION15',
         'shape' : 'circle',
-        'radius' : 100,
+        'radius' : $('#blockly').width() / 10,
         'top' : offsetTop,
         'left' : offsetLeft,
         'showSkip' : false
