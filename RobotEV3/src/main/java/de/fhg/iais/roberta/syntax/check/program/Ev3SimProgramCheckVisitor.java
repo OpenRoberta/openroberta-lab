@@ -12,7 +12,6 @@ public class Ev3SimProgramCheckVisitor extends SimulationProgramCheckVisitor {
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
