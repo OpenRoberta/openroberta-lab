@@ -239,7 +239,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
         $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
 
-
         if (!opt_init) {
             setProgramSaved(true);
             setConfigurationSaved(true);
@@ -374,6 +373,45 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         return getRobot();
     }
     exports.getRobotRealName = getRobotRealName;
+
+    function getMenuRobotRealName(robotName) {
+        for ( var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName) {
+                return getRobots()[robot].realName;
+            }
+        }
+        return "Robot not found";
+    }
+    exports.getMenuRobotRealName = getMenuRobotRealName;
+
+    function getIsRobotBeta(robotName) {
+        for ( var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName && getRobots()[robot].beta == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+    exports.getIsRobotBeta = getIsRobotBeta;
+
+    function getRobotInfo(robotName) {
+        for ( var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName) {
+                return getRobots()[robot].info;
+            }
+        }
+        return "Info not found";
+    }
+    exports.getRobotInfo = getRobotInfo;
 
     function isRobotConnected() {
         return GUISTATE.robot.time > 0 || GUISTATE.gui.connection;
@@ -826,12 +864,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         return GUISTATE.gui.vendor;
     }
     exports.getVendor = getVendor;
-    
+
     function getSignature() {
         return GUISTATE.gui.signature;
     }
     exports.getSignature = getSignature;
-    
+
     function getCommandLine() {
         return GUISTATE.gui.commandLine;
     }

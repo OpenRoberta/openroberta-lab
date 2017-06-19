@@ -60,15 +60,25 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         var groupsDict = {};
 
-        var addPair = function(my_key, my_value) {
-            if (typeof groupsDict[my_key] != 'undefined') {
-                groupsDict[my_key].push(my_value);
+        var addPair = function(key, value) {
+            if (typeof groupsDict[key] != 'undefined') {
+                groupsDict[key].push(value);
             } else {
-                groupsDict[my_key] = [ my_value ];
+                groupsDict[key] = [ value ];
             }
         }
-        var giveValue = function(my_key) {
-            return groupsDict[my_key];
+
+        var giveValue = function(key) {
+            return groupsDict[key];
+        }
+
+        var addInfoLink = function(clone, robotName) {
+            if (GUISTATE_C.getRobotInfo(robotName) != 'Info not found') {
+                clone.find('a').attr('onclick', 'window.open("' + GUISTATE_C.getRobotInfo(robotName) + '");return false;');
+            } else {
+                clone.find('a').remove();
+            }
+            return clone;
         }
 
         for (var i = 0; i < length; i++) {
@@ -78,91 +88,55 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
             addPair(robots[i].group, robots[i].name);
         }
-/*
+
         for ( var key in groupsDict) {
             if (groupsDict.hasOwnProperty(key)) {
-                if (groupsDict[key] == key) {
-                    var clone = proto.clone().prop('id', 'menu-' + groupsDict[key]);
-                    clone.attr('data-type', groupsDict[key]);
-                    clone.find('span:eq( 0 )').addClass('typcn-' + groupsDict[key]);
+                if (groupsDict[key] == key) { //this means that a robot has no subgroup
+                    var robotName = key; // robot name is the same as robot group
+                    var clone = proto.clone().prop('id', 'menu-' + robotName);
+                    clone.attr('data-type', robotName);
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
-                    clone.find('span:eq( 1 )').text(groupsDict[key]);
+                    clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
+                    clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotName));
+                    addInfoLink(clone, robotName);
+                    clone.find('img').css('visibility', 'hidden');
                     $("#popup-robot-container").append(clone);
 
-                } else {
-                    $("#popup-robot-container").append(proto.clone().prop('id', 'menu-' + key));
+                } else { // till the next for loop we create groups for robots
                     var robotGroup = key;
-                    for (var i = 0; i < groupsDict[key].length; i++){
+                    var clone = proto.clone().prop('id', 'menu-' + robotGroup);
+                    clone.attr('data-type', robotGroup);
+                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group 
+                    clone.find('span:eq( 0 )').removeClass('typcn-open');
+                    clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup); // so we just capitalize the first letter + add typicon
+                    clone.find('img.img-beta').css('visibility', 'hidden'); // groups do not have 'beta' labels
+                    addInfoLink(clone, robotGroup); // this will just kill the link tag, because no description for group
+                    clone.attr('data-group', true);
+                    $("#popup-robot-container").append(clone);
+                    for (var i = 0; i < groupsDict[key].length; i++) { // and here we put robots in subgroups
                         var robotName = groupsDict[key][i];
                         var clone = proto.clone().prop('id', 'menu-' + robotName);
                         clone.addClass('hidden');
                         clone.addClass('robotSubGroup');
                         clone.addClass(robotGroup);
+                        if (!GUISTATE_C.getIsRobotBeta(robotName)) {
+                            clone.find('img.img-beta').css('visibility', 'hidden');
+                        }
+                        addInfoLink(clone, robotName);
                         clone.attr('data-type', robotName);
-                        clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
-                        clone.find('span:eq( 0 )').addClass('img-' + robotName);
-                        clone.attr('data-type', robotGroup);
-                        clone.attr('data-group', true);
                         clone.find('span:eq( 0 )').removeClass('typcn-open');
-                        clone.find('span:eq( 1 )').text(robotName);
+                        clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
+                        clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
+                        clone.attr('data-type', robotName);
                         $("#popup-robot-container").append(clone);
                     }
-                    groupsDict[key].forEach(function(item, index, groupsDict){
-                        //console.log(item, index, groupsDict, groupsDict[index]);
-
-                    });
                 }
             }
         }
-*/        
-        var newGroup = false;
+
         for (var i = 0; i < length; i++) {
-            if (robots[i].name == 'sim') {
-                i++;
-                proto.attr('data-type', robots[i].name);
-            }
-            var robotName = robots[i].name;
-            var robotGroup = robots[i].group;
-            var clone = proto.clone().prop('id', 'menu-' + robotName);
-            clone.find('span:eq( 0 )').removeClass('typcn-open');
-            if (robotName != robotGroup) {
-                clone.addClass('hidden');
-                clone.addClass('robotSubGroup');
-                clone.addClass(robotGroup);
-                clone.find('span:eq( 0 )').addClass('img-' + robotName);
-            } else {
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
-            }
-            clone.find('span:eq( 1 )').text(robots[i].realName);
-            clone.find('a').attr('onclick', 'window.open("' + robots[i].info + '");return false;');
-            clone.attr('data-type', robotName);
-            if (!robots[i].beta) {
-                clone.find('img.img-beta').css('visibility', 'hidden');
-            }
-            $("#popup-robot-container").append(clone);
-            if(robotGroup == "makeblock") {
-                newGroup = false;
-            }
-            if ((robotName != robotGroup) && !newGroup) {
-                console.log(robotGroup);
-                newGroup = true;
-                var clone = proto.clone().prop('id', 'menu-' + robotGroup);
-                clone.find('span:eq( 0 )').removeClass('typcn-open');
-                clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup);
-                clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1));
-                clone.find('a').remove();
-                clone.attr('data-type', robotGroup);
-                clone.attr('data-group', true);
-                clone.find('img').css('visibility', 'hidden');
-                $("#popup-robot-container").append(clone);
-            } else {
-                newGroup = false;
-            }
+
         }
-        if (robots[0].name != 'sim') {
-            proto.remove();
-        }
-        
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
@@ -508,8 +482,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
         }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {
-            if (GUISTATE_C.getRobotGroup() !== 'ev3')
+            if (GUISTATE_C.getRobotGroup() !== 'ev3') {
                 ROBOT_C.switchRobot('ev3lejos', true);
+            }
             if (GUISTATE_C.getProgramToolboxLevel() !== 'beginner') {
                 $('#beginner').trigger('click');
             }
