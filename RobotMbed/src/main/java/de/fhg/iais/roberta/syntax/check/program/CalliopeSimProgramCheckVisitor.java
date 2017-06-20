@@ -12,6 +12,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
@@ -176,6 +178,16 @@ public class CalliopeSimProgramCheckVisitor extends SimulationProgramCheckVisito
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
         microphoneSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         return null;
     }
 }
