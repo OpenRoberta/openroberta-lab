@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.MakeBlockUsedHardwareVisitor;
+import de.fhg.iais.roberta.syntax.check.program.MakeBlockCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
@@ -83,14 +83,14 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     private Ast2MakeBlockVisitor(MakeBlockConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
-        MakeBlockUsedHardwareVisitor usedHardwareVisitor = new MakeBlockUsedHardwareVisitor(phrases, brickConfiguration);
-        this.usedSensors = usedHardwareVisitor.getUsedSensors();
-        this.usedActors = usedHardwareVisitor.getUsedActors();
-        this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
+        MakeBlockCodePreprocessVisitor codePreprocessVisitor = new MakeBlockCodePreprocessVisitor(phrases, brickConfiguration);
+        this.usedSensors = codePreprocessVisitor.getUsedSensors();
+        this.usedActors = codePreprocessVisitor.getUsedActors();
+        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         //        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
-        this.isTemperatureSensorUsed = usedHardwareVisitor.isTemperatureSensorUsed();
-        this.isToneActionUsed = usedHardwareVisitor.isToneActionUsed();
-        this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
+        this.isTemperatureSensorUsed = codePreprocessVisitor.isTemperatureSensorUsed();
+        this.isToneActionUsed = codePreprocessVisitor.isToneActionUsed();
+        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
     /**

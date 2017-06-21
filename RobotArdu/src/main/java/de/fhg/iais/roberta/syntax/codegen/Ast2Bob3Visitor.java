@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.Bob3UsedHardwareVisitor;
+import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
@@ -58,11 +58,11 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     private Ast2Bob3Visitor(Bob3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
         //this.boardConfiguration = brickConfiguration;
-        Bob3UsedHardwareVisitor usedHardwareVisitor = new Bob3UsedHardwareVisitor(phrases, brickConfiguration);
-        this.usedSensors = usedHardwareVisitor.getUsedSensors();
-        this.usedActors = usedHardwareVisitor.getUsedActors();
-        this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-        this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
+        Bob3CodePreprocessVisitor codePreprocessVisitor = new Bob3CodePreprocessVisitor(phrases, brickConfiguration);
+        this.usedSensors = codePreprocessVisitor.getUsedSensors();
+        this.usedActors = codePreprocessVisitor.getUsedActors();
+        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
     /**

@@ -113,12 +113,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         super(programPhrases, indentation);
         this.brickConfiguration = brickConfiguration;
 
-        NxtCodePreprocessVisitor usedHardware = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
+        NxtCodePreprocessVisitor codePreprocessVisitor = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
 
-        this.timeSensorUsed = usedHardware.isTimerSensorUsed();
-        this.playToneActionUsed = usedHardware.isPlayToneUsed();
+        this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
 
-        this.loopsLabels = usedHardware.getloopsLabelContainer();
+        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
     /**

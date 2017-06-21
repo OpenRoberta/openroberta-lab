@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NxtAstVisitor;
@@ -34,19 +33,14 @@ public class NxtCodePreprocessVisitor extends PreprocessProgramVisitor implement
     }
 
     @Override
-    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        return null;
-    }
-
-    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        super.visitToneAction(toneAction);
         this.isPlayToneUsed = true;
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 

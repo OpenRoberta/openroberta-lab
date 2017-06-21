@@ -33,7 +33,7 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.hardwarecheck.arduino.BotNrollUsedHardwareVisitor;
+import de.fhg.iais.roberta.syntax.check.program.BotNrollCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
@@ -84,11 +84,11 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
     private Ast2BotNrollVisitor(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
-        BotNrollUsedHardwareVisitor usedHardwareVisitor = new BotNrollUsedHardwareVisitor(phrases, brickConfiguration);
-        this.usedSensors = usedHardwareVisitor.getUsedSensors();
-        this.usedActors = usedHardwareVisitor.getUsedActors();
-        this.isTimerSensorUsed = usedHardwareVisitor.isTimerSensorUsed();
-        this.loopsLabels = usedHardwareVisitor.getloopsLabelContainer();
+        BotNrollCodePreprocessVisitor codePreprocessVisitor = new BotNrollCodePreprocessVisitor(phrases, brickConfiguration);
+        this.usedSensors = codePreprocessVisitor.getUsedSensors();
+        this.usedActors = codePreprocessVisitor.getUsedActors();
+        this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
     /**
