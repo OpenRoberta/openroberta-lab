@@ -17,15 +17,15 @@ import de.fhg.iais.roberta.visitor.NxtAstVisitor;
  */
 public class NxtCodePreprocessVisitor extends PreprocessProgramVisitor implements NxtAstVisitor<Void> {
 
-    private boolean isToneUsed = false;
+    private boolean isPlayToneUsed = false;
 
     public NxtCodePreprocessVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
         super(configuration);
         check(phrasesSet);
     }
 
-    public boolean isToneUsed() {
-        return this.isToneUsed;
+    public boolean isPlayToneUsed() {
+        return this.isPlayToneUsed;
     }
 
     @Override
@@ -35,13 +35,12 @@ public class NxtCodePreprocessVisitor extends PreprocessProgramVisitor implement
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        this.isToneUsed = true;
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.isToneUsed = true;
+        this.isPlayToneUsed = true;
         return null;
     }
 

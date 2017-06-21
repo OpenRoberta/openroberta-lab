@@ -190,9 +190,9 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "byte volume = 0x02;\n"
             + MASMETHOD
             + "        TextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");\n"
-            + "byte volume = 0x02;\n"
             + "        PlayToneEx(300, 3000, volume, false);Wait(3000);\n"
             + SUFFIX
 

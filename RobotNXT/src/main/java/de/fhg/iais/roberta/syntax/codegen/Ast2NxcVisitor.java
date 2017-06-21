@@ -100,7 +100,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     private final NxtConfiguration brickConfiguration;
 
     private boolean timeSensorUsed;
-    private boolean volumeActionUsed;
+    private boolean playToneActionUsed;
 
     /**
      * initialize the Nxc code generator visitor.
@@ -116,7 +116,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         NxtCodePreprocessVisitor usedHardware = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
 
         this.timeSensorUsed = usedHardware.isTimerSensorUsed();
-        this.volumeActionUsed = usedHardware.isToneUsed();
+        this.playToneActionUsed = usedHardware.isPlayToneUsed();
 
         this.loopsLabels = usedHardware.getloopsLabelContainer();
     }
@@ -464,8 +464,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("byte volume = 0x02;");
-        nlIndent();
         this.sb.append("PlayToneEx(");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
@@ -828,6 +826,16 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
+        this.sb.append("\n");
+        if ( this.playToneActionUsed ) {
+            this.sb.append("byte volume = 0x02;");
+        }
+        if ( this.timeSensorUsed ) {
+            if ( this.playToneActionUsed ) {
+                this.sb.append("\n");
+            }
+            this.sb.append("long timer1;");
+        }
         mainTask.getVariables().visit(this);
         incrIndentation();
         generateUserDefinedMethods();
@@ -1163,7 +1171,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#define MAXLINES 8 \n");
-        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources\n");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
     }
 
     @Override
@@ -1243,10 +1251,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
                     break;
             }
         }
-        // TODO: also move outside main
         if ( this.timeSensorUsed ) {
-            nlIndent();
-            this.sb.append("long timer1;");
             nlIndent();
             this.sb.append("SetTimerValue(timer1);");
         }
