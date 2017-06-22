@@ -241,13 +241,12 @@ public class ProgramProcessor extends AbstractProcessor {
 
     /**
      * Get information about all the programs shared with the gallery
-     * 
+     *
      * @param galleryId the gallery user
      */
     public JSONArray getProgramGallery(int galleryId) {
 
         UserDao userDao = new UserDao(this.dbSession);
-        ProgramDao programDao = new ProgramDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(galleryId);
         JSONArray programs = new JSONArray();
@@ -265,7 +264,6 @@ public class ProgramProcessor extends AbstractProcessor {
             prog.put(program.getTags());
             programs.put(prog);
         }
-        System.out.println(programs.length());
         setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programs.length());
         return programs;
     }

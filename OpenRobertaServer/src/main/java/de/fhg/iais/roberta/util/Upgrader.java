@@ -1,7 +1,11 @@
 package de.fhg.iais.roberta.util;
 
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 /**
  * assembles all actions to be done to upgrade the server version. This may include<br>
@@ -30,7 +34,19 @@ public class Upgrader {
             System.exit(4);
         }
         LOG.info("upgrading to server version " + serverVersion);
-        if ( serverVersion.equals("2.2.6") ) {
+        if ( serverVersion.equals("2.3.0") ) {
+            String dbUrl = RobertaProperties.getStringProperty("hibernate.connection.url");
+            SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
+            Session nativeSession = sessionFactoryWrapper.getNativeSession();
+            DbSetup dbSetup = new DbSetup(nativeSession);
+            nativeSession.beginTransaction();
+            dbSetup.runDatabaseSetup(
+                "/update-2-3-0.sql",
+                "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
+                "select count(*) from USER where ACCOUNT = 'Gallery'");
+            nativeSession.createSQLQuery("shutdown").executeUpdate();
+            nativeSession.close();
+        } else if ( serverVersion.equals("2.2.6") ) {
             // do nothing
         } else if ( serverVersion.equals("2.2.5") ) {
             // do nothing
