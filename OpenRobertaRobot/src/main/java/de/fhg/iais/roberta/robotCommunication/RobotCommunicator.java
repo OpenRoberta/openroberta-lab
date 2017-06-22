@@ -102,10 +102,8 @@ public class RobotCommunicator {
         if ( state == null ) {
             LOG.info("token " + token + " is not waiting for. Typing error of the user?");
             return Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING;
-        } else if ( !(state.getRobot().equals(robot)
-            || state.getRobotName().toLowerCase().equals(robot)
-            || (state.getRobot() + state.getFirmwareName()).equals(robot)) ) {
-            LOG.info("token " + token + " belongs to a robot of type " + state.getRobot() + ", client is set to " + robot);
+        } else if ( !(state.getRobot().equals(robot) || state.getFirmwareName().equals(robot) || (state.getRobot() + state.getFirmwareName()).equals(robot)) ) {
+            LOG.info("token " + token + " belongs to a robot of type " + state.getRobot() + "/" + state.getFirmwareName() + ", client is set to " + robot);
             return Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE;
         } else {
             // todo: version check!
