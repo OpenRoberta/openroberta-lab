@@ -315,8 +315,8 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         this.sb.append("while (1) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
-        nlIndent();
-        this.sb.append("uBit.sleep(100);");
+        //        nlIndent();
+        //        this.sb.append("uBit.sleep(1);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");

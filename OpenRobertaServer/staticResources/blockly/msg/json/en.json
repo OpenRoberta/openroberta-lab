@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-06-16 16:50:19.397494",
+		"lastupdated": "2017-06-23 13:27:31.558454",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -409,7 +409,6 @@
 	"GYRO_GETSAMPLE_TOOLTIP": "Gets the current reading from the gyro sensor.",
 	"TIMER_RESET_TOOLTIP": "Resets the timer.",
 	"TIMER_GETSAMPLE_TOOLTIP": "Gets the current reading from the timer.",
-	"PIN_GETSAMPLE_TOOLTIP": "Gets the current reading from a pin.",
 	"BATTERY_GETSAMPLE_TOOLTIP": "Gets the current voltage from the battery.",
 	"ULTRASONIC_TOOLTIP": "Represents an ultrasonic sensor.",
 	"COLOUR_TOOLTIP": "Represents a colour sensor.",
@@ -886,7 +885,7 @@
 	"ACCELEROMETER_ROTATION": "rotation °",
 	"TEMPERATURE_GETSAMPLE_TOOLTIP": "Gets the current reading from the temperatur sensor.",
 	"COMPASS_GETSAMPLE_TOOLTIP": "Gets the current reading from the compass sensor.",
-	"MICROPHONE_GETSAMPLE_TOOLTIP": "Gets the current reading from the microphone.",
+	"MICROPHONE_GETSAMPLE_TOOLTIP": "Gets the current reading from the microphone in % (mapped to 0 - 100). If the value is always low, the value has to be multiplied by 10, because the amplification is missing on the hardware.",
 	"CALLIOPEBRICK_TOOLTIP": "Represents Calliope, a pocket-sized codeable computer. There are also inbuilt actors and sensors available, e.g. buttons, display ...",
 	"MICROBITBRICK_TOOLTIP": "Represents micro:bit, a pocket-sized codeable computer. There are also inbuilt actors and sensors available, e.g. buttons, display ...",
 	"PLAY_NOTE_TOOLTIP": "Plays a music note",
@@ -1154,5 +1153,14 @@
 	"ORA_USER_ACTIVATION_SUCCESS": "Activation of the user account is successful!",
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!",
 	"SENSOR_JOYSTICK": "joystick",
-	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick"
+	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick",
+	"PULSE_LOW": "pulse time HIGH",
+	"PULSE_HIGH": "pulse time LOW",
+	"PIN_GETSAMPLE_ANALOG_TOOLTIP": "Returns the value from the specified analog pin. The value is between 0 and 1023.",
+	"PIN_GETSAMPLE_DIGITAL_TOOLTIP": "Returns the value from the specified digital pin. The value is either HIGH »1« or LOW »0«.",
+	"PIN_GETSAMPLE_PULSEHIGH_TOOLTIP": "Returns the pulse HIGH on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
+	"PIN_GETSAMPLE_PULSELOW_TOOLTIP": "Returns the pulse LOW on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
+	"CONNECTION_POWER": "with strength",
+	"CONNECTION_MBED_RECEIVE_TOOLTIP": "Waits for a message on channel 0 - 255. ",
+	"CONNECTION_MBED_SEND_TOOLTIP": "Sends a message to another microBoard. You can use the channel from 0 to 255 and specify a signal strength from 0 - 7, where 0 is very low and 7 is the strongests."
 }
