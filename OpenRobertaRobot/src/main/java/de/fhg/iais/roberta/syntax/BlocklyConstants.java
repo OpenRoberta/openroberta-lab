@@ -243,6 +243,8 @@ public final class BlocklyConstants {
     public static final String SOUND = "SOUND";
     public static final String COMPASS = "COMPASS";
     public static final String MICROPHONE = "MICROPHONE";
+    public static final String ARMSIDE = "ARM";
+    public static final String ARMPART = "ARMPAIR";
 
     public static final String ROB_BRICK_GYRO = "robBrick_gyro";
     public static final String ROB_BRICK_INFRARED = "robBrick_infrared";

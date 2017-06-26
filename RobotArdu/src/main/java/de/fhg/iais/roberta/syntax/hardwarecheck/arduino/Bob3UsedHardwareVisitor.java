@@ -167,4 +167,10 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
         return null;
     }
 
+    @Override
+    public Void visitTouchSensor(de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor<Void> touchSensor) {
+        this.usedSensors.add(new UsedSensor(null, SensorType.TOUCH, null));
+        return null;
+    }
+
 }

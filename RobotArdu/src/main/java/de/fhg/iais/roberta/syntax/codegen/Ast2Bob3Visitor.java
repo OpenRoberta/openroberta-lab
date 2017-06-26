@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -32,7 +33,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -110,20 +110,17 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        //the axis names(getAxis) should be taken as input for gyro sensor however the implementations for that don't exist in GyroSensor.java
-        //this.sb.append("myGyro.getAngle" + "(" + gyroSensor.getAxis() + ")");
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-
+        this.sb.append("bob3.getIRLight()");
         return null;
     }
 
@@ -152,7 +149,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         ITouchSensorMode arm = touchSensor.getMode();
         System.out.println(arm.toString());
-        this.sb.append("bob3.getArm(" + "here be arm side" + ")"); //TODO: extend touch sensor for this robot to support arm sides.
+        this.sb.append("bob3.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
         return null;
     }
 
@@ -467,5 +464,11 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
             //this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
             //nlIndent();
         }
+    }
+
+    @Override
+    public Void visitTouchSensor(de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor<Void> touchSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
