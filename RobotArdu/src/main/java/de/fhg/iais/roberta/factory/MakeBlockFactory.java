@@ -266,8 +266,8 @@ public class MakeBlockFactory extends AbstractRobotFactory {
         throw new DbcException("Invalid Gyro Sensor Mode: " + gyroSensorMode);
     }
 
-    @Override
-    public List<IGyroSensorMode> getGyroSensorModes() {
+   @Override
+   public List<IGyroSensorMode> getGyroSensorModes() {
         // TODO Auto-generated method stub
         return null;
     }

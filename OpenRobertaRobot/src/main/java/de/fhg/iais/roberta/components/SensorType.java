@@ -18,6 +18,7 @@ public enum SensorType {
     COMPASS( "robBrick_compass" ),
     TEMPERATURE( "robBrick_temperature" ),
     GYROSCOPE( "makeblockSensors_gyroscope_getSample" ),
+    FLAMESENSOR( "makeblockSensors_flameSensor_getSample" ),
     ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
     JOYSTICK( "arduSensors_joystick_getSample" );
 

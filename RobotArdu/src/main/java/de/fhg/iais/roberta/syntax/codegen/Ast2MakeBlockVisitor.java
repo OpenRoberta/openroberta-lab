@@ -55,6 +55,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -397,6 +398,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         return null;
     }
 
+    
+    @Override
+    public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
+        this.sb.append("flameSensor" + flameSensor.getPort().getPortNumber() + ".readAnalog()");
+        return null;
+    }
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
         /*
@@ -740,6 +747,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     }
                     break;
                 case COMPASS:
+                	break;
                 case GYROSCOPE:
                     this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
@@ -751,6 +759,9 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     break;
                 case JOYSTICK:
                     this.sb.append("MeJoystick myJoystick" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
+                case FLAMESENSOR:
+                    this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 default:
                     throw new DbcException("Sensor is not supported!");

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-06-27 11:40:09.642197",
+		"lastupdated": "2017-06-27 12:04:34.326406",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -407,6 +407,7 @@
 	"ENCODER_GETSAMPLE_TOOLTIP": "Gets the current reading from the motor encoder.",
 	"GYRO_RESET_TOOLTIP": "Resets the gyro sensor.",
 	"GYRO_GETSAMPLE_TOOLTIP": "Gets the current reading from the gyro sensor.",
+	"FLAME_GETSAMPLE_TOOLTIP": "Gets the current reading from the flame sensor.",
 	"TIMER_RESET_TOOLTIP": "Resets the timer.",
 	"TIMER_GETSAMPLE_TOOLTIP": "Gets the current reading from the timer.",
 	"BATTERY_GETSAMPLE_TOOLTIP": "Gets the current voltage from the battery.",
@@ -415,6 +416,7 @@
 	"INFRARED_TOOLTIP": "Represents an infrared sensor.",
 	"TOUCH_TOOLTIP": "Is the touch sensor pressed?",
 	"GYRO_TOOLTIP": "Represents a gyro sensor.",
+	"FLAME_TOOLTIP": "Represents a flame sensor.",
 	"MOTOR_BIG_TOOLTIP": "Represents a big motor.",
 	"MOTOR_MIDDLE_TOOLTIP": "Represents a middle motor.",
 	"ACTOR_TOOLTIP": "Represents any actor.",
@@ -509,6 +511,7 @@
 	"SENSOR_INFRARED": "infrared sensor",
 	"SENSOR_ENCODER": "encoder",
 	"SENSOR_GYRO": "gyroscope",
+	"SENSOR_FLAME": "flame sensor",
 	"SENSOR_BATTERY": "voltage in V",
 	"SENSOR_KEY": "button",
 	"SENSOR_KEY_ENTER": "enter",

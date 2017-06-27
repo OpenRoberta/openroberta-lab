@@ -106,7 +106,7 @@ public abstract class SimulationProgramCheckVisitor extends ProgramCheckVisitor 
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( usedSensor.getType() != SensorType.GYRO ) {
+                    if ( usedSensor.getType() != SensorType.GYRO || usedSensor.getType() != SensorType.GYROSCOPE  ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;
