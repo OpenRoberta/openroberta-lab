@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.syntax.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Bob3Configuration;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -22,18 +20,11 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.sensor.bob3.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -80,45 +71,6 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         return astVisitor.sb.toString();
     }
 
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("bob3.getIRLight()");
-        return null;
-    }
-
-    @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-
-        return null;
-    }
-
-    @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-
-        return null;
-    }
-
-    @Override
-    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         this.sb.append("bob3.getIRLight()");
         return null;
@@ -130,7 +82,6 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         return null;
     }
 
-    @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
@@ -150,11 +101,6 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         ITouchSensorMode arm = touchSensor.getMode();
         System.out.println(arm.toString());
         this.sb.append("bob3.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         return null;
     }
 
@@ -410,12 +356,9 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
 
         this.sb.append("RobertaFunctions rob;\n");
         this.sb.append("Bob3 bob3;\n");
-
-        this.generateSensors();
         this.sb.append("\nvoid setup() \n");
         this.sb.append("{");
         nlIndent();
-        this.generateActors();
         this.sb.append("Serial.begin(9600);");
         if ( this.isTimerSensorUsed ) {
             nlIndent();
@@ -431,44 +374,9 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         }
     }
 
-    private void generateSensors() {
-        for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
-                case COLOR:
-                    break;
-                case INFRARED:
-                    break;
-                case ULTRASONIC:
-                    break;
-                case TEMPERATURE:
-                    break;
-                case TOUCH:
-                    break;
-                case LIGHT:
-                    break;
-                case COMPASS:
-                case GYRO:
-                    break;
-                case SOUND:
-                    break;
-                case JOYSTICK:
-                    break;
-                default:
-                    throw new DbcException("Sensor is not supported!");
-            }
-        }
-    }
-
-    private void generateActors() {
-        for ( UsedActor usedActor : this.usedActors ) {
-            //this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
-            //nlIndent();
-        }
-    }
-
     @Override
-    public Void visitTouchSensor(de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor<Void> touchSensor) {
-        // TODO Auto-generated method stub
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.sb.append("bob3.getIRLight()");
         return null;
     }
 }
