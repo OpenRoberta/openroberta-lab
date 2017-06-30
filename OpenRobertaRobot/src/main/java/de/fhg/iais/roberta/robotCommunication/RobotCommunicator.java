@@ -100,7 +100,7 @@ public class RobotCommunicator {
     public Key aTokenAgreementWasSent(String token, String robot) {
         RobotCommunicationData state = this.allStates.get(token);
 
-        String stateRobotName = state.getRobot();
+        //TODO: it is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
         if ( robot.equals("botnroll") ) {
             robot = "ardu";
         }
