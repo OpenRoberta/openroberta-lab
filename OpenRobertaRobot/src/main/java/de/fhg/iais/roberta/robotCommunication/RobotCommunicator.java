@@ -99,6 +99,12 @@ public class RobotCommunicator {
 
     public Key aTokenAgreementWasSent(String token, String robot) {
         RobotCommunicationData state = this.allStates.get(token);
+
+        String stateRobotName = state.getRobot();
+        if ( robot.equals("botnroll") ) {
+            robot = "ardu";
+        }
+
         if ( state == null ) {
             LOG.info("token " + token + " is not waiting for. Typing error of the user?");
             return Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING;
