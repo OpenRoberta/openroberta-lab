@@ -97,18 +97,36 @@ public class RobotCommunicator {
         }
     }
 
-    public Key aTokenAgreementWasSent(String token, String robot) {
-        RobotCommunicationData state = this.allStates.get(token);
-
+    // TODO: when can this fail?
+    private boolean checkRobotMatchesClient(String robot, RobotCommunicationData state) {
         //TODO: it is a hot fix for the release on 6.7.17, later we need to change the state robot name from ardu to botnroll
         if ( robot.equals("botnroll") ) {
             robot = "ardu";
         }
 
+        LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firware: " + state.getFirmwareName());
+
+        if ( state.getRobot().equals(robot) ) {
+            return true;
+        }
+        if ( state.getFirmwareName().equals(robot) ) {
+            return true;
+        }
+        // TODO: workarounds for sloppy protocol definition, check for which robots they trigger and fix 
+        if ( (state.getRobot() + state.getFirmwareName()).equals(robot) ) {
+            LOG.warn("checking robot+firmware");
+            return true;
+        }
+        return false;
+    }
+
+    public Key aTokenAgreementWasSent(String token, String robot) {
+        RobotCommunicationData state = this.allStates.get(token);
+
         if ( state == null ) {
             LOG.info("token " + token + " is not waiting for. Typing error of the user?");
             return Key.TOKEN_SET_ERROR_NO_ROBOT_WAITING;
-        } else if ( !(state.getRobot().equals(robot) || state.getFirmwareName().equals(robot) || (state.getRobot() + state.getFirmwareName()).equals(robot)) ) {
+        } else if ( !checkRobotMatchesClient(robot, state) ) {
             LOG.info("token " + token + " belongs to a robot of type " + state.getRobot() + "/" + state.getFirmwareName() + ", client is set to " + robot);
             return Key.TOKEN_SET_ERROR_WRONG_ROBOTTYPE;
         } else {
