@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
@@ -213,4 +214,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param microphoneSensor phrase to be visited
      */
     V visitMicrophoneSensor(MicrophoneSensor<V> microphoneSensor);
+
+    /**
+     * visit a {@link RadioSetChannelAction}.
+     *
+     * @param radioSetChannelAction phrase to be visited
+     */
+    V visitRadioSetChannelAction(RadioSetChannelAction<V> radioSetChannelAction);
 }

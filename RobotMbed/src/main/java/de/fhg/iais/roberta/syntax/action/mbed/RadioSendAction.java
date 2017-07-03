@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.action.mbed;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -21,10 +22,12 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
 public class RadioSendAction<V> extends Action<V> {
     private final Expr<V> message;
+    private final String power;
 
-    private RadioSendAction(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private RadioSendAction(Expr<V> msg, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("RADIO_SEND_ACTION"), properties, comment);
         this.message = msg;
+        this.power = power;
         setReadOnly();
     }
 
@@ -35,17 +38,21 @@ public class RadioSendAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RadioSendAction}
      */
-    public static <V> RadioSendAction<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new RadioSendAction<>(msg, properties, comment);
+    public static <V> RadioSendAction<V> make(Expr<V> msg, String power, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new RadioSendAction<>(msg, power, properties, comment);
     }
 
     public Expr<V> getMsg() {
         return this.message;
     }
 
+    public String getPower() {
+        return this.power;
+    }
+
     @Override
     public String toString() {
-        return "RadioSendAction [ " + getMsg().toString() + " ]";
+        return "RadioSendAction [ " + getMsg().toString() + ", " + getPower() + " ]";
     }
 
     @Override
@@ -62,9 +69,11 @@ public class RadioSendAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
+        List<Field> fields = helper.extractFields(block, (short) 2);
         Phrase<V> message = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.STRING));
+        String power = helper.extractField(fields, BlocklyConstants.POWER);
 
-        return RadioSendAction.make(helper.convertPhraseToExpr(message), helper.extractBlockProperties(block), helper.extractComment(block));
+        return RadioSendAction.make(helper.convertPhraseToExpr(message), power, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -76,7 +85,7 @@ public class RadioSendAction<V> extends Action<V> {
         jaxbDestination.setMutation(mutation);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, "String");
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, this.message);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.POWER, this.power);
         return jaxbDestination;
     }
-
 }

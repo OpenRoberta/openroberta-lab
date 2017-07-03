@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -721,6 +722,8 @@ public class Ast2PythonMicroBitVisitor extends Ast2PythonVisitor implements Mbed
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+        this.sb.append("radio.config(power=" + radioSendAction.getPower() + ")");
+        this.nlIndent();
         this.sb.append("radio.send(");
         radioSendAction.getMsg().visit(this);
         this.sb.append(")");
@@ -730,6 +733,14 @@ public class Ast2PythonMicroBitVisitor extends Ast2PythonVisitor implements Mbed
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
         this.sb.append("radio.receive()");
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+        this.sb.append("radio.config(group=");
+        radioSetChannelAction.getChannel().visit(this);
+        this.sb.append(")");
         return null;
     }
 

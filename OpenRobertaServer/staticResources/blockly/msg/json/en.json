@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-06-30 15:00:23.543739",
+		"lastupdated": "2017-07-02 13:37:40.557045",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -675,7 +675,7 @@
 	"POPUP_CONFIRM_DELETE_CONFIGURATION": "Do you really want to delete the configuration ?",
 	"POPUP_BEFOREUNLOAD": "You have unsaved changes in your program or configuration. Sign in and save your program or configuration.",
 	"POPUP_BEFOREUNLOAD_LOGGEDIN": "You have unsaved changes in your program or configuration.",
-	"POPUP_CONFIRM_UPDATE_FIRMWARE": "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<<.",
+	"POPUP_CONFIRM_UPDATE_FIRMWARE": "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click »Update now«.",
 	"POPUP_DO_UPDATE_FIRMWARE": "Update now",
 	"POPUP_EMAIL_SEND": "Send now",
 	"POPUP_REGISTER_USER": "Register now",
@@ -690,7 +690,7 @@
 	"BUTTON_EMPTY_LIST": "Empty list",
 	"MESSAGE_NOT_AVAILABLE": "Not available.",
 	"MESSAGE_INVALID_NAME": "Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers.",
-	"MESSAGE_EDIT_START": "Your program $ will run in a moment!",
+	"MESSAGE_EDIT_START": "Your program »$« will run in a moment!",
 	"MESSAGE_EDIT_CHECK": "Your program is now checked!",
 	"MESSAGE_EDIT_SAVE_PROGRAM": "Your program has been saved",
 	"MESSAGE_EDIT_SAVE_PROGRAM_AS": "Your program has been saved as »$«",
@@ -1157,15 +1157,17 @@
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!",
 	"SENSOR_JOYSTICK": "joystick",
 	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick",
-	"PULSE_LOW": "pulse time HIGH",
-	"PULSE_HIGH": "pulse time LOW",
+	"PULSE_LOW": "pulse time LOW",
+	"PULSE_HIGH": "pulse time HIGH",
 	"PIN_GETSAMPLE_ANALOG_TOOLTIP": "Returns the value from the specified analog pin. The value is between 0 and 1023.",
 	"PIN_GETSAMPLE_DIGITAL_TOOLTIP": "Returns the value from the specified digital pin. The value is either HIGH »1« or LOW »0«.",
 	"PIN_GETSAMPLE_PULSEHIGH_TOOLTIP": "Returns the pulse HIGH on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
 	"PIN_GETSAMPLE_PULSELOW_TOOLTIP": "Returns the pulse LOW on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
 	"CONNECTION_POWER": "with strength",
-	"CONNECTION_MBED_RECEIVE_TOOLTIP": "Waits for a message on channel 0 - 255. ",
-	"CONNECTION_MBED_SEND_TOOLTIP": "Sends a message to another microBoard. You can use the channel from 0 to 255 and specify a signal strength from 0 - 7, where 0 is very low and 7 is the strongests.",
 	"BOB3_ARM": "arm",
-	"BOB3_ARM_PAIR": "sensor pair"
+	"BOB3_ARM_PAIR": "sensor pair",
+	"CONNECTION_MBED_RECEIVE_TOOLTIP": "Reads a message over one of the channels (0 - 255). The default channel is 0.",
+	"CONNECTION_MBED_SEND_TOOLTIP": "Sends a message to another microBoard. You can specify a signal strength from 0 - 7, where 0 is very low and 7 is the strongests. The message is send over channel 0 unless you specify another one.",
+	"CONNECTION_SET_CHANNEL": "set channel to %1",
+	"CONNECTION_SET_CHANNEL_TOOLTIP": "Sets the channel for sending and receiving messages. Can be set from 0 to 255."
 }

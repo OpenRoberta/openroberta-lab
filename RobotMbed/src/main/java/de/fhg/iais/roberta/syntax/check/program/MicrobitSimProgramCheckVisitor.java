@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
@@ -116,12 +117,22 @@ public class MicrobitSimProgramCheckVisitor extends SimulationProgramCheckVisito
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        radioSendAction.getMsg().visit(this);
+        radioSendAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        // radioSendAction.getMsg().visit(this);
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+        radioReceiveAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        // radioReceiveAction.getConnection().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+        radioSetChannelAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        // radioSetChannelAction.getChannel().visit(this);
         return null;
     }
 

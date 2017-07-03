@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
@@ -85,6 +86,13 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+        this.radioUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+        radioSetChannelAction.getChannel().visit(this);
         this.radioUsed = true;
         return null;
     }
