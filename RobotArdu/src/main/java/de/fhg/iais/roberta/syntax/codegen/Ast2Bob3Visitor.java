@@ -7,7 +7,10 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.LightAction;
+import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
+import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
@@ -29,12 +32,13 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<Void> {
+public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<Void>, AstActorLightVisitor<Void> {
     private boolean isTimerSensorUsed;
 
     //private Bob3Configuration boardConfiguration;
@@ -377,6 +381,25 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.sb.append("bob3.getIRLight()");
+        return null;
+    }
+
+    @Override
+    public Void visitLightAction(LightAction<Void> lightAction) {
+        this.sb.append("bob3.setWhiteLeds(WHITE, WHITE)");
+        return null;
+    }
+
+    @Override
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
+        this.sb.append("bob3.setLed(2, OFF)");
+        this.sb.append("bob3.setLed(1, OFF)");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        this.sb.append("bob3.setEyes(WHITE, WHITE)");
         return null;
     }
 }
