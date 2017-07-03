@@ -17,7 +17,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function createUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(),  function(
+            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(
                     result) {
                 if (result.rc === "ok") {
                     $('#loginAccountName').val($("#registerAccountName").val());
@@ -35,7 +35,8 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function updateUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(result) {
+            USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(
+                    result) {
                 if (result.rc === "ok") {
                     USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
                         if (result.rc === "ok") {
@@ -97,28 +98,27 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
      */
     function sendAccountActivation() {
         if ($("#registerUserEmail").val() != "") {
-          USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
-              if (result.rc === "ok") {
-                  MSG.displayInformation(result, result.message, result.message);
-              }
-              MSG.displayInformation(result, result.message, result.message);
-          });
+            USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
+                if (result.rc === "ok") {
+                    MSG.displayInformation(result, result.message, result.message);
+                }
+                MSG.displayInformation(result, result.message, result.message);
+            });
         } else {
 
         }
     }
 
-
     /**
      * Send account activation
      */
     function activateAccount(url) {
-          USER.userActivateAccount(url, function(result) {
-              if (result.rc === "ok") {
-                  MSG.displayInformation(result, result.message, result.message);
-              }
-              MSG.displayInformation(result, result.message, result.message)
-          });
+        USER.userActivateAccount(url, function(result) {
+            if (result.rc === "ok") {
+                MSG.displayInformation(result, result.message, result.message);
+            }
+            MSG.displayInformation(result, result.message, result.message)
+        });
     }
 
     exports.activateAccount = activateAccount;
@@ -356,7 +356,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     /**
      * Resets the validation of every form in login modal
-     *
+     * 
      */
     function resetForm() {
         $formLogin.validate().resetForm();
@@ -461,7 +461,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         });
 
         $('#resendActivation').onWrap('click', function() {
-          sendAccountActivation()
+            sendAccountActivation()
         });
 
         $('#change-user-password').onWrap('hidden.bs.modal', function() {
@@ -608,6 +608,12 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         });
     }
     exports.showResetPassword = showResetPassword;
+
+    //TODO: Do we need to set some style here?
+    function showRegisterUserModal() {
+        $("#register-user").modal('show');
+    }
+    exports.showRegisterUserModal = showRegisterUserModal;
 
     function initValidationMessages() {
         validateLoginUser();

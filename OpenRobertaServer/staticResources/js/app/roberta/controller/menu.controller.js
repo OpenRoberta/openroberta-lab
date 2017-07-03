@@ -27,7 +27,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#loadProgram" && target.length >= 4) {
             PROGRAM_C.openProgramFromXML(target);
         } else if (target[0] === "#activateAccount") {
-          USER_C.activateAccount(target[1]);
+            USER_C.activateAccount(target[1]);
         }
     }
 
@@ -133,10 +133,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 }
             }
         }
-
-        for (var i = 0; i < length; i++) {
-
-        }
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
@@ -182,54 +178,77 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         // EDIT Menu
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
-            var domId = event.target.id;
-            if (domId === 'menuRunProg') {
+            switch (event.target.id) {
+            case 'menuRunProg':
                 PROGRAM_C.runOnBrick();
-            } else if (domId === 'menuRunSim') {
+                break;
+            case 'menuRunSim':
                 $('#progSim').trigger('click');
-            } else if (domId === 'menuCheckProg') {
+                break;
+            case 'menuCheckProg':
                 PROGRAM_C.checkProgram();
-            } else if (domId === 'menuNewProg') {
+                break;
+            case 'menuNewProg':
                 PROGRAM_C.newProgram();
-            } else if (domId === 'menuListProg') {
+                break;
+            case 'menuListProg':
                 $('#tabProgList').data('type', 'userProgram');
                 $('#tabProgList').click();
-            } else if (domId === 'menuListExamples') {
+                break;
+            case 'menuListExamples':
                 $('#tabProgList').data('type', 'exampleProgram');
                 $('#tabProgList').click();
-            } else if (domId === 'menuSaveProg') {
+                break;
+            case 'menuSaveProg':
                 PROGRAM_C.saveToServer();
-            } else if (domId === 'menuSaveAsProg') {
+                break;
+            case 'menuSaveAsProg':
                 PROGRAM_C.showSaveAsModal();
-            } else if (domId === 'menuShowCode') {
+                break;
+            case 'menuShowCode':
                 $('#progCode').trigger("click");
-            } else if (domId === 'menuImportProg') {
+                break;
+            case 'menuImportProg':
                 PROGRAM_C.importXml();
-            } else if (domId === 'menuExportProg') {
+                break;
+            case 'menuExportProg':
                 PROGRAM_C.exportXml();
-            } else if (domId === 'menuLinkProg') {
+                break;
+            case 'menuLinkProg':
                 PROGRAM_C.linkProgram();
-            } else if (domId === 'menuToolboxBeginner') {
+                break;
+            case 'menuToolboxBeginner':
                 $('#beginner').trigger('click');
-            } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
+                break;
+            case 'menuToolboxExpert':
                 $('#expert').trigger('click');
+                break;
+            default:
+                break;
             }
         }, 'program edit clicked');
 
         // CONF Menu
         $('#head-navigation-configuration-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
-            var domId = event.target.id;
-            if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
+            switch (event.target.id) {
+            case 'menuCheckConfig':
                 MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
-            } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
+                break;
+            case 'menuNewConfig':
                 CONFIGURATION_C.newConfiguration();
-            } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
+                break;
+            case 'menuListConfig':
                 $('#tabConfList').click();
-            } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
+                break
+            case 'menuSaveConfig':
                 CONFIGURATION_C.saveToServer();
-            } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
+                break;
+            case 'menuSaveAsConfig':
                 CONFIGURATION_C.showSaveAsModal();
+                break;
+            default:
+                break;
             }
         }, 'configuration edit clicked');
 
@@ -289,19 +308,27 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
-            var domId = event.target.id;
-            if (domId === 'menuLogin') { // Submenu 'Login'
+            switch (event.target.id) {
+            case 'menuLogin':
                 USER_C.showLoginForm();
-            } else if (domId === 'menuLogout') { // Submenu 'Login'
+                break;
+            case 'menuLogout':
                 USER_C.logout();
-            } else if (domId === 'menuNewUser') { // Submenu 'Login'
-                $("#register-user").modal('show');
-            } else if (domId === 'menuChangeUser') { // Submenu 'Login'
+                break;
+            case 'menuNewUser':
+                USER_C.showRegisterUserModal();
+                break;
+            case 'menuChangeUser':
                 USER_C.showUserDataForm();
-            } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
+                break;
+            case 'menuDeleteUser':
                 USER_C.showDeleteUserModal();
-            } else if (domId === 'menuStateInfo') { // Submenu 'Help'
+                break;
+            case 'menuStateInfo':
                 USER_C.showUserInfo();
+                break;
+            default:
+                break;
             }
             return false;
         }, 'user clicked');
@@ -313,37 +340,35 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // head-navigation-sim-control
-            var domId = event.target.id;
-            if (domId === 'menuSimSimple') {
-                $('.menuSim').parent().removeClass('disabled');
+            $('.menuSim').parent().removeClass('disabled'); //these two were in all cases 
+            $("#simButtonsCollapse").collapse('hide'); //so I extracted them here
+            switch (event.target.id) {
+            case 'menuSimSimple':
                 $('.simSimple').parent().addClass('disabled');
                 SIM.setBackground(2, SIM.setBackground);
-                $("#simButtonsCollapse").collapse('hide');
-            } else if (domId === 'menuSimDraw') {
-                $('.menuSim').parent().removeClass('disabled');
+                break;
+            case 'menuSimDraw':
                 $('.simDraw').parent().addClass('disabled');
                 SIM.setBackground(3, SIM.setBackground);
-                $("#simButtonsCollapse").collapse('hide');
-            } else if (domId === 'menuSimRoberta') {
-                $('.menuSim').parent().removeClass('disabled');
+                break;
+            case 'menuSimRoberta':
                 $('.simRoberta').parent().addClass('disabled');
                 SIM.setBackground(4, SIM.setBackground);
-                $("#simButtonsCollapse").collapse('hide');
-            } else if (domId === 'menuSimRescue') {
-                $('.menuSim').parent().removeClass('disabled');
+                break;
+            case 'menuSimRescue':
                 $('.simRescue').parent().addClass('disabled');
                 SIM.setBackground(5, SIM.setBackground);
-                $("#simButtonsCollapse").collapse('hide');
-            } else if (domId === 'menuSimWRO') {
-                $('.menuSim').parent().removeClass('disabled');
+                break;
+            case 'menuSimWRO':
                 $('.simWRO').parent().addClass('disabled');
                 SIM.setBackground(6, SIM.setBackground);
-                $("#simButtonsCollapse").collapse('hide');
-            } else if (domId === 'menuSimMath') {
-                $('.menuSim').parent().removeClass('disabled');
+                break;
+            case 'menuSimMath':
                 $('.simMath').parent().addClass('disabled');
                 SIM.setBackground(7, SIM.setBackground);
-                $("#simButtonsCollapse").collapse('hide');
+                break;
+            default:
+                break;
             }
         }, 'sim clicked');
 
@@ -391,18 +416,27 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             SIM.setBackground(-1, SIM.setBackground);
             var scene = $("#simButtonsCollapse").collapse('hide');
             $('.menuSim').parent().removeClass('disabled');
-            if (scene == 2) {
+            switch (scene) {
+            case 2:
                 $('.simSimple').parent().addClass('disabled');
-            } else if (scene == 3) {
+                break;
+            case 3:
                 $('.simDraw').parent().addClass('disabled');
-            } else if (scene == 4) {
+                break;
+            case 4:
                 $('.simRoberta').parent().addClass('disabled');
-            } else if (scene == 5) {
+                break;
+            case 5:
                 $('.simRescue').parent().addClass('disabled');
-            } else if (scene == 6) {
+                break;
+            case 6:
                 $('.simWRO').parent().addClass('disabled');
-            } else if (scene == 7) {
+                break;
+            case 7:
                 $('.simMath').parent().addClass('disabled');
+                break;
+            default:
+                break;
             }
         }, 'simScene clicked');
 
