@@ -951,7 +951,7 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
     @Override
     public Void visitSonar(Sonar<Void> sonar) {
-        this.sb.append("h.sonar()");
+        this.sb.append("h.ultrasonic()");
         return null;
     }
 
