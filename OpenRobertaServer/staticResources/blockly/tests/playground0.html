@@ -364,8 +364,6 @@
             <block type='mbedSensors_acceleration_getSample'>
             </block>
             <block type='mbedSensors_rotation_getSample'>
-            </block>    
-            <block type='mbedSensors_pin_getPuls'>
             </block>         
         </category>
         <category name='TOOLBOX_CONTROL' svg="true">
@@ -553,9 +551,9 @@
         <category name='TOOLBOX_COMMUNICATION' svg="true">
             <block type='mbedCommunication_sendBlock'></block>
             <block type='mbedCommunication_receiveBlock'></block>
-            <!--<block type='robCommunication_startConnection'></block>
+            <block type="mbedCommunication_setChannel"><value name="CONNECTION"><block type="math_number"><field name="NUM">0</field></block></value></block>
 
-            <block type='robCommunication_waitForConnection'></block>
+            <!--<block type='robCommunication_waitForConnection'></block>
             <block type='robCommunication_connection'></block>
             <block type='robCommunication_checkConnection'>
                 <value name='CONNECTION'>
