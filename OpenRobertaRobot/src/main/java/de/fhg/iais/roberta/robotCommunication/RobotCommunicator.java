@@ -104,7 +104,7 @@ public class RobotCommunicator {
             robot = "ardu";
         }
 
-        LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firware: " + state.getFirmwareName());
+        LOG.info("client:" + robot + ", robot: " + state.getRobot() + ", firmware: " + state.getFirmwareName());
 
         if ( state.getRobot().equals(robot) ) {
             return true;
