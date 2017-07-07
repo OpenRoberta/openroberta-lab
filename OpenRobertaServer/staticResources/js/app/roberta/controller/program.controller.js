@@ -410,19 +410,23 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     }
     exports.openProgramFromXML = openProgramFromXML;
 
-    function loadProgramFromXML(name, xml) {
+    function loadProgramFromXML(name, xml) {        
         PROGRAM.loadProgramFromXML(name, xml, function(result) {
             if (result.rc == "ok") {
+                // save the old program that it can be restored
+                var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+                var xmlOld = Blockly.Xml.domToText(dom);
+                GUISTATE_C.setProgramXML(xmlOld);
                 // on server side we only test case insensitive block names, displaying xml can still fail:
                 try {
                     result.programSaved = false;
+                    result.name = 'NEPOprog';
                     result.programShared = false;
                     result.programTimestamp = '';
                     showProgram(result);
                 } catch (e) {
-                    result.data = xml;
-                    result.name = GUISTATE_C.getProgramName();
-                    showProgram(result);
+                    // restore old Program
+                    reloadProgram();  
                     result.rc = "error";
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, result.name);
                 }
