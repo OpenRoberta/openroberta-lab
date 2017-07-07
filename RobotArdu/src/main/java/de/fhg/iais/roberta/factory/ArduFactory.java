@@ -48,26 +48,26 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class BotNrollFactory extends AbstractRobotFactory {
+public class ArduFactory extends AbstractRobotFactory {
     private BotNrollCompilerWorkflow compilerWorkflow;
     private final Properties arduProperties;
     private final String name;
     private final int robotPropertyNumber;
 
-    public BotNrollFactory(RobotCommunicator robotCommunicator) {
+    public ArduFactory(RobotCommunicator robotCommunicator) {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.name = "botnroll";
+        this.name = "ardu";
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new BotNrollCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.arduProperties = Util1.loadProperties("classpath:BotNroll.properties");
-        addBlockTypesFromProperties("BotNroll.properties", this.arduProperties);
+        this.arduProperties = Util1.loadProperties("classpath:ardu.properties");
+        addBlockTypesFromProperties("ardu.properties", this.arduProperties);
     }
 
     @Override

@@ -79,10 +79,10 @@
 .typcn-open:before {
   content: "\e90e";
 }
-.typcn-ardu:before {
+/* .typcn-botnroll:before {
   content: "\e9d3";
-}
-.typcn-botnroll:before {
+} */
+.typcn-ardu:before {
   content: "\e90f";
 }
 .typcn-nibo:before {

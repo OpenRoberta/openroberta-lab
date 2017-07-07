@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.BotNrollFactory;
+import de.fhg.iais.roberta.factory.ArduFactory;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MotorStopActionTest {
 	HelperBotNroll h = new HelperBotNroll();
-    BotNrollFactory robotFactory = new BotNrollFactory(null);
+    ArduFactory robotFactory = new ArduFactory(null);
 
     @Before
     public void setUp() throws Exception {
