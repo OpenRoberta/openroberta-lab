@@ -34,7 +34,7 @@ public class Upgrader {
             System.exit(4);
         }
         LOG.info("upgrading to server version " + serverVersion);
-        if ( serverVersion.equals("2.3.0") ) {
+        if ( serverVersion.equals("2.2.7") ) {
             String dbUrl = RobertaProperties.getStringProperty("hibernate.connection.url");
             SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
             Session nativeSession = sessionFactoryWrapper.getNativeSession();
