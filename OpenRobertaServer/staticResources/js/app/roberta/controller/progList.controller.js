@@ -58,7 +58,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 align : 'left',
                 valign : 'top',
                 formatter : formatDeleteShareLoad,
-                width : '110px',
+             // TODO activate gallery for release 2.3.0
+             // width : '110px',
+                width : '89px',
             }, ]
         });
         $('#programNameTable').bootstrapTable('togglePagination');
@@ -195,12 +197,13 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             }
             return false;
         },
-        'click .gallery' : function(e, value, row, index) {
-            if (!row[2].sharedFrom) {
-                $('#share-with-gallery').trigger('updateAndShow', [ row ]);
-            }
-            return false;
-        },
+     // TODO activate gallery for release 2.3.0
+//        'click .gallery' : function(e, value, row, index) {
+//            if (!row[2].sharedFrom) {
+//                $('#share-with-gallery').trigger('updateAndShow', [ row ]);
+//            }
+//            return false;
+//        },
         'click .load' : function(e, value, row, index) {
             PROGRAM_C.loadFromListing(row);
         }
@@ -271,10 +274,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
             if (row[2].sharedFrom) {
                 result += '<a href="#" class="share disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-                result += '<a href="#" class="gallery disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
+                // TODO activate gallery for release 2.3.0
+                // result += '<a href="#" class="gallery disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
             } else {
                 result += '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-                result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
+             // TODO activate gallery for release 2.3.0
+                // result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
             }
         }
         result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
