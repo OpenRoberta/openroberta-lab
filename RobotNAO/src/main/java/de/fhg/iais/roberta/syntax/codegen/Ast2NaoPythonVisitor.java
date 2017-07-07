@@ -46,9 +46,6 @@ import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.NaoCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
@@ -90,7 +87,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -941,10 +937,10 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
     @Override
     public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
-        this.sb.append("h.touchsensor(");
-        this.sb.append(touchsensors.getSensor().getPythonCode());
+        this.sb.append("h.touchsensors(");
+        this.sb.append("\"" + touchsensors.getSensor().getPythonCode() + "\"");
         this.sb.append(", ");
-        this.sb.append(touchsensors.getSide().getPythonCode());
+        this.sb.append("\"" + touchsensors.getSide().getPythonCode() + "\"");
         this.sb.append(")");
         return null;
     }
@@ -1151,5 +1147,4 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         return null;
     }
 
- 
 }
