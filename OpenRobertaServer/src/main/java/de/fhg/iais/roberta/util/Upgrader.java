@@ -41,7 +41,7 @@ public class Upgrader {
             DbSetup dbSetup = new DbSetup(nativeSession);
             nativeSession.beginTransaction();
             dbSetup.runDatabaseSetup(
-                "/update-2-3-0.sql",
+                "/update-2-2-7.sql",
                 "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PENDING_EMAIL_CONFIRMATIONS'",
                 "select count(*) from USER where ACCOUNT = 'Gallery'");
             nativeSession.createSQLQuery("shutdown").executeUpdate();
