@@ -237,7 +237,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								class="typcn typcn-input-checked"
 								lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
 						</ul></li>
-					<!-- Menu Gallery 
+					<!-- TODO activate this for version with Menu Gallery 
 					<li id="head-navigation-gallery"><a href="#"
 						id="head-navi-tooltip-gallery"
 						lkey="Blockly.Msg.MENU_GALLERY_TOOLTIP" rel="tooltip"
@@ -677,11 +677,13 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 										name="registerUserEmail" />
 								</div>
 							</div>
-							<div class="form-group">
+							<!-- TODO remove display:none for version with User mail confirmation -->
+							<div class="form-group" style="display: none;">
 								<label for="registerUserAge" lkey="Blockly.Msg.POPUP_AGE">Age</label>
 								<div class="input-group">
 									<span class="input-group-addon typcn input-typcn typcn-at"></span>
-									<select class="form-control" id="registerUserAge" name="registerUserAge">
+									<select class="form-control" id="registerUserAge"
+										name="registerUserAge">
 										<option value="none"></option>
 										<option value="true" lkey="Blockly.Msg.YOUNGER_THEN_14">B</option>
 										<option value="false" lkey="Blockly.Msg.OLDER_THEN_14">C</option>
@@ -692,8 +694,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						<div class="modal-footer">
 							<button id="showChangeUserPassword" type="button"
 								class="btn-link hidden" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"></button>
-								<button id="resendActivation" type="button"
-									class="btn-link hidden" lkey="Blockly.Msg.RESEND_ACTIVATION">resend activation</button>
+							<!-- TODO remove display:none for version with User mail confirmation -->
+							<button id="resendActivation" type="button"
+								style="display: none;" class="btn-link hidden"
+								lkey="Blockly.Msg.RESEND_ACTIVATION">resend activation</button>
 							<button type="submit" class="btn btn-primary btn-block"
 								id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER"
 								value="register"></button>
@@ -790,7 +794,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Single Modal -->
 	<div id="single-modal" class="modal fade">
 		<div class="modal-dialog modal-sm">
@@ -823,7 +827,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Single Modal List -->
 	<div id="single-modal-list" class="modal fade">
 		<div class="modal-dialog modal-sm">
@@ -849,7 +853,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary" id="singleModalListOk">OK</button>
+						<button type="submit" class="btn btn-primary"
+							id="singleModalListOk">OK</button>
 						<input type="button" class="btn backButton" data-dismiss="modal"
 							lkey="Blockly.Msg.POPUP_CANCEL"></input>
 					</div>
@@ -857,7 +862,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- Popup show about info -->
 	<div id="show-about" class="modal fade">
 		<div class="modal-dialog">
@@ -1016,10 +1021,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 						lkey="Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE">Update now</button>
 					<input id="buttonCancelFirmwareUpdate" type="button"
 						class="btn backButton" data-dismiss="modal"
-						lkey="Blockly.Msg.POPUP_CANCEL"></input>
-				    <input id="buttonCancelFirmwareUpdateAndRun" type="button"
+						lkey="Blockly.Msg.POPUP_CANCEL"></input> <input
+						id="buttonCancelFirmwareUpdateAndRun" type="button"
 						class="btn backButton" data-dismiss="modal"
-						lkey="Blockly.Msg.POPUP_CANCEL"></input>					
+						lkey="Blockly.Msg.POPUP_CANCEL"></input>
 				</div>
 			</div>
 		</div>
@@ -1140,14 +1145,15 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<h3 id="#headShareGallery" class="modal-title">Share</h3>
 				</div>
 				<!-- <form id="share-program-form"> -->
-				<div class="modal-body">					
+				<div class="modal-body">
 					<table id="galleryPreview" class="galleryTable">
 					</table>
 					<span id="textShareGallery"></span>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" id="shareWithGallery">OK</button>
-					<button type="button" class="btn backButton" id="cancelShareWithGallery" lkey="Blockly.Msg.POPUP_CANCEL"></button>
+					<button type="button" class="btn backButton"
+						id="cancelShareWithGallery" lkey="Blockly.Msg.POPUP_CANCEL"></button>
 				</div>
 			</div>
 		</div>
