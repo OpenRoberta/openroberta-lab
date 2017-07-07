@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -80,6 +81,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -92,7 +94,6 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -316,7 +317,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("uBit.sleep(100);");
+        this.sb.append("uBit.sleep(1);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -506,7 +507,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitMicrophoneSensor(MicrophoneSensor<Void> microphoneSensor) {
-        this.sb.append("uBit.io.P21.getAnalogValue()");
+        this.sb.append("uBit.io.P21.getMicrophoneValue()");
         return null;
     }
 
@@ -558,11 +559,17 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String valueType = "AnalogValue()";
+        String valueType = null;
         if ( pinValueSensor.getValueType() == ValueType.DIGITAL ) {
-            valueType = "DigitalValue()";
+            valueType = ".getDigitalValue()";
+        } else if ( pinValueSensor.getValueType() == ValueType.ANALOG ) {
+            valueType = ".getAnalogValue()";
+        } else if ( pinValueSensor.getValueType() == ValueType.PULSEHIGH ) {
+            valueType = ".readPulseHigh()";
+        } else if ( pinValueSensor.getValueType() == ValueType.PULSELOW ) {
+            valueType = ".readPulseLow()";
         }
-        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName() + ".get" + valueType);
+        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName() + valueType);
         return null;
     }
 
@@ -974,6 +981,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
+        this.sb.append("uBit.radio.setTransmitPower(" + radioSendAction.getPower() + "); ");
         this.sb.append("uBit.radio.datagram.send(");
         radioSendAction.getMsg().visit(this);
         this.sb.append(");");
@@ -983,6 +991,14 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
         this.sb.append("ManagedString(uBit.radio.datagram.recv())");
+        return null;
+    };
+
+    @Override
+    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+        this.sb.append("uBit.radio.setGroup(");
+        radioSetChannelAction.getChannel().visit(this);
+        this.sb.append(");\n");
         return null;
     }
 

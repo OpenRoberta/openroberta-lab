@@ -237,6 +237,16 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								class="typcn typcn-input-checked"
 								lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
 						</ul></li>
+					<!-- TODO activate this for version with Menu Gallery 
+					<li id="head-navigation-gallery"><a href="#"
+						id="head-navi-tooltip-gallery"
+						lkey="Blockly.Msg.MENU_GALLERY_TOOLTIP" rel="tooltip"
+						data-original-title="" title=""> <span
+							id="head-navi-icon-gallery"
+							class="head-navi-icons typcn typcn-puzzle-outline"></span><span
+							class="head-navi-title hidden-sm hidden-md hidden-lg"
+							lkey="Blockly.Msg.MENU_GALLERY">gallery</span>
+					</a></li> -->
 					<!-- Menu Languages -->
 					<li class="dropdown" id="head-navigation-language"><a href="#"
 						data-toggle="dropdown" class="dropdown-toggle"
@@ -363,6 +373,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					href="#confList">Listing of configurations</a></li>
 				<li class="hidden"><a data-toggle="tab" id="tabLogList"
 					href="#logList">Logging</a></li>
+				<li class="hidden"><a data-toggle="tab" id="tabGalleryList"
+					href="#galleryList">Logging</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -553,6 +565,15 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			<table id="logTable">
 			</table>
 		</div>
+		<div id="galleryList" class="tab-pane fade">
+			<div id="galleryListToolbar">
+				<button id="backGalleryList" class="btn">
+					<i class="typcn typcn-arrow-left"></i>
+				</button>
+			</div>
+			<table id="galleryTable" class="galleryTable">
+			</table>
+		</div>
 		<div id="bricklyDiv" class="tab-pane fade"></div>
 	</div>
 	<!--  ################## END TABS ################## -->
@@ -656,10 +677,27 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 										name="registerUserEmail" />
 								</div>
 							</div>
+							<!-- TODO remove display:none for version with User mail confirmation -->
+							<div class="form-group" style="display: none;">
+								<label for="registerUserAge" lkey="Blockly.Msg.POPUP_AGE">Age</label>
+								<div class="input-group">
+									<span class="input-group-addon typcn input-typcn typcn-at"></span>
+									<select class="form-control" id="registerUserAge"
+										name="registerUserAge">
+										<option value="none"></option>
+										<option value="true" lkey="Blockly.Msg.YOUNGER_THEN_14">B</option>
+										<option value="false" lkey="Blockly.Msg.OLDER_THEN_14">C</option>
+									</select>
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button id="showChangeUserPassword" type="button"
 								class="btn-link hidden" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"></button>
+							<!-- TODO remove display:none for version with User mail confirmation -->
+							<button id="resendActivation" type="button"
+								style="display: none;" class="btn-link hidden"
+								lkey="Blockly.Msg.RESEND_ACTIVATION">resend activation</button>
 							<button type="submit" class="btn btn-primary btn-block"
 								id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER"
 								value="register"></button>
@@ -756,6 +794,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
+
 	<!-- Single Modal -->
 	<div id="single-modal" class="modal fade">
 		<div class="modal-dialog modal-sm">
@@ -788,6 +827,42 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 			</div>
 		</div>
 	</div>
+
+	<!-- Single Modal List -->
+	<div id="single-modal-list" class="modal fade">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 class="modal-title">connect ...</h3>
+				</div>
+				<form id="single-modal-list-form">
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="singleModalListInput">Please, choose a robot</label>
+							<div class="input-group">
+								<span class="input-group-addon typcn input-typcn typcn-pencil"></span>
+								<select class="form-control" id="singleModalListInput"
+									name="singleModalListInput">
+								</select>
+							</div>
+							<div align="right">
+								<a href="#" target="_blank" style="display: inline;"></a>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary"
+							id="singleModalListOk">OK</button>
+						<input type="button" class="btn backButton" data-dismiss="modal"
+							lkey="Blockly.Msg.POPUP_CANCEL"></input>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 	<!-- Popup show about info -->
 	<div id="show-about" class="modal fade">
 		<div class="modal-dialog">
@@ -1056,6 +1131,29 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<button type="button" class="btn btn-primary" id="shareProgram">OK</button>
 					<input type="button" class="btn backButton" data-dismiss="modal"
 						lkey="Blockly.Msg.POPUP_CANCEL"></input>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--  Popup to show relations / share programs -->
+	<div id="share-with-gallery" class="modal fade">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h3 id="#headShareGallery" class="modal-title">Share</h3>
+				</div>
+				<!-- <form id="share-program-form"> -->
+				<div class="modal-body">
+					<table id="galleryPreview" class="galleryTable">
+					</table>
+					<span id="textShareGallery"></span>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="shareWithGallery">OK</button>
+					<button type="button" class="btn backButton"
+						id="cancelShareWithGallery" lkey="Blockly.Msg.POPUP_CANCEL"></button>
 				</div>
 			</div>
 		</div>

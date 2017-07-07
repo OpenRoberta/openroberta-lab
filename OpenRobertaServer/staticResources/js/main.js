@@ -15,13 +15,15 @@ require.config({
         'jquery-hotkeys' : 'jquery/jquery.hotkeys',
         'prettify' : 'code-prettify/prettify',
         'volume-meter' : 'sound/volume-meter',
-        'bootstrap.wysiwyg': 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
-        
+        'bootstrap.wysiwyg' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
+        'socket.io' : 'socket.io/socket.io',
+
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
         'configuration.model' : '../app/roberta/models/configuration.model',
         'confList.controller' : '../app/roberta/controller/confList.controller',
         'confList.model' : '../app/roberta/models/confList.model',
+        'galleryList.controller' : '../app/roberta/controller/galleryList.controller',
         'guiState.controller' : '../app/roberta/controller/guiState.controller',
         'guiState.model' : '../app/roberta/models/guiState.model',
         'language.controller' : '../app/roberta/controller/language.controller',
@@ -44,6 +46,7 @@ require.config({
         'user.controller' : '../app/roberta/controller/user.controller',
         'user.model' : '../app/roberta/models/user.model',
         'rest.robot' : '../app/roberta/rest/robot',
+        'socket.controller' : '../app/roberta/controller/socket.controller',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.math' : '../app/simulation/simulationLogic/math',
@@ -110,8 +113,8 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller','progShare.controller', 'menu.controller', 'user.controller', 'robot.controller', 'program.controller',
-        'configuration.controller', 'language.controller', 'volume-meter' ], function(require) {
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller',
+        'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -125,10 +128,12 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     menuController = require('menu.controller');
     progDeleteController = require('progDelete.controller');
     progListController = require('progList.controller');
+    galleryListController = require('galleryList.controller');
     programController = require('program.controller');
     progShareController = require('progShare.controller');
     robotController = require('robot.controller');
     userController = require('user.controller');
+    socketController = require('socket.controller');
 
     $(document).ready(WRAP.fn3(init, 'page init'));
 });
@@ -145,6 +150,7 @@ function init() {
     }).then(function() {
         return userController.init();
     }).then(function() {
+        galleryListController.init();
         progListController.init();
         progDeleteController.init();
         confListController.init();
@@ -154,7 +160,10 @@ function init() {
         configurationController.init();
         programController.init();
         menuController.init();
-        $(".cover").fadeOut(100, function(){
+        //socketController.init();
+
+        //console.log(robotList);
+        $(".cover").fadeOut(100, function() {
             if (guiStateController.noCookie()) {
                 $("#show-startup-message").modal("show");
             }

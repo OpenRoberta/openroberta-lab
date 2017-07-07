@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 
-public class SimulationProgramCheckVisitor extends ProgramCheckVisitor implements AstActorCommunicationVisitor<Void> {
+public abstract class SimulationProgramCheckVisitor extends ProgramCheckVisitor implements AstActorCommunicationVisitor<Void> {
 
     public SimulationProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
@@ -106,7 +106,7 @@ public class SimulationProgramCheckVisitor extends ProgramCheckVisitor implement
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( usedSensor.getType() != SensorType.GYRO ) {
+                    if ( usedSensor.getType() != SensorType.GYRO || usedSensor.getType() != SensorType.GYROSCOPE  ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;

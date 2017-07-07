@@ -5,13 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.ArduFactory;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
+import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MotorOnActionTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
     ArduFactory robotFactory = new ArduFactory(null);
 
     @Before

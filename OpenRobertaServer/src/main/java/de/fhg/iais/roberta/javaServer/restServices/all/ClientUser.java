@@ -21,8 +21,10 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.LostPasswordProcessor;
+import de.fhg.iais.roberta.persistence.PendingEmailConfirmationsProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
+import de.fhg.iais.roberta.persistence.bo.PendingEmailConfirmations;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -30,6 +32,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 
@@ -40,10 +43,13 @@ public class ClientUser {
     private final RobotCommunicator brickCommunicator;
     private final MailManagement mailManagement;
 
+    private final boolean isPublicServer;
+
     @Inject
     public ClientUser(RobotCommunicator brickCommunicator, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
         this.mailManagement = mailManagement;
+        this.isPublicServer = RobertaProperties.getBooleanProperty("server.public");
     }
 
     @POST
@@ -64,6 +70,7 @@ public class ClientUser {
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             LostPasswordProcessor lostPasswordProcessor = new LostPasswordProcessor(dbSession, httpSessionState);
+            PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState);
             if ( cmd.equals("clear") ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
@@ -85,6 +92,7 @@ public class ClientUser {
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
                     response.put("userName", name);
+                    response.put("isAccountActivated", user.isActivated());
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
@@ -98,10 +106,12 @@ public class ClientUser {
                     String account = user.getAccount();
                     String userName = user.getUserName();
                     String email = user.getEmail();
+                    boolean age = user.isYoungerThen14();
                     response.put("userId", id);
                     response.put("userAccountName", account);
                     response.put("userName", userName);
                     response.put("userEmail", email);
+                    response.put("youngerThen14", age);
                 }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
@@ -109,7 +119,6 @@ public class ClientUser {
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
                 ClientUser.LOG.info("logout of user " + userId);
-
             } else if ( cmd.equals("createUser") ) {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
@@ -117,7 +126,13 @@ public class ClientUser {
                 String userName = request.getString("userName");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                up.createUser(account, password, userName, role, email, null);
+                boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
+                up.createUser(account, password, userName, role, email, null, youngerThen14);
+                if ( this.isPublicServer && !email.equals("") && up.isOk() ) {
+                    String lang = request.getString("language");
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang);
+                }
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("updateUser") ) {
@@ -126,7 +141,16 @@ public class ClientUser {
                 String email = request.getString("userEmail");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                up.updateUser(account, userName, role, email, null);
+                boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
+                User user = up.getUser(account);
+                String oldEmail = user.getEmail();
+                up.updateUser(account, userName, role, email, null, youngerThen14);
+                if ( this.isPublicServer && !oldEmail.equals(email) && up.isOk() ) {
+                    String lang = request.getString("language");
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang);
+                    up.deactivateAccount(user.getId());
+                }
                 Util.addResultInfo(response, up);
 
             } else if ( cmd.equals("changePassword") ) {
@@ -146,7 +170,6 @@ public class ClientUser {
                     lostPasswordProcessor.deleteLostPassword(resetPasswordLink);
                 }
                 Util.addResultInfo(response, up);
-
             } else if ( cmd.equals("isResetPasswordLinkExpired") ) {
                 String resetPasswordLink = request.getString("resetPasswordLink");
                 LostPassword lostPassword = lostPasswordProcessor.loadLostPassword(resetPasswordLink);
@@ -178,6 +201,25 @@ public class ClientUser {
                     } catch ( MessagingException e ) {
                         up.setError(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
                     }
+                }
+                Util.addResultInfo(response, up);
+            } else if ( cmd.equals("activateUser") ) {
+                String userActivationLink = request.getString("userActivationLink");
+                PendingEmailConfirmations confirmation = pendingConfirmationProcessor.loadConfirmation(userActivationLink);
+                if ( confirmation != null ) {
+                    up.activateAccount(confirmation.getUserID());
+                }
+                if ( up.getMessage() == Key.USER_ACTIVATION_SUCCESS ) {
+                    pendingConfirmationProcessor.deleteEmailConfirmation(userActivationLink);
+                }
+                Util.addResultInfo(response, up);
+            } else if ( cmd.equals("resendActivation") ) {
+                String account = request.getString("accountName");
+                String lang = request.getString("language");
+                User user = up.getUser(account);
+                if ( this.isPublicServer && user != null && !user.getEmail().equals("") ) {
+                    PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, user.getEmail(), lang);
                 }
                 Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {
@@ -215,5 +257,18 @@ public class ClientUser {
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         MDC.clear();
         return Response.ok(response).build();
+    }
+
+    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang) throws Exception {
+        String[] body = {
+            account,
+            urlPostfix
+        };
+        try {
+            this.mailManagement.send(email, "activate", body, lang);
+            up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
+        } catch ( Exception e ) {
+            up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);
+        }
     }
 }

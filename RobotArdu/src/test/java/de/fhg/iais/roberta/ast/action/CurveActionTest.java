@@ -5,10 +5,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class CurveActionTest {
-    Helper h = new Helper();
+	HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void make() throws Exception {

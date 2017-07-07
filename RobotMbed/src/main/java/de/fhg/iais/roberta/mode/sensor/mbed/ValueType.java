@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * This enumeration contain all types of sensors that are used in <b>robSensors_getSample</b> Blockly block.
  */
 public enum ValueType {
-    ANALOG(), DIGITAL();
+    ANALOG(), DIGITAL(), PULSEHIGH(), PULSELOW();
 
     private final String[] values;
 

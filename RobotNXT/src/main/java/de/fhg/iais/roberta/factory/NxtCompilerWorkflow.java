@@ -126,6 +126,7 @@ public class NxtCompilerWorkflow implements ICompilerWorkflow {
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
                 nbcCompilerFileName,
+                "-q",
                 this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
                 "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
                 "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()

@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -64,11 +65,13 @@ public class ClientProgram {
 
     private final SessionFactoryWrapper sessionFactoryWrapper;
     private final RobotCommunicator brickCommunicator;
+    private final boolean isPublicServer;
 
     @Inject
     public ClientProgram(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
         this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
+        this.isPublicServer = RobertaProperties.getBooleanProperty("server.public");
 
     }
 
@@ -90,8 +93,8 @@ public class ClientProgram {
         JSONObject response = new JSONObject();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
-            final JSONObject request = fullRequest.getJSONObject("data");
-            final String cmd = request.getString("cmd");
+            JSONObject request = fullRequest.getJSONObject("data");
+            String cmd = request.getString("cmd");
             ClientProgram.LOG.info("command is: " + cmd + ", userId is " + userId);
             response.put("cmd", cmd);
             ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
@@ -184,10 +187,20 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
                 }
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
-                String programName = request.getString("programName");
-                String userToShareName = request.getString("userToShare");
-                String right = request.getString("right");
-                upp.shareToUser(userId, robot, programName, userToShareName, right);
+                User user = up.getUser(userId);
+                if ( !this.isPublicServer || (user != null && user.isActivated()) ) {
+                    String programName = request.getString("programName");
+                    String userToShareName = request.getString("userToShare");
+                    String right = request.getString("right");
+                    upp.shareToUser(userId, robot, programName, userToShareName, right);
+                    Util.addResultInfo(response, upp);
+                } else {
+                    Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
+                }
+
+            } else if ( cmd.equals("shareWithGallery") && httpSessionState.isUserLoggedIn() ) {
+                final String programName = request.getString("programName");
+                upp.shareToUser(userId, robot, programName, "Gallery", "READ");
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("shareDelete") && httpSessionState.isUserLoggedIn() ) {
@@ -206,10 +219,27 @@ public class ClientProgram {
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
+            } else if ( cmd.equals("loadGallery") ) {
+                final JSONArray programInfo = pp.getProgramGallery(2);
+                response.put("programNames", programInfo);
+                Util.addResultInfo(response, pp);
+
+            } else if ( cmd.equals("loadProgramEntity") && httpSessionState.isUserLoggedIn() ) {
+                final String programName = request.getString("name");
+                final String ownerName = request.getString("owner");
+                final User owner = up.getUser(ownerName);
+                final int ownerID = owner.getId();
+                final JSONArray program = pp.getProgramEntity(programName, ownerID, robot);
+                if ( program != null ) {
+                    response.put("program", program);
+                }
+                Util.addResultInfo(response, pp);
+
             } else if ( cmd.equals("loadEN") ) {
                 JSONArray programInfo = pp.getProgramInfo(1, robot);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
+
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
                 JSONArray relations = pp.getProgramRelations(programName, userId, robot);
@@ -230,7 +260,7 @@ public class ClientProgram {
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 // TODO: this is quick fix not to check the program for arduino
                 if ( !(httpSessionState.getRobotName().equals("ardu") || httpSessionState.getRobotName().equals("nao")) && messageKey == null ) {
-                    RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                    RobotProgramCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                     messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 } else {
                     response.put("data", programText);
@@ -294,7 +324,7 @@ public class ClientProgram {
 
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                    final String javaScriptCode =
+                    String javaScriptCode =
                         robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, programText, configurationText);
 
                     ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
@@ -339,10 +369,10 @@ public class ClientProgram {
     }
 
     private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
-        final JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        final Marshaller m = jaxbContext.createMarshaller();
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        final StringWriter writer = new StringWriter();
+        StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         return writer.toString();
     }

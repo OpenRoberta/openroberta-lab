@@ -2,11 +2,11 @@ package de.fhg.iais.roberta.ast.syntax.actors;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class TurnActionTest {
 
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void turn() throws Exception {
@@ -17,7 +17,7 @@ public class TurnActionTest {
 
     @Test
     public void turnFor() throws Exception {
-        final String a = "\nrob.moveTimePID(50,-50,20);";
+        final String a = "\nbnr.moveTimePID(50,-50,20);";
 
         this.h.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurnFor.xml", false);
     }

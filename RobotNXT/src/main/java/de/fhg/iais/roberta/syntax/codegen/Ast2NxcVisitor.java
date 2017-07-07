@@ -12,8 +12,12 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.general.nxt.IndexLocation;
+import de.fhg.iais.roberta.mode.general.nxt.PickColor;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
@@ -71,6 +75,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -95,7 +100,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     private final NxtConfiguration brickConfiguration;
 
     private boolean timeSensorUsed;
-    private boolean volumeActionUsed;
+    private boolean playToneActionUsed;
 
     /**
      * initialize the Nxc code generator visitor.
@@ -108,12 +113,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         super(programPhrases, indentation);
         this.brickConfiguration = brickConfiguration;
 
-        NxtCodePreprocessVisitor usedHardware = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
+        NxtCodePreprocessVisitor codePreprocessVisitor = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
 
-        this.timeSensorUsed = usedHardware.isTimerSensorUsed();
-        this.volumeActionUsed = usedHardware.isToneUsed();
+        this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
 
-        this.loopsLabels = usedHardware.getloopsLabelContainer();
+        this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
     /**
@@ -135,41 +140,41 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
         String value;
-        switch ( getEnumCode(colorConst.getValue()) ) {
-            case "PickColor.BLACK":
+        switch ( (PickColor) colorConst.getValue() ) {
+            case BLACK:
                 value = "INPUT_BLACKCOLOR";
                 break;
-            case "PickColor.BLUE":
+            case BLUE:
                 value = "INPUT_BLUECOLOR";
                 break;
-            case "PickColor.GREEN":
+            case GREEN:
                 value = "INPUT_GREENCOLOR";
                 break;
-            case "PickColor.YELLOW":
+            case YELLOW:
                 value = "INPUT_YELLOWCOLOR";
                 break;
-            case "PickColor.RED":
+            case RED:
                 value = "INPUT_REDCOLOR";
                 break;
-            case "PickColor.WHITE":
+            case WHITE:
                 value = "INPUT_WHITECOLOR";
                 break;
-            case "PickColor.MAGENTA":
+            case MAGENTA:
                 value = "INPUT_MAGENTACOLOR";
                 break;
-            case "PickColor.ORANGE":
+            case ORANGE:
                 value = "INPUT_ORANGECOLOR";
                 break;
-            case "PickColor.LIME":
+            case LIME:
                 value = "INPUT_LIMECOLOR";
                 break;
-            case "PickColor.VIOLET":
+            case VIOLET:
                 value = "INPUT_VIOLETCOLOR";
                 break;
-            case "PickColor.CRIMSON":
+            case CRIMSON:
                 value = "INPUT_CRIMSONCOLOR";
                 break;
-            case "PickColor.PURPLE":
+            case PURPLE:
                 value = "INPUT_PURPLECOLOR";
                 break;
             default:
@@ -687,15 +692,14 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        //final String Port = getEnumCode(lightSensor.getPort());
         this.sb.append("SensorLight(");
         this.sb.append(lightSensor.getPort());
         this.sb.append(", ");
-        switch ( getEnumCode(lightSensor.getMode()) ) {
-            case "LightSensorMode.RED":
+        switch ( (LightSensorMode) lightSensor.getMode() ) {
+            case RED:
                 this.sb.append("\"LIGHT\"");
                 break;
-            case "LightSensorMode.AMBIENTLIGHT":
+            case AMBIENTLIGHT:
                 this.sb.append("\"AMBIENTLIGHT\"");
                 break;
             default:
@@ -708,14 +712,14 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         String button = null;
-        switch ( getEnumCode(brickSensor.getKey()) ) {
-            case "BrickKey.ENTER":
+        switch ( (BrickKey) brickSensor.getKey() ) {
+            case ENTER:
                 button = "BTNCENTER";
                 break;
-            case "BrickKey.LEFT":
+            case LEFT:
                 button = "BTNLEFT";
                 break;
-            case "BrickKey.RIGHT":
+            case RIGHT:
                 button = "BTNRIGHT";
                 break;
         }
@@ -732,18 +736,16 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         }
         this.sb.append(colorSensor.getPort());
         this.sb.append(", ");
-        switch ( getEnumCode(colorSensor.getMode()) ) {
-            case "ColorSensorMode.COLOUR":
+        switch ( (ColorSensorMode) colorSensor.getMode() ) {
+            case COLOUR:
                 this.sb.append("\"COLOR\"");
                 break;
-            case "ColorSensorMode.AMBIENTLIGHT":
+            case AMBIENTLIGHT:
                 this.sb.append("\"AMBIENTLIGHT\"");
                 break;
-            case "ColorSensorMode.RED":
+            case RED:
                 this.sb.append("\"LIGHT\"");
                 break;
-            /*default:
-            throw new DbcException("Invalide mode for Color Sensor!");*/
         }
         this.sb.append(")");
         return null;
@@ -824,6 +826,16 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
+        this.sb.append("\n");
+        if ( this.playToneActionUsed ) {
+            this.sb.append("byte volume = 0x02;");
+        }
+        if ( this.timeSensorUsed ) {
+            if ( this.playToneActionUsed ) {
+                this.sb.append("\n");
+            }
+            this.sb.append("long timer1;");
+        }
         mainTask.getVariables().visit(this);
         incrIndentation();
         generateUserDefinedMethods();
@@ -877,9 +889,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.sb.append(methodName);
         lengthOfIsEmptyFunct.getParam().get(0).visit(this);
         this.sb.append(")");
-        //this.sb.append(methodName);
-        //lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        //this.sb.append(")");
         return null;
     }
 
@@ -1162,7 +1171,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#define MAXLINES 8 \n");
-        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources\n");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
     }
 
     @Override
@@ -1244,13 +1253,13 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         }
         if ( this.timeSensorUsed ) {
             nlIndent();
-            this.sb.append("long timer1;");
-            nlIndent();
             this.sb.append("SetTimerValue(timer1);");
         }
-        if ( this.volumeActionUsed ) {
-            nlIndent();
-            this.sb.append("byte volume = 0x02;");
-        }
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -32,7 +32,7 @@ public class GetSampleSensorTest {
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TimerSensor [mode=GET_SAMPLE, timer=1]]], NumConst [500]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor []]], NumConst [20]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [null]]], NumConst [20]]]\n"
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [AmbientLightSensor []]], NumConst [50]]]\n"
                 + ")]]]]";

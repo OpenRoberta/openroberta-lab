@@ -51,13 +51,18 @@ public class RobotCommunicationData {
         String menuversion,
         String firmwarename,
         String firmwareversion) {
+        // the per session token
         this.token = token;
+        // the robot group, such as 'ev3' ...
         this.robot = robot;
         this.robotIdentificator = robotIdentificator;
+        // the name of the robot, can be changed by the user in some cases
         this.robotName = robotName;
         this.battery = battery;
         this.menuversion = menuversion;
+        // the robot variant, such as 'ev3dev' or 'lejos'
         this.firmwarename = firmwarename;
+        // inbformal robot firmware version details
         this.firmwareversion = firmwareversion;
         this.sensorvalues = new JSONObject();
 

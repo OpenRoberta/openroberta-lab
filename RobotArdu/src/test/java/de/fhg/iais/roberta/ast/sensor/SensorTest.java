@@ -3,10 +3,10 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class SensorTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void sensorReset() throws Exception {

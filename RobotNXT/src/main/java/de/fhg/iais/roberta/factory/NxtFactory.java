@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -31,6 +32,7 @@ import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.action.nxt.ShowPicture;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.general.nxt.WorkingState;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.GyroSensorMode;
@@ -39,12 +41,14 @@ import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nxt.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.NxtRobProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.NxtSimProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -574,7 +578,7 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.nxtProperties.getProperty("robot.sim") != null ? true : false;
+        return this.nxtProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
@@ -588,13 +592,18 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.nxtProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.nxtProperties.getProperty("robot.connection");
     }
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
-        return new SimulationProgramCheckVisitor(brickConfiguration);
+        return new NxtSimProgramCheckVisitor(brickConfiguration);
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new NxtRobProgramCheckVisitor(brickConfiguration);
     }
 
     @Override
@@ -611,6 +620,36 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getVendorId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getCommandline() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getSignature() {
         // TODO Auto-generated method stub
         return null;
     }

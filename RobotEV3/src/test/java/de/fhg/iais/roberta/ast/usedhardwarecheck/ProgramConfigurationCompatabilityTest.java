@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.Ev3CodePreprocessVisitor;
+import de.fhg.iais.roberta.syntax.check.program.Ev3RobProgramCheckVisitor;
 import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class ProgramConfigurationCompatabilityTest {
@@ -36,7 +37,7 @@ public class ProgramConfigurationCompatabilityTest {
 
         Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, brickConfiguration);
         Set<UsedSensor> usedSensors = checkVisitor.getUsedSensors();
-        RobotProgramCheckVisitor programChecker = new RobotProgramCheckVisitor(brickConfiguration);
+        RobotProgramCheckVisitor programChecker = new Ev3RobProgramCheckVisitor(brickConfiguration);
         programChecker.check(phrases);
         int countErrors = programChecker.getErrorCount();
         ArrayList<ArrayList<Phrase<Void>>> checkedProgram = programChecker.getCheckedProgram();

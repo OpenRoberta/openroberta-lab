@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -33,6 +34,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 
 public interface IRobotFactory {
@@ -231,6 +233,10 @@ public interface IRobotFactory {
 
     List<IColorSensorMode> getColorSensorModes();
 
+    IJoystickMode getJoystickMode(String joystickMode);
+
+    List<IJoystickMode> getJoystickMode();
+
     ILightSensorMode getLightSensorMode(String lightrSensorMode);
 
     List<ILightSensorMode> getLightSensorModes();
@@ -364,11 +370,19 @@ public interface IRobotFactory {
 
     Boolean isBeta();
 
-    Boolean isAutoconnected();
+    String getConnectionType();
+
+    String getVendorId();
+
+    String getCommandline();
+
+    String getSignature();
 
     Boolean hasConfiguration();
 
     SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
+
+    RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
     String getGroup();
 

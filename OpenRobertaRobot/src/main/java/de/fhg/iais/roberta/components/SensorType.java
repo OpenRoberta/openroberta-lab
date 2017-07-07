@@ -15,7 +15,12 @@ public enum SensorType {
     GYRO( "robBrick_gyro" ),
     SOUND( "robBrick_sound" ),
     LIGHT( "robBrick_light" ),
-    COMPASS( "robBrick_compass" );
+    COMPASS( "robBrick_compass" ),
+    TEMPERATURE( "robBrick_temperature" ),
+    GYROSCOPE( "makeblockSensors_gyroscope_getSample" ),
+    FLAMESENSOR( "makeblockSensors_flameSensor_getSample" ),
+    ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
+    JOYSTICK( "arduSensors_joystick_getSample" );
 
     private final String[] values;
 

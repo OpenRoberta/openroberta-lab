@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
 import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
@@ -21,6 +22,7 @@ import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
 import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
@@ -29,17 +31,10 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.TemperatureSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.MbedAstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public class MicrobitSimProgramCheckVisitor extends SimulationProgramCheckVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>,
-    AstActorMotorVisitor<Void>, AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public class MicrobitSimProgramCheckVisitor extends SimulationProgramCheckVisitor implements MbedAstVisitor<Void> {
 
     public MicrobitSimProgramCheckVisitor(Configuration brickConfiguration) {
         super(brickConfiguration);
@@ -122,12 +117,22 @@ public class MicrobitSimProgramCheckVisitor extends SimulationProgramCheckVisito
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        radioSendAction.getMsg().visit(this);
+        radioSendAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        // radioSendAction.getMsg().visit(this);
         return null;
     }
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction<Void> radioReceiveAction) {
+        radioReceiveAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        // radioReceiveAction.getConnection().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitRadioSetChannelAction(RadioSetChannelAction<Void> radioSetChannelAction) {
+        radioSetChannelAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        // radioSetChannelAction.getChannel().visit(this);
         return null;
     }
 

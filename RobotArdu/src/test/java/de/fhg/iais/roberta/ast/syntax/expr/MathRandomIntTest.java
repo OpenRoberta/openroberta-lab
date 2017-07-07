@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MathRandomIntTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void Test() throws Exception {

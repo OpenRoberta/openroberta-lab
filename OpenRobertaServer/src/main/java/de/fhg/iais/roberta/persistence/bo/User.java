@@ -47,6 +47,12 @@ public class User implements WithSurrogateId {
     @Column(name = "TAGS")
     private String tags;
 
+    @Column(name = "ACTIVATED")
+    private boolean activated;
+
+    @Column(name = "YOUNGER_THAN_14")
+    private boolean youngerThen14;
+
     protected User() {
         // Hibernate
     }
@@ -129,9 +135,47 @@ public class User implements WithSurrogateId {
         this.lastLogin = Util1.getNow();
     }
 
+    public boolean isActivated() {
+        return this.activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public boolean isYoungerThen14() {
+        return this.youngerThen14;
+    }
+
+    public void setYoungerThen14(boolean youngerThen14) {
+        this.youngerThen14 = youngerThen14;
+    }
+
     @Override
     public String toString() {
-        return "User [id=" + this.id + ", account=" + this.account + ", role=" + this.role + ", lastLogin=" + this.lastLogin + "]";
+        return "User [id="
+            + this.id
+            + ", account="
+            + this.account
+            + ", userName="
+            + this.userName
+            + ", password="
+            + this.password
+            + ", email="
+            + this.email
+            + ", role="
+            + this.role
+            + ", created="
+            + this.created
+            + ", lastLogin="
+            + this.lastLogin
+            + ", tags="
+            + this.tags
+            + ", activated="
+            + this.activated
+            + ", youngerThen14="
+            + this.youngerThen14
+            + "]";
     }
 
 }

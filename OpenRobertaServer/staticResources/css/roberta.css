@@ -610,6 +610,10 @@ hidden
 	padding: 6px 0;
 }
 
+.blocklyFlyoutBackground {
+	fill-opacity: 0.925 !important;
+}
+
 .nav#head-navigation-tabs {
 	position: relative;
 	width: auto;
@@ -1183,6 +1187,21 @@ table [data-toggle="collapse"].collapsed:after {
 	height: 157px;
 }
 
+.robotSpecial span.img-mbot {
+	background-image: url("/css/img/mblock.jpg");	
+	background-size: 100% 100%;	
+}
+
+.robotSpecial span.img-botnroll {
+	background-image: url("/css/img/botnroll.jpg");	
+	background-size: 80% 100%;	
+}
+
+.robotSpecial span.img-bob3 {
+	background-image: url("/css/img/bob3.jpg");	
+	background-size: 80% 100%;	
+}
+
 .startupImages {
 	top: 50%;
     position: relative;
@@ -1342,6 +1361,22 @@ td.bs-checkbox {
 
 .bootstrap-table a>span {
 	padding: 0;
+}
+
+.galleryTable .typcn:before {
+    position: absolute;
+    left: 50%;
+    margin-left: -50px;
+    color: #eee;
+    font-size: 100px;
+}
+
+.galleryTable td {
+	border: none;
+	color: #fff;
+	width: 100vw;
+    position: relative;
+    border: none !important;
 }
 
 .dataTables_wrapper {

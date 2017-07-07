@@ -157,7 +157,7 @@ public class DbExecutor {
     }
 
     private static boolean isDDL(String sqlStmt) {
-        return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ");
+        return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ") || DbExecutor.sW(sqlStmt, "alter ");
     }
 
     private static boolean sW(String testString, String expected) {

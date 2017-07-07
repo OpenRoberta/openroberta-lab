@@ -1,7 +1,10 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.model', 'program.controller', 'configuration.controller', 'jquery',
-        'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.model', 'robot.model', 'program.controller', 'configuration.controller',
+        'socket.controller', 'jquery', 'jquery-validate' ], function(exports, UTIL, LOG, MSG, GUISTATE_C, GUISTATE, ROBOT, PROGRAM_C, CONFIGURATION_C,
+        SOCKET_C, $) {
 
     var $formSingleModal;
+    var $formSingleListModal;
+    var robotPort;
 
     /**
      * Initialize robot
@@ -47,6 +50,18 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         }
     }
 
+    function setPort(port) {
+        robotPort = port;
+        $('#single-modal-list').modal('hide');
+        GUISTATE_C.setRobotPort(port);
+    }
+    exports.setPort = setPort;
+
+    function getPort() {
+        return robotPort;
+    }
+    exports.getPort = getPort;
+
     function initRobotForms() {
         $('#iconDisplayRobotState').onWrap('click', function() {
             showRobotInfo();
@@ -68,7 +83,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
             $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
             $('#singleModalInput').addClass('capitalLetters');
             $('#single-modal a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
-            $('#single-modal a[href]').attr("href", "https://wiki.open-roberta.org");
+            $('#single-modal a[href]').attr("href", "http://wiki.open-roberta.org");
         }, function() {
             setToken($('#singleModalInput').val().toUpperCase());
         }, function() {
@@ -95,6 +110,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'robot.mode
         });
     }
     exports.showSetTokenModal = showSetTokenModal;
+
+    function showListModal() {
+        UTIL.showSingleListModal(function() {
+            $('#single-modal-list h3').text(Blockly.Msg["MENU_CONNECT"]);
+            $('#single-modal-list label').text(Blockly.Msg["POPUP_VALUE"]);
+            $('#single-modal-list a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
+            $('#single-modal-list a[href]').attr("href", "http://wiki.open-roberta.org");
+        }, function() {
+            console.log(document.getElementById("singleModalListInput").value);
+            setPort(document.getElementById("singleModalListInput").value);
+        }, function() {
+        });
+    }
+    exports.showListModal = showListModal;
 
     /**
      * Show robot info

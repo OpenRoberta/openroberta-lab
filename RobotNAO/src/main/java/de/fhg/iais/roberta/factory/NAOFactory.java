@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -28,17 +29,18 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.nao.ActorPort;
 import de.fhg.iais.roberta.mode.action.nao.BlinkMode;
 import de.fhg.iais.roberta.mode.action.nao.BrickLedColor;
+import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nao.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nao.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.nao.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nao.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -487,7 +489,7 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.naoProperties.getProperty("robot.sim") != null ? true : false;
+        return this.naoProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
@@ -501,12 +503,17 @@ public class NAOFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.naoProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.naoProperties.getProperty("robot.connection");
     }
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 
@@ -524,6 +531,36 @@ public class NAOFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getVendorId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getCommandline() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getSignature() {
         // TODO Auto-generated method stub
         return null;
     }

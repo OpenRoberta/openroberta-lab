@@ -77,7 +77,8 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void createUser(String account, String password, String userName, String roleAsString, String email, String tags) throws Exception {
+    public void createUser(String account, String password, String userName, String roleAsString, String email, String tags, boolean youngerThen14)
+        throws Exception {
         Pattern p = Pattern.compile("[^a-zA-Z0-9=+!?.,%#+&^@_\\- ]", Pattern.CASE_INSENSITIVE);
         Matcher acc_symbols = p.matcher(account);
         boolean account_check = acc_symbols.find();
@@ -98,6 +99,7 @@ public class UserProcessor extends AbstractProcessor {
                     user.setUserName(userName);
                     user.setEmail(email);
                     user.setTags(tags);
+                    user.setYoungerThen14(youngerThen14);
                 } else {
                     setError(Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
                 }
@@ -145,7 +147,35 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void updateUser(String account, String userName, String roleAsString, String email, String tags) throws Exception {
+    public void activateAccount(int userID) throws Exception {
+        if ( userID <= 0 ) {
+            setError(Key.USER_ACTIVATION_WRONG_ACCOUNT, String.valueOf(userID));
+        } else {
+            User user = getUser(userID);
+            if ( user != null ) {
+                user.setActivated(true);
+                setSuccess(Key.USER_ACTIVATION_SUCCESS);
+            } else {
+                setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, String.valueOf(userID));
+            }
+        }
+    }
+
+    public void deactivateAccount(int userID) throws Exception {
+        if ( userID <= 0 ) {
+            setError(Key.USER_ACTIVATION_WRONG_ACCOUNT, String.valueOf(userID));
+        } else {
+            User user = getUser(userID);
+            if ( user != null ) {
+                user.setActivated(false);
+                setSuccess(Key.USER_DEACTIVATION_SUCCESS);
+            } else {
+                setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, String.valueOf(userID));
+            }
+        }
+    }
+
+    public void updateUser(String account, String userName, String roleAsString, String email, String tags, boolean youngerThen14) throws Exception {
         if ( account == null || account.equals("") ) {
             setError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, account);
         } else {
@@ -157,6 +187,7 @@ public class UserProcessor extends AbstractProcessor {
                     user.setRole(Role.valueOf(roleAsString));
                     user.setEmail(email);
                     user.setTags(tags);
+                    user.setYoungerThen14(youngerThen14);
                     setSuccess(Key.USER_UPDATE_SUCCESS);
                 }
             } else {
@@ -198,4 +229,5 @@ public class UserProcessor extends AbstractProcessor {
         setSuccess(Key.USER_GET_ALL_SUCCESS);
         return usersJSONArray;
     }
+
 }

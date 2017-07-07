@@ -7,7 +7,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import de.fhg.iais.roberta.components.ArduConfiguration;
+import de.fhg.iais.roberta.components.BotNrollConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -19,35 +19,37 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.action.arduino.ActorPort;
-import de.fhg.iais.roberta.mode.action.arduino.BlinkMode;
-import de.fhg.iais.roberta.mode.action.arduino.BrickLedColor;
-import de.fhg.iais.roberta.mode.sensor.arduino.BrickKey;
-import de.fhg.iais.roberta.mode.sensor.arduino.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.arduino.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
+import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
+import de.fhg.iais.roberta.mode.action.botnroll.BrickLedColor;
+import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.botnroll.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.botnroll.SoundSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensor.botnroll.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2ArduVisitor;
+import de.fhg.iais.roberta.syntax.codegen.Ast2BotNrollVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ArduFactory extends AbstractRobotFactory {
-    private ArduCompilerWorkflow compilerWorkflow;
+    private BotNrollCompilerWorkflow compilerWorkflow;
     private final Properties arduProperties;
     private final String name;
     private final int robotPropertyNumber;
@@ -60,12 +62,12 @@ public class ArduFactory extends AbstractRobotFactory {
         this.name = "ardu";
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
-            new ArduCompilerWorkflow(
+            new BotNrollCompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.arduProperties = Util1.loadProperties("classpath:Ardu.properties");
-        addBlockTypesFromProperties("Ardu.properties", this.arduProperties);
+        this.arduProperties = Util1.loadProperties("classpath:ardu.properties");
+        addBlockTypesFromProperties("ardu.properties", this.arduProperties);
     }
 
     @Override
@@ -478,7 +480,7 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasSim() {
-        return this.arduProperties.getProperty("robot.sim") != null ? true : false;
+        return this.arduProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
@@ -492,12 +494,22 @@ public class ArduFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public Boolean isAutoconnected() {
-        return this.arduProperties.getProperty("robot.connection.server") != null ? true : false;
+    public String getConnectionType() {
+        return this.arduProperties.getProperty("robot.connection");
+    }
+
+    @Override
+    public String getVendorId() {
+        return this.arduProperties.getProperty("robot.vendor");
     }
 
     @Override
     public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
+    }
+
+    @Override
+    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 
@@ -527,6 +539,28 @@ public class ArduFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return Ast2ArduVisitor.generate((ArduConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return Ast2BotNrollVisitor.generate((BotNrollConfiguration) brickConfiguration, phrasesSet, withWrapping);
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getCommandline() {
+        return this.arduProperties.getProperty("robot.connection.commandLine");
+    }
+
+    @Override
+    public String getSignature() {
+        return this.arduProperties.getProperty("robot.connection.signature");
     }
 }

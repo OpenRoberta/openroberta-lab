@@ -28,8 +28,8 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -285,6 +285,10 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
             nlIndent();
             this.sb.append("pass");
         } else {
+            if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+                nlIndent();
+                this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+            }
             methodVoid.getBody().visit(this);
         }
         return null;
@@ -300,6 +304,10 @@ public abstract class Ast2PythonVisitor extends CommonLanguageVisitor {
             nlIndent();
             this.sb.append("pass");
         } else {
+            if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
+                nlIndent();
+                this.sb.append("global " + String.join(", ", this.usedGlobalVarInFunctions));
+            }
             methodReturn.getBody().visit(this);
             this.nlIndent();
             this.sb.append("return ");

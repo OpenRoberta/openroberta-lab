@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import org.junit.Ignore;
 
-import de.fhg.iais.roberta.util.test.ardu.Helper;
+import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class ListsOccurrenceTest {
-    Helper h = new Helper();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Ignore
     public void Test() throws Exception {

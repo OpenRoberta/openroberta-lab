@@ -141,6 +141,10 @@ public class Program implements WithSurrogateId {
         return this.owner;
     }
 
+    public Robot getRobot() {
+        return this.robot;
+    }
+
     public Timestamp getCreated() {
         return this.created;
     }

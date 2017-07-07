@@ -29,6 +29,11 @@ public class MailManagement {
         @Named("reset.text.en") String resetTextEn,
         @Named("reset.subject.de") String resetSubjectDe,
         @Named("reset.subject.en") String resetSubjectEn,
+        @Named("activate.url") String activateUrl,
+        @Named("activate.text.de") String activateTextDe,
+        @Named("activate.text.en") String activateTextEn,
+        @Named("activate.subject.de") String activateSubjectDe,
+        @Named("activate.subject.en") String activateSubjectEn,
         @Named("username") final String username,
         @Named("password") final String password) {
         this.props.put("mail.smtp.auth", auth);
@@ -41,6 +46,11 @@ public class MailManagement {
         this.props.put("reset.text.en", resetTextEn);
         this.props.put("reset.subject.de", resetSubjectDe);
         this.props.put("reset.subject.en", resetSubjectEn);
+        this.props.put("activate.url", activateUrl);
+        this.props.put("activate.text.de", activateTextDe);
+        this.props.put("activate.text.en", activateTextEn);
+        this.props.put("activate.subject.de", activateSubjectDe);
+        this.props.put("activate.subject.en", activateSubjectEn);
         this.props.put("username", username);
 
         this.session = Session.getInstance(this.props, new javax.mail.Authenticator() {
@@ -55,12 +65,23 @@ public class MailManagement {
         // TODO support for more languages
         String language = lang.toLowerCase().equals("de") ? "DE" : "en";
         String mailText = body[0];
-        String mailSubject = this.props.getProperty("reset.subject." + language.toLowerCase());
+        String mailSubject = "";
         if ( subject.equals("reset") ) {
+            mailSubject = this.props.getProperty("reset.subject." + language.toLowerCase());
             mailText = this.props.getProperty("reset.text." + language.toLowerCase());
             String url =
                 this.props.getProperty("reset.url") != null && !this.props.getProperty("reset.url").isEmpty()
                     ? this.props.getProperty("reset.url")
+                    : "https://lab.open-roberta.org/";
+            mailText = mailText.replace("$1", body[0]);
+            mailText = mailText.replace("$2", url);
+            mailText = mailText.replace("$3", body[1]);
+        } else if ( subject.equals("activate") ) {
+            mailSubject = this.props.getProperty("activate.subject." + language.toLowerCase());
+            mailText = this.props.getProperty("activate.text." + language.toLowerCase());
+            String url =
+                this.props.getProperty("activate.url") != null && !this.props.getProperty("activate.url").isEmpty()
+                    ? this.props.getProperty("activate.url")
                     : "https://lab.open-roberta.org/";
             mailText = mailText.replace("$1", body[0]);
             mailText = mailText.replace("$2", url);
