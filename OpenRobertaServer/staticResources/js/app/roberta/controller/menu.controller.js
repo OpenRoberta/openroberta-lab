@@ -99,7 +99,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotName);
                     clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotName));
                     addInfoLink(clone, robotName);
-                    clone.find('img').css('visibility', 'hidden');
+                    if (!GUISTATE_C.getIsRobotBeta(robotName)) {
+                        clone.find('img.img-beta').css('visibility', 'hidden');
+                    }
                     $("#popup-robot-container").append(clone);
 
                 } else { // till the next for loop we create groups for robots
