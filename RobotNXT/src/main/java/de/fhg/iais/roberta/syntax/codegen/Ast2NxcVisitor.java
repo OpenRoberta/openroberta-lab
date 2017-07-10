@@ -565,7 +565,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
             this.sb.append(", ");
         }
         driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(", ");
+        this.sb.append(" < 100 ? ");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(" : 100,  ");
         if ( isDuration ) {
             this.sb.append("(");
             driveAction.getParam().getDuration().getValue().visit(this);
