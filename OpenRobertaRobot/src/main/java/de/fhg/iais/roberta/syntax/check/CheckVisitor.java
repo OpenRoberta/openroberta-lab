@@ -61,7 +61,6 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
     private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
 
     private boolean isProgramEmpty = false;
-    private boolean isInUserDefinedFunction = false;
 
     private int loopCounter = 0;
     private int currenLoop = 0;

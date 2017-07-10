@@ -50,8 +50,8 @@ import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public abstract class PreprocessProgramVisitor extends CheckVisitor implements AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>, AstActorDisplayVisitor<Void>,
-    AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, AstActorCommunicationVisitor<Void> {
+public abstract class PreprocessProgramVisitor extends CheckVisitor implements AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
+    AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, AstActorCommunicationVisitor<Void> {
     protected final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     protected final Set<UsedActor> usedActors = new LinkedHashSet<UsedActor>();
 
