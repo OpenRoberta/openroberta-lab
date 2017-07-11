@@ -281,7 +281,7 @@ public class Ast2BotNrollVisitorTest {
             + MAIN_METHOD1
             + MAIN_METHOD2
             + "}"
-            + "int variablenNameLen=3;\n"
+            + "int variablenNameSysLen=3;\n"
             + "String *variablenName = (String*)malloc(variablenName,sizeof(String)*variablenNameSysLen);"
             + "rob.createArray(variablenName,variablenNameSysLen,\"a\",\"b\",\"c\");"
             + "     double test(double x, Stringx2[]) {\n"
