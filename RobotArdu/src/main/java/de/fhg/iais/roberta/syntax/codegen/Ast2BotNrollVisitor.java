@@ -432,10 +432,10 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
                 this.sb.append(")");
                 break;
             case RGB:
-                this.sb.append("{(double) bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[0], (double) bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[1], (double) bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[2]}");
+                this.sb.append("bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[0], bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[1], bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[2]");
                 break;
             case RED:
                 this.sb.append("bnr.colorSensorLight(" + colors + port);

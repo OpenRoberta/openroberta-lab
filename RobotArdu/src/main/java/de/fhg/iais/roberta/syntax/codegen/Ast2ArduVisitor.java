@@ -8,12 +8,15 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
@@ -26,6 +29,82 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
 
     protected Ast2ArduVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
+    }
+
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        listCreate.getValue().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        int size = 0;
+        if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+            ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
+            size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+            this.sb.append("int " + var.getName() + "SysLen = ").append(size).append(";");
+            nlIndent();
+        }
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
+        this.sb.append(var.getTypeVar().isArray() ? "*" : "");
+        this.sb.append(var.getName());
+        if ( var.getTypeVar().isArray() ) {
+            this.sb.append(" = (");
+            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)realloc(");
+            this.sb.append(var.getName()).append(", ").append("sizeof(");
+            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
+        }
+        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+            if ( var.getTypeVar().isArray() ) {
+                this.sb.append(var.getName() + "SysLen").append(")").append(";");
+                nlIndent();
+                this.sb.append("rob.createArray(").append(var.getName()).append(", ").append(var.getName() + "SysLen").append(", ");
+                var.getValue().visit(this);
+                this.sb.append(")");
+            } else {
+                this.sb.append(" = ");
+                var.getValue().visit(this);
+            }
+        } else {
+            if ( var.getTypeVar().isArray() ) {
+                this.sb.append(0).append(");");
+                nlIndent();
+                this.sb.append("int " + var.getName() + "SysLen = ").append(size).append(";");
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+        int size = 0;
+        if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") && !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
+            ListCreate<Void> list = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) assignStmt.getExpr();
+            size = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+            assignStmt.getName().visit(this);
+            this.sb.append("SysLen = ").append(size).append(";");
+            nlIndent();
+        }
+        assignStmt.getName().visit(this);
+
+        this.sb.append(" = ");
+
+        if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") ) {
+            this.sb.append("(").append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append("*)realloc(");
+            assignStmt.getName().visit(this);
+            this.sb.append(", ").append("sizeof(");
+            this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(")*");
+        }
+        if ( !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
+            if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") ) {
+
+            }
+        }
+
+        assignStmt.getExpr().visit(this);
+        this.sb.append(";");
+        return null;
     }
 
     @Override
