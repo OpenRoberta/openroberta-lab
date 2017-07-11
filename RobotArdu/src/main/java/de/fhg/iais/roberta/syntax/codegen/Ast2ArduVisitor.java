@@ -5,6 +5,7 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
@@ -12,8 +13,18 @@ import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
+import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
@@ -39,6 +50,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        this.sb.append(var + "\n");
         int size = 0;
         if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
             ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
@@ -70,7 +82,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
             if ( var.getTypeVar().isArray() ) {
                 this.sb.append(0).append(");");
                 nlIndent();
-                this.sb.append("int " + var.getName() + "SysLen = ").append(size).append(";");
+                this.sb.append("int " + var.getName() + "SysLen = ").append(size);
             }
         }
         return null;
@@ -202,22 +214,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
                 }
                 if ( !segments[6].contains("java.util") ) {
                     arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));
-                    this.sb.append(
-                        "for("
-                            + varType
-                            + whitespace()
-                            + element
-                            + " = 0;"
-                            + element
-                            + " < sizeof("
-                            + arr
-                            + "Raw"
-                            + ") / sizeof("
-                            + arr
-                            + "Raw"
-                            + "[0]); "
-                            + element
-                            + "++) {");
+                    this.sb.append("for(" + varType + whitespace() + element + " = 0;" + element + " < " + arr + "SysLen; " + element + "++) {");
                 } else {
                     this.sb.append("while(false){");
                 }
@@ -287,7 +284,223 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
     }
 
     protected void arrayLen(Var<Void> arr) {
-        this.sb.append("sizeof(" + arr.getValue() + "Raw" + ")/sizeof(" + arr.getValue() + "Raw" + "[0])");
+        this.sb.append(arr.getValue() + "SysLen");
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
+        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
+        this.sb.append(methodName);
+        arrayLen((Var<Void>) indexOfFunct.getParam().get(0));
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        indexOfFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
+        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("NULL");
+            return null;
+        }
+        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
+            this.sb.append("(");
+            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
+            this.sb.append(" == 0)");
+        } else {
+            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
+        listGetIndex.getParam().get(0).visit(this);
+        this.sb.append("[");
+        switch ( (IndexLocation) listGetIndex.getLocation() ) {
+            case FROM_START:
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case FROM_END:
+                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
+                this.sb.append(" - 1 - ");
+                listGetIndex.getParam().get(1).visit(this);
+                break;
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case LAST:
+                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
+                this.sb.append(" - 1");
+                break;
+            case RANDOM:
+                this.sb.append("rob.randomIntegerInRange(0, ");
+                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
+                this.sb.append(")");
+                break;
+        }
+        this.sb.append("]");
+        return null;
+    }
+
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
+            return null;
+        }
+        listSetIndex.getParam().get(0).visit(this);
+        this.sb.append("[");
+        switch ( (IndexLocation) listSetIndex.getLocation() ) {
+            case FROM_START:
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case FROM_END:
+                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
+                this.sb.append(" - 1 - ");
+                listSetIndex.getParam().get(2).visit(this);
+                break;
+            case FIRST:
+                this.sb.append("0");
+                break;
+            case LAST:
+                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
+                this.sb.append(" - 1");
+                break;
+            case RANDOM:
+                this.sb.append("rob.randomIntegerInRange(0, ");
+                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
+                this.sb.append(")");
+                break;
+        }
+        this.sb.append("]");
+        this.sb.append(" = ");
+        listSetIndex.getParam().get(1).visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        this.sb.append("rob.clamp(");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(", 2) == 0");
+                break;
+            case ODD:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(", 2) != 0");
+                break;
+            case PRIME:
+                this.sb.append("rob.isPrime(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                break;
+            case WHOLE:
+                this.sb.append("rob.isWhole(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                break;
+            case POSITIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" > 0");
+                break;
+            case NEGATIVE:
+                this.sb.append("(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(" < 0");
+                break;
+            case DIVISIBLE_BY:
+                this.sb.append("(fmod(");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(",");
+                mathNumPropFunct.getParam().get(1).visit(this);
+                this.sb.append(") == 0");
+                break;
+            default:
+                break;
+        }
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
+            this.sb.append("null");
+            return null;
+        }
+        switch ( mathOnListFunct.getFunctName() ) {
+            case SUM:
+                this.sb.append("rob.arrSum(");
+                break;
+            case MIN:
+                this.sb.append("rob.arrMin(");
+                break;
+            case MAX:
+                this.sb.append("rob.arrMax(");
+                break;
+            case AVERAGE:
+                this.sb.append("rob.arrMean(");
+                break;
+            case MEDIAN:
+                this.sb.append("rob.arrMedian(");
+                break;
+            case STD_DEV:
+                this.sb.append("rob.arrStandardDeviatioin(");
+                break;
+            case RANDOM:
+                this.sb.append("rob.arrRand(");
+                break;
+            case MODE:
+                this.sb.append("rob.arrMode(");
+                break;
+            default:
+                break;
+        }
+        arrayLen((Var<Void>) mathOnListFunct.getParam().get(0));
+        this.sb.append(", ");
+        mathOnListFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("rob.randomFloat()");
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        this.sb.append("rob.randomIntegerInRange(");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathRandomIntFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
     }
 
 }
