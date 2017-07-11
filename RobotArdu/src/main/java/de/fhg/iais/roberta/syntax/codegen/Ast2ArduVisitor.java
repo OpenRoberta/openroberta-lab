@@ -51,7 +51,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
             this.sb.append(" = (");
-            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)realloc(");
+            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
             this.sb.append(var.getName()).append(", ").append("sizeof(");
             this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
         }
@@ -89,20 +89,26 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
         assignStmt.getName().visit(this);
 
         this.sb.append(" = ");
-
-        if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") ) {
-            this.sb.append("(").append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append("*)realloc(");
-            assignStmt.getName().visit(this);
-            this.sb.append(", ").append("sizeof(");
-            this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(")*");
-        }
         if ( !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
             if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") ) {
-
+                this.sb.append("(").append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append("*)realloc(");
+                assignStmt.getName().visit(this);
+                this.sb.append(", ").append("sizeof(");
+                this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(")*");
+                assignStmt.getName().visit(this);
+                this.sb.append("SysLen);");
+                nlIndent();
+                this.sb.append("rob.createArray(");
+                assignStmt.getName().visit(this);
+                this.sb.append(", ");
+                assignStmt.getName().visit(this);
+                this.sb.append("SysLen, ");
             }
         }
-
         assignStmt.getExpr().visit(this);
+        if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") && !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
+            this.sb.append(")");
+        }
         this.sb.append(";");
         return null;
     }
