@@ -44,6 +44,7 @@ import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Stop;
 import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.check.program.NaoCodePreprocessVisitor;
@@ -1136,6 +1137,8 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\" + str(e))\n");
+        this.sb.append(INDENT).append("finally:\n");
+        this.sb.append(INDENT).append(INDENT).append("pass");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
@@ -1144,6 +1147,18 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        return null;
+    }
+
+    @Override
+    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
+        this.sb.append("h.walkAsync(");
+        walkAsync.getXSpeed().visit(this);
+        this.sb.append(", ");
+        walkAsync.getYSpeed().visit(this);
+        this.sb.append(", ");
+        walkAsync.getZSpeed().visit(this);
+        this.sb.append(")");
         return null;
     }
 

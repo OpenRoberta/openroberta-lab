@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Stop;
 import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -287,6 +288,12 @@ public class NaoCodePreprocessVisitor extends PreprocessProgramVisitor implement
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
         // TODO Auto-generated method stub
         return null;
     }
