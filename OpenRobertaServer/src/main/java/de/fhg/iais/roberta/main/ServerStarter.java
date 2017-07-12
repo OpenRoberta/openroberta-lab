@@ -109,11 +109,7 @@ public class ServerStarter {
      * @param defines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
      */
     public ServerStarter(String propertyPath, List<String> defines) {
-        Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
         Properties robertaProperties = Util1.loadAndMergeProperties(propertyPath, defines);
-        if ( mailProperties != null ) {
-            robertaProperties.putAll(mailProperties);
-        }
         setupPropertyForDatabaseConnection(robertaProperties);
         RobertaProperties.setRobertaProperties(robertaProperties);
     }
@@ -133,9 +129,10 @@ public class ServerStarter {
         int port = RobertaProperties.getIntProperty("server.port");
         http.setHost(host);
         http.setPort(port);
-        server.setConnectors(new ServerConnector[] {
-            http
-        });
+        server.setConnectors(
+            new ServerConnector[] {
+                http
+            });
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
@@ -180,11 +177,12 @@ public class ServerStarter {
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {
-            versionedHttpHandler,
-            wsHandler,
-            rootHandler
-        });
+        handlers.setHandlers(
+            new Handler[] {
+                versionedHttpHandler,
+                wsHandler,
+                rootHandler
+            });
         server.setHandler(handlers);
 
         try {
