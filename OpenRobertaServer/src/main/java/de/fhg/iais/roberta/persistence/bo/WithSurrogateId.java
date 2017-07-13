@@ -6,8 +6,7 @@ package de.fhg.iais.roberta.persistence.bo;
  * 
  * @author rbudde
  */
-public interface WithSurrogateId
-{
+public interface WithSurrogateId {
     /**
      * @return the (technical) key of this object. The key is generated automatically by hibernate, when the object is saved. The key may not be used in
      *         hashcode and equals!

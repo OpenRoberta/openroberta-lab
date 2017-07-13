@@ -62,7 +62,7 @@ public class LightSensorActionTest {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.syntax.action.generic.VolumeAction.Mode.invalid", e.getMessage());
         }
     }
-
+    
     @Test
     public void getVolumeAction() throws Exception {
         String a = "BlockAST [project=[[Location [x=-2, y=189], VolumeAction [GET, NullConst [null]]]]]";

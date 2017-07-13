@@ -53,16 +53,16 @@ public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor imp
         this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getCoordinate()));
         return null;
     }
-    
+
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYROSCOPE, gyroSensor.getMode()));
         return null;
     }
-    
+
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-    	 this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
+        this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
         return null;
     }
 

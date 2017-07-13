@@ -17,7 +17,7 @@ public interface MakeblockAstVisitor<V> extends ArduAstVisitor<V> {
     V visitJoystick(Joystick<V> joystick);
 
     V visitAccelerometer(Accelerometer<V> accelerometer);
-    
+
     V visitFlameSensor(FlameSensor<V> flameSensor);
 
 }

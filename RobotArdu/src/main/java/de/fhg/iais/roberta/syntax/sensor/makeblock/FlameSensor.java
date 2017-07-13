@@ -40,7 +40,6 @@ public final class FlameSensor<V> extends Sensor<V> {
         return new FlameSensor<V>(port, properties, comment);
     }
 
-
     public ISensorPort getPort() {
         return this.port;
     }

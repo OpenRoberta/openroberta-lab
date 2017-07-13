@@ -38,11 +38,11 @@ public class RecognizedWord<V> extends Sensor<V> {
     }
 
     @Override
-	public String toString() {
-		return "RecognizedWord []";
-	}
+    public String toString() {
+        return "RecognizedWord []";
+    }
 
-	@Override
+    @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((NaoAstVisitor<V>) visitor).visitRecognizedWord(this);
     }

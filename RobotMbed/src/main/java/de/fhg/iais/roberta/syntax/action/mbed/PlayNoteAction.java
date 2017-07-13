@@ -28,9 +28,9 @@ import de.fhg.iais.roberta.visitor.MbedAstVisitor;
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class PlayNoteAction<V> extends Action<V> {
-	private final String duration;
-	private final String frequency;
-   
+    private final String duration;
+    private final String frequency;
+
     private PlayNoteAction(String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
         Assert.isTrue(NumberUtils.isNumber(duration) && NumberUtils.isNumber(frequency));
@@ -50,21 +50,21 @@ public class PlayNoteAction<V> extends Action<V> {
     private static <V> PlayNoteAction<V> make(String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PlayNoteAction<>(duration, frequency, properties, comment);
     }
-    
+
     /**
      * @return get the duration of this action.
      */
     public String getDuration() {
         return this.duration;
     }
-    
+
     /**
      * @return get the duration of this action.
      */
     public String getFrequency() {
         return this.frequency;
     }
-    
+
     @Override
     public String toString() {
         return "PlayNoteAction [ duration=" + this.duration + ", frequency=" + this.frequency + "]";
@@ -83,9 +83,9 @@ public class PlayNoteAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-    	List<Field> fields = helper.extractFields(block, (short) 2);
-    	String duration = helper.extractField(fields, BlocklyConstants.DURATION);
-    	String frequency = helper.extractField(fields, BlocklyConstants.FREQUENCE);
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String duration = helper.extractField(fields, BlocklyConstants.DURATION);
+        String frequency = helper.extractField(fields, BlocklyConstants.FREQUENCE);
         return PlayNoteAction.make(duration, frequency, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

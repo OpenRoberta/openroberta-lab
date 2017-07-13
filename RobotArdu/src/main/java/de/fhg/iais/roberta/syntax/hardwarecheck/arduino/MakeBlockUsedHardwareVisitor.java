@@ -221,10 +221,10 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-    	        this.usedSensors.add(new UsedSensor(null, SensorType.GYROSCOPE, null));
+        this.usedSensors.add(new UsedSensor(null, SensorType.GYROSCOPE, null));
         return null;
     }
-    
+
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
         this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));

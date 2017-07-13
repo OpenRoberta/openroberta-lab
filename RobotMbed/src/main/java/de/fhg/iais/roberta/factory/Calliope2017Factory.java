@@ -59,10 +59,10 @@ public class Calliope2017Factory extends AbstractCalliopeFactory {
 
     @Override
     public String getSignature() {
-		return null;
+        return null;
         // TODO Auto-generated method stub
     }
-    
+
     @Override
     public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         return null;

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class ActionTest {
-	HelperBotNroll h = new HelperBotNroll();
+    HelperBotNroll h = new HelperBotNroll();
     ArduFactory robotFactory = new ArduFactory(null);
 
     @Before

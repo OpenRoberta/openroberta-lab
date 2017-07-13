@@ -11,8 +11,7 @@ import javax.xml.bind.Marshaller;
  * @author rbudde
  */
 @Provider
-public class JAXBMarshallerProvider implements ContextResolver<Marshaller>
-{
+public class JAXBMarshallerProvider implements ContextResolver<Marshaller> {
     @Override
     public Marshaller getContext(Class<?> type) {
         return JAXBProviderFactory.getInstance().getMarshaller(type);

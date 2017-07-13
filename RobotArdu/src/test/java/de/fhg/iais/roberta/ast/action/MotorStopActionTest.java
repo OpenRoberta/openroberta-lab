@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MotorStopActionTest {
-	HelperBotNroll h = new HelperBotNroll();
+    HelperBotNroll h = new HelperBotNroll();
     ArduFactory robotFactory = new ArduFactory(null);
 
     @Before

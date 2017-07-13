@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class CurveActionTest {
-	HelperBotNroll h = new HelperBotNroll();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void make() throws Exception {
