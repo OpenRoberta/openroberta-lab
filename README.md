@@ -8,7 +8,7 @@ Build status:
 
 ### Introduction
 
-The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into the [wiki - installation](wiki/installation). If you want to contribute, please get in touch with us, see [wiki - Community](wiki/Community) before you start.
+The steps below explain how to get started with the sources. If you just want to run the server locally, please have a look into the [wiki - installation](https://github.com/OpenRoberta/robertalab/wiki/Installation). If you want to contribute, please get in touch with us, see [wiki - Community](https://github.com/OpenRoberta/robertalab/wiki/Community) before you start.
 
 After a fresh git clone you get the **robertalab** project folder. It includes everything you need to setup and extend your own browser programming environment. License information is available in the **docs** folder.
 
