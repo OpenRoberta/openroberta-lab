@@ -35,7 +35,9 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.BotNrollCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -61,6 +63,7 @@ import de.fhg.iais.roberta.visitor.BotnrollAstVisitor;
 public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstVisitor<Void> {
     private final BotNrollConfiguration brickConfiguration;
     private boolean isTimerSensorUsed;
+    ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -73,6 +76,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
         BotNrollCodePreprocessVisitor codePreprocessVisitor = new BotNrollCodePreprocessVisitor(phrases, brickConfiguration);
+        this.usedVars = codePreprocessVisitor.getvisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
@@ -514,6 +518,35 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         mainTask.getVariables().visit(this);
         incrIndentation();
         generateUserDefinedMethods();
+        this.sb.append("\n \n void setup() \n");
+        this.sb.append("{");
+        nlIndent();
+        this.sb.append("Wire.begin();");
+        nlIndent();
+        //set baud rate to 9600 for printing values at serial monitor:
+        this.sb.append("Serial.begin(9600);   // sets baud rate to 9600bps for printing values at serial monitor.");
+        nlIndent();
+        // start the communication module:
+        this.sb.append("one.spiConnect(SSPIN);   // starts the SPI communication module");
+        nlIndent();
+        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);   // starts I2C communication");
+        nlIndent();
+        this.sb.append("brm.setModuleAddress(0x2C);");
+        nlIndent();
+        // stop motors:
+        this.sb.append("one.stop();");
+        nlIndent();
+        this.sb.append("bnr.setOne(one);");
+        nlIndent();
+        this.sb.append("bnr.setBrm(brm);");
+        nlIndent();
+        this.generateSensors();
+        if ( this.isTimerSensorUsed ) {
+            nlIndent();
+            this.sb.append("T.StartTimer();");
+        }
+        generateUsedVars();
+        this.sb.append("\n}\n");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
         if ( this.isTimerSensorUsed ) {
@@ -553,35 +586,46 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         this.sb.append("#define SSPIN  2 \n");
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
-        this.sb.append("byte colorsRight[3]={0,0,0}; \n \n");
-        this.sb.append("void setup() \n");
-        this.sb.append("{");
-        nlIndent();
-        this.sb.append("Wire.begin();");
-        nlIndent();
-        //set baud rate to 9600 for printing values at serial monitor:
-        this.sb.append("Serial.begin(9600);   // sets baud rate to 9600bps for printing values at serial monitor.");
-        nlIndent();
-        // start the communication module:
-        this.sb.append("one.spiConnect(SSPIN);   // starts the SPI communication module");
-        nlIndent();
-        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);   // starts I2C communication");
-        nlIndent();
-        this.sb.append("brm.setModuleAddress(0x2C);");
-        nlIndent();
-        // stop motors:
-        this.sb.append("one.stop();");
-        nlIndent();
-        this.sb.append("bnr.setOne(one);");
-        nlIndent();
-        this.sb.append("bnr.setBrm(brm);");
-        nlIndent();
-        this.generateSensors();
-        if ( this.isTimerSensorUsed ) {
+        this.sb.append("byte colorsRight[3]={0,0,0};");
+    }
+
+    protected void generateUsedVars() {
+        for ( VarDeclaration<Void> var : this.usedVars ) {
+            int size = 0;
+            if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
+                size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+                this.sb.append(var.getName() + "SysLen = ").append(size).append(";");
+                nlIndent();
+            }
+            this.sb.append(var.getName());
+            if ( var.getTypeVar().isArray() ) {
+                this.sb.append(" = (");
+                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
+                this.sb.append("sizeof(");
+                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
+            }
+            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(var.getName() + "SysLen").append(")").append(";");
+                    nlIndent();
+                    this.sb.append("rob.createArray(").append(var.getName()).append(", ").append(var.getName() + "SysLen").append(", ");
+                    var.getValue().visit(this);
+                    this.sb.append(")");
+                } else {
+                    this.sb.append(" = ");
+                    var.getValue().visit(this);
+                }
+            } else {
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(0).append(");");
+                    nlIndent();
+                    this.sb.append(var.getName() + "SysLen = ").append(size);
+                }
+            }
+            this.sb.append(";");
             nlIndent();
-            this.sb.append("T.StartTimer();");
         }
-        this.sb.append("\n}\n");
     }
 
     @Override

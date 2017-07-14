@@ -55,40 +55,13 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
             this.sb.append(var.getName());
             this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
         } else {
-            int size = 0;
-            if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
-                size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
-                this.sb.append("int " + var.getName() + "SysLen = ").append(size).append(";");
+            if ( var.getTypeVar().isArray() ) {
+                this.sb.append("int " + var.getName() + "SysLen;");
                 nlIndent();
             }
             this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
             this.sb.append(var.getTypeVar().isArray() ? "*" : "");
             this.sb.append(var.getName());
-            if ( var.getTypeVar().isArray() ) {
-                this.sb.append(" = (");
-                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
-                this.sb.append(var.getName()).append(", ").append("sizeof(");
-                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
-            }
-            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(var.getName() + "SysLen").append(")").append(";");
-                    nlIndent();
-                    this.sb.append("rob.createArray(").append(var.getName()).append(", ").append(var.getName() + "SysLen").append(", ");
-                    var.getValue().visit(this);
-                    this.sb.append(")");
-                } else {
-                    this.sb.append(" = ");
-                    var.getValue().visit(this);
-                }
-            } else {
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(0).append(");");
-                    nlIndent();
-                    this.sb.append("int " + var.getName() + "SysLen = ").append(size);
-                }
-            }
         }
         return null;
     }

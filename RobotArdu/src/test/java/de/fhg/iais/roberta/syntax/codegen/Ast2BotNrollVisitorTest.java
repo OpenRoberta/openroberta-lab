@@ -21,11 +21,9 @@ public class Ast2BotNrollVisitorTest {
         + "RobertaFunctionsrob;"
         + "BnrRoberta bnr(one, brm);";
 
+    private static final String DEFINES = "" + "#defineSSPIN2" + "#defineMODULE_ADDRESS0x2C" + "bytecolorsLeft[3]={0,0,0};" + "bytecolorsRight[3]={0,0,0};";
+
     private static final String MAIN_METHOD2 = ""
-        + "#defineSSPIN2"
-        + "#defineMODULE_ADDRESS0x2C"
-        + "bytecolorsLeft[3]={0,0,0};"
-        + "bytecolorsRight[3]={0,0,0};"
         + "voidsetup(){"
         + "Wire.begin();"
         + "Serial.begin(9600);//setsbaudrateto9600bpsforprintingvaluesatserialmonitor."
@@ -41,6 +39,7 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
             + MAIN_METHOD2
             + "}"
             + "voidloop(){"
@@ -55,6 +54,7 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = ""
             + MAIN_METHOD1
+            + DEFINES
             + MAIN_METHOD2
             + "}"
             + "voidloop(){"
@@ -71,12 +71,16 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = ""
             + MAIN_METHOD1
+            + DEFINES
+            + "String item;"
+            + "int item2SysLen;"
+            + "double *item2;"
             + MAIN_METHOD2
             + "one.obstacleEmitters(ON);"
+            + "item = \"yyy\";"
+            + "item2=(double*)malloc(sizeof(double)*0);"
+            + "item2SysLen=0;"
             + "}"
-            + "String item = \"yyy\";"
-            + "double *item2=(double*)malloc(item2,sizeof(double)*0);"
-            + "int item2SysLen=0;"
             + "voidloop(){"
             + "item += \"zzz\";"
             + "while (true) {"
@@ -101,17 +105,23 @@ public class Ast2BotNrollVisitorTest {
         final String a = ""
             + MAIN_METHOD1
             + "CountUpDownTimer T(UP, HIGH);"
+            + DEFINES
+            + "int itemSysLen;"
+            + "bool*item;"
+            + "intitem2SysLen;"
+            + "String*item2;"
+            + "double item3;"
             + MAIN_METHOD2
             + "one.obstacleEmitters(ON);"
             + "T.StartTimer();"
-            + "}"
-            + "int itemSysLen=3;"
-            + "bool*item=(bool*)malloc(item,sizeof(bool)*itemSysLen);"
+            + "itemSysLen=3;"
+            + "item=(bool*)malloc(sizeof(bool)*itemSysLen);"
             + "rob.createArray(item,itemSysLen,true,true,true);"
-            + "intitem2SysLen=3;"
-            + "String*item2=(String*)malloc(item2,sizeof(String)*item2SysLen);"
+            + "item2SysLen=3;"
+            + "item2=(String*)malloc(sizeof(String)*item2SysLen);"
             + "rob.createArray(item2,item2SysLen,\"\",\"\",\"\");"
-            + "double item3 = T.ShowSeconds();"
+            + "item3 = T.ShowSeconds();"
+            + "}"
             + "voidloop(){"
             + "T.Timer();"
             + "for(double  item4 = 0; item4 < itemSysLen;  item4++) {"
@@ -132,6 +142,7 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
             + MAIN_METHOD2
             + "one.obstacleEmitters(ON);brm.setSonarStatus(ENABLE);"
             + "}"
@@ -153,6 +164,7 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
             + MAIN_METHOD2
             + "}"
             + "voidloop(){"
@@ -170,6 +182,7 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
             + MAIN_METHOD2
             + "}"
             + "voidloop(){"
@@ -184,6 +197,7 @@ public class Ast2BotNrollVisitorTest {
     public void test7() throws Exception {
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
             + MAIN_METHOD2
             + "}"
             + "voidloop(){"
@@ -199,11 +213,15 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
+            + "        double item;\n"
+            + "        String item2;\n"
+            + "        bool item3;\n"
             + MAIN_METHOD2
+            + "        item = 10;\n"
+            + "        item2 = \"TTTT\";\n"
+            + "        item3 = true;\n"
             + "}"
-            + "        double item = 10;\n"
-            + "        String item2 = \"TTTT\";\n"
-            + "        bool item3 = true;\n"
             + "voidloop(){"
             + "        one.lcd1(item);\n"
             + "        one.lcd1(item2.c_str());\n"
@@ -216,14 +234,15 @@ public class Ast2BotNrollVisitorTest {
 
     @Test
     public void test11() throws Exception {
-
         final String a = "" //
             + MAIN_METHOD1
-            + MAIN_METHOD2
-            + "}"
+            + DEFINES
             + "void test() {\n"
             + "    one.led(HIGH);"
             + "}"
+            + MAIN_METHOD2
+            + "}"
+
             + "voidloop(){"
             + "    test();"
             + "}\n";
@@ -236,11 +255,12 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
-            + MAIN_METHOD2
-            + "}"
+            + DEFINES
             + "void test(bool x) {\n"
             + "    if (x) return;"
             + "    one.led(HIGH);"
+            + "}"
+            + MAIN_METHOD2
             + "}"
             + "void loop(){"
             + "test(true);"
@@ -254,10 +274,9 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
-            + MAIN_METHOD2
-            + "}"
-            + "    double variablenName=0;\n"
-            + "    bool variablenName2=true;\n"
+            + DEFINES
+            + "    double variablenName;\n"
+            + "    bool variablenName2;\n"
             + "     void test1(double x, double x2) {\n"
             + "        one.lcd1(\"Hallo\");\n"
             + "    }\n\n"
@@ -266,6 +285,10 @@ public class Ast2BotNrollVisitorTest {
             + "        one.led(HIGH);"
             + "    }"
 
+            + MAIN_METHOD2
+            + "    variablenName=0;\n"
+            + "    variablenName2=true;\n"
+            + "}"
             + "void loop(){"
             + "        test1(0, 0);"
             + "        test2();"
@@ -279,15 +302,17 @@ public class Ast2BotNrollVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
-            + MAIN_METHOD2
-            + "}"
-            + "int variablenNameSysLen=3;\n"
-            + "String *variablenName = (String*)malloc(variablenName,sizeof(String)*variablenNameSysLen);"
-            + "rob.createArray(variablenName,variablenNameSysLen,\"a\",\"b\",\"c\");"
+            + DEFINES
+            + "int variablenNameSysLen;\n"
+            + "String *variablenName;"
             + "     double test(double x, Stringx2[]) {\n"
             + "       one.lcd1(x2);\n"
             + "        return x;\n"
             + "    }"
+            + MAIN_METHOD2
+            + "variablenNameSysLen=3;\n"
+            + "variablenName = (String*)malloc(sizeof(String)*variablenNameSysLen);"
+            + "rob.createArray(variablenName,variablenNameSysLen,\"a\",\"b\",\"c\");}"
             + "void loop(){"
             + "one.lcd1(test(0,variablenName));"
             + "}\n";
@@ -300,9 +325,12 @@ public class Ast2BotNrollVisitorTest {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
+            + "    String message;\n"
             + MAIN_METHOD2
+            + "    message=\"exit\";\n"
+
             + "}"
-            + "    String message=\"exit\";\n"
             + "voidloop(){"
             + "        if (message == \"exit\") {\n"
             + "           one.lcd1(\"done\");"
@@ -317,10 +345,13 @@ public class Ast2BotNrollVisitorTest {
     public void test18() throws Exception {
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
+            + "    double item;\n"
+            + "    String item2;\n"
             + MAIN_METHOD2
+            + "    item=0;\n"
+            + "    item2=\"cc\";\n"
             + "}"
-            + "    double item=0;\n"
-            + "    String item2=\"cc\";\n"
             + "voidloop(){"
             + "}\n";
 
@@ -331,11 +362,15 @@ public class Ast2BotNrollVisitorTest {
     public void testStmtForEach() throws Exception {
         final String a = "" //
             + MAIN_METHOD1
+            + DEFINES
+            + "int item2SysLen;"
+            + "double*item2;"
             + MAIN_METHOD2
-            + "}"
-            + "int item2SysLen=3;"
-            + "double*item2=(double*)malloc(item2,sizeof(double)*item2SysLen);"
+            + "item2SysLen=3;"
+            + "item2=(double*)malloc(sizeof(double)*item2SysLen);"
             + "rob.createArray(item2,item2SysLen,0,0,0);"
+            + "}"
+
             + "voidloop(){"
             + "for(double  item = 0; item < item2SysLen;  item++) {"
             + "    bnr.moveTimePID(item, item, 100);}"

@@ -410,7 +410,6 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         generateUserDefinedMethods();
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-
         if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
