@@ -76,6 +76,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.usedVars = codePreprocessVisitor.getvisitedVars();
         //        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
         this.isTemperatureSensorUsed = codePreprocessVisitor.isTemperatureSensorUsed();
         this.isToneActionUsed = codePreprocessVisitor.isToneActionUsed();
@@ -408,6 +409,22 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         mainTask.getVariables().visit(this);
         incrIndentation();
         generateUserDefinedMethods();
+        this.sb.append("\nvoid setup() \n");
+        this.sb.append("{");
+        nlIndent();
+        this.generateActors();
+        this.sb.append("Serial.begin(9600); ");
+        if ( this.isTimerSensorUsed ) {
+            nlIndent();
+            this.sb.append("T.StartTimer();");
+        }
+        //        if ( this.isInfraredSensorUsed ) {
+        //            nlIndent();
+        //            this.sb.append("ir.begin();");
+        //        }
+        nlIndent();
+        generateUsedVars();
+        this.sb.append("\n}");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
         if ( this.isTimerSensorUsed ) {
@@ -470,20 +487,6 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     + ");\n");
         }
         this.generateSensors();
-        this.sb.append("\nvoid setup() \n");
-        this.sb.append("{");
-        nlIndent();
-        this.generateActors();
-        this.sb.append("Serial.begin(9600);");
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.StartTimer();");
-        }
-        //        if ( this.isInfraredSensorUsed ) {
-        //            nlIndent();
-        //            this.sb.append("ir.begin();");
-        //        }
-        this.sb.append("\n}");
     }
 
     @Override

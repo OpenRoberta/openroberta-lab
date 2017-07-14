@@ -7,8 +7,8 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
  *
  * @author kcvejoski
  */
-public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor implements MakeblockAstVisitor<Void> {
+public class MakeBlockCodePreprocessVisitor extends ArduCodePreprocessVisitor implements MakeblockAstVisitor<Void> {
     private boolean isToneActionUsed = false;
     private boolean isTemperatureSensorUsed = false;
 

@@ -37,6 +37,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
 
     protected Set<UsedSensor> usedSensors;
     protected Set<UsedActor> usedActors;
+    ArrayList<VarDeclaration<Void>> usedVars;
 
     protected Ast2ArduVisitor(ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
@@ -48,6 +49,45 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
         return null;
     }
 
+    protected void generateUsedVars() {
+        for ( VarDeclaration<Void> var : this.usedVars ) {
+            int size = 0;
+            if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
+                size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+                this.sb.append("__" + var.getName() + "Len = ").append(size).append(";");
+                nlIndent();
+            }
+            this.sb.append(var.getName());
+            if ( var.getTypeVar().isArray() ) {
+                this.sb.append(" = (");
+                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
+                this.sb.append("sizeof(");
+                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
+            }
+            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append("__" + var.getName() + "Len").append(")").append(";");
+                    nlIndent();
+                    this.sb.append("rob.createArray(").append(var.getName()).append(", ").append("__" + var.getName() + "Len").append(", ");
+                    var.getValue().visit(this);
+                    this.sb.append(")");
+                } else {
+                    this.sb.append(" = ");
+                    var.getValue().visit(this);
+                }
+            } else {
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(0).append(");");
+                    nlIndent();
+                    this.sb.append("__" + var.getName() + "Len = ").append(size);
+                }
+            }
+            this.sb.append(";");
+            nlIndent();
+        }
+    }
+
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         if ( var.toString().contains("false, false") ) {
@@ -56,7 +96,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
             this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
         } else {
             if ( var.getTypeVar().isArray() ) {
-                this.sb.append("int " + var.getName() + "SysLen;");
+                this.sb.append("int " + "__" + var.getName() + "Len;");
                 nlIndent();
             }
             this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
@@ -72,8 +112,9 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
         if ( assignStmt.getExpr().getKind().hasName("LIST_CREATE") && !assignStmt.getExpr().getKind().hasName("EMPTY_EXPR") ) {
             ListCreate<Void> list = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) assignStmt.getExpr();
             size = assignStmt.getExpr().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+            this.sb.append("__");
             assignStmt.getName().visit(this);
-            this.sb.append("SysLen = ").append(size).append(";");
+            this.sb.append("Len = ").append(size).append(";");
             nlIndent();
         }
         assignStmt.getName().visit(this);
@@ -85,14 +126,16 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
                 assignStmt.getName().visit(this);
                 this.sb.append(", ").append("sizeof(");
                 this.sb.append(getLanguageVarTypeFromBlocklyType(assignStmt.getExpr().getVarType())).append(")*");
+                this.sb.append("__");
                 assignStmt.getName().visit(this);
-                this.sb.append("SysLen);");
+                this.sb.append("Len);");
                 nlIndent();
                 this.sb.append("rob.createArray(");
                 assignStmt.getName().visit(this);
                 this.sb.append(", ");
+                this.sb.append("__");
                 assignStmt.getName().visit(this);
-                this.sb.append("SysLen, ");
+                this.sb.append("Len, ");
             }
         }
         assignStmt.getExpr().visit(this);
@@ -192,7 +235,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
                 }
                 if ( !segments[6].contains("java.util") ) {
                     arr = segments[6].substring(segments[6].indexOf("[") + 1, segments[6].indexOf("]"));
-                    this.sb.append("for(" + varType + whitespace() + element + " = 0;" + element + " < " + arr + "SysLen; " + element + "++) {");
+                    this.sb.append("for(" + varType + whitespace() + element + " = 0;" + element + " < " + "__" + arr + "Len; " + element + "++) {");
                 } else {
                     this.sb.append("while(false){");
                 }
@@ -262,7 +305,7 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
     }
 
     protected void arrayLen(Var<Void> arr) {
-        this.sb.append(arr.getValue() + "SysLen");
+        this.sb.append("__" + arr.getValue() + "Len");
     }
 
     @Override

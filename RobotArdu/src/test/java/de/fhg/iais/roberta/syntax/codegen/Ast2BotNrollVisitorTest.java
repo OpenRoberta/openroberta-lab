@@ -73,13 +73,13 @@ public class Ast2BotNrollVisitorTest {
             + MAIN_METHOD1
             + DEFINES
             + "String item;"
-            + "int item2SysLen;"
+            + "int __item2Len;"
             + "double *item2;"
             + MAIN_METHOD2
             + "one.obstacleEmitters(ON);"
             + "item = \"yyy\";"
             + "item2=(double*)malloc(sizeof(double)*0);"
-            + "item2SysLen=0;"
+            + "__item2Len=0;"
             + "}"
             + "voidloop(){"
             + "item += \"zzz\";"
@@ -106,29 +106,29 @@ public class Ast2BotNrollVisitorTest {
             + MAIN_METHOD1
             + "CountUpDownTimer T(UP, HIGH);"
             + DEFINES
-            + "int itemSysLen;"
+            + "int __itemLen;"
             + "bool*item;"
-            + "intitem2SysLen;"
+            + "int __item2Len;"
             + "String*item2;"
             + "double item3;"
             + MAIN_METHOD2
             + "one.obstacleEmitters(ON);"
             + "T.StartTimer();"
-            + "itemSysLen=3;"
-            + "item=(bool*)malloc(sizeof(bool)*itemSysLen);"
-            + "rob.createArray(item,itemSysLen,true,true,true);"
-            + "item2SysLen=3;"
-            + "item2=(String*)malloc(sizeof(String)*item2SysLen);"
-            + "rob.createArray(item2,item2SysLen,\"\",\"\",\"\");"
+            + "__itemLen=3;"
+            + "item=(bool*)malloc(sizeof(bool)*__itemLen);"
+            + "rob.createArray(item,__itemLen,true,true,true);"
+            + "__item2Len=3;"
+            + "item2=(String*)malloc(sizeof(String)*__item2Len);"
+            + "rob.createArray(item2,__item2Len,\"\",\"\",\"\");"
             + "item3 = T.ShowSeconds();"
             + "}"
             + "voidloop(){"
             + "T.Timer();"
-            + "for(double  item4 = 0; item4 < itemSysLen;  item4++) {"
+            + "for(double  item4 = 0; item4 < __itemLen;  item4++) {"
             + "    T.ResetTimer();"
             + "    item3 = one.readAdc(1) / 10.23;"
             + "}"
-            + "for(double  item5 = 0; item5 < item2SysLen;  item5++) {"
+            + "for(double  item5 = 0; item5 < __item2Len;  item5++) {"
             + "    one.movePID(bnr.readBearing(), bnr.readBearing());"
             + "if (bnr.infraredSensorPresence(3)) {"
             + "    one.stop();}}"
@@ -303,16 +303,16 @@ public class Ast2BotNrollVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + DEFINES
-            + "int variablenNameSysLen;\n"
+            + "int __variablenNameLen;\n"
             + "String *variablenName;"
             + "     double test(double x, Stringx2[]) {\n"
             + "       one.lcd1(x2);\n"
             + "        return x;\n"
             + "    }"
             + MAIN_METHOD2
-            + "variablenNameSysLen=3;\n"
-            + "variablenName = (String*)malloc(sizeof(String)*variablenNameSysLen);"
-            + "rob.createArray(variablenName,variablenNameSysLen,\"a\",\"b\",\"c\");}"
+            + "__variablenNameLen=3;\n"
+            + "variablenName = (String*)malloc(sizeof(String)*__variablenNameLen);"
+            + "rob.createArray(variablenName,__variablenNameLen,\"a\",\"b\",\"c\");}"
             + "void loop(){"
             + "one.lcd1(test(0,variablenName));"
             + "}\n";
@@ -363,16 +363,16 @@ public class Ast2BotNrollVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + DEFINES
-            + "int item2SysLen;"
+            + "int __item2Len;"
             + "double*item2;"
             + MAIN_METHOD2
-            + "item2SysLen=3;"
-            + "item2=(double*)malloc(sizeof(double)*item2SysLen);"
-            + "rob.createArray(item2,item2SysLen,0,0,0);"
+            + "__item2Len=3;"
+            + "item2=(double*)malloc(sizeof(double)*__item2Len);"
+            + "rob.createArray(item2,__item2Len,0,0,0);"
             + "}"
 
             + "voidloop(){"
-            + "for(double  item = 0; item < item2SysLen;  item++) {"
+            + "for(double  item = 0; item < __item2Len;  item++) {"
             + "    bnr.moveTimePID(item, item, 100);}"
             + "}\n";
 

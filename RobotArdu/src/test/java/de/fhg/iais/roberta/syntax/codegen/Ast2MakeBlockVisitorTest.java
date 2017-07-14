@@ -58,9 +58,10 @@ public class Ast2MakeBlockVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeLightSensor myLight1(PORT_1);"
-            + MAIN_METHOD2
-            + "}"
             + "double item;"
+            + MAIN_METHOD2
+            + "item;"
+            + "}"
             + "void loop(){"
             + "if (myLight1.read() != 0) {"
             + "        delay(500);}\n"
@@ -93,9 +94,10 @@ public class Ast2MakeBlockVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeSoundSensor mySound3(PORT_3);"
-            + MAIN_METHOD2
-            + "}"
             + "double item;"
+            + MAIN_METHOD2
+            + "item;"
+            + "}"
             + "void loop(){"
             + "if (mySound3.strength() > 0) {"
             + "        delay(500);}\n"
@@ -115,9 +117,10 @@ public class Ast2MakeBlockVisitorTest {
             + "MeDCMotor motor1(M1);"
             + "MeDrive myDrive(M2,M1);"
             + "MeHumiture myTemp1(PORT_1);"
-            + MAIN_METHOD2
-            + "}"
             + "double item;"
+            + MAIN_METHOD2
+            + "item;"
+            + "}"
             + "void loop(){"
             + "myTemp1.update();"
             + "if (myTemp1.getTemperature() < 20) {"
