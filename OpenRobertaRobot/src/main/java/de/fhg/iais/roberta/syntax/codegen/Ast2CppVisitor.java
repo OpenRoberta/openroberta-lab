@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -19,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -37,6 +39,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct C++ code.</b> <br>
  */
 public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
+    protected List<Method<Void>> userDefinedMethods = new ArrayList<Method<Void>>();
 
     /**
      * initialize the cpp code generator visitor.
@@ -355,6 +358,16 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
         this.sb.append("}");
     }
 
+    protected void generateSignaturesOfUserDefinedMethods() {
+        for ( Method<Void> phrase : this.userDefinedMethods ) {
+            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
+            this.sb.append(phrase.getMethodName() + "(");
+            phrase.getParameters().visit(this);
+            this.sb.append(");");
+            nlIndent();
+        }
+    }
+
     protected void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
         expr.visit(this);
@@ -396,44 +409,50 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     }
 
     protected static Map<Binary.Op, String> binaryOpSymbols() {
-        return Collections.unmodifiableMap(Stream.of(
+        return Collections.unmodifiableMap(
+            Stream
+                .of(
 
-            entry(Binary.Op.ADD, "+"),
-            entry(Binary.Op.MINUS, "-"),
-            entry(Binary.Op.MULTIPLY, "*"),
-            entry(Binary.Op.DIVIDE, "/"),
-            entry(Binary.Op.MOD, "%"),
-            entry(Binary.Op.EQ, "=="),
-            entry(Binary.Op.NEQ, "!="),
-            entry(Binary.Op.LT, "<"),
-            entry(Binary.Op.LTE, "<="),
-            entry(Binary.Op.GT, ">"),
-            entry(Binary.Op.GTE, ">="),
-            entry(Binary.Op.AND, "&&"),
-            entry(Binary.Op.OR, "||"),
-            entry(Binary.Op.MATH_CHANGE, "+="),
-            entry(Binary.Op.TEXT_APPEND, "+="),
-            entry(Binary.Op.IN, ":"),
-            entry(Binary.Op.ASSIGNMENT, "="),
-            entry(Binary.Op.ADD_ASSIGNMENT, "+="),
-            entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
-            entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
-            entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
-            entry(Binary.Op.MOD_ASSIGNMENT, "%=")
+                    entry(Binary.Op.ADD, "+"),
+                    entry(Binary.Op.MINUS, "-"),
+                    entry(Binary.Op.MULTIPLY, "*"),
+                    entry(Binary.Op.DIVIDE, "/"),
+                    entry(Binary.Op.MOD, "%"),
+                    entry(Binary.Op.EQ, "=="),
+                    entry(Binary.Op.NEQ, "!="),
+                    entry(Binary.Op.LT, "<"),
+                    entry(Binary.Op.LTE, "<="),
+                    entry(Binary.Op.GT, ">"),
+                    entry(Binary.Op.GTE, ">="),
+                    entry(Binary.Op.AND, "&&"),
+                    entry(Binary.Op.OR, "||"),
+                    entry(Binary.Op.MATH_CHANGE, "+="),
+                    entry(Binary.Op.TEXT_APPEND, "+="),
+                    entry(Binary.Op.IN, ":"),
+                    entry(Binary.Op.ASSIGNMENT, "="),
+                    entry(Binary.Op.ADD_ASSIGNMENT, "+="),
+                    entry(Binary.Op.MINUS_ASSIGNMENT, "-="),
+                    entry(Binary.Op.MULTIPLY_ASSIGNMENT, "*="),
+                    entry(Binary.Op.DIVIDE_ASSIGNMENT, "/="),
+                    entry(Binary.Op.MOD_ASSIGNMENT, "%=")
 
-        ).collect(entriesToMap()));
+                )
+                .collect(entriesToMap()));
     }
 
     protected static Map<Unary.Op, String> unaryOpSymbols() {
-        return Collections.unmodifiableMap(Stream.of(
+        return Collections.unmodifiableMap(
+            Stream
+                .of(
 
-            entry(Unary.Op.PLUS, "+"),
-            entry(Unary.Op.NEG, "-"),
-            entry(Unary.Op.NOT, "!"),
-            entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
-            entry(Unary.Op.PREFIX_INCREMENTS, "++")
+                    entry(Unary.Op.PLUS, "+"),
+                    entry(Unary.Op.NEG, "-"),
+                    entry(Unary.Op.NOT, "!"),
+                    entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+                    entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
-        ).collect(entriesToMap()));
+                )
+                .collect(entriesToMap()));
     }
 
 }

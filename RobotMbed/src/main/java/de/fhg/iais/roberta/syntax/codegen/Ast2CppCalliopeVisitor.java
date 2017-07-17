@@ -114,7 +114,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @SuppressWarnings("unused")
     private final CalliopeConfiguration brickConfiguration;
 
-    private final MbedCodePreprocessVisitor usedHardwareVisitor;
+    private final MbedCodePreprocessVisitor codePreprocess;
 
     /**
      * initialize the C++ code generator visitor.
@@ -127,10 +127,10 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         super(programPhrases, indentation);
 
         this.brickConfiguration = brickConfiguration;
+        this.codePreprocess = new MbedCodePreprocessVisitor(programPhrases, brickConfiguration);
 
-        this.usedHardwareVisitor = new MbedCodePreprocessVisitor(programPhrases, brickConfiguration);
-
-        this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
+        this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
+        this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
     }
 
     /**
@@ -600,8 +600,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         //        decrIndentation();
         this.sb.append("int initTime = uBit.systemTime(); \n");
         mainTask.getVariables().visit(this);
-        this.sb.append("\n");
-        generateUserDefinedMethods();
+
         this.sb.append("\n").append("int main() \n");
         this.sb.append("{");
         incrIndentation();
@@ -609,14 +608,14 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
         nlIndent();
-        if ( this.usedHardwareVisitor.isGreyScale() ) {
+        if ( this.codePreprocess.isGreyScale() ) {
             this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
-        if ( this.usedHardwareVisitor.isRadioUsed() ) {
+        if ( this.codePreprocess.isRadioUsed() ) {
             nlIndent();
             this.sb.append("uBit.radio.enable();");
         }
-        if ( this.usedHardwareVisitor.isAccelerometerUsed() ) {
+        if ( this.codePreprocess.isAccelerometerUsed() ) {
             nlIndent();
             this.sb.append("uBit.accelerometer.updateSample();");
         }
@@ -1091,8 +1090,8 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         if ( !withWrapping ) {
             return;
         }
-        this.addConstants();
-
+        this.addIncludes();
+        this.generateSignaturesOfUserDefinedMethods();
     }
 
     @Override
@@ -1101,6 +1100,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
             nlIndent();
             this.sb.append("release_fiber();");
             this.sb.append("\n}\n");
+            generateUserDefinedMethods();
         }
 
     }
@@ -1190,7 +1190,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 
-    private void addConstants() {
+    private void addIncludes() {
         this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\" \n");
         this.sb.append("#include <array>\n");

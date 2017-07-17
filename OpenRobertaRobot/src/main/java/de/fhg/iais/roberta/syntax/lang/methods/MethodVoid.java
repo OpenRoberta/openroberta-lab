@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
@@ -24,8 +25,6 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
  * into the AST (abstract syntax tree). Object from this class is used to create a method with no return<br/>
  */
 public class MethodVoid<V> extends Method<V> {
-    private final String methodName;
-    private final ExprList<V> parameters;
     private final StmtList<V> body;
 
     private MethodVoid(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment) {
@@ -33,6 +32,7 @@ public class MethodVoid<V> extends Method<V> {
         Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;
+        this.returnType = BlocklyType.VOID;
         this.body = body;
         setReadOnly();
     }
@@ -54,20 +54,6 @@ public class MethodVoid<V> extends Method<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new MethodVoid<V>(methodName, parameters, body, properties, comment);
-    }
-
-    /**
-     * @return the methodName
-     */
-    public String getMethodName() {
-        return this.methodName;
-    }
-
-    /**
-     * @return the variables
-     */
-    public ExprList<V> getParameters() {
-        return this.parameters;
     }
 
     /**
