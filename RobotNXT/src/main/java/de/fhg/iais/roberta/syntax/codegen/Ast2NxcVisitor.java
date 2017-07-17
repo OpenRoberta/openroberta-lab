@@ -119,6 +119,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
 
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
+        this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
     }
 
     /**
@@ -827,8 +828,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        decrIndentation();
-        this.sb.append("\n");
         if ( this.playToneActionUsed ) {
             this.sb.append("byte volume = 0x02;");
         }
@@ -840,7 +839,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         }
         mainTask.getVariables().visit(this);
         incrIndentation();
-        generateUserDefinedMethods();
         this.sb.append("\n").append("task main() {");
         this.generateSensors();
         return null;
@@ -1173,7 +1171,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#define MAXLINES 8 \n");
-        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources \n \n");
+        decrIndentation();
+        this.generateSignaturesOfUserDefinedMethods();
     }
 
     @Override
@@ -1181,7 +1181,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         if ( withWrapping ) {
             this.sb.append("\n}\n");
         }
-
+        generateUserDefinedMethods();
     }
 
     @Override

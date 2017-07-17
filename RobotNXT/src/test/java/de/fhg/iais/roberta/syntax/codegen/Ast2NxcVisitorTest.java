@@ -279,11 +279,12 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "void macheEtwas(float x, float x2) {\n"
-            + "}"
+            + "void macheEtwas(float x, float x2);"
             + MASMETHOD
             + "       RotateMotor(OUT_B, 30, 360 * 1);"
             + "       macheEtwas(10, 10);"
+            + "}"
+            + "void macheEtwas(float x, float x2) {\n"
             + "}";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_1.xml");
@@ -294,13 +295,14 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "    void test() {\n"
-            + "    }"
+            + "    void test();"
             + MASMETHOD
 
             + "        test();"
 
-            + "}\n";
+            + "}\n"
+            + "    void test() {\n"
+            + "    }";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
     }
@@ -310,14 +312,15 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "     void test(bool x) {\n"
-            + "        if (x) return;"
-            + "    }"
+            + "     void test(bool x);"
             + MASMETHOD
 
             + "        test(true);"
 
-            + "}\n";
+            + "}\n"
+            + "     void test(bool x) {\n"
+            + "        if (x) return;"
+            + "    }";
 
         assertCodeIsOk(a, "/syntax/methods/method_if_return_1.xml");
     }
@@ -327,19 +330,21 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "     void test1(float x, float x2);"
+            + "    void test2();"
             + "    float variablenName=0;\n"
             + "    bool variablenName2=true;\n"
+            + MASMETHOD
+            + "        test1(0, 0);"
+            + "        test2();"
+
+            + "}\n"
             + "     void test1(float x, float x2) {\n"
             + "        TextOut(x,(MAXLINES - x2) * MAXLINES,\"Hallo\");\n"
             + "    }\n\n"
             + "    void test2() {\n"
             + "        if (variablenName2) return;"
-            + "    }"
-            + MASMETHOD
-            + "        test1(0, 0);"
-            + "        test2();"
-
-            + "}\n";
+            + "    }";
 
         assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
     }

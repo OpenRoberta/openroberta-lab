@@ -12,11 +12,11 @@ public class ToneActionFunctionTest {
         final String a =
             "bytevolume=0x02;\n"
                 + "floatElement=0;\n"
+                + "taskmain(){macheEtwas();"
                 + "voidmacheEtwas(){\n"
                 + "volume=50*4/100.0+0.5;"
                 + "PlayToneEx(300, 100, volume, false);\n"
-                + "Wait(100);}"
-                + "taskmain(){macheEtwas();";
+                + "Wait(100);}";
 
         this.h.assertCodeIsOk(a, "/ast/actions/action_PlaySoundFunc.xml");
     }
