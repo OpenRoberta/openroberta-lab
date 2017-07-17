@@ -464,7 +464,6 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor<Void> accelerometerSensor) {
-        // TODO Auto-generated method stub
         this.sb.append("0");
         return null;
     }

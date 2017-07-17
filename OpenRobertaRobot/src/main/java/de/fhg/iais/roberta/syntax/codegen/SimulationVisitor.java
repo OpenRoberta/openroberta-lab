@@ -71,12 +71,12 @@ import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -268,11 +268,30 @@ public abstract class SimulationVisitor<V> implements AstLanguageVisitor<V>, Ast
             case NUMBER:
                 this.sb.append("createConstant(CONST.NUM_CONST, 0)");
                 break;
+            case COLOR:
+                this.sb.append("createConstant(CONST.LED_COLOR_CONST, [153, 153, 153])");
+                break;
             case ARRAY:
                 this.sb.append("[]");
                 break;
+            case ARRAY_NUMBER:
+                this.sb.append("createConstant(CONST.ARRAY_NUMBER, [createConstant(CONST.NUM_CONST, 0)])");
+                break;
+            case ARRAY_BOOLEAN:
+                this.sb.append("createConstant(CONST.ARRAY_BOOLEAN, [createConstant(CONST.BOOLEAN, false)])");
+                break;
+            case ARRAY_STRING:
+                this.sb.append("createConstant(CONST.ARRAY_STRING, [createConstant(CONST.STRING, '')])");
+                break;
+            case ARRAY_IMAGE:
+                this.sb
+                    .append("createConstant(CONST.ARRAY_IMAGE, [createConstant(CONST.IMAGE, [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]])])");
+                break;
             case NULL:
                 this.sb.append("createConstant(CONST.NULL_CONST, null)");
+                break;
+            case IMAGE:
+                this.sb.append("createConstant(CONST.IMAGE, [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]])");
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
