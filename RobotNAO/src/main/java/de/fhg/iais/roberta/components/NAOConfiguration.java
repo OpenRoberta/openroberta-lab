@@ -1,13 +1,25 @@
 package de.fhg.iais.roberta.components;
 
+import java.util.Map;
+import java.util.TreeMap;
+
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+
 public class NAOConfiguration extends Configuration {
     private final String ipAddress;
     private final String portNumber;
     private final String userName;
     private final String password;
 
-    public NAOConfiguration(String ipAddress, String portNumber, String userName, String password) {
-        super(null, null, 0, 0);
+    public NAOConfiguration(
+        Map<IActorPort, Actor> actors,
+        Map<ISensorPort, Sensor> sensors,
+        String ipAddress,
+        String portNumber,
+        String userName,
+        String password) {
+        super(actors, sensors, 0.0, 0.0);
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
         this.userName = userName;
@@ -38,6 +50,8 @@ public class NAOConfiguration extends Configuration {
         private String portNumber;
         private String userName;
         private String password;
+        private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
+        private final Map<ISensorPort, Sensor> sensorMapping = new TreeMap<>();
 
         public Builder setIpAddres(String ipAddress) {
             this.ipAddress = ipAddress;
@@ -61,7 +75,7 @@ public class NAOConfiguration extends Configuration {
 
         @Override
         public Configuration build() {
-            return new NAOConfiguration(this.ipAddress, this.portNumber, this.userName, this.password);
+            return new NAOConfiguration(this.actorMapping, this.sensorMapping, this.ipAddress, this.portNumber, this.userName, this.password);
         }
 
         @Override

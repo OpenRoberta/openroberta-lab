@@ -2,8 +2,10 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import de.fhg.iais.roberta.components.NAOConfiguration;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
@@ -74,6 +76,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 
@@ -84,6 +87,7 @@ import de.fhg.iais.roberta.visitor.NaoAstVisitor;
 public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVisitor<Void> {
 
     private final NAOConfiguration brickConfiguration;
+    protected Set<UsedSensor> usedSensors;
 
     /**
      * initialize the Python code generator visitor.
@@ -97,6 +101,7 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
         this.brickConfiguration = brickConfiguration;
         NaoCodePreprocessVisitor checker = new NaoCodePreprocessVisitor(programPhrases, brickConfiguration);
+        this.usedSensors = checker.getUsedSensors();
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
@@ -1297,7 +1302,9 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
         this.sb.append("h = Hal()\n\n");
-
+        System.out.println(this.usedSensors);
+        this.generateSensors();
+        nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
 
@@ -1315,9 +1322,12 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\" + str(e))\n");
         this.sb.append(INDENT).append("finally:\n");
-        this.sb.append(INDENT).append(INDENT).append("pass");
+        if ( this.usedSensors.size() < 1 ) {
+            this.sb.append(INDENT).append(INDENT).append("pass");
+        }
+        this.removeSensors();
 
-        this.sb.append("\n");
+        this.sb.append("\n\n");
         this.sb.append("if __name__ == \"__main__\":\n");
         this.sb.append(INDENT).append("main()");
     }
@@ -1337,6 +1347,52 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         walkAsync.getZSpeed().visit(this);
         this.sb.append(")");
         return null;
+    }
+
+    private void generateSensors() {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case COLOR:
+                    break;
+                case INFRARED:
+                    break;
+                case ULTRASONIC:
+                    this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")");
+                    break;
+                case NAOMARK:
+                    this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
+                case LIGHT:
+                case COMPASS:
+                case SOUND:
+                case TOUCH:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported!");
+            }
+        }
+    }
+
+    private void removeSensors() {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case COLOR:
+                    break;
+                case INFRARED:
+                    break;
+                case ULTRASONIC:
+                    this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")");
+                    break;
+                case NAOMARK:
+                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\", 500, 0.0)");
+                case LIGHT:
+                case COMPASS:
+                case SOUND:
+                case TOUCH:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported!");
+            }
+        }
     }
 
 }

@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.syntax.check.program;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -210,7 +212,7 @@ public class NaoCodePreprocessVisitor extends PreprocessProgramVisitor implement
 
     @Override
     public Void visitSonar(Sonar<Void> sonar) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.ULTRASONIC, null));
         return null;
     }
 
@@ -234,7 +236,7 @@ public class NaoCodePreprocessVisitor extends PreprocessProgramVisitor implement
 
     @Override
     public Void visitNaoMark(NaoMark<Void> naoMark) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOMARK, null));
         return null;
     }
 
