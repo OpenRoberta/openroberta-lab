@@ -795,32 +795,31 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
+                this.sb.append("sum(");
                 break;
             case MIN:
+                this.sb.append("min(");
                 break;
             case MAX:
+                this.sb.append("max(");
                 break;
             case AVERAGE:
+                this.sb.append("average(");
                 break;
             case MEDIAN:
+                this.sb.append("median(");
                 break;
             case STD_DEV:
+                this.sb.append("standardDeviation(");
                 break;
             case RANDOM:
-                break;
-            case MODE:
+                this.sb.append("randomElement(");
                 break;
             default:
                 break;
         }
-        arrayLen((Var<Void>) mathOnListFunct.getParam().get(0));
-        this.sb.append(", ");
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
         return null;
