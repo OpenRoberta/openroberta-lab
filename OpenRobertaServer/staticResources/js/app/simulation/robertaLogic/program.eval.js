@@ -846,7 +846,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.MATH_CONSTRAIN_FUNCTION:
                 return evalMathConstrainFunct(obj, propName + ".value", propName + ".min", propName + ".max");
             case CONSTANTS.MATH_ON_LIST:
-                return evalMathOnList(obj, propName + expr.op, propName + ".list");
+                return evalMathOnList(obj, expr.op, propName + ".list");
             case CONSTANTS.MATH_PROP_FUNCT:
                 return evalMathPropFunct(obj, expr.op, propName + ".arg1", propName + ".arg2");
             case CONSTANTS.MATH_CONST:
@@ -1089,7 +1089,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var listVal = evalExpr(obj, list);
         if (!isObject(listVal) && !obj.modifiedStmt)
             switch (op) {
-                case SUM:
+                case CONSTANTS.SUM:
                     return listVal.reduce(function(x, y) {
                         return x + y;
                     });
