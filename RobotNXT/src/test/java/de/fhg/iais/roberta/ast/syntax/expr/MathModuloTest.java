@@ -9,7 +9,7 @@ public class MathModuloTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "floatvariablenName=1%0;taskmain(){";
+        String a = "floatvariablenName;taskmain(){variablenName=1%0;";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_modulo.xml");
     }

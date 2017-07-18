@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  *
  * @author VinArt
  */
-public class Bob3CodePreprocessVisitor extends ArduCodePreprocessVisitor implements Bob3AstVisitor<Void> {
+public class Bob3CodePreprocessVisitor extends PreprocessProgramVisitor implements Bob3AstVisitor<Void> {
 
     public Bob3CodePreprocessVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Bob3Configuration configuration) {
         super(configuration);

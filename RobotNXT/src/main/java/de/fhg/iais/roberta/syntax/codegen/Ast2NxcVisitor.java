@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -101,6 +100,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     private boolean timeSensorUsed;
     private boolean playToneActionUsed;
+    ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
      * initialize the Nxc code generator visitor.
@@ -114,10 +114,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.brickConfiguration = brickConfiguration;
 
         NxtCodePreprocessVisitor codePreprocessVisitor = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
-
+        this.usedVars = codePreprocessVisitor.getvisitedVars();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
-
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
     }
@@ -213,33 +212,41 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         return null;
     }
 
+    protected Void generateUsedVars() {
+        for ( VarDeclaration<Void> var : this.usedVars ) {
+            nlIndent();
+            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
+                    this.sb.append("__");
+                }
+                this.sb.append(var.getName()).append(var.getTypeVar().isArray() ? "[]" : "").append(" = ");
+                var.getValue().visit(this);
+                this.sb.append(";");
+                if ( var.getTypeVar().isArray() ) {
+                    nlIndent();
+                    this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
+                    incrIndentation();
+                    nlIndent();
+                    this.sb.append(var.getName()).append("[i] = __" + var.getName() + "[i];");
+                    decrIndentation();
+                    nlIndent();
+                    this.sb.append("}");
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
-            this.sb.append("[]");
-            if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
-                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                if ( list.getValue().get().isEmpty() ) {
-                    return null;
-                }
-            }
-
-        }
-
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-            }
+            this.sb.append("[");
+            ListCreate<Void> list = var.getValue().getKind().hasName("EMPTY_EXPR") ? null : (ListCreate<Void>) var.getValue();
+            this.sb.append(var.getValue().getKind().hasName("EMPTY_EXPR") ? "" : list.getValue().get().size());
+            this.sb.append("]");
         }
         return null;
     }
@@ -840,6 +847,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n").append("task main() {");
+        this.generateUsedVars();
         this.generateSensors();
         return null;
     }

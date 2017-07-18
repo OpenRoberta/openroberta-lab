@@ -78,7 +78,6 @@ public class Ast2BotNrollVisitorTest {
             + MAIN_METHOD2
             + "one.obstacleEmitters(ON);"
             + "item = \"yyy\";"
-            + "item2=(double*)malloc(sizeof(double)*0);"
             + "__item2Len=0;"
             + "}"
             + "voidloop(){"

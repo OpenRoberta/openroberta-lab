@@ -60,7 +60,6 @@ public class Ast2MakeBlockVisitorTest {
             + "MeLightSensor myLight1(PORT_1);"
             + "double item;"
             + MAIN_METHOD2
-            + "item;"
             + "}"
             + "void loop(){"
             + "if (myLight1.read() != 0) {"
@@ -96,7 +95,6 @@ public class Ast2MakeBlockVisitorTest {
             + "MeSoundSensor mySound3(PORT_3);"
             + "double item;"
             + MAIN_METHOD2
-            + "item;"
             + "}"
             + "void loop(){"
             + "if (mySound3.strength() > 0) {"
@@ -119,7 +117,6 @@ public class Ast2MakeBlockVisitorTest {
             + "MeHumiture myTemp1(PORT_1);"
             + "double item;"
             + MAIN_METHOD2
-            + "item;"
             + "}"
             + "void loop(){"
             + "myTemp1.update();"

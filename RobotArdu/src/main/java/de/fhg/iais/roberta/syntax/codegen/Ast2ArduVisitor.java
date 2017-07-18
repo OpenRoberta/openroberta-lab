@@ -51,21 +51,21 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
 
     protected void generateUsedVars() {
         for ( VarDeclaration<Void> var : this.usedVars ) {
-            int size = 0;
-            if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
-                size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
-                this.sb.append("__" + var.getName() + "Len = ").append(size).append(";");
-                nlIndent();
-            }
-            this.sb.append(var.getName());
-            if ( var.getTypeVar().isArray() ) {
-                this.sb.append(" = (");
-                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
-                this.sb.append("sizeof(");
-                this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
-            }
             if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                int size = 0;
+                if ( var.getTypeVar().isArray() && !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                    ListCreate<Void> list = var.getValue().getKind().hasName("SENSOR_EXPR") ? null : (ListCreate<Void>) var.getValue();
+                    size = var.getValue().getKind().hasName("SENSOR_EXPR") ? 3 : list.getValue().get().size();
+                    this.sb.append("__" + var.getName() + "Len = ").append(size).append(";");
+                    nlIndent();
+                }
+                this.sb.append(var.getName());
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(" = (");
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("*)malloc(");
+                    this.sb.append("sizeof(");
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(")*");
+                }
                 if ( var.getTypeVar().isArray() ) {
                     this.sb.append("__" + var.getName() + "Len").append(")").append(";");
                     nlIndent();
@@ -76,15 +76,17 @@ public abstract class Ast2ArduVisitor extends Ast2CppVisitor {
                     this.sb.append(" = ");
                     var.getValue().visit(this);
                 }
+                this.sb.append(";");
+                nlIndent();
             } else {
                 if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(0).append(");");
+                    this.sb.append("__" + var.getName() + "Len = ").append(0);
+                    this.sb.append(";");
                     nlIndent();
-                    this.sb.append("__" + var.getName() + "Len = ").append(size);
                 }
+
             }
-            this.sb.append(";");
-            nlIndent();
+
         }
     }
 

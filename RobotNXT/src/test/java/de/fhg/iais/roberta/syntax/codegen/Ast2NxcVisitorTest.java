@@ -27,7 +27,6 @@ public class Ast2NxcVisitorTest {
         + "#define MAXLINES 8 \n"
         + "#include\"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources";
     private static final String MASMETHOD = "" //
-        + "task main() {"
         + "    SetSensor(S1, SENSOR_TOUCH);\n"
         + "    SetSensor(S2, SENSOR_LOWSPEED);\n";
     //+ "    SetSensor(S3, SENSOR_LIGHT);\n"
@@ -52,6 +51,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "        TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");\n"
             + SUFFIX
@@ -66,6 +66,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = ""
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
 
             + "        for ( int k0 = 0; k0 < 10; k0+=1 ) {\n"
@@ -83,6 +84,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
 
             + "        if (SENSOR_1) {\n"
@@ -112,6 +114,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
 
             + "        if (SENSOR_1) {\n"
@@ -141,6 +144,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
 
             + "        if ( 5 < MotorPower(OUT_B); ) {\n\n\n"
@@ -171,6 +175,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
 
             + "          OnFwdReg(OUT_B,0,100);"
@@ -191,6 +196,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "byte volume = 0x02;\n"
+            + "task main() {"
             + MASMETHOD
             + "        TextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");\n"
             + "        PlayToneEx(300, 3000, volume, false);Wait(3000);\n"
@@ -205,6 +211,7 @@ public class Ast2NxcVisitorTest {
     public void test7() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
 
             + "          OnFwdReg(OUT_B,30,100);\n"
@@ -220,6 +227,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "        float item = 10;\n"
             + "        string item2 = \"TTTT\";\n"
@@ -240,6 +248,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "        float variablenName = 0;\n"
 
@@ -280,6 +289,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "void macheEtwas(float x, float x2);"
+            + "task main() {"
             + MASMETHOD
             + "       RotateMotor(OUT_B, 30, 360 * 1);"
             + "       macheEtwas(10, 10);"
@@ -296,6 +306,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "    void test();"
+            + "task main() {"
             + MASMETHOD
 
             + "        test();"
@@ -313,6 +324,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "     void test(bool x);"
+            + "task main() {"
             + MASMETHOD
 
             + "        test(true);"
@@ -332,8 +344,11 @@ public class Ast2NxcVisitorTest {
             + IMPORTS_CONSTANTS
             + "     void test1(float x, float x2);"
             + "    void test2();"
-            + "    float variablenName=0;\n"
-            + "    bool variablenName2=true;\n"
+            + "    float variablenName;\n"
+            + "    bool variablenName2;\n"
+            + "task main() {"
+            + "variablenName=0;\n"
+            + "variablenName2=true;\n"
             + MASMETHOD
             + "        test1(0, 0);"
             + "        test2();"
@@ -354,6 +369,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "    string variablenName[]={\"a\",\"b\",\"c\"};\n"
 
@@ -408,7 +424,9 @@ public class Ast2NxcVisitorTest {
         // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "    string message=\"exit\";\n"
+            + "string message;\n"
+            + "task main() {"
+            + "message=\"exit\";"
             + MASMETHOD
             + "        if (message == \"exit\") {\n"
             + "           TextOut(0,(MAXLINES - 0) * MAXLINES,\"done\");"
@@ -423,8 +441,11 @@ public class Ast2NxcVisitorTest {
     public void test18() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "    float item=0;\n"
-            + "    string item2=\"cc\";\n"
+            + "    float item;\n"
+            + "    string item2;\n"
+            + "task main() {"
+            + "    item=0;\n"
+            + "    item2=\"cc\";\n"
             + MASMETHOD
             + "}\n";
 
@@ -435,6 +456,7 @@ public class Ast2NxcVisitorTest {
     public void testCurveBlocks() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "  SteerDriveEx( OUT_A, OUT_B, 30, -20, true, 20 );\n"
             + "  SteerDriveEx( OUT_A, OUT_B, 50, -50, false, 20 );\n"
@@ -462,6 +484,7 @@ public class Ast2NxcVisitorTest {
     public void testStmtForEach() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
             + "    public void run() throwsException {\n"
@@ -478,6 +501,7 @@ public class Ast2NxcVisitorTest {
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "if (30 == 20) {"
             + "   while (true) {"
@@ -495,6 +519,7 @@ public class Ast2NxcVisitorTest {
     public void check_nestedLoopsNoBreakorContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "if (30 == 20) {"
@@ -516,7 +541,11 @@ public class Ast2NxcVisitorTest {
     public void check_loopsWithBreakAndContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
-            + "float item2[] = {0, 0, 0};"
+            + "float item2[3];"
+            + "task main() {"
+            + "float __item2[] = {0, 0, 0};"
+            + "for(int i = 0; i < ArrayLen(item2); i++) {"
+            + "item2[i] = __item2[i];}"
             + MASMETHOD
             + "while (true) {"
             + "if (30 == 20) {"
@@ -570,6 +599,7 @@ public class Ast2NxcVisitorTest {
     public void check_loopWithBreakAndContinueInWait_returnsOneLabeledLoop() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "   while (true) {"
@@ -594,6 +624,7 @@ public class Ast2NxcVisitorTest {
     public void check_loopsWithBreakAndContinueFitstInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "   while (true) {"
@@ -624,6 +655,7 @@ public class Ast2NxcVisitorTest {
     public void check_twoNestedloopsFirstWithBreakAndContinueInWaitSecondNot_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "   while (true) {"
@@ -653,6 +685,7 @@ public class Ast2NxcVisitorTest {
     public void check_loopWithNestedTwoLoopsInsideWait_returnsFirstLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "   while (true) {"
@@ -688,6 +721,7 @@ public class Ast2NxcVisitorTest {
     public void check_loopWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstAndThirdLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "   while (true) {"
@@ -732,6 +766,7 @@ public class Ast2NxcVisitorTest {
     public void check_threeLoopsWithNestedTwoLoopsInsideWaitSecondContainWait_returnsFirstThirdAndFourthLoopLabeled() throws Exception {
         String a = "" //
             + IMPORTS_CONSTANTS
+            + "task main() {"
             + MASMETHOD
             + "while (true) {"
             + "   while (true) {"

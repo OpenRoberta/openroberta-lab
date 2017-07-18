@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.visitor.BotnrollAstVisitor;
  *
  * @author kcvejoski
  */
-public class BotNrollCodePreprocessVisitor extends ArduCodePreprocessVisitor implements BotnrollAstVisitor<Void> {
+public class BotNrollCodePreprocessVisitor extends PreprocessProgramVisitor implements BotnrollAstVisitor<Void> {
 
     public BotNrollCodePreprocessVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, BotNrollConfiguration configuration) {
         super(configuration);

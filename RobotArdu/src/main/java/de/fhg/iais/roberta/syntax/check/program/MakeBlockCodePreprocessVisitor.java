@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
  *
  * @author kcvejoski
  */
-public class MakeBlockCodePreprocessVisitor extends ArduCodePreprocessVisitor implements MakeblockAstVisitor<Void> {
+public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor implements MakeblockAstVisitor<Void> {
     private boolean isToneActionUsed = false;
     private boolean isTemperatureSensorUsed = false;
 
