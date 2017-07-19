@@ -287,7 +287,6 @@
 			<resource>
 				<directory>staticResources</directory>
 				<targetPath>staticResources</targetPath>
-				<filtering>true</filtering>
 			</resource>
 		</resources>
 		<pluginManagement>
