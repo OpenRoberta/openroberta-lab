@@ -1,7 +1,7 @@
 {
   "name": "Open Roberta Lab",
   "short_name": "Open Roberta Lab",
-  "version": "${project.version}",
+  "version": "${openRobertaServer.version}",
   "description": "Roberta – Learning with Robots",
   "developer": {
     "name": "Open Roberta",
