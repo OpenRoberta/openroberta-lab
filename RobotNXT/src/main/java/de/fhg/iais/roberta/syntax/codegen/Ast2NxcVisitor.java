@@ -548,6 +548,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
+        this.sb.append("__speed").append(" = ");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(" < 100  ? ");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(" : 100;  ");
+        nlIndent();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -572,10 +578,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         } else {
             this.sb.append(", ");
         }
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(" < 100 ? ");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(" : 100,  ");
+        this.sb.append("__speed").append(", ");
         if ( isDuration ) {
             this.sb.append("(");
             driveAction.getParam().getDuration().getValue().visit(this);
@@ -844,6 +847,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
             }
             this.sb.append("long timer1;");
         }
+        this.sb.append("float __speed;");
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n").append("task main() {");
