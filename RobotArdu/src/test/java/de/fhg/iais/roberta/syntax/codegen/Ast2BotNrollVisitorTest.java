@@ -114,11 +114,13 @@ public class Ast2BotNrollVisitorTest {
             + "one.obstacleEmitters(ON);"
             + "T.StartTimer();"
             + "__itemLen=3;"
+            + "bool__item[]={true,true,true};"
             + "item=(bool*)malloc(sizeof(bool)*__itemLen);"
-            + "rob.createArray(item,__itemLen,true,true,true);"
+            + "rob.createArray(item,__itemLen,__item);"
             + "__item2Len=3;"
+            + "String__item2[]={\"\",\"\",\"\"};"
             + "item2=(String*)malloc(sizeof(String)*__item2Len);"
-            + "rob.createArray(item2,__item2Len,\"\",\"\",\"\");"
+            + "rob.createArray(item2,__item2Len,__item2);"
             + "item3 = T.ShowSeconds();"
             + "}"
             + "voidloop(){"
@@ -310,11 +312,11 @@ public class Ast2BotNrollVisitorTest {
             + "    }"
             + MAIN_METHOD2
             + "__variablenNameLen=3;\n"
+            // With wrapping it is not __variablenName, but __variablenName + letters from getBlocklyId to get a unique name that wouldn't be repeated
+            // if we use assignment statement
+            + "String__variablenName[]={\"a\",\"b\",\"c\"};"
             + "variablenName = (String*)malloc(sizeof(String)*__variablenNameLen);"
-            + "rob.createArray(variablenName,__variablenNameLen,\"a\",\"b\",\"c\");}"
-            + "void loop(){"
-            + "one.lcd1(test(0,variablenName));"
-            + "}\n";
+            + "rob.createArray(variablenName,__variablenNameLen,__variablenName);}" + "void loop(){" + "one.lcd1(test(0,variablenName));" + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/methods/method_return_1.xml", true);
     }
@@ -366,8 +368,9 @@ public class Ast2BotNrollVisitorTest {
             + "double*item2;"
             + MAIN_METHOD2
             + "__item2Len=3;"
+            + "double__item2[]={0,0,0};"
             + "item2=(double*)malloc(sizeof(double)*__item2Len);"
-            + "rob.createArray(item2,__item2Len,0,0,0);"
+            + "rob.createArray(item2,__item2Len,__item2);"
             + "}"
 
             + "voidloop(){"
