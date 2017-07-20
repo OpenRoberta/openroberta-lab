@@ -100,6 +100,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     private boolean timeSensorUsed;
     private boolean playToneActionUsed;
+    private boolean driveActionUsed;
     ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
@@ -117,6 +118,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.usedVars = codePreprocessVisitor.getvisitedVars();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
+        this.driveActionUsed = codePreprocessVisitor.isDriveUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
     }
@@ -847,7 +849,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
             }
             this.sb.append("long timer1;");
         }
-        this.sb.append("float __speed;");
+        if ( this.driveActionUsed ) {
+            this.sb.append("float __speed;");
+        }
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n").append("task main() {");

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -17,6 +18,7 @@ import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 public class NxtCodePreprocessVisitor extends PreprocessProgramVisitor implements NxtAstVisitor<Void> {
 
     private boolean isPlayToneUsed = false;
+    private boolean isDriveUsed = false;
 
     public NxtCodePreprocessVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
         super(configuration);
@@ -25,6 +27,10 @@ public class NxtCodePreprocessVisitor extends PreprocessProgramVisitor implement
 
     public boolean isPlayToneUsed() {
         return this.isPlayToneUsed;
+    }
+
+    public boolean isDriveUsed() {
+        return this.isDriveUsed;
     }
 
     @Override
@@ -41,6 +47,12 @@ public class NxtCodePreprocessVisitor extends PreprocessProgramVisitor implement
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
+        this.isDriveUsed = true;
         return null;
     }
 

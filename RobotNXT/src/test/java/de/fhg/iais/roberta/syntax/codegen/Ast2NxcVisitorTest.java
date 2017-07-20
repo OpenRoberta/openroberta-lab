@@ -84,7 +84,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; task main() {"
             + MASMETHOD
 
             + "        if (SENSOR_1) {\n"
@@ -114,7 +114,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; float__speed; task main() {"
             + MASMETHOD
 
             + "        if (SENSOR_1) {\n"
@@ -144,7 +144,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; float__speed; task main() {"
             + MASMETHOD
 
             + "        if ( 5 < MotorPower(OUT_B); ) {\n\n\n"
@@ -175,7 +175,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; float__speed; task main() {"
             + MASMETHOD
 
             + "          OnFwdReg(OUT_B,0,100);"
@@ -211,7 +211,7 @@ public class Ast2NxcVisitorTest {
     public void test7() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; float__speed; task main() {"
             + MASMETHOD
 
             + "          OnFwdReg(OUT_B,30,100);\n"
@@ -227,7 +227,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; float__speed; task main() {"
             + MASMETHOD
             + "        float item = 10;\n"
             + "        string item2 = \"TTTT\";\n"
@@ -248,7 +248,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; float__speed; task main() {"
             + MASMETHOD
             + "        float variablenName = 0;\n"
 
@@ -344,8 +344,8 @@ public class Ast2NxcVisitorTest {
             + IMPORTS_CONSTANTS
             + "     void test1(float x, float x2);"
             + "    void test2();"
-            + "    float variablenName;\n"
-            + "    bool variablenName2;\n"
+            + "float variablenName;\n"
+            + "bool variablenName2;\n"
             + "task main() {"
             + "variablenName=0;\n"
             + "variablenName2=true;\n"
@@ -369,7 +369,7 @@ public class Ast2NxcVisitorTest {
 
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; task main() {"
             + MASMETHOD
             + "    string variablenName[]={\"a\",\"b\",\"c\"};\n"
 
@@ -425,7 +425,7 @@ public class Ast2NxcVisitorTest {
         final String a = "" //
             + IMPORTS_CONSTANTS
             + "string message;\n"
-            + "task main() {"
+            + " task main() {"
             + "message=\"exit\";"
             + MASMETHOD
             + "        if (message == \"exit\") {\n"
@@ -484,7 +484,7 @@ public class Ast2NxcVisitorTest {
     public void testStmtForEach() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "task main() {"
+            + "float__speed; task main() {"
             + MASMETHOD
             + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
             + "    public void run() throwsException {\n"
