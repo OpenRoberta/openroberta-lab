@@ -130,7 +130,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#simDiv',
         'description' : 'TOUR1_DESCRIPTION15',
         'shape' : 'circle',
-        'radius' : $('#blockly').width() / 10,
+        'radius' : $('#blockly').width() / 10 + $('#blockly').height() / 10,
         'top' : offsetTop,
         'left' : offsetLeft,
         'showSkip' : false
@@ -138,6 +138,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'event' : 'click',
         'selector' : '#progSim',
         'description' : 'TOUR1_DESCRIPTION16',
-        'showSkip' : false
+        'showSkip' : false,
+        'showNext' : true
     } ];
 });
