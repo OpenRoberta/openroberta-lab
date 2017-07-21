@@ -113,7 +113,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#progSim', //'.blocklyButtons>g:eq(1)>rect',
         'description' : 'TOUR1_DESCRIPTION13',
         'showSkip' : false,
-        'showNext' : true,
+        'showNext' : false,
         onBeforeStart : function() {
             var blocks = Blockly.getMainWorkspace().getTopBlocks();
             if (!blocks[0].getNextBlock()) {
