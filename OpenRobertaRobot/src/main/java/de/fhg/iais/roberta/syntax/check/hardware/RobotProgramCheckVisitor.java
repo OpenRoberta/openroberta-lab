@@ -59,18 +59,6 @@ public abstract class RobotProgramCheckVisitor extends ProgramCheckVisitor {
                         this.errorCount++;
                     }
                     break;
-                case "AMBIENT_LIGHT":
-                    if ( usedSensor.getType() != SensorType.AMBIENT_LIGHT ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
-                case "LINE_FOLLOWER":
-                    if ( usedSensor.getType() != SensorType.LINE_FOLLOWER ) {
-                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
-                        this.errorCount++;
-                    }
-                    break;
                 case "SOUND_SENSING":
                     if ( usedSensor.getType() != SensorType.SOUND ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));

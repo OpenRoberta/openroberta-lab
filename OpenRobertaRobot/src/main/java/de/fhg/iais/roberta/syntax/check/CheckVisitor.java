@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -57,11 +58,12 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
-    private List<String> globalVariables = new ArrayList<String>();
+    private final List<String> globalVariables = new ArrayList<String>();
+    protected ArrayList<VarDeclaration<Void>> visitedVars = new ArrayList<VarDeclaration<Void>>();
+    private final List<Method<Void>> userDefinedMethods = new ArrayList<Method<Void>>();
     private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
 
     private boolean isProgramEmpty = false;
-    private boolean isInUserDefinedFunction = false;
 
     private int loopCounter = 0;
     private int currenLoop = 0;
@@ -79,6 +81,10 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     public Set<String> getMarkedVariablesAsGlobal() {
         return this.markedVariablesAsGlobal;
+    }
+
+    public List<Method<Void>> getUserDefinedMethods() {
+        return this.userDefinedMethods;
     }
 
     public boolean isProgramEmpty() {
@@ -143,9 +149,16 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        if ( !var.toString().contains("false, false") ) {
+            this.visitedVars.add(var);
+        }
         var.getValue().visit(this);
         this.globalVariables.add(var.getName());
         return null;
+    }
+
+    public ArrayList<VarDeclaration<Void>> getvisitedVars() {
+        return this.visitedVars;
     }
 
     @Override
@@ -346,12 +359,14 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        this.userDefinedMethods.add(methodVoid);
         methodVoid.getBody().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        this.userDefinedMethods.add(methodReturn);
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
         return null;

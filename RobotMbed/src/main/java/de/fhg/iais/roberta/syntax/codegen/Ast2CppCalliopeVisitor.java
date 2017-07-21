@@ -114,7 +114,8 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @SuppressWarnings("unused")
     private final CalliopeConfiguration brickConfiguration;
 
-    private final MbedCodePreprocessVisitor usedHardwareVisitor;
+    private final MbedCodePreprocessVisitor codePreprocess;
+    ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
      * initialize the C++ code generator visitor.
@@ -127,10 +128,11 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         super(programPhrases, indentation);
 
         this.brickConfiguration = brickConfiguration;
+        this.codePreprocess = new MbedCodePreprocessVisitor(programPhrases, brickConfiguration);
 
-        this.usedHardwareVisitor = new MbedCodePreprocessVisitor(programPhrases, brickConfiguration);
-
-        this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
+        this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
+        this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
+        this.usedVars = this.codePreprocess.getvisitedVars();
     }
 
     /**
@@ -186,21 +188,28 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         //TODO there must be a way to make this code simpler
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
-            if ( var.getTypeVar().isArray() ) {
-                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                this.sb.append(list.getValue().get().size() + ">");
+        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
+        if ( var.getTypeVar().isArray() ) {
+            ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+            this.sb.append(list.getValue().get().size() + ">");
+        }
+        this.sb.append(whitespace() + var.getName());
+        return null;
+    }
+
+    protected Void generateUsedVars() {
+        for ( VarDeclaration<Void> var : this.usedVars ) {
+            nlIndent();
+            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                /*if ( var.getTypeVar().isArray() ) {
+                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                    this.sb.append(list.getValue().get().size() + ">");
+                }*/
+                this.sb.append(var.getName());
+                this.sb.append(whitespace() + "=" + whitespace());
+                var.getValue().visit(this);
+                this.sb.append(";");
             }
-            this.sb.append(whitespace() + var.getName());
-            this.sb.append(whitespace() + "=" + whitespace());
-            var.getValue().visit(this);
-        } else {
-            this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
-            if ( var.getTypeVar().isArray() ) {
-                this.sb.append("N>");
-            }
-            this.sb.append(whitespace() + var.getName());
         }
         return null;
     }
@@ -600,23 +609,23 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         //        decrIndentation();
         this.sb.append("int initTime = uBit.systemTime(); \n");
         mainTask.getVariables().visit(this);
-        this.sb.append("\n");
-        generateUserDefinedMethods();
+
         this.sb.append("\n").append("int main() \n");
         this.sb.append("{");
         incrIndentation();
         nlIndent();
         // Initialise the micro:bit runtime.
         this.sb.append("uBit.init();");
+        generateUsedVars();
         nlIndent();
-        if ( this.usedHardwareVisitor.isGreyScale() ) {
+        if ( this.codePreprocess.isGreyScale() ) {
             this.sb.append("uBit.display.setDisplayMode(DISPLAY_MODE_GREYSCALE);");
         }
-        if ( this.usedHardwareVisitor.isRadioUsed() ) {
+        if ( this.codePreprocess.isRadioUsed() ) {
             nlIndent();
             this.sb.append("uBit.radio.enable();");
         }
-        if ( this.usedHardwareVisitor.isAccelerometerUsed() ) {
+        if ( this.codePreprocess.isAccelerometerUsed() ) {
             nlIndent();
             this.sb.append("uBit.accelerometer.updateSample();");
         }
@@ -796,32 +805,31 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
+                this.sb.append("sum(");
                 break;
             case MIN:
+                this.sb.append("min(");
                 break;
             case MAX:
+                this.sb.append("max(");
                 break;
             case AVERAGE:
+                this.sb.append("average(");
                 break;
             case MEDIAN:
+                this.sb.append("median(");
                 break;
             case STD_DEV:
+                this.sb.append("standardDeviation(");
                 break;
             case RANDOM:
-                break;
-            case MODE:
+                this.sb.append("randomElement(");
                 break;
             default:
                 break;
         }
-        arrayLen((Var<Void>) mathOnListFunct.getParam().get(0));
-        this.sb.append(", ");
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
         return null;
@@ -1091,8 +1099,8 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         if ( !withWrapping ) {
             return;
         }
-        this.addConstants();
-
+        this.addIncludes();
+        this.generateSignaturesOfUserDefinedMethods();
     }
 
     @Override
@@ -1101,6 +1109,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
             nlIndent();
             this.sb.append("release_fiber();");
             this.sb.append("\n}\n");
+            generateUserDefinedMethods();
         }
 
     }
@@ -1190,7 +1199,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         return original.substring(0, 1).toUpperCase() + original.substring(1).toLowerCase();
     }
 
-    private void addConstants() {
+    private void addIncludes() {
         this.sb.append("#define _GNU_SOURCE\n\n");
         this.sb.append("#include \"MicroBit.h\" \n");
         this.sb.append("#include <array>\n");

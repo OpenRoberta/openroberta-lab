@@ -34,7 +34,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Initialize the program that is executed in the simulation.
-     * 
+     *
      * @param program
      *            {Object} - list of statements representing the program
      */
@@ -54,7 +54,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
     /**
      * Function that executes one step of the program.
-     * 
+     *
      * @param simulationData
      *            {Object} - sensor data from the simulation
      */
@@ -116,7 +116,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
                 case CONSTANTS.DISPLAY_TEXT_ACTION:
                     evalDisplayTextAction(internal(this), simulationData, stmt);
-                    break;           
+                    break;
 
                 case CONSTANTS.DISPLAY_SET_BRIGHTNESS_ACTION:
                     evalDisplaySetBrightnessAction(internal(this), simulationData, stmt);
@@ -420,13 +420,13 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             obj.program.setTimer(duration);
         }
     };
-    
+
     var evalImageShiftAction = function(obj, image, direction, n) {
         var image = evalExpr(obj, image);
         var n = evalExpr(obj, n);
         return shiftImage(image,direction,n );
     }
-    
+
     var evalImageInvertAction = function(obj, image) {
         var image = evalExpr(obj, image);
         return invertImage(image);
@@ -697,7 +697,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         }
         switch (stmt.mode) {
             case CONSTANTS.FOR_EACH:
-                var i = stmt.eachCounter++;
+                var i = obj.repeatStmtExpr.eachCounter++;
                 if (i == 0) {
                     evalVarDeclaration(obj, "expr.left");
                 }
@@ -705,7 +705,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 if (!isObject(list) && !obj.modifiedStmt) {
                     if (i < list.length) {
                         obj.memory.assign(stmt.expr.left.name, list[i]);
-                        obj.program.prepend([originalStmt])
+                        obj.program.prepend([obj.repeatStmtExpr])
                         obj.program.prepend(stmt.stmtList);
                     }
                 }
@@ -846,7 +846,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             case CONSTANTS.MATH_CONSTRAIN_FUNCTION:
                 return evalMathConstrainFunct(obj, propName + ".value", propName + ".min", propName + ".max");
             case CONSTANTS.MATH_ON_LIST:
-                return evalMathOnList(obj, propName + expr.op, propName + ".list");
+                return evalMathOnList(obj, expr.op, propName + ".list");
             case CONSTANTS.MATH_PROP_FUNCT:
                 return evalMathPropFunct(obj, expr.op, propName + ".arg1", propName + ".arg2");
             case CONSTANTS.MATH_CONST:
@@ -1089,7 +1089,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var listVal = evalExpr(obj, list);
         if (!isObject(listVal) && !obj.modifiedStmt)
             switch (op) {
-                case SUM:
+                case CONSTANTS.SUM:
                     return listVal.reduce(function(x, y) {
                         return x + y;
                     });

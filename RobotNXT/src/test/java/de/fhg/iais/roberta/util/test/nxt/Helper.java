@@ -82,4 +82,15 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
         Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateNXCWithoutWrapping(fileName).replaceAll("\\s+", ""));
     }
 
+    public void assertWrappedCodeIsOk(String correctJavaCode, String fileName) throws Exception {
+        NxtConfiguration brickConfiguration =
+            (NxtConfiguration) new NxtConfiguration.Builder()
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
+                .build();
+        Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
+    }
+
 }

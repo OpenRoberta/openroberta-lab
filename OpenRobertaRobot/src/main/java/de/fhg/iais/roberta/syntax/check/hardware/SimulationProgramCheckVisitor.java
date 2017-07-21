@@ -17,8 +17,6 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -53,18 +51,6 @@ public abstract class SimulationProgramCheckVisitor extends ProgramCheckVisitor 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         bluetoothWaitForConnection.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        methodReturn.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
-        return null;
-    }
-
-    @Override
-    public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        methodIfReturn.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
         return null;
     }
 
@@ -106,7 +92,7 @@ public abstract class SimulationProgramCheckVisitor extends ProgramCheckVisitor 
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( usedSensor.getType() != SensorType.GYRO || usedSensor.getType() != SensorType.GYROSCOPE  ) {
+                    if ( usedSensor.getType() != SensorType.GYRO || usedSensor.getType() != SensorType.GYROSCOPE ) {
                         sensor.addInfo(NepoInfo.warning("SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT"));
                     }
                     break;

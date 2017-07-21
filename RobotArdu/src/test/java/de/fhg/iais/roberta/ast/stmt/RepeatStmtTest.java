@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class RepeatStmtTest {
-	HelperBotNroll h = new HelperBotNroll();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void loopForeverArdu() throws Exception {

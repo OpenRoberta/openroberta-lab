@@ -540,6 +540,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                 getBlocklyWorkspace().robControls.enable('saveProgram');
             } else {
                 $('#menuSaveProg').parent().addClass('disabled');
+                getBlocklyWorkspace().robControls.disable('saveProgram');
             }
         }
         GUISTATE.program.saved = save;

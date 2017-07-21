@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
-import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.botnroll.ColorSensorMode;
@@ -37,17 +36,6 @@ import de.fhg.iais.roberta.syntax.check.program.BotNrollCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.lang.functions.FunctionNames;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -85,6 +73,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
         BotNrollCodePreprocessVisitor codePreprocessVisitor = new BotNrollCodePreprocessVisitor(phrases, brickConfiguration);
+        this.usedVars = codePreprocessVisitor.getvisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
@@ -432,10 +421,10 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
                 this.sb.append(")");
                 break;
             case RGB:
-                this.sb.append("{(double) bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[0], (double) bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[1], (double) bnr.colorSensorRGB(" + colors + port);
-                this.sb.append(")[2]}");
+                this.sb.append("bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[0], bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[1], bnr.colorSensorRGB(" + colors + port);
+                this.sb.append(")[2]");
                 break;
             case RED:
                 this.sb.append("bnr.colorSensorLight(" + colors + port);
@@ -526,228 +515,41 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         mainTask.getVariables().visit(this);
         incrIndentation();
         generateUserDefinedMethods();
+        this.sb.append("\n \n void setup() \n");
+        this.sb.append("{");
+        nlIndent();
+        this.sb.append("Wire.begin();");
+        nlIndent();
+        //set baud rate to 9600 for printing values at serial monitor:
+        this.sb.append("Serial.begin(9600);   // sets baud rate to 9600bps for printing values at serial monitor.");
+        nlIndent();
+        // start the communication module:
+        this.sb.append("one.spiConnect(SSPIN);   // starts the SPI communication module");
+        nlIndent();
+        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);   // starts I2C communication");
+        nlIndent();
+        this.sb.append("brm.setModuleAddress(0x2C);");
+        nlIndent();
+        // stop motors:
+        this.sb.append("one.stop();");
+        nlIndent();
+        this.sb.append("bnr.setOne(one);");
+        nlIndent();
+        this.sb.append("bnr.setBrm(brm);");
+        nlIndent();
+        this.generateSensors();
+        if ( this.isTimerSensorUsed ) {
+            nlIndent();
+            this.sb.append("T.StartTimer();");
+        }
+        generateUsedVars();
+        this.sb.append("\n}\n");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
         if ( this.isTimerSensorUsed ) {
             nlIndent();
             this.sb.append("T.Timer();");
         }
-        return null;
-    }
-
-    @Override
-    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        if ( indexOfFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        String methodName = indexOfFunct.getLocation() == IndexLocation.LAST ? "rob.arrFindLast(" : "rob.arrFindFirst(";
-        this.sb.append(methodName);
-        arrayLen((Var<Void>) indexOfFunct.getParam().get(0));
-        this.sb.append(", ");
-        indexOfFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        indexOfFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
-        if ( lengthOfIsEmptyFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("NULL");
-            return null;
-        }
-        if ( lengthOfIsEmptyFunct.getFunctName() == FunctionNames.LIST_IS_EMPTY ) {
-            this.sb.append("(");
-            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
-            this.sb.append(" == 0)");
-        } else {
-            arrayLen((Var<Void>) lengthOfIsEmptyFunct.getParam().get(0));
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( listGetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        listGetIndex.getParam().get(0).visit(this);
-        this.sb.append("[");
-        switch ( (IndexLocation) listGetIndex.getLocation() ) {
-            case FROM_START:
-                listGetIndex.getParam().get(1).visit(this);
-                break;
-            case FROM_END:
-                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(" - 1 - ");
-                listGetIndex.getParam().get(1).visit(this);
-                break;
-            case FIRST:
-                this.sb.append("0");
-                break;
-            case LAST:
-                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(" - 1");
-                break;
-            case RANDOM:
-                this.sb.append("rob.randomIntegerInRange(0, ");
-                arrayLen((Var<Void>) listGetIndex.getParam().get(0));
-                this.sb.append(")");
-                break;
-        }
-        this.sb.append("]");
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        if ( listSetIndex.getParam().get(0).toString().contains("ListCreate ") ) {
-            return null;
-        }
-        listSetIndex.getParam().get(0).visit(this);
-        this.sb.append("[");
-        switch ( (IndexLocation) listSetIndex.getLocation() ) {
-            case FROM_START:
-                listSetIndex.getParam().get(2).visit(this);
-                break;
-            case FROM_END:
-                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(" - 1 - ");
-                listSetIndex.getParam().get(2).visit(this);
-                break;
-            case FIRST:
-                this.sb.append("0");
-                break;
-            case LAST:
-                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(" - 1");
-                break;
-            case RANDOM:
-                this.sb.append("rob.randomIntegerInRange(0, ");
-                arrayLen((Var<Void>) listSetIndex.getParam().get(0));
-                this.sb.append(")");
-                break;
-        }
-        this.sb.append("]");
-        this.sb.append(" = ");
-        listSetIndex.getParam().get(1).visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("rob.clamp(");
-        mathConstrainFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(1).visit(this);
-        this.sb.append(", ");
-        mathConstrainFunct.getParam().get(2).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        switch ( mathNumPropFunct.getFunctName() ) {
-            case EVEN:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(", 2) == 0");
-                break;
-            case ODD:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(", 2) != 0");
-                break;
-            case PRIME:
-                this.sb.append("rob.isPrime(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                break;
-            case WHOLE:
-                this.sb.append("rob.isWhole(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                break;
-            case POSITIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" > 0");
-                break;
-            case NEGATIVE:
-                this.sb.append("(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(" < 0");
-                break;
-            case DIVISIBLE_BY:
-                this.sb.append("(fmod(");
-                mathNumPropFunct.getParam().get(0).visit(this);
-                this.sb.append(",");
-                mathNumPropFunct.getParam().get(1).visit(this);
-                this.sb.append(") == 0");
-                break;
-            default:
-                break;
-        }
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        if ( mathOnListFunct.getParam().get(0).toString().contains("ListCreate ") ) {
-            this.sb.append("null");
-            return null;
-        }
-        switch ( mathOnListFunct.getFunctName() ) {
-            case SUM:
-                this.sb.append("rob.arrSum(");
-                break;
-            case MIN:
-                this.sb.append("rob.arrMin(");
-                break;
-            case MAX:
-                this.sb.append("rob.arrMax(");
-                break;
-            case AVERAGE:
-                this.sb.append("rob.arrMean(");
-                break;
-            case MEDIAN:
-                this.sb.append("rob.arrMedian(");
-                break;
-            case STD_DEV:
-                this.sb.append("rob.arrStandardDeviatioin(");
-                break;
-            case RANDOM:
-                this.sb.append("rob.arrRand(");
-                break;
-            case MODE:
-                this.sb.append("rob.arrMode(");
-                break;
-            default:
-                break;
-        }
-        arrayLen((Var<Void>) mathOnListFunct.getParam().get(0));
-        this.sb.append(", ");
-        mathOnListFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        this.sb.append("rob.randomFloat()");
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        this.sb.append("rob.randomIntegerInRange(");
-        mathRandomIntFunct.getParam().get(0).visit(this);
-        this.sb.append(", ");
-        mathRandomIntFunct.getParam().get(1).visit(this);
-        this.sb.append(")");
         return null;
     }
 
@@ -781,35 +583,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         this.sb.append("#define SSPIN  2 \n");
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
-        this.sb.append("byte colorsRight[3]={0,0,0}; \n \n");
-        this.sb.append("void setup() \n");
-        this.sb.append("{");
-        nlIndent();
-        this.sb.append("Wire.begin();");
-        nlIndent();
-        //set baud rate to 9600 for printing values at serial monitor:
-        this.sb.append("Serial.begin(9600);   // sets baud rate to 9600bps for printing values at serial monitor.");
-        nlIndent();
-        // start the communication module:
-        this.sb.append("one.spiConnect(SSPIN);   // starts the SPI communication module");
-        nlIndent();
-        this.sb.append("brm.i2cConnect(MODULE_ADDRESS);   // starts I2C communication");
-        nlIndent();
-        this.sb.append("brm.setModuleAddress(0x2C);");
-        nlIndent();
-        // stop motors:
-        this.sb.append("one.stop();");
-        nlIndent();
-        this.sb.append("bnr.setOne(one);");
-        nlIndent();
-        this.sb.append("bnr.setBrm(brm);");
-        nlIndent();
-        this.generateSensors();
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.StartTimer();");
-        }
-        this.sb.append("\n}\n");
+        this.sb.append("byte colorsRight[3]={0,0,0};");
     }
 
     @Override

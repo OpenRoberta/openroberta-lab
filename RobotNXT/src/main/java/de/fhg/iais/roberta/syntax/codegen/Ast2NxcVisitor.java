@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -101,6 +100,8 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     private boolean timeSensorUsed;
     private boolean playToneActionUsed;
+    private boolean driveActionUsed;
+    ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
      * initialize the Nxc code generator visitor.
@@ -114,11 +115,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.brickConfiguration = brickConfiguration;
 
         NxtCodePreprocessVisitor codePreprocessVisitor = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
-
+        this.usedVars = codePreprocessVisitor.getvisitedVars();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
-
+        this.driveActionUsed = codePreprocessVisitor.isDriveUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
+        this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
     }
 
     /**
@@ -212,33 +214,41 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         return null;
     }
 
+    protected Void generateUsedVars() {
+        for ( VarDeclaration<Void> var : this.usedVars ) {
+            nlIndent();
+            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                if ( var.getTypeVar().isArray() ) {
+                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
+                    this.sb.append("__");
+                }
+                this.sb.append(var.getName()).append(var.getTypeVar().isArray() ? "[]" : "").append(" = ");
+                var.getValue().visit(this);
+                this.sb.append(";");
+                if ( var.getTypeVar().isArray() ) {
+                    nlIndent();
+                    this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
+                    incrIndentation();
+                    nlIndent();
+                    this.sb.append(var.getName()).append("[i] = __" + var.getName() + "[i];");
+                    decrIndentation();
+                    nlIndent();
+                    this.sb.append("}");
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getTypeVar().isArray() ) {
-            this.sb.append("[]");
-            if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
-                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                if ( list.getValue().get().isEmpty() ) {
-                    return null;
-                }
-            }
-
-        }
-
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-            }
+            this.sb.append("[");
+            ListCreate<Void> list = var.getValue().getKind().hasName("EMPTY_EXPR") ? null : (ListCreate<Void>) var.getValue();
+            this.sb.append(var.getValue().getKind().hasName("EMPTY_EXPR") ? "" : list.getValue().get().size());
+            this.sb.append("]");
         }
         return null;
     }
@@ -540,6 +550,12 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
+        this.sb.append("__speed").append(" = ");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(" < 100  ? ");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(" : 100;  ");
+        nlIndent();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -564,8 +580,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         } else {
             this.sb.append(", ");
         }
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(", ");
+        this.sb.append("__speed").append(", ");
         if ( isDuration ) {
             this.sb.append("(");
             driveAction.getParam().getDuration().getValue().visit(this);
@@ -825,8 +840,6 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        decrIndentation();
-        this.sb.append("\n");
         if ( this.playToneActionUsed ) {
             this.sb.append("byte volume = 0x02;");
         }
@@ -836,10 +849,13 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
             }
             this.sb.append("long timer1;");
         }
+        if ( this.driveActionUsed ) {
+            this.sb.append("float __speed;");
+        }
         mainTask.getVariables().visit(this);
         incrIndentation();
-        generateUserDefinedMethods();
         this.sb.append("\n").append("task main() {");
+        this.generateUsedVars();
         this.generateSensors();
         return null;
     }
@@ -1171,7 +1187,9 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.sb.append("#define WHEELDIAMETER " + this.brickConfiguration.getWheelDiameterCM() + "\n");
         this.sb.append("#define TRACKWIDTH " + this.brickConfiguration.getTrackWidthCM() + "\n");
         this.sb.append("#define MAXLINES 8 \n");
-        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources");
+        this.sb.append("#include \"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources \n \n");
+        decrIndentation();
+        this.generateSignaturesOfUserDefinedMethods();
     }
 
     @Override
@@ -1179,7 +1197,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         if ( withWrapping ) {
             this.sb.append("\n}\n");
         }
-
+        generateUserDefinedMethods();
     }
 
     @Override

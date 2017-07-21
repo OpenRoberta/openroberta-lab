@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.util;
 
-
 public class KeyVal {
     private final String key;
     private final String value;

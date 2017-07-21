@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 @Ignore
 public class ClearDisplayActionTest {
-	HelperBotNroll h = new HelperBotNroll();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void clearDisplay() throws Exception {

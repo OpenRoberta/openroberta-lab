@@ -610,6 +610,10 @@ hidden
 	padding: 6px 0;
 }
 
+.blocklyFlyoutBackground {
+	fill-opacity: 0.925 !important;
+}
+
 .nav#head-navigation-tabs {
 	position: relative;
 	width: auto;

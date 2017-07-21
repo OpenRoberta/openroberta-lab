@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class SensorExprTest {
-	HelperBotNroll h = new HelperBotNroll();
+    HelperBotNroll h = new HelperBotNroll();
 
     @Test
     public void make() throws Exception {

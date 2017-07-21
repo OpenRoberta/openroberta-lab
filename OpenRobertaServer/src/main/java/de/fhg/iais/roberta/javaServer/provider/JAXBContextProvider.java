@@ -11,8 +11,7 @@ import javax.xml.bind.JAXBContext;
  * @author rbudde
  */
 @Provider
-public class JAXBContextProvider implements ContextResolver<JAXBContext>
-{
+public class JAXBContextProvider implements ContextResolver<JAXBContext> {
     @Override
     public JAXBContext getContext(Class<?> type) {
         return JAXBProviderFactory.getInstance().getJAXBContext(type);

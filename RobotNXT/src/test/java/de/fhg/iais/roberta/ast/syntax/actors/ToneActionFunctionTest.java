@@ -10,14 +10,18 @@ public class ToneActionFunctionTest {
     @Test
     public void playTone() throws Exception {
         final String a =
-            "bytevolume=0x02;\n"
-                + "floatElement=0;\n"
-                + "voidmacheEtwas(){\n"
+            "#defineWHEELDIAMETER0.0#defineTRACKWIDTH0.0#defineMAXLINES8#include\"NEPODefs.h\"//containsNEPOdeclarationsfortheNXCNXTAPIresources"
+                + "void macheEtwas();"
+                + "byte volume = 0x02;\n"
+                + "float Element;"
+                + "taskmain(){ "
+                + "Element=0;"
+                + "macheEtwas();}"
+                + "void macheEtwas(){\n"
                 + "volume=50*4/100.0+0.5;"
                 + "PlayToneEx(300, 100, volume, false);\n"
-                + "Wait(100);}"
-                + "taskmain(){macheEtwas();";
+                + "Wait(100);}";
 
-        this.h.assertCodeIsOk(a, "/ast/actions/action_PlaySoundFunc.xml");
+        this.h.assertWrappedCodeIsOk(a, "/ast/actions/action_PlaySoundFunc.xml");
     }
 }

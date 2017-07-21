@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -16,10 +17,10 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -38,6 +39,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * StringBuilder. <b>This representation is correct C++ code.</b> <br>
  */
 public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
+    protected List<Method<Void>> userDefinedMethods = new ArrayList<Method<Void>>();
 
     /**
      * initialize the cpp code generator visitor.
@@ -57,61 +59,6 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
         this.sb.append(connectConst.getValue());
-        return null;
-    }
-
-    @Override
-    public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
-        this.sb.append(var.getName());
-        if ( var.getTypeVar().isArray() ) {
-            if ( var.toString().contains("false, false") ) {
-                this.sb.append("[]");
-            } else {
-                this.sb.append("Raw");
-                if ( var.getValue().toString().equals("ListCreate [NUMBER, ]")
-                    || var.getValue().toString().equals("ListCreate [BOOLEAN, ]")
-                    || var.getValue().toString().equals("ListCreate [STRING, ]")
-                    || var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-                    this.sb.append("[0];");
-                    nlIndent();
-                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("* ");
-                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
-                } else if ( var.getValue().getKind().hasName("SENSOR_EXPR") ) {
-                    this.sb.append("[3]");
-                } else {
-                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    this.sb.append("[" + list.getValue().get().size() + "]");
-                }
-                if ( var.getValue().getKind().hasName("LIST_CREATE") ) {
-                    ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-                    if ( list.getValue().get().isEmpty() ) {
-                        return null;
-                    }
-                }
-            }
-
-        }
-
-        if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
-            this.sb.append(" = ");
-            if ( var.getValue().getKind().hasName("EXPR_LIST") ) {
-                ExprList<Void> list = (ExprList<Void>) var.getValue();
-                if ( list.get().size() == 2 ) {
-                    list.get().get(1).visit(this);
-                } else {
-                    list.get().get(0).visit(this);
-                }
-            } else {
-                var.getValue().visit(this);
-                if ( var.getTypeVar().isArray() ) {
-                    this.sb.append(";");
-                    nlIndent();
-                    this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append("* ");
-                    this.sb.append(var.getName() + " = " + var.getName() + "Raw");
-                }
-            }
-        }
         return null;
     }
 
@@ -409,6 +356,16 @@ public abstract class Ast2CppVisitor extends CommonLanguageVisitor {
         }
         nlIndent();
         this.sb.append("}");
+    }
+
+    protected void generateSignaturesOfUserDefinedMethods() {
+        for ( Method<Void> phrase : this.userDefinedMethods ) {
+            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
+            this.sb.append(phrase.getMethodName() + "(");
+            phrase.getParameters().visit(this);
+            this.sb.append(");");
+            nlIndent();
+        }
     }
 
     protected void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {

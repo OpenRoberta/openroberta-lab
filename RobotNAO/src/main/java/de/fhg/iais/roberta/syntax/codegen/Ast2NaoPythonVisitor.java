@@ -2,21 +2,11 @@ package de.fhg.iais.roberta.syntax.codegen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import de.fhg.iais.roberta.components.NAOConfiguration;
-import de.fhg.iais.roberta.mode.action.nao.BodyPart;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
-import de.fhg.iais.roberta.mode.action.nao.Frame;
-import de.fhg.iais.roberta.mode.action.nao.Joint;
-import de.fhg.iais.roberta.mode.action.nao.Language;
-import de.fhg.iais.roberta.mode.action.nao.Led;
-import de.fhg.iais.roberta.mode.action.nao.Modus;
-import de.fhg.iais.roberta.mode.action.nao.Move;
-import de.fhg.iais.roberta.mode.action.nao.OnOff;
-import de.fhg.iais.roberta.mode.action.nao.PointLook;
-import de.fhg.iais.roberta.mode.action.nao.Posture;
-import de.fhg.iais.roberta.mode.action.nao.RelativeAbsolute;
-import de.fhg.iais.roberta.mode.action.nao.Resolution;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -44,11 +34,9 @@ import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Stop;
 import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
-import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.NaoCodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
@@ -88,9 +76,9 @@ import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.NaoAstVisitor;
-import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
@@ -99,6 +87,7 @@ import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVisitor<Void> {
 
     private final NAOConfiguration brickConfiguration;
+    protected Set<UsedSensor> usedSensors;
 
     /**
      * initialize the Python code generator visitor.
@@ -112,6 +101,7 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
         this.brickConfiguration = brickConfiguration;
         NaoCodePreprocessVisitor checker = new NaoCodePreprocessVisitor(programPhrases, brickConfiguration);
+        this.usedSensors = checker.getUsedSensors();
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
@@ -478,12 +468,16 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitSetMode(SetMode<Void> setMode) {
         this.sb.append("h.mode(");
-        if ( setMode.getModus() == Modus.ACTIVE ) {
-            this.sb.append("1)");
-        } else if ( setMode.getModus() == Modus.REST ) {
-            this.sb.append("2)");
-        } else if ( setMode.getModus() == Modus.SIT ) {
-            this.sb.append("3)");
+        switch ( setMode.getModus() ) {
+            case ACTIVE:
+                this.sb.append("1)");
+                break;
+            case REST:
+                this.sb.append("2)");
+                break;
+            case SIT:
+                this.sb.append("3)");
+                break;
         }
         return null;
     }
@@ -491,22 +485,31 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
         this.sb.append("h.applyPosture(");
-        if ( applyPosture.getPosture() == Posture.STAND ) {
-            this.sb.append("\"Stand\")");
-        } else if ( applyPosture.getPosture() == Posture.STANDINIT ) {
-            this.sb.append("\"StandInit\")");
-        } else if ( applyPosture.getPosture() == Posture.STANDZERO ) {
-            this.sb.append("\"StandZero\")");
-        } else if ( applyPosture.getPosture() == Posture.SITRELAX ) {
-            this.sb.append("\"SitRelax\")");
-        } else if ( applyPosture.getPosture() == Posture.SIT ) {
-            this.sb.append("\"Sit\")");
-        } else if ( applyPosture.getPosture() == Posture.LYINGBELLY ) {
-            this.sb.append("\"LyingBelly\")");
-        } else if ( applyPosture.getPosture() == Posture.LYINGBACK ) {
-            this.sb.append("\"LyingBack\")");
-        } else if ( applyPosture.getPosture() == Posture.CROUCH ) {
-            this.sb.append("\"Crouch\")");
+        switch ( applyPosture.getPosture() ) {
+            case STAND:
+                this.sb.append("\"Stand\")");
+                break;
+            case STANDINIT:
+                this.sb.append("\"StandInit\")");
+                break;
+            case STANDZERO:
+                this.sb.append("\"StandZero\")");
+                break;
+            case SITRELAX:
+                this.sb.append("\"SitRelax\")");
+                break;
+            case SIT:
+                this.sb.append("\"Sit\")");
+                break;
+            case LYINGBELLY:
+                this.sb.append("\"LyingBelly\")");
+                break;
+            case LYINGBACK:
+                this.sb.append("\"LyingBack\")");
+                break;
+            case CROUCH:
+                this.sb.append("\"Crouch\")");
+                break;
         }
         return null;
     }
@@ -514,28 +517,40 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitSetStiffness(SetStiffness<Void> setStiffness) {
         this.sb.append("h.stiffness(");
-        if ( setStiffness.getBodyPart() == BodyPart.BODY ) {
-            this.sb.append("\"Body\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.HEAD ) {
-            this.sb.append("\"Head\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.ARMS ) {
-            this.sb.append("\"Arms\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.LEFTARM ) {
-            this.sb.append("\"LArm\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.RIGHTARM ) {
-            this.sb.append("\"RArm\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.LEGS ) {
-            this.sb.append("\"Legs\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.LEFTLEG ) {
-            this.sb.append("\"LLeg\"");
-        } else if ( setStiffness.getBodyPart() == BodyPart.RIHTLEG ) {
-            this.sb.append("\"RLeg\"");
+        switch ( setStiffness.getBodyPart() ) {
+            case BODY:
+                this.sb.append("\"Body\"");
+                break;
+            case HEAD:
+                this.sb.append("\"Head\"");
+                break;
+            case ARMS:
+                this.sb.append("\"Arms\"");
+                break;
+            case LEFTARM:
+                this.sb.append("\"LArm\"");
+                break;
+            case RIGHTARM:
+                this.sb.append("\"RArm\"");
+                break;
+            case LEGS:
+                this.sb.append("\"Legs\"");
+                break;
+            case LEFTLEG:
+                this.sb.append("\"LLeg\"");
+                break;
+            case RIHTLEG:
+                this.sb.append("\"RLeg\"");
+                break;
         }
 
-        if ( setStiffness.getOnOff() == OnOff.ON ) {
-            this.sb.append(", 1)");
-        } else if ( setStiffness.getOnOff() == OnOff.OFF ) {
-            this.sb.append(", 2)");
+        switch ( setStiffness.getOnOff() ) {
+            case ON:
+                this.sb.append(", 1)");
+                break;
+            case OFF:
+                this.sb.append(", 2)");
+                break;
         }
         return null;
     }
@@ -543,16 +558,27 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitHand(Hand<Void> hand) {
         this.sb.append("h.hand(");
-        if ( hand.getTurnDirection() == TurnDirection.LEFT ) {
-            this.sb.append("\"LHand\"");
-        } else if ( hand.getTurnDirection() == TurnDirection.RIGHT ) {
-            this.sb.append("\"RHand\"");
+        switch ( hand.getTurnDirection() ) {
+            case LEFT:
+                this.sb.append("\"LHand\"");
+                break;
+            case RIGHT:
+                this.sb.append("\"RHand\"");
+                break;
         }
 
-        if ( hand.getModus() == Modus.ACTIVE ) {
-            this.sb.append(", 1)");
-        } else if ( hand.getModus() == Modus.REST ) {
-            this.sb.append(", 2)");
+        switch ( hand.getModus() ) {
+            case ACTIVE:
+                this.sb.append(", 1)");
+                break;
+            case REST:
+                this.sb.append(", 2)");
+                break;
+            case SIT:
+                this.sb.append(", 3)");
+                break;
+            default:
+                break;
         }
         return null;
     }
@@ -560,64 +586,98 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
         this.sb.append("h.moveJoint(");
-        if ( moveJoint.getJoint() == Joint.HEADYAW ) {
-            this.sb.append("\"HeadYaw\"");
-        } else if ( moveJoint.getJoint() == Joint.HEADPITCH ) {
-            this.sb.append("\"HeadPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.LSHOULDERPITCH ) {
-            this.sb.append("\"LShoulderPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.LSHOULDERROLL ) {
-            this.sb.append("\"LShoulderRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.LELBOWYAW ) {
-            this.sb.append("\"LElbowYaw\"");
-        } else if ( moveJoint.getJoint() == Joint.LELBOWROLL ) {
-            this.sb.append("\"LElbowRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.LWRISTYAW ) {
-            this.sb.append("\"LWristYaw\"");
-        } else if ( moveJoint.getJoint() == Joint.LHAND ) {
-            this.sb.append("\"LHand\"");
-        } else if ( moveJoint.getJoint() == Joint.LHIPYAWPITCH ) {
-            this.sb.append("\"LHipYawPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.LHIPROLL ) {
-            this.sb.append("\"LHipRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.LHIPPITCH ) {
-            this.sb.append("\"LHipPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.LKNEEPITCH ) {
-            this.sb.append("\"LKneePitch\"");
-        } else if ( moveJoint.getJoint() == Joint.LANKLEPITCH ) {
-            this.sb.append("\"LAnklePitch\"");
-        } else if ( moveJoint.getJoint() == Joint.RANKLEROLL ) {
-            this.sb.append("\"RAnkleRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.RHIPYAWPITCH ) {
-            this.sb.append("\"RHipYawPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.RHIPROLL ) {
-            this.sb.append("\"RHipRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.RHIPITCH ) {
-            this.sb.append("\"RHipPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.RKNEEPITCH ) {
-            this.sb.append("\"RKneePitch\"");
-        } else if ( moveJoint.getJoint() == Joint.RANKLEPITCH ) {
-            this.sb.append("\"RAnklePitch\"");
-        } else if ( moveJoint.getJoint() == Joint.RSHOULDERPITCH ) {
-            this.sb.append("\"RShoulderPitch\"");
-        } else if ( moveJoint.getJoint() == Joint.RSHOULDERROLL ) {
-            this.sb.append("\"RShoulderRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.RELBOWYAW ) {
-            this.sb.append("\"RElbowYaw\"");
-        } else if ( moveJoint.getJoint() == Joint.RELBOWROLL ) {
-            this.sb.append("\"RElbowRoll\"");
-        } else if ( moveJoint.getJoint() == Joint.RWRISTYAW ) {
-            this.sb.append("\"RWristYaw\"");
-        } else if ( moveJoint.getJoint() == Joint.RHAND ) {
-            this.sb.append("\"RHand\"");
+        switch ( moveJoint.getJoint() ) {
+            case HEADYAW:
+                this.sb.append("\"HeadYaw\"");
+                break;
+            case HEADPITCH:
+                this.sb.append("\"HeadPitch\"");
+                break;
+            case LSHOULDERPITCH:
+                this.sb.append("\"LShoulderPitch\"");
+                break;
+            case LSHOULDERROLL:
+                this.sb.append("\"LShoulderRoll\"");
+                break;
+            case LELBOWYAW:
+                this.sb.append("\"LElbowYaw\"");
+                break;
+            case LELBOWROLL:
+                this.sb.append("\"LElbowRoll\"");
+                break;
+            case LWRISTYAW:
+                this.sb.append("\"LWristYaw\"");
+                break;
+            case LHAND:
+                this.sb.append("\"LHand\"");
+                break;
+            case LHIPYAWPITCH:
+                this.sb.append("\"LHipYawPitch\"");
+                break;
+            case LHIPROLL:
+                this.sb.append("\"LHipRoll\"");
+                break;
+            case LHIPPITCH:
+                this.sb.append("\"LHipPitch\"");
+                break;
+            case LKNEEPITCH:
+                this.sb.append("\"LKneePitch\"");
+                break;
+            case LANKLEPITCH:
+                this.sb.append("\"LAnklePitch\"");
+                break;
+            case RANKLEROLL:
+                this.sb.append("\"RAnkleRoll\"");
+                break;
+            case RHIPYAWPITCH:
+                this.sb.append("\"RHipYawPitch\"");
+                break;
+            case RHIPROLL:
+                this.sb.append("\"RHipRoll\"");
+                break;
+            case RHIPITCH:
+                this.sb.append("\"RHipPitch\"");
+                break;
+            case RKNEEPITCH:
+                this.sb.append("\"RKneePitch\"");
+                break;
+            case RANKLEPITCH:
+                this.sb.append("\"RAnklePitch\"");
+                break;
+            case RSHOULDERPITCH:
+                this.sb.append("\"RShoulderPitch\"");
+                break;
+            case RSHOULDERROLL:
+                this.sb.append("\"RShoulderRoll\"");
+                break;
+            case RELBOWYAW:
+                this.sb.append("\"RElbowYaw\"");
+                break;
+            case RELBOWROLL:
+                this.sb.append("\"RElbowRoll\"");
+                break;
+            case RWRISTYAW:
+                this.sb.append("\"RWristYaw\"");
+                break;
+            case RHAND:
+                this.sb.append("\"RHand\"");
+                break;
+            case LANKLEROLL:
+                this.sb.append("\"LAnkleRoll\"");
+                break;
+            default:
+                break;
         }
         this.sb.append(", ");
         moveJoint.getDegrees().visit(this);
         this.sb.append(", ");
-        if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.ABSOLUTE ) {
-            this.sb.append("1)");
-        } else if ( moveJoint.getRelativeAbsolute() == RelativeAbsolute.RELATIVE ) {
-            this.sb.append("2)");
+        switch ( moveJoint.getRelativeAbsolute() ) {
+            case ABSOLUTE:
+                this.sb.append("1)");
+                break;
+            case RELATIVE:
+                this.sb.append("2)");
+                break;
         }
         return null;
     }
@@ -666,14 +726,19 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
     @Override
     public Void visitAnimation(Animation<Void> animation) {
-        if ( animation.getMove() == Move.TAICHI ) {
-            this.sb.append("h.taiChi()");
-        } else if ( animation.getMove() == Move.BLINK ) {
-            this.sb.append("h.blink()");
-        } else if ( animation.getMove() == Move.WAVE ) {
-            this.sb.append("h.wave()");
-        } else if ( animation.getMove() == Move.WIPEFOREHEAD ) {
-            this.sb.append("h.wipeForehead()");
+        switch ( animation.getMove() ) {
+            case TAICHI:
+                this.sb.append("h.taiChi()");
+                break;
+            case BLINK:
+                this.sb.append("h.blink()");
+                break;
+            case WAVE:
+                this.sb.append("h.wave()");
+                break;
+            case WIPEFOREHEAD:
+                this.sb.append("h.wipeForehead()");
+                break;
         }
         return null;
     }
@@ -687,18 +752,25 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append(", ");
         pointLookAt.getpointZ().visit(this);
         this.sb.append(", ");
-        if ( pointLookAt.getFrame() == Frame.TORSO ) {
-            this.sb.append("0, ");
-        } else if ( pointLookAt.getFrame() == Frame.WORLD ) {
-            this.sb.append("1, ");
-        } else if ( pointLookAt.getFrame() == Frame.ROBOT ) {
-            this.sb.append("2, ");
+        switch ( pointLookAt.getFrame() ) {
+            case TORSO:
+                this.sb.append("0, ");
+                break;
+            case WORLD:
+                this.sb.append("1, ");
+                break;
+            case ROBOT:
+                this.sb.append("2, ");
+                break;
         }
         pointLookAt.getSpeed().visit(this);
-        if ( pointLookAt.getPointLook() == PointLook.LOOK ) {
-            this.sb.append(", 1)");
-        } else if ( pointLookAt.getPointLook() == PointLook.POINT ) {
-            this.sb.append(", 0)");
+        switch ( pointLookAt.getPointLook() ) {
+            case LOOK:
+                this.sb.append(", 1)");
+                break;
+            case POINT:
+                this.sb.append(", 0)");
+                break;
         }
         return null;
     }
@@ -720,48 +792,70 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
         this.sb.append("h.setLanguage(");
-        if ( setLanguage.getLanguage() == Language.GERMAN ) {
-            this.sb.append("\"German\")");
-        } else if ( setLanguage.getLanguage() == Language.ENGLISH ) {
-            this.sb.append("\"English\")");
-        } else if ( setLanguage.getLanguage() == Language.FRENCH ) {
-            this.sb.append("\"French\")");
-        } else if ( setLanguage.getLanguage() == Language.JAPANESE ) {
-            this.sb.append("\"Japanese\")");
-        } else if ( setLanguage.getLanguage() == Language.CHINESE ) {
-            this.sb.append("\"Chinese\")");
-        } else if ( setLanguage.getLanguage() == Language.SPANISH ) {
-            this.sb.append("\"Spanish\")");
-        } else if ( setLanguage.getLanguage() == Language.KOREAN ) {
-            this.sb.append("\"Korean\")");
-        } else if ( setLanguage.getLanguage() == Language.ITALIAN ) {
-            this.sb.append("\"Italian\")");
-        } else if ( setLanguage.getLanguage() == Language.DUTCH ) {
-            this.sb.append("\"Dutch\")");
-        } else if ( setLanguage.getLanguage() == Language.FINNISH ) {
-            this.sb.append("\"Finnish\")");
-        } else if ( setLanguage.getLanguage() == Language.POLISH ) {
-            this.sb.append("\"Polish\")");
-        } else if ( setLanguage.getLanguage() == Language.RUSSIAN ) {
-            this.sb.append("\"Russian\")");
-        } else if ( setLanguage.getLanguage() == Language.TURKISH ) {
-            this.sb.append("\"Turkish\")");
-        } else if ( setLanguage.getLanguage() == Language.ARABIC ) {
-            this.sb.append("\"Arabic\")");
-        } else if ( setLanguage.getLanguage() == Language.CZECH ) {
-            this.sb.append("\"Czech\")");
-        } else if ( setLanguage.getLanguage() == Language.PORTUGUESE ) {
-            this.sb.append("\"Portuguese\")");
-        } else if ( setLanguage.getLanguage() == Language.BRAZILIAN ) {
-            this.sb.append("\"Brazilian\")");
-        } else if ( setLanguage.getLanguage() == Language.SWEDISH ) {
-            this.sb.append("\"Swedish\")");
-        } else if ( setLanguage.getLanguage() == Language.DANISH ) {
-            this.sb.append("\"Danish\")");
-        } else if ( setLanguage.getLanguage() == Language.NORWEGIAN ) {
-            this.sb.append("\"Norwegian\")");
-        } else if ( setLanguage.getLanguage() == Language.GREEK ) {
-            this.sb.append("\"Greek\")");
+        switch ( setLanguage.getLanguage() ) {
+            case GERMAN:
+                this.sb.append("\"German\")");
+                break;
+            case ENGLISH:
+                this.sb.append("\"English\")");
+                break;
+            case FRENCH:
+                this.sb.append("\"French\")");
+                break;
+            case JAPANESE:
+                this.sb.append("\"Japanese\")");
+                break;
+            case CHINESE:
+                this.sb.append("\"Chinese\")");
+                break;
+            case SPANISH:
+                this.sb.append("\"Spanish\")");
+                break;
+            case KOREAN:
+                this.sb.append("\"Korean\")");
+                break;
+            case ITALIAN:
+                this.sb.append("\"Italian\")");
+                break;
+            case DUTCH:
+                this.sb.append("\"Dutch\")");
+                break;
+            case FINNISH:
+                this.sb.append("\"Finnish\")");
+                break;
+            case POLISH:
+                this.sb.append("\"Polish\")");
+                break;
+            case RUSSIAN:
+                this.sb.append("\"Russian\")");
+                break;
+            case TURKISH:
+                this.sb.append("\"Turkish\")");
+                break;
+            case ARABIC:
+                this.sb.append("\"Arabic\")");
+                break;
+            case CZECH:
+                this.sb.append("\"Czech\")");
+                break;
+            case PORTUGUESE:
+                this.sb.append("\"Portuguese\")");
+                break;
+            case BRAZILIAN:
+                this.sb.append("\"Brazilian\")");
+                break;
+            case SWEDISH:
+                this.sb.append("\"Swedish\")");
+                break;
+            case DANISH:
+                this.sb.append("\"Danish\")");
+                break;
+            case NORWEGIAN:
+                this.sb.append("\"Norwegian\")");
+                break;
+            case GREEK:
+                this.sb.append("\"Greek\")");
+                break;
         }
         return null;
     }
@@ -798,28 +892,40 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
         this.sb.append("h.setLeds(");
-        if ( setLeds.getLed() == Led.ALL ) {
-            this.sb.append("\"AllLeds\", ");
-        } else if ( setLeds.getLed() == Led.CHEST ) {
-            this.sb.append("\"ChestLeds\", ");
-        } else if ( setLeds.getLed() == Led.EARS ) {
-            this.sb.append("\"EarLeds\", ");
-        } else if ( setLeds.getLed() == Led.EYES ) {
-            this.sb.append("\"FaceLeds\", ");
-        } else if ( setLeds.getLed() == Led.HEAD ) {
-            this.sb.append("\"BrainLeds\", ");
-        } else if ( setLeds.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEarLeds\", ");
-        } else if ( setLeds.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftFaceLeds\", ");
-        } else if ( setLeds.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFootLeds\", ");
-        } else if ( setLeds.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEarLeds\", ");
-        } else if ( setLeds.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightFaceLeds\", ");
-        } else if ( setLeds.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFootLeds\", ");
+        switch ( setLeds.getLed() ) {
+            case ALL:
+                this.sb.append("\"AllLeds\", ");
+                break;
+            case CHEST:
+                this.sb.append("\"ChestLeds\", ");
+                break;
+            case EARS:
+                this.sb.append("\"EarLeds\", ");
+                break;
+            case EYES:
+                this.sb.append("\"FaceLeds\", ");
+                break;
+            case HEAD:
+                this.sb.append("\"BrainLeds\", ");
+                break;
+            case LEFTEAR:
+                this.sb.append("\"LeftEarLeds\", ");
+                break;
+            case LEFTEYE:
+                this.sb.append("\"LeftFaceLeds\", ");
+                break;
+            case LEFTFOOT:
+                this.sb.append("\"LeftFootLeds\", ");
+                break;
+            case RIGHTEAR:
+                this.sb.append("\"RightEarLeds\", ");
+                break;
+            case RIGHTEYE:
+                this.sb.append("\"RightFaceLeds\", ");
+                break;
+            case RIGHTFOOT:
+                this.sb.append("\"RightFootLeds\", ");
+                break;
         }
         setLeds.getColor().visit(this);
         this.sb.append(")");
@@ -829,28 +935,40 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
         this.sb.append("h.setIntensity(");
-        if ( setIntensity.getLed() == Led.ALL ) {
-            this.sb.append("\"AllLeds\", ");
-        } else if ( setIntensity.getLed() == Led.CHEST ) {
-            this.sb.append("\"ChestLeds\", ");
-        } else if ( setIntensity.getLed() == Led.EARS ) {
-            this.sb.append("\"EarLeds\", ");
-        } else if ( setIntensity.getLed() == Led.EYES ) {
-            this.sb.append("\"FaceLeds\", ");
-        } else if ( setIntensity.getLed() == Led.HEAD ) {
-            this.sb.append("\"BrainLeds\", ");
-        } else if ( setIntensity.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEarLeds\", ");
-        } else if ( setIntensity.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftFaceLeds\", ");
-        } else if ( setIntensity.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFootLeds\", ");
-        } else if ( setIntensity.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEarLeds\", ");
-        } else if ( setIntensity.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightFaceLeds\", ");
-        } else if ( setIntensity.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFootLeds\", ");
+        switch ( setIntensity.getLed() ) {
+            case ALL:
+                this.sb.append("\"AllLeds\", ");
+                break;
+            case CHEST:
+                this.sb.append("\"ChestLeds\", ");
+                break;
+            case EARS:
+                this.sb.append("\"EarLeds\", ");
+                break;
+            case EYES:
+                this.sb.append("\"FaceLeds\", ");
+                break;
+            case HEAD:
+                this.sb.append("\"BrainLeds\", ");
+                break;
+            case LEFTEAR:
+                this.sb.append("\"LeftEarLeds\", ");
+                break;
+            case LEFTEYE:
+                this.sb.append("\"LeftFaceLeds\", ");
+                break;
+            case LEFTFOOT:
+                this.sb.append("\"LeftFootLeds\", ");
+                break;
+            case RIGHTEAR:
+                this.sb.append("\"RightEarLeds\", ");
+                break;
+            case RIGHTEYE:
+                this.sb.append("\"RightFaceLeds\", ");
+                break;
+            case RIGHTFOOT:
+                this.sb.append("\"RightFootLeds\", ");
+                break;
         }
         setIntensity.getIntensity().visit(this);
         this.sb.append(")");
@@ -866,28 +984,40 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
         this.sb.append("h.ledOff(");
-        if ( ledOff.getLed() == Led.ALL ) {
-            this.sb.append("\"AllLeds\"");
-        } else if ( ledOff.getLed() == Led.CHEST ) {
-            this.sb.append("\"ChestLeds\"");
-        } else if ( ledOff.getLed() == Led.EARS ) {
-            this.sb.append("\"EarLeds\"");
-        } else if ( ledOff.getLed() == Led.EYES ) {
-            this.sb.append("\"FaceLeds\"");
-        } else if ( ledOff.getLed() == Led.HEAD ) {
-            this.sb.append("\"BrainLeds\"");
-        } else if ( ledOff.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEarLeds\"");
-        } else if ( ledOff.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftFaceLeds\"");
-        } else if ( ledOff.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFootLeds\"");
-        } else if ( ledOff.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEarLeds\"");
-        } else if ( ledOff.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightFaceLeds\"");
-        } else if ( ledOff.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFootLeds\"");
+        switch ( ledOff.getLed() ) {
+            case ALL:
+                this.sb.append("\"AllLeds\"");
+                break;
+            case CHEST:
+                this.sb.append("\"ChestLeds\"");
+                break;
+            case EARS:
+                this.sb.append("\"EarLeds\"");
+                break;
+            case EYES:
+                this.sb.append("\"FaceLeds\"");
+                break;
+            case HEAD:
+                this.sb.append("\"BrainLeds\"");
+                break;
+            case LEFTEAR:
+                this.sb.append("\"LeftEarLeds\"");
+                break;
+            case LEFTEYE:
+                this.sb.append("\"LeftFaceLeds\"");
+                break;
+            case LEFTFOOT:
+                this.sb.append("\"LeftFootLeds\"");
+                break;
+            case RIGHTEAR:
+                this.sb.append("\"RightEarLeds\"");
+                break;
+            case RIGHTEYE:
+                this.sb.append("\"RightFaceLeds\"");
+                break;
+            case RIGHTFOOT:
+                this.sb.append("\"RightFootLeds\"");
+                break;
         }
         this.sb.append(")");
         return null;
@@ -896,28 +1026,40 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
         this.sb.append("h.ledReset(");
-        if ( ledReset.getLed() == Led.ALL ) {
-            this.sb.append("\"AllLeds\"");
-        } else if ( ledReset.getLed() == Led.CHEST ) {
-            this.sb.append("\"ChestLeds\"");
-        } else if ( ledReset.getLed() == Led.EARS ) {
-            this.sb.append("\"EarLeds\"");
-        } else if ( ledReset.getLed() == Led.EYES ) {
-            this.sb.append("\"FaceLeds\"");
-        } else if ( ledReset.getLed() == Led.HEAD ) {
-            this.sb.append("\"BrainLeds\"");
-        } else if ( ledReset.getLed() == Led.LEFTEAR ) {
-            this.sb.append("\"LeftEarLeds\"");
-        } else if ( ledReset.getLed() == Led.LEFTEYE ) {
-            this.sb.append("\"LeftFaceLeds\"");
-        } else if ( ledReset.getLed() == Led.LEFTFOOT ) {
-            this.sb.append("\"LeftFootLeds\"");
-        } else if ( ledReset.getLed() == Led.RIGHTEAR ) {
-            this.sb.append("\"RightEarLeds\"");
-        } else if ( ledReset.getLed() == Led.RIGHTEYE ) {
-            this.sb.append("\"RightFaceLeds\"");
-        } else if ( ledReset.getLed() == Led.RIGHTFOOT ) {
-            this.sb.append("\"RightFootLeds\"");
+        switch ( ledReset.getLed() ) {
+            case ALL:
+                this.sb.append("\"AllLeds\"");
+                break;
+            case CHEST:
+                this.sb.append("\"ChestLeds\"");
+                break;
+            case EARS:
+                this.sb.append("\"EarLeds\"");
+                break;
+            case EYES:
+                this.sb.append("\"FaceLeds\"");
+                break;
+            case HEAD:
+                this.sb.append("\"BrainLeds\"");
+                break;
+            case LEFTEAR:
+                this.sb.append("\"LeftEarLeds\"");
+                break;
+            case LEFTEYE:
+                this.sb.append("\"LeftFaceLeds\"");
+                break;
+            case LEFTFOOT:
+                this.sb.append("\"LeftFootLeds\"");
+                break;
+            case RIGHTEAR:
+                this.sb.append("\"RightEarLeds\"");
+                break;
+            case RIGHTEYE:
+                this.sb.append("\"RightFaceLeds\"");
+                break;
+            case RIGHTFOOT:
+                this.sb.append("\"RightFootLeds\"");
+                break;
         }
         this.sb.append(")");
         return null;
@@ -941,10 +1083,10 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
 
     @Override
     public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
-        this.sb.append("h.touchsensor(");
-        this.sb.append(touchsensors.getSensor().getPythonCode());
+        this.sb.append("h.touchsensors(");
+        this.sb.append("\"" + touchsensors.getSensor().getPythonCode() + "\"");
         this.sb.append(", ");
-        this.sb.append(touchsensors.getSide().getPythonCode());
+        this.sb.append("\"" + touchsensors.getSide().getPythonCode() + "\"");
         this.sb.append(")");
         return null;
     }
@@ -1009,17 +1151,24 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
         this.sb.append("h.recordVideo(");
-        if ( recordVideo.getResolution() == Resolution.LOW ) {
-            this.sb.append("0, ");
-        } else if ( recordVideo.getResolution() == Resolution.MED ) {
-            this.sb.append("1, ");
-        } else if ( recordVideo.getResolution() == Resolution.HIGH ) {
-            this.sb.append("2, ");
+        switch ( recordVideo.getResolution() ) {
+            case LOW:
+                this.sb.append("0, ");
+                break;
+            case MED:
+                this.sb.append("1, ");
+                break;
+            case HIGH:
+                this.sb.append("2, ");
+                break;
         }
-        if ( recordVideo.getCamera() == Camera.TOP ) {
-            this.sb.append("\"Top\", ");
-        } else if ( recordVideo.getCamera() == Camera.BOTTOM ) {
-            this.sb.append("\"Bottom\", ");
+        switch ( recordVideo.getCamera() ) {
+            case TOP:
+                this.sb.append("\"Top\", ");
+                break;
+            case BOTTOM:
+                this.sb.append("\"Bottom\", ");
+                break;
         }
         recordVideo.getDuration().visit(this);
         this.sb.append(", ");
@@ -1058,56 +1207,86 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
     @Override
     public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
         this.sb.append("h.getElectricCurrent(");
-        if ( electricCurrent.getJoint() == Joint.HEADYAW ) {
-            this.sb.append("\"HeadYaw\"");
-        } else if ( electricCurrent.getJoint() == Joint.HEADPITCH ) {
-            this.sb.append("\"HeadPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.LSHOULDERPITCH ) {
-            this.sb.append("\"LShoulderPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.LSHOULDERROLL ) {
-            this.sb.append("\"LShoulderRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.LELBOWYAW ) {
-            this.sb.append("\"LElbowYaw\"");
-        } else if ( electricCurrent.getJoint() == Joint.LELBOWROLL ) {
-            this.sb.append("\"LElbowRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.LWRISTYAW ) {
-            this.sb.append("\"LWristYaw\"");
-        } else if ( electricCurrent.getJoint() == Joint.LHAND ) {
-            this.sb.append("\"LHand\"");
-        } else if ( electricCurrent.getJoint() == Joint.LHIPYAWPITCH ) {
-            this.sb.append("\"LHipYawPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.LHIPROLL ) {
-            this.sb.append("\"LHipRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.LHIPPITCH ) {
-            this.sb.append("\"LHipPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.LKNEEPITCH ) {
-            this.sb.append("\"LKneePitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.LANKLEPITCH ) {
-            this.sb.append("\"LAnklePitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.RANKLEROLL ) {
-            this.sb.append("\"RAnkleRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.RHIPYAWPITCH ) {
-            this.sb.append("\"RHipYawPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.RHIPROLL ) {
-            this.sb.append("\"RHipRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.RHIPITCH ) {
-            this.sb.append("\"RHipPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.RKNEEPITCH ) {
-            this.sb.append("\"RKneePitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.RANKLEPITCH ) {
-            this.sb.append("\"RAnklePitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.RSHOULDERPITCH ) {
-            this.sb.append("\"RShoulderPitch\"");
-        } else if ( electricCurrent.getJoint() == Joint.RSHOULDERROLL ) {
-            this.sb.append("\"RShoulderRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.RELBOWYAW ) {
-            this.sb.append("\"RElbowYaw\"");
-        } else if ( electricCurrent.getJoint() == Joint.RELBOWROLL ) {
-            this.sb.append("\"RElbowRoll\"");
-        } else if ( electricCurrent.getJoint() == Joint.RWRISTYAW ) {
-            this.sb.append("\"RWristYaw\"");
-        } else if ( electricCurrent.getJoint() == Joint.RHAND ) {
-            this.sb.append("\"RHand\"");
+        switch ( electricCurrent.getJoint() ) {
+            case HEADYAW:
+                this.sb.append("\"HeadYaw\"");
+                break;
+            case HEADPITCH:
+                this.sb.append("\"HeadPitch\"");
+                break;
+            case LSHOULDERPITCH:
+                this.sb.append("\"LShoulderPitch\"");
+                break;
+            case LSHOULDERROLL:
+                this.sb.append("\"LShoulderRoll\"");
+                break;
+            case LELBOWYAW:
+                this.sb.append("\"LElbowYaw\"");
+                break;
+            case LELBOWROLL:
+                this.sb.append("\"LElbowRoll\"");
+                break;
+            case LWRISTYAW:
+                this.sb.append("\"LWristYaw\"");
+                break;
+            case LHAND:
+                this.sb.append("\"LHand\"");
+                break;
+            case LHIPYAWPITCH:
+                this.sb.append("\"LHipYawPitch\"");
+                break;
+            case LHIPROLL:
+                this.sb.append("\"LHipRoll\"");
+                break;
+            case LHIPPITCH:
+                this.sb.append("\"LHipPitch\"");
+                break;
+            case LKNEEPITCH:
+                this.sb.append("\"LKneePitch\"");
+                break;
+            case LANKLEPITCH:
+                this.sb.append("\"LAnklePitch\"");
+                break;
+            case RANKLEROLL:
+                this.sb.append("\"RAnkleRoll\"");
+                break;
+            case RHIPYAWPITCH:
+                this.sb.append("\"RHipYawPitch\"");
+                break;
+            case RHIPROLL:
+                this.sb.append("\"RHipRoll\"");
+                break;
+            case RHIPITCH:
+                this.sb.append("\"RHipPitch\"");
+                break;
+            case RKNEEPITCH:
+                this.sb.append("\"RKneePitch\"");
+                break;
+            case RANKLEPITCH:
+                this.sb.append("\"RAnklePitch\"");
+                break;
+            case RSHOULDERPITCH:
+                this.sb.append("\"RShoulderPitch\"");
+                break;
+            case RSHOULDERROLL:
+                this.sb.append("\"RShoulderRoll\"");
+                break;
+            case RELBOWYAW:
+                this.sb.append("\"RElbowYaw\"");
+                break;
+            case RELBOWROLL:
+                this.sb.append("\"RElbowRoll\"");
+                break;
+            case RWRISTYAW:
+                this.sb.append("\"RWristYaw\"");
+                break;
+            case RHAND:
+                this.sb.append("\"RHand\"");
+                break;
+            case LANKLEROLL:
+                this.sb.append("\"LAnkleRoll\"");
+            default:
+                break;
         }
         this.sb.append(")");
         return null;
@@ -1123,7 +1302,9 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
         this.sb.append("h = Hal()\n\n");
-
+        System.out.println(this.usedSensors);
+        this.generateSensors();
+        nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
         this.sb.append("class ContinueLoop(Exception): pass\n\n");
 
@@ -1140,8 +1321,13 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append(INDENT).append(INDENT).append("run()\n");
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\" + str(e))\n");
+        this.sb.append(INDENT).append("finally:\n");
+        if ( this.usedSensors.size() < 1 ) {
+            this.sb.append(INDENT).append(INDENT).append("pass");
+        }
+        this.removeSensors();
 
-        this.sb.append("\n");
+        this.sb.append("\n\n");
         this.sb.append("if __name__ == \"__main__\":\n");
         this.sb.append(INDENT).append("main()");
     }
@@ -1151,5 +1337,62 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         return null;
     }
 
- 
+    @Override
+    public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
+        this.sb.append("h.walkAsync(");
+        walkAsync.getXSpeed().visit(this);
+        this.sb.append(", ");
+        walkAsync.getYSpeed().visit(this);
+        this.sb.append(", ");
+        walkAsync.getZSpeed().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    private void generateSensors() {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case COLOR:
+                    break;
+                case INFRARED:
+                    break;
+                case ULTRASONIC:
+                    this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")");
+                    break;
+                case NAOMARK:
+                    this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
+                case LIGHT:
+                case COMPASS:
+                case SOUND:
+                case TOUCH:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported!");
+            }
+        }
+    }
+
+    private void removeSensors() {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case COLOR:
+                    break;
+                case INFRARED:
+                    break;
+                case ULTRASONIC:
+                    this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")");
+                    break;
+                case NAOMARK:
+                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\", 500, 0.0)");
+                case LIGHT:
+                case COMPASS:
+                case SOUND:
+                case TOUCH:
+                    break;
+                default:
+                    throw new DbcException("Sensor is not supported!");
+            }
+        }
+    }
+
 }

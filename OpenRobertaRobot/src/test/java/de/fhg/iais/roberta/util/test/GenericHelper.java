@@ -340,41 +340,41 @@ public class GenericHelper extends Helper {
             return null;
         }
 
-		@Override
-		public IJoystickMode getJoystickMode(String joystickMode) {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        @Override
+        public IJoystickMode getJoystickMode(String joystickMode) {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
-		@Override
-		public List<IJoystickMode> getJoystickMode() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        @Override
+        public List<IJoystickMode> getJoystickMode() {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
-		@Override
-		public String getConnectionType() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        @Override
+        public String getConnectionType() {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
-		@Override
-		public String getVendorId() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        @Override
+        public String getVendorId() {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
-		@Override
-		public String getCommandline() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        @Override
+        public String getCommandline() {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
-		@Override
-		public String getSignature() {
-			// TODO Auto-generated method stub
-			return null;
-		}
+        @Override
+        public String getSignature() {
+            // TODO Auto-generated method stub
+            return null;
+        }
 
     }
 }

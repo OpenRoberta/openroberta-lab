@@ -8,12 +8,12 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.

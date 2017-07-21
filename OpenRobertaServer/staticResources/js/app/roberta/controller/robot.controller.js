@@ -83,7 +83,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             $('#single-modal label').text(Blockly.Msg["POPUP_VALUE"]);
             $('#singleModalInput').addClass('capitalLetters');
             $('#single-modal a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
-            $('#single-modal a[href]').attr("href", "https://wiki.open-roberta.org");
+            $('#single-modal a[href]').attr("href", "http://wiki.open-roberta.org");
         }, function() {
             setToken($('#singleModalInput').val().toUpperCase());
         }, function() {
@@ -116,7 +116,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             $('#single-modal-list h3').text(Blockly.Msg["MENU_CONNECT"]);
             $('#single-modal-list label').text(Blockly.Msg["POPUP_VALUE"]);
             $('#single-modal-list a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
-            $('#single-modal-list a[href]').attr("href", "https://wiki.open-roberta.org");
+            $('#single-modal-list a[href]').attr("href", "http://wiki.open-roberta.org");
         }, function() {
             console.log(document.getElementById("singleModalListInput").value);
             setPort(document.getElementById("singleModalListInput").value);

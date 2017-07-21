@@ -16,8 +16,7 @@ import org.hibernate.type.StandardBasicTypes;
  * 
  * @author rbudde
  */
-public class SQLiteDialect extends Dialect
-{
+public class SQLiteDialect extends Dialect {
     public SQLiteDialect() {
         registerColumnType(Types.BIT, "boolean");
         registerColumnType(Types.TINYINT, "tinyint");

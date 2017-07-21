@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.syntax.action.nao.SetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Stop;
 import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
+import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 //import de.fhg.iais.roberta.syntax.expr.nao.LedColor;
@@ -39,7 +40,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
-import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
@@ -100,6 +100,13 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
      * @param walkTo phrase to be visited
      */
     V visitWalkTo(WalkTo<V> walkTo);
+
+    /**
+     * visit a {@link WalkAsync}.
+     *
+     * @param walkAsync phrase to be visited
+     */
+    V visitWalkAsync(WalkAsync<V> walkAsync);
 
     /**
      * visit a {@link Stop}.

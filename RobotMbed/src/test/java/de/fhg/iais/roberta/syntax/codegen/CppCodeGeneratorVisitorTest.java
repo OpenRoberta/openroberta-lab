@@ -59,9 +59,11 @@ public class CppCodeGeneratorVisitorTest {
     public void visitPredefinedImage_ScriptWithToImageVariables_ReturnsCppProgramWithTwoImageVariables() throws Exception {
         String expectedResult = "" //
             + IMPORTS
-            + "MicroBitImage Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
-            + "MicroBitImage Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
+            + "MicroBitImage Element;"
+            + "MicroBitImage Element2;"
             + MAIN
+            + "Element = MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\");"
+            + "Element2 = MicroBitImage(\"255,255,255,255,255\\n255,255,0,255,255\\n0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n\");"
             + END;
 
         assertCodeIsOk(expectedResult, "/expr/image_get_image_defined_as_global_variables.xml");
@@ -543,8 +545,9 @@ public class CppCodeGeneratorVisitorTest {
     public void check_loopsWithBreakAndContinue_returnsNoLabeledLoops() throws Exception {
         String a = "" //
             + IMPORTS
-            + "array<double, 3> item2 = {0, 0, 0};"
+            + "array<double, 3> item2;"
             + MAIN
+            + "item2 = {0, 0, 0};"
             + "while (true) {"
             + "if (30 == 20) {"
             + "     break;"

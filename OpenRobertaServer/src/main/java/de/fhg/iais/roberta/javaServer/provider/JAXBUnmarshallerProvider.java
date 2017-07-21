@@ -11,8 +11,7 @@ import javax.xml.bind.Unmarshaller;
  * @author rbudde
  */
 @Provider
-public class JAXBUnmarshallerProvider implements ContextResolver<Unmarshaller>
-{
+public class JAXBUnmarshallerProvider implements ContextResolver<Unmarshaller> {
     @Override
     public Unmarshaller getContext(Class<?> type) {
         return JAXBProviderFactory.getInstance().getUnmarshaller(type);

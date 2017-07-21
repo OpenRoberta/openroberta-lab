@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.check.program;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
+import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -50,8 +52,8 @@ import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public abstract class PreprocessProgramVisitor extends CheckVisitor implements AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>, AstActorDisplayVisitor<Void>,
-    AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, AstActorCommunicationVisitor<Void> {
+public abstract class PreprocessProgramVisitor extends CheckVisitor implements AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
+    AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void>, AstActorCommunicationVisitor<Void> {
     protected final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
     protected final Set<UsedActor> usedActors = new LinkedHashSet<UsedActor>();
 

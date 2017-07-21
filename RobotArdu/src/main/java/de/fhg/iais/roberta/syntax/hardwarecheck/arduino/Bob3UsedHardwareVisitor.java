@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
+import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.bob3.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
@@ -29,14 +30,11 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
     private boolean isTimerSensorUsed;
     private boolean isTemperatureSensorUsed;
 
-    private Configuration brickConfiguration;
-
     public Bob3UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         check(phrasesSet);
     }
 
     public Bob3UsedHardwareVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
         check(phrasesSet);
 
     }
@@ -98,6 +96,12 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
 
     @Override
     public Void visitConnectConst(ConnectConst<Void> connectConst) {
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

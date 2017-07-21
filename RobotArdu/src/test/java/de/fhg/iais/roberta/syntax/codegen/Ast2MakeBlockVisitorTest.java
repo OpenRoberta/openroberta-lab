@@ -33,7 +33,7 @@ public class Ast2MakeBlockVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/motor1m1.xml", true);
     }
-    
+
     @Test
     public void ultrasonicSensorTest() throws Exception {
 
@@ -50,7 +50,7 @@ public class Ast2MakeBlockVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml", true);
     }
-    
+
     @Test
     public void LightSensorTest() throws Exception {
 
@@ -58,9 +58,9 @@ public class Ast2MakeBlockVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeLightSensor myLight1(PORT_1);"
+            + "double item;"
             + MAIN_METHOD2
             + "}"
-            + "double item;"
             + "void loop(){"
             + "if (myLight1.read() != 0) {"
             + "        delay(500);}\n"
@@ -68,7 +68,7 @@ public class Ast2MakeBlockVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", true);
     }
-    
+
     @Test
     public void TouchSensorTest() throws Exception {
 
@@ -85,7 +85,7 @@ public class Ast2MakeBlockVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_touch_sensor.xml", true);
     }
-    
+
     @Test
     public void SoundSensorTest() throws Exception {
 
@@ -93,18 +93,18 @@ public class Ast2MakeBlockVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeSoundSensor mySound3(PORT_3);"
+            + "double item;"
             + MAIN_METHOD2
             + "}"
-            + "double item;"
             + "void loop(){"
             + "if (mySound3.strength() > 0) {"
             + "        delay(500);}\n"
-            
+
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_sound_sensor.xml", true);
     }
-    
+
     @Test
     public void TemperatureSensorTest() throws Exception {
 
@@ -115,14 +115,14 @@ public class Ast2MakeBlockVisitorTest {
             + "MeDCMotor motor1(M1);"
             + "MeDrive myDrive(M2,M1);"
             + "MeHumiture myTemp1(PORT_1);"
+            + "double item;"
             + MAIN_METHOD2
             + "}"
-            + "double item;"
             + "void loop(){"
             + "myTemp1.update();"
             + "if (myTemp1.getTemperature() < 20) {"
             + "        myDrive.drive(30, 1);}\n"
-            
+
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml", true);

@@ -109,11 +109,7 @@ public class ServerStarter {
      * @param defines is a list of properties (from the command line ...) which overwrite the properties from the propertyPath. May be null.
      */
     public ServerStarter(String propertyPath, List<String> defines) {
-        Properties mailProperties = Util1.loadProperties("classpath:openRobertaMailServer.properties");
         Properties robertaProperties = Util1.loadAndMergeProperties(propertyPath, defines);
-        if ( mailProperties != null ) {
-            robertaProperties.putAll(mailProperties);
-        }
         setupPropertyForDatabaseConnection(robertaProperties);
         RobertaProperties.setRobertaProperties(robertaProperties);
     }
