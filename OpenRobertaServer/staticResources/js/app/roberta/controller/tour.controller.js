@@ -138,7 +138,8 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'event' : 'click',
         'selector' : '#progSim',
         'description' : 'TOUR1_DESCRIPTION16',
-        'showSkip' : false,
-        'showNext' : true
+        'showSkip' : false
+        // TODO: test with iPad
+        //'showNext' : true
     } ];
 });
