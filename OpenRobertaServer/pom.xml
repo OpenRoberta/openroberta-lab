@@ -306,7 +306,17 @@
 			<resource>
 				<directory>staticResources</directory>
 				<targetPath>staticResources</targetPath>
+				<excludes>
+				  <exclude>**/*.json</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>staticResources</directory>
+				<targetPath>staticResources</targetPath>
 				<filtering>true</filtering>
+				<includes>
+				  <include>**/*.json</include>
+				</includes>
 			</resource>
 		</resources>
 		<pluginManagement>
