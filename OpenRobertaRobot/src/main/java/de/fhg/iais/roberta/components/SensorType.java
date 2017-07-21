@@ -15,6 +15,8 @@ public enum SensorType {
     GYRO( "robBrick_gyro" ),
     SOUND( "robBrick_sound" ),
     LIGHT( "robBrick_light" ),
+    LINE_FOLLOWER( "makeblockSensors_light" ),
+    AMBIENT_LIGHT( "makeblockSensors_ambientlight" ),
     COMPASS( "robBrick_compass" ),
     TEMPERATURE( "robBrick_temperature" ),
     GYROSCOPE( "makeblockSensors_gyroscope_getSample" ),

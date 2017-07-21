@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.makeblock;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 
 public enum LightSensorMode implements ILightSensorMode {
-    RED( "Red" ), AMBIENTLIGHT( "Ambient" );
+    LEFT( "Left" ), RIGHT( "Right" );
 
     private final String[] values;
 

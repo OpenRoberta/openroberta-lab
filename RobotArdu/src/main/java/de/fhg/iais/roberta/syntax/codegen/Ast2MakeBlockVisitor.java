@@ -290,21 +290,24 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     // TODO: separate the block:
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLineFollower(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
-            // should go to ambientlight sensor block
-            case RED:
-                this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+            case LEFT:
+                this.sb.append("lineFinder.readSensors" + lightSensor.getPort().getPortNumber() + "()&2");
                 break;
-            //should go to light sensor block
-            case AMBIENTLIGHT:
-                this.sb.append("lineFinder.readSensor" + lightSensor.getPort().getPortNumber() + "()");
+            case RIGHT:
+                this.sb.append("lineFinder.readSensors" + lightSensor.getPort().getPortNumber() + "()&1");
                 break;
-            default:
-                break;
-        }
 
+        }
         return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+        return null;
+
     }
 
     @Override
@@ -398,12 +401,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         return null;
     }
 
-    
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
         this.sb.append("flameSensor" + flameSensor.getPort().getPortNumber() + ".readAnalog()");
         return null;
     }
+
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
         /*
@@ -738,16 +741,14 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                 case TOUCH:
                     this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
-                case LIGHT:
-                    //TODO: change it according to new blocks
-                    if ( usedSensor.getMode() == LightSensorMode.RED ) {
-                        this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
-                    } else if ( usedSensor.getMode() == LightSensorMode.AMBIENTLIGHT ) {
-                        this.sb.append("MeLineFollower lineFinder(" + usedSensor.getPort() + ");\n");
-                    }
+                case AMBIENT_LIGHT:
+                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
+                case LINE_FOLLOWER:
+                    this.sb.append("MeLineFollower lineFinder(" + usedSensor.getPort() + ");\n");
                     break;
                 case COMPASS:
-                	break;
+                    break;
                 case GYROSCOPE:
                     this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;

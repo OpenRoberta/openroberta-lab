@@ -7,8 +7,9 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
@@ -49,20 +50,32 @@ public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor imp
     }
 
     @Override
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.AMBIENT_LIGHT, null));
+        return null;
+    }
+
+    @Override
+    public Void visitLineFollower(LightSensor<Void> lightSensor) {
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LINE_FOLLOWER, lightSensor.getMode()));
+        return null;
+    }
+
+    @Override
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
         this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getCoordinate()));
         return null;
     }
-    
+
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYROSCOPE, gyroSensor.getMode()));
         return null;
     }
-    
+
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-    	 this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
+        this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
         return null;
     }
 
