@@ -65,20 +65,20 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     }
 
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("bob3.getIRLight()");
+        this.sb.append("myBob.getIRLight()");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("bob3.getTemperature()");
+        this.sb.append("myBob.getTemperature()");
         return null;
     }
 
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("T.ShowSeconds()");
+                this.sb.append("T.ShowSeconds();");
                 break;
             case RESET:
                 this.sb.append("T.ResetTimer();");
@@ -93,7 +93,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         ITouchSensorMode arm = touchSensor.getMode();
         System.out.println(arm.toString());
-        this.sb.append("bob3.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
+        this.sb.append("myBob.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
         return null;
     }
 
@@ -143,7 +143,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         }
 
         this.sb.append("RobertaFunctions rob;\n");
-        this.sb.append("Bob3 bob3;\n");
+        this.sb.append("Bob3 myBob;\n");
 
     }
 
@@ -156,26 +156,26 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("bob3.getIRLight()");
+        this.sb.append("myBob.getIRLight();");
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("bob3.setWhiteLeds(WHITE, WHITE)");
+        this.sb.append("myBob.setWhiteLeds(WHITE, WHITE);");
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        this.sb.append("bob3.setLed(2, OFF)");
-        this.sb.append("bob3.setLed(1, OFF)");
+        this.sb.append("myBob.setLed(2, OFF);");
+        this.sb.append("myBob.setLed(1, OFF);");
         return null;
     }
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        this.sb.append("bob3.setEyes(WHITE, WHITE)");
+        this.sb.append("myBob.setEyes(WHITE, WHITE);");
         return null;
     }
 }

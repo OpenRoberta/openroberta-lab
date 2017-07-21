@@ -12,7 +12,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     function init() {
         robotSocket = GUISTATE_C.getSocket()
         if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
-            robotSocket = IO('wss://localhost:8992/');
+            robotSocket = IO('ws://localhost:8991/');
             GUISTATE_C.setSocket(robotSocket);
             GUISTATE_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');
@@ -119,7 +119,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         var board = 'arduino:avr:uno';
         console.log("uploading " + filename);
         // TODO: add to property file after BOB3 implementation 
-        // signatureBob3 = "009de3ed2c8fbfaa5fa0b796f71a5f7b61081d82461dd73d626c288adeffd845fdd2eb1e801b4da5609fc9eb9c149d17e1d551b74313e698260a8e02436197b4bd0893232515609ab2a55b5d35232e0653f6f716f816e2acb81654c85f2fe1075f5c168804584a3e315df43d63c4c8762ab5fc618cf83b84cc9162d595379e17";
+        // signatureBob3 = "276ed4cbc2013ff4e932cee5132c1068bda492d0b0fddb26bb73bd4d7baf4ab71176be20ced644f42d6b13a52cee24a271d4f85cb94647ea7374e1a5d59b05fc98e00fad9ce7e9bd76137b6d2fb4ed34a73c7826f57cd3e4b14eb61042256c062a576e87fb6ab1c005ca21687b2dfc0531369ff7e286b5f34d95ffdee630057d";
         // commandLineBob3 = "\"{runtime.tools.avrdude.path}/bin/avrdude\" \"-C{runtime.tools.avrdude.path}/etc/avrdude.conf\" {upload.verbose} -patmega88 -cavrisp2 -P{serial.port} -b38400 -D -e \"-Uflash:w:{build.path}/{build.project_name}.hex:i\"";
         var signature = GUISTATE_C.getSignature();
         var commandLine = GUISTATE_C.getCommandLine();
