@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'socket.io' ], function(exports, UTIL,
-        LOG, MSG, $, ROBOT_C, GUISTATE_C, IO) {
+define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'socket.io' ], function(exports, UTIL, LOG, MSG, $, ROBOT_C,
+        GUISTATE_C, IO) {
 
     var portList = [];
     var vendorList = [];
@@ -12,7 +12,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     function init() {
         robotSocket = GUISTATE_C.getSocket()
         if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
-            robotSocket = IO('ws://localhost:8991/');
+            robotSocket = IO('wss://localhost:8992/');
             GUISTATE_C.setSocket(robotSocket);
             GUISTATE_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');
