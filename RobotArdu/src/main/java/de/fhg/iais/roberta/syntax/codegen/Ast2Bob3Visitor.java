@@ -28,9 +28,11 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -184,8 +186,8 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     }
 
     @Override
-    public Void visitLightSensor(Bob3LightSensor<Void> lightSensor) {
-        this.sb.append("myBob.getIRLight();");
+    public Void visitLightSensor(Bob3AmbientLightSensor<Void> lightSensor) {
+        this.sb.append("myBob.getIRSensor()");
         return null;
     }
 
@@ -382,6 +384,18 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitBob3TemperatureSensor(Bob3TemperatureSensor<Void> temperatureSensor) {
         this.sb.append("myBob.getTemperature()");
+        return null;
+    }
+
+    @Override
+    public Void visitBob3CodePadSensor(Bob3CodePadSensor<Void> codePadSensor) {
+        this.sb.append("myBob.getID()");
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        this.sb.append("myBob.getMillivolt()"); // ADC_BANDGAP_CHANNEL_VOLTAGE must be below 1.28 V!!!
         return null;
     }
 }

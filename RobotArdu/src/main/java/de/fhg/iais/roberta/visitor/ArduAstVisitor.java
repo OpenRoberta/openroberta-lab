@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
+import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
@@ -22,4 +23,11 @@ public interface ArduAstVisitor<V>
     V visitLedOnAction(LedOnAction<V> ledOnAction);
 
     V visitLedOffAction(LedOffAction<V> ledOffAction);
+
+    /**
+     * visit a {@link VoltageSensor}.
+     *
+     * @param voltageSensor to be visited
+     */
+    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
 }

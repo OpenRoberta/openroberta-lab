@@ -31,9 +31,11 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -137,7 +139,7 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
     }
 
     @Override
-    public Void visitLightSensor(Bob3LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(Bob3AmbientLightSensor<Void> lightSensor) {
         this.usedSensors.add(new UsedSensor(null, SensorType.LIGHT, null));
         return null;
     }
@@ -318,6 +320,18 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
 
     @Override
     public Void visitBob3TemperatureSensor(Bob3TemperatureSensor<Void> temperatureSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBob3CodePadSensor(Bob3CodePadSensor<Void> codePadSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         // TODO Auto-generated method stub
         return null;
     }
