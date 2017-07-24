@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.bob3;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -20,34 +21,33 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class Bob3LightSensor<V> extends Sensor<V> {
-
-    private Bob3LightSensor(BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(null, properties, comment);
+public class Bob3TemperatureSensor<V> extends Sensor<V> {
+    private Bob3TemperatureSensor(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("BOB3_TEMPERATURE"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Create object of the class {@link Bob3LightSensor}.
+     * Create object of the class {@link Bob3TemperatureSensor}.
      *
      * @param port on which the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible ports that the sensor can be
      *        connected,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link Bob3LightSensor}
+     * @return read only object of {@link Bob3TemperatureSensor}
      */
-    public static <V> Bob3LightSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Bob3LightSensor<V>(properties, comment);
+    public static <V> Bob3TemperatureSensor<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Bob3TemperatureSensor<V>(properties, comment);
     }
 
     @Override
     public String toString() {
-        return "LightSensor []";
+        return "TemperatureSensor []";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((Bob3AstVisitor<V>) visitor).visitLightSensor(this);
+        return ((Bob3AstVisitor<V>) visitor).visitBob3TemperatureSensor(this);
     }
 
     /**
@@ -58,7 +58,7 @@ public class Bob3LightSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        return Bob3LightSensor.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return Bob3TemperatureSensor.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

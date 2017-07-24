@@ -3,18 +3,12 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.action.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 
 public interface Bob3AstVisitor<V> extends ArduAstVisitor<V> {
-    /**
-     * visit a {@link VoltageSensor}.
-     *
-     * @param temperatureSensor to be visited
-     */
-    @Override
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+
+    V visitBob3TemperatureSensor(Bob3TemperatureSensor<V> temperatureSensor);
 
     V visitRgbColor(RgbColor<V> rgbColor);
 

@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
@@ -62,6 +63,12 @@ public class Bob3CodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBob3TemperatureSensor(Bob3TemperatureSensor<Void> temperatureSensor) {
         // TODO Auto-generated method stub
         return null;
     }

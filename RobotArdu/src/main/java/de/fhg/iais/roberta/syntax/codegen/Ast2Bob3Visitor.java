@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -379,6 +380,12 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
             this.sb.append("LED_3, ");
         }
         this.sb.append(bodyLEDAction.getledState().toUpperCase() + ");");
+        return null;
+    }
+
+    @Override
+    public Void visitBob3TemperatureSensor(Bob3TemperatureSensor<Void> temperatureSensor) {
+        this.sb.append("myBob.getTemperature()");
         return null;
     }
 }
