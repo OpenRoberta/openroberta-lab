@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-07-24 13:43:51.604444",
+		"lastupdated": "2017-07-24 15:17:17.498359",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1165,11 +1165,14 @@
 	"PIN_GETSAMPLE_PULSELOW_TOOLTIP": "Returns the pulse LOW on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
 	"CONNECTION_POWER": "with strength",
 	"BOB3_ARM": "arm",
-	"BOB3_ARM_PAIR": "sensor pair",
+	"BOB3_ARM_PAIR": "pad pair",
 	"CONNECTION_MBED_RECEIVE_TOOLTIP": "Reads a message over one of the channels (0 - 255). The default channel is 0.",
 	"CONNECTION_MBED_SEND_TOOLTIP": "Sends a message to another microBoard. You can specify a signal strength from 0 - 7, where 0 is very low and 7 is the strongests. The message is send over channel 0 unless you specify another one.",
 	"CONNECTION_SET_CHANNEL": "set channel to %1",
 	"CONNECTION_SET_CHANNEL_TOOLTIP": "Sets the channel for sending and receiving messages. Can be set from 0 to 255.",
 	"MOTOR_SPEED_0": "Motor Speed is 0!",
 	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration."
+	"NAO_WALK_ASYNC_TOOLTIP": "Makes the robot walk infinitely",
+	"SENSOR_CODE": "code pad",
+	"GET_CODE_TOOLTIP": "Returns the value of the solderable code pad in the head piece. Values are in range 0-31."
 }
