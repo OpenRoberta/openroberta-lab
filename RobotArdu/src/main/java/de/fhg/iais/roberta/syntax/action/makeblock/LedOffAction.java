@@ -29,6 +29,7 @@ public class LedOffAction<V> extends Action<V> {
 
     private LedOffAction(String side, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MAKEBLOCK_RGB_LED_OFF"), properties, comment);
+        this.side = side;
         setReadOnly();
     }
 

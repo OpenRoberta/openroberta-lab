@@ -264,9 +264,9 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
         this.sb.append("myBob.setLed(");
         if ( ledOnAction.getSide().equals("Left") ) {
-            this.sb.append("EYE_1, ");
-        } else {
             this.sb.append("EYE_2, ");
+        } else {
+            this.sb.append("EYE_1, ");
         }
         String color = ledOnAction.getLedColor().toString().split("\\[")[1];
         color = color.replace("]", "");
@@ -362,9 +362,9 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         this.sb.append("myBob.setLed(");
         if ( ledOffAction.getSide().equals("Left") ) {
-            this.sb.append("EYE_1, OFF);");
-        } else {
             this.sb.append("EYE_2, OFF);");
+        } else {
+            this.sb.append("EYE_1, OFF);");
         }
         return null;
     }

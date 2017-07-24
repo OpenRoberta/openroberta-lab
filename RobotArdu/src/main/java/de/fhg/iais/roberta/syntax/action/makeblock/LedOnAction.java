@@ -34,7 +34,7 @@ public class LedOnAction<V> extends Action<V> {
     private final String side;
 
     private LedOnAction(String side, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("MAKEBLOCK_RGB_LED"), properties, comment);
+        super(BlockTypeContainer.getByName("MAKEBLOCK_RGB_LED_ON"), properties, comment);
         Assert.notNull(ledColor);
         this.ledColor = ledColor;
         this.side = side;
