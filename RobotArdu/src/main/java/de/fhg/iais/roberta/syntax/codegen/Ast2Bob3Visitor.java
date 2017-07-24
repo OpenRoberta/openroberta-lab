@@ -374,12 +374,8 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
         this.sb.append("myBob.setLed(");
-        if ( bodyLEDAction.getSide().equals("Left") ) {
-            this.sb.append("LED_4, ");
-        } else {
-            this.sb.append("LED_3, ");
-        }
-        this.sb.append(bodyLEDAction.getledState().toUpperCase() + ");");
+        this.sb.append(bodyLEDAction.getSide() + ", ");
+        this.sb.append(bodyLEDAction.getledState() + ");");
         return null;
     }
 
