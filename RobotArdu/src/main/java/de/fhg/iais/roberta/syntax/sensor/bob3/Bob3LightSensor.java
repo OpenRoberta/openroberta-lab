@@ -22,24 +22,24 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class LightSensor<V> extends Sensor<V> {
+public class Bob3LightSensor<V> extends Sensor<V> {
 
-    private LightSensor(BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Bob3LightSensor(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(null, properties, comment);
         setReadOnly();
     }
 
     /**
-     * Create object of the class {@link LightSensor}.
+     * Create object of the class {@link Bob3LightSensor}.
      *
      * @param port on which the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible ports that the sensor can be
      *        connected,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link LightSensor}
+     * @return read only object of {@link Bob3LightSensor}
      */
-    public static <V> LightSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightSensor<V>(properties, comment);
+    public static <V> Bob3LightSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Bob3LightSensor<V>(properties, comment);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class LightSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        return LightSensor.make(null, helper.extractBlockProperties(block), helper.extractComment(block));
+        return Bob3LightSensor.make(null, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

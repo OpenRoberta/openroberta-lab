@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.Bob3Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
 
@@ -28,13 +28,13 @@ public class Bob3CodePreprocessVisitor extends PreprocessProgramVisitor implemen
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(Bob3LightSensor<Void> lightSensor) {
         // TODO Auto-generated method stub
         return null;
     }

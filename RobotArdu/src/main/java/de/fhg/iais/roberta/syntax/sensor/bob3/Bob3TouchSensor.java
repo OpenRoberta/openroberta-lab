@@ -28,12 +28,12 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class TouchSensor<V> extends Sensor<V> {
+public class Bob3TouchSensor<V> extends Sensor<V> {
     private final ITouchSensorMode mode;
     private final String arm_side;
     private final String arm_part;
 
-    private TouchSensor(String arm_side, String arm_part, ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Bob3TouchSensor(String arm_side, String arm_part, ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BOB3_ARMS"), properties, comment);
         this.mode = mode;
         this.arm_part = arm_part;
@@ -42,22 +42,22 @@ public class TouchSensor<V> extends Sensor<V> {
     }
 
     /**
-     * Create object of the class {@link TouchSensor}.
+     * Create object of the class {@link Bob3TouchSensor}.
      *
      * @param port on which the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible ports that the sensor can be
      *        connected,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of {@link TouchSensor}
+     * @return read only object of {@link Bob3TouchSensor}
      */
-    public static <V> TouchSensor<V> make(
+    public static <V> Bob3TouchSensor<V> make(
         String arm_side,
         String arm_part,
         ITouchSensorMode mode,
         ISensorPort port,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new TouchSensor<V>(arm_side, arm_part, mode, port, properties, comment);
+        return new Bob3TouchSensor<V>(arm_side, arm_part, mode, port, properties, comment);
     }
 
     /**
@@ -97,7 +97,7 @@ public class TouchSensor<V> extends Sensor<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String arm_side = helper.extractField(fields, BlocklyConstants.ARMSIDE);
         String arm_part = helper.extractField(fields, BlocklyConstants.ARMPART);
-        return TouchSensor.make(
+        return Bob3TouchSensor.make(
             arm_side,
             arm_part,
             factory.getTouchSensorMode("UPPER"),

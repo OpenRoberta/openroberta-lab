@@ -11,17 +11,19 @@ import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.sensor.bob3.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -99,7 +101,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     }
 
     @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+    public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
         ITouchSensorMode arm = touchSensor.getMode();
         System.out.println(arm.toString());
         this.sb.append("myBob.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
@@ -164,7 +166,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(Bob3LightSensor<Void> lightSensor) {
         this.sb.append("myBob.getIRLight();");
         return null;
     }
@@ -229,4 +231,16 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public Void visitLightSensor(LightSensor<Void> lightSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
