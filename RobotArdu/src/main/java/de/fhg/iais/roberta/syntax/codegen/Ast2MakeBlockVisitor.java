@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -548,5 +550,17 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
             //this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
             //nlIndent();
         }
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

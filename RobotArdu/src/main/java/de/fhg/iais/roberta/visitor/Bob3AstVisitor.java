@@ -5,9 +5,8 @@ import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public interface Bob3AstVisitor<V> extends AstSensorsVisitor<V> {
+public interface Bob3AstVisitor<V> extends ArduAstVisitor<V> {
     /**
      * visit a {@link VoltageSensor}.
      *
@@ -18,8 +17,8 @@ public interface Bob3AstVisitor<V> extends AstSensorsVisitor<V> {
 
     V visitRgbColor(RgbColor<V> rgbColor);
 
-	V visitTouchSensor(Bob3TouchSensor<V> touchSensor);
+    V visitTouchSensor(Bob3TouchSensor<V> touchSensor);
 
-	V visitLightSensor(Bob3LightSensor<V> lightSensor);
+    V visitLightSensor(Bob3LightSensor<V> lightSensor);
 
 }

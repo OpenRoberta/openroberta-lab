@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Bob3Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
@@ -41,6 +43,18 @@ public class Bob3CodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         // TODO Auto-generated method stub
         return null;
     }
