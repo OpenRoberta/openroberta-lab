@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.components.Bob3Configuration;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -366,6 +367,18 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         } else {
             this.sb.append("EYE_1, OFF);");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+        this.sb.append("myBob.setLed(");
+        if ( bodyLEDAction.getSide().equals("Left") ) {
+            this.sb.append("LED_4, ");
+        } else {
+            this.sb.append("LED_3, ");
+        }
+        this.sb.append(bodyLEDAction.getledState().toUpperCase() + ");");
         return null;
     }
 }
