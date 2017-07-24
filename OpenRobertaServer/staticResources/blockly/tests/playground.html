@@ -54,6 +54,9 @@
 <script src="../blocks/makeblockSensors.js"></script>
 <script src="../blocks/makeblockActions.js"></script>
 <script src="../blocks/makeblockColours.js"></script>
+<script src="../blocks/bob3Sensors.js"></script>
+<script src="../blocks/bob3Actions.js"></script>
+<script src="../blocks/bob3Communication.js"></script>
 <script src="../blocks/simActions.js"></script>
 <script src="../blocks/simSensors.js"></script>
 <link rel="stylesheet" type="text/css" href="typicons.css"></link>
@@ -449,6 +452,7 @@ h1 {
         <category name='TOOLBOX_LIGHT' svg="true">
             <block type='robActions_brickLight_on'></block>
             <block type='robActions_sensorLight_on'></block>
+            <block type='bob3Actions_set_led'></block>
             <block type='robActions_brickLight_off'></block>
             <block type='robActions_brickLight_reset'></block>
         </category>
@@ -456,7 +460,11 @@ h1 {
     <category name='TOOLBOX_SENSOR' svg="true">
         <block type='makeblockSensors_light'></block>
         <block type='makeblockSensors_ambientlight'></block>
-        <block type='bob3Sensors_irlight_getSample'>
+        <block type='bob3Sensors_ambientlight'>
+        </block>
+        <block type='bob3Sensors_temperature_getSample'>
+        </block>
+        <block type='bob3Sensors_touch_getSample'>
         </block>
         <block type='makeblockSensors_gyroscope_getSample'>
         </block>
@@ -666,6 +674,8 @@ h1 {
         <block type='robCommunication_startConnection'></block>
         <block type='robCommunication_sendBlock'></block>
         <block type='robCommunication_receiveBlock'></block>
+        <block type='bob3Communication_sendBlock'></block>
+        <block type='bob3Communication_receiveBlock'></block>
         <block type='robCommunication_waitForConnection'></block>
         <block type='robCommunication_connection'></block>
         <block type='robCommunication_checkConnection'>
