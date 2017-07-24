@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -28,13 +28,13 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class TouchSensor<V> extends BaseSensor<V> {
+public class TouchSensor<V> extends Sensor<V> {
     private final ITouchSensorMode mode;
     private final String arm_side;
     private final String arm_part;
 
     private TouchSensor(String arm_side, String arm_part, ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("BOB3_ARMS"), properties, comment);
+        super(BlockTypeContainer.getByName("BOB3_ARMS"), properties, comment);
         this.mode = mode;
         this.arm_part = arm_part;
         this.arm_side = arm_side;
@@ -77,7 +77,7 @@ public class TouchSensor<V> extends BaseSensor<V> {
 
     @Override
     public String toString() {
-        return "TouchSensor [port=" + getPort() + "]";
+        return "TouchSensor []";
     }
 
     @Override

@@ -13,9 +13,16 @@ import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.bob3.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -64,6 +71,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         return astVisitor.sb.toString();
     }
 
+    @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         this.sb.append("myBob.getIRLight()");
         return null;
@@ -75,6 +83,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         return null;
     }
 
+    @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
@@ -176,6 +185,48 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         this.sb.append("myBob.setEyes(WHITE, WHITE);");
+        return null;
+    }
+
+    @Override
+    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 }
