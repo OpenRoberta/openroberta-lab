@@ -258,13 +258,8 @@ public class ClientProgram {
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
-                // TODO: this is quick fix not to check the program for arduino
-                if ( !(httpSessionState.getRobotName().equals("ardu") || httpSessionState.getRobotName().equals("nao")) && messageKey == null ) {
-                    RobotProgramCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                    messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
-                } else {
-                    response.put("data", programText);
-                }
+                RobotProgramCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
                     messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);

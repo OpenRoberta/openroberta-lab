@@ -6,6 +6,8 @@ goog.provide('Blockly.Msg.en');
 
 goog.require('Blockly.Msg');
 
+Blockly.Msg.VARIABLE_USED_BEFORE_DECLARATION = "The variable is used before declaration.";
+Blockly.Msg.MOTOR_SPEED_0 = "Motor Speed is 0!";
 Blockly.Msg.ACCELERATION = "acceleration mg";
 Blockly.Msg.ACCELERATION_TOOLTIP = "Get the acceleration value in milli-gravitys.";
 Blockly.Msg.ACCELEROMETER_ROTATION = "rotation °";

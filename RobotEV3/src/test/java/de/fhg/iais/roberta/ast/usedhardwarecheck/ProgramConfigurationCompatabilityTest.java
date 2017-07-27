@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
@@ -24,12 +25,13 @@ import de.fhg.iais.roberta.util.test.ev3.Helper;
 public class ProgramConfigurationCompatabilityTest {
     Helper h = new Helper();
 
+    @Ignore
     public void test() throws Exception {
         EV3Configuration.Builder builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
-            ActorPort.B,
-            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder
+            .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
 
         EV3Configuration brickConfiguration = (EV3Configuration) builder.build();
