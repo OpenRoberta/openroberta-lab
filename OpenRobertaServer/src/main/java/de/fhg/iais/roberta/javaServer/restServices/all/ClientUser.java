@@ -111,7 +111,7 @@ public class ClientUser {
                     response.put("userAccountName", account);
                     response.put("userName", userName);
                     response.put("userEmail", email);
-                    response.put("youngerThen14", age);
+                    response.put("isYoungerThen14", age);
                 }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
@@ -126,8 +126,8 @@ public class ClientUser {
                 String userName = request.getString("userName");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
-                up.createUser(account, password, userName, role, email, null, youngerThen14);
+                boolean isYoungerThen14 = request.getString("isYoungerThen14").equals("1");
+                up.createUser(account, password, userName, role, email, null, isYoungerThen14);
                 if ( this.isPublicServer && !email.equals("") && up.isOk() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
@@ -141,10 +141,10 @@ public class ClientUser {
                 String email = request.getString("userEmail");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                boolean youngerThen14 = Boolean.parseBoolean(request.getString("youngerThen14"));
+                boolean isYoungerThen14 = request.getString("isYoungerThen14").equals("1");
                 User user = up.getUser(account);
                 String oldEmail = user.getEmail();
-                up.updateUser(account, userName, role, email, null, youngerThen14);
+                up.updateUser(account, userName, role, email, null, isYoungerThen14);
                 if ( this.isPublicServer && !oldEmail.equals(email) && up.isOk() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
@@ -191,10 +191,11 @@ public class ClientUser {
                 if ( user != null ) {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
-                    String[] body = {
-                        user.getAccount(),
-                        lostPassword.getUrlPostfix()
-                    };
+                    String[] body =
+                        {
+                            user.getAccount(),
+                            lostPassword.getUrlPostfix()
+                        };
                     try {
                         this.mailManagement.send(user.getEmail(), "reset", body, lang);
                         up.setSuccess(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS);
@@ -260,10 +261,11 @@ public class ClientUser {
     }
 
     private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang) throws Exception {
-        String[] body = {
-            account,
-            urlPostfix
-        };
+        String[] body =
+            {
+                account,
+                urlPostfix
+            };
         try {
             this.mailManagement.send(email, "activate", body, lang);
             up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);

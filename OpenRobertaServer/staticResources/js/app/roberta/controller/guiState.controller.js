@@ -66,7 +66,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
     /**
      * Set gui state
-     *
+     * 
      * @param {result}
      *            result of server call
      */
@@ -743,6 +743,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.getServerVersion = getServerVersion;
 
+    function isPublicServerVersion() {
+        return GUISTATE.server.isPublic;
+    }
+    exports.isPublicServerVersion = isPublicServerVersion;
+
     function getUserName() {
         return GUISTATE.user.name;
     }
@@ -831,7 +836,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
     /**
      * Set program name
-     *
+     * 
      * @param {name}
      *            Name to be set
      */

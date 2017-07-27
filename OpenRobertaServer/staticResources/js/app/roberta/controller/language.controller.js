@@ -84,8 +84,9 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 value = value.replace("$", GUISTATE_C.getRobotRealName());
             }
             $('#menuRunProg').text(value);
-            if (GUISTATE_C.getBlocklyWorkspace())
+            if (GUISTATE_C.getBlocklyWorkspace()) {
                 GUISTATE_C.getBlocklyWorkspace().robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
+            }
         });
         LOG.info('language switched to ' + language);
     }
@@ -160,6 +161,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#confNameTable').find('.delete').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.CONFLIST_LOAD_TOOLTIP') {
                 $('#confNameTable').find('.load').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.OLDER_THEN_14' || lkey == 'Blockly.Msg.YOUNGER_THEN_14') {
+                $(this).html(value);
             } else {
                 $(this).html(value);
                 $(this).attr('value', value);

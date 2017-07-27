@@ -137,19 +137,19 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'youngerThen14': 'true', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 'true', 'language': 'de'}",
                 "error",
                 Key.USER_ACTIVATION_SENT_MAIL_FAIL);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'youngerThen14': 'false', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy1@home';'role':'STUDENT', 'isYoungerThen14': 'false', 'language': 'de'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'youngerThen14': 'true', 'language': 'de'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'';'role':'STUDENT', 'isYoungerThen14': 'true', 'language': 'de'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
@@ -192,16 +192,16 @@ public class RestInterfaceTest {
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false, 'language': 'de'}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
             "error",
             Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
 
-        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12', 'youngerThen14': false}", "ok", Key.USER_GET_ONE_SUCCESS);
+        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12', 'isYoungerThen14': false}", "ok", Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(!this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
 
         restUser(
             this.sMinscha,
-            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'youngerThen14': false, 'language': 'de'}",
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}",
             "ok",
             Key.USER_DEACTIVATION_SUCCESS);
 
