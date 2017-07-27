@@ -358,7 +358,7 @@ public class ClientProgram {
         response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
         response.put("errorCounter", errorCounter);
         if ( errorCounter > 0 ) {
-            return Key.PROGRAM_CONFIGURATION_NOT_COMPATIBLE;
+            return Key.PROGRAM_INVALID_STATEMETNS;
         }
         return null;
     }

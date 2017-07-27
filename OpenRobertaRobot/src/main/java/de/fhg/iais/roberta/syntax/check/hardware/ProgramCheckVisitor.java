@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
+import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -86,6 +87,16 @@ public abstract class ProgramCheckVisitor extends CheckVisitor
     protected abstract void checkSensorPort(BaseSensor<Void> sensor);
 
     @Override
+    public Void visitVar(Var<Void> var) {
+        String name = var.getValue();
+        if ( !this.globalVariables.contains(name) ) {
+            var.addInfo(NepoInfo.error("VARIABLE_USED_BEFORE_DECLARATION"));
+            this.errorCount++;
+        }
+        return null;
+    }
+
+    @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         checkDiffDrive(driveAction);
         Expr<Void> speed = driveAction.getParam().getSpeed();
@@ -94,12 +105,6 @@ public abstract class ProgramCheckVisitor extends CheckVisitor
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
         visitMotorDuration(duration);
         return null;
-    }
-
-    private void visitMotorDuration(MotorDuration<Void> duration) {
-        if ( duration != null ) {
-            duration.getValue().visit(this);
-        }
     }
 
     @Override
@@ -295,4 +300,11 @@ public abstract class ProgramCheckVisitor extends CheckVisitor
             }
         }
     }
+
+    private void visitMotorDuration(MotorDuration<Void> duration) {
+        if ( duration != null ) {
+            duration.getValue().visit(this);
+        }
+    }
+
 }

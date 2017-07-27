@@ -58,7 +58,7 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 
 public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
-    private final List<String> globalVariables = new ArrayList<String>();
+    protected final List<String> globalVariables = new ArrayList<String>();
     protected ArrayList<VarDeclaration<Void>> visitedVars = new ArrayList<VarDeclaration<Void>>();
     private final List<Method<Void>> userDefinedMethods = new ArrayList<Method<Void>>();
     private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
@@ -157,7 +157,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
         return null;
     }
 
-    public ArrayList<VarDeclaration<Void>> getvisitedVars() {
+    public ArrayList<VarDeclaration<Void>> getVisitedVars() {
         return this.visitedVars;
     }
 

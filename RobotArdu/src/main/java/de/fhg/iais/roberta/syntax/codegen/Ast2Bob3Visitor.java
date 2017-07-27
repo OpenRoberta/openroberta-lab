@@ -42,7 +42,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         super(phrases, indentation);
         //this.boardConfiguration = brickConfiguration;
         Bob3CodePreprocessVisitor codePreprocessVisitor = new Bob3CodePreprocessVisitor(phrases, brickConfiguration);
-        this.usedVars = codePreprocessVisitor.getvisitedVars();
+        this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();

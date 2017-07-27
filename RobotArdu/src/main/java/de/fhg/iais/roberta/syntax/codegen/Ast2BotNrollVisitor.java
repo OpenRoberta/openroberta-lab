@@ -73,7 +73,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
         BotNrollCodePreprocessVisitor codePreprocessVisitor = new BotNrollCodePreprocessVisitor(phrases, brickConfiguration);
-        this.usedVars = codePreprocessVisitor.getvisitedVars();
+        this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();

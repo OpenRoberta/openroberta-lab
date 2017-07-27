@@ -132,7 +132,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
         this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
         this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
-        this.usedVars = this.codePreprocess.getvisitedVars();
+        this.usedVars = this.codePreprocess.getVisitedVars();
     }
 
     /**
