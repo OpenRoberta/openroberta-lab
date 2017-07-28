@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-07-24 19:04:10.353468",
+		"lastupdated": "2017-07-28 10:12:26.626868",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1157,6 +1157,8 @@
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!",
 	"SENSOR_JOYSTICK": "joystick",
 	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick",
+	"MESSAGE_ROBOT_DISCONNECTED": "An active robot was disconnected",
+	"INTERNAL_PORT": "internal",
 	"PULSE_LOW": "pulse time LOW",
 	"PULSE_HIGH": "pulse time HIGH",
 	"PIN_GETSAMPLE_ANALOG_TOOLTIP": "Returns the value from the specified analog pin. The value is between 0 and 1023.",
@@ -1174,5 +1176,9 @@
 	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration."
 	"NAO_WALK_ASYNC_TOOLTIP": "Makes the robot walk infinitely",
 	"SENSOR_CODE": "code pad",
-	"GET_CODE_TOOLTIP": "Returns the value of the solderable code pad in the head piece. Values are in range 0-31."
+	"GET_CODE_TOOLTIP": "Returns the value of the solderable code pad in the head piece. Values are in range 0-31.",
+	"MOTOR_SPEED_0": "Motor Speed is 0!",
+	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration.",
+	"ORA_PROGRAM_INVALID_STATEMETNS": "There are errors in your program. Please check the messages",
+	"TIMEOUT": "timeout"
 }
