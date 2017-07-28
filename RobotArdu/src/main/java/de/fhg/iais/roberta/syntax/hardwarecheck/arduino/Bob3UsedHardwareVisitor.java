@@ -31,7 +31,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
-import de.fhg.iais.roberta.syntax.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;

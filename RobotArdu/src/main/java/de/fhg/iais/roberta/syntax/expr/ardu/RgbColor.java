@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.expr;
+package de.fhg.iais.roberta.syntax.expr.ardu;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class RgbColor<V> extends Expr<V> {
     private final Expr<V> B;
 
     private RgbColor(Expr<V> R, Expr<V> G, Expr<V> B, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("RGB_COLOR"), properties, comment);
+        super(BlockTypeContainer.getByName("RGB_COLOR_ARDU"), properties, comment);
         this.R = R;
         this.G = G;
         this.B = B;

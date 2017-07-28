@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
-import de.fhg.iais.roberta.syntax.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
@@ -255,7 +255,17 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        this.sb.append("myBob.setEyes(WHITE, WHITE);");
+        this.sb.append("(");
+        rgbColor.getR().visit(this);
+        this.sb.append(")");
+        this.sb.append("*256*256 + ");
+        this.sb.append("(");
+        rgbColor.getG().visit(this);
+        this.sb.append(")");
+        this.sb.append("*256 + ");
+        this.sb.append("(");
+        rgbColor.getB().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -321,9 +331,8 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         } else {
             this.sb.append("EYE_1, ");
         }
-        String color = ledOnAction.getLedColor().toString().split("\\[")[1];
-        color = color.replace("]", "");
-        this.sb.append(color + ");");
+        ledOnAction.getLedColor().visit(this);
+        this.sb.append(");");
         return null;
     }
 
