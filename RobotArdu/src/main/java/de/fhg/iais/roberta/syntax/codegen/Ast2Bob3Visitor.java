@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.Bob3CodePreprocessVisitor;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
@@ -47,6 +48,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -60,8 +62,6 @@ import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<Void>, AstActorLightVisitor<Void> {
     private final boolean isTimerSensorUsed;
 
-    //private Bob3Configuration boardConfiguration;
-
     /**
      * Initialize the C++ code generator visitor.
      *
@@ -71,7 +71,6 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
      */
     private Ast2Bob3Visitor(Bob3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
-        //this.boardConfiguration = brickConfiguration;
         Bob3CodePreprocessVisitor codePreprocessVisitor = new Bob3CodePreprocessVisitor(phrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
@@ -93,6 +92,54 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         Ast2Bob3Visitor astVisitor = new Ast2Bob3Visitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst<Void> colorConst) {
+        this.sb.append(colorConst.getValue());
+        return null;
+    }
+
+    @Override
+    protected String getLanguageVarTypeFromBlocklyType(BlocklyType type) {
+        switch ( type ) {
+            case ANY:
+            case COMPARABLE:
+            case ADDABLE:
+            case NULL:
+            case REF:
+            case PRIM:
+            case NOTHING:
+            case CAPTURED_TYPE:
+            case R:
+            case S:
+            case T:
+                return "";
+            case ARRAY:
+                return "double";
+            case ARRAY_NUMBER:
+                return "double";
+            case ARRAY_STRING:
+                return "String";
+            case ARRAY_BOOLEAN:
+                return "bool";
+            case BOOLEAN:
+                return "bool";
+            case NUMBER:
+                return "double";
+            case NUMBER_INT:
+                return "int";
+            case STRING:
+                return "String";
+            case VOID:
+                return "void";
+            case COLOR:
+                return "Bob3Color";
+            case CONNECTION:
+                return "int";
+            default:
+                throw new IllegalArgumentException("unhandled type");
+        }
     }
 
     @Override

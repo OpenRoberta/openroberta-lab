@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
+import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
@@ -29,6 +30,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.action.botnroll.BlinkMode;
 import de.fhg.iais.roberta.mode.action.botnroll.BrickLedColor;
+import de.fhg.iais.roberta.mode.general.bob3.PickColor;
 import de.fhg.iais.roberta.mode.sensor.bob3.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.botnroll.LightSensorMode;
@@ -81,6 +83,25 @@ public class Bob3Factory extends AbstractRobotFactory {
             }
         }
         throw new DbcException("Invalid Blink Mode: " + mode);
+    }
+
+    @Override
+    public IPickColor getPickColor(String color) {
+        if ( color == null || color.isEmpty() ) {
+            throw new DbcException("Invalid Color: " + color);
+        }
+        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
+        for ( PickColor po : PickColor.values() ) {
+            if ( po.toString().equals(sUpper) ) {
+                return po;
+            }
+            for ( String value : po.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return po;
+                }
+            }
+        }
+        throw new DbcException("Invalid Color: " + color);
     }
 
     @Override
