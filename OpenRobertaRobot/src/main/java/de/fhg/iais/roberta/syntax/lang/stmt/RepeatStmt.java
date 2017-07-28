@@ -18,9 +18,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary.Op;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -124,6 +124,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 values = helper.extractValues(block, (short) 1);
                 exprList = ExprList.make();
 
+                //TODO: replace var, from, to by expressions
                 var = Var.make(BlocklyType.NUMBER_INT, "k" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
                 from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
                 to = helper.extractValue(values, new ExprParam(BlocklyConstants.TIMES, BlocklyType.NUMBER_INT));

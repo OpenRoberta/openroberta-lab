@@ -19,7 +19,6 @@ public class Ev3CodePreprocessVisitor extends PreprocessProgramVisitor {
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 

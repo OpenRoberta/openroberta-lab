@@ -89,7 +89,7 @@ public abstract class ProgramCheckVisitor extends CheckVisitor
     @Override
     public Void visitVar(Var<Void> var) {
         String name = var.getValue();
-        if ( !this.globalVariables.contains(name) ) {
+        if ( !this.declaredVariables.contains(name) ) {
             var.addInfo(NepoInfo.error("VARIABLE_USED_BEFORE_DECLARATION"));
             this.errorCount++;
         }

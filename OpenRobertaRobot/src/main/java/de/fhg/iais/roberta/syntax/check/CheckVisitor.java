@@ -59,6 +59,7 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     protected final List<String> globalVariables = new ArrayList<String>();
+    protected final List<String> declaredVariables = new ArrayList<String>();
     protected ArrayList<VarDeclaration<Void>> visitedVars = new ArrayList<VarDeclaration<Void>>();
     private final List<Method<Void>> userDefinedMethods = new ArrayList<Method<Void>>();
     private final Set<String> markedVariablesAsGlobal = new HashSet<String>();
@@ -154,6 +155,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
         }
         var.getValue().visit(this);
         this.globalVariables.add(var.getName());
+        this.declaredVariables.add(var.getName());
         return null;
     }
 
@@ -218,7 +220,15 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        repeatStmt.getExpr().visit(this);
+        if ( repeatStmt.getExpr().getKind().hasName("EXPR_LIST") ) {
+            ExprList<Void> exprList = (ExprList<Void>) repeatStmt.getExpr();
+            String varName = ((Var<Void>) exprList.get().get(0)).getValue();
+            this.declaredVariables.add(varName);
+            exprList.visit(this);
+        } else {
+            repeatStmt.getExpr().visit(this);
+        }
+
         if ( repeatStmt.getMode() != RepeatStmt.Mode.WAIT ) {
             increaseLoopCounter();
             repeatStmt.getList().visit(this);
