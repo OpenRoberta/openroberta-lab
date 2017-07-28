@@ -314,7 +314,7 @@ public class ClientProgram {
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 //TODO program checks should be in compiler workflow
-                SimulationProgramCheckVisitor programChecker = robotFactory.getProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                SimulationProgramCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
@@ -353,6 +353,10 @@ public class ClientProgram {
     private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, ProgramCheckVisitor programChecker)
         throws JSONException,
         JAXBException {
+        if ( programChecker == null ) {
+            response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(program)));
+            return null;
+        }
         programChecker.check(program);
         final int errorCounter = programChecker.getErrorCount();
         response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));

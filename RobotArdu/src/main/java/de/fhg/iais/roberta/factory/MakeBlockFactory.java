@@ -495,7 +495,7 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+    public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 

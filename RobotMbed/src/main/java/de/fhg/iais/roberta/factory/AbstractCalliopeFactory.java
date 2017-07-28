@@ -351,7 +351,7 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+    public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return new CalliopeSimProgramCheckVisitor(brickConfiguration);
     }
 

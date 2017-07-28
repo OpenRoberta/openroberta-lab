@@ -380,7 +380,7 @@ public interface IRobotFactory {
 
     Boolean hasConfiguration();
 
-    SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration);
+    SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration);
 
     RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration);
 
