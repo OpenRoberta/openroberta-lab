@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
 
 /**
- * This class represents the <b>mbedColour_rgb</b> block from Blockly into the AST (abstract syntax tree).
+ * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate color.<br/>
  * <br>
  * The client must provide the value for each color channel. <br>
