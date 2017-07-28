@@ -77,7 +77,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
         Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
-            "[UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE], UsedSensor [S2, GYRO, RESET], UsedSensor [S1, TOUCH, TOUCH]]",
+            "[UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE], UsedSensor [S1, TOUCH, TOUCH]]",
             checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE], UsedActor [A, LARGE]]", checkVisitor.getUsedActors().toString());
     }
