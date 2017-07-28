@@ -9,7 +9,9 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3SendIRAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -313,7 +315,7 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+    public Void visitBodyLEDAction(Bob3BodyLEDAction<Void> bodyLEDAction) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -332,6 +334,18 @@ public class Bob3UsedHardwareVisitor extends CheckVisitor implements Bob3AstVisi
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSendIRAction(Bob3SendIRAction<Void> sendIRAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitReceiveIRAction(Bob3ReceiveIRAction<Void> receiveIRAction) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -6,7 +6,9 @@ import de.fhg.iais.roberta.components.Bob3Configuration;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3SendIRAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -374,7 +376,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     }
 
     @Override
-    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+    public Void visitBodyLEDAction(Bob3BodyLEDAction<Void> bodyLEDAction) {
         this.sb.append("myBob.setLed(");
         this.sb.append(bodyLEDAction.getSide() + ", ");
         this.sb.append(bodyLEDAction.getledState() + ");");
@@ -396,6 +398,22 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         this.sb.append("myBob.getMillivolt()"); // ADC_BANDGAP_CHANNEL_VOLTAGE must be below 1.28 V!!!
+        return null;
+    }
+
+    @Override
+    public Void visitSendIRAction(Bob3SendIRAction<Void> sendIRAction) {
+        this.sb.append("myBob.transmitIRCode(");
+        sendIRAction.getCode().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitReceiveIRAction(Bob3ReceiveIRAction<Void> receiveIRAction) {
+        this.sb.append("myBob.receiveIRCode(");
+        receiveIRAction.getCode().visit(this);
+        this.sb.append(");");
         return null;
     }
 }

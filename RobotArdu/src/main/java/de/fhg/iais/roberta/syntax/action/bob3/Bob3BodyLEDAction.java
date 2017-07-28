@@ -24,11 +24,11 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class BodyLEDAction<V> extends Action<V> {
+public class Bob3BodyLEDAction<V> extends Action<V> {
     private final String ledState;
     private final String side;
 
-    private BodyLEDAction(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Bob3BodyLEDAction(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BOB3_BODYLED"), properties, comment);
         this.ledState = ledState;
         this.side = side;
@@ -36,15 +36,15 @@ public class BodyLEDAction<V> extends Action<V> {
     }
 
     /**
-     * Creates instance of {@link BodyLEDAction}. This instance is read only and can not be modified.
+     * Creates instance of {@link Bob3BodyLEDAction}. This instance is read only and can not be modified.
      *
      * @param ledColor {@link ColorConst} color of the led; must <b>not</b> be null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link BodyLEDAction}
+     * @return read only object of class {@link Bob3BodyLEDAction}
      */
-    private static <V> BodyLEDAction<V> make(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BodyLEDAction<>(side, ledState, properties, comment);
+    private static <V> Bob3BodyLEDAction<V> make(String side, String ledState, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Bob3BodyLEDAction<>(side, ledState, properties, comment);
     }
 
     /**
@@ -79,7 +79,7 @@ public class BodyLEDAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String side = helper.extractField(fields, BlocklyConstants.LED + BlocklyConstants.SIDE);
         String ledState = helper.extractField(fields, BlocklyConstants.LED + BlocklyConstants.STATE);
-        return BodyLEDAction.make(side, ledState, helper.extractBlockProperties(block), helper.extractComment(block));
+        return Bob3BodyLEDAction.make(side, ledState, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
