@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.syntax.check.program;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -33,7 +32,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.check.CheckVisitor;
-import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -114,7 +112,9 @@ public abstract class PreprocessProgramVisitor extends CheckVisitor implements A
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         if ( this.brickConfiguration != null ) {
             Actor actor = this.brickConfiguration.getActors().get(encoderSensor.getMotorPort());
-            this.usedActors.add(new UsedActor(encoderSensor.getMotorPort(), actor.getName()));
+            if ( actor != null ) {
+                this.usedActors.add(new UsedActor(encoderSensor.getMotorPort(), actor.getName()));
+            }
         }
         return null;
     }

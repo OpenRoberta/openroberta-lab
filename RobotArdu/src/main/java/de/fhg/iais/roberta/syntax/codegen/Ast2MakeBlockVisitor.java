@@ -522,7 +522,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     break;
                 case COMPASS:
                     break;
-                case GYROSCOPE:
+                case GYRO:
                     this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
                 case ACCELEROMETER:
