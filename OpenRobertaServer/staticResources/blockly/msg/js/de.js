@@ -1014,6 +1014,7 @@ Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "Diesen Block kann man leider nicht in der
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "Dieser Sensor ist nicht in der Roboterkonfiguration. Das Verhalten des Programmes auf dem realen Roboter wird anders als erwartet sein, bitte überprüfe die Roboterkonfiguration";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "In der Simulation wird der Infrarotsensor durch den Ultraschallsensor ersetzt. Das Verhalten des Programmes auf dem realen Roboter wird anders als erwartet sein, bitte überprüfe die Roboterkonfiguration";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "In diesem Block hast du einen falschen Sensorport angegeben! Das Verhalten des Programmes auf dem realen Roboter wird anders als erwartet sein, bitte überprüfe die Roboterkonfiguration";
+Blockly.Msg.SLEEP = "sleep";  // untranslated
 Blockly.Msg.SOUND_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Geräuschsensors zurück.";
 Blockly.Msg.SOUND_TOOLTIP = "Block für den Geräuschsensor.";
 Blockly.Msg.START = "Starte";

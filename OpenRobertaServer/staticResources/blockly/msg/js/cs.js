@@ -1014,6 +1014,7 @@ Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "Bohužel tento blok nemůžete použít v
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "Tento senzor není v nastavení! Chování programu ve skutečném robotovi bude jiné než jste čekali!";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "Infračervený senzor není připojen v nastavení! Chování programu ve skutečném robotovi bude jiné než jste čekali, zkontrolujte prosím konfiguraci robota!";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "V tomto bloku jste použili špatný port senzoru! Chování programu ve skutečném robotovi bude jiné než jste čekali, zkontrolujte prosím konfiguraci robota!";
+Blockly.Msg.SLEEP = "sleep";  // untranslated
 Blockly.Msg.SOUND_GETSAMPLE_TOOLTIP = "Vráti aktuální hodnotu zvukového senzoru.";
 Blockly.Msg.SOUND_TOOLTIP = "Představuje zvukový senzor.";
 Blockly.Msg.START = "start";

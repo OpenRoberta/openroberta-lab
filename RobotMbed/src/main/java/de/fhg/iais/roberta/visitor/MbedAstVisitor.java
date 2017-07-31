@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.expr.Image;
 import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
 import de.fhg.iais.roberta.syntax.expr.RgbColor;
@@ -221,4 +222,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param radioSetChannelAction phrase to be visited
      */
     V visitRadioSetChannelAction(RadioSetChannelAction<V> radioSetChannelAction);
+
+    /**
+     * visit a {@link SingleMotorOnAction}.
+     *
+     * @param singleMotorOnAction phrase to be visited
+     */
+    V visitSingleMotorOnAction(SingleMotorOnAction<V> singleMotorOnAction);
 }

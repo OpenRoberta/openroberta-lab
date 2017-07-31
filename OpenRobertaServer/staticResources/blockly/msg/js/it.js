@@ -1014,6 +1014,7 @@ Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "Sfortunatamente non puoi usare questo blo
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "Questo sensore non c'è nella configurazione! Il comportamento del programma sul robot vero potrebbe essere diverso da quello previsto.";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "Il sensore infrarosso non è connesso nella configurazione! Il comportamento del programma sul robot vero potrebbe essere diverso da quello previsto.";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "In questo blocco hai usato il porto del sensore sbagliato! Il comportamento del programma sul robot vero potrebbe essere diverso da quello previsto.";
+Blockly.Msg.SLEEP = "sleep";  // untranslated
 Blockly.Msg.SOUND_GETSAMPLE_TOOLTIP = "Acquisisce lettura del sensore acustico";
 Blockly.Msg.SOUND_TOOLTIP = "Sensore acustico";
 Blockly.Msg.START = "start/avvia/inizio";

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-07-31 12:14:51.664182",
+		"lastupdated": "2017-07-31 14:02:33.656159",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1178,5 +1178,6 @@
 	"MOTOR_SPEED_0": "Motor Speed is 0!",
 	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration.",
 	"ORA_PROGRAM_INVALID_STATEMETNS": "There are errors in your program. Please check the messages",
-	"TIMEOUT": "timeout"
+	"TIMEOUT": "timeout",
+	"SLEEP": "sleep"
 }

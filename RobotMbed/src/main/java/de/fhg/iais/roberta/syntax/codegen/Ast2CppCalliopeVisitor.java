@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -424,6 +425,14 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         // fix for IT Gipfel
         this.sb.append("On(");
         motorOnAction.getParam().getSpeed().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
+        this.sb.append("uBit.soundmotor.motorOn(");
+        singleMotorOnAction.getSpeed().visit(this);
         this.sb.append(");");
         return null;
     }

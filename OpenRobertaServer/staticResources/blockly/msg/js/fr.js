@@ -1014,6 +1014,7 @@ Blockly.Msg.SIM_BLOCK_NOT_SUPPORTED = "Ce bloc n'est malheureusement pas disponi
 Blockly.Msg.SIM_CONFIGURATION_WARNING_SENSOR_MISSING = "Ce capteur n'est pas prévu dans la configuration de ton robot. Vérifie s'il te plaît!";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT = "Confusion entre capteur infrarouge et ultra-son. Vérifie s'il te plaït !";
 Blockly.Msg.SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT = "Mauvais port du capteur ! Vérifie s'il te plaît !";
+Blockly.Msg.SLEEP = "sleep";  // untranslated
 Blockly.Msg.SOUND_GETSAMPLE_TOOLTIP = "Récupère la valeur actuelle du capteur de son.";
 Blockly.Msg.SOUND_TOOLTIP = "Represents a sound sensor.";  // untranslated
 Blockly.Msg.START = "démarrage";
