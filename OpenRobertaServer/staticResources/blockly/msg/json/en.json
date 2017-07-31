@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-07-28 12:33:09.019348",
+		"lastupdated": "2017-07-31 12:14:51.664182",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1172,8 +1172,6 @@
 	"CONNECTION_MBED_SEND_TOOLTIP": "Sends a message to another microBoard. You can specify a signal strength from 0 - 7, where 0 is very low and 7 is the strongests. The message is send over channel 0 unless you specify another one.",
 	"CONNECTION_SET_CHANNEL": "set channel to %1",
 	"CONNECTION_SET_CHANNEL_TOOLTIP": "Sets the channel for sending and receiving messages. Can be set from 0 to 255.",
-	"MOTOR_SPEED_0": "Motor Speed is 0!",
-	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration."
 	"NAO_WALK_ASYNC_TOOLTIP": "Makes the robot walk infinitely",
 	"SENSOR_CODE": "code pad",
 	"GET_CODE_TOOLTIP": "Returns the value of the solderable code pad in the head piece. Values are in range 0-31.",
