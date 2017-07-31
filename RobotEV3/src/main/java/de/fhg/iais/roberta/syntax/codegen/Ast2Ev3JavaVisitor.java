@@ -252,7 +252,7 @@ public class Ast2Ev3JavaVisitor extends Ast2JavaVisitor implements AstSensorsVis
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(\"" + showPictureAction.getPicture().getPixels() + "\", ");
+        this.sb.append("hal.drawPicture(\"" + showPictureAction.getPicture() + "\", ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);

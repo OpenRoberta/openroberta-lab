@@ -202,7 +202,7 @@ public class Ast2Ev3PythonVisitor extends Ast2PythonVisitor implements AstSensor
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(u'").append(showPictureAction.getPicture().getPixels()).append("', ");
+        this.sb.append("hal.drawPicture(u'").append(showPictureAction.getPicture()).append("', ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);
