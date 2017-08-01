@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
@@ -236,6 +237,12 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
     }
 
     @Override
+    public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
+        singleMotorOnAction.getSpeed().visit(this);
+        return null;
+    }
+
+    @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         return null;
     }
@@ -246,8 +253,7 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
     }
 
     @Override
-    public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
-        singleMotorOnAction.getSpeed().visit(this);
+    public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
         return null;
     }
 

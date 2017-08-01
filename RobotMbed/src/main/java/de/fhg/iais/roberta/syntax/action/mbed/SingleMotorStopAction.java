@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
@@ -14,11 +13,12 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.MoveAction;
+import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 
 /**
  * This class represents the <b>mbedActions_single_motor_stop</b> block from Blockly into the AST (abstract syntax tree).
@@ -26,12 +26,12 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
-public class SingleMotorStopAction<V> extends MoveAction<V> {
+public class SingleMotorStopAction<V> extends Action<V> {
     private final IMotorStopMode mode;
 
-    private SingleMotorStopAction(IActorPort port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("MOTOR_STOP_ACTION"), properties, comment);
-        Assert.isTrue(port != null && mode != null);
+    private SingleMotorStopAction(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("SINGLE_MOTOR_STOP_ACTION"), properties, comment);
+        Assert.isTrue(mode != null);
         this.mode = mode;
         setReadOnly();
     }
@@ -39,14 +39,13 @@ public class SingleMotorStopAction<V> extends MoveAction<V> {
     /**
      * Creates instance of {@link SingleMotorStopAction}. This instance is read only and can not be modified.
      *
-     * @param port {@link ActorPort} on which the motor is connected; must be <b>not</b> null,
      * @param mode of stopping {@link MotorStopMode}; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link SingleMotorStopAction}
      */
-    private static <V> SingleMotorStopAction<V> make(IActorPort port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SingleMotorStopAction<V>(port, mode, properties, comment);
+    private static <V> SingleMotorStopAction<V> make(IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SingleMotorStopAction<V>(mode, properties, comment);
     }
 
     /**
@@ -58,13 +57,12 @@ public class SingleMotorStopAction<V> extends MoveAction<V> {
 
     @Override
     public String toString() {
-        return "MotorStop [port=" + getPort() + ", mode=" + this.mode + "]";
+        return "SingleMotorStopAction [" + this.mode + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return null;
-        //        return ((AstActorMotorVisitor<V>) visitor).visitMotorStopAction(this);
+        return ((MbedAstVisitor<V>) visitor).visitSingleMotorStopAction(this);
     }
 
     /**
@@ -76,11 +74,9 @@ public class SingleMotorStopAction<V> extends MoveAction<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+        List<Field> fields = helper.extractFields(block, (short) 1);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return SingleMotorStopAction
-            .make(factory.getActorPort(portName), factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SingleMotorStopAction.make(factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -88,8 +84,6 @@ public class SingleMotorStopAction<V> extends MoveAction<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
 
         return jaxbDestination;

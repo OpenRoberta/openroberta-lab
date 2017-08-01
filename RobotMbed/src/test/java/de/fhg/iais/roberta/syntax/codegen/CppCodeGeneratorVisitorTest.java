@@ -386,6 +386,20 @@ public class CppCodeGeneratorVisitorTest {
     }
 
     @Test
+    public void visitSingleMotorStopAction_StopMotorFloatNonFloatSleep_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "uBit.soundmotor.motorCoast();\n"
+                + "uBit.soundmotor.motorBreak();\n"
+                + "uBit.soundmotor.motorSleep();\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/single_motor_stop.xml");
+    }
+
+    @Test
     public void visitMathRandomIntFunct_ShowRandInt1to200_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

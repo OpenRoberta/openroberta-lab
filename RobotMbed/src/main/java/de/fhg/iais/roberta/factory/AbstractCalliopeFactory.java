@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
+import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
@@ -23,6 +24,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
+import de.fhg.iais.roberta.mode.action.mbed.MotorStopMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
@@ -49,8 +51,26 @@ public abstract class AbstractCalliopeFactory extends AbstractRobotFactory {
 
     @Override
     public List<IBlinkMode> getBlinkModes() {
-        // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public IMotorStopMode getMotorStopMode(String mode) {
+        if ( mode == null || mode.isEmpty() ) {
+            throw new DbcException("Invalid Motor Stop Mode: " + mode);
+        }
+        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
+        for ( MotorStopMode mo : MotorStopMode.values() ) {
+            if ( mo.toString().equals(sUpper) ) {
+                return mo;
+            }
+            for ( String value : mo.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return mo;
+                }
+            }
+        }
+        throw new DbcException("Invalid Stop Move Mode: " + mode);
     }
 
     @Override

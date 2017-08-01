@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -483,6 +484,11 @@ public class Ast2MbedSimVisitor extends SimulationVisitor<Void> implements MbedA
 
     @Override
     public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
         return null;
     }
 }
