@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nao.Helper;
 
-public class StopMovement {
+public class StopMovementTest {
     Helper h = new Helper();
 
     @Test

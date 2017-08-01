@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nao.Helper;
 
-public class MoveAbsoluteTen {
+public class MoveAbsoluteTest {
     Helper h = new Helper();
 
     @Test

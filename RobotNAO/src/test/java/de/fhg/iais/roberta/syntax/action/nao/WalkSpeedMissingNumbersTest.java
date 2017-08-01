@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nao.Helper;
 
-public class WalkSpeedMissingNumbers {
+public class WalkSpeedMissingNumbersTest {
     Helper h = new Helper();
 
     @Test

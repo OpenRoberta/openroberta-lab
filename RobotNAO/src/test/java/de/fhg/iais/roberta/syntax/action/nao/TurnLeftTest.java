@@ -5,14 +5,14 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nao.Helper;
 
-public class TurnRight {
+public class TurnLeftTest {
     Helper h = new Helper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfTurnClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=138, y=163], " + "MainTask [], " + "TurnDegrees [RIGHT, NumConst [60]]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=138, y=163], " + "MainTask [], " + "TurnDegrees [LEFT, NumConst [30]]]]]";
         
-        String result = this.h.generateTransformerString("/action/turnRightSixty.xml");
+        String result = this.h.generateTransformerString("/action/turnLeftThirty.xml");
 
         Assert.assertEquals(expectedResult, result);
     }
@@ -20,6 +20,6 @@ public class TurnRight {
     @Test
     public void astToBlock_XMLtoJAXBtoASTtoXML_ReturnsSameXML() throws Exception {
 
-        this.h.assertTransformationIsOk("/action/turnRightSixty.xml");
+        this.h.assertTransformationIsOk("/action/turnLeftThirty.xml");
     }
 }
