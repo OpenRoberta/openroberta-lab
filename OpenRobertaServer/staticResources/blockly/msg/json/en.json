@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-07-31 14:02:33.656159",
+		"lastupdated": "2017-08-01 08:29:06.853254",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -958,6 +958,7 @@
 	"NAO_POINTAT": "point at",
 	"NAO_LOOKAT": "look at",
 	"NAO_STIFFNESS": "stiffness of",
+	"NAO_AUTONOMOUS": "autonomous life",
 	"NAO_WALK": "walk",
 	"NAO_WALKTO": "walk to",
 	"NAO_STOP": "stop movement",
@@ -1103,6 +1104,7 @@
 	"NAO_GETCURRENT_TOOLTIP": "Get the electric current from the selected joint.",
 	"NAO_SETINTENSITY_TOOLTIP": "Set the intensity of a group of LEDs.",
 	"NAO_CHAT_TOOLTIP": "Add a reaction if a word is recognized.",
+	"NAO_AUTONOMOUS_TOOLTIP": "Toggle the state of Autonomous life. Turn Autonomous life off to gain more control over NAOs behaviour.",
 	"MENU_CODE_DOWNLOAD_TOOLTIP": "Download the source code of your program on the computer",
 	"MENU_CODE_REFRESH_TOOLTIP": "Refresh the source code, if you have changed the NEPO Block's.",
 	"MENU_SIM_WRO": "World Robot Olympiad scene",

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
+import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
@@ -304,4 +305,6 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     //V visitLedColor(LedColor<V> ledColor);
 
     V visitSetIntensity(SetIntensity<V> setIntensity);
+
+	V visitAutonomous(Autonomous<V> autonomous);
 }
