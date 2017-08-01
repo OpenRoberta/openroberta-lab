@@ -542,7 +542,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         this.generateSensors();
         if ( this.isTimerSensorUsed ) {
             nlIndent();
-            this.sb.append("T.StartTimer();");
+            this.sb.append("T.StartTimer(); \n");
         }
         generateUsedVars();
         this.sb.append("\n}\n");

@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.action.bob3.Bob3SendIRAction;
 import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 
@@ -26,5 +27,7 @@ public interface Bob3AstVisitor<V> extends ArduAstVisitor<V> {
     V visitSendIRAction(Bob3SendIRAction<V> sendIRAction);
 
     V visitReceiveIRAction(Bob3ReceiveIRAction<V> receiveIRAction);
+
+    V visitBob3GetSampleSensor(Bob3GetSampleSensor<V> bob3GetSampleSensor);
 
 }

@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
@@ -158,7 +159,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("T.ShowSeconds();");
+                this.sb.append("T.ShowSeconds()");
                 break;
             case RESET:
                 this.sb.append("T.ResetTimer();");
@@ -218,7 +219,7 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         this.sb.append("#include <RobertaFunctions.h>\n");
 
         if ( this.isTimerSensorUsed ) {
-            this.sb.append("#include <CountUpDown.h>\n\n");
+            //this.sb.append("#include <CountUpDown.h>\n\n");
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
 
@@ -470,6 +471,12 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
         this.sb.append("myBob.receiveIRCode(");
         receiveIRAction.getCode().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitBob3GetSampleSensor(Bob3GetSampleSensor<Void> getSampleSensor) {
+        getSampleSensor.getSensor().visit(this);
         return null;
     }
 }

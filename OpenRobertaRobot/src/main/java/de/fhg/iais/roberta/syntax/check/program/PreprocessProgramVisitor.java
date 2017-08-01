@@ -57,7 +57,7 @@ public abstract class PreprocessProgramVisitor extends CheckVisitor implements A
 
     protected final Configuration brickConfiguration;
 
-    private boolean isTimerSensorUsed;
+    protected boolean isTimerSensorUsed;
 
     public PreprocessProgramVisitor(Configuration brickConfiguration) {
         this.brickConfiguration = brickConfiguration;

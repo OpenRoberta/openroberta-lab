@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
@@ -98,6 +99,12 @@ public class Bob3CodePreprocessVisitor extends PreprocessProgramVisitor implemen
     @Override
     public Void visitReceiveIRAction(Bob3ReceiveIRAction<Void> receiveIRAction) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBob3GetSampleSensor(Bob3GetSampleSensor<Void> bob3GetSampleSensor) {
+        this.isTimerSensorUsed = true;
         return null;
     }
 }

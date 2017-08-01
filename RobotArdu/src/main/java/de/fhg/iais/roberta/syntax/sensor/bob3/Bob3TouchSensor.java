@@ -30,14 +30,20 @@ import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
  */
 public class Bob3TouchSensor<V> extends Sensor<V> {
     private final ITouchSensorMode mode;
-    private final String arm_side;
-    private final String arm_part;
+    private final String armSide;
+    private final String armPart;
 
-    private Bob3TouchSensor(String arm_side, String arm_part, ITouchSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Bob3TouchSensor(
+        String armSide,
+        String armPart,
+        ITouchSensorMode mode,
+        ISensorPort port,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BOB3_ARMS"), properties, comment);
         this.mode = mode;
-        this.arm_part = arm_part;
-        this.arm_side = arm_side;
+        this.armPart = armPart;
+        this.armSide = armSide;
         setReadOnly();
     }
 
@@ -51,13 +57,13 @@ public class Bob3TouchSensor<V> extends Sensor<V> {
      * @return read only object of {@link Bob3TouchSensor}
      */
     public static <V> Bob3TouchSensor<V> make(
-        String arm_side,
-        String arm_part,
+        String armSide,
+        String armPart,
         ITouchSensorMode mode,
         ISensorPort port,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new Bob3TouchSensor<V>(arm_side, arm_part, mode, port, properties, comment);
+        return new Bob3TouchSensor<V>(armSide, armPart, mode, port, properties, comment);
     }
 
     /**
@@ -68,11 +74,11 @@ public class Bob3TouchSensor<V> extends Sensor<V> {
     }
 
     public String getArmSide() {
-        return this.arm_side;
+        return this.armSide;
     }
 
     public String getArmPart() {
-        return this.arm_part;
+        return this.armPart;
     }
 
     @Override
@@ -95,13 +101,13 @@ public class Bob3TouchSensor<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
-        String arm_side = helper.extractField(fields, BlocklyConstants.ARMSIDE);
-        String arm_part = helper.extractField(fields, BlocklyConstants.ARMPART);
+        String armSide = helper.extractField(fields, BlocklyConstants.ARMSIDE);
+        String armPart = helper.extractField(fields, BlocklyConstants.ARMPART);
         return Bob3TouchSensor.make(
-            arm_side,
-            arm_part,
+            armSide,
+            armPart,
             factory.getTouchSensorMode("UPPER"),
-            factory.getSensorPort(arm_side),
+            factory.getSensorPort(armSide),
             helper.extractBlockProperties(block),
             helper.extractComment(block));
     }
