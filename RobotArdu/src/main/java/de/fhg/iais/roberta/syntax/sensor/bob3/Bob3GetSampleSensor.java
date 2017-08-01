@@ -157,11 +157,13 @@ public class Bob3GetSampleSensor<V> extends Sensor<V> {
         Mutation mutation = new Mutation();
         mutation.setInput(getSensorType().name());
         jaxbDestination.setMutation(mutation);
-
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, getSensorType().name());
-        JaxbTransformerHelper.addField(jaxbDestination, getSensorType().getArmSide(), getSensorType().getArmPart());
+        String portNameType = GetSampleType.get(getSensorType().name()).getArmPart();
+        if ( !portNameType.equals("") ) {
+            JaxbTransformerHelper.addField(jaxbDestination, getSensorType().getArmSide(), getSensorType().getArmPart());
+        }
 
-        return jaxbDestination;
+        return null;
     }
 
 }
