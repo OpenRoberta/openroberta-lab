@@ -22,16 +22,16 @@ public class Ast2MakeBlockVisitorTest {
     @Test
     public void motor1m1Test() throws Exception {
 
-        final String a =
-            "" //
-                + MAIN_METHOD1
-                + "RobertaFunctions rob;"
-                + "MeDCMotor motor1(M1);"
-                + MAIN_METHOD2
-                + "}"
-                + "void loop(){"
-                + "        motor1.run(30);\n"
-                + "}\n";
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeDCMotor motor1(M1);"
+            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + MAIN_METHOD2
+            + "}"
+            + "void loop(){"
+            + "        motor1.run(30);\n"
+            + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/motor1m1.xml", true);
     }
@@ -39,17 +39,17 @@ public class Ast2MakeBlockVisitorTest {
     @Test
     public void ultrasonicSensorTest() throws Exception {
 
-        final String a =
-            "" //
-                + MAIN_METHOD1
-                + "RobertaFunctions rob;"
-                + "MeDCMotor motor1(M1);"
-                + "MeUltrasonicSensor ultraSensor(PORT_4);"
-                + MAIN_METHOD2
-                + "}"
-                + "void loop(){"
-                + "        motor1.run(ultraSensor.distanceCm());\n"
-                + "}\n";
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeDCMotor motor1(M1);"
+            + "MeUltrasonicSensor ultraSensor(PORT_4);"
+            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + MAIN_METHOD2
+            + "}"
+            + "void loop(){"
+            + "        motor1.run(ultraSensor.distanceCm());\n"
+            + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml", true);
     }
@@ -57,36 +57,36 @@ public class Ast2MakeBlockVisitorTest {
     @Test
     public void LightSensorTest() throws Exception {
 
-        final String a =
-            "" //
-                + MAIN_METHOD1
-                + "RobertaFunctions rob;"
-                + "MeLineFollower lineFinder(PORT_1);"
-                + "bool item;"
-                + "void setup(){"
-                + "Serial.begin(9600);"
-                + "item = lineFinder.readSensors()&1;"
-                + "}"
-                + "void loop(){"
-                + "}\n";
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeLightSensor myLight1(PORT_1);"
+            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "double item;"
+            + MAIN_METHOD2
+            + "}"
+            + "void loop(){"
+            + "if (myLight1.read() != 0) {"
+            + "        delay(500);}\n"
+            + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor2.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", true);
     }
 
     @Test
     public void TouchSensorTest() throws Exception {
 
-        final String a =
-            "" //
-                + MAIN_METHOD1
-                + "RobertaFunctions rob;"
-                + "MeTouchSensor myTouch1(PORT_1);"
-                + MAIN_METHOD2
-                + "}"
-                + "void loop(){"
-                + "if (myTouch1.touched()) {"
-                + "        delay(500);}\n"
-                + "}\n";
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeTouchSensor myTouch1(PORT_1);"
+            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + MAIN_METHOD2
+            + "}"
+            + "void loop(){"
+            + "if (myTouch1.touched()) {"
+            + "        delay(500);}\n"
+            + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_touch_sensor.xml", true);
     }
@@ -94,17 +94,17 @@ public class Ast2MakeBlockVisitorTest {
     @Test
     public void SoundSensorTest() throws Exception {
 
-        final String a =
-            "" //
-                + MAIN_METHOD1
-                + "RobertaFunctions rob;"
-                + "MeSoundSensor mySound3(PORT_3);"
-                + "double item;"
-                + MAIN_METHOD2
-                + "}"
-                + "void loop(){"
-                + "if (mySound3.strength() > 0) {"
-                + "        delay(500);}\n"
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeSoundSensor mySound3(PORT_3);"
+            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "double item;"
+            + MAIN_METHOD2
+            + "}"
+            + "void loop(){"
+            + "if (mySound3.strength() > 0) {"
+            + "        delay(500);}\n"
 
                 + "}\n";
 
@@ -114,23 +114,23 @@ public class Ast2MakeBlockVisitorTest {
     @Test
     public void TemperatureSensorTest() throws Exception {
 
-        final String a =
-            "" //
-                + MAIN_METHOD1
-                + "RobertaFunctions rob;"
-                + "MeDCMotor motor2(M2);"
-                + "MeDCMotor motor1(M1);"
-                + "MeDrive myDrive(M2,M1);"
-                + "MeHumiture myTemp1(PORT_1);"
-                + "double item;"
-                + MAIN_METHOD2
-                + "}"
-                + "void loop(){"
-                + "myTemp1.update();"
-                + "if (myTemp1.getTemperature() < 20) {"
-                + "        myDrive.drive(30, 1);}\n"
+        final String a = "" //
+            + MAIN_METHOD1
+            + "RobertaFunctions rob;"
+            + "MeDCMotor motor2(M2);"
+            + "MeDCMotor motor1(M1);"
+            + "MeDrive myDrive(M2,M1);"
+            + "MeHumiture myTemp1(PORT_1);"
+            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "double item;"
+            + MAIN_METHOD2
+            + "}"
+            + "void loop(){"
+            + "myTemp1.update();"
+            + "if (myTemp1.getTemperature() < 20) {"
+            + "        myDrive.drive(30, 1);}\n"
 
-                + "}\n";
+            + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml", true);
     }

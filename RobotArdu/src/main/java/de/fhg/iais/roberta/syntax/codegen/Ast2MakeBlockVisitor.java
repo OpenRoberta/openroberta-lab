@@ -426,7 +426,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
         this.sb.append("\nvoid setup() \n");
         this.sb.append("{");
         nlIndent();
-        this.generateActors();
+
         this.sb.append("Serial.begin(9600); ");
         if ( this.isTimerSensorUsed ) {
             nlIndent();
@@ -501,6 +501,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     + ");\n");
         }
         this.generateSensors();
+        this.generateActors();
     }
 
     @Override
@@ -559,21 +560,65 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     }
 
     private void generateActors() {
-        for ( UsedActor usedActor : this.usedActors ) {
-            //this.sb.append(usedActor.getPort().getValues()[1] + ".begin();");
-            //nlIndent();
-        }
+        //for ( UsedActor usedActor : this.usedActors ) {
+        //this.sb.append(usedActor.getType());
+        this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);");
+        nlIndent();
+        //}
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
+        this.sb.append("rgbled_7.setColor(");
+        if ( ledOnAction.getSide().equals("Left") ) {
+            this.sb.append("1, ");
+        } else {
+            this.sb.append("2, ");
+        }
+        switch ( ledOnAction.getLedColor().toString() ) {
+            case ("ColorConst [RED]"):
+                this.sb.append("255, 0, 0");
+                break;
+            case ("ColorConst [BLACK]"):
+                this.sb.append("0, 0, 0");
+                break;
+            case ("ColorConst [BLUE]"):
+                this.sb.append("0, 0, 255");
+                break;
+            case ("ColorConst [GREEN]"):
+                this.sb.append("0, 255, 0");
+                break;
+            case ("ColorConst [YELLOW]"):
+                this.sb.append("255, 255, 0");
+                break;
+            case ("ColorConst [WHITE]"):
+                this.sb.append("255, 255, 255");
+                break;
+            case ("ColorConst [BROWN]"):
+                this.sb.append("102, 51, 0");
+                break;
+            default:
+                this.sb.append("0, 0, 0");
+                break;
+
+        }
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("rgbled_7.show();");
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
+        this.sb.append("rgbled_7.setColor(");
+        if ( ledOffAction.getSide().equals("Left") ) {
+            this.sb.append("1, ");
+        } else {
+            this.sb.append("2, ");
+        }
+        this.sb.append("0, 0, 0);");
+        nlIndent();
+        this.sb.append("rgbled_7.show();");
         return null;
     }
 
