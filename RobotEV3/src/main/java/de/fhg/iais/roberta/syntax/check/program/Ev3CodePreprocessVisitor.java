@@ -1,9 +1,14 @@
 package de.fhg.iais.roberta.syntax.check.program;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 
 /**
@@ -12,14 +17,34 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
  * @author kcvejoski
  */
 public class Ev3CodePreprocessVisitor extends PreprocessProgramVisitor {
+    private final Set<String> usedImages = new HashSet<String>();
+
     public Ev3CodePreprocessVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration brickConfiguration) {
         super(brickConfiguration);
         check(phrasesSet);
     }
 
+    public Set<String> getUsedImages() {
+        return this.usedImages;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        if ( gyroSensor.getMode() != GyroSensorMode.RESET ) {
+            super.visitGyroSensor(gyroSensor);
+        }
+        return null;
+    }
+
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        super.visitShowPictureAction(showPictureAction);
+        this.usedImages.add(showPictureAction.getPicture().toString());
         return null;
     }
 

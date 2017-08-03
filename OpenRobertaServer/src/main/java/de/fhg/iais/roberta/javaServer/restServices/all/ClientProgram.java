@@ -258,13 +258,8 @@ public class ClientProgram {
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
-                // TODO: this is quick fix not to check the program for arduino
-                if ( !(httpSessionState.getRobotName().equals("ardu") || httpSessionState.getRobotName().equals("nao")) && messageKey == null ) {
-                    RobotProgramCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                    messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
-                } else {
-                    response.put("data", programText);
-                }
+                RobotProgramCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
                     messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);
@@ -319,7 +314,7 @@ public class ClientProgram {
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 //TODO program checks should be in compiler workflow
-                SimulationProgramCheckVisitor programChecker = robotFactory.getProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                SimulationProgramCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
 
                 if ( messageKey == null ) {
@@ -358,12 +353,16 @@ public class ClientProgram {
     private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, ProgramCheckVisitor programChecker)
         throws JSONException,
         JAXBException {
+        if ( programChecker == null ) {
+            response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(program)));
+            return null;
+        }
         programChecker.check(program);
         final int errorCounter = programChecker.getErrorCount();
         response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
         response.put("errorCounter", errorCounter);
         if ( errorCounter > 0 ) {
-            return Key.PROGRAM_CONFIGURATION_NOT_COMPATIBLE;
+            return Key.PROGRAM_INVALID_STATEMETNS;
         }
         return null;
     }

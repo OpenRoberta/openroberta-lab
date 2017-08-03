@@ -115,7 +115,7 @@ public class Ast2NxcVisitor extends Ast2CppVisitor implements NxtAstVisitor<Void
         this.brickConfiguration = brickConfiguration;
 
         NxtCodePreprocessVisitor codePreprocessVisitor = new NxtCodePreprocessVisitor(programPhrases, brickConfiguration);
-        this.usedVars = codePreprocessVisitor.getvisitedVars();
+        this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
         this.driveActionUsed = codePreprocessVisitor.isDriveUsed();

@@ -54,7 +54,7 @@ public abstract class RobotProgramCheckVisitor extends ProgramCheckVisitor {
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( usedSensor.getType() != SensorType.GYRO || usedSensor.getType() != SensorType.GYROSCOPE ) {
+                    if ( usedSensor.getType() != SensorType.GYRO ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }

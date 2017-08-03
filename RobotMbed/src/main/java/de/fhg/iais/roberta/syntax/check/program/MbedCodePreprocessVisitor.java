@@ -16,6 +16,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
@@ -197,11 +199,13 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitImageShiftFunction(ImageShiftFunction<Void> imageShiftFunction) {
+        imageShiftFunction.getImage().visit(this);
         return null;
     }
 
     @Override
     public Void visitImageInvertFunction(ImageInvertFunction<Void> imageInvertFunction) {
+        imageInvertFunction.getImage().visit(this);
         return null;
     }
 
@@ -217,6 +221,7 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        ledOnAction.getLedColor().visit(this);
         return null;
     }
 
@@ -227,6 +232,13 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        motorOnAction.getParam().getSpeed().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
+        singleMotorOnAction.getSpeed().visit(this);
         return null;
     }
 
@@ -237,7 +249,11 @@ public class MbedCodePreprocessVisitor extends PreprocessProgramVisitor implemen
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        return null;
+    }
 
+    @Override
+    public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
         return null;
     }
 

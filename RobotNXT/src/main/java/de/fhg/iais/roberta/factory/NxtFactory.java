@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.action.nxt.BlinkMode;
 import de.fhg.iais.roberta.mode.action.nxt.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
-import de.fhg.iais.roberta.mode.action.nxt.ShowPicture;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.general.nxt.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -171,21 +170,7 @@ public class NxtFactory extends AbstractRobotFactory {
 
     @Override
     public IShowPicture getShowPicture(String picture) {
-        if ( picture == null || picture.isEmpty() ) {
-            throw new DbcException("Invalid Picture: " + picture);
-        }
-        String sUpper = picture.trim().toUpperCase(Locale.GERMAN);
-        for ( ShowPicture pic : ShowPicture.values() ) {
-            if ( pic.toString().equals(sUpper) ) {
-                return pic;
-            }
-            for ( String value : pic.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return pic;
-                }
-            }
-        }
-        throw new DbcException("Invalid Picture: " + picture);
+        return null;
     }
 
     @Override
@@ -597,7 +582,7 @@ public class NxtFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+    public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return new NxtSimProgramCheckVisitor(brickConfiguration);
     }
 

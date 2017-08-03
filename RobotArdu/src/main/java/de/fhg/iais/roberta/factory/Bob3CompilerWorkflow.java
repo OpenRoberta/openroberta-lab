@@ -159,7 +159,7 @@ public class Bob3CompilerWorkflow implements ICompilerWorkflow {
                 "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
                 "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
                 "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
-                "-fqbn=arduino:avr:uno",
+                "-fqbn=nicai:avr:bob3",
                 "-prefs=compiler.path=" + this.robotCompilerDir,
                 "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
                 "-verbose",

@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
+import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
@@ -550,6 +551,21 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
                 break;
             case OFF:
                 this.sb.append(", 2)");
+                break;
+        }
+        return null;
+    }
+    
+    @Override
+    public Void visitAutonomous(Autonomous<Void> autonomous) {
+        this.sb.append("h.autonomous(");
+
+        switch ( autonomous.getOnOff() ) {
+            case ON:
+                this.sb.append("1)");
+                break;
+            case OFF:
+                this.sb.append("2)");
                 break;
         }
         return null;

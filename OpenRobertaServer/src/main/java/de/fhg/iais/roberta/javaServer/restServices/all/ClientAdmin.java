@@ -74,6 +74,7 @@ public class ClientAdmin {
                     robots.put("" + i, robotDescription);
                     i++;
                 }
+                server.put("isPublic", RobertaProperties.getBooleanProperty("server.public"));
                 server.put("robots", robots);
                 response.put("server", server);
                 LOG.info("success: create init object");

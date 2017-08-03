@@ -17,7 +17,6 @@ public class EV3Configuration extends Configuration {
 
     public EV3Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super(actors, sensors, wheelDiameterCM, trackWidthCM);
-
     }
 
     /**

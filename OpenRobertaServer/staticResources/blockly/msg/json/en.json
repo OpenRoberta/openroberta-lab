@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-07-11 10:09:45.393969",
+		"lastupdated": "2017-08-01 11:57:33.867139",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -958,6 +958,7 @@
 	"NAO_POINTAT": "point at",
 	"NAO_LOOKAT": "look at",
 	"NAO_STIFFNESS": "stiffness of",
+	"NAO_AUTONOMOUS": "autonomous life",
 	"NAO_WALK": "walk",
 	"NAO_WALKTO": "walk to",
 	"NAO_STOP": "stop movement",
@@ -1103,6 +1104,7 @@
 	"NAO_GETCURRENT_TOOLTIP": "Get the electric current from the selected joint.",
 	"NAO_SETINTENSITY_TOOLTIP": "Set the intensity of a group of LEDs.",
 	"NAO_CHAT_TOOLTIP": "Add a reaction if a word is recognized.",
+	"NAO_AUTONOMOUS_TOOLTIP": "Toggle the state of Autonomous life. Turn Autonomous life off to gain more control over NAOs behaviour.",
 	"MENU_CODE_DOWNLOAD_TOOLTIP": "Download the source code of your program on the computer",
 	"MENU_CODE_REFRESH_TOOLTIP": "Refresh the source code, if you have changed the NEPO Block's.",
 	"MENU_SIM_WRO": "World Robot Olympiad scene",
@@ -1157,6 +1159,8 @@
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account!",
 	"SENSOR_JOYSTICK": "joystick",
 	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axises of the joystick",
+	"MESSAGE_ROBOT_DISCONNECTED": "An active robot was disconnected",
+	"INTERNAL_PORT": "internal",
 	"PULSE_LOW": "pulse time LOW",
 	"PULSE_HIGH": "pulse time HIGH",
 	"PIN_GETSAMPLE_ANALOG_TOOLTIP": "Returns the value from the specified analog pin. The value is between 0 and 1023.",
@@ -1165,9 +1169,17 @@
 	"PIN_GETSAMPLE_PULSELOW_TOOLTIP": "Returns the pulse LOW on a pin in microseconds or -1 if no complete pulse was received within the timeout.",
 	"CONNECTION_POWER": "with strength",
 	"BOB3_ARM": "arm",
-	"BOB3_ARM_PAIR": "sensor pair",
+	"BOB3_ARM_PAIR": "pad pair",
 	"CONNECTION_MBED_RECEIVE_TOOLTIP": "Reads a message over one of the channels (0 - 255). The default channel is 0.",
 	"CONNECTION_MBED_SEND_TOOLTIP": "Sends a message to another microBoard. You can specify a signal strength from 0 - 7, where 0 is very low and 7 is the strongests. The message is send over channel 0 unless you specify another one.",
 	"CONNECTION_SET_CHANNEL": "set channel to %1",
-	"CONNECTION_SET_CHANNEL_TOOLTIP": "Sets the channel for sending and receiving messages. Can be set from 0 to 255."
+	"CONNECTION_SET_CHANNEL_TOOLTIP": "Sets the channel for sending and receiving messages. Can be set from 0 to 255.",
+	"NAO_WALK_ASYNC_TOOLTIP": "Makes the robot walk infinitely",
+	"SENSOR_CODE": "code pad",
+	"GET_CODE_TOOLTIP": "Returns the value of the solderable code pad in the head piece. Values are in range 0-31.",
+	"MOTOR_SPEED_0": "Motor Speed is 0!",
+	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration.",
+	"ORA_PROGRAM_INVALID_STATEMETNS": "There are errors in your program. Please check the messages",
+	"TIMEOUT": "timeout",
+	"SLEEP": "sleep"
 }

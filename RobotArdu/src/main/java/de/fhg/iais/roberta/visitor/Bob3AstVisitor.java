@@ -1,23 +1,33 @@
 package de.fhg.iais.roberta.visitor;
 
-import de.fhg.iais.roberta.syntax.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.action.bob3.Bob3SendIRAction;
+import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
 
-public interface Bob3AstVisitor<V> {
-    /**
-     * visit a {@link VoltageSensor}.
-     *
-     * @param temperatureSensor to be visited
-     */
-    V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
+public interface Bob3AstVisitor<V> extends ArduAstVisitor<V> {
 
-    V visitTouchSensor(TouchSensor<V> touchSensor);
+    V visitBob3TemperatureSensor(Bob3TemperatureSensor<V> temperatureSensor);
 
-    V visitLightSensor(LightSensor<V> lightSensor);
+    V visitBob3CodePadSensor(Bob3CodePadSensor<V> codePadSensor);
 
     V visitRgbColor(RgbColor<V> rgbColor);
+
+    V visitTouchSensor(Bob3TouchSensor<V> touchSensor);
+
+    V visitLightSensor(Bob3AmbientLightSensor<V> lightSensor);
+
+    V visitBodyLEDAction(Bob3BodyLEDAction<V> bodyLEDAction);
+
+    V visitSendIRAction(Bob3SendIRAction<V> sendIRAction);
+
+    V visitReceiveIRAction(Bob3ReceiveIRAction<V> receiveIRAction);
+
+    V visitBob3GetSampleSensor(Bob3GetSampleSensor<V> bob3GetSampleSensor);
 
 }

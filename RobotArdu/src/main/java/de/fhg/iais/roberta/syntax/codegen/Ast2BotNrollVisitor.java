@@ -21,6 +21,8 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -60,7 +62,7 @@ import de.fhg.iais.roberta.visitor.BotnrollAstVisitor;
  */
 public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstVisitor<Void> {
     private final BotNrollConfiguration brickConfiguration;
-    private boolean isTimerSensorUsed;
+    private final boolean isTimerSensorUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -73,7 +75,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
         BotNrollCodePreprocessVisitor codePreprocessVisitor = new BotNrollCodePreprocessVisitor(phrases, brickConfiguration);
-        this.usedVars = codePreprocessVisitor.getvisitedVars();
+        this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
@@ -540,7 +542,7 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
         this.generateSensors();
         if ( this.isTimerSensorUsed ) {
             nlIndent();
-            this.sb.append("T.StartTimer();");
+            this.sb.append("T.StartTimer(); \n");
         }
         generateUsedVars();
         this.sb.append("\n}\n");
@@ -621,6 +623,18 @@ public class Ast2BotNrollVisitor extends Ast2ArduVisitor implements BotnrollAstV
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -6,6 +6,7 @@ import java.util.List;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
+import de.fhg.iais.roberta.mode.action.mbed.MotorStopMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;
@@ -27,6 +28,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorOnAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SingleMotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -90,6 +93,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor.GestureMode;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
@@ -132,7 +136,7 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
         this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
         this.userDefinedMethods = this.codePreprocess.getUserDefinedMethods();
-        this.usedVars = this.codePreprocess.getvisitedVars();
+        this.usedVars = this.codePreprocess.getVisitedVars();
     }
 
     /**
@@ -429,6 +433,14 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
     }
 
     @Override
+    public Void visitSingleMotorOnAction(SingleMotorOnAction<Void> singleMotorOnAction) {
+        this.sb.append("uBit.soundmotor.motorOn(");
+        singleMotorOnAction.getSpeed().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         return null;
     }
@@ -449,6 +461,25 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
             this.sb.append(motorStopAction.getPort());
         }
         this.sb.append("Off();");
+        return null;
+    }
+
+    @Override
+    public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
+        this.sb.append("uBit.soundmotor.motor");
+        switch ( (MotorStopMode) singleMotorStopAction.getMode() ) {
+            case FLOAT:
+                this.sb.append("Coast();");
+                break;
+            case NONFLOAT:
+                this.sb.append("Break();");
+                break;
+            case SLEEP:
+                this.sb.append("Sleep();");
+                break;
+            default:
+                throw new DbcException("Invalide stop mode " + singleMotorStopAction.getMode());
+        }
         return null;
     }
 
@@ -490,15 +521,15 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
-        String gest = gestureSensor.getMode().toString();
+        GestureMode gest = gestureSensor.getMode();
         this.sb.append("(uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
-        if ( gestureSensor.getMode().toString() == "UP"
-            || gestureSensor.getMode().toString() == "DOWN"
-            || gestureSensor.getMode().toString() == "LEFT"
-            || gestureSensor.getMode().toString() == "RIGHT" ) {
+        if ( gestureSensor.getMode() == GestureMode.UP
+            || gestureSensor.getMode() == GestureMode.DOWN
+            || gestureSensor.getMode() == GestureMode.LEFT
+            || gestureSensor.getMode() == GestureMode.RIGHT ) {
             this.sb.append("TILT_");
         }
-        this.sb.append(gest + ")");
+        this.sb.append(gest.toString() + ")");
         return null;
     }
 
@@ -568,17 +599,23 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String valueType = null;
-        if ( pinValueSensor.getValueType() == ValueType.DIGITAL ) {
-            valueType = ".getDigitalValue()";
-        } else if ( pinValueSensor.getValueType() == ValueType.ANALOG ) {
-            valueType = ".getAnalogValue()";
-        } else if ( pinValueSensor.getValueType() == ValueType.PULSEHIGH ) {
-            valueType = ".readPulseHigh()";
-        } else if ( pinValueSensor.getValueType() == ValueType.PULSELOW ) {
-            valueType = ".readPulseLow()";
+        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName());
+        switch ( pinValueSensor.getValueType() ) {
+            case DIGITAL:
+                this.sb.append(".getDigitalValue()");
+                break;
+            case ANALOG:
+                this.sb.append(".getAnalogValue()");
+                break;
+            case PULSEHIGH:
+                this.sb.append(".readPulseHigh()");
+                break;
+            case PULSELOW:
+                this.sb.append(".readPulseLow()");
+                break;
+            default:
+                throw new DbcException("Valu type  " + pinValueSensor.getValueType() + " is not supported.");
         }
-        this.sb.append("uBit.io." + pinValueSensor.getPin().getCalliopeName() + valueType);
         return null;
     }
 
@@ -687,23 +724,23 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         }
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        switch ( getEnumCode(listGetIndex.getLocation()) ) {
-            case "IndexLocation.FROM_START":
+        switch ( (IndexLocation) listGetIndex.getLocation() ) {
+            case FROM_START:
                 listGetIndex.getParam().get(1).visit(this);
                 break;
-            case "IndexLocation.FROM_END":
+            case FROM_END:
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
                 this.sb.append(" - 1 - ");
                 listGetIndex.getParam().get(1).visit(this);
                 break;
-            case "IndexLocation.FIRST":
+            case FIRST:
                 this.sb.append("0");
                 break;
-            case "IndexLocation.LAST":
+            case LAST:
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
                 this.sb.append(" - 1");
                 break;
-            case "IndexLocation.RANDOM":
+            case RANDOM:
                 this.sb.append("uBit.random(");
                 arrayLen((Var<Void>) listGetIndex.getParam().get(0));
                 this.sb.append(")");
@@ -720,23 +757,23 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         }
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        switch ( getEnumCode(listSetIndex.getLocation()) ) {
-            case "IndexLocation.FROM_START":
+        switch ( (IndexLocation) listSetIndex.getLocation() ) {
+            case FROM_START:
                 listSetIndex.getParam().get(2).visit(this);
                 break;
-            case "IndexLocation.FROM_END":
+            case FROM_END:
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
                 this.sb.append(" - 1 - ");
                 listSetIndex.getParam().get(2).visit(this);
                 break;
-            case "IndexLocation.FIRST":
+            case FIRST:
                 this.sb.append("0");
                 break;
-            case "IndexLocation.LAST":
+            case LAST:
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
                 this.sb.append(" - 1");
                 break;
-            case "IndexLocation.RANDOM":
+            case RANDOM:
                 this.sb.append("uBit.random(");
                 arrayLen((Var<Void>) listSetIndex.getParam().get(0));
                 this.sb.append(")");
@@ -805,30 +842,13 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        switch ( mathOnListFunct.getFunctName() ) {
-            case SUM:
-                this.sb.append("sum(");
-                break;
-            case MIN:
-                this.sb.append("min(");
-                break;
-            case MAX:
-                this.sb.append("max(");
-                break;
-            case AVERAGE:
-                this.sb.append("average(");
-                break;
-            case MEDIAN:
-                this.sb.append("median(");
-                break;
-            case STD_DEV:
-                this.sb.append("standardDeviation(");
-                break;
-            case RANDOM:
-                this.sb.append("randomElement(");
-                break;
-            default:
-                break;
+        FunctionNames functName = mathOnListFunct.getFunctName();
+        if ( functName == FunctionNames.STD_DEV ) {
+            this.sb.append("standardDeviation(");
+        } else if ( functName == FunctionNames.RANDOM ) {
+            this.sb.append("randomElement(");
+        } else {
+            this.sb.append(functName.toString().toLowerCase());
         }
         mathOnListFunct.getParam().get(0).visit(this);
         this.sb.append(")");
@@ -1206,4 +1226,5 @@ public class Ast2CppCalliopeVisitor extends Ast2CppVisitor implements MbedAstVis
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit uBit;\n\n");
     }
+
 }

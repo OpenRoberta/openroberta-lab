@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
+import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
@@ -299,5 +300,11 @@ public class NaoCodePreprocessVisitor extends PreprocessProgramVisitor implement
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public Void visitAutonomous(Autonomous<Void> autonomous) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

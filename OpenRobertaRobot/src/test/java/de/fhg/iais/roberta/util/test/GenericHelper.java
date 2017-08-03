@@ -317,7 +317,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public SimulationProgramCheckVisitor getProgramCheckVisitor(Configuration brickConfiguration) {
+        public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
             // TODO Auto-generated method stub
             return null;
         }
