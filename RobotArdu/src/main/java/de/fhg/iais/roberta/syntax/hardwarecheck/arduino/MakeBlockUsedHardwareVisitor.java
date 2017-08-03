@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -260,6 +261,11 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
         this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.AMBIENT_LIGHT, null));
         return null;
     }

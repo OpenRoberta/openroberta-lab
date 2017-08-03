@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -296,8 +297,14 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
+    public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
         this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
+        return null;
+
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor<Void> lightAction) {
         return null;
 
     }
