@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 //import de.fhg.iais.roberta.syntax.expr.nao.LedColor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
@@ -306,5 +307,7 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
 
     V visitSetIntensity(SetIntensity<V> setIntensity);
 
-	V visitAutonomous(Autonomous<V> autonomous);
+    V visitAutonomous(Autonomous<V> autonomous);
+
+    V visitColorHexString(ColorHexString<V> colorHexString);
 }

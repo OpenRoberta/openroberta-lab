@@ -78,7 +78,7 @@ public final class SetLeds<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 1);
 
-        Phrase<V> Color = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOUR, BlocklyType.COLOR));
+        Phrase<V> Color = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
 
         String leds = helper.extractField(fields, BlocklyConstants.LED);
 

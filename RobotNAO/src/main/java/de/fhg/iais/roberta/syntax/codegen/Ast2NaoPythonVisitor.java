@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
+import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
@@ -555,7 +556,7 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         }
         return null;
     }
-    
+
     @Override
     public Void visitAutonomous(Autonomous<Void> autonomous) {
         this.sb.append("h.autonomous(");
@@ -1318,7 +1319,6 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
         this.sb.append("h = Hal()\n\n");
-        System.out.println(this.usedSensors);
         this.generateSensors();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
@@ -1409,6 +1409,12 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
                     throw new DbcException("Sensor is not supported!");
             }
         }
+    }
+
+    @Override
+    public Void visitColorHexString(ColorHexString<Void> colorHexString) {
+        this.sb.append(colorHexString.getValue().replaceAll("#", "0x"));
+        return null;
     }
 
 }
