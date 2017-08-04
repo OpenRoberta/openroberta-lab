@@ -6,12 +6,10 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.sensor.makeblock.Coordinates;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
@@ -19,33 +17,25 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 
-public final class Accelerometer<V> extends Sensor<V> {
+public final class PIRMotionSensor<V> extends Sensor<V> {
 
-    private final Coordinates coordinate;
     private final ISensorPort port;
 
-    private Accelerometer(Coordinates coordinate, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("ACCELEROMETER_GET_SAMPLE"), properties, comment);
+    private PIRMotionSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("MOTIONSENSOR_GET_SAMPLE"), properties, comment);
         this.port = port;
-        this.coordinate = coordinate;
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link Gyroscope}. This instance is read only and can not be modified.
+     * Creates instance of {@link PIRMotionSensor}. This instance is read only and can not be modified.
      *
-     * @param port {@link ActorPort} on which the motor is connected,
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link Gyroscope}
+     * @return read only object of class {@link PIRMotionSensor}
      */
-    static <V> Accelerometer<V> make(Coordinates coordinate, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Accelerometer<V>(coordinate, port, properties, comment);
-    }
-
-    public Coordinates getCoordinate() {
-        return this.coordinate;
+    static <V> PIRMotionSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PIRMotionSensor<V>(port, properties, comment);
     }
 
     public ISensorPort getPort() {
@@ -54,7 +44,7 @@ public final class Accelerometer<V> extends Sensor<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((MakeblockAstVisitor<V>) visitor).visitAccelerometer(this);
+        return ((MakeblockAstVisitor<V>) visitor).visitPIRMotionSensor(this);
     }
 
     /**
@@ -67,9 +57,8 @@ public final class Accelerometer<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
-        String coordinate = helper.extractField(fields, BlocklyConstants.COORDINATE);
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        return Accelerometer.make(Coordinates.get(coordinate), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        return PIRMotionSensor.make(factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -78,14 +67,13 @@ public final class Accelerometer<V> extends Sensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         String fieldValue = this.port.getPortNumber();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COORDINATE, this.coordinate.toString());
 
         return jaxbDestination;
     }
 
     @Override
     public String toString() {
-        return "Accelerometer [port = " + this.port + ", coordinate  = " + this.coordinate + "]";
+        return "pir [port = " + this.port + "]";
     }
 
 }

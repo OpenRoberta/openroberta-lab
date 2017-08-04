@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.PIRMotionSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -286,10 +287,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
             case LEFT:
-                this.sb.append("lineFinder.readSensors" + lightSensor.getPort().getPortNumber() + "()&2");
+                this.sb.append("lineFinder.readSensors" + "()&2");
                 break;
             case RIGHT:
-                this.sb.append("lineFinder.readSensors" + lightSensor.getPort().getPortNumber() + "()&1");
+                this.sb.append("lineFinder.readSensors" + "()&1");
                 break;
 
         }
@@ -391,6 +392,12 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         this.sb.append("ultraSensor.distanceCm()");
+        return null;
+    }
+
+    @Override
+    public Void visitPIRMotionSensor(PIRMotionSensor<Void> motionSensor) {
+        this.sb.append("pir.isHumanDetected()");
         return null;
     }
 
@@ -512,6 +519,9 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                     break;
                 case ULTRASONIC:
                     this.sb.append("MeUltrasonicSensor ultraSensor(" + usedSensor.getPort() + ");\n");
+                    break;
+                case PIR_MOTION:
+                    this.sb.append("MePIRMotionSensor pir(" + usedSensor.getPort() + ");\n");
                     break;
                 case TEMPERATURE:
                     this.sb.append("MeHumiture myTemp" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");

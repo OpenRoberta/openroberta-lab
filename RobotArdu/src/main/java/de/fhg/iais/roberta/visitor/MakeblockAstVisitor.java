@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.PIRMotionSensor;
 
 public interface MakeblockAstVisitor<V> extends ArduAstVisitor<V> {
     /**
@@ -17,6 +18,8 @@ public interface MakeblockAstVisitor<V> extends ArduAstVisitor<V> {
     V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor);
 
     V visitAmbientLightSensor(AmbientLightSensor<V> lightSensor);
+
+    V visitPIRMotionSensor(PIRMotionSensor<V> motionSensor);
 
     V visitJoystick(Joystick<V> joystick);
 

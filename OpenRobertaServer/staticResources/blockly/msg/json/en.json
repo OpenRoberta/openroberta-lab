@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-08-01 11:57:33.867139",
+		"lastupdated": "2017-08-04 11:00:07.339812",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -823,6 +823,7 @@
 	"MODE_OBSTACLE": "obstacle",
 	"SENSOR_LIGHT": "light sensor",
 	"SENSOR_AMBIENTLIGHT": "ambientlight sensor",
+	"SENSOR_PIRMOTION": "PIR Motion sensor",
 	"LIGHT_GETSAMPLE_TOOLTIP": "Gets the current reading from the light sensor.",
 	"SENSOR_SOUND": "sound sensor",
 	"SOUND_GETSAMPLE_TOOLTIP": "Gets the current reading from the sound sensor.",

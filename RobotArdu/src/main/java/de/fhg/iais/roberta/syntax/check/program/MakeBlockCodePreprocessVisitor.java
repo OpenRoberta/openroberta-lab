@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
+import de.fhg.iais.roberta.syntax.sensor.makeblock.PIRMotionSensor;
 import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 
 /**
@@ -80,6 +81,12 @@ public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor imp
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
         this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
+        return null;
+    }
+
+    @Override
+    public Void visitPIRMotionSensor(PIRMotionSensor<Void> motionSensor) {
+        this.usedSensors.add(new UsedSensor(motionSensor.getPort(), SensorType.PIR_MOTION, null));
         return null;
     }
 

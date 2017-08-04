@@ -54,6 +54,7 @@
 <script src="../blocks/makeblockSensors.js"></script>
 <script src="../blocks/makeblockActions.js"></script>
 <script src="../blocks/makeblockColours.js"></script>
+<script src="../blocks/makeblockImage.js"></script>
 <script src="../blocks/bob3Sensors.js"></script>
 <script src="../blocks/bob3Actions.js"></script>
 <script src="../blocks/bob3Communication.js"></script>
@@ -392,6 +393,9 @@ h1 {
             </block>
         </category>
         <category name='TOOLBOX_DISPLAY' svg="true">
+            <block type='makeblockActions_display_image'></block>
+            <block type='makeblockActions_display_number'></block>
+            <block type='makeblokcActions_display_clear'></block>
             <block type='robActions_display_text'>
                 <value name='OUT'>
                     <block type='text'>
@@ -451,6 +455,8 @@ h1 {
             </block>
         </category>
         <category name='TOOLBOX_LIGHT' svg="true">
+            <block type='makeblockActions_external_leds_on'></block>
+            <block type='makeblockActions_external_leds_off'></block>
             <block type='bob3Actions_set_led'></block>
             <block type='robActions_brickLight_on'></block>
             <block type='robActions_sensorLight_on'></block>
@@ -670,6 +676,9 @@ h1 {
         </block>
         <block type='makeblockColour_rgb'>
         </block>
+    </category>
+    <category name='TOOLBOX_IMAGE' svg="true">
+        <block type='makeblockImage_image'></block>
     </category>
     <category name='TOOLBOX_VARIABLE' custom='VARIABLE' svg="true"></category>
     <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE' svg="true"></category>

@@ -22,6 +22,7 @@ public enum SensorType {
     FLAMESENSOR( "makeblockSensors_flameSensor_getSample" ),
     ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
     JOYSTICK( "arduSensors_joystick_getSample" ),
+    PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
     NAOMARK( "naoSensors_naoMark" );
 
     private final String[] values;

@@ -999,6 +999,7 @@ Blockly.Msg.SENSOR_LIGHT = "light sensor";
 Blockly.Msg.SENSOR_MIC = "microphone";  // untranslated
 Blockly.Msg.SENSOR_MS_TIMER = "en ms";
 Blockly.Msg.SENSOR_PIN = "pin";  // untranslated
+Blockly.Msg.SENSOR_PIRMOTION = "PIR Motion sensor";  // untranslated
 Blockly.Msg.SENSOR_PRESSED = "(pulsado)";
 Blockly.Msg.SENSOR_RESET = "reiniciar";
 Blockly.Msg.SENSOR_RESET_II = "";
