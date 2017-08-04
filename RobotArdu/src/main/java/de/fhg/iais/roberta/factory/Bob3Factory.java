@@ -45,7 +45,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Bob3Factory extends AbstractRobotFactory {
-    private Bob3CompilerWorkflow compilerWorkflow;
+    private final Bob3CompilerWorkflow compilerWorkflow;
     private final Properties properties;
     private final String name;
     private final int robotPropertyNumber;
