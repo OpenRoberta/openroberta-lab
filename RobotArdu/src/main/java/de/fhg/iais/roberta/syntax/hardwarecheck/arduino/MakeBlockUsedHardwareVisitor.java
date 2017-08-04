@@ -260,18 +260,13 @@ public class MakeBlockUsedHardwareVisitor extends CheckVisitor implements Makebl
     }
 
     @Override
-    public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        return null;
-    }
-
-    @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
         this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.AMBIENT_LIGHT, null));
         return null;
     }
 
     @Override
-    public Void visitLineFollower(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LINE_FOLLOWER, lightSensor.getMode()));
         return null;
     }

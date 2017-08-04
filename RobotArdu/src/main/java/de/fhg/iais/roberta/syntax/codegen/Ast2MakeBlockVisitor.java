@@ -283,7 +283,7 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
 
     // TODO: separate the block:
     @Override
-    public Void visitLineFollower(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
             case LEFT:
                 this.sb.append("lineFinder.readSensors" + lightSensor.getPort().getPortNumber() + "()&2");
@@ -299,12 +299,6 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
         this.sb.append("myLight" + lightSensor.getPort().getPortNumber() + ".read()");
-        return null;
-
-    }
-
-    @Override
-    public Void visitLightSensor(LightSensor<Void> lightAction) {
         return null;
 
     }

@@ -60,7 +60,7 @@ public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor imp
     }
 
     @Override
-    public Void visitLineFollower(LightSensor<Void> lightSensor) {
+    public Void visitLightSensor(LightSensor<Void> lightSensor) {
         this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LINE_FOLLOWER, lightSensor.getMode()));
         return null;
     }
