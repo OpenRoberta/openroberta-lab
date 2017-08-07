@@ -945,7 +945,7 @@ public class Ast2NaoPythonVisitor extends Ast2PythonVisitor implements NaoAstVis
                 break;
         }
         setLeds.getColor().visit(this);
-        this.sb.append(")");
+        this.sb.append(", 0.1)");
         return null;
     }
 
