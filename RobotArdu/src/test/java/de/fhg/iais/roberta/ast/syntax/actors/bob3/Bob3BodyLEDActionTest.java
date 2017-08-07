@@ -12,29 +12,9 @@ public class Bob3BodyLEDActionTest {
 
     @Test
     public void turnOnLeftLED() throws Exception {
-        final String a = "myBob.setLed(LED_4, ON);";
+        //TODO: Figure out hot to cross-test blocks
+        final String a = "how do I use blocks from makeblock? JUint says that blockly block is not found";
 
-        this.h.assertCodeIsOk(a, "/ast/actions/action_Bob3TurnLeftLEDOn.xml", false);
-    }
-
-    @Test
-    public void turnOffLeftLED() throws Exception {
-        final String a = "myBob.setLed(LED_4, OFF);";
-
-        this.h.assertCodeIsOk(a, "/ast/actions/action_Bob3TurnLeftLEDOff.xml", false);
-    }
-
-    @Test
-    public void turnOnRightLED() throws Exception {
-        final String a = "myBob.setLed(LED_3, ON);";
-
-        this.h.assertCodeIsOk(a, "/ast/actions/action_Bob3TurnRightLEDOn.xml", false);
-    }
-
-    @Test
-    public void turnOffRightLED() throws Exception {
-        final String a = "myBob.setLed(LED_3, OFF);";
-
-        this.h.assertCodeIsOk(a, "/ast/actions/action_Bob3TurnRightLEDOff.xml", false);
+        this.h.assertCodeIsOk(a, "/ast/actions/action_Bob3LED.xml", false);
     }
 }

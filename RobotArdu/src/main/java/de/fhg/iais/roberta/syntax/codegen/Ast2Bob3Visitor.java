@@ -173,7 +173,6 @@ public class Ast2Bob3Visitor extends Ast2ArduVisitor implements Bob3AstVisitor<V
     @Override
     public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
         ITouchSensorMode arm = touchSensor.getMode();
-        System.out.println(arm.toString());
         this.sb.append("myBob.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
         return null;
     }
