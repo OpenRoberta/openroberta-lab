@@ -7,15 +7,14 @@ import de.fhg.iais.roberta.util.test.ardu.HelperMakeBlock;
 public class Ast2MakeBlockVisitorTest {
     HelperMakeBlock h = new HelperMakeBlock();
 
-    private static final String MAIN_METHOD1 =
-        ""
-            + "#include <math.h> \n"
-            + "#include <MeMCore.h> \n"
-            + "#include <Wire.h>\n"
-            + "#include <SoftwareSerial.h>\n"
-            + "#include <CountUpDownTimer.h>\n"
-            + "#include <RobertaFunctions.h>\n"
-            + "#include \"MeDrive.h\"\n\n";
+    private static final String MAIN_METHOD1 = ""
+        + "#include <math.h> \n"
+        + "#include <MeMCore.h> \n"
+        + "#include <Wire.h>\n"
+        + "#include <SoftwareSerial.h>\n"
+        + "#include <CountUpDownTimer.h>\n"
+        + "#include <RobertaFunctions.h>\n"
+        + "#include \"MeDrive.h\"\n\n";
 
     private static final String MAIN_METHOD2 = "" + "void setup(){" + "Serial.begin(9600);";
 
@@ -60,17 +59,16 @@ public class Ast2MakeBlockVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeLightSensor myLight1(PORT_1);"
+            + "MeLineFollowerlineFinder(PORT_1);"
             + "MeRGBLedrgbled_7(7,7==7?2:4);"
-            + "double item;"
+            + "bool item;"
             + MAIN_METHOD2
+            + "item = lineFinder.readSensors()&1;"
             + "}"
             + "void loop(){"
-            + "if (myLight1.read() != 0) {"
-            + "        delay(500);}\n"
             + "}\n";
 
-        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor.xml", true);
+        this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_light_sensor2.xml", true);
     }
 
     @Test
@@ -106,7 +104,7 @@ public class Ast2MakeBlockVisitorTest {
             + "if (mySound3.strength() > 0) {"
             + "        delay(500);}\n"
 
-                + "}\n";
+            + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_sound_sensor.xml", true);
     }
