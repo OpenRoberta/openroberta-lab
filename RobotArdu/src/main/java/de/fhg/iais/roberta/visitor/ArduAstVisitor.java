@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
+import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOffAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
@@ -30,4 +32,8 @@ public interface ArduAstVisitor<V>
      * @param voltageSensor to be visited
      */
     V visitVoltageSensor(VoltageSensor<V> voltageSensor);
+
+    V visitExternalLedOnAction(ExternalLedOnAction<V> externalLedOnAction);
+
+    V visitExternalLedOffAction(ExternalLedOffAction<V> externalLedOffAction);
 }

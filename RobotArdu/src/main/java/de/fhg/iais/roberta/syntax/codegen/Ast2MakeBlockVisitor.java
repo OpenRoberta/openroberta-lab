@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOffAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -56,7 +58,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
 
 /**
- * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they append a hussentation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
 public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAstVisitor<Void> {
@@ -623,8 +625,21 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
     }
 
     @Override
+    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
+        this.sb.append("external len on");
+        return null;
+    }
+
+    @Override
+    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        this.sb.append("external len off");
+        return null;
+    }
+
+    @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         // TODO Auto-generated method stub
         return null;
     }
+
 }

@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.bob3.Bob3BodyLEDAction;
 import de.fhg.iais.roberta.syntax.action.bob3.Bob3ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.action.bob3.Bob3SendIRAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOffAction;
+import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
@@ -105,6 +107,18 @@ public class Bob3CodePreprocessVisitor extends PreprocessProgramVisitor implemen
     @Override
     public Void visitBob3GetSampleSensor(Bob3GetSampleSensor<Void> bob3GetSampleSensor) {
         this.isTimerSensorUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        // TODO Auto-generated method stub
         return null;
     }
 }
