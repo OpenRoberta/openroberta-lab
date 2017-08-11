@@ -85,4 +85,40 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         } : successFn);
     }
     exports.ping = ping;
+    
+    function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine) {
+        var URL = 'http://localhost:8991/upload';
+        var board = 'arduino:avr:uno';
+        var request = {
+            'board' : board,
+            'port' : robotPort,
+            'commandline' : commandLine,
+            'signature' : signature,
+            'hex' : programHex,
+            'filename' : programName + '.hex',
+            'extra' : {
+                'auth' : {
+                    'password' : null
+                }
+            },
+            'wait_for_upload_port' : true,
+            'use_1200bps_touch' : true,
+            'network' : false,
+            'params_verbose' : '-v',
+            'params_quiet' : '-q -q',
+            'verbose' : true
+        }
+        var JSONrequest = JSON.stringify(request);        
+        return $.ajax({
+            type: "POST",
+            url: URL,
+            data: JSONrequest,
+            contentType : 'application/json; charset=utf-8',
+            success: WRAP.fn3(successFn, message),
+            dataType: 'json',
+            error : errorFn
+        });
+    }
+    
+    exports.sendProgramHexToAgent = sendProgramHexToAgent;
 });

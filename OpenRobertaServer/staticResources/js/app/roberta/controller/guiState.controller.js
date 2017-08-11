@@ -146,11 +146,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
         connectionType = getConnection();
         switch (getConnection()) {
-        case 'arduinoAgentOrToken':
+        case GUISTATE.gui.connectionType.AGENTORTOKEN:
             if (GUISTATE.gui.isAgent === true) {
                 break;
             }
-        case 'token':
+        case GUISTATE.gui.connectionType.TOKEN:
             $('#menuConnect').parent().removeClass('disabled');
             if (GUISTATE.robot.state === 'wait') {
                 $('#head-navi-icon-robot').removeClass('error');
@@ -172,9 +172,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                 $('#menuRunProg').parent().addClass('disabled');
             }
             break;
-        case 'autoConnection':
+        case GUISTATE.gui.connectionType.AUTO:
             break;
-        case 'arduinoAgent':
+        case GUISTATE.gui.connectionType.AGENT:
             break;
         default:
             break;
@@ -257,7 +257,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
         connectionType = getConnection();
         switch (getConnection()) {
-        case 'token':
+        case GUISTATE.gui.connectionType.TOKEN:
             SOCKET_C.closeConnection();
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
@@ -268,9 +268,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuRunProg').parent().addClass('disabled');
             $('#menuConnect').parent().removeClass('disabled');
             break;
-        case 'autoConnection':
+        case GUISTATE.gui.connectionType.AUTO:
             SOCKET_C.closeConnection();
-            console.log('autoConnection');
+            //console.log('autoConnection');
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
@@ -280,26 +280,26 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuRunProg').parent().removeClass('disabled');
             $('#menuConnect').parent().addClass('disabled');
             break;
-        case 'arduinoAgentOrToken':
+        case GUISTATE.gui.connectionType.AGENTORTOKEN:
             SOCKET_C.init();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
-                console.log('arduino based bobot was selected');
+                //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().removeClass('disabled');
             }
             break;
-        case 'arduinoAgent':
+        case GUISTATE.gui.connectionType.AGENT:
             SOCKET_C.init();
             if (GUISTATE.isAgent == true) {
                 updateMenuStatus();
-                console.log('arduino based bobot was selected');
+                //console.log('arduino based bobot was selected');
             } else {
                 $('#menuConnect').parent().addClass('disabled');
             }
             break;
         default:
-            console.log('unknown connection');
+            //console.log('unknown connection');
             break;
         }
 
@@ -860,6 +860,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
     }
     exports.checkSim = checkSim;
+    
+    function getConnectionTypeEnum() {
+        return GUISTATE.gui.connectionType;
+    }
 
     function getConnection() {
         return GUISTATE.gui.connection;

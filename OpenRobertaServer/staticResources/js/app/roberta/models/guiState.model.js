@@ -29,6 +29,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
         exports.gui.connection = '';
         exports.gui.vendor = '';
         exports.gui.sim = '';
+        exports.gui.connectionType = {
+                TOKEN: 'token',
+                AGENT: 'arduinoAgent',
+                AUTO: 'autoConnection',
+                AGENTORTOKEN: 'arduinoAgentOrToken'
+        }
 
         exports.user = {};
         exports.user.id = -1;
