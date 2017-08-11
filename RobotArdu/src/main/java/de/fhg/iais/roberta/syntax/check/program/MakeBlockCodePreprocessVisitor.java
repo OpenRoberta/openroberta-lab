@@ -53,6 +53,7 @@ public class MakeBlockCodePreprocessVisitor extends PreprocessProgramVisitor imp
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
+        this.usedSensors.add(new UsedSensor(joystick.getPort(), SensorType.JOYSTICK, null));
         return null;
     }
 

@@ -541,10 +541,10 @@ public class Ast2MakeBlockVisitor extends Ast2ArduVisitor implements MakeblockAs
                 case COMPASS:
                     break;
                 case GYRO:
-                    this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
                 case ACCELEROMETER:
-                    this.sb.append("MEGyro myGyro(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeGyro myGyro(" + usedSensor.getPort() + ");\n");
                     break;
                 case SOUND:
                     this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
