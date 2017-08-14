@@ -488,21 +488,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
         this.sb.append("RobertaFunctions rob;\n");
 
-        String actorPorts = "";
-        for ( UsedActor actor : this.usedActors ) {
-            actorPorts += actor.getPort().getValues()[0] + ", ";
-            this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
-        }
-
-        if ( this.usedActors.size() > 1 ) {
-            actorPorts = actorPorts.substring(0, actorPorts.length() - 2);
-            this.sb.append(
-                "MeDrive myDrive("
-                    + this.brickConfiguration.getLeftMotorPort().getValues()[0]
-                    + ", "
-                    + this.brickConfiguration.getRightMotorPort().getValues()[0]
-                    + ");\n");
-        }
         this.generateSensors();
         this.generateActors();
     }
@@ -563,11 +548,35 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     }
 
     private void generateActors() {
-        //for ( UsedActor usedActor : this.usedActors ) {
-        //this.sb.append(usedActor.getType());
-        this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);");
-        nlIndent();
-        //}
+        String actorPorts = "";
+        for ( UsedActor actor : this.usedActors ) {
+            actorPorts += actor.getPort().getValues()[0] + ", ";
+            this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
+        }
+
+        if ( this.usedActors.size() > 1 ) {
+            actorPorts = actorPorts.substring(0, actorPorts.length() - 2);
+            this.sb.append(
+                "MeDrive myDrive("
+                    + this.brickConfiguration.getLeftMotorPort().getValues()[0]
+                    + ", "
+                    + this.brickConfiguration.getRightMotorPort().getValues()[0]
+                    + ");\n");
+        }
+        for ( UsedActor usedActor : this.usedActors ) {
+            switch ( usedActor.getType() ) {
+                case LED_ON_BOARD:
+                    this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);");
+                    break;
+                case LARGE:
+                    this.sb.append("MeDCMotor " + usedActor.getPort().getValues()[1] + "(" + usedActor.getPort().getValues()[0] + ");\n");
+                    break;
+                default:
+                    System.out.println("unlnown actor");
+                    break;
+            }
+            nlIndent();
+        }
     }
 
     @Override
@@ -627,13 +636,47 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        this.sb.append("external len on");
+        this.sb.append("rgbled_").append(externalLedOnAction.getPort()).append(".setColor(").append(externalLedOnAction.getLedNo() + ", ");
+        switch ( externalLedOnAction.getLedColor().toString() ) {
+            case ("ColorConst [RED]"):
+                this.sb.append("255, 0, 0");
+                break;
+            case ("ColorConst [BLACK]"):
+                this.sb.append("0, 0, 0");
+                break;
+            case ("ColorConst [BLUE]"):
+                this.sb.append("0, 0, 255");
+                break;
+            case ("ColorConst [GREEN]"):
+                this.sb.append("0, 255, 0");
+                break;
+            case ("ColorConst [YELLOW]"):
+                this.sb.append("255, 255, 0");
+                break;
+            case ("ColorConst [WHITE]"):
+                this.sb.append("255, 255, 255");
+                break;
+            case ("ColorConst [BROWN]"):
+                this.sb.append("102, 51, 0");
+                break;
+            default:
+                this.sb.append("0, 0, 0");
+                break;
+
+        }
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("rgbled_" + externalLedOnAction.getPort() + ".show();");
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        this.sb.append("external len off");
+        this.sb.append("rgbled_" + externalLedOffAction.getPort() + ".setColor(");
+        this.sb.append(externalLedOffAction.getLedNo());
+        this.sb.append("0, 0, 0);");
+        nlIndent();
+        this.sb.append("rgbled_" + externalLedOffAction.getPort() + ".show();");
         return null;
     }
 

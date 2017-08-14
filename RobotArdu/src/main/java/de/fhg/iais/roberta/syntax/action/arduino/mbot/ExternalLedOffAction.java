@@ -25,12 +25,12 @@ import de.fhg.iais.roberta.visitor.arduino.ArduinoAstVisitor;
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ExternalLedOffAction<V> extends Action<V> {
-    private String side;
+    private String ledNo;
     private final String port;
 
-    private ExternalLedOffAction(String side, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ExternalLedOffAction(String ledNo, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MAKEBLOCK_EXTERNAL_RGB_LED_OFF"), properties, comment);
-        this.side = side;
+        this.ledNo = ledNo;
         this.port = port;
         setReadOnly();
     }
@@ -43,8 +43,8 @@ public class ExternalLedOffAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ExternalLedOffAction}
      */
-    private static <V> ExternalLedOffAction<V> make(String side, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ExternalLedOffAction<>(side, port, properties, comment);
+    private static <V> ExternalLedOffAction<V> make(String ledNo, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ExternalLedOffAction<>(ledNo, port, properties, comment);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class ExternalLedOffAction<V> extends Action<V> {
         return ((ArduinoAstVisitor<V>) visitor).visitExternalLedOffAction(this);
     }
 
-    public String getSide() {
-        return this.side;
+    public String getLedNo() {
+        return this.ledNo;
     }
 
     public String getPort() {
@@ -74,16 +74,16 @@ public class ExternalLedOffAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 2);
-        String side = helper.extractField(fields, BlocklyConstants.LEDNUMBER);
+        String ledNo = helper.extractField(fields, BlocklyConstants.LEDNUMBER);
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        return ExternalLedOffAction.make(side, port, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ExternalLedOffAction.make(ledNo, port, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LEDNUMBER, this.side);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LEDNUMBER, this.ledNo);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.port);
         return jaxbDestination;
 

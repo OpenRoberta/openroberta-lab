@@ -2,7 +2,9 @@ package de.fhg.iais.roberta.syntax.check.hardware.arduino.mbot;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -103,13 +105,13 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
+        this.usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
+        this.usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
         return null;
     }
 
