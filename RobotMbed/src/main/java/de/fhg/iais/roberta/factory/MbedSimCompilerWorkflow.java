@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.codegen.Ast2MbedSimVisitor;
+import de.fhg.iais.roberta.syntax.codegen.mbed.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -59,7 +59,7 @@ public class MbedSimCompilerWorkflow implements ICompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2MbedSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+        String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
         MbedSimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;

@@ -10,9 +10,9 @@ import de.fhg.iais.roberta.factory.EV3lejosFactory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3JavaVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 
 public class Helper extends de.fhg.iais.roberta.util.test.Helper {
@@ -39,7 +39,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = Ast2Ev3JavaVisitor.generate("Test", (EV3Configuration) this.robotConfiguration, transformer.getTree(), false);
+        String javaCode = JavaVisitor.generate("Test", (EV3Configuration) this.robotConfiguration, transformer.getTree(), false);
         return javaCode;
     }
 
@@ -64,7 +64,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJava(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true);
+        String code = JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -79,7 +79,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true);
+        String code = PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -93,7 +93,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2Ev3SimVisitor.generate(this.robotConfiguration, transformer.getTree());
+        String code = SimulationVisitor.generate(this.robotConfiguration, transformer.getTree());
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

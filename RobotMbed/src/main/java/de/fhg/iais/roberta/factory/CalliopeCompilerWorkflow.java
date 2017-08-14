@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.check.program.MbedCodePreprocessVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2CppCalliopeVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2CalliopeConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -68,8 +68,8 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2CppCalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-        MbedCodePreprocessVisitor usedHardwareVisitor = new MbedCodePreprocessVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
+        String sourceCode = CppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        UsedHardwareCollectorVisitor usedHardwareVisitor = new UsedHardwareCollectorVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".cpp");
         } catch ( Exception e ) {
@@ -112,7 +112,7 @@ public class CalliopeCompilerWorkflow implements ICompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return Ast2CppCalliopeVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return CppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {

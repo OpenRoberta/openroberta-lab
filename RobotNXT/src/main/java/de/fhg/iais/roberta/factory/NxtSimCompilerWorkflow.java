@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.codegen.Ast2NxtSimVisitor;
+import de.fhg.iais.roberta.syntax.codegen.nxt.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -63,7 +63,7 @@ public class NxtSimCompilerWorkflow implements ICompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2NxtSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+        String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
         NxtSimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;

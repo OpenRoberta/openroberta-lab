@@ -10,8 +10,8 @@ import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
-import de.fhg.iais.roberta.syntax.codegen.Ast2NxcVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2NxtSimVisitor;
+import de.fhg.iais.roberta.syntax.codegen.nxt.NxcVisitor;
+import de.fhg.iais.roberta.syntax.codegen.nxt.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 
 /**
@@ -40,7 +40,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2NxtSimVisitor.generate(this.robotConfiguration, transformer.getTree());
+        String code = SimulationVisitor.generate(this.robotConfiguration, transformer.getTree());
         return code;
     }
 
@@ -53,7 +53,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     private String generateNXCWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = Ast2NxcVisitor.generate((NxtConfiguration) this.robotConfiguration, transformer.getTree(), false);
+        final String code = NxcVisitor.generate((NxtConfiguration) this.robotConfiguration, transformer.getTree(), false);
         return code;
     }
 
@@ -66,7 +66,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateNXC(String pathToProgramXml, NxtConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = Ast2NxcVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        final String code = NxcVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
     }
 

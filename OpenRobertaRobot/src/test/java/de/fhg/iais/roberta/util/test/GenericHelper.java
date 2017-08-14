@@ -24,8 +24,8 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 
 public class GenericHelper extends Helper {
     public GenericHelper() {
@@ -317,7 +317,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+        public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
             // TODO Auto-generated method stub
             return null;
         }
@@ -335,7 +335,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
             // TODO Auto-generated method stub
             return null;
         }

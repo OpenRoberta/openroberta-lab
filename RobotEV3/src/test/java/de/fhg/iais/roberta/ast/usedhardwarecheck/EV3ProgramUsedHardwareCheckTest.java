@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.Ev3CodePreprocessVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class EV3ProgramUsedHardwareCheckTest {
@@ -39,7 +39,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test0ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -48,7 +48,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test1ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check1.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -57,7 +57,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test2ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check2.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S3, COLOR, COLOUR]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
@@ -66,7 +66,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test3ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check3.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH], UsedSensor [S4, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
@@ -75,7 +75,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test4ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check4.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
             "[UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE], UsedSensor [S1, TOUCH, TOUCH]]",
             checkVisitor.getUsedSensors().toString());
@@ -86,7 +86,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test5ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -95,7 +95,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test6ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt1.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[UsedSensor [S1, TOUCH, TOUCH]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -104,7 +104,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test7ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt2.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -113,7 +113,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test8ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt3.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[UsedSensor [S4, INFRARED, DISTANCE]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -122,7 +122,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test9ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check5.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
@@ -131,7 +131,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test10ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check6.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
             "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S4, INFRARED, DISTANCE], UsedSensor [S4, ULTRASONIC, DISTANCE]]",
             checkVisitor.getUsedSensors().toString());
@@ -142,7 +142,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test11ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/methods/method_return_3.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
@@ -151,7 +151,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test12ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check7.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals(
             "[UsedSensor [S3, COLOR, COLOUR], UsedSensor [S3, COLOR, AMBIENTLIGHT], UsedSensor [S4, COLOR, RED]]",
             checkVisitor.getUsedSensors().toString());
@@ -162,7 +162,7 @@ public class EV3ProgramUsedHardwareCheckTest {
     public void test13ok() throws Exception {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check8.xml");
 
-        Ev3CodePreprocessVisitor checkVisitor = new Ev3CodePreprocessVisitor(phrases, makeConfiguration());
+        UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert.assertEquals("[]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [D, MEDIUM]]", checkVisitor.getUsedActors().toString());
     }

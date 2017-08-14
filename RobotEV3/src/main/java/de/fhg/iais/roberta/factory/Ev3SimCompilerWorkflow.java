@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3SimVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.SimulationVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -63,7 +63,7 @@ public class Ev3SimCompilerWorkflow implements ICompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2Ev3SimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+        String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
         Ev3SimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;

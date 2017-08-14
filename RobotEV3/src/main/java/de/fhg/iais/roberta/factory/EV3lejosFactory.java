@@ -39,10 +39,10 @@ import de.fhg.iais.roberta.mode.sensor.ev3.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.Ev3RobProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.program.Ev3SimProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -502,13 +502,13 @@ public class EV3lejosFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
-        return new Ev3SimProgramCheckVisitor(brickConfiguration);
+    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+        return new SimulationCheckVisitor(brickConfiguration);
     }
 
     @Override
-    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
-        return new Ev3RobProgramCheckVisitor(brickConfiguration);
+    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return new BrickCheckVisitor(brickConfiguration);
     }
 
     @Override

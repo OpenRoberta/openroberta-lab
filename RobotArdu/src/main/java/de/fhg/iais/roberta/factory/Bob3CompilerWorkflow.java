@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Bob3Configuration;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Bob3Visitor;
+import de.fhg.iais.roberta.syntax.codegen.arduino.bob3.CppVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Bob3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -68,7 +68,7 @@ public class Bob3CompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2Bob3Visitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = CppVisitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
@@ -113,7 +113,7 @@ public class Bob3CompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2Bob3Visitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return CppVisitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {

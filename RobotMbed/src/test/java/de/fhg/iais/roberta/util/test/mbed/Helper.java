@@ -4,9 +4,9 @@ import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.Calliope2016Factory;
-import de.fhg.iais.roberta.syntax.codegen.Ast2CppCalliopeVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2MbedSimVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2PythonMicroBitVisitor;
+import de.fhg.iais.roberta.syntax.codegen.mbed.SimulationVisitor;
+import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
+import de.fhg.iais.roberta.syntax.codegen.mbed.microbit.PythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 
 /**
@@ -30,7 +30,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2MbedSimVisitor.generate(this.robotConfiguration, transformer.getTree());
+        String code = SimulationVisitor.generate(this.robotConfiguration, transformer.getTree());
         return code;
     }
 
@@ -43,7 +43,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateCpp(String pathToProgramXml, CalliopeConfiguration brickConfiguration) throws Exception {
         final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        final String code = Ast2CppCalliopeVisitor.generate(brickConfiguration, transformer.getTree(), true);
+        final String code = CppVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
     }
 
@@ -56,7 +56,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = Ast2PythonMicroBitVisitor.generate((MicrobitConfiguration) brickConfiguration, transformer.getTree(), true);
+        String code = PythonVisitor.generate((MicrobitConfiguration) brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

@@ -42,9 +42,9 @@ import de.fhg.iais.roberta.mode.sensor.makeblock.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.makeblock.SensorPort;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.hardware.RobotProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.check.hardware.SimulationProgramCheckVisitor;
-import de.fhg.iais.roberta.syntax.codegen.Ast2MakeBlockVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.syntax.codegen.arduino.mbot.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -495,7 +495,7 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public SimulationProgramCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
+    public RobotSimulationCheckVisitor getSimProgramCheckVisitor(Configuration brickConfiguration) {
         return null;
     }
 
@@ -525,7 +525,7 @@ public class MakeBlockFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return Ast2MakeBlockVisitor.generate((MakeBlockConfiguration) brickConfiguration, phrasesSet, withWrapping);
+        return CppVisitor.generate((MakeBlockConfiguration) brickConfiguration, phrasesSet, withWrapping);
     }
 
     @Override
@@ -574,7 +574,7 @@ public class MakeBlockFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public RobotProgramCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         // TODO Auto-generated method stub
         return null;
     }

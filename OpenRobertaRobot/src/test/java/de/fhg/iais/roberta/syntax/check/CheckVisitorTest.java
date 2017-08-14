@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.ProgramCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.util.test.GenericHelper;
@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.test.Helper;
 public class CheckVisitorTest {
     Helper h = new GenericHelper();
 
-    class TestProgramCheckVisitor extends ProgramCheckVisitor {
+    class TestProgramCheckVisitor extends RobotCommonCheckVisitor {
 
         public TestProgramCheckVisitor(Configuration brickConfiguration) {
             super(brickConfiguration);

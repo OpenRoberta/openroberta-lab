@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.EV3Configuration;
-import de.fhg.iais.roberta.syntax.codegen.Ast2Ev3PythonVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -43,7 +43,7 @@ public class Ev3devCompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = Ast2Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
         try {
             storeGeneratedProgram(token, programName, sourceCode);
         } catch ( Exception e ) {
@@ -75,7 +75,7 @@ public class Ev3devCompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return Ast2Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
     }
 
     /**
