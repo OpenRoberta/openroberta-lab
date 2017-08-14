@@ -290,10 +290,10 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
             case LEFT:
-                this.sb.append("lineFinder.readSensors" + "()&2");
+                this.sb.append("lineFinder" + lightSensor.getPort().getPortNumber() + ".readSensors" + "()&2");
                 break;
             case RIGHT:
-                this.sb.append("lineFinder.readSensors" + "()&1");
+                this.sb.append("lineFinder" + lightSensor.getPort().getPortNumber() + ".readSensors" + "()&1");
                 break;
 
         }
@@ -339,13 +339,13 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.sb.append("myGyro.getGyro" + gyroSensor.getMode().toString() + "()");
+        this.sb.append("myGyro" + gyroSensor.getPort().getPortNumber() + ".getGyro" + gyroSensor.getMode().toString() + "()");
         return null;
     }
 
     @Override
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
-        this.sb.append("myGyro.getAngle" + accelerometer.getCoordinate() + "()");
+        this.sb.append("myGyro" + accelerometer.getPort().getPortNumber() + ".getAngle" + accelerometer.getCoordinate() + "()");
         return null;
     }
 
@@ -394,13 +394,13 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("ultraSensor.distanceCm()");
+        this.sb.append("ultraSensor" + ultrasonicSensor.getPort().getPortNumber() + ".distanceCm()");
         return null;
     }
 
     @Override
     public Void visitPIRMotionSensor(PIRMotionSensor<Void> motionSensor) {
-        this.sb.append("pir.isHumanDetected()");
+        this.sb.append("pir" + motionSensor.getPort().getPortNumber() + ".isHumanDetected()");
         return null;
     }
 
@@ -522,10 +522,10 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 case INFRARED:
                     break;
                 case ULTRASONIC:
-                    this.sb.append("MeUltrasonicSensor ultraSensor(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeUltrasonicSensor ultraSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case PIR_MOTION:
-                    this.sb.append("MePIRMotionSensor pir(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MePIRMotionSensor pir" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case TEMPERATURE:
                     this.sb.append("MeHumiture myTemp" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
@@ -537,15 +537,15 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                     this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LINE_FOLLOWER:
-                    this.sb.append("MeLineFollower lineFinder(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeLineFollower lineFinder" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case COMPASS:
                     break;
                 case GYRO:
-                    this.sb.append("MeGyro myGyro(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeGyro myGyro" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case ACCELEROMETER:
-                    this.sb.append("MeGyro myGyro(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeGyro myGyro" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case SOUND:
                     this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");

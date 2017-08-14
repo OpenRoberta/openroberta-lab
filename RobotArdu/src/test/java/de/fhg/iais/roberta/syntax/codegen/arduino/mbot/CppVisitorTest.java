@@ -42,12 +42,12 @@ public class CppVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeDCMotor motor1(M1);"
-            + "MeUltrasonicSensor ultraSensor(PORT_4);"
+            + "MeUltrasonicSensor ultraSensor4(PORT_4);"
             + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "        motor1.run(ultraSensor.distanceCm());\n"
+            + "        motor1.run(ultraSensor4.distanceCm());\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml", true);
@@ -59,11 +59,11 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeLineFollower lineFinder(PORT_1);"
+            + "MeLineFollower lineFinder1(PORT_1);"
             + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "bool item;"
             + MAIN_METHOD2
-            + "item=lineFinder.readSensors()&1;"
+            + "item=lineFinder1.readSensors()&1;"
             + "}"
             + "void loop(){"
             + "}\n";
@@ -95,12 +95,12 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MePIRMotionSensor pir(PORT_3);"
+            + "MePIRMotionSensor pir3(PORT_3);"
             + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "if (pir.isHumanDetected()) {"
+            + "if (pir3.isHumanDetected()) {"
             + "        delay(500);}\n"
             + "}\n";
 
@@ -126,7 +126,7 @@ public class CppVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_joystick_sample.xml", true);
     }
-    
+
     @Test
     public void GyroscopeTest() throws Exception {
 
@@ -134,19 +134,19 @@ public class CppVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeDCMotor motor1(M1);"
-            + "MeGyro myGyro(PORT_1);"
+            + "MeGyro myGyro1(PORT_1);"
             + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "if (myGyro.getGyroX() > 10 ) {"
+            + "if (myGyro1.getGyroX() > 10 ) {"
             + "        motor1.run(30);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_gyroscope_sensor.xml", true);
     }
-    
+
     @Test
     public void AccelerometerTest() throws Exception {
 
@@ -154,19 +154,19 @@ public class CppVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeDCMotor motor1(M1);"
-            + "MeGyro myGyro(PORT_1);"
+            + "MeGyro myGyro1(PORT_1);"
             + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "if (myGyro.getAngleX() > 10 ) {"
+            + "if (myGyro1.getAngleX() > 10 ) {"
             + "        motor1.run(30);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_accelerometer_sensor.xml", true);
     }
-    
+
     @Test
     public void FlameSensorTest() throws Exception {
 
@@ -186,7 +186,7 @@ public class CppVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_flame_sensor.xml", true);
     }
-    
+
     @Test
     public void AmbientLightSensorTest() throws Exception {
 
@@ -206,7 +206,7 @@ public class CppVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ambientlight_sensor.xml", true);
     }
-    
+
     @Test
     public void SoundSensorTest() throws Exception {
 
@@ -250,7 +250,7 @@ public class CppVisitorTest {
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_temperature_sensor.xml", true);
     }
-    
+
     @Test
     public void TimerTest() throws Exception {
 
