@@ -1,9 +1,10 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'guiState.controller','jquery' ], function(exports, UTIL, LOG, MSG, GUISTATE, SOCKET_C, GUISTATE_C,$) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'guiState.controller', 'jquery' ], function(exports, UTIL, LOG, MSG,
+        GUISTATE, SOCKET_C, GUISTATE_C, $) {
 
     function init() {
-        
+
     }
-    
+
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
@@ -103,9 +104,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
         reloadProgram(result);
     }
-    
+
     exports.runForAutoConnection = runForAutoConnection;
-    
+
     function runForAgentConnection(result) {
         GUISTATE_C.setAutoConnectedBusy(true);
         $('#head-navi-icon-robot').addClass('busy');
@@ -116,14 +117,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             GUISTATE_C.setAutoConnectedBusy(false);
             $('#head-navi-icon-robot').removeClass('busy');
         } else {
+
+            console.log("result not ok");
             MSG.displayInformation(result, "", result.message, "");
             GUISTATE_C.setAutoConnectedBusy(false);
             $('#head-navi-icon-robot').removeClass('busy');
         }
     }
-    
+
     exports.runForAgentConnection = runForAgentConnection;
-    
+
     function runForToken(result) {
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
@@ -133,6 +136,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
         reloadProgram(result);
     }
-    
+
     exports.runForToken = runForToken;
 });

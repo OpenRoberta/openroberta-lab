@@ -860,10 +860,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         }
     }
     exports.checkSim = checkSim;
-    
+
     function getConnectionTypeEnum() {
         return GUISTATE.gui.connectionType;
     }
+    exports.getConnectionTypeEnum = getConnectionTypeEnum;
 
     function getConnection() {
         return GUISTATE.gui.connection;

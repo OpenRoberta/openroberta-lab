@@ -1,6 +1,7 @@
 define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'robot.controller', 'socket.controller',
-        'progHelp.controller', 'progRun.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(
-        exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, SOCKET_C, HELP_C, RUN_C, INFO_C, CODE_C, SIM_C, Blockly, $) {
+        'progHelp.controller', 'progRun.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate',
+        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, SOCKET_C, HELP_C, RUN_C, INFO_C, CODE_C, SIM_C,
+        Blockly, $) {
 
     var $formSingleModal;
 
@@ -273,23 +274,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
 
     exports.showProgram = showProgram;
 
-    // TODO is this still supported by the server?
-    //    /**
-    //     * Check program
-    //     */
-    //    function checkProgram() {
-    //        LOG.info('check ' + GUISTATE_C.getProgramName());
-    //        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    //        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-    //        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
-    //        MSG.displayMessage("MESSAGE_EDIT_CHECK", "TOAST", GUISTATE_C.getProgramName());
-    //        PROGRAM.checkProgramCompatibility(GUISTATE_C.getProgramName(), userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-    //            refreshBlocklyProgram(result);
-    //            MSG.displayInformation(result, "", result.message, "");
-    //        });
-    //    }
-    //    exports.checkProgram = checkProgram;
-
     /**
      * Show program code
      */
@@ -342,7 +326,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         var xml = Blockly.Xml.domToText(dom);
         var input = $(document.createElement('input'));
         input.attr("type", "file");
-        input.attr("accept", ".xml");        
+        input.attr("accept", ".xml");
         input.change(function(event) {
             var file = event.target.files[0]
             var reader = new FileReader()
@@ -410,7 +394,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     }
     exports.openProgramFromXML = openProgramFromXML;
 
-    function loadProgramFromXML(name, xml) {        
+    function loadProgramFromXML(name, xml) {
         PROGRAM.loadProgramFromXML(name, xml, function(result) {
             if (result.rc == "ok") {
                 // save the old program that it can be restored
@@ -426,7 +410,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                     showProgram(result);
                 } catch (e) {
                     // restore old Program
-                    reloadProgram();  
+                    reloadProgram();
                     result.rc = "error";
                     MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, result.name);
                 }
@@ -457,10 +441,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         } else if (GUISTATE_C.robotState === 'busy' && GUISTATE_C.getConnection() === 'token') {
             MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
             return;
-            //        } else if (ROBOT_C.handleFirmwareConflict()) {
-            //            $('#buttonCancelFirmwareUpdate').css('display', 'none');
-            //            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-            //            return;
         }
         LOG.info('run ' + GUISTATE_C.getProgramName() + 'on brick');
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
@@ -469,22 +449,31 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         switch (GUISTATE_C.getConnection()) {
         case connectionType.TOKEN:
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, RUN_C.runForToken(result));
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+                RUN_C.runForToken(result);
+            });
             break;
         case connectionType.AUTO:
             GUISTATE_C.setAutoConnectedBusy(true);
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, RUN_C.runForAutoConnection(result));
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+                RUN_C.runForAutoConnection(result);
+            });
             break;
         case connectionType.AGENT:
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, RUN_C.runForAgent(result));
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+                RUN_C.runForAgentConnection(result);
+            });
             break;
         case connectionType.AGENTORTOKEN:
-        	if (GUISTATE_C.getIsAgent() == true){
-                PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, RUN_C.runForAgent(result));
-        	}
-        	else{
-                PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, RUN_C.runForToken(result));
-        	}
+            if (GUISTATE_C.getIsAgent() == true) {
+                PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+                    RUN_C.runForAgentConnection(result);
+                });
+            } else {
+                PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+                    RUN_C.runForToken(result);
+                });
+            }
             break;
         default:
             break;

@@ -85,8 +85,8 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         } : successFn);
     }
     exports.ping = ping;
-    
-    function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine) {
+
+    function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine, successFn) {
         var URL = 'http://localhost:8991/upload';
         var board = 'arduino:avr:uno';
         var request = {
@@ -108,17 +108,28 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             'params_quiet' : '-q -q',
             'verbose' : true
         }
-        var JSONrequest = JSON.stringify(request);        
+        var JSONrequest = JSON.stringify(request);
+
         return $.ajax({
-            type: "POST",
-            url: URL,
-            data: JSONrequest,
+            type : "POST",
+            url : URL,
+            data : JSONrequest,
             contentType : 'application/json; charset=utf-8',
-            success: WRAP.fn3(successFn, message),
-            dataType: 'json',
-            error : errorFn
+            dataType : 'json',
+            statusCode : {
+                200 : function() {
+                    WRAP.fn3(successFn, "Upload success");
+                },
+                202 : function() {
+                    WRAP.fn3(successFn, "Upload success");
+                },
+                400 : errorFn,
+                403 : errorFn,
+                404 : errorFn
+            }
         });
+
     }
-    
+
     exports.sendProgramHexToAgent = sendProgramHexToAgent;
 });

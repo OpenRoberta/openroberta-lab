@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'socket.io', 'comm' ], function(exports, UTIL, LOG, MSG, $, ROBOT_C,
-        GUISTATE_C, IO, COMM) {
+define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'socket.io', 'comm' ], function(exports, UTIL, LOG, MSG, $,
+        ROBOT_C, GUISTATE_C, IO, COMM) {
 
     var portList = [];
     var vendorList = [];
@@ -102,8 +102,9 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     exports.getRobotList = getRobotList;
 
     function uploadProgram(programHex, robotPort) {
-        COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine());
+        COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
+            LOG.text("Create agent upload success");
+        });
     }
     exports.uploadProgram = uploadProgram;
-
 });
