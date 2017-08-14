@@ -79,9 +79,9 @@
 .typcn-open:before {
   content: "\e90e";
 }
-/* .typcn-botnroll:before {
-  content: "\e9d3";
-} */
+.typcn-botnroll:before {
+  content: "\e90f";
+}
 .typcn-ardu:before {
   content: "\e90f";
 }

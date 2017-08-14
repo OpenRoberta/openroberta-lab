@@ -129,9 +129,10 @@ public class ServerStarter {
         int port = RobertaProperties.getIntProperty("server.port");
         http.setHost(host);
         http.setPort(port);
-        server.setConnectors(new ServerConnector[] {
-            http
-        });
+        server.setConnectors(
+            new ServerConnector[] {
+                http
+            });
 
         // configure robot plugins
         RobotCommunicator robotCommunicator = new RobotCommunicator();
@@ -176,11 +177,12 @@ public class ServerStarter {
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[] {
-            versionedHttpHandler,
-            wsHandler,
-            rootHandler
-        });
+        handlers.setHandlers(
+            new Handler[] {
+                versionedHttpHandler,
+                wsHandler,
+                rootHandler
+            });
         server.setHandler(handlers);
 
         try {

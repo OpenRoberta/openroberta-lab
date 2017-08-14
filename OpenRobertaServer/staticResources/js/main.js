@@ -34,6 +34,7 @@ require.config({
         'progDelete.controller' : '../app/roberta/controller/progDelete.controller',
         'progHelp.controller' : '../app/roberta/controller/progHelp.controller',
         'progInfo.controller' : '../app/roberta/controller/progInfo.controller',
+        'progRun.controller' : '../app/roberta/controller/progRun.controller',
         'progList.controller' : '../app/roberta/controller/progList.controller',
         'progList.model' : '../app/roberta/models/progList.model',
         'program.controller' : '../app/roberta/controller/program.controller',
