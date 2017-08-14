@@ -2,25 +2,25 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.MakeBlockConfiguration;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.makeblock.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOnAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -32,10 +32,15 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.mbot.UsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.arduino.mbot.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Joystick;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.PIRMotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -48,22 +53,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.makeblock.Accelerometer;
-import de.fhg.iais.roberta.syntax.sensor.makeblock.AmbientLightSensor;
-import de.fhg.iais.roberta.syntax.sensor.makeblock.FlameSensor;
-import de.fhg.iais.roberta.syntax.sensor.makeblock.Joystick;
-import de.fhg.iais.roberta.syntax.sensor.makeblock.PIRMotionSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.MakeblockAstVisitor;
+import de.fhg.iais.roberta.visitor.arduino.MbotAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a hussentation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public class CppVisitor extends ArduinoVisitor implements MakeblockAstVisitor<Void> {
-    private final MakeBlockConfiguration brickConfiguration;
+public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
+    private final MbotConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
     //    private final boolean isInfraredSensorUsed;
     private final boolean isTemperatureSensorUsed;
@@ -77,7 +77,7 @@ public class CppVisitor extends ArduinoVisitor implements MakeblockAstVisitor<Vo
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private CppVisitor(MakeBlockConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
+    private CppVisitor(MbotConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
         this.brickConfiguration = brickConfiguration;
         UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases, brickConfiguration);
@@ -98,7 +98,7 @@ public class CppVisitor extends ArduinoVisitor implements MakeblockAstVisitor<Vo
      * @param programPhrases to generate the code from
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(MakeBlockConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(MbotConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
 
         CppVisitor astVisitor = new CppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);

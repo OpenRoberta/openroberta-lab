@@ -5,7 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.MicrobitConfiguration;
+import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class PythonVisitorTest {

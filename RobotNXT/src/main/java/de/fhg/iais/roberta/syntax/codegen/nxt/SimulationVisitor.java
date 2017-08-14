@@ -41,7 +41,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.NxtAstVisitor;
+import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 public class SimulationVisitor extends RobotSimulationVisitor<Void> implements NxtAstVisitor<Void> {
     private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";

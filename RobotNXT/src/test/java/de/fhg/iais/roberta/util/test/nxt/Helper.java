@@ -5,8 +5,8 @@ import org.junit.Assert;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.NxtConfiguration;
-import de.fhg.iais.roberta.factory.NxtFactory;
+import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
+import de.fhg.iais.roberta.factory.nxt.Factory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 public class Helper extends de.fhg.iais.roberta.util.test.Helper {
 
     public Helper() {
-        this.robotFactory = new NxtFactory(null);
+        this.robotFactory = new Factory(null);
         Configuration brickConfiguration =
             new NxtConfiguration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))

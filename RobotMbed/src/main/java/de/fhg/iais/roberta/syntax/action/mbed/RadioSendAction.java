@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 public class RadioSendAction<V> extends Action<V> {
     private final Expr<V> message;

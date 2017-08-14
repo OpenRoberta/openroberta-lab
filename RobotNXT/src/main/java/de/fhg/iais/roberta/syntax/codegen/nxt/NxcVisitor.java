@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.syntax.codegen.nxt;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
-import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -83,12 +83,12 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**

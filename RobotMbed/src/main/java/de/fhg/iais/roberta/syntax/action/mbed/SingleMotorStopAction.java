@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
  * This class represents the <b>mbedActions_single_motor_stop</b> block from Blockly into the AST (abstract syntax tree).

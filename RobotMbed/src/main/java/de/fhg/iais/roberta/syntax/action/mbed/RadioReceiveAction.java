@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 public class RadioReceiveAction<V> extends Action<V> {
 

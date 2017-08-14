@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;

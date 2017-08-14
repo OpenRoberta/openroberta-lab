@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.MicrobitConfiguration;
+import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -43,12 +43,12 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.RobotPythonVisitor;
-import de.fhg.iais.roberta.syntax.expr.Image;
-import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
-import de.fhg.iais.roberta.syntax.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
-import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
-import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
+import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
+import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -93,11 +93,11 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.MbedAstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
+import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 /**

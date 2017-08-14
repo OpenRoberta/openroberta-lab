@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.components;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.components.ev3.JavaSourceCompiler;
+
 public class CompileSourceInMemoryTest {
 
     public static String code =

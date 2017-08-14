@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.visitor.NxtAstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorCommunicationVisitor;
+import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 public class BrickCheckVisitor extends RobotBrickCheckVisitor implements NxtAstVisitor<Void>, AstActorCommunicationVisitor<Void> {
 

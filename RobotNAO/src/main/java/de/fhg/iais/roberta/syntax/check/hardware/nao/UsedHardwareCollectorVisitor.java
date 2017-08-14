@@ -49,7 +49,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
-import de.fhg.iais.roberta.visitor.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.

@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.NxtFactory;
-import de.fhg.iais.roberta.transformer.Jaxb2NxtConfigurationTransformer;
+import de.fhg.iais.roberta.factory.nxt.Factory;
+import de.fhg.iais.roberta.transformer.nxt.Jaxb2NxtConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class NxtConfigurationTest {
-    NxtFactory factory = new NxtFactory(null);
+    Factory factory = new Factory(null);
 
     @BeforeClass
     public static void loadPropertiesForTests() {

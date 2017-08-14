@@ -21,24 +21,24 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Configuration.Builder;
-import de.fhg.iais.roberta.components.EV3Configuration;
+import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
-import de.fhg.iais.roberta.factory.EV3lejosFactory;
+import de.fhg.iais.roberta.factory.ev3.lejos.Factory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.ev3.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.transformer.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
+import de.fhg.iais.roberta.transformer.ev3.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.util.Option;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Antlr4Ev3ConfigurationTest {
-    EV3lejosFactory robotModeFactory = new EV3lejosFactory(null);
+    Factory robotModeFactory = new Factory(null);
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
 

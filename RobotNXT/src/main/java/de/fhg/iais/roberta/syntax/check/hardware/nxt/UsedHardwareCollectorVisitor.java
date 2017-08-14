@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.syntax.check.hardware.nxt;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.NxtConfiguration;
+import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.NxtAstVisitor;
+import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they

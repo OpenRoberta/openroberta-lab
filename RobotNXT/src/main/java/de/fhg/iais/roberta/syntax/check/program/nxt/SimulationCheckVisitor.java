@@ -4,7 +4,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.visitor.NxtAstVisitor;
+import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 public class SimulationCheckVisitor extends RobotSimulationCheckVisitor implements NxtAstVisitor<Void> {
 

@@ -9,15 +9,15 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.EV3lejosFactory;
-import de.fhg.iais.roberta.transformer.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
-import de.fhg.iais.roberta.transformer.Jaxb2Ev3ConfigurationTransformer;
+import de.fhg.iais.roberta.factory.ev3.lejos.Factory;
+import de.fhg.iais.roberta.transformer.ev3.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
+import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class Ev3ConfigurationTest {
-    EV3lejosFactory robotModeFactory = new EV3lejosFactory(null);
+    Factory robotModeFactory = new Factory(null);
 
     @BeforeClass
     public static void loadPropertiesForTests() {

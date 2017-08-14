@@ -5,8 +5,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.util.test.mbed.Helper;
 
 public class CppVisitorTest {

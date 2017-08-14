@@ -2,22 +2,22 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.bob3;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Bob3Configuration;
+import de.fhg.iais.roberta.components.arduino.Bob3Configuration;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.bob3.Bob3BodyLEDAction;
-import de.fhg.iais.roberta.syntax.action.bob3.Bob3ReceiveIRAction;
-import de.fhg.iais.roberta.syntax.action.bob3.Bob3SendIRAction;
+import de.fhg.iais.roberta.syntax.action.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.arduino.bob3.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.action.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.ExternalLedOnAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.LedOffAction;
-import de.fhg.iais.roberta.syntax.action.makeblock.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorDriveStopAction;
@@ -29,17 +29,17 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.check.hardware.bob3.UsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.syntax.check.hardware.arduino.bob3.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
-import de.fhg.iais.roberta.syntax.expr.ardu.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3AmbientLightSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3CodePadSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3GetSampleSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.bob3.Bob3TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.botnroll.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.AmbientLightSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -56,8 +56,8 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.Bob3AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
+import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
@@ -238,7 +238,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitLightSensor(Bob3AmbientLightSensor<Void> lightSensor) {
+    public Void visitLightSensor(AmbientLightSensor<Void> lightSensor) {
         this.sb.append("myBob.getIRSensor()");
         return null;
     }
@@ -435,7 +435,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitBodyLEDAction(Bob3BodyLEDAction<Void> bodyLEDAction) {
+    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
         this.sb.append("myBob.setLed(");
         this.sb.append(bodyLEDAction.getSide() + ", ");
         this.sb.append(bodyLEDAction.getledState() + ");");
@@ -449,7 +449,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitBob3CodePadSensor(Bob3CodePadSensor<Void> codePadSensor) {
+    public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
         this.sb.append("myBob.getID()");
         return null;
     }
@@ -461,7 +461,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitSendIRAction(Bob3SendIRAction<Void> sendIRAction) {
+    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
         this.sb.append("myBob.transmitIRCode(");
         sendIRAction.getCode().visit(this);
         this.sb.append(");");
@@ -469,7 +469,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitReceiveIRAction(Bob3ReceiveIRAction<Void> receiveIRAction) {
+    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         this.sb.append("myBob.receiveIRCode(");
         receiveIRAction.getCode().visit(this);
         this.sb.append(");");
@@ -477,7 +477,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitBob3GetSampleSensor(Bob3GetSampleSensor<Void> getSampleSensor) {
+    public Void visitBob3GetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
         getSampleSensor.getSensor().visit(this);
         return null;
     }

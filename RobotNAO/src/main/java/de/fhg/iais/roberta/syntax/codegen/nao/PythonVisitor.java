@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.NAOConfiguration;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
@@ -81,7 +81,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a

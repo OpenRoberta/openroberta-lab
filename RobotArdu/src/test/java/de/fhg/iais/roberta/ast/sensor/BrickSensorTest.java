@@ -4,15 +4,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.factory.ArduFactory;
-import de.fhg.iais.roberta.mode.sensor.botnroll.BrickKey;
+import de.fhg.iais.roberta.factory.arduino.botnroll.Factory;
+import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.BrickKey;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class BrickSensorTest {
     HelperBotNroll h = new HelperBotNroll();
-    ArduFactory robotFactory = new ArduFactory(null);
+    Factory robotFactory = new Factory(null);
 
     @Before
     public void setUp() throws Exception {

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen.nao;
 import org.junit.BeforeClass;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.NAOConfiguration;
+import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 
 public class PythonVisitorTest {
 

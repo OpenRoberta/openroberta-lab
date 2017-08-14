@@ -7,10 +7,10 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;

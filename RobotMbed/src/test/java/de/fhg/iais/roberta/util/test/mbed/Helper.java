@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.util.test.mbed;
 
-import de.fhg.iais.roberta.components.CalliopeConfiguration;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.MicrobitConfiguration;
-import de.fhg.iais.roberta.factory.Calliope2016Factory;
+import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
+import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
+import de.fhg.iais.roberta.factory.mbed.calliope.calliope2016.Factory;
 import de.fhg.iais.roberta.syntax.codegen.mbed.SimulationVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.microbit.PythonVisitor;
@@ -17,7 +17,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
     public Helper() {
         super();
         Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        this.robotFactory = new Calliope2016Factory(null);
+        this.robotFactory = new Factory(null);
         setRobotConfiguration(brickConfiguration);
     }
 

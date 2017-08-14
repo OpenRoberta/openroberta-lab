@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.NxtAstVisitor;
+import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 
 /**
  * This class represents the <b>robActions_brickLight_on</b> block from Blockly

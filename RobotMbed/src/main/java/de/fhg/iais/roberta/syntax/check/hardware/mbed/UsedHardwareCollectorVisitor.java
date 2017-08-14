@@ -22,12 +22,12 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.expr.Image;
-import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
-import de.fhg.iais.roberta.syntax.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
-import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
-import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
+import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
+import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
-import de.fhg.iais.roberta.visitor.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.

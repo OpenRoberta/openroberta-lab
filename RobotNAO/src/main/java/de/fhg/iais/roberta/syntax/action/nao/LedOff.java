@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
  * This class represents the <b>naoActions_ledOff</b> block from Blockly into the AST (abstract syntax tree).

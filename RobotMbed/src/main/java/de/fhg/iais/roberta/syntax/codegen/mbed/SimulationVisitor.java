@@ -35,12 +35,12 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
-import de.fhg.iais.roberta.syntax.expr.Image;
-import de.fhg.iais.roberta.syntax.expr.PredefinedImage;
-import de.fhg.iais.roberta.syntax.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.LedColor;
-import de.fhg.iais.roberta.syntax.functions.ImageInvertFunction;
-import de.fhg.iais.roberta.syntax.functions.ImageShiftFunction;
+import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
+import de.fhg.iais.roberta.syntax.expr.mbed.RgbColor;
+import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
+import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -62,7 +62,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 public class SimulationVisitor extends RobotSimulationVisitor<Void> implements MbedAstVisitor<Void> {
 

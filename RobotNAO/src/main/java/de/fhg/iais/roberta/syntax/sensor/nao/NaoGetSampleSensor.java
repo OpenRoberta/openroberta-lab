@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 
 /**
  * This class represents the <b>naoSensors_getSample</b> block from Blockly
