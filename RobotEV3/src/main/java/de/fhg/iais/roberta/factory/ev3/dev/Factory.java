@@ -59,9 +59,9 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
 
     public Factory(RobotCommunicator robotCommunicator) {
-        this.name = "ev3dev";
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.ev3Properties = Util1.loadProperties("classpath:EV3dev.properties");
+        this.name = this.ev3Properties.getProperty("robot.name");
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow = new CompilerWorkflow(RobertaProperties.getTempDirForUserProjects());
         this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
         addBlockTypesFromProperties("EV3dev.properties", this.ev3Properties);

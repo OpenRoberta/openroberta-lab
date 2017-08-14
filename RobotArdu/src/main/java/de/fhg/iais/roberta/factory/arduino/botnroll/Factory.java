@@ -61,14 +61,15 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.name = "ardu";
+        //this.name = "ardu";
+        this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
+        this.name = this.botnrollProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.botnrollProperties = Util1.loadProperties("classpath:botnroll.properties");
         addBlockTypesFromProperties("botnroll.properties", this.botnrollProperties);
     }
 

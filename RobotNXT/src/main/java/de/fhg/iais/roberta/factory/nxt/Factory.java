@@ -62,15 +62,13 @@ public class Factory extends AbstractRobotFactory {
     private int robotPropertyNumber;
 
     public Factory(RobotCommunicator unusedForNxt) {
-
-        this.name = "nxt";
+        this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
+        this.name = this.nxtProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
-        this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
-
         this.simCompilerWorkflow = new SimCompilerWorkflow();
         addBlockTypesFromProperties("NXT.properties", this.nxtProperties);
     }

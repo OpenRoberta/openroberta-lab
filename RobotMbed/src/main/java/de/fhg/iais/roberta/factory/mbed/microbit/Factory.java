@@ -42,21 +42,20 @@ public class Factory extends AbstractRobotFactory {
 
     private CompilerWorkflow compilerWorkflow;
     private final SimCompilerWorkflow microbitSimCompilerWorkflow;
-    private final Properties calliopeProperties;
+    private final Properties microbitProperties;
     private final String name;
     private final int robotPropertyNumber;
 
     public Factory(RobotCommunicator unusedForArdu) {
-
-        this.name = "microbit";
+        this.microbitProperties = Util1.loadProperties("classpath:Microbit.properties");
+        this.name = this.microbitProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.dir"));
-        this.calliopeProperties = Util1.loadProperties("classpath:Microbit.properties");
         this.microbitSimCompilerWorkflow = new SimCompilerWorkflow();
-        addBlockTypesFromProperties("Microbit.properties", this.calliopeProperties);
+        addBlockTypesFromProperties("Microbit.properties", this.microbitProperties);
     }
 
     @Override
@@ -305,52 +304,52 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return this.calliopeProperties.getProperty("robot.program.toolbox.beginner");
+        return this.microbitProperties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return this.calliopeProperties.getProperty("robot.program.toolbox.expert");
+        return this.microbitProperties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return this.calliopeProperties.getProperty("robot.program.default");
+        return this.microbitProperties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return this.calliopeProperties.getProperty("robot.configuration.toolbox");
+        return this.microbitProperties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return this.calliopeProperties.getProperty("robot.configuration.default");
+        return this.microbitProperties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return this.calliopeProperties.getProperty("robot.real.name");
+        return this.microbitProperties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return this.calliopeProperties.getProperty("robot.sim").equals("true") ? true : false;
+        return this.microbitProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
     public String getInfo() {
-        return this.calliopeProperties.getProperty("robot.info") != null ? this.calliopeProperties.getProperty("robot.info") : "#";
+        return this.microbitProperties.getProperty("robot.info") != null ? this.microbitProperties.getProperty("robot.info") : "#";
     }
 
     @Override
     public Boolean isBeta() {
-        return this.calliopeProperties.getProperty("robot.beta") != null ? true : false;
+        return this.microbitProperties.getProperty("robot.beta") != null ? true : false;
     }
 
     @Override
     public String getConnectionType() {
-        return this.calliopeProperties.getProperty("robot.connection");
+        return this.microbitProperties.getProperty("robot.connection");
     }
 
     @Override
@@ -365,12 +364,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+        return this.microbitProperties.getProperty("robot.configuration") != null ? false : true;
     }
 
     @Override
     public String getGroup() {
-        return this.calliopeProperties.getProperty("robot.group") != null ? this.calliopeProperties.getProperty("robot.group") : this.name;
+        return this.microbitProperties.getProperty("robot.group") != null ? this.microbitProperties.getProperty("robot.group") : this.name;
     }
 
     @Override

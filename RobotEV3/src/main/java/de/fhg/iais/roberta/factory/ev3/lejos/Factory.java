@@ -59,10 +59,9 @@ public class Factory extends AbstractRobotFactory {
     private final int robotPropertyNumber;
 
     public Factory(RobotCommunicator robotCommunicator) {
-        this.name = "ev3lejos";
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.ev3Properties = Util1.loadProperties("classpath:EV3lejos.properties");
-
+        this.name = this.ev3Properties.getProperty("robot.name");
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.robotCompilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),

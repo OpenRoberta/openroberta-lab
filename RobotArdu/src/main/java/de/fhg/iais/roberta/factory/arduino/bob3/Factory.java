@@ -48,7 +48,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Factory extends AbstractRobotFactory {
     private final CompilerWorkflow compilerWorkflow;
-    private final Properties properties;
+    private final Properties bob3Properties;
     private final String name;
     private final int robotPropertyNumber;
 
@@ -57,15 +57,15 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.name = "bob3";
+        this.bob3Properties = Util1.loadProperties("classpath:bob3.properties");
+        this.name = this.bob3Properties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
         this.compilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
-        this.properties = Util1.loadProperties("classpath:bob3.properties");
-        addBlockTypesFromProperties("bob3.properties", this.properties);
+        addBlockTypesFromProperties("bob3.properties", this.bob3Properties);
     }
 
     @Override
@@ -363,47 +363,47 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return this.properties.getProperty("robot.program.toolbox.beginner");
+        return this.bob3Properties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return this.properties.getProperty("robot.program.toolbox.expert");
+        return this.bob3Properties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return this.properties.getProperty("robot.program.default");
+        return this.bob3Properties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return this.properties.getProperty("robot.configuration.toolbox");
+        return this.bob3Properties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return this.properties.getProperty("robot.configuration.default");
+        return this.bob3Properties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return this.properties.getProperty("robot.real.name");
+        return this.bob3Properties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return this.properties.getProperty("robot.sim").equals("true") ? true : false;
+        return this.bob3Properties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
     public String getInfo() {
-        return this.properties.getProperty("robot.info") != null ? this.properties.getProperty("robot.info") : "#";
+        return this.bob3Properties.getProperty("robot.info") != null ? this.bob3Properties.getProperty("robot.info") : "#";
     }
 
     @Override
     public Boolean isBeta() {
-        return this.properties.getProperty("robot.beta") != null ? true : false;
+        return this.bob3Properties.getProperty("robot.beta") != null ? true : false;
     }
 
     @Override
@@ -423,7 +423,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.properties.getProperty("robot.configuration") != null ? false : true;
+        return this.bob3Properties.getProperty("robot.configuration") != null ? false : true;
     }
 
     @Override
@@ -440,12 +440,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getConnectionType() {
-        return this.properties.getProperty("robot.connection");
+        return this.bob3Properties.getProperty("robot.connection");
     }
 
     @Override
     public String getVendorId() {
-        return this.properties.getProperty("robot.vendor");
+        return this.bob3Properties.getProperty("robot.vendor");
     }
 
     @Override
@@ -460,12 +460,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getCommandline() {
-        return this.properties.getProperty("robot.connection.commandLine");
+        return this.bob3Properties.getProperty("robot.connection.commandLine");
     }
 
     @Override
     public String getSignature() {
-        return this.properties.getProperty("robot.connection.signature");
+        return this.bob3Properties.getProperty("robot.connection.signature");
     }
 
     @Override
