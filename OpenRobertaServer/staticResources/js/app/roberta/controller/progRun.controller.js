@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'guiState.controller', 'jquery' ], function(exports, UTIL, LOG, MSG,
-        GUISTATE, SOCKET_C, GUISTATE_C, $) {
+define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controller', 'guiState.controller', 'jquery', 'program.controller' ], function(exports, UTIL, LOG, MSG,
+        GUISTATE, SOCKET_C, GUISTATE_C, $, PROGRAM_C) {
 
     function init() {
 
@@ -102,7 +102,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             MSG.displayInformation(result, "", result.message, "");
             GUISTATE_C.setAutoConnectedBusy(false);
         }
-        reloadProgram(result);
+        PROGRAM_C.reloadProgram(result);
     }
 
     exports.runForAutoConnection = runForAutoConnection;
@@ -134,7 +134,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         } else {
             MSG.displayInformation(result, "", result.message, "");
         }
-        reloadProgram(result);
+        PROGRAM_C.reloadProgram(result);
     }
 
     exports.runForToken = runForToken;
