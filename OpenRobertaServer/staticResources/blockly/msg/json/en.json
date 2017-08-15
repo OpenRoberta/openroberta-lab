@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-08-15 11:09:55.877211",
+		"lastupdated": "2017-08-15 12:09:23.748120",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1186,5 +1186,13 @@
 	"MAKEBLOCKBRICK_TOOLTIP": "Represents the MakeBlock brick with connected actors and sensors. There are also inbuilt actors and sensors available, e.g. buttons, display ...",
 	"TEMPERATURE_TOOLTIP": "Represents a temperature sensor.",
 	"GEARED_MOTOR": "Geared motor",
-	"MOTOR_GEARED_TOOLTIP": "Represents a geared motor."
+	"MOTOR_GEARED_TOOLTIP": "Represents a geared motor.",
+	"LED_TOOLTIP": "Represents an external LED.",
+	"LED_MATRIX": "LED matrix",
+	"LED": "LED",
+	"LED_MATRIX_TOOLTIP": "Represents an LED matrix",
+	"JOYSTICK_TOOLTIP": "Represents a joystick.",
+	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
+	"AMBIENTLIGHT_TOOLTIP": "Represents an ambientlight sensor.",
+	"PIRMOTION_TOOLTIP": "Represents an PIR motion sensor."
 }
