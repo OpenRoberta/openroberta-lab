@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-08-11 15:09:35.297062",
+		"lastupdated": "2017-08-15 11:09:55.877211",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1182,5 +1182,9 @@
 	"VARIABLE_USED_BEFORE_DECLARATION": "The variable is used before declaration.",
 	"ORA_PROGRAM_INVALID_STATEMETNS": "There are errors in your program. Please check the messages",
 	"TIMEOUT": "timeout",
-	"SLEEP": "sleep"
+	"SLEEP": "sleep",
+	"MAKEBLOCKBRICK_TOOLTIP": "Represents the MakeBlock brick with connected actors and sensors. There are also inbuilt actors and sensors available, e.g. buttons, display ...",
+	"TEMPERATURE_TOOLTIP": "Represents a temperature sensor.",
+	"GEARED_MOTOR": "Geared motor",
+	"MOTOR_GEARED_TOOLTIP": "Represents a geared motor."
 }
