@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor.arduino.mbot;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public enum SensorPort implements ISensorPort {
-    PORT_0("0", "S0"), PORT_1( "1", "S1" ), PORT_2( "2", "S2" ), PORT_3( "3", "S3" ), PORT_4( "4", "S4" );
+    PORT_0( "0", "P0" ), PORT_1( "1", "P1" ), PORT_2( "2", "P2" ), PORT_3( "3", "P3" ), PORT_4( "4", "P4" );
 
     private final String[] values;
 

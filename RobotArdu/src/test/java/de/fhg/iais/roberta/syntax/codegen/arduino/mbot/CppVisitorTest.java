@@ -25,7 +25,6 @@ public class CppVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeDCMotor motor1(M1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
@@ -41,9 +40,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
+            + "MeUltrasonicSensor ultraSensor(PORT_4);"
             + "MeDCMotor motor1(M1);"
-            + "MeUltrasonicSensor ultraSensor4(PORT_4);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
@@ -59,8 +57,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeLineFollower lineFinder1(PORT_1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "MeLineFollower lineFinder(PORT_1);"
             + "bool item;"
             + MAIN_METHOD2
             + "item=lineFinder1.readSensors()&1;"
@@ -78,7 +75,6 @@ public class CppVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeTouchSensor myTouch1(PORT_1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
@@ -95,8 +91,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MePIRMotionSensor pir3(PORT_3);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "MePIRMotionSensor pir(PORT_3);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
@@ -113,9 +108,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeDCMotor motor1(M1);"
             + "MeJoystick myJoystick2(PORT_2);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "MeDCMotormotor1(M1);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -133,9 +127,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
+            + "MeGyro myGyro(PORT_1);"
             + "MeDCMotor motor1(M1);"
-            + "MeGyro myGyro1(PORT_1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -153,9 +146,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
+            + "MeGyro myGyro(PORT_1);"
             + "MeDCMotor motor1(M1);"
-            + "MeGyro myGyro1(PORT_1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -173,9 +165,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeDCMotor motor1(M1);"
             + "MeFlameSensor flameSensor1(PORT_1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "MeDCMotor motor1(M1);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -193,9 +184,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
+            + "MeLightSensormyLight0(PORT_0);"
             + "MeDCMotor motor1(M1);"
-            + "MeLightSensor myLight0(PORT_0);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -214,7 +204,6 @@ public class CppVisitorTest {
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
             + "MeSoundSensor mySound3(PORT_3);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -233,11 +222,8 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeDCMotor motor2(M2);"
-            + "MeDCMotor motor1(M1);"
-            + "MeDrive myDrive(M2,M1);"
             + "MeHumiture myTemp1(PORT_1);"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
+            + "MeDrive myDrive(M2,M1);"
             + "double item;"
             + MAIN_METHOD2
             + "}"
@@ -259,7 +245,6 @@ public class CppVisitorTest {
             + "#include<CountUpDown.h>"
             + "CountUpDownTimer T(UP,HIGH);"
             + "RobertaFunctions rob;"
-            + "MeRGBLedrgbled_7(7,7==7?2:4);"
             + "double item;"
             + MAIN_METHOD2
             + "T.StartTimer();"

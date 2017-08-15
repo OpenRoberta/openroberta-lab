@@ -65,7 +65,6 @@ import de.fhg.iais.roberta.visitor.arduino.MbotAstVisitor;
 public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     private final MbotConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
-    //    private final boolean isInfraredSensorUsed;
     private final boolean isTemperatureSensorUsed;
     private String temperatureSensorPort;
     private final boolean isToneActionUsed;
@@ -85,7 +84,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.usedVars = codePreprocessVisitor.getVisitedVars();
-        //        this.isInfraredSensorUsed = usedHardwareVisitor.isInfraredSensorUsed();
         this.isTemperatureSensorUsed = codePreprocessVisitor.isTemperatureSensorUsed();
         this.isToneActionUsed = codePreprocessVisitor.isToneActionUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
@@ -351,17 +349,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        //        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-        //            case DISTANCE: // TODO: change to send or create actor
-        //
-        //                break;
-        //            case SEEK: // TODO: change to receive or remove mode
-        //                //  ">> 16 & 0xff" add
-        //                this.sb.append("ir.value");
-        //                break;
-        //            default:
-        //                throw new DbcException("Invalid Infrared Sensor Mode!");
-        //        }
         return null;
     }
 
@@ -482,10 +469,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
         }
 
-        if ( this.isToneActionUsed ) {
-            this.sb.append("MeBuzzer buzzer;\n");
-        }
-
         this.sb.append("RobertaFunctions rob;\n");
 
         this.generateSensors();
@@ -548,34 +531,34 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     }
 
     private void generateActors() {
-        String actorPorts = "";
-        for ( UsedActor actor : this.usedActors ) {
-            actorPorts += actor.getPort().getValues()[0] + ", ";
-            this.sb.append("MeDCMotor " + actor.getPort().getValues()[1] + "(" + actor.getPort().getValues()[0] + ");\n");
-        }
-
-        if ( this.usedActors.size() > 1 ) {
-            actorPorts = actorPorts.substring(0, actorPorts.length() - 2);
-            this.sb.append(
-                "MeDrive myDrive("
-                    + this.brickConfiguration.getLeftMotorPort().getValues()[0]
-                    + ", "
-                    + this.brickConfiguration.getRightMotorPort().getValues()[0]
-                    + ");\n");
-        }
+        decrIndentation();
         for ( UsedActor usedActor : this.usedActors ) {
             switch ( usedActor.getType() ) {
                 case LED_ON_BOARD:
-                    this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);");
+                    this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);\n");
                     break;
-                case LARGE:
+                case GEARED_MOTOR:
                     this.sb.append("MeDCMotor " + usedActor.getPort().getValues()[1] + "(" + usedActor.getPort().getValues()[0] + ");\n");
                     break;
+                case DIFFERENTIAL_DRIVE:
+                    this.sb.append(
+                        "MeDrive myDrive("
+                            + this.brickConfiguration.getLeftMotorPort().getValues()[0]
+                            + ", "
+                            + this.brickConfiguration.getRightMotorPort().getValues()[0]
+                            + ");\n");
+                    break;
+                case EXTERNAL_LED:
+                    break;
+                case LED_MATRIX:
+                    break;
+                case BUZZER:
+                    this.sb.append("MeBuzzer buzzer;\n");
+                    break;
                 default:
-                    System.out.println("unlnown actor");
+                    System.out.println("unknown actor");
                     break;
             }
-            nlIndent();
         }
     }
 

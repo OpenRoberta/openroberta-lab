@@ -12,6 +12,9 @@ import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
+import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
@@ -99,7 +102,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         super.visitToneAction(toneAction);
-        this.isToneActionUsed = true;
+        this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
         return null;
     }
 
@@ -123,13 +126,40 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        // TODO Auto-generated method stub
+        this.usedActors.add(new UsedActor(null, ActorType.EXTERNAL_LED));
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        // TODO Auto-generated method stub
+        this.usedActors.add(new UsedActor(null, ActorType.EXTERNAL_LED));
+        return null;
+    }
+
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
+        super.visitDriveAction(driveAction);
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        super.visitCurveAction(curveAction);
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
+        super.visitTurnAction(turnAction);
+        if ( this.brickConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        }
         return null;
     }
 

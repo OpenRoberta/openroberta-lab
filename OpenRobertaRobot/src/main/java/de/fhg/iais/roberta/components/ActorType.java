@@ -12,7 +12,11 @@ public enum ActorType {
     REGULATED(),
     ARDU( "robBrick_motor_ardu" ),
     LED_ON_BOARD( "makeblockActions_leds_on" ),
-    DIFFERENTIAL_DRIVE( "" );
+    EXTERNAL_LED( "robBrick_led" ),
+    LED_MATRIX( "robBrick_led_matrix" ),
+    GEARED_MOTOR( "robBrick_motor_geared" ),
+    DIFFERENTIAL_DRIVE( "" ),
+    BUZZER( "robActions_play_tone" );
 
     private final String[] values;
 

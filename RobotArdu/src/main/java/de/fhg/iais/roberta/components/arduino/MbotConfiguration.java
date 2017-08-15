@@ -90,13 +90,7 @@ public class MbotConfiguration extends Configuration {
     @Override
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
-        sb.append("robot ardu ").append(name).append(" {\n");
-        //        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) {
-        //            sb.append("  size {\n");
-        //                        sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
-        //                        sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
-        //            sb.append("  }\n");
-        //        }
+        sb.append("robot mbot ").append(name).append(" {\n");
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
             for ( ISensorPort port : this.sensors.keySet() ) {
@@ -111,14 +105,8 @@ public class MbotConfiguration extends Configuration {
             for ( IActorPort port : this.actors.keySet() ) {
                 sb.append("    ").append(port.toString()).append(": ");
                 Actor actor = this.actors.get(port);
-                if ( actor.getName() == ActorType.LARGE ) {
-                    sb.append("large");
-                } else if ( actor.getName() == ActorType.MEDIUM ) {
-                    sb.append("middle");
-                } else if ( actor.getName() == ActorType.ARDU ) {
-                    sb.append("ardu");
-                } else {
-                    throw new RuntimeException("Key.E3");
+                if ( actor.getName() == ActorType.GEARED_MOTOR ) {
+                    sb.append("geared");
                 }
                 sb.append(" motor, ");
                 if ( actor.isRegulated() ) {
@@ -128,7 +116,7 @@ public class MbotConfiguration extends Configuration {
                 }
                 sb.append(", ");
                 String rotationDirection = actor.getRotationDirection().toString().toLowerCase();
-                sb.append(rotationDirection.equals("foreward") ? "forward" : rotationDirection); // TODO: remove this hack; rename FOIREWARD tp FORWARD (be careful!)
+                sb.append(rotationDirection.equals("foreward") ? "forward" : rotationDirection); // TODO: remove this hack; rename FOIREWARD to FORWARD (be careful!)
                 MotorSide motorSide = (MotorSide) actor.getMotorSide();
                 if ( motorSide != MotorSide.NONE ) {
                     sb.append(", ").append(motorSide.getText());

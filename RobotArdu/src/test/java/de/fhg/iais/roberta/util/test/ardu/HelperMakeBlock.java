@@ -16,8 +16,8 @@ public class HelperMakeBlock extends de.fhg.iais.roberta.util.test.Helper {
         Factory robotFactory = new Factory(null);
         Configuration brickConfiguration =
             new MbotConfiguration.Builder()
-                .addActor(ActorPort.M2, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.M1, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.M2, new Actor(ActorType.GEARED_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.M1, new Actor(ActorType.GEARED_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         setRobotFactory(robotFactory);
         setRobotConfiguration(brickConfiguration);

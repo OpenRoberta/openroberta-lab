@@ -19,7 +19,6 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -50,7 +49,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
         instance.setX("20");
         instance.setY("20");
         Block block = mkBlock(idCount++);
-        block.setType("robBrick_EV3-Brick");
+        block.setType("robBrick_makeBlock-Brick");
         instance.getBlock().add(block);
         List<Field> fields = block.getField();
         fields.add(mkField("WHEEL_DIAMETER", Util1.formatDouble1digit(conf.getWheelDiameterCM())));
@@ -78,12 +77,9 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
-                actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
                 String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
                 actorFields.add(mkField("MOTOR_REVERSE", rotation));
-                if ( !actor.getName().blocklyName().equals("robBrick_motor_middle") ) {
-                    actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
-                }
+                actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
                 values.add(hardwareComponent);
             }
         }
@@ -108,7 +104,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
 
     private Configuration blockToBrickConfiguration(Block block) {
         switch ( block.getType() ) {
-            case "robBrick_EV3-Brick":
+            case "robBrick_makeBlock-Brick":
                 List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
                 List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
 
@@ -123,39 +119,26 @@ public class Jaxb2MakeBlockConfigurationTransformer {
 
     private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
         for ( Value value : values ) {
-            if ( value.getName().startsWith("S") ) {
-                // Extract sensor
+            if ( value.getName().startsWith("P") ) {
+                // Extract sensor/actor on port
                 sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
             } else {
                 List<Field> fields;
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
-                    case "robBrick_motor_middle":
+                    case "robBrick_motor_geared":
                         fields = extractFields(value.getBlock(), (short) 2);
                         actors.add(
                             Pair.of(
                                 this.factory.getActorPort(value.getName()),
                                 new Actor(
                                     ActorType.get(value.getBlock().getType()),
-                                    extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
-                                    MotorSide.NONE)));
-
-                        break;
-                    case "robBrick_motor_big":
-
-                        fields = extractFields(value.getBlock(), (short) 3);
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(
-                                    ActorType.get(value.getBlock().getType()),
-                                    extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
-                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 2)))));
+                                    false,
+                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 0)),
+                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 1)))));
                         break;
                     default:
-                        throw new DbcException("Invalide motor type!");
+                        throw new DbcException("Invalide motor type!" + value.getBlock().getType());
                 }
             }
         }

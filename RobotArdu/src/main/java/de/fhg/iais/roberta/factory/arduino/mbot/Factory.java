@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
+import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
@@ -28,6 +29,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.arduino.botnroll.BlinkMode;
 import de.fhg.iais.roberta.mode.action.arduino.botnroll.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.arduino.mbot.ActorPort;
@@ -580,5 +582,24 @@ public class Factory extends AbstractRobotFactory {
     public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public IMotorSide getMotorSide(String motorSide) {
+        if ( motorSide == null || motorSide.isEmpty() ) {
+            throw new DbcException("Invalid Drive Direction: " + motorSide);
+        }
+        String sUpper = motorSide.trim().toUpperCase(Locale.GERMAN);
+        for ( MotorSide sp : MotorSide.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Drive Direction: " + motorSide);
     }
 }
