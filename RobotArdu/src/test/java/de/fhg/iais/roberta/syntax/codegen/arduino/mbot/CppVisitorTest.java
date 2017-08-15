@@ -40,7 +40,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeUltrasonicSensor ultraSensor(PORT_4);"
+            + "MeUltrasonicSensor ultraSensor4(PORT_4);"
             + "MeDCMotor motor1(M1);"
             + MAIN_METHOD2
             + "}"
@@ -57,7 +57,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeLineFollower lineFinder(PORT_1);"
+            + "MeLineFollower lineFinder1(PORT_1);"
             + "bool item;"
             + MAIN_METHOD2
             + "item=lineFinder1.readSensors()&1;"
@@ -91,7 +91,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MePIRMotionSensor pir(PORT_3);"
+            + "MePIRMotionSensor pir3(PORT_3);"
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
@@ -127,7 +127,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeGyro myGyro(PORT_1);"
+            + "MeGyro myGyro1(PORT_1);"
             + "MeDCMotor motor1(M1);"
             + "double item;"
             + MAIN_METHOD2
@@ -146,7 +146,7 @@ public class CppVisitorTest {
         final String a = "" //
             + MAIN_METHOD1
             + "RobertaFunctions rob;"
-            + "MeGyro myGyro(PORT_1);"
+            + "MeGyro myGyro1(PORT_1);"
             + "MeDCMotor motor1(M1);"
             + "double item;"
             + MAIN_METHOD2
