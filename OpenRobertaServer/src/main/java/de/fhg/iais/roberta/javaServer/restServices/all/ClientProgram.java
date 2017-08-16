@@ -346,8 +346,7 @@ public class ClientProgram {
                 String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                BlocklyProgramAndConfigTransformer
-                    programAndConfigTransformer =
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 //TODO program checks should be in compiler workflow
@@ -356,8 +355,7 @@ public class ClientProgram {
 
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                    String
-                        javaScriptCode =
+                    String javaScriptCode =
                         robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, programText, configurationText);
 
                     ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
@@ -389,7 +387,8 @@ public class ClientProgram {
     }
 
     private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, RobotCommonCheckVisitor programChecker)
-        throws JSONException, JAXBException {
+        throws JSONException,
+        JAXBException {
         if ( programChecker == null ) {
             response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(program)));
             return null;
