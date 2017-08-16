@@ -315,8 +315,7 @@ public class ClientProgram {
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
 
-                BlocklyProgramAndConfigTransformer
-                    programAndConfigTransformer =
+                BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
 
