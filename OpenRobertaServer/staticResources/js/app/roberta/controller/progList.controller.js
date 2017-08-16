@@ -166,6 +166,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 } else {
                     $('.deleteSomeProg').hide();
                 }
+            } else {
+                if (result.cmd === "loadPN") {
+                    $('#backProgList').click();
+                }
             }
 
             $('#deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || "Click here to delete all selected programs.");
