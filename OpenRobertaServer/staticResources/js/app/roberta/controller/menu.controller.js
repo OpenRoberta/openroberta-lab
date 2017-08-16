@@ -177,6 +177,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#simButtonsHead').onWrap('click', '', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
+        $('#head-navigation-gallery').onWrap('click', '', function(event) {
+            $('#navbarCollapse').collapse('hide');
+        })
 
         // EDIT Menu
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
@@ -508,11 +511,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('#confirmContinue').onWrap('click', function(event) {
             if ($('#confirmContinue').data('type') === 'program') {
-                PROGRAM_C.newProgram(true);
+                var callback = $('#confirmContinue').data('callback');
+                typeof callback === "function" && callback();
             } else if ($('#confirmContinue').data('type') === 'configuration') {
                 CONFIGURATION_C.newConfiguration(true);
             } else if ($('#confirmContinue').data('type') === 'switchRobot') {
-                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true);
+                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true, $('#confirmContinue').data('opt_callback'));
             } else {
                 console.log('Confirmation with unknown data type clicked');
             }

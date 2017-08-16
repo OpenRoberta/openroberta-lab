@@ -160,7 +160,7 @@ public class ClientAdmin {
                     }
                 } else {
                     LOG.error("Invalid command: " + cmd + " setting robot name to " + robot);
-                    Util.addErrorInfo(response, Key.COMMAND_INVALID);
+                    Util.addErrorInfo(response, Key.ROBOT_DOES_NOT_EXIST);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);

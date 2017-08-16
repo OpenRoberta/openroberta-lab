@@ -51,26 +51,37 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         $('#galleryPreview').bootstrapTable({
             height : 312,
             cardView : 'true',
-            rowStyle : rowStyle,
+            rowStyle : GALLERY_C.rowStyle,
             rowAttributes : GALLERY_C.rowAttributes,
             resizable : 'true',
             iconsPrefix : 'typcn',
             columns : [ {
-                formatter : GALLERY_C.formatProgramName,
-            }, {
-                title : GALLERY_C.titleOwner,
-            }, {
+                sortable : true,
                 visible : false,
             }, {
-                title : GALLERY_C.titleNumberOfBlocks,
-                formatter : GALLERY_C.formatNumberOfBlocks,
+                sortable : true,
+                formatter : GALLERY_C.formatProgramName,
             }, {
-                title : GALLERY_C.titleDate,
-                formatter : UTIL.formatDate
-            }, {
+                sortable : true,
                 formatter : GALLERY_C.formatProgramDescription,
             }, {
-            //tags
+                title : GALLERY_C.titleAuthor,
+                sortable : true,
+            }, {
+                title : GALLERY_C.titleDate,
+                sortable : true,
+                formatter : UTIL.formatDate
+            }, {
+                title : GALLERY_C.titleNumberOfViews,
+                sortable : true,
+            }, {
+                title : GALLERY_C.titleLikes,
+                sortable : true,
+            }, {
+                sortable : true,
+                formatter : GALLERY_C.formatTags,
+            }, {
+                visible : false,
             } ]
         });
     }
@@ -159,53 +170,41 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         });
         $('#show-relations').one('shown.bs.modal', function(e) {
             $('#relationsTable').bootstrapTable("resetView");
+            $('#relationsTable').find('input :first').focus();
         });
         $('#show-relations').modal("show");
     }
 
     function showShareWithGallery(row) {
-        $('#share-with-gallery').data('progName', row[0]);
-        $('#share-with-gallery').data('user', row[1]);
-        var alreadySharedWithGallery = false;
-        if (!$.isEmptyObject(row[2]) && !$.isEmptyObject(row[2].sharedWith)) {
-            var a = row[2].sharedWith.filter(function(value) {
-                if (value['Gallery']) {
-                    return true;
-                }
-            });
-            if (a.length > 0 && a[0]['Gallery'] && a[0]['Gallery'] == 'READ') {
-                alreadySharedWithGallery = true;
-            }
-        }
         var progName = row[0];
+        var authorName = row[3];
         $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '« with gallery').end();
         $('#galleryPreview').html('');
         $('#textShareGallery').html('');
-        if (alreadySharedWithGallery) {
-            //TODO create usefull text at least for german and english.
-            $('#textShareGallery').html('Your program is allready shared with the gallery. If you change it, it will be automatically updated. Do you want to remove your program from the gallery?');
-            $('#galleryPreview').bootstrapTable("removeAll");
-            var table = $('#share-with-gallery .modal-body').find(">:first-child");
-            if (table) {
-                table.hide();
+        $('#share-with-gallery').data('progName', progName);
+        $('#share-with-gallery').data('user', authorName);
+        // check if this program has already shared with the gallery
+        PROGRAM.loadProgramFromListing(progName, "Gallery", authorName, function(result) {
+            if (result.rc === 'ok') { // already shared!
+                //TODO create usefull text at least for german and english.
+                MSG.displayInformation({'rc':'error'}, '','GALLERY_SHARED_ALREADY', progName);
             } else {
-                $('#textShareGallery').hide();
+                $('#textShareGallery').html('Do you really want to share your program with everybody?');
+                $('#share-with-gallery').data('action', 'add');
+                PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), GUISTATE_C.getUserAccountName(), function(result) {
+                    if (result.rc === 'ok') {
+                        var progName = row[0];
+                        $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '« with gallery').end();
+                        $('#galleryPreview').bootstrapTable("load", new Array(result.program));
+                        $('.infoTags').tagsinput();
+                        $('#galleryPreview .bootstrap-tagsinput').addClass('galleryTags');
+                        $('#galleryPreview').find('.galleryTags>input').attr('readonly', 'true');
+                        $('#galleryPreview').find('span[data-role=remove]').addClass('hidden');
+                        $('#share-with-gallery').modal("show");
+                    }                   
+                });
             }
-            $('#share-with-gallery').data('action', 'remove');
-            $('#share-with-gallery').modal("show");
-        } else {
-            $('#textShareGallery').html('Do you really want to share your program with everybody?');
-            $('#share-with-gallery').data('action', 'add');
-            PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), function(result) {
-                if (result.rc === 'ok') {
-                    var progName = row[0];
-                    $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '« with gallery').end();
-
-                    $('#galleryPreview').bootstrapTable("load", new Array(result.program));
-                    $('#share-with-gallery').modal("show");
-                }
-            });
-        }
+        });
     }
 
     /**
@@ -231,12 +230,12 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                 PROGRAM.shareProgram(progName, sharedWith, right, function(result) {
                     if (result.rc === 'ok') {
                         MSG.displayMessage(result.message, "TOAST", sharedWith);
-                        LOG.info("share program " + progName + " with '" + sharedWith + " having right '" + right + "'");
+                        LOG.info("share program " + progName + " with '" + sharedWith + " having right '" + right + "'");                      
                     }
                 });
             }
         }
-        $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+        $('#progList').find('button[name="refresh"]').trigger('click');
         $('#show-relations').modal("hide");
     }
 
@@ -245,24 +244,14 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
      * 
      */
     function updateShareWithGallery(action) {
-        if (action === 'remove') {
-            var progName = $('#share-with-gallery').data('progName');
-            PROGRAM.shareProgram(progName, 'Gallery', 'NONE', function(result) {
-                if (result.rc === 'ok') {
-                    MSG.displayMessage(result.message, "TOAST", sharedWith);
-                    LOG.info("share program " + progName + " with '" + 'Gallery' + " having right '" + right + "'");
-                }
-            });
-        } else if (action === 'add') {
-            var progName = $('#share-with-gallery').data('progName');
-            PROGRAM.shareProgramWithGallery(progName, function(result) {
-                if (result.rc === 'ok') {
-                    MSG.displayMessage(result.message, "TOAST", 'Gallery');
-                    LOG.info("share program " + progName + " with Gallery");
-                }
-            });
-        }
-        $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+        var progName = $('#share-with-gallery').data('progName');
+        PROGRAM.shareProgramWithGallery(progName, function(result) {
+            if (result.rc === 'ok') {
+                LOG.info("share program " + progName + " with Gallery");
+                $('#progList').find('button[name="refresh"]').trigger('click');
+            }
+            MSG.displayInformation(result, result.message, result.message, 'Gallery');
+        });       
         $('#share-with-gallery').modal("hide");
     }
 
@@ -337,8 +326,9 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                             }
                         });
                     }
+                    MSG.displayInformation(result, result.message, result.message, values.shareWithInput);
                     LOG.info("share program " + row.name + " with '" + values.shareWithInput + " having right '" + right + "'");
-                    $('.bootstrap-table').find('button[name="refresh"]').trigger('click');
+                    $('#progList').find('button[name="refresh"]').trigger('click');
                 } else {
                     UTIL.showMsgOnTop(result.message);
                     returnValue = false;

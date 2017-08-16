@@ -158,7 +158,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     function loadFromListing(program) {
         var right = 'none';
         LOG.info('loadFromList ' + program[0]);
-        PROGRAM.loadProgramFromListing(program[0], program[1], function(result) {
+        PROGRAM.loadProgramFromListing(program[0], program[1], program[3], function(result) {
             if (result.rc === 'ok') {
                 result.programShared = false;
                 var alien = program[1] === GUISTATE_C.getUserAccountName() ? null : program[1];
@@ -178,6 +178,47 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         });
     }
     exports.loadFromListing = loadFromListing;
+
+    /**
+     * Load the program that was selected in gallery list
+     */
+    function loadFromGallery(program) {
+        var programName = program[1];
+        var user = program[3];
+        // check if in the GUI the right robot type is already chosen
+        var robotType = program[0]; // robot type or group
+        var robotAvailable = false;
+        var robots = GUISTATE_C.getRobots();
+        for (robot in robots) {
+            if (robots[robot].group === robotType) {
+                robotAvailable = robots[robot].name;
+                break;
+            }
+        }
+        var owner = 'Gallery';
+        function loadProgramFromGallery() {
+            PROGRAM.loadProgramFromListing(programName, owner, user, function(result) {
+                if (result.rc === 'ok') {
+                    result.programShared = 'READ';
+                    result.name = programName;
+                    GUISTATE_C.setProgram(result, owner, user);
+                    GUISTATE_C.setProgramXML(result.data);
+                    $('#tabProgram').trigger('click');
+                }
+                MSG.displayInformation(result, "", result.message);
+            });
+        }
+        if (robotAvailable !== GUISTATE_C.getRobot()) {
+            ROBOT_C.switchRobot(robotAvailable, false, loadProgramFromGallery);
+        } else {
+            if (GUISTATE_C.isProgramSaved()) {
+                loadProgramFromGallery();
+            } else {
+                confirmLoadProgram(loadProgramFromGallery);
+            }
+        }
+    }
+    exports.loadFromGallery = loadFromGallery;
 
     function initProgramForms() {
         $formSingleModal = $('#single-modal-form');
@@ -245,7 +286,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
      */
     function newProgram(opt_further) {
         var further = opt_further || false;
-        if (further || GUISTATE_C.isProgramSaved()) {
+        function loadNewProgram() {
             var result = {};
             result.rc = 'ok';
             result.name = "NEPOprog"
@@ -253,16 +294,25 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             result.lastChanged = '';
             GUISTATE_C.setProgram(result);
             initProgramEnvironment();
+        }
+        if (further || GUISTATE_C.isProgramSaved()) {
+            loadNewProgram();
         } else {
-            $('#confirmContinue').data('type', 'program');
-            if (GUISTATE_C.isUserLoggedIn()) {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
-            } else {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
-            }
+            confirmLoadProgram(loadNewProgram);
         }
     }
     exports.newProgram = newProgram;
+
+    function confirmLoadProgram(callback) {
+        $('#confirmContinue').removeData();
+        $('#confirmContinue').data('type', 'program');
+        $('#confirmContinue').data('callback', callback);
+        if (GUISTATE_C.isUserLoggedIn()) {
+            MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+        } else {
+            MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+        }
+    }
 
     function showProgram(result, alien) {
         if (result.rc === 'ok') {
@@ -377,6 +427,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 if (target[2] !== "") {
                     if (target[3] !== "") {
                         loadProgramFromXML(target[2], target[3]);
+                        $('#tabProgram').trigger('click');
                     } else {
                         throw "program";
                     }
@@ -573,6 +624,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         // update right panel if it is already open
         if ($('.fromRight').hasClass('rightActive')) {
             $('#infoContent').html(blocklyWorkspace.description);
+            var tmpTags = blocklyWorkspace.tags;
+            $('#infoTags').tagsinput('removeAll');
+            $('#infoTags').tagsinput('add', tmpTags);
             var xmlConfiguration = GUISTATE_C.getConfigurationXML();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);

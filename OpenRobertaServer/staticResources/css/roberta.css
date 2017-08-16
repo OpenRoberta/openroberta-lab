@@ -270,6 +270,10 @@ body.blocklyMinimalBody  * {
     -moz-user-select: none;
 }
 
+#infoDiv.fromRight {
+	background-color: #eee;
+}
+
 .fromRight.rightActive {
 	height: 100%;
 	overflow: hidden;
@@ -1221,6 +1225,19 @@ table [data-toggle="collapse"].collapsed:after {
     margin:0;
 }
 
+.bootstrap-tagsinput {
+	border: 10px solid #eee;
+	padding: 4px 6px;
+	color: #555;
+	white-space: nowrap;
+	overflow-x: auto;
+	width: 100%;
+}
+
+.bootstrap-tagsinput .tag {
+	background-color: #bbb;	
+}
+
 /***** END Overwrite Bootstrap-CSS *****/
 .atlwdg-trigger.atlwdg-RIGHT {
 	left: 100%;
@@ -1366,9 +1383,71 @@ td.bs-checkbox {
 .galleryTable .typcn:before {
     position: absolute;
     left: 50%;
-    margin-left: -50px;
+    margin-left: -40px;
     color: #eee;
-    font-size: 100px;
+    font-size: 80px;
+    top: 10px;
+}
+
+.galleryIcon.typcn:before {
+    position: relative;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    top: 4px;
+    left: 40px;
+}
+
+div.galleryLike {
+	color: #fff;
+	font-size:16px; 
+	text-align:center;
+	position: relative;
+	margin-left: 16px;
+	bottom: -20px;
+}
+
+div.galleryLike a>span {
+	color: #fff;
+}
+
+div.galleryDescription {
+    font-weight: normal;
+    font-size: 16px;
+    min-height: 45px;
+    max-height: 45px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    word-break: break-word;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.galleryLike.typcn:before {
+    position: inherit;
+    font-size: 16px;
+    color: #fff;
+}
+
+.galleryTags {
+	background-color: inherit;
+    border: none;
+    box-shadow: none;
+    text-decoration: none;
+    overflow: auto;
+    white-space: normal;
+    padding: 0;
+    height: 34px;   
+    line-height: 34px;
+}
+
+.galleryTags input{
+	height: 0;
+}
+
+.galleryTags>.tag {
+	background-color: #bbb;
 }
 
 .galleryTable td {
@@ -1377,6 +1456,10 @@ td.bs-checkbox {
 	width: 100vw;
     position: relative;
     border: none !important;
+}
+
+#galleryPreview tr {
+	width: 100%;
 }
 
 .dataTables_wrapper {

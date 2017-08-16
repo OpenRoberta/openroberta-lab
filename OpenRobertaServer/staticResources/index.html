@@ -26,6 +26,8 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/css/typicons.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/wysiwyg.css"></link>
+<link rel="stylesheet" type="text/css"
+	href="/css/bootstrap-tagsinput.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css"
 	href="js/libs/code-prettify/prettify.css"></link>
@@ -237,16 +239,15 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 								class="typcn typcn-input-checked"
 								lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
 						</ul></li>
-					<!-- TODO activate this for version with Menu Gallery 
 					<li id="head-navigation-gallery"><a href="#"
 						id="head-navi-tooltip-gallery"
 						lkey="Blockly.Msg.MENU_GALLERY_TOOLTIP" rel="tooltip"
 						data-original-title="" title=""> <span
 							id="head-navi-icon-gallery"
-							class="head-navi-icons typcn typcn-puzzle-outline"></span><span
+							class="head-navi-icons typcn typcn-th-large-outline"></span><span
 							class="head-navi-title hidden-sm hidden-md hidden-lg"
 							lkey="Blockly.Msg.MENU_GALLERY">gallery</span>
-					</a></li> -->
+					</a></li>
 					<!-- Menu Languages -->
 					<li class="dropdown" id="head-navigation-language"><a href="#"
 						data-toggle="dropdown" class="dropdown-toggle"
@@ -489,7 +490,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							title="Redo (Ctrl/Cmd+Y)"><i class="editor fa fa-repeat"></i></a>
 					</div>
 				</div>
-				<div id="infoContent"></div>
+				<div id="infoContainer">
+					<div id="infoContent"></div>
+					<input id="infoTags" type="text" data-role="tagsinput"/>
+				</div>
 			</div>
 			<div id="codeDiv" class="fromRight">
 				<div id="codeContainer">
@@ -694,8 +698,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<button id="showChangeUserPassword" type="button"
 								class="btn-link hidden" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"></button>
 							<button id="resendActivation" type="button"
-								class="btn-link hidden"
-								lkey="Blockly.Msg.RESEND_ACTIVATION">resend activation</button>
+								class="btn-link hidden" lkey="Blockly.Msg.RESEND_ACTIVATION">resend
+								activation</button>
 							<button type="submit" class="btn btn-primary btn-block"
 								id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER"
 								value="register"></button>

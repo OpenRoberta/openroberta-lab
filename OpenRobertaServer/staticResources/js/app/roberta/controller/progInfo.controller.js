@@ -1,5 +1,5 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'jquery-hotkeys', 'bootstrap.wysiwyg',
-        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'blocks', 'jquery', 'jquery-validate', 'jquery-hotkeys', 'bootstrap-tagsinput',
+        'bootstrap.wysiwyg', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, Blockly, $) {
 
     var blocklyWorkspace;
     /**
@@ -15,6 +15,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
 
     function initView() {
         $('#infoContent').wysiwyg();
+        $('#infoTags').tagsinput('removeAll');
         if (GUISTATE_C.getLanguage() == 'de') {
             $('#infoContent').attr('data-placeholder', 'Beschreibe dein Programm hier ...');
         } else {
@@ -30,9 +31,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
         });
         $(window).on('resize', function(e) {
             if ($('#infoDiv').hasClass('rightActive')) {
-                $('#infoContent').css({
+                $('#infoContainer').css({
                     "width" : $('#infoDiv').outerWidth(),
-                    "height" : $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight(),
+                    "height" : $('#infoDiv').outerHeight() - $('.btn-toolbar.editor').outerHeight() - 57,
                 });
             }
         });
@@ -41,6 +42,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
     function toggleInfo() {
         Blockly.hideChaff();
         if ($('#infoDiv').hasClass('rightActive')) {
+            $('#infoContent, #infoTags').off('change');
             $('.blocklyToolboxDiv').css('display', 'inherit');
             Blockly.svgResize(blocklyWorkspace);
             $('#progInfo').animate({
@@ -67,11 +69,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     });
                     $('#infoContent').off('change');
                     $('#sliderDiv').hide();
-                    $('#progInfo').removeClass('shifted');
+                    $('#progInfo').removeClass('shifted');                    
                 }
             });
         } else {
             $('#infoContent').html(blocklyWorkspace.description);
+            $('#infoTags').tagsinput('add', blocklyWorkspace.tags);
             $('#blocklyDiv').addClass('rightActive');
             $('#infoDiv').addClass('rightActive');
             var width;
@@ -105,8 +108,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'bl
                     $('#progInfo').addClass('shifted');
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
-                    $('#infoContent').on('change', function() {
+                    $('#infoContent, #infoTags').on('change', function() {
                         blocklyWorkspace.description = $('#infoContent').html();
+                        blocklyWorkspace.tags = $('#infoTags').val();
                         if (GUISTATE_C.isProgramSaved()) {
                             GUISTATE_C.setProgramSaved(false);
                         }

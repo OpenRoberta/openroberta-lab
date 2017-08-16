@@ -32,11 +32,12 @@ public class AccessRightProcessor extends AbstractProcessor {
      * @param userToShareName the account name (a String!) of the user who should get access to a program
      * @param right "WRITE" or "READ"
      */
-    public void shareToUser(int ownerId, String robotName, String programName, String userToShareName, String right) {
+    public void shareToUser(int ownerId, String robotName, String programName, int authorId, String userToShareName, String right) {
         UserDao userDao = new UserDao(this.dbSession);
         User owner = userDao.get(ownerId);
+        User author = userDao.get(authorId);
         User userToShare = userDao.loadUser(userToShareName);
-        executeShare(owner, robotName, programName, userToShare, right);
+        executeShare(owner, robotName, programName, author, userToShare, right);
     }
 
     /**
@@ -49,11 +50,12 @@ public class AccessRightProcessor extends AbstractProcessor {
      * @param userToShareName the account name (a String!) of the user who should get access to a program
      * @param right "WRITE" or "READ"
      */
-    public void shareDelete(String ownerName, String robotName, String programName, int userToShareId) {
+    public void shareDelete(String ownerName, String robotName, String programName, String authorName, int userToShareId) {
         UserDao userDao = new UserDao(this.dbSession);
         User owner = userDao.loadUser(ownerName);
         User userToShare = userDao.get(userToShareId);
-        executeShare(owner, robotName, programName, userToShare, "NONE");
+        User author = userDao.loadUser(authorName);
+        executeShare(owner, robotName, programName, author, userToShare, "NONE");
     }
 
     /**
@@ -67,7 +69,7 @@ public class AccessRightProcessor extends AbstractProcessor {
      * @param userToShare
      * @param right
      */
-    public void executeShare(User owner, String robotName, String programName, User userToShare, String right) {
+    public void executeShare(User owner, String robotName, String programName, User author, User userToShare, String right) {
         ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
 
@@ -82,7 +84,7 @@ public class AccessRightProcessor extends AbstractProcessor {
             if ( robot == null ) {
                 responseKey = Key.ROBOT_DOES_NOT_EXIST;
             } else {
-                programToShare = programDao.load(programName, owner, robot);
+                programToShare = programDao.load(programName, owner, robot, author);
                 if ( programToShare == null ) {
                     responseKey = Key.PROGRAM_TO_SHARE_DOES_NOT_EXIST;
                 }

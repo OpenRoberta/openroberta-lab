@@ -8,10 +8,13 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
+import de.fhg.iais.roberta.persistence.bo.Like;
 import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.bo.Relation;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.AccessRightDao;
+import de.fhg.iais.roberta.persistence.dao.LikeDao;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
@@ -35,22 +38,23 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param robotId the robot the program was written for
      * @return the program; null, if no program was found
      */
-    public Program getProgram(String programName, int ownerId, String robotName) {
+    public Program getProgram(String programName, String ownerName, String robotName, String authorName) {
+        UserDao userDao = new UserDao(this.dbSession);
+        User owner = userDao.loadUser(ownerName);
         if ( !Util1.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
-        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId < 3 ) {
-            UserDao userDao = new UserDao(this.dbSession);
+        } else if ( this.httpSessionState.isUserLoggedIn() || owner.getId() < 3 ) {
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
-            User owner = userDao.get(ownerId);
             Robot robot = robotDao.loadRobot(robotName);
-            Program program = programDao.load(programName, owner, robot);
+            User author = userDao.loadUser(authorName);
+            Program program = programDao.load(programName, owner, robot, author);
             if ( program != null ) {
                 setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
                 return program;
             } else {
-                program = getProgramWithAccessRight(programName, ownerId);
+                program = getProgramWithAccessRight(programName, owner.getId(), authorName);
                 if ( program != null ) {
                     setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
                     return program;
@@ -70,13 +74,14 @@ public class ProgramProcessor extends AbstractProcessor {
      *
      * @param ownerId the owner of the program
      */
-    public JSONArray getProgramInfo(int ownerId, String robotName) {
+    public JSONArray getProgramInfo(int ownerId, String robotName, int authorId) {
         UserDao userDao = new UserDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(ownerId);
         Robot robot = robotDao.loadRobot(robotName);
+        User author = userDao.get(authorId);
         // First we obtain all programs owned by the user
         List<Program> programs = programDao.loadAll(owner, robot);
 
@@ -101,15 +106,16 @@ public class ProgramProcessor extends AbstractProcessor {
             } catch ( JSONException e ) {
             }
             programInfo.put(sharedWith);
+            programInfo.put(program.getAuthor().getAccount());
             programInfo.put(program.getCreated().getTime());
             programInfo.put(program.getLastChanged().getTime());
             programInfos.put(programInfo);
         }
         // Now we find all the programs which are not owned by the user but have been shared to him
-        List<AccessRight> accessRights2 = accessRightDao.loadAccessRightsForUser(owner);
+        List<AccessRight> accessRights2 = accessRightDao.loadAccessRightsForUser(owner, robot);
         for ( AccessRight accessRight : accessRights2 ) {
             // Don't return programs with wrong robot type
-            Program program = programDao.load(accessRight.getProgram().getName(), accessRight.getProgram().getOwner(), robot);
+            Program program = programDao.get(accessRight.getProgram().getId());
             if ( program != null ) {
                 JSONArray programInfo2 = new JSONArray();
                 programInfo2.put(accessRight.getProgram().getName());
@@ -121,6 +127,7 @@ public class ProgramProcessor extends AbstractProcessor {
                 } catch ( JSONException e ) {
                 }
                 programInfo2.put(sharedFrom);
+                programInfo2.put(program.getAuthor().getAccount());
                 programInfo2.put(accessRight.getProgram().getCreated().getTime());
                 programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
                 programInfos.put(programInfo2);
@@ -137,15 +144,16 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programName the name of the program
      * @param ownerId the owner of the program
      */
-    public JSONArray getProgramRelations(String programName, int ownerId, String robotName) {
+    public JSONArray getProgramRelations(String programName, int ownerId, String robotName, int authorId) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(ownerId);
         Robot robot = robotDao.loadRobot(robotName);
+        User author = userDao.get(authorId);
         JSONArray relations = new JSONArray();
-        Program program = programDao.load(programName, owner, robot);
+        Program program = programDao.load(programName, owner, robot, author);
         //If shared find with whom and under which rights
         List<AccessRight> accessRights = accessRightDao.loadAccessRightsByProgram(program);
         for ( AccessRight accessRight : accessRights ) {
@@ -167,11 +175,11 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programName the name of the program
      * @param ownerId the owner of the program
      */
-    private Program getProgramWithAccessRight(String programName, int ownerId) {
+    private Program getProgramWithAccessRight(String programName, int ownerId, String authorName) {
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
 
         // Find whether a program has been shared to the user logged in
-        AccessRight accessRight = accessRightDao.loadAccessRightForUser(this.httpSessionState.getUserId(), programName, ownerId);
+        AccessRight accessRight = accessRightDao.loadAccessRightForUser(this.httpSessionState.getUserId(), programName, ownerId, authorName);
         if ( accessRight == null ) {
             return null;
         } else {
@@ -189,7 +197,14 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      */
-    public Program persistProgramText(String programName, int userId, String robotName, String programText, Timestamp programTimestamp, boolean isOwner) {
+    public Program persistProgramText(
+        String programName,
+        int userId,
+        String robotName,
+        int authorId,
+        String programText,
+        Timestamp programTimestamp,
+        boolean isOwner) {
         if ( !Util1.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
@@ -200,11 +215,12 @@ public class ProgramProcessor extends AbstractProcessor {
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User user = userDao.get(userId);
             Robot robot = robotDao.loadRobot(robotName);
+            User author = userDao.get(authorId);
             Pair<Key, Program> result;
             if ( isOwner ) {
-                result = programDao.persistOwnProgram(programName, user, robot, programText, programTimestamp);
+                result = programDao.persistOwnProgram(programName, user, robot, author, programText, programTimestamp);
             } else {
-                result = programDao.persistSharedProgramText(programName, user, robot, programText, programTimestamp);
+                result = programDao.persistSharedProgramText(programName, user, robot, author, programText, programTimestamp);
             }
             // a bit strange, but necessary as Java has no N-tuple
             if ( result.getFirst() == Key.PROGRAM_SAVE_SUCCESS ) {
@@ -225,13 +241,26 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programName the name of the program
      * @param ownerId the owner of the program
      */
-    public void deleteByName(String programName, int ownerId, String robotName) {
+    public void deleteByName(String programName, int ownerId, String robotName, String authorName) {
+        UserDao userDao = new UserDao(this.dbSession);
+        int authorId = userDao.loadUser(authorName).getId();
+        deleteByName(programName, ownerId, robotName, authorId);
+    }
+
+    /**
+     * delete a given program owned by a given user
+     *
+     * @param programName the name of the program
+     * @param ownerId the owner of the program
+     */
+    public void deleteByName(String programName, int ownerId, String robotName, int authorId) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
         User owner = userDao.get(ownerId);
+        User author = userDao.get(authorId);
         Robot robot = robotDao.loadRobot(robotName);
-        int rowCount = programDao.deleteByName(programName, owner, robot);
+        int rowCount = programDao.deleteByName(programName, owner, robot, author);
         if ( rowCount > 0 ) {
             setSuccess(Key.PROGRAM_DELETE_SUCCESS);
         } else {
@@ -240,55 +269,72 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * Get information about all the programs shared with the gallery
+     * Get information about all the programs owned by the gallery
      *
      * @param galleryId the gallery user
      */
-    public JSONArray getProgramGallery(int galleryId) {
+
+    public JSONArray getProgramGallery(int userId) {
 
         UserDao userDao = new UserDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
-        User owner = userDao.get(galleryId);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        LikeDao likeDao = new LikeDao(this.dbSession);
+
+        User gallery = userDao.loadUser("Gallery");
         JSONArray programs = new JSONArray();
-        // Now we find all the programs which are not owned by the gallery but have been shared to it
-        List<AccessRight> accessRights2 = accessRightDao.loadAccessRightsForUser(owner);
-        for ( AccessRight accessRight : accessRights2 ) {
-            Program program = accessRight.getProgram();
-            JSONArray prog = new JSONArray();
-            prog.put(program.getName());
-            prog.put(program.getOwner().getAccount());
-            prog.put(program.getRobot().getName());
-            prog.put(program.getNumberOfBlocks());
-            prog.put(program.getLastChanged().getTime());
-            prog.put(program.getProgramText());
-            prog.put(program.getTags());
-            programs.put(prog);
+
+        // Find all the programs which are owned by the gallery       
+        List<Program> programsList = programDao.loadAll(gallery);
+        for ( Program program : programsList ) {
+            // check if this program only is shared with one user (the original owner) with special exclusive right X_WRITE.
+            List<AccessRight> accessRights = accessRightDao.loadAccessRightsByProgram(program);
+            List<Like> likes = likeDao.loadLikesByProgram(program);
+            Like like = null;
+            if ( userId > 0 ) {
+                like = likeDao.loadLike(userDao.load(userId), program);
+            }
+            if ( !accessRights.isEmpty() && accessRights.size() == 1 && accessRights.get(0).getRelation() == Relation.X_WRITE ) {
+                JSONArray tempProgram = new JSONArray();
+                tempProgram.put(program.getRobot().getName());
+                tempProgram.put(program.getName());
+                tempProgram.put(program.getProgramText()); // only needed if we want to show the description of the program                                          
+                tempProgram.put(accessRights.get(0).getUser().getAccount());
+                tempProgram.put(program.getLastChanged().getTime());
+                tempProgram.put(program.getNumberOfViews());
+                tempProgram.put(likes.size());
+                tempProgram.put(program.getTags());
+                tempProgram.put(like == null ? false : true);
+                programs.put(tempProgram);
+            } else {
+                // this should not happen!
+                System.out.println("User gallery owns programs that are not shared exactly with the origin user with right X_WRITE: " + program.getId());
+            }
         }
         setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programs.length());
         return programs;
     }
 
-    public JSONArray getProgramEntity(String programName, int ownerId, String robotName) {
+    public JSONArray getProgramEntity(String programName, int ownerId, String robotName, int authorId) {
 
-        if ( !Util1.isValidJavaIdentifier(programName) ) {
-            setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
-            return null;
-        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId == 1 ) {
+        if ( this.httpSessionState.isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User owner = userDao.get(ownerId);
             Robot robot = robotDao.loadRobot(robotName);
-            Program program = programDao.load(programName, owner, robot);
+            User author = userDao.get(authorId);
+            Program program = programDao.load(programName, owner, robot, author);
             if ( program != null ) {
                 setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
                 JSONArray prog = new JSONArray();
-                prog.put(program.getName());
-                prog.put(program.getOwner().getAccount());
                 prog.put(program.getRobot().getName());
-                prog.put(program.getNumberOfBlocks());
+                prog.put(program.getName());
+                prog.put(program.getProgramText()); // only needed if we want to show the description of the program                                          
+                prog.put(program.getAuthor().getAccount());
                 prog.put(program.getLastChanged().getTime());
-                prog.put(program.getProgramText());
+                prog.put(program.getNumberOfViews());
+                prog.put(0);
                 prog.put(program.getTags());
                 return prog;
             } else {
@@ -297,5 +343,10 @@ public class ProgramProcessor extends AbstractProcessor {
             }
         }
         return null;
+    }
+
+    public void addOneView(Program program) {
+        int views = program.getNumberOfViews();
+        program.setViewed(views + 1);
     }
 }

@@ -37,6 +37,7 @@ import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.DummyProcessor;
+import de.fhg.iais.roberta.persistence.LikeProcessor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -100,6 +101,7 @@ public class ClientProgram {
             ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
 
             IRobotFactory robotFactory = httpSessionState.getRobotFactory();
 
@@ -114,9 +116,9 @@ public class ClientProgram {
                     Long timestamp = request.getLong("timestamp");
                     Timestamp programTimestamp = new Timestamp(timestamp);
                     boolean isShared = request.optBoolean("shared", false);
-                    program = pp.persistProgramText(programName, userId, robot, programText, programTimestamp, !isShared);
+                    program = pp.persistProgramText(programName, userId, robot, userId, programText, programTimestamp, !isShared);
                 } else {
-                    program = pp.persistProgramText(programName, userId, robot, programText, null, true);
+                    program = pp.persistProgramText(programName, userId, robot, userId, programText, null, true);
                 }
                 if ( pp.isOk() ) {
                     if ( program != null ) {
@@ -145,18 +147,22 @@ public class ClientProgram {
                 Util.addResultInfo(response, forMessages);
 
             } else if ( cmd.equals("loadP") ) {
-                if ( !httpSessionState.isUserLoggedIn() || request.getString("owner").equals("Roberta") ) {
+                if ( !httpSessionState.isUserLoggedIn() && !request.getString("owner").equals("Roberta") && !request.getString("owner").equals("Gallery") ) {
                     ClientProgram.LOG.error("Unauthorized");
                     Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                 } else {
                     String programName = request.getString("name");
                     String ownerName = request.getString("owner");
-                    User owner = up.getUser(ownerName);
-                    int ownerID = owner.getId();
-                    Program program = pp.getProgram(programName, ownerID, robot);
+                    String authorName = request.getString("authorName");
+
+                    Program program = pp.getProgram(programName, ownerName, robot, authorName);
                     if ( program != null ) {
                         response.put("data", program.getProgramText());
                         response.put("lastChanged", program.getLastChanged().getTime());
+                        // count the views if the program is from the gallery!
+                        if ( ownerName.equals("Gallery") ) {
+                            pp.addOneView(program);
+                        }
                     }
                     Util.addResultInfo(response, pp);
                 }
@@ -201,7 +207,7 @@ public class ClientProgram {
                         String programName = request.getString("programName");
                         String userToShareName = request.getString("userToShare");
                         String right = request.getString("right");
-                        upp.shareToUser(userId, robot, programName, userToShareName, right);
+                        upp.shareToUser(userId, robot, programName, userId, userToShareName, right);
                         Util.addResultInfo(response, upp);
                     } else {
                         Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
@@ -214,8 +220,58 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                 } else {
                     final String programName = request.getString("programName");
-                    upp.shareToUser(userId, robot, programName, "Gallery", "READ");
-                    Util.addResultInfo(response, upp);
+                    int galleryId = up.getUser("Gallery").getId();
+                    // generating a unique name for the program owned by the gallery.
+                    User user = up.getUser(userId);
+                    String userAccount = user.getAccount();
+                    if ( !this.isPublicServer || (user != null && user.isActivated()) ) {
+                        // get the program from the origin user to share with the gallery
+                        Program program = pp.getProgram(programName, userAccount, robot, userAccount);
+                        if ( program != null ) {
+                            // make a copy of the user program and store it as a gallery owned program
+                            Program programCopy = pp.persistProgramText(programName, galleryId, robot, userId, program.getProgramText(), null, true);
+                            if ( pp.isOk() ) {
+                                if ( programCopy != null ) {
+                                    response.put("lastChanged", programCopy.getLastChanged().getTime());
+                                    // share the copy of the program with the origin user
+                                    upp.shareToUser(galleryId, robot, programName, userId, userAccount, "X_WRITE");
+                                } else {
+                                    ClientProgram.LOG.error("TODO: check potential error: the saved program should never be null");
+                                }
+                                Util.addSuccessInfo(response, Key.GALLERY_UPLOAD_SUCCESS);
+                            } else {
+                                Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR);
+                            }
+                        } else {
+                            Util.addErrorInfo(response, Key.GALLERY_UPLOAD_ERROR);
+                        }
+                    } else {
+                        Util.addErrorInfo(response, Key.ACCOUNT_NOT_ACTIVATED_TO_SHARE);
+                    }
+                }
+
+            } else if ( cmd.equals("likeP") ) {
+                if ( !httpSessionState.isUserLoggedIn() ) {
+                    ClientProgram.LOG.error("Unauthorized");
+                    Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
+                } else {
+                    final String programName = request.getString("programName");
+                    final String robotName = request.getString("robotName");
+                    final boolean like = request.getBoolean("like");
+                    final String authorName = request.getString("authorName");
+
+                    if ( like ) {
+                        lp.createLike(programName, robotName, authorName);
+                        if ( lp.isOk() ) {
+                            System.out.println("ok");
+                        } else {
+                            System.out.println("error");
+                        }
+                    } else {
+                        lp.deleteLike(programName, robotName, authorName);
+                    }
+
+                    Util.addResultInfo(response, lp);
                 }
 
             } else if ( cmd.equals("shareDelete") ) {
@@ -225,16 +281,25 @@ public class ClientProgram {
                 } else {
                     String programName = request.getString("programName");
                     String owner = request.getString("owner");
-                    upp.shareDelete(owner, robot, programName, userId);
+                    String author = request.getString("author");
+                    upp.shareDelete(owner, robot, programName, author, userId);
                     Util.addResultInfo(response, upp);
+                    // if this program was shared from the gallery we need to delete the copy of it as well
+                    if ( owner.equals("Gallery") ) {
+                        int ownerId = up.getUser(owner).getId();
+                        pp.deleteByName(programName, ownerId, robot, userId);
+                        Util.addResultInfo(response, pp);
+                    }
                 }
+
             } else if ( cmd.equals("deleteP") ) {
                 if ( !httpSessionState.isUserLoggedIn() ) {
                     ClientProgram.LOG.error("Unauthorized");
                     Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                 } else {
                     String programName = request.getString("name");
-                    pp.deleteByName(programName, userId, robot);
+                    String author = request.getString("author");
+                    pp.deleteByName(programName, userId, robot, author);
                     Util.addResultInfo(response, pp);
                 }
             } else if ( cmd.equals("loadPN") ) {
@@ -242,13 +307,13 @@ public class ClientProgram {
                     ClientProgram.LOG.error("Unauthorized");
                     Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                 } else {
-                    JSONArray programInfo = pp.getProgramInfo(userId, robot);
+                    JSONArray programInfo = pp.getProgramInfo(userId, robot, userId);
                     response.put("programNames", programInfo);
                     Util.addResultInfo(response, pp);
                 }
 
             } else if ( cmd.equals("loadGallery") ) {
-                final JSONArray programInfo = pp.getProgramGallery(2);
+                final JSONArray programInfo = pp.getProgramGallery(userId);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
@@ -259,16 +324,19 @@ public class ClientProgram {
                 } else {
                     final String programName = request.getString("name");
                     final String ownerName = request.getString("owner");
+                    final String authorName = request.getString("author");
                     final User owner = up.getUser(ownerName);
                     final int ownerID = owner.getId();
-                    final JSONArray program = pp.getProgramEntity(programName, ownerID, robot);
+                    final int authorId = up.getUser(authorName).getId();
+                    final JSONArray program = pp.getProgramEntity(programName, ownerID, robot, authorId);
                     if ( program != null ) {
                         response.put("program", program);
                     }
                     Util.addResultInfo(response, pp);
                 }
+
             } else if ( cmd.equals("loadEN") ) {
-                JSONArray programInfo = pp.getProgramInfo(1, robot);
+                JSONArray programInfo = pp.getProgramInfo(1, robot, 1);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
@@ -278,10 +346,11 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                 } else {
                     String programName = request.getString("name");
-                    JSONArray relations = pp.getProgramRelations(programName, userId, robot);
+                    JSONArray relations = pp.getProgramRelations(programName, userId, robot, userId);
                     response.put("relations", relations);
                     Util.addResultInfo(response, pp);
                 }
+
             } else if ( cmd.equals("runP") ) {
                 Key messageKey = null;
                 String token = httpSessionState.getToken();

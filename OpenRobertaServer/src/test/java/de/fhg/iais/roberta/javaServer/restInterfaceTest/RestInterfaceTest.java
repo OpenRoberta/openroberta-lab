@@ -423,13 +423,13 @@ public class RestInterfaceTest {
         }
         Assert.assertTrue(ownershipOk);
 
-        restProgram(this.sPid, "{'cmd':'loadP';'name':'p2';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        restProgram(this.sPid, "{'cmd':'loadP';'name':'p2';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         Assert.assertTrue(this.response.getEntity().toString().contains(".2.pid.updated"));
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         Assert.assertTrue(this.response.getEntity().toString().contains(".2.pid.updated"));
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'minscha';'authorName':'minscha'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         Assert.assertTrue(this.response.getEntity().toString().contains(".2.minscha"));
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p3';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p3';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         Assert.assertTrue(this.response.getEntity().toString().contains(".3.pid"));
 
         save(this.sMinscha, pidId, "p2", -1, "<program>.2.minscha.update</program>", "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
@@ -461,23 +461,27 @@ public class RestInterfaceTest {
         assertProgramListingAsExpected(this.sPid, "['p1','p2','p3','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1','p2','p2','p3']"); // p2 is from "pid"!
 
-        restProgram(this.sMinscha, "{'cmd':'deleteP';'name':'p2'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'minscha'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
-        restProgram(this.sMinscha, "{'cmd':'deleteP';'name':'p2'}", "error", Key.PROGRAM_DELETE_ERROR);
+        restProgram(this.sMinscha, "{'cmd':'deleteP';'name':'p2';'author':'minscha'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
+        restProgram(
+            this.sMinscha,
+            "{'cmd':'loadP';'name':'p2';'owner':'minscha';'robot':'ev3';'authorName':'minscha'}",
+            "error",
+            Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+        restProgram(this.sMinscha, "{'cmd':'deleteP';'name':'p2';'author':'minscha'}", "error", Key.PROGRAM_DELETE_ERROR);
         assertProgramListingAsExpected(this.sPid, "['p1','p2','p3','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1','p2','p3']"); // p2 is from "pid"!
 
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM"));
-        restProgram(this.sPid, "{'cmd':'deleteP';'name':'p2'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
-        restProgram(this.sPid, "{'cmd':'deleteP';'name':'p3'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
+        restProgram(this.sPid, "{'cmd':'deleteP';'name':'p2';'author':'pid'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
+        restProgram(this.sPid, "{'cmd':'deleteP';'name':'p3';'author':'pid'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1']");
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM"));
 
-        restProgram(this.sPid, "{'cmd':'loadP';'name':'p2';'owner':'pid'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'pid'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'minscha'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
-        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p3';'owner':'pid'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+        restProgram(this.sPid, "{'cmd':'loadP';'name':'p2';'owner':'pid';'authorName':'pid'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'pid';'authorName':'minscha'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'minscha';'authorName':'minscha'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+        restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p3';'owner':'pid';'authorName':'minscha'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
 
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p2'"));
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p3'"));
@@ -512,17 +516,17 @@ public class RestInterfaceTest {
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM where USER_ID = '" + minschaId + "'"));
             String p4Text = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4Text.contains(".4.pid"));
-            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid"));
             save(this.sMinscha, pidId, "p4", -1, "<program>.4.minscha.update</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
             String p4TextUpd1 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4TextUpd1.contains(".4.minscha.update"));
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
 
-            restProgram(this.sMinscha, "{'cmd':'shareDelete';'programName':'p4';'owner':'pid'}", "ok", Key.ACCESS_RIGHT_DELETED);
+            restProgram(this.sMinscha, "{'cmd':'shareDelete';'programName':'p4';'owner':'pid';'author':'pid'}", "ok", Key.ACCESS_RIGHT_DELETED);
             save(this.sMinscha, pidId, "p4", -1, "<program>.5.minscha.fail</program>", "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
             assertProgramListingAsExpected(this.sMinscha, "['p1']");
             assertProgramListingAsExpected(this.sPid, "['p1','p4']");
@@ -549,7 +553,7 @@ public class RestInterfaceTest {
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1']");
 
-        restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+        restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         save(this.sPid, pidId, "p4", -1, "<program>.4.pId</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");
@@ -563,13 +567,13 @@ public class RestInterfaceTest {
 
         // scenario 1: minscha reads pid's p4, then he writes; pid doesn't use her program; the timestamp increases
         {
-            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pId"));
             long lastChanged1 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             save(this.sMinscha, pidId, "p4", lastChanged1, "<program>.4.minscha.update</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
             String p4TextUpd1 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4TextUpd1.contains(".4.minscha.update"));
-            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
             long lastChanged2 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             Assert.assertTrue(lastChanged2 > lastChanged1);
@@ -577,32 +581,32 @@ public class RestInterfaceTest {
         final Key LOCK_ERROR = Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING;
         // scenario 2: minscha reads pid's p4, then pid reads her p4; pid stores her program, but minscha can't (his timestamp is outdated)
         {
-            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long minschaReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long pidReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             Thread.sleep(2); // both timestamps are probably the same, sleeping to get a different 'last update timestamp'
             save(this.sPid, pidId, "p4", pidReadTimestamp, "<program>.4.pid.concurrentOk</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid.concurrentOk"));
             save(this.sMinscha, pidId, "p4", minschaReadTimestamp, "<program>.4.minscha.concurrentFail</program>", "error", LOCK_ERROR);
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid.concurrentOk"));
             String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(program.contains(".4.pid.concurrentOk"));
         }
         // scenario 3: minscha reads pid's p4, then pid reads her p4; minscha stores the shared program, but pid can't (her timestamp is outdated)
         {
-            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long minschaReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long pidReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             Thread.sleep(2); // both timestamps are probably the same, sleeping to get a different 'last update timestamp'
             save(this.sMinscha, pidId, "p4", minschaReadTimestamp, "<program>.4.minscha.concurrentOk</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
-            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.concurrentOk"));
             save(this.sPid, pidId, "p4", pidReadTimestamp, "<program>.4.pid.concurrentFail</program>", "error", LOCK_ERROR);
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.concurrentOk"));
             String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(program.contains(".4.minscha.concurrentOk"));

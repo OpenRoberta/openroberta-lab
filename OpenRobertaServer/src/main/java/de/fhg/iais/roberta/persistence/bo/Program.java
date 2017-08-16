@@ -33,6 +33,10 @@ public class Program implements WithSurrogateId {
     @JoinColumn(name = "ROBOT_ID")
     private Robot robot;
 
+    @ManyToOne
+    @JoinColumn(name = "AUTHOR_ID")
+    private User author;
+
     @Column(name = "PROGRAM_TEXT")
     private String programText;
 
@@ -48,8 +52,8 @@ public class Program implements WithSurrogateId {
     @Column(name = "LAST_ERRORFREE")
     private Timestamp lastErrorFree;
 
-    @Column(name = "NUMBER_OF_BLOCKS")
-    private int numberOfBlocks;
+    @Column(name = "VIEWED")
+    private int viewed;
 
     @Column(name = "TAGS")
     private String tags;
@@ -67,12 +71,14 @@ public class Program implements WithSurrogateId {
      * @param name the name of the program, not null
      * @param owner the user who created and thus owns the program
      */
-    public Program(String name, User owner, Robot robot) {
+    public Program(String name, User owner, Robot robot, User author) {
         Assert.notNull(name);
         Assert.notNull(owner);
+        Assert.notNull(author);
         this.name = name;
         this.owner = owner;
         this.robot = robot;
+        this.author = author;
         this.created = Util1.getNow();
         this.lastChanged = Util1.getNow();
     }
@@ -111,12 +117,12 @@ public class Program implements WithSurrogateId {
         this.lastErrorFree = lastErrorFree;
     }
 
-    public int getNumberOfBlocks() {
-        return this.numberOfBlocks;
+    public int getNumberOfViews() {
+        return this.viewed;
     }
 
-    public void setNumberOfBlocks(int numberOfBlocks) {
-        this.numberOfBlocks = numberOfBlocks;
+    public void setViewed(int viewed) {
+        this.viewed = viewed;
     }
 
     public String getTags() {
@@ -145,6 +151,15 @@ public class Program implements WithSurrogateId {
         return this.robot;
     }
 
+    /**
+     * get the user, who shared this program with someone, currently either the owner or the Gallery user
+     *
+     * @return the author, never <code>null</code>
+     */
+    public User getAuthor() {
+        return this.author;
+    }
+
     public Timestamp getCreated() {
         return this.created;
     }
@@ -163,6 +178,8 @@ public class Program implements WithSurrogateId {
             + (this.owner == null ? "???" : this.owner.getId())
             + ", robotId="
             + (this.robot == null ? "???" : this.robot.getId())
+            + ", authorId="
+            + (this.author == null ? "???" : this.author.getId())
             + ", created="
             + this.created
             + ", lastChanged="

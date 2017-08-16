@@ -782,7 +782,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         $('#menuSaveConfig').parent().addClass('disabled');
         setProgramSaved(true);
         setConfigurationSaved(true);
-
+        if (GUISTATE.gui.view == 'tabGalleryList') {
+            $('#galleryList').find('button[name="refresh"]').trigger('click');
+        }
     }
     exports.setLogin = setLogin;
 
@@ -802,11 +804,14 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#tabProgram').trigger('click');
         } else if (GUISTATE.gui.view == 'tabConfList') {
             $('#tabConfiguration').trigger('click');
+        } else if (GUISTATE.gui.view == 'tabGalleryList') {
+            $('#galleryList').find('button[name="refresh"]').trigger('click');
         }
     }
+
     exports.setLogout = setLogout;
 
-    function setProgram(result, opt_owner, opt_gallery) {
+    function setProgram(result, opt_owner, opt_author) {
         if (result) {
             GUISTATE.program.name = result.name;
             GUISTATE.program.shared = result.programShared;
@@ -814,15 +819,16 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             setProgramSaved(true);
             var name = result.name;
             if (opt_owner) {
-                if (opt_gallery) {
-                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-puzzle-outline progName"></span></b><span style="color:#33B8CA;">' + opt_owner
-                            + '</span>';
-                } else if (opt_owner === 'Roberta') {
+                if (opt_owner === 'Gallery' && GUISTATE.program.shared == 'X_WRITE') { // user has uploaded this program to the gallery
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-th-large-outline progName"></span></b>';
+                } else if (opt_owner === 'Gallery' && GUISTATE.program.shared == 'READ') { // user loads a program from the gallery
+                    name += ' <b><span style="color:#33B8CA;" class="typcn typcn-th-large-outline progName">' + opt_author + '</span></b>';
+                } else if (opt_owner === 'Roberta') { // user loads a program from the example program list
                     name += ' <b><span style="color:#33B8CA;" class="typcn typcn-roberta progName"></span></b>';
-                } else if (GUISTATE.program.shared == 'WRITE') {
+                } else if (GUISTATE.program.shared == 'WRITE') { // user loads a program, owned by another user, but with WRITE rights
                     name += ' <b><span style="color:#33B8CA;" class="typcn typcn-pencil progName"></span></b><span style="color:#33B8CA;">' + opt_owner
                             + '</span>';
-                } else if (GUISTATE.program.shared == 'READ') {
+                } else if (GUISTATE.program.shared == 'READ') { // user loads a program, owned by another user, but with READ rights
                     name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner
                             + '</span>';
                 } else {

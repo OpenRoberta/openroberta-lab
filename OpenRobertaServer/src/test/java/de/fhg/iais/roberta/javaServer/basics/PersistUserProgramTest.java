@@ -66,9 +66,9 @@ public class PersistUserProgramTest {
         //Create one program per user
         for ( int userNumber = 0; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber++ ) {
             User owner = userDao.loadUser("account-" + userNumber);
-            Program program = programDao.load("program-" + userNumber, owner, robot);
+            Program program = programDao.load("program-" + userNumber, owner, robot, owner);
             if ( program == null ) {
-                Program program2 = new Program("program-" + userNumber, owner, robot);
+                Program program2 = new Program("program-" + userNumber, owner, robot, owner);
                 String text = "<program>...</program>";
                 program2.setProgramText(text);
                 hSession.save(program2);
@@ -80,7 +80,7 @@ public class PersistUserProgramTest {
 
         //User 0 invites all inpair  users to write to its program
         User owner = userDao.loadUser("account-0");
-        Program program = programDao.load("program-0", owner, robot);
+        Program program = programDao.load("program-0", owner, robot, owner);
         AccessRightDao userProgramDao = new AccessRightDao(hSession);
         for ( int userNumber = 1; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
@@ -99,7 +99,7 @@ public class PersistUserProgramTest {
         Assert.assertTrue(userProgramList.size() == 50);
         for ( int userNumber = 1; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
-            List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user);
+            List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user, robot);
             Assert.assertTrue(userProgramList2.size() == 1);
         }
     }

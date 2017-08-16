@@ -1,13 +1,14 @@
 /**
  * @fileOverview Provides the view/tab for all programs shared with the gallery.
- *               Programs are edited in a bootstrap table with card view. From
+ *               Programs are shown in a bootstrap table with card view. From
  *               this view one can select (double click) a program to load it
  *               into the program (blockly) view to execute or copy it.
- *               
+ * 
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
-define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'progList.model', 'program.model', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(
-        require, exports, LOG, UTIL, COMM, GUISTATE_C, PROGLIST, PROGRAM, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'progList.model', 'program.model', 'program.controller', 'blocks-msg',
+        'jquery', 'bootstrap-table', 'bootstrap-tagsinput' ], function(require, exports, LOG, UTIL, COMM, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C,
+        Blockly, $) {
 
     var BACKGROUND_COLORS = [ '#33B8CA', '#EBC300', '#39378B', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA',
             '#FF69B4', '#DF01D7' ];
@@ -44,27 +45,33 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'pr
             },
             columns : [ {
                 sortable : true,
-                formatter : formatProgramName,
-            }, {
-                title : titleOwner,
-                sortable : true,
-            }, {
-                sortable : true,
                 visible : false,
             }, {
-                title : titleNumberOfBlocks,
                 sortable : true,
-                formatter : formatNumberOfBlocks,
+                formatter : formatProgramName,
+            }, {
+                sortable : true,
+                formatter : formatProgramDescription,
+            }, {
+                title : titleAuthor,
+                sortable : true,
             }, {
                 title : titleDate,
                 sortable : true,
                 formatter : UTIL.formatDate
             }, {
+                title : titleNumberOfViews,
                 sortable : true,
-                formatter : formatProgramDescription,
+            }, {
+                title : titleLikes,
+                sortable : true,
             }, {
                 sortable : true,
-            }, ]
+                formatter : formatTags,
+            }, {
+                events : eventsLike,
+                formatter : formatLike,
+            } ]
         });
         $('#galleryTable').bootstrapTable('togglePagination');
     }
@@ -76,44 +83,23 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'pr
                 height : UTIL.calcDataTableHeight()
             });
         });
+
         $('#tabGalleryList').on('show.bs.tab', function(e) {
             guiStateController.setView('tabGalleryList');
             PROGLIST.loadGalleryList(update);
         });
 
-        $('.bootstrap-table').find('button[name="refresh"]').onWrap('click', function() {
+        $('#galleryTable').on('all.bs.table', function(e) {
+            configureTagsInput();
+        });
+
+        $('#galleryList').find('button[name="refresh"]').onWrap('click', function() {
             PROGLIST.loadGalleryList(update);
             return false;
         }, "refresh gallery list clicked");
 
         $('#galleryTable').onWrap('dbl-click-row.bs.table', function($element, row) {
-            row.splice(2, 2); // robot type and number of blocks are not needed
-            var result = {};
-            result.name = row[0];
-            result.programShared = 'READ';
-            result.timestamp = '';
-            PROGRAM.loadProgramFromXML(row[0], row[3], function(result) {
-                if (result.rc == "ok") {
-                    // on server side we only test case insensitive block names, displaying xml can still fail:
-                    try {
-                        result.programSaved = false;
-                        result.programShared = 'READ';
-                        result.programTimestamp = '';
-                        GUISTATE_C.setProgram(result, row[1], true);
-                        GUISTATE_C.setProgramXML(row[3]);
-                        $('#tabProgram').trigger('click');
-                    } catch (e) {
-                        result.data = xml;
-                        result.name = GUISTATE_C.getProgramName();
-                        showProgram(result);
-                        result.rc = "error";
-                        MSG.displayInformation(result, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, result.name);
-                    }
-                } else {
-                    MSG.displayInformation(result, "", result.message, "");
-                }
-            });
-
+            PROGRAM_C.loadFromGallery(row);
         }, "Load program from gallery double clicked");
 
         $('#backGalleryList').onWrap('click', function() {
@@ -129,20 +115,44 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'pr
             UTIL.response(result);
             if (result.rc === 'ok') {
                 $('#galleryTable').bootstrapTable("load", result.programNames);
-
+                //configureTagsInput();
             }
+        }
+    }
+
+    var eventsLike = {
+        'click .like' : function(e, value, row, index) {
+            e.preventDefault();
+            PROGRAM.likeProgram(true, row[1], row[3], row[0], function(result) {
+                if (result.rc == "ok") {
+                    $('#galleryList').find('button[name="refresh"]').trigger('click');
+                }
+                MSG.displayInformation(result, result.message, result.message, row[1]);
+            });
+            return false;
+        },
+        'click .dislike' : function(e, value, row, index) {
+            e.preventDefault();
+            PROGRAM.likeProgram(false, row[1], row[3], row[0], function(result) {
+                if (result.rc == "ok") {
+                    $('#galleryList').find('button[name="refresh"]').trigger('click');
+                }
+                MSG.displayInformation(result, result.message, result.message, row[1]);
+            });
+            return false;
         }
     }
 
     var rowStyle = function(row, index) {
         return {
-            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6 typcn typcn-' + row[2] // the robot typicon as background image
+            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6 typcn typcn-' + row[0] // the robot typicon as background image
         }
     }
+    exports.rowStyle = rowStyle;
 
     // TODO extend this, if more customization features are available, eg. robot graphics, uploaded images.
     var rowAttributes = function(row, index) {
-        var hash = UTIL.getHashFrom(row[0] + row[1] + row[2]);
+        var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);
         var colorIndex = hash % BACKGROUND_COLORS.length;
         return {
             style : 'background-color :' + BACKGROUND_COLORS[colorIndex] + ';' + //
@@ -153,44 +163,64 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'guiState.controller', 'pr
     }
     exports.rowAttributes = rowAttributes;
 
-    var titleOwner = "<span lkey='Blockly.Msg.DATATABLE_BY'>" + (Blockly.Msg.DATATABLE_BY || "von") + "</span>";
-    exports.titleOwner = titleOwner;
+    var titleAuthor = "<span lkey='Blockly.Msg.DATATABLE_BY'>" + (Blockly.Msg.DATATABLE_BY || "von") + "</span>";
+    exports.titleAuthor = titleAuthor;
 
-    var titleNumberOfBlocks = "<span lkey='Blockly.Msg.DATATABLE_NUMBER_OF_BLOCKS'>" + (Blockly.Msg.DATATABLE_NUMBER_OF_BLOCKS || "Blöcke") + "</span>";
-    exports.titleNumberOfBlocks = titleNumberOfBlocks;
+    var titleNumberOfViews = '<span class="galleryIcon typcn typcn-eye-outline" />';
+    exports.titleNumberOfViews = titleNumberOfViews;
 
     var titleDate = "<span lkey='Blockly.Msg.DATATABLE_DATE'>" + (Blockly.Msg.DATATABLE_DATE || "Datum") + "</span>";
     exports.titleDate = titleDate;
 
-    var formatProgramName = function(value, row, index) {
-        return '<div style="font-weight:bold; font-size:24px; text-align:center; margin-top:100px">' + value + '</div>';
+    var titleLikes = '<span class="galleryIcon typcn typcn-heart-full-outline" />';
+    exports.titleLikes = titleLikes;
 
+    var formatProgramName = function(value, row, index) {
+        return '<div style="font-weight:bold; font-size:24px; text-align:center; margin-top:60px">' + value + '</div>';
     }
     exports.formatProgramName = formatProgramName;
 
     var formatProgramDescription = function(value, row, index) {
-        var table = document.getElementById("galleryTable").rows.length;
         var xmlDoc = Blockly.Xml.textToDom(value, Blockly.getMainWorkspace());
         var description = xmlDoc.getAttribute("description");
-        var firstParagraph;
         if (description) {
-            if (description.startsWith("<div>")) {
-                firstParagraph = description.substr(0, description.indexOf('</div>') + 6);
-            } else {
-                firstParagraph = description.substr(0, description.indexOf('<div'))
-            }
-            return '<div width:100% style="font-weight:normal; font-size:16px; min-height:45px; max-height:45px; overflow:hidden">' + firstParagraph + '</div>';
+            description = description.substring(0, 200);
+        } else {
+            description = "&nbsp;";
         }
-        return '<div width:100% style="font-weight:normal; font-size:16px; min-height:45px">&nbsp;</div>';
+        return '<div class="galleryDescription">' + description + '</div>';
     }
     exports.formatProgramDescription = formatProgramDescription;
 
-    var formatNumberOfBlocks = function(value, row, index) {
-        if (value === parseInt(value, 10) && value !== 0) {
-            return value;
+    var formatTags = function(value, row, index) {
+        var xmlDoc = Blockly.Xml.textToDom(row[2], Blockly.getMainWorkspace());
+        var tags = xmlDoc.getAttribute("tags");
+        if (!tags) {
+            tags = "&nbsp;";
+        }
+        return '<input class="infoTags" type="text" value="' + tags + '" data-role="tagsinput"/>';
+    }
+    exports.formatTags = formatTags;
+
+    var formatLike = function(value, row, index) {
+        if (GUISTATE_C.isUserLoggedIn()) {
+            if (value) {
+                return '<div class="galleryLike"><a href="#" class="dislike galleryLike typcn typcn-heart-half-outline"><span lkey="Blockly.Msg.DATATABLE_DISLIKE">'
+                        + (Blockly.Msg.GALLERY_DISLIKE || 'gefällt mir nicht mehr') + '</span></a></div>';
+            } else {
+                return '<div class="galleryLike"><a href="#" class="like galleryLike typcn typcn-heart-full-outline"><span lkey="Blockly.Msg.DATATABLE_LIKE">'
+                        + (Blockly.Msg.GALLERY_LIKE || 'gefällt mir') + '</span></a></div>';
+            }
         } else {
-            return UTIL.countBlocks(row[5]);
+            return '<div style="display:none;" />'; // like is only for logged in users allowed
         }
     }
-    exports.formatNumberOfBlocks = formatNumberOfBlocks;
+
+    function configureTagsInput() {
+        $('.infoTags').tagsinput();
+        $('#galleryTable .bootstrap-tagsinput').addClass('galleryTags');
+        $('#galleryList').find('.galleryTags>input').attr('readonly', 'true');
+        $('#galleryList').find('span[data-role=remove]').addClass('hidden');
+    }
+    exports.configureTagsInput = configureTagsInput;
 });

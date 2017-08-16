@@ -6,6 +6,8 @@ require.config({
         'blocks-msg' : '../../blockly/msg/js/en',
         'bootstrap' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
         'bootstrap-table' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
+        'bootstrap-tagsinput' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
+        'bootstrap.wysiwyg' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',   
         'datatables' : 'jquery/jquery.dataTables.min',
         'enjoyHint' : 'enjoyHint/enjoyhint.min',
         'jquery' : 'jquery/jquery-2.1.4.min',
@@ -14,10 +16,9 @@ require.config({
         'jquery-validate' : 'jquery/jquery.validate.min',
         'jquery-hotkeys' : 'jquery/jquery.hotkeys',
         'prettify' : 'code-prettify/prettify',
-        'volume-meter' : 'sound/volume-meter',
-        'bootstrap.wysiwyg' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
         'socket.io' : 'socket.io/socket.io',
-
+        'volume-meter' : 'sound/volume-meter',
+        
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
         'configuration.model' : '../app/roberta/models/configuration.model',

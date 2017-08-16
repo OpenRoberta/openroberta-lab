@@ -41,20 +41,22 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @param name the name of the program, never null
      * @param user the user who owns the program, never null
-     * @param robotId the robot the program was written for
+     * @param robot the robot the program was written for
+     * @param author the user who is the author of this program, never null
      * @param programText the program text
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @return a pair of (message-key, program). If the program is persisted successfully, the program is NOT null.
      */
-    public Pair<Key, Program> persistOwnProgram(String name, User user, Robot robot, String programText, Timestamp timestamp) {
+    public Pair<Key, Program> persistOwnProgram(String name, User user, Robot robot, User author, String programText, Timestamp timestamp) {
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
-        Program program = load(name, user, robot);
+        Assert.notNull(author);
+        Program program = load(name, user, robot, author);
         if ( program == null ) {
             if ( timestamp == null ) {
                 // save as && the program doesn't exist.
-                program = new Program(name, user, robot);
+                program = new Program(name, user, robot, author);
                 program.setProgramText(programText);
                 this.session.save(program);
                 return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
@@ -85,12 +87,13 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @return a pair of (message-key, program). If the program is persisted successfully, the program is NOT null.
      */
-    public Pair<Key, Program> persistSharedProgramText(String name, User user, Robot robot, String programText, Timestamp timestamp) {
+    public Pair<Key, Program> persistSharedProgramText(String name, User user, Robot robot, User author, String programText, Timestamp timestamp) {
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
+        Assert.notNull(author);
 
-        Program program = loadSharedForUpdate(name, user, robot);
+        Program program = loadSharedForUpdate(name, user, robot, author);
         if ( program == null ) {
             ProgramDao.LOG.error("update was requested, but no shared program was found");
             return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION, null);
@@ -109,16 +112,20 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @param name the name of the program, never null
      * @param owner user who owns the program, never null
+     * @param robotId the robot the program was written for
+     * @param author the user who is the author of this program, never null
      * @return the program, null if the program is not found
      */
-    public Program load(String name, User owner, Robot robot) {
+    public Program load(String name, User owner, Robot robot, User author) {
         Assert.notNull(name);
         Assert.notNull(owner);
         Assert.notNull(robot);
-        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner and robot=:robot");
+        Assert.notNull(author);
+        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner and robot=:robot and author=:author");
         hql.setString("name", name);
         hql.setEntity("owner", owner);
         hql.setEntity("robot", robot);
+        hql.setEntity("author", author);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -133,10 +140,11 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param robot
      * @return the program, null if the program is not found
      */
-    private Program loadSharedForUpdate(String name, User user, Robot robot) {
+    private Program loadSharedForUpdate(String name, User user, Robot robot, User author) {
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
+        Assert.notNull(author);
         Query hql = this.session.createQuery("from AccessRight where user=:user and program.name=:name and program.robot=:robot");
         hql.setString("name", name);
         hql.setEntity("user", user);
@@ -146,15 +154,15 @@ public class ProgramDao extends AbstractDao<Program> {
         Assert.isTrue(il.size() <= 1);
         if ( il.size() == 1 ) {
             AccessRight accessRight = il.get(0);
-            if ( accessRight.getRelation() == Relation.WRITE ) {
+            if ( accessRight.getRelation() == Relation.WRITE || accessRight.getRelation() == Relation.X_WRITE ) {
                 return accessRight.getProgram();
             }
         }
         return null; // .. because the right dowsn't exist, it's no write access :-)
     }
 
-    public int deleteByName(String name, User owner, Robot robot) {
-        Program toBeDeleted = load(name, owner, robot);
+    public int deleteByName(String name, User owner, Robot robot, User author) {
+        Program toBeDeleted = load(name, owner, robot, author);
         if ( toBeDeleted == null ) {
             return 0;
         } else {
@@ -164,7 +172,7 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * load all programs persisted in the database which are owned by a user given
+     * load all programs persisted in the database which are owned by a given user and given robot type
      *
      * @return the list of all programs, may be an empty list, but never null
      */
@@ -172,6 +180,19 @@ public class ProgramDao extends AbstractDao<Program> {
         Query hql = this.session.createQuery("from Program where owner=:owner and robot=:robot");
         hql.setEntity("owner", owner);
         hql.setEntity("robot", robot);
+        @SuppressWarnings("unchecked")
+        List<Program> il = hql.list();
+        return Collections.unmodifiableList(il);
+    }
+
+    /**
+     * load all programs persisted in the database which are owned by a user given
+     *
+     * @return the list of all programs, may be an empty list, but never null
+     */
+    public List<Program> loadAll(User owner) {
+        Query hql = this.session.createQuery("from Program where owner=:owner");
+        hql.setEntity("owner", owner);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -187,5 +208,10 @@ public class ProgramDao extends AbstractDao<Program> {
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);
+    }
+
+    public Pair<Key, Program> persistProgram(Program program) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -1,0 +1,238 @@
+[33m8f11fc2[m HEAD@{0}: rebase finished: returning to refs/heads/beate2
+[33m8f11fc2[m HEAD@{1}: rebase: asdf
+[33md9019fe[m HEAD@{2}: rebase: checkout develop
+[33ma2876ea[m HEAD@{3}: checkout: moving from develop to beate2
+[33md9019fe[m HEAD@{4}: merge labcode-de-bug-invalidcommand: Merge made by the 'recursive' strategy.
+[33m8a9a3a0[m HEAD@{5}: checkout: moving from labcode-de-bug-invalidcommand to develop
+[33m68ca3ed[m HEAD@{6}: pull https://github.com/labcode-de/robertalab-1.git bug-invalidcommand: Merge made by the 'recursive' strategy.
+[33m8a9a3a0[m HEAD@{7}: checkout: moving from develop to labcode-de-bug-invalidcommand
+[33m8a9a3a0[m HEAD@{8}: pull: Fast-forward
+[33m1990e0e[m HEAD@{9}: checkout: moving from labcode-de-bug-invalidcommand to develop
+[33m1990e0e[m HEAD@{10}: checkout: moving from develop to labcode-de-bug-invalidcommand
+[33m1990e0e[m HEAD@{11}: checkout: moving from beate2 to develop
+[33ma2876ea[m HEAD@{12}: commit: asdf
+[33m20990ea[m HEAD@{13}: reset: moving to HEAD^
+[33m98a6a5b[m HEAD@{14}: commit (amend): asdf
+[33m2f7772e[m HEAD@{15}: commit (amend): asdf
+[33m4a32329[m HEAD@{16}: checkout: moving from aufraeumen to beate2
+[33m1990e0e[m HEAD@{17}: checkout: moving from develop to aufraeumen
+[33m1990e0e[m HEAD@{18}: checkout: moving from beate2 to develop
+[33m4a32329[m HEAD@{19}: commit: asdf
+[33m20990ea[m HEAD@{20}: checkout: moving from beate to beate2
+[33m20990ea[m HEAD@{21}: checkout: moving from refactorProgram to beate
+[33m1990e0e[m HEAD@{22}: checkout: moving from develop to refactorProgram
+[33m1990e0e[m HEAD@{23}: pull: Fast-forward
+[33m20990ea[m HEAD@{24}: checkout: moving from galery to develop
+[33m20990ea[m HEAD@{25}: checkout: moving from beate to galery
+[33m20990ea[m HEAD@{26}: rebase finished: returning to refs/heads/beate
+[33m20990ea[m HEAD@{27}: rebase: checkout develop
+[33m4b62726[m HEAD@{28}: checkout: moving from develop to beate
+[33m20990ea[m HEAD@{29}: pull: Fast-forward
+[33mcc179cc[m HEAD@{30}: checkout: moving from master to develop
+[33mfdb05ac[m HEAD@{31}: checkout: moving from develop to master
+[33mcc179cc[m HEAD@{32}: checkout: moving from master to develop
+[33mfdb05ac[m HEAD@{33}: merge develop: Merge made by the 'recursive' strategy.
+[33mf870dc3[m HEAD@{34}: checkout: moving from develop to master
+[33mcc179cc[m HEAD@{35}: commit: fix bump to version 2.2.7
+[33m03d3a09[m HEAD@{36}: checkout: moving from master to develop
+[33mf870dc3[m HEAD@{37}: commit (merge): Merge branch 'develop'
+[33m0631fc5[m HEAD@{38}: checkout: moving from develop to master
+[33m03d3a09[m HEAD@{39}: commit: bump to version 2.2.7
+[33mbcbfd15[m HEAD@{40}: commit (amend): x#537 follow a tip from the designers and remove a little bit of opacity
+[33md8ec937[m HEAD@{41}: reset: moving to HEAD~
+[33m30f356b[m HEAD@{42}: commit: bump to version 2.2.7
+[33md8ec937[m HEAD@{43}: commit: #537 follow a tip from the designers and remove a little bit of opacity
+[33m4b62726[m HEAD@{44}: reset: moving to HEAD~
+[33m23885ca[m HEAD@{45}: commit: #537 follow a tip from the designers and remove a little bit of opacity
+[33m4b62726[m HEAD@{46}: reset: moving to HEAD~
+[33m22f6349[m HEAD@{47}: commit: bump to version 2.2.7
+[33m4b62726[m HEAD@{48}: merge beate: Fast-forward
+[33maa61804[m HEAD@{49}: checkout: moving from beate to develop
+[33m4b62726[m HEAD@{50}: commit: fix #554, fix reload program if rendering blocks fails
+[33mbb82885[m HEAD@{51}: commit: fix another two linkds to the wiki #526.
+[33maa61804[m HEAD@{52}: rebase finished: returning to refs/heads/beate
+[33maa61804[m HEAD@{53}: rebase: checkout develop
+[33maa3b7db[m HEAD@{54}: checkout: moving from develop to beate
+[33maa61804[m HEAD@{55}: pull: Fast-forward
+[33maa3b7db[m HEAD@{56}: merge beate: Fast-forward
+[33m045e429[m HEAD@{57}: checkout: moving from beate to develop
+[33maa3b7db[m HEAD@{58}: commit: rename botnroll back to ardu #553
+[33m045e429[m HEAD@{59}: rebase finished: returning to refs/heads/beate
+[33m045e429[m HEAD@{60}: rebase: checkout develop
+[33m2548210[m HEAD@{61}: checkout: moving from develop to beate
+[33m045e429[m HEAD@{62}: pull: Fast-forward
+[33m0b7485a[m HEAD@{63}: commit: hide unfinished new systems, correct no group for botnRoll #496
+[33m0b39b21[m HEAD@{64}: pull: Fast-forward
+[33m2548210[m HEAD@{65}: merge beate: Fast-forward
+[33meffbc6e[m HEAD@{66}: checkout: moving from beate to develop
+[33m2548210[m HEAD@{67}: checkout: moving from develop to beate
+[33meffbc6e[m HEAD@{68}: checkout: moving from beate to develop
+[33m2548210[m HEAD@{69}: commit: hide new user workflow #504 for next release
+[33m62790b0[m HEAD@{70}: commit: hide gallery #399 for next release
+[33meffbc6e[m HEAD@{71}: rebase finished: returning to refs/heads/beate
+[33meffbc6e[m HEAD@{72}: rebase: checkout develop
+[33m504c77c[m HEAD@{73}: checkout: moving from develop to beate
+[33meffbc6e[m HEAD@{74}: pull: Fast-forward
+[33m875d136[m HEAD@{75}: checkout: moving from mm to develop
+[33m0631fc5[m HEAD@{76}: reset: moving to HEAD^
+[33m447603b[m HEAD@{77}: cherry-pick: #527 fix the bug of global variables
+[33m0631fc5[m HEAD@{78}: checkout: moving from master to mm
+[33m0631fc5[m HEAD@{79}: checkout: moving from develop to master
+[33m875d136[m HEAD@{80}: pull: Fast-forward
+[33mb0689e2[m HEAD@{81}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{82}: checkout: moving from develop to master
+[33mb0689e2[m HEAD@{83}: reset: moving to HEAD^
+[33m60d33ed[m HEAD@{84}: reset: moving to HEAD^
+[33m3ed484b[m HEAD@{85}: reset: moving to HEAD^
+[33m875d136[m HEAD@{86}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{87}: reset: moving to HEAD^
+[33m479a8fc[m HEAD@{88}: reset: moving to HEAD^
+[33me033d9b[m HEAD@{89}: reset: moving to HEAD^
+[33m0c724d8[m HEAD@{90}: reset: moving to HEAD^
+[33m48964fb[m HEAD@{91}: reset: moving to HEAD^
+[33m2bf25df[m HEAD@{92}: reset: moving to HEAD^
+[33m4f5dfb4[m HEAD@{93}: reset: moving to HEAD^
+[33mc4886ca[m HEAD@{94}: commit (cherry-pick): #539 add missing visitor implementation
+[33m4f5dfb4[m HEAD@{95}: cherry-pick: #521 moved volume and timer outside the main function
+[33m2bf25df[m HEAD@{96}: reset: moving to HEAD^
+[33m6156c72[m HEAD@{97}: reset: moving to HEAD^
+[33m9ae6e81[m HEAD@{98}: reset: moving to HEAD^
+[33m2ccaf74[m HEAD@{99}: reset: moving to HEAD^
+[33mf1b4c39[m HEAD@{100}: commit (cherry-pick): #541 and #536 add new values and test wait for loop with no wait instead of 100
+[33m2ccaf74[m HEAD@{101}: reset: moving to HEAD^
+[33mf44f785[m HEAD@{102}: reset: moving to HEAD^
+[33mefc419e[m HEAD@{103}: reset: moving to HEAD^
+[33mdf3f8cd[m HEAD@{104}: reset: moving to HEAD^
+[33mb2682d9[m HEAD@{105}: reset: moving to HEAD^
+[33mbebf9aa[m HEAD@{106}: cherry-pick: implement #541 signal strength, #536 read puls, add #537 flyout background from blockly
+[33mb2682d9[m HEAD@{107}: cherry-pick: Move robot+client check into a locla helper.
+[33mdf3f8cd[m HEAD@{108}: cherry-pick: #536 Read pulse hotfix/microbit libs rebuild
+[33mefc419e[m HEAD@{109}: cherry-pick: #528 added comment about changes needed in future and removed unused string
+[33mf44f785[m HEAD@{110}: cherry-pick: #528 hardcoded botnroll-ardu name so it would be compatible with usb program (tmp solution)
+[33m2ccaf74[m HEAD@{111}: reset: moving to HEAD^
+[33me59cabb[m HEAD@{112}: reset: moving to HEAD^
+[33m7b22654[m HEAD@{113}: cherry-pick: #543 fixed mutation type that returns to blockly from assignment statement
+[33me59cabb[m HEAD@{114}: cherry-pick: #535 #536 updated microbit-dal libraries and modified microphone visitor to use getMicrophoneValue (normalised)
+[33m2ccaf74[m HEAD@{115}: cherry-pick: Compare with firmwareName instead of robotName.
+[33m9ae6e81[m HEAD@{116}: cherry-pick: #542 fix motor bugs in calliope
+[33m6156c72[m HEAD@{117}: cherry-pick: #541 and #536 add new values and test wait for loop with no wait instead of 100
+[33m2bf25df[m HEAD@{118}: reset: moving to HEAD^
+[33m818a30c[m HEAD@{119}: cherry-pick: #521 moved volume and timer outside the main function
+[33m2bf25df[m HEAD@{120}: cherry-pick: fixed calliopes motors when set to different values.
+[33m48964fb[m HEAD@{121}: cherry-pick: #583 fix motors bug in calliope simulation
+[33m0c724d8[m HEAD@{122}: commit (cherry-pick): #529 fix invalid casting in RobProgramCheckVisitor
+[33me033d9b[m HEAD@{123}: cherry-pick: #521 moved volume variable inside the fuction where the play function is used
+[33m479a8fc[m HEAD@{124}: reset: moving to HEAD^
+[33m2598050[m HEAD@{125}: commit (cherry-pick): #496 moved temperature sensor to generic sensors
+[33m479a8fc[m HEAD@{126}: reset: moving to HEAD^
+[33m6e870ac[m HEAD@{127}: cherry-pick: #521 moved volume variable inside the fuction where the play function is used
+[33m479a8fc[m HEAD@{128}: cherry-pick: #527 fix the bug of global variables
+[33m0631fc5[m HEAD@{129}: reset: moving to HEAD^
+[33mf4ab3c7[m HEAD@{130}: reset: moving to HEAD^
+[33m2911507[m HEAD@{131}: reset: moving to HEAD^
+[33m1749aca[m HEAD@{132}: reset: moving to HEAD^
+[33m7595748[m HEAD@{133}: reset: moving to HEAD^
+[33md3e02cf[m HEAD@{134}: reset: moving to HEAD^
+[33m051a1a5[m HEAD@{135}: reset: moving to HEAD^
+[33mbd8f43f[m HEAD@{136}: reset: moving to HEAD^
+[33ma69b35c[m HEAD@{137}: reset: moving to HEAD^
+[33m5a670e0[m HEAD@{138}: reset: moving to HEAD^
+[33mf620847[m HEAD@{139}: reset: moving to HEAD^
+[33m90a9895[m HEAD@{140}: reset: moving to HEAD^
+[33mf0fe59a[m HEAD@{141}: reset: moving to HEAD^
+[33m3f64810[m HEAD@{142}: commit (amend): implement #541 signal strength, #536 read puls, add #537 flyout background from blockly
+[33m11dfbb9[m HEAD@{143}: commit (cherry-pick): implement #541 signal strength, #536 read puls, add #537 flyout background from blockly
+[33mf0fe59a[m HEAD@{144}: commit (cherry-pick): #536 Read pulse hotfix/microbit libs rebuild
+[33m90a9895[m HEAD@{145}: cherry-pick: #543 fixed mutation type that returns to blockly from assignment statement
+[33mf620847[m HEAD@{146}: commit (cherry-pick): #535 #536 updated microbit-dal libraries and modified microphone visitor to use getMicrophoneValue (normalised)
+[33m5a670e0[m HEAD@{147}: commit (cherry-pick): #542 fix motor bugs in calliope
+[33ma69b35c[m HEAD@{148}: commit (cherry-pick): #541 and #536 add new values and test wait for loop with no wait instead of 100
+[33mbd8f43f[m HEAD@{149}: commit (cherry-pick): Compare with firmwareName instead of robotName.
+[33m051a1a5[m HEAD@{150}: cherry-pick: #521 moved volume and timer outside the main function
+[33md3e02cf[m HEAD@{151}: commit (cherry-pick): fixed calliopes motors when set to different values.
+[33m7595748[m HEAD@{152}: cherry-pick: #583 fix motors bug in calliope simulation
+[33m1749aca[m HEAD@{153}: commit (cherry-pick): #529 fix invalid casting in RobProgramCheckVisitor
+[33m2911507[m HEAD@{154}: cherry-pick: #521 moved volume variable inside the fuction where the play function is used
+[33mf4ab3c7[m HEAD@{155}: cherry-pick: #527 fix the bug of global variables
+[33m0631fc5[m HEAD@{156}: checkout: moving from develop to master
+[33m875d136[m HEAD@{157}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{158}: pull: Fast-forward
+[33mf1b6df7[m HEAD@{159}: reset: moving to HEAD^
+[33m0631fc5[m HEAD@{160}: reset: moving to HEAD^
+[33m40d1beb[m HEAD@{161}: commit (merge): Merge branch 'develop'
+[33m0631fc5[m HEAD@{162}: reset: moving to HEAD^
+[33m55a4bf7[m HEAD@{163}: reset: moving to HEAD^
+[33m2db4eea[m HEAD@{164}: cherry-pick: #521 moved volume variable inside the fuction where the play function is used
+[33m55a4bf7[m HEAD@{165}: cherry-pick: #527 fix the bug of global variables
+[33m0631fc5[m HEAD@{166}: pull: Fast-forward
+[33md2ec67a[m HEAD@{167}: reset: moving to HEAD^
+[33mf1b6df7[m HEAD@{168}: reset: moving to HEAD~1
+[33m0631fc5[m HEAD@{169}: reset: moving to HEAD^
+[33m8b6698f[m HEAD@{170}: reset: moving to HEAD^
+[33me7f6a92[m HEAD@{171}: commit (cherry-pick): corrected nxt timeSensor mode
+[33m8b6698f[m HEAD@{172}: cherry-pick: #527 fix the bug of global variables
+[33m0631fc5[m HEAD@{173}: checkout: moving from develop to master
+[33m875d136[m HEAD@{174}: pull: Fast-forward
+[33m504c77c[m HEAD@{175}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{176}: checkout: moving from develop to master
+[33m504c77c[m HEAD@{177}: merge beate: Fast-forward
+[33m7a8d60d[m HEAD@{178}: checkout: moving from beate to develop
+[33m504c77c[m HEAD@{179}: checkout: moving from develop to beate
+[33m7a8d60d[m HEAD@{180}: checkout: moving from beate to develop
+[33m504c77c[m HEAD@{181}: rebase finished: returning to refs/heads/beate
+[33m504c77c[m HEAD@{182}: rebase: implement #541 signal strength, #536 read puls, add #537 flyout background from blockly
+[33m7a8d60d[m HEAD@{183}: reset: moving to HEAD@{1}
+[33md0f5930[m HEAD@{184}: commit (amend): Move robot+client check into a locla helper.
+[33m7a8d60d[m HEAD@{185}: rebase: checkout develop
+[33m12f6eb0[m HEAD@{186}: checkout: moving from develop to beate
+[33m7a8d60d[m HEAD@{187}: pull: Fast-forward
+[33m64c07ab[m HEAD@{188}: checkout: moving from beate to develop
+[33m12f6eb0[m HEAD@{189}: commit: implement #541 signal strength, #536 read puls, add #537 flyout background from blockly
+[33m64c07ab[m HEAD@{190}: rebase finished: returning to refs/heads/beate
+[33m64c07ab[m HEAD@{191}: rebase: checkout develop
+[33mef07d18[m HEAD@{192}: checkout: moving from develop to beate
+[33m64c07ab[m HEAD@{193}: pull: Fast-forward
+[33mef07d18[m HEAD@{194}: checkout: moving from beate to develop
+[33mef07d18[m HEAD@{195}: checkout: moving from develop to beate
+[33mef07d18[m HEAD@{196}: checkout: moving from beate to develop
+[33mef07d18[m HEAD@{197}: rebase finished: returning to refs/heads/beate
+[33mef07d18[m HEAD@{198}: rebase: checkout develop
+[33m5455ec0[m HEAD@{199}: checkout: moving from develop to beate
+[33mef07d18[m HEAD@{200}: pull: Fast-forward
+[33md22cf10[m HEAD@{201}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{202}: checkout: moving from develop to master
+[33md22cf10[m HEAD@{203}: pull: Fast-forward
+[33m5455ec0[m HEAD@{204}: merge beate: Fast-forward
+[33me51b584[m HEAD@{205}: checkout: moving from beate to develop
+[33m5455ec0[m HEAD@{206}: rebase finished: returning to refs/heads/beate
+[33m5455ec0[m HEAD@{207}: rebase: #541 and #536 add new values and test wait for loop with no wait instead of 100
+[33me51b584[m HEAD@{208}: rebase: checkout develop
+[33me33686a[m HEAD@{209}: checkout: moving from develop to beate
+[33me51b584[m HEAD@{210}: pull: Fast-forward
+[33mf65a6c3[m HEAD@{211}: checkout: moving from beate to develop
+[33me33686a[m HEAD@{212}: commit: #541 and #536 add new values and test wait for loop with no wait instead of 100
+[33mf65a6c3[m HEAD@{213}: rebase finished: returning to refs/heads/beate
+[33mf65a6c3[m HEAD@{214}: rebase: checkout develop
+[33me86946d[m HEAD@{215}: checkout: moving from develop to beate
+[33mf65a6c3[m HEAD@{216}: pull: Fast-forward
+[33me86946d[m HEAD@{217}: checkout: moving from eac7ba6840216790070b884066563fc76b9986b4 to develop
+[33meac7ba6[m HEAD@{218}: checkout: moving from beate to eac7ba6840216790070b884066563fc76b9986b4
+[33me86946d[m HEAD@{219}: checkout: moving from develop to beate
+[33me86946d[m HEAD@{220}: checkout: moving from eac7ba6840216790070b884066563fc76b9986b4 to develop
+[33meac7ba6[m HEAD@{221}: checkout: moving from beate to eac7ba6840216790070b884066563fc76b9986b4
+[33me86946d[m HEAD@{222}: checkout: moving from develop to beate
+[33me86946d[m HEAD@{223}: pull: Fast-forward
+[33meac7ba6[m HEAD@{224}: pull: Fast-forward
+[33m110f8e1[m HEAD@{225}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{226}: checkout: moving from develop to master
+[33m110f8e1[m HEAD@{227}: cherry-pick: bump version to 2.2.6
+[33m5428d8d[m HEAD@{228}: cherry-pick: #526 fix wiki links
+[33mc291d46[m HEAD@{229}: checkout: moving from master to develop
+[33m0631fc5[m HEAD@{230}: commit: bump version to 2.2.6
+[33mf1b6df7[m HEAD@{231}: commit: #526 fix wiki links
+[33md2ec67a[m HEAD@{232}: checkout: moving from develop to master
+[33mc291d46[m HEAD@{233}: cherry-pick: bump to version 2.2.5
+[33md9cc299[m HEAD@{234}: cherry-pick: fix #516 and #518 from blockly
+[33m034b806[m HEAD@{235}: cherry-pick: fix ev3 compilation bug
+[33m7896ff5[m HEAD@{236}: checkout: moving from master to develop
+[33md2ec67a[m HEAD@{237}: clone: from https://github.com/OpenRoberta/robertalab.git

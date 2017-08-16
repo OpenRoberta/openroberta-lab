@@ -8,6 +8,7 @@ import org.hibernate.Query;
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -93,12 +94,16 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
      *
      * @return the list of all access rights, may be an empty list, but never null
      */
-    public List<AccessRight> loadAccessRightsForUser(User user) {
+    public List<AccessRight> loadAccessRightsForUser(User user, Robot robot) {
         Assert.notNull(user);
+        Assert.notNull(robot);
 
-        Query hql = this.session.createQuery("from AccessRight where user=:user");
+        int robotId = robot.getId();
+
+        Query hql = this.session.createQuery("from AccessRight where user=:user and program.robot.id=:robotId");
 
         hql.setEntity("user", user);
+        hql.setInteger("robotId", robotId);
         @SuppressWarnings("unchecked")
         List<AccessRight> il = hql.list();
         return Collections.unmodifiableList(il);
@@ -118,14 +123,17 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
         }
     }
 
-    public AccessRight loadAccessRightForUser(int userId, String programName, int ownerId) {
+    public AccessRight loadAccessRightForUser(int userId, String programName, int ownerId, String authorName) {
         Assert.isTrue(userId > 0);
 
-        Query hql = this.session.createQuery("from AccessRight where user.id=:userId and program.name=:programName and program.owner.id=:ownerId");
+        Query hql =
+            this.session.createQuery(
+                "from AccessRight where user.id=:userId and program.name=:programName and program.owner.id=:ownerId and program.author.account=:authorName");
 
         hql.setInteger("userId", userId);
         hql.setString("programName", programName);
         hql.setInteger("ownerId", ownerId);
+        hql.setString("authorName", authorName);
         @SuppressWarnings("unchecked")
         List<AccessRight> il = hql.list();
         Assert.isTrue(il.size() <= 1);

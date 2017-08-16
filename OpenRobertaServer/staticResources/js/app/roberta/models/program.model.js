@@ -69,7 +69,6 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
             "program" : xmlText
         }, successFn, "open program '" + programName + "' from XML");
     }
-    ;
 
     exports.loadProgramFromXML = loadProgramFromXML;
 
@@ -111,11 +110,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * @param owner
      *            {String} - owner of the program
      */
-    function deleteShare(programName, owner, successFn) {
+    function deleteShare(programName, owner, author, successFn) {
         COMM.json("/program", {
             "cmd" : "shareDelete",
             "programName" : programName,
-            "owner" : owner
+            "owner" : owner,
+            "author" : author,
         }, function(result) {
             successFn(result, programName);
         }, "delete share program '" + programName + "' owner: " + owner);
@@ -130,10 +130,11 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - name of the program
      * 
      */
-    function deleteProgramFromListing(programName, successFn) {
+    function deleteProgramFromListing(programName, author, successFn) {
         COMM.json("/program", {
             "cmd" : "deleteP",
-            "name" : programName
+            "name" : programName,
+            "author" : author,
         }, function(result) {
             successFn(result, programName);
         }, "delete program '" + programName + "'");
@@ -150,11 +151,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - name of the owner of the program
      * 
      */
-    function loadProgramFromListing(programName, ownerName, successFn) {
+    function loadProgramFromListing(programName, ownerName, authorName, successFn) {
         COMM.json("/program", {
             "cmd" : "loadP",
             "name" : programName,
-            "owner" : ownerName
+            "owner" : ownerName,
+            "authorName" : authorName
         }, successFn, "load program '" + programName + "' owned by '" + ownerName + "'");
     }
 
@@ -169,11 +171,12 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - name of the owner of the program
      * 
      */
-    function loadProgramEntity(programName, ownerName, successFn) {
+    function loadProgramEntity(programName, authorName, ownerName, successFn) {
         COMM.json("/program", {
             "cmd" : "loadProgramEntity",
             "name" : programName,
-            "owner" : ownerName
+            "owner" : ownerName,
+            "author" : authorName
         }, successFn, "load programEntity '" + programName + "' owned by '" + ownerName + "'");
     }
 
@@ -315,4 +318,22 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.checkProgramCompatibility = checkProgramCompatibility;
+
+    /**
+     * Like or dislike a program from the gallery
+     * 
+     * @param programName
+     *            {String} - name of the program from the gallery
+     * 
+     */
+    function likeProgram(like, programName, authorName, robotName, successFn) {
+        COMM.json("/program", {
+            "cmd" : "likeP",
+            "programName" : programName,
+            "robotName" : robotName,
+            "authorName" : authorName,
+            "like" : like
+        }, successFn, "like program '" + programName + "': '" + like + "'");
+    }
+    exports.likeProgram = likeProgram;
 });

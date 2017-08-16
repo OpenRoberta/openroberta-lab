@@ -208,8 +208,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
     /**
      * Switch robot
      */
-    function switchRobot(robot, opt_continue) {
-        if (robot === GUISTATE_C.getRobot()) {
+    function switchRobot(robot, opt_continue, opt_callback) {
+         if (robot === GUISTATE_C.getRobot()) {
             return;
         }
         var further = opt_continue || GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup();
@@ -232,19 +232,21 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     if ($('.rightMenuButton.shifted')) {
                         $('.rightMenuButton.shifted').trigger('click');
                     }
-                } else {
-                    alert('Robot not available');
-                }
-            });
+                    typeof opt_callback === "function" && opt_callback();
+                } 
+                MSG.displayInformation(result, result.message, result.message, robot);
+            });          
         } else {
+            $('#confirmContinue').removeData();
             $('#confirmContinue').data('type', 'switchRobot');
             $('#confirmContinue').data('robot', robot);
+            $('#confirmContinue').data('opt_callback', opt_callback);
             if (GUISTATE_C.isUserLoggedIn) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
             } else {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
             }
-        }
+        }  
     }
     exports.switchRobot = switchRobot;
 });

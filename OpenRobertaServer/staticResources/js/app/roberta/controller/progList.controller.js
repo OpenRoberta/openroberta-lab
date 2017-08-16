@@ -1,4 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program.model', 'program.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require, exports, LOG, UTIL, COMM, PROGLIST, PROGRAM, PROGRAM_C, Blockly, $) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program.controller', 'blocks-msg', 'jquery', 'bootstrap-table' ], function(require,
+        exports, LOG, UTIL, COMM, PROGLIST, PROGRAM_C, Blockly, $) {
 
     /**
      * Initialize table of programs
@@ -42,6 +43,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 align : 'left',
                 valign : 'middle',
             }, {
+                visible : false
+            }, {
                 title : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || "Erzeugt am") + "</span>",
                 sortable : true,
                 formatter : UTIL.formatDate
@@ -58,9 +61,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 align : 'left',
                 valign : 'top',
                 formatter : formatDeleteShareLoad,
-             // TODO activate gallery for release 2.3.0
-             // width : '110px',
-                width : '89px',
+                width : '117px',
             }, ]
         });
         $('#programNameTable').bootstrapTable('togglePagination');
@@ -75,6 +76,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         });
         $('#tabProgList').on('show.bs.tab', function(e) {
             guiStateController.setView('tabProgList');
+            
+        });
+        
+        $('#tabProgList').on('shown.bs.tab', function(e) {
             if ($('#tabProgList').data('type') === 'userProgram') {
                 PROGLIST.loadProgList(update);
             } else {
@@ -82,7 +87,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             }
         });
 
-        $('.bootstrap-table').find('button[name="refresh"]').onWrap('click', function() {
+        $('#progList').find('button[name="refresh"]').onWrap('click', function() {
             if ($('#tabProgList').data('type') === 'userProgram') {
                 PROGLIST.loadProgList(update);
             } else {
@@ -174,8 +179,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
 
             $('#deleteSomeProg').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || "Click here to delete all selected programs.");
             $('#programNameTable').find('.delete').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
-            $('#programNameTable').find('.share').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP || "Click here to share your program with a friend.");
-            $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP || 'Click here to load your program in the programming environment.');
+            $('#programNameTable').find('.share').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP
+                    || "Click here to share your program with a friend.");
+            $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP
+                    || 'Click here to load your program in the programming environment.');
             $('#programNameTable').find('[rel="tooltip"]').tooltip();
         }
     }
@@ -201,13 +208,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             }
             return false;
         },
-     // TODO activate gallery for release 2.3.0
-//        'click .gallery' : function(e, value, row, index) {
-//            if (!row[2].sharedFrom) {
-//                $('#share-with-gallery').trigger('updateAndShow', [ row ]);
-//            }
-//            return false;
-//        },
+        'click .gallery' : function(e, value, row, index) {
+            if (!row[2].sharedFrom) {
+                $('#share-with-gallery').trigger('updateAndShow', [ row ]);
+            }
+            return false;
+        },
         'click .load' : function(e, value, row, index) {
             PROGRAM_C.loadFromListing(row);
         }
@@ -223,6 +229,9 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         if (value.sharedFrom === 'WRITE') {
             return '<span class="typcn typcn-pencil"></span>';
         }
+        if (value.sharedFrom === 'X_WRITE') {
+            return '<span class="typcn typcn-key"></span>';
+        }
         if (value.sharedWith && Object.keys(value.sharedWith).length == 1) {
             var result = '';
             $.each(value.sharedWith, function(i, obj) {
@@ -230,12 +239,12 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                     result += '<span>';
                     if (user === 'Roberta') {
                         // should not happen
-                    } else if (user === 'Gallery') {
-                        result += '<span class="typcn typcn-puzzle-outline"></span>';
                     } else if (right === 'READ') {
                         result += '<span class="typcn typcn-eye"></span>';
-                    } else {
-                        result += '<span rel="tooltip" data-original-title="WRITE" class="typcn typcn-pencil"></span>';
+                    } else if (right === 'X_WRITE') {
+                        result += '<span class="typcn typcn-key"></span>';
+                    } else if (right === 'WRITE') {
+                        result += '<span class="typcn typcn-pencil"></span>';
                     }
                     result += '&nbsp;';
                     result += user;
@@ -250,8 +259,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
                 $.each(obj, function(user, right) {
                     if (user === 'Roberta') {
                         return true;
-                    } else if (user === 'Gallery') {
-                        result.unshift('<span class="typcn typcn-puzzle-outline"></span>&nbsp;' + user);
                     } else if (right === 'READ') {
                         result.push('<span class="typcn typcn-eye"></span>&nbsp;' + user);
                     } else {
@@ -261,7 +268,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             });
             var resultString = '<div style="white-space:nowrap;"><span style="float:left;">';
             resultString += result[0];
-            resultString += '</span><a class="collapsed showRelations" href="#" style="float:right;"' + 'href="#" data-toggle="collapse" data-target=".relation' + index + '"></a></div>';
+            resultString += '</span><a class="collapsed showRelations" href="#" style="float:right;"'
+                    + 'href="#" data-toggle="collapse" data-target=".relation' + index + '"></a></div>';
             for (var i = 1; i < result.length; i++) {
                 resultString += '<div style="clear:both;" class="collapse relation' + index + '">';
                 resultString += result[i];
@@ -277,13 +285,11 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         if ($('#tabProgList').data('type') === 'userProgram') {
             result += '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
             if (row[2].sharedFrom) {
-                result += '<a href="#" class="share disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-                // TODO activate gallery for release 2.3.0
-                // result += '<a href="#" class="gallery disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
+                result += '<a href="#" class="share disabled"><span class="typcn typcn-flow-merge"></span></a>';
+                result += '<a href="#" class="gallery disabled"><span class="typcn typcn-th-large-outline"></span></a>';
             } else {
                 result += '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
-             // TODO activate gallery for release 2.3.0
-                // result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-puzzle-outline"></span></a>';
+                result += '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-th-large-outline"></span></a>';
             }
         }
         result += '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-original-title="" title=""><span class="typcn typcn-document"></span></a>';
@@ -336,5 +342,6 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
         }
         return -1;
     }
-    var titleActions = '<a href="#" id="deleteSomeProg" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">' + '<span class="typcn typcn-delete"></span></a>';
+    var titleActions = '<a href="#" id="deleteSomeProg" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-original-title="" data-container="body" title="">'
+            + '<span class="typcn typcn-delete"></span></a>';
 });

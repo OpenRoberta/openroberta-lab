@@ -23,8 +23,9 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
                 var progName = prog[0];
                 var progOwner = prog[1];
                 var progRight = prog[2];
+                var author = prog[3];
                 if (progRight.sharedFrom) {
-                    PROGRAM.deleteShare(progName, progOwner, function(result, progName) {
+                    PROGRAM.deleteShare(progName, progOwner, author, function(result, progName) {
                         UTIL.response(result);
                         if (result.rc === 'ok') {
                             MSG.displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
@@ -33,7 +34,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'program.model'
                         }
                     });
                 } else {
-                    PROGRAM.deleteProgramFromListing(progName, function(result, progName) {
+                    PROGRAM.deleteProgramFromListing(progName, author, function(result, progName) {
                         UTIL.response(result);
                         if (result.rc === 'ok') {
                             MSG.displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
