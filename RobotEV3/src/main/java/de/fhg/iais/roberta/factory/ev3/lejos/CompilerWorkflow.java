@@ -48,9 +48,8 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode =
-            JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    public Key execute(String token, String robotVersion, String programName, BlocklyProgramAndConfigTransformer data) {
+        String sourceCode = JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
@@ -59,7 +58,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
             CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        Key messageKey = runBuild(token, programName, sourceCode);
+        Key messageKey = runBuild(token, robotVersion, programName, sourceCode);
         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
         } else {
@@ -107,8 +106,9 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @param mainFile
      * @param sourceCode
      */
-    public Key runBuild(String token, String mainFile, String sourceCode) {
-        JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode, this.crossCompilerResourcesDir);
+    public Key runBuild(String token, String robotVersion, String mainFile, String sourceCode) {
+        String versionResourcesPath = robotVersion.equals("0.9.0-beta") ? "lejos0_9_0/" : "lejos0_9_1/";
+        JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode, this.crossCompilerResourcesDir + versionResourcesPath);
         boolean isSuccess = scp.compileAndPackage(this.pathToCrosscompilerBaseDir, token);
         if ( !isSuccess ) {
             CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());

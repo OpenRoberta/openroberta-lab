@@ -32,7 +32,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class RobotModeFactoryTest {
-    Factory factory = new Factory(null);
+    Factory factory = new Factory();
 
     @BeforeClass
     public static void loadPropertiesForTests() {

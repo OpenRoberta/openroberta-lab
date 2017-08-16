@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.factory.mbed.SimCompilerWorkflow;
 import de.fhg.iais.roberta.factory.mbed.calliope.AbstractFactory;
 import de.fhg.iais.roberta.factory.mbed.calliope.CompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
@@ -16,7 +15,7 @@ import de.fhg.iais.roberta.util.Util1;
 
 public class Factory extends AbstractFactory {
 
-    public Factory(RobotCommunicator unusedForArdu) {
+    public Factory() {
         this.calliopeProperties = Util1.loadProperties("classpath:Calliope2017.properties");
         this.name = this.calliopeProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);

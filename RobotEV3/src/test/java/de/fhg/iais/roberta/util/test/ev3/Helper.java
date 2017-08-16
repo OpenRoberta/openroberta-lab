@@ -19,7 +19,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
 
     public Helper() {
         super();
-        this.robotFactory = new Factory(null);
+        this.robotFactory = new Factory();
         Configuration brickConfiguration =
             new EV3Configuration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))

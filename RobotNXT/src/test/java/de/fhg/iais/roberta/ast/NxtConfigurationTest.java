@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class NxtConfigurationTest {
-    Factory factory = new Factory(null);
+    Factory factory = new Factory();
 
     @BeforeClass
     public static void loadPropertiesForTests() {

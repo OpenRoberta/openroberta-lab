@@ -44,7 +44,6 @@ import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -61,7 +60,7 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private int robotPropertyNumber;
 
-    public Factory(RobotCommunicator unusedForNxt) {
+    public Factory() {
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
         this.name = this.nxtProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);

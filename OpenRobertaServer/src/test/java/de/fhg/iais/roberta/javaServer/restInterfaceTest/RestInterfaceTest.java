@@ -703,8 +703,8 @@ public class RestInterfaceTest {
             @SuppressWarnings("unchecked")
             Class<IRobotFactory> factoryClass =
                 (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.lejos.Factory");
-            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
-            robotPlugins.put("ev3lejos", factoryConstructor.newInstance(this.brickCommunicator));
+            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor();
+            robotPlugins.put("ev3lejos", factoryConstructor.newInstance());
         } catch ( Exception e ) {
             throw new DbcException("robot plugin ev3 has an invalid factory. Check the properties. Server does NOT start", e);
         }

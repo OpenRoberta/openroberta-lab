@@ -46,8 +46,8 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -102,6 +102,7 @@ public class ClientProgram {
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
 
             IRobotFactory robotFactory = httpSessionState.getRobotFactory();
+
             ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
 
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
@@ -252,8 +253,8 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
+                String firmwareVersion = this.brickCommunicator.getState(token).getFirmwareVersion();
                 boolean wasRobotWaiting = false;
-
                 //TODO: Add the checkers in workflow compiler
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
@@ -262,7 +263,7 @@ public class ClientProgram {
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);
+                    messageKey = robotCompilerWorkflow.execute(token, firmwareVersion, programName, programAndConfigTransformer);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {

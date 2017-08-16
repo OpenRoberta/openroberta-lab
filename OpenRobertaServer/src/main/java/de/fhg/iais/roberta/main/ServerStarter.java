@@ -256,8 +256,8 @@ public class ServerStarter {
                         try {
                             @SuppressWarnings("unchecked")
                             Class<IRobotFactory> factoryClass = (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass(pluginFactory);
-                            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor(RobotCommunicator.class);
-                            robotPlugins.put(pluginName, factoryConstructor.newInstance(robotCommunicator));
+                            Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor();
+                            robotPlugins.put(pluginName, factoryConstructor.newInstance());
                         } catch ( Exception e ) {
                             throw new DbcException("robot plugin " + pluginName + " has an invalid factory. Check the properties. Server does NOT start", e);
                         }

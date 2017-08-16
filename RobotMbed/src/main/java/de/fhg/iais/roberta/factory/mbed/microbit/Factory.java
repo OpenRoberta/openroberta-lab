@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -46,7 +45,7 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory(RobotCommunicator unusedForArdu) {
+    public Factory() {
         this.microbitProperties = Util1.loadProperties("classpath:Microbit.properties");
         this.name = this.microbitProperties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);

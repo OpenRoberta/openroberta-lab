@@ -69,7 +69,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
+    public Key execute(String token, String robotVersion, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = CppVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
@@ -155,16 +155,18 @@ public class CompilerWorkflow implements ICompilerWorkflow {
         Path base = Paths.get("");
 
         try {
-            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                scriptName,
-                "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
-                "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
-                "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
-                "-fqbn=arduino:avr:uno",
-                "-prefs=compiler.path=" + this.robotCompilerDir,
-                "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
-            });
+            ProcessBuilder procBuilder =
+                new ProcessBuilder(
+                    new String[] {
+                        scriptName,
+                        "-hardware=" + this.robotCompilerResourcesDir + "/hardware",
+                        "-tools=" + this.robotCompilerResourcesDir + "/" + os + "/tools-builder",
+                        "-libraries=" + this.robotCompilerResourcesDir + "/libraries",
+                        "-fqbn=arduino:avr:uno",
+                        "-prefs=compiler.path=" + this.robotCompilerDir,
+                        "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
+                    });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);

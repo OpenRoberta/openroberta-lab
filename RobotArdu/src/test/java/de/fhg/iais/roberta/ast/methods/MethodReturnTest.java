@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class MethodReturnTest {
     HelperBotNroll h = new HelperBotNroll();
-    Factory robotFactory = new Factory(null);
+    Factory robotFactory = new Factory();
 
     @Before
     public void setUp() throws Exception {

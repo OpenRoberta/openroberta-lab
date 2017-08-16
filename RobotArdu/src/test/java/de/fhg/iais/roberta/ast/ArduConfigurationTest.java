@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class ArduConfigurationTest {
-    Factory factory = new Factory(null);
+    Factory factory = new Factory();
 
     @BeforeClass
     public static void loadPropertiesForTests() {

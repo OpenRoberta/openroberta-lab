@@ -13,7 +13,7 @@ public class HelperBotNroll extends de.fhg.iais.roberta.util.test.Helper {
 
     public HelperBotNroll() {
         super();
-        Factory robotFactory = new Factory(null);
+        Factory robotFactory = new Factory();
         Configuration brickConfiguration =
             new BotNrollConfiguration.Builder()
                 .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))

@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 
 public class Ev3ConfigurationTest {
-    Factory robotModeFactory = new Factory(null);
+    Factory robotModeFactory = new Factory();
 
     @BeforeClass
     public static void loadPropertiesForTests() {

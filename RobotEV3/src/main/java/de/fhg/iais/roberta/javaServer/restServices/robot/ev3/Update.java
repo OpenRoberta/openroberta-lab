@@ -39,7 +39,20 @@ public class Update {
     public Response getRuntime() throws FileNotFoundException {
         AliveData.rememberRobotCall();
         LOG.info("/update/runtime called");
-        File jar = new File(this.robotUpdateResourcesDir + "/EV3Runtime.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_0/EV3Runtime.jar");
+        ResponseBuilder response = Response.ok(new FileInputStream(jar));
+        response.header("Content-Disposition", "attachment; filename=EV3Runtime.jar");
+        response.header("Filename", "EV3Runtime.jar");
+        return response.build();
+    }
+
+    @GET
+    @Path("/lejos_0_9_1/runtime")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getRuntimeNewLejos() throws FileNotFoundException {
+        AliveData.rememberRobotCall();
+        LOG.info("/update/runtime called");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_1/EV3Runtime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=EV3Runtime.jar");
         response.header("Filename", "EV3Runtime.jar");
@@ -52,7 +65,7 @@ public class Update {
     @Deprecated
     /**
      * After restructuring our projects we do not have any more the OpenRobertaShared library
-     * 
+     *
      * @return
      * @throws FileNotFoundException
      */
@@ -61,7 +74,7 @@ public class Update {
         // since we do not have any more we pass the EV3Runtime twice
         AliveData.rememberRobotCall();
         LOG.info("/update/shared called");
-        File jar = new File(this.robotUpdateResourcesDir + "/EV3Runtime.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_0/EV3Runtime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=EV3Runtime.jar");
         response.header("Filename", "EV3Runtime.jar");
@@ -75,7 +88,7 @@ public class Update {
     public Response getJsonLib() throws FileNotFoundException {
         AliveData.rememberRobotCall();
         LOG.info("/update/jsonlib called");
-        File jar = new File(this.robotUpdateResourcesDir + "/json.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_1/json.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=json.jar");
         response.header("Filename", "json.jar");
@@ -88,7 +101,7 @@ public class Update {
     public Response getWebSocketLib() throws FileNotFoundException {
         AliveData.rememberRobotCall();
         LOG.info("/update/websocketlib called");
-        File jar = new File(this.robotUpdateResourcesDir + "/Java-WebSocket.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_1/Java-WebSocket.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=Java-WebSocket.jar");
         response.header("Filename", "Java-WebSocket.jar");
@@ -101,7 +114,20 @@ public class Update {
     public Response getMenu() throws FileNotFoundException {
         AliveData.rememberRobotCall();
         LOG.info("/update/ev3menu called");
-        File jar = new File(this.robotUpdateResourcesDir + "/EV3Menu.jar");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_0/EV3Menu.jar");
+        ResponseBuilder response = Response.ok(new FileInputStream(jar));
+        response.header("Content-Disposition", "attachment; filename=EV3Menu.jar");
+        response.header("Filename", "EV3Menu.jar");
+        return response.build();
+    }
+
+    @GET
+    @Path("/lejos_0_9_1/ev3menu")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getMenuNewLejos() throws FileNotFoundException {
+        AliveData.rememberRobotCall();
+        LOG.info("/update/ev3menu called");
+        File jar = new File(this.robotUpdateResourcesDir + "/lejos0_9_1/EV3Menu.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=EV3Menu.jar");
         response.header("Filename", "EV3Menu.jar");

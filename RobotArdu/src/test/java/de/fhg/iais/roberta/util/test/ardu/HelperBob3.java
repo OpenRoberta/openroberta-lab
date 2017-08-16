@@ -9,7 +9,7 @@ public class HelperBob3 extends Helper {
 
     public HelperBob3() {
         super();
-        Factory robotFactory = new Factory(null);
+        Factory robotFactory = new Factory();
         Configuration brickConfiguration = new Bob3Configuration.Builder().build();
         setRobotFactory(robotFactory);
         setRobotConfiguration(brickConfiguration);

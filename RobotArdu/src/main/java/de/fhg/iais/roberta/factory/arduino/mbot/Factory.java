@@ -44,7 +44,6 @@ import de.fhg.iais.roberta.mode.sensor.arduino.mbot.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.JoystickMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.SensorPort;
-import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -59,7 +58,7 @@ public class Factory extends AbstractRobotFactory {
     private final String name;
     private final int robotPropertyNumber;
 
-    public Factory(RobotCommunicator robotCommunicator) {
+    public Factory() {
         String os = "linux";
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";

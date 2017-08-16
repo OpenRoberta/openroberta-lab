@@ -13,7 +13,7 @@ public class HelperMakeBlock extends de.fhg.iais.roberta.util.test.Helper {
 
     public HelperMakeBlock() {
         super();
-        Factory robotFactory = new Factory(null);
+        Factory robotFactory = new Factory();
         Configuration brickConfiguration =
             new MbotConfiguration.Builder()
                 .addActor(ActorPort.M2, new Actor(ActorType.GEARED_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))

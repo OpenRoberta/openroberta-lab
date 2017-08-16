@@ -26,6 +26,7 @@ public class HttpSessionState {
         this.robotPluginMap = robotPluginMap;
         this.robotName = RobertaProperties.getDefaultRobot();
         this.sessionNumber = sessionNumber;
+
     }
 
     public static HttpSessionState init(RobotCommunicator robotCommunicator, Map<String, IRobotFactory> robotPluginMap, long sessionNumber) {

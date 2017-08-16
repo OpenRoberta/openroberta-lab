@@ -53,7 +53,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
+    public Key execute(String token, String robotVersion, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = NxcVisitor.generate((NxtConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {
@@ -126,13 +126,15 @@ public class CompilerWorkflow implements ICompilerWorkflow {
         }
 
         try {
-            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                nbcCompilerFileName,
-                "-q",
-                this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
-                "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
-                "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
-            });
+            ProcessBuilder procBuilder =
+                new ProcessBuilder(
+                    new String[] {
+                        nbcCompilerFileName,
+                        "-q",
+                        this.pathToCrosscompilerBaseDir + token + "/src/" + mainFile + ".nxc",
+                        "-O=" + this.pathToCrosscompilerBaseDir + token + "/" + mainFile + ".rxe",
+                        "-I=" + base.resolve(path).toAbsolutePath().normalize().toString()
+                    });
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);
             procBuilder.redirectError(Redirect.INHERIT);

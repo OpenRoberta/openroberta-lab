@@ -69,9 +69,10 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
+    public Key execute(String token, String robotVersion, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = CppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
-        UsedHardwareCollectorVisitor usedHardwareVisitor = new UsedHardwareCollectorVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
+        UsedHardwareCollectorVisitor usedHardwareVisitor =
+            new UsedHardwareCollectorVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".cpp");
         } catch ( Exception e ) {
@@ -152,14 +153,16 @@ public class CompilerWorkflow implements ICompilerWorkflow {
         Path base = Paths.get("");
 
         try {
-            ProcessBuilder procBuilder = new ProcessBuilder(new String[] {
-                scriptName,
-                this.robotCompilerDir,
-                mainFile,
-                base.resolve(path).toAbsolutePath().normalize().toString() + "/",
-                this.robotCompilerResourcesDir,
-                bluetooth
-            });
+            ProcessBuilder procBuilder =
+                new ProcessBuilder(
+                    new String[] {
+                        scriptName,
+                        this.robotCompilerDir,
+                        mainFile,
+                        base.resolve(path).toAbsolutePath().normalize().toString() + "/",
+                        this.robotCompilerResourcesDir,
+                        bluetooth
+                    });
 
             procBuilder.redirectInput(Redirect.INHERIT);
             procBuilder.redirectOutput(Redirect.INHERIT);

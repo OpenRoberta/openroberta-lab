@@ -21,9 +21,12 @@
 	<name>RobotEV3</name>
 	<description>the plugin for the EV3 robot</description>
 	<properties>
-		<dbusjava.version>0.9.0-beta</dbusjava.version>
+		<dbusjava.old.version>0.9.0-beta</dbusjava.old.version>
+		<dbusjava.version>0.9.1-beta</dbusjava.version>
 		<jna.version>3.2.7</jna.version>
-		<ev3classes.version>0.9.0-beta</ev3classes.version>
+		<ev3classes.old.version>0.9.0-beta</ev3classes.old.version>
+		<ev3classes.version>0.9.1-beta</ev3classes.version>
+		<ev3runtime.old.version>2.3.0</ev3runtime.old.version>
 		<ev3runtime.version>2.3.0</ev3runtime.version>
 	</properties>
 	<dependencies>
@@ -105,7 +108,50 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>resources/updateResources</outputDirectory>
+							<outputDirectory>resources/updateResources/lejos0_9_1</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copyUpdateResourcesLejos0.9.0</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Runtime</artifactId>
+									<version>${ev3runtime.old.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Menu</artifactId>
+									<version>${ev3runtime.old.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.java-websocket</groupId>
+									<artifactId>Java-WebSocket</artifactId>
+									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>resources/updateResources/lejos0_9_0</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
@@ -162,7 +208,64 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>resources/crossCompilerResources</outputDirectory>
+							<outputDirectory>resources/crossCompilerResources/lejos0_9_1</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copyCrossCompilerResourcesLejos0.9.0</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Runtime</artifactId>
+									<version>${ev3runtime.old.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.roberta</groupId>
+									<artifactId>ev3classes</artifactId>
+									<version>${ev3classes.old.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.roberta</groupId>
+									<artifactId>dbusjava</artifactId>
+									<version>${dbusjava.old.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.lejos</groupId>
+									<artifactId>jna</artifactId>
+									<version>${jna.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.java-websocket</groupId>
+									<artifactId>Java-WebSocket</artifactId>
+									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>resources/crossCompilerResources/lejos0_9_0</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>

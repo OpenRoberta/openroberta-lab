@@ -21,9 +21,9 @@ import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Configuration.Builder;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationLexer;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public class Antlr4Ev3ConfigurationTest {
-    Factory robotModeFactory = new Factory(null);
+    Factory robotModeFactory = new Factory();
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = false;
 
@@ -57,12 +57,13 @@ public class Antlr4Ev3ConfigurationTest {
                     + "sensor port { 1: touch; } "
                     + "actor port { B: middle motor, regulated, forward; }"
                     + " }");
-        String expected = "" //
-            + "(conf robot ev3 Craesy-PID-2014 { "
-            + "(sizes size { wheel diameter 5 cm ; track width 2.5 cm ; }) "
-            + "(sensors sensor port { (sdecl 1 : touch ;) }) "
-            + "(actors actor port { (adecl B : (actor middle motor , (motorSpec regulated , forward)) ;) })"
-            + " })";
+        String expected =
+            "" //
+                + "(conf robot ev3 Craesy-PID-2014 { "
+                + "(sizes size { wheel diameter 5 cm ; track width 2.5 cm ; }) "
+                + "(sensors sensor port { (sdecl 1 : touch ;) }) "
+                + "(actors actor port { (adecl B : (actor middle motor , (motorSpec regulated , forward)) ;) })"
+                + " })";
         assertEquals(expected, actual);
     }
 
@@ -109,9 +110,12 @@ public class Antlr4Ev3ConfigurationTest {
         expectedBuilder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH));
         EV3Configuration expected = (EV3Configuration) expectedBuilder.build();
 
-        Configuration actual1 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting( //
-            "robot ev3 Craesy-PID-2014 { size { wheel diameter 5 cm; track width 2.5 cm; } sensor port {1: touch; } }",
-            this.robotModeFactory).getVal();
+        Configuration actual1 =
+            Ev3ConfigurationParseTree2Ev3ConfigurationVisitor
+                .startWalkForVisiting( //
+                    "robot ev3 Craesy-PID-2014 { size { wheel diameter 5 cm; track width 2.5 cm; } sensor port {1: touch; } }",
+                    this.robotModeFactory)
+                .getVal();
         assertEquals(expected, actual1);
 
         String expectedAsString = expected.generateText("Craesy-PID-2014");

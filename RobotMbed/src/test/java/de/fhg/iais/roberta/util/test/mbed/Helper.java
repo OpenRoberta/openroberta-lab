@@ -17,7 +17,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
     public Helper() {
         super();
         Configuration brickConfiguration = new CalliopeConfiguration.Builder().build();
-        this.robotFactory = new Factory(null);
+        this.robotFactory = new Factory();
         setRobotConfiguration(brickConfiguration);
     }
 

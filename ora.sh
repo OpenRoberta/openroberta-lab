@@ -138,15 +138,15 @@ java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db-${serverVer
 }
 
 function _updateLejos {
-  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos0_9_1/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
   run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="RobotEV3/resources/updateResources/EV3Runtime.jar"
-  json='RobotEV3/resources/updateResources/json.jar'
-  websocket='RobotEV3/resources/updateResources/Java-WebSocket.jar'
+  runtime="RobotEV3/resources/updateResources/lejos0_9_1/EV3Runtime.jar"
+  json='RobotEV3/resources/updateResources/lejos0_9_1/json.jar'
+  websocket='RobotEV3/resources/updateResources/lejos0_9_1/Java-WebSocket.jar'
   run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run

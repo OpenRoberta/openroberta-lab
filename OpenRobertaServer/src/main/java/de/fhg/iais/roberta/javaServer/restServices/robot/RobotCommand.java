@@ -61,6 +61,7 @@ public class RobotCommand {
         String brickname = requestEntity.optString("brickname", robot);
         String batteryvoltage = requestEntity.optString("battery", "");
         String menuversion = requestEntity.optString("menuversion", "");
+        String runtimeVersion = requestEntity.optString("runtimeversion", "");
         String firmwareversion = requestEntity.optString("firmwareversion");
         firmwareversion = firmwareversion == null ? requestEntity.optString("lejosversion", "") : firmwareversion;
         int nepoExitValue = requestEntity.optInt("nepoexitvalue", 0);
@@ -71,7 +72,7 @@ public class RobotCommand {
                 LOG.info("Robot [" + macaddr + "] token " + token + " received for registration");
                 // LOG.info("Robot [" + macaddr + "] token " + token + " received for registration, user-agent: " + this.servletRequest.getHeader("User-Agent"));
                 RobotCommunicationData state =
-                    new RobotCommunicationData(token, robot, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
+                    new RobotCommunicationData(token, robot, macaddr, brickname, batteryvoltage, menuversion, runtimeVersion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response).build();

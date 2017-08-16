@@ -28,6 +28,7 @@ public class RobotCommunicationData {
     private final String robotIdentificator;
     private final String robotName;
     private final String menuversion;
+    private final String runtimeversion;
     private final String firmwarename;
     private final String firmwareversion;
     private JSONObject sensorvalues;
@@ -49,6 +50,7 @@ public class RobotCommunicationData {
         String robotName,
         String battery,
         String menuversion,
+        String runtimeveriosn,
         String firmwarename,
         String firmwareversion) {
         // the per session token
@@ -60,6 +62,7 @@ public class RobotCommunicationData {
         this.robotName = robotName;
         this.battery = battery;
         this.menuversion = menuversion;
+        this.runtimeversion = runtimeveriosn;
         // the robot variant, such as 'ev3dev' or 'lejos'
         this.firmwarename = firmwarename;
         // inbformal robot firmware version details
@@ -247,7 +250,8 @@ public class RobotCommunicationData {
      * @return true, if the robot didn't send a push command within a reasonable long interval after being requested to do so
      */
     public boolean isRobotProbablyDisconnected() {
-        return state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT && getElapsedMsecOfStartOfLastRequest() > TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH;
+        return this.state == State.WAIT_FOR_PUSH_CMD_FROM_ROBOT
+            && getElapsedMsecOfStartOfLastRequest() > TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH;
     }
 
     public String getToken() {
@@ -312,6 +316,10 @@ public class RobotCommunicationData {
 
     public String getFirmwareVersion() {
         return this.firmwareversion;
+    }
+
+    public String getRuntimeVersion() {
+        return runtimeversion;
     }
 
     public JSONObject getSensorValues() {
