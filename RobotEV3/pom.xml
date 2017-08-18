@@ -70,50 +70,6 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
 				<executions>
-
-					<execution>
-						<id>copyUpdateResources</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3runtime.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
-									<artifactId>EV3Menu</artifactId>
-									<version>${ev3runtime.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.java-websocket</groupId>
-									<artifactId>Java-WebSocket</artifactId>
-									<version>${ev3.websocket.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>resources/updateResources/lejos0_9_1</outputDirectory>
-							<overWriteReleases>true</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-							<stripVersion>true</stripVersion>
-						</configuration>
-					</execution>
 					<execution>
 						<id>copyUpdateResourcesLejos0.9.0</id>
 						<phase>pre-integration-test</phase>
@@ -151,14 +107,57 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>resources/updateResources/lejos0_9_0</outputDirectory>
+							<outputDirectory>resources/updateResources/lejos_v0</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
 						</configuration>
 					</execution>
 					<execution>
-						<id>copyCrossCompilerResources</id>
+						<id>copyUpdateResourcesLejos0.9.1</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Runtime</artifactId>
+									<version>${ev3runtime.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>EV3Menu</artifactId>
+									<version>${ev3runtime.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.java-websocket</groupId>
+									<artifactId>Java-WebSocket</artifactId>
+									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>resources/updateResources/lejos_v1</outputDirectory>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+							<stripVersion>true</stripVersion>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copyCrossCompilerResourcesLejos0.9.1</id>
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>copy</goal>
@@ -208,7 +207,7 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>resources/crossCompilerResources/lejos0_9_1</outputDirectory>
+							<outputDirectory>resources/crossCompilerResources/lejos_v1</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
@@ -265,7 +264,7 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>resources/crossCompilerResources/lejos0_9_0</outputDirectory>
+							<outputDirectory>resources/crossCompilerResources/lejos_v0</outputDirectory>
 							<overWriteReleases>true</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>

@@ -69,7 +69,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String robotVersion, String programName, BlocklyProgramAndConfigTransformer data) {
+    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String sourceCode = CppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
 
         try {

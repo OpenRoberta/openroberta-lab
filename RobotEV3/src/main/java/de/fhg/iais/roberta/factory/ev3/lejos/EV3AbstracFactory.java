@@ -47,29 +47,13 @@ import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class Factory extends AbstractRobotFactory {
-    private final CompilerWorkflow robotCompilerWorkflow;
-    private final Ev3SimCompilerWorkflow simCompilerWorkflow;
-    private final Properties ev3Properties;
-    private final String name;
-    private final int robotPropertyNumber;
-
-    public Factory() {
-        this.ev3Properties = Util1.loadProperties("classpath:EV3lejos.properties");
-        this.name = this.ev3Properties.getProperty("robot.name");
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
-        this.robotCompilerWorkflow =
-            new CompilerWorkflow(
-                RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
-
-        this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
-
-        addBlockTypesFromProperties("EV3lejos.properties", this.ev3Properties);
-    }
+public abstract class EV3AbstracFactory extends AbstractRobotFactory {
+    protected Ev3SimCompilerWorkflow simCompilerWorkflow;
+    protected Properties ev3Properties;
+    protected String name;
+    protected int robotPropertyNumber;
 
     @Override
     public IBlinkMode getBlinkMode(String mode) {
@@ -397,11 +381,6 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.robotCompilerWorkflow;
-    }
-
-    @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
         return this.simCompilerWorkflow;
     }
@@ -449,7 +428,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getFileExtension() {
-        //FIX ME: when the ev3lejos and ev3dev are splitted then we will have different file extension
         return "java";
     }
 

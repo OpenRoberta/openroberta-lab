@@ -357,7 +357,7 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
-                String firmwareVersion = this.brickCommunicator.getState(token).getFirmwareVersion();
+
                 boolean wasRobotWaiting = false;
                 //TODO: Add the checkers in workflow compiler
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
@@ -367,7 +367,7 @@ public class ClientProgram {
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = robotCompilerWorkflow.execute(token, firmwareVersion, programName, programAndConfigTransformer);
+                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {

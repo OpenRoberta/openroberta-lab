@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.factory.ev3.dev;
+package de.fhg.iais.roberta.factory.ev3.lejos.v0;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -10,9 +10,10 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
+import de.fhg.iais.roberta.components.ev3.JavaSourceCompiler;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -22,9 +23,12 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 public class CompilerWorkflow implements ICompilerWorkflow {
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
     public final String pathToCrosscompilerBaseDir;
+    public final String crossCompilerResourcesDir;
 
-    public CompilerWorkflow(String pathToCrosscompilerBaseDir) {
+    public CompilerWorkflow(String pathToCrosscompilerBaseDir, String crossCompilerResourcesDir) {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
+        this.crossCompilerResourcesDir = crossCompilerResourcesDir;
+
     }
 
     /**
@@ -45,15 +49,22 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+
+        //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode);
         } catch ( Exception e ) {
             CompilerWorkflow.LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-
-        return Key.COMPILERWORKFLOW_SUCCESS;
+        Key messageKey = runBuild(token, programName, sourceCode);
+        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+            CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
+        } else {
+            CompilerWorkflow.LOG.info(messageKey.toString());
+        }
+        return messageKey;
 
     }
 
@@ -76,8 +87,33 @@ public class CompilerWorkflow implements ICompilerWorkflow {
         if ( data.getErrorMessage() != null ) {
             return null;
         }
+        return JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    }
 
-        return PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    private void storeGeneratedProgram(String token, String programName, String sourceCode) throws Exception {
+        Assert.isTrue(token != null && programName != null && sourceCode != null);
+        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ".java");
+        CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
+        FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
+    }
+
+    /**
+     * 1. Make target folder (if not exists).<br>
+     * 2. Clean target folder (everything inside).<br>
+     * 3. Compile .java files to .class.<br>
+     * 4. Make jar from class files and add META-INF entries.<br>
+     *
+     * @param mainFile
+     * @param sourceCode
+     */
+    public Key runBuild(String token, String mainFile, String sourceCode) {
+        JavaSourceCompiler scp = new JavaSourceCompiler(mainFile, sourceCode, this.crossCompilerResourcesDir);
+        boolean isSuccess = scp.compileAndPackage(this.pathToCrosscompilerBaseDir, token);
+        if ( !isSuccess ) {
+            CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + scp.getCompilationMessages());
+            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
+        }
+        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     /**
@@ -98,12 +134,4 @@ public class CompilerWorkflow implements ICompilerWorkflow {
     public String getCompiledCode() {
         return null;
     }
-
-    private void storeGeneratedProgram(String token, String programName, String sourceCode) throws Exception {
-        Assert.isTrue(token != null && programName != null && sourceCode != null);
-        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ".py");
-        CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
-        FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
-    }
-
 }

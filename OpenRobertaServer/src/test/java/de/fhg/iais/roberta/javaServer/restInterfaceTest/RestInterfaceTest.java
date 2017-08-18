@@ -706,7 +706,7 @@ public class RestInterfaceTest {
         try {
             @SuppressWarnings("unchecked")
             Class<IRobotFactory> factoryClass =
-                (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.lejos.Factory");
+                (Class<IRobotFactory>) ServerStarter.class.getClassLoader().loadClass("de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory");
             Constructor<IRobotFactory> factoryConstructor = factoryClass.getDeclaredConstructor();
             robotPlugins.put("ev3lejos", factoryConstructor.newInstance());
         } catch ( Exception e ) {

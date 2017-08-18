@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.factory.ev3.lejos.Factory;
+import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.transformer.ev3.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.RobertaProperties;

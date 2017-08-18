@@ -2,10 +2,10 @@
 **/target
 **/bin
 **/*.class
-Resources/resources/*.jar
-Resources/updateResources/*.jar
-RobotEV3/resources/*.jar
-RobotEV3/resources/updateResources/*.jar
+Resources/resources/**/*.jar
+Resources/updateResources/**/*.jar
+RobotEV3/resources/**/*.jar
+RobotEV3/resources/**/updateResources/*.jar
 OpenRobertaRuntime/userProjects/*
 OpenRobertaServer/userProjects/*
 OpenRobertaServer/db-*
