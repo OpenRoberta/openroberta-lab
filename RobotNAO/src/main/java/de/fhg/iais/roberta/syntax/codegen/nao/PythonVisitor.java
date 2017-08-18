@@ -1319,9 +1319,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("import math\n");
         this.sb.append("import time\n");
-        this.sb.append("from hal import Hal\n");
-        this.sb.append("from hal import SpeechRecognitionModule\n");
-        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
+        this.sb.append("from roberta import Hal\n");
+        this.sb.append("from roberta import SpeechRecognitionModule\n");
+        this.sb.append("from roberta import BlocklyMethods\n");
         this.sb.append("h = Hal()\n");
         this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
         this.sb.append("speechRecognitionModule.pauseASR()");
