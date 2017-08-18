@@ -112,7 +112,7 @@ public class RobotCommunicator {
         if ( state.getFirmwareName().equals(robot) ) {
             return true;
         }
-        // TODO: workarounds for sloppy protocol definition, check for which robots they trigger and fix 
+        // TODO: workarounds for sloppy protocol definition, check for which robots they trigger and fix
         if ( (state.getRobot() + state.getFirmwareName()).equals(robot) ) {
             LOG.warn("checking robot+firmware");
             return true;

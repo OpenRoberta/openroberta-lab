@@ -21,13 +21,13 @@
 	<name>RobotEV3</name>
 	<description>the plugin for the EV3 robot</description>
 	<properties>
-		<dbusjava.old.version>0.9.0-beta</dbusjava.old.version>
-		<dbusjava.version>0.9.1-beta</dbusjava.version>
+		<dbusjava.v0.version>0.9.0-beta</dbusjava.v0.version>
+		<dbusjava.v1.version>0.9.1-beta</dbusjava.v1.version>
 		<jna.version>3.2.7</jna.version>
-		<ev3classes.old.version>0.9.0-beta</ev3classes.old.version>
-		<ev3classes.version>0.9.1-beta</ev3classes.version>
-		<ev3runtime.old.version>2.3.0</ev3runtime.old.version>
-		<ev3runtime.version>2.3.0</ev3runtime.version>
+		<ev3classes.v0.version>0.9.0-beta</ev3classes.v0.version>
+		<ev3classes.v1.version>0.9.1-beta</ev3classes.v1.version>
+		<ev3runtime.v0.version>2.3.0</ev3runtime.v0.version>
+		<ev3runtime.v1.version>2.3.0</ev3runtime.v1.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -42,9 +42,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>de.fhg.iais.openroberta</groupId>
+			<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
 			<artifactId>EV3Runtime</artifactId>
-			<version>${ev3runtime.version}</version>
+			<version>${ev3runtime.v0.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta.ev3.v1</groupId>
+			<artifactId>EV3Runtime</artifactId>
+			<version>${ev3runtime.v1.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
@@ -79,16 +84,16 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
+									<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
 									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3runtime.old.version}</version>
+									<version>${ev3runtime.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
+									<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
 									<artifactId>EV3Menu</artifactId>
-									<version>${ev3runtime.old.version}</version>
+									<version>${ev3runtime.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
@@ -122,16 +127,16 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
+									<groupId>de.fhg.iais.openroberta.ev3.v1</groupId>
 									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3runtime.version}</version>
+									<version>${ev3runtime.v1.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
+									<groupId>de.fhg.iais.openroberta.ev3.v1</groupId>
 									<artifactId>EV3Menu</artifactId>
-									<version>${ev3runtime.version}</version>
+									<version>${ev3runtime.v1.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
@@ -165,9 +170,9 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
+									<groupId>de.fhg.iais.openroberta.ev3.v1</groupId>
 									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3runtime.version}</version>
+									<version>${ev3runtime.v1.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
@@ -181,14 +186,14 @@
 								<artifactItem>
 									<groupId>de.fhg.iais.roberta</groupId>
 									<artifactId>ev3classes</artifactId>
-									<version>${ev3classes.version}</version>
+									<version>${ev3classes.v1.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.roberta</groupId>
 									<artifactId>dbusjava</artifactId>
-									<version>${dbusjava.version}</version>
+									<version>${dbusjava.v1.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
@@ -222,9 +227,9 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>de.fhg.iais.openroberta</groupId>
+									<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
 									<artifactId>EV3Runtime</artifactId>
-									<version>${ev3runtime.old.version}</version>
+									<version>${ev3runtime.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
@@ -238,14 +243,14 @@
 								<artifactItem>
 									<groupId>de.fhg.iais.roberta</groupId>
 									<artifactId>ev3classes</artifactId>
-									<version>${ev3classes.old.version}</version>
+									<version>${ev3classes.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.roberta</groupId>
 									<artifactId>dbusjava</artifactId>
-									<version>${dbusjava.old.version}</version>
+									<version>${dbusjava.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>

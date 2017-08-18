@@ -138,15 +138,15 @@ java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db-${serverVer
 }
 
 function _updateLejos {
-  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos0_9_1/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos_${lejosversion}/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
   run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="RobotEV3/resources/updateResources/lejos0_9_1/EV3Runtime.jar"
-  json='RobotEV3/resources/updateResources/lejos0_9_1/json.jar'
-  websocket='RobotEV3/resources/updateResources/lejos0_9_1/Java-WebSocket.jar'
+  runtime="RobotEV3/resources/updateResources/lejos_${lejosversion}/EV3Runtime.jar"
+  json="RobotEV3/resources/updateResources/lejos_${lejosversion}/json.jar"
+  websocket="RobotEV3/resources/updateResources/lejos_${lejosversion}/Java-WebSocket.jar"
   run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
@@ -167,6 +167,7 @@ cmd="$1"
 shift
 
 lejosipaddr='10.0.1.1' # only needed for updating a lejos based ev3
+lejosversion='v0' # only needed for updating a lejos based ev3
 serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
 
 case "$cmd" in
@@ -186,9 +187,14 @@ case "$cmd" in
 --java)           _checkJava ;;
 
 --update-lejos)   serverurl="$1"
+                  lejosversion="$2"
                   if [[ "$serverurl" == '' ]]
                   then
                     echo "the first parameter with the server address is missing. Exit 4"
+                    exit 4
+                  elif [[ "$lejosversion" == '' ]]
+                  then
+                    echo "the lejos version is missing missing. Exit 4"
                     exit 4
                   fi
                   _updateLejos ;;

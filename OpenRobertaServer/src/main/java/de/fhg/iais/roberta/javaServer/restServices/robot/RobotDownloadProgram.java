@@ -56,6 +56,7 @@ public class RobotDownloadProgram {
 
             // FIXME as the number of supported robot system grows, we should think about a better solution here :-D
             switch ( state.getFirmwareName() ) {
+                case "ev3lejosv1":
                 case "lejos":
                     fileName = programName + ".jar";
                     filePath = this.pathToCrosscompilerBaseDir + token + "/target";
