@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-08-17 22:46:34.383977",
+		"lastupdated": "2017-08-18 12:42:22.511109",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1194,5 +1194,7 @@
 	"JOYSTICK_TOOLTIP": "Represents a joystick.",
 	"ACCELEROMETER_TOOLTIP": "Represents an accelerometer.",
 	"AMBIENTLIGHT_TOOLTIP": "Represents an ambientlight sensor.",
-	"PIRMOTION_TOOLTIP": "Represents an PIR motion sensor."
+	"PIRMOTION_TOOLTIP": "Represents an PIR motion sensor.",
+	"NAO_RECOGNIZEWORD": "recognize word from",
+	"NAO_RECOGNIZEWORD_TOOLTIP": "Make NAO recognize a word or a phrase from the provided list"
 }
