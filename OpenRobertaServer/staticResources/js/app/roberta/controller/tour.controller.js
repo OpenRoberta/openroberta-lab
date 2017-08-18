@@ -135,7 +135,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'left' : offsetLeft,
         'showSkip' : false
     }, {
-        'event' : 'click',
+        'event' : 'click touchend',
         'selector' : '#progSim',
         'description' : 'TOUR1_DESCRIPTION16',
         'showSkip' : false
