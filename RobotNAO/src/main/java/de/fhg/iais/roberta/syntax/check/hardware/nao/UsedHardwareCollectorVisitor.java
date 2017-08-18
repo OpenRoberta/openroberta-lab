@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
@@ -311,6 +312,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitColorHexString(ColorHexString<Void> colorHexString) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         // TODO Auto-generated method stub
         return null;
     }

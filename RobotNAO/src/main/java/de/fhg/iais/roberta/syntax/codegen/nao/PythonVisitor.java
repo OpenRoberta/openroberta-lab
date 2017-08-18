@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
+import de.fhg.iais.roberta.syntax.action.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
 import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
@@ -1319,7 +1320,11 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("import math\n");
         this.sb.append("import time\n");
         this.sb.append("from hal import Hal\n");
-        this.sb.append("h = Hal()\n\n");
+        this.sb.append("from hal import SpeechRecognitionModule\n");
+        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
+        this.sb.append("h = Hal()\n");
+        this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
+        this.sb.append("speechRecognitionModule.pauseASR()");
         this.generateSensors();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
@@ -1415,6 +1420,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public Void visitColorHexString(ColorHexString<Void> colorHexString) {
         this.sb.append(colorHexString.getValue().replaceAll("#", "0x"));
+        return null;
+    }
+
+    @Override
+    public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+        this.sb.append("speechRecognitionModule.recognizeWordFromDictionary(");
+        recognizeWord.getVocabulary().visit(this);
+        this.sb.append(")");
         return null;
     }
 
