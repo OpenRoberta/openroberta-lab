@@ -102,6 +102,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     exports.getRobotList = getRobotList;
 
     function uploadProgram(programHex, robotPort) {
+        GUISTATE_C.getSocket().emit('command', 'downloadtool avrdude 6.3.0-arduino9');
         COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
             LOG.text("Create agent upload success");
         });
