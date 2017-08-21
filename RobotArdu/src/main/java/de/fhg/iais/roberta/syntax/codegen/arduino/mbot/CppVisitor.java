@@ -168,8 +168,12 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         } else {
             this.sb.append(".run(");
         }
+        if ( this.brickConfiguration.getRightMotorPort().equals(motorOnAction.getPort()) ) {
+            this.sb.append("-1*");
+        }
+        this.sb.append("(");
         motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(");");
+        this.sb.append(")*255/100);");
         return null;
     }
 
@@ -283,7 +287,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         return null;
     }
 
-    // TODO: separate the block:
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
         switch ( (LightSensorMode) lightSensor.getMode() ) {
@@ -422,10 +425,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
-        //        if ( this.isInfraredSensorUsed ) {
-        //            nlIndent();
-        //            this.sb.append("ir.begin();");
-        //        }
         nlIndent();
         generateUsedVars();
         this.sb.append("\n}");
@@ -549,6 +548,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                             + ");\n");
                     break;
                 case EXTERNAL_LED:
+                    this.sb.append("MeRGBLed rgbled_(0, 0);\n");
                     break;
                 case LED_MATRIX:
                     break;

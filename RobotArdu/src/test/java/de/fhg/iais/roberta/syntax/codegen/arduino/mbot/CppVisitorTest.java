@@ -28,7 +28,7 @@ public class CppVisitorTest {
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "        motor1.run(30);\n"
+            + "        motor1.run(-1*(30)*255/100);\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/motor1m1.xml", true);
@@ -45,7 +45,7 @@ public class CppVisitorTest {
             + MAIN_METHOD2
             + "}"
             + "void loop(){"
-            + "        motor1.run(ultraSensor4.distanceCm());\n"
+            + "        motor1.run(-1*(ultraSensor4.distanceCm())*255/100);\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ultrasonic_sensor.xml", true);
@@ -115,7 +115,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (myJoystick2.readX() == 0 ) {"
-            + "        motor1.run(30);}\n"
+            + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_joystick_sample.xml", true);
@@ -134,7 +134,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (myGyro1.getGyroX() > 10 ) {"
-            + "        motor1.run(30);}\n"
+            + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_gyroscope_sensor.xml", true);
@@ -153,7 +153,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (myGyro1.getAngleX() > 10 ) {"
-            + "        motor1.run(30);}\n"
+            + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_accelerometer_sensor.xml", true);
@@ -172,7 +172,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (flameSensor1.readAnalog() > 20 ) {"
-            + "        motor1.run(30);}\n"
+            + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_flame_sensor.xml", true);
@@ -191,7 +191,7 @@ public class CppVisitorTest {
             + "}"
             + "void loop(){"
             + "if (myLight0.read() > 10 ) {"
-            + "        motor1.run(30);}\n"
+            + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
 
         this.h.assertCodeIsOk(a, "/syntax/code_generator/java/makeblock/get_ambientlight_sensor.xml", true);
