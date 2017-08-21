@@ -2,11 +2,11 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
@@ -156,24 +156,21 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
-        this.sb.append(motorOnAction.getPort().getValues()[1]);
-        if ( duration != null ) {
-            if ( duration.getType() == MotorMoveMode.ROTATIONS ) {
-                this.sb.append(".runTurns(");
-            } else if ( duration.getType() == MotorMoveMode.DEGREE ) {
-                this.sb.append(".move(");
-            }
-            duration.getValue().visit(this);
-            this.sb.append(", ");
-        } else {
-            this.sb.append(".run(");
-        }
+        this.sb.append(motorOnAction.getPort().getValues()[1]).append(".run(");
         if ( this.brickConfiguration.getRightMotorPort().equals(motorOnAction.getPort()) ) {
             this.sb.append("-1*");
         }
         this.sb.append("(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(")*255/100);");
+        if ( duration != null ) {
+            nlIndent();
+            this.sb.append("delay(");
+            motorOnAction.getDurationValue().visit(this);
+            this.sb.append(");");
+            nlIndent();
+            this.sb.append(motorOnAction.getPort().getValues()[1]).append(".stop();");
+        }
         return null;
     }
 
@@ -189,34 +186,21 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append(motorStopAction.getPort().getValues()[1] + ".stop()");
+        this.sb.append(motorStopAction.getPort().getValues()[1]).append(".stop();");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
-        if ( driveAction.getDirection() == DriveDirection.FOREWARD ) {
-            this.sb.append("myDrive.drive(");
-            driveAction.getParam().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", 1, ");
-                duration.getValue().visit(this);
-                this.sb.append(");");
-            } else {
-                this.sb.append(", 1);");
-            }
-        } else {
-            this.sb.append("myDrive.drive(");
-            driveAction.getParam().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", 0, ");
-                duration.getValue().visit(this);
-                this.sb.append(");");
-            } else {
-                this.sb.append(", 0);");
-            }
+        this.sb.append("myDrive.drive(");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append("*255/100, ").append(driveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
         }
+        this.sb.append(");");
         return null;
     }
 
@@ -281,8 +265,10 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         for ( UsedActor actor : this.usedActors ) {
-            this.sb.append(actor.getPort().getValues()[1] + ".stop();");
-            nlIndent();
+            if ( actor.getType().equals(ActorType.DIFFERENTIAL_DRIVE) ) {
+                this.sb.append("myDrive.stop();");
+                break;
+            }
         }
         return null;
     }
@@ -524,7 +510,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                     this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 default:
-                    throw new DbcException("Sensor is not supported!");
+                    throw new DbcException("Sensor is not supported! " + usedSensor.getType());
             }
         }
     }
@@ -556,8 +542,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                     this.sb.append("MeBuzzer buzzer;\n");
                     break;
                 default:
-                    System.out.println("unknown actor");
-                    break;
+                    throw new DbcException("Actor is not supported! " + usedActor.getType());
             }
         }
     }

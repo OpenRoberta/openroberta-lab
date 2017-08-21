@@ -74,10 +74,12 @@ public class MotorStopAction<V> extends MoveAction<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+
+        boolean mbolck = block.getType().equals("makeblockActions_motor_stop");
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = helper.extractFields(block, mbolck ? (short) 1 : (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        String modeName = mbolck ? MotorStopMode.FLOAT.toString() : helper.extractField(fields, BlocklyConstants.MODE_);
         return MotorStopAction
             .make(factory.getActorPort(portName), factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
 

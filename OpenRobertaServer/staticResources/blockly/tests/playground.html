@@ -67,7 +67,7 @@
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
-var device = 'ev3'
+var device = 'makeblock'
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -97,7 +97,7 @@ function start() {
            variableDeclaration: true,
            robControls: true
           });
-  workspace.setDevice('nxt');
+  workspace.setDevice(device);
   // Restore previously displayed text.
   if (sessionStorage) {
     var text = sessionStorage.getItem('textarea');
@@ -328,6 +328,9 @@ h1 {
             <block type='robActions_motor_stop'>
                 <field name='MOTORPORT'>A</field>
             </block>
+            <block type='makeblockActions_motor_stop'>
+                <field name='MOTORPORT'>M1</field>
+            </block>
             <block type='robActions_motor_on_for_ardu'>
             </block>
         </category>
@@ -404,8 +407,8 @@ h1 {
         </category>
         <category name='TOOLBOX_DISPLAY' svg="true">
             <block type='makeblockActions_display_image'></block>
-            <block type='makeblockActions_display_number'></block>
-            <block type='makeblokcActions_display_clear'></block>
+            <block type='makeblockActions_display_text'></block>
+            <block type='makeblockActions_display_clear'></block>
             <block type='robActions_display_text'>
                 <value name='OUT'>
                     <block type='text'>

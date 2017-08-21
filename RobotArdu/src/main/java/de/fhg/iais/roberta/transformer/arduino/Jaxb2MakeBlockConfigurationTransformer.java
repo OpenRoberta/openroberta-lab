@@ -77,8 +77,8 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
-                String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
-                actorFields.add(mkField("MOTOR_REVERSE", rotation));
+                //String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
+                //actorFields.add(mkField("MOTOR_REVERSE", rotation));
                 actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
                 values.add(hardwareComponent);
             }
@@ -127,15 +127,15 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_geared":
-                        fields = extractFields(value.getBlock(), (short) 2);
+                        fields = extractFields(value.getBlock(), (short) 1);
                         actors.add(
                             Pair.of(
                                 this.factory.getActorPort(value.getName()),
                                 new Actor(
                                     ActorType.get(value.getBlock().getType()),
                                     false,
-                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 0)),
-                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 1)))));
+                                    DriveDirection.FOREWARD,
+                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 0)))));
                         break;
                     default:
                         throw new DbcException("Invalide motor type!" + value.getBlock().getType());

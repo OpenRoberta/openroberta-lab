@@ -230,7 +230,7 @@ public class CppVisitorTest {
             + "void loop(){"
             + "myTemp1.update();"
             + "if (myTemp1.getTemperature() < 20) {"
-            + "        myDrive.drive(30, 1);}\n"
+            + "        myDrive.drive(30*255/100, 1);}\n"
 
             + "}\n";
 

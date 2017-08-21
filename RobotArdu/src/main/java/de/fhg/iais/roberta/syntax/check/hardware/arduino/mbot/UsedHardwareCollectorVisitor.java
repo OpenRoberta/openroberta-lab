@@ -138,7 +138,10 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        super.visitDriveAction(driveAction);
+        driveAction.getParam().getSpeed().visit(this);
+        if ( driveAction.getParam().getDuration() != null ) {
+            driveAction.getParam().getDuration().getValue().visit(this);
+        }
         if ( this.brickConfiguration != null ) {
             this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
@@ -147,7 +150,11 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        super.visitCurveAction(curveAction);
+        curveAction.getParamLeft().getSpeed().visit(this);
+        curveAction.getParamRight().getSpeed().visit(this);
+        if ( curveAction.getParamLeft().getDuration() != null ) {
+            curveAction.getParamLeft().getDuration().getValue().visit(this);
+        }
         if ( this.brickConfiguration != null ) {
             this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
@@ -156,7 +163,10 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        super.visitTurnAction(turnAction);
+        turnAction.getParam().getSpeed().visit(this);
+        if ( turnAction.getParam().getDuration() != null ) {
+            turnAction.getParam().getDuration().getValue().visit(this);
+        }
         if ( this.brickConfiguration != null ) {
             this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
