@@ -4,13 +4,13 @@ function mkAndCheckDir {
   mkdir "$1"
   if [ $? -ne 0 ]
   then
-    echo "creating the directory \"$1\" failed - exit 4"
-    exit 4
+    echo "creating the directory \"$1\" failed - exit 1"
+    exit 1
   fi
 }
 
 function _aliveFn {
-  serverurl="$1"
+  serverUrl="$1"
   shift
   if [[ "$1" == '-q' ]]
   then
@@ -23,7 +23,7 @@ function _aliveFn {
   timeout="${2:-30}"
   mail="${3:-no}"
 
-  echo "checking for a server crash of server $serverurl every $every sec with $timeout sec timeout."
+  echo "checking for a server crash of server $serverUrl every $every sec with $timeout sec timeout."
   if [[ "$mail" == 'no' ]]
   then
      echo "no mail will be sent if a crash is detected"
@@ -33,10 +33,10 @@ function _aliveFn {
   while :; do
     if [[ "$quiet" == 'true' ]]
     then
-       curl --max-time $timeout "http://$serverurl/rest/alive" > /dev/null
+       curl --max-time $timeout "http://$serverUrl/rest/alive" > /dev/null
        rc=$?
     else
-       curl --max-time $timeout "http://$serverurl/rest/alive"
+       curl --max-time $timeout "http://$serverUrl/rest/alive"
        rc=$?
        if [[ $rc == 0 ]]
        then
@@ -61,96 +61,83 @@ function _checkJava {
   checkJava=''
   if [[ "$JAVA_HOME" == '' ]]
   then
-     checkJava=${checkJava}$'  JAVA_HOME is undefined.\n'
+     checkJava=${checkJava}$'JAVA_HOME is undefined.\n'
   fi
   which java 2>/dev/null 1>/dev/null
   if [[ $? != 0 ]]
   then
-     checkJava=${checkJava}$'  java was NOT found on the PATH.\n'
+     checkJava=${checkJava}$'java was NOT found on the PATH.\n'
   fi
   which javac 2>/dev/null 1>/dev/null
   if [[ $? != 0 ]]
   then
-     checkJava=${checkJava}$'  javac was NOT found on the PATH.\n'
+     checkJava=${checkJava}$'javac was NOT found on the PATH.\n'
   fi
-  javaversion=`java -d64 -version 2>&1`
+  javaversion=$(java -d64 -version 2>&1)
   case "$javaversion" in
-    *not\ support*) checkJava=${checkJava}$'  This may be a 32 bit java version. A 64 bit jdk is recommended.\n' ;;
+    *not\ support*) checkJava=${checkJava}$'This may be a 32 bit java version. A 64 bit jdk is recommended.\n' ;;
     *)              : ;;
   esac
-  javaversion=`java -version 2>&1`
+  javaversion=$(java -version 2>&1)
   case "$javaversion" in
-    *1\.7\.*) : ;;
     *1\.8\.*) : ;;
-    *)        checkJava=${checkJava}$'  This may be a java version less than 1.7.*. A version 7 is recommended.' ;;
+    *)        checkJava=${checkJava}$'This may be a java version less than 1.8.*. A version 8 is recommended.' ;;
   esac
-  if [[ "$checkJava" != '' ]]
-  then
-     echo
-     echo "if the server fails to start, have a look at these hints:"
-     echo "$checkJava"
-  fi
   echo 'you are using the following java runtime:'
   echo "$javaversion"
+  echo "$checkJava"
 }
 
 function _exportApplication {
-  exportpath="$1"
-  databasemode="$2" # database mode: either server or embedded. Default is embedded.
-  if [ "${databasemode}" = "" ]
-  then
-    databasemode="embedded"
-  fi
-  if [[ -e "$exportpath" ]]
-  then
-     echo "target directory \"$exportpath\" already exists - exit 4"
-     exit 4
-  fi
-  echo "using databasemode: ${databasemode} serverVersion: ${serverVersion}"
-  mkAndCheckDir "$exportpath"
-  exportpath=`cd "$exportpath"; pwd`
-  echo "created the target directory \"$exportpath\""
-  echo "copying all jars"
-  mkAndCheckDir "${exportpath}/lib"
-  cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
-
-  echo "copying resources for all robot plugins"
-  set *
-  for Robot do
-    if [[ -d "$Robot" && -e "$Robot/resources" ]]
+    exportpath="$1"
+    if [[ -e "$exportpath" ]]
     then
-      echo "  $Robot"
-      mkAndCheckDir "${exportpath}/$Robot"
-      cd $Robot
-      cp -r --parents resources "${exportpath}/$Robot"
-      cd ..
+        echo "target directory \"$exportpath\" already exists - exit 1"
+        exit 1
     fi
-  done
-# -------------- begin of here documents --------------------------------------------------------------
-  cat >"${exportpath}/start-server.sh" <<.eof
-java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=${databasemode} \$*
-.eof
-  cat >"${exportpath}/start-db.sh" <<.eof
-java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db-${serverVersion}/openroberta-db --dbname.0 openroberta-db
-.eof
-# -------------- end of here documents ----------------------------------------------------------------
-  chmod ugo+x "${exportpath}/start-server.sh" "${exportpath}/start-db.sh"
+	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
+    echo "serverVersion: ${serverVersion}"
+    mkAndCheckDir "$exportpath"
+    exportpath=$(cd "$exportpath"; pwd)
+    echo "created the target directory \"$exportpath\""
+    echo "copying all jars"
+    mkAndCheckDir "${exportpath}/lib"
+    cp OpenRobertaServer/target/resources/*.jar "$exportpath/lib"
+    mkAndCheckDir "${exportpath}/dbBase"
+    cp OpenRobertaServer/dbBase/* "$exportpath/dbBase"
+
+    echo 'copying resources for all robot plugins'
+    set *
+    for Robot do
+        if [[ -d "$Robot" && -e "$Robot/resources" ]]
+        then
+            echo "  $Robot"
+            mkAndCheckDir "${exportpath}/$Robot"
+            cd "$Robot"
+            cp -r --parents resources "${exportpath}/$Robot"
+            cd ..
+        fi
+    done
+    echo 'copy start scripts'
+    cp start-*.sh ${exportpath}
+    chmod ugo+rx ${exportpath}/*.sh
+	echo "You are responsible to supply a usable database in directory db-${serverVersion}"
 }
 
 function _updateLejos {
-  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos_${lejosversion}/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos_${lejosVersion}/EV3Menu.jar root@${LEJOSIPADDR}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
-  run="echo ${serverurl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
+  run="echo ${serverUrl} | ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${LEJOSIPADDR} \"cat > /home/roberta/serverIP.txt\""
   echo "executing: ${run}"
   $run
-  runtime="RobotEV3/resources/updateResources/lejos_${lejosversion}/EV3Runtime.jar"
-  json="RobotEV3/resources/updateResources/lejos_${lejosversion}/json.jar"
-  websocket="RobotEV3/resources/updateResources/lejos_${lejosversion}/Java-WebSocket.jar"
-  run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${lejosipaddr} mkdir -p /home/roberta/lib"
+  runtime="RobotEV3/resources/updateResources/lejos_${lejosVersion}/EV3Runtime.jar"
+  json="RobotEV3/resources/updateResources/lejos_${lejosVersion}/json.jar"
+  websocket="RobotEV3/resources/updateResources/lejos_${lejosVersion}/Java-WebSocket.jar"
+  run="ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 root@${LEJOSIPADDR} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
-  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 ${runtime} ${json} ${websocket} root@${lejosipaddr}:/home/roberta/lib"
+  run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 ${runtime} ${json} ${websocket} root@${LEJOSIPADDR}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
 }
@@ -160,15 +147,15 @@ if [ -d OpenRobertaServer ]
 then
   :
 else
-  echo "please start this script from the root of the Git working tree - exit 4"
-  exit 4
+  echo 'please start this script from the root of the Git working tree - exit 1'
+  exit 1
 fi
 cmd="$1"
 shift
 
-lejosipaddr='10.0.1.1' # only needed for updating a lejos based ev3
-lejosversion='v0' # only needed for updating a lejos based ev3
-serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
+# often used values
+DBEMPTY='OpenRobertaServer/dbEmpty'
+DBBASE='OpenRobertaServer/dbBase'
 
 case "$cmd" in
 --export)         _exportApplication $* ;;
@@ -176,38 +163,67 @@ case "$cmd" in
 --start-from-git) java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded $* ;;
 
 --sqlclient)      dir="OpenRobertaServer/target/resources"
-                  databaseurl=$1
-                  java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
+                  databaseurl="$1"
+                  java -jar "$dir/hsqldb-2.3.2.jar" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
 
-''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" may be used by compgen for completion
+''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" are used by compgen for completion
                   $0 --java
-                  echo ''
                   cat ora-help.txt ;;
 
 --java)           _checkJava ;;
 
---update-lejos)   serverurl="$1"
-                  lejosversion="$2"
-                  if [[ "$serverurl" == '' ]]
+--update-lejos)   serverUrl="$1"
+                  lejosVersion="$2"
+				  LEJOSIPADDR='10.0.1.1'
+                  if [[ "$serverUrl" == '' ]]
                   then
-                    echo "the first parameter with the server address is missing. Exit 4"
-                    exit 4
-                  elif [[ "$lejosversion" == '' ]]
+                    echo "the server URL is missing. Exit 1"
+                    exit 1
+                  elif [[ "$lejosVersion" == '' ]]
                   then
-                    echo "the lejos version is missing missing. Exit 4"
-                    exit 4
+                    echo "the lejos version (0 or 1) is missing missing. Exit 1"
+                    exit 1
                   fi
                   _updateLejos ;;
---reset-db)       dbVersion="$1"
-                  rm -rf OpenRobertaServer/db-${dbVersion}
-                  cp -a OpenRobertaServer/dbBase OpenRobertaServer/db-${dbVersion} ;;
 
---createemptydb)  dbpath="$1"
-                  main='de.fhg.iais.roberta.main.Administration'
-                  java -cp 'OpenRobertaServer/target/resources/*' "${main}" createemptydb "${dbpath}" ;;
+--reset-db)       echo -n "do you really want to reset the ACTUAL database to $DBBASE? The old content will be LOST. 'yes', 'no') "
+                  read ANSWER
+                  case "$ANSWER" in
+                  yes) : ;;
+                  *)   echo "nothing done"
+                       exit 0 ;;
+                  esac
+				  serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
+                  DB="OpenRobertaServer/db-${serverVersion}"
+				  echo "the database at $DB is resetted to $DBBASE"
+				  rm -rf "$DB"
+                  cp -a "$DBBASE" "$DB" ;;
+
+--createEmptydb)  echo -n "do you really want to create $DBEMPTY? The old empty db will be LOST. 'yes', 'no') "
+                  read ANSWER
+                  case "$ANSWER" in
+                  yes) : ;;
+                  *)   echo "nothing done"
+                       exit 0 ;;
+                  esac
+                  rm -rf $DBEMPTY
+				  main='de.fhg.iais.roberta.main.Administration'
+                  java -cp 'OpenRobertaServer/target/resources/*' "${main}" createemptydb "$DBEMPTY/openroberta-db" ;;
+
+--resetDbBase)    echo -n "do you really want to make DBBASE equal to DBEMPTY? The old defaults will be LOST. 'yes', 'no') "
+                  read ANSWER
+                  case "$ANSWER" in
+                  yes) : ;;
+                  *)   echo "nothing done"
+                       exit 0 ;;
+                  esac
+				  rm -rf $DBBASE
+				  cp -r $DBEMPTY $DBBASE ;;
+
 --alive)          _aliveFn $* ;;
-*)                echo "invalid command: $cmd"
-                  exit 4 ;;
+
+*)                echo "invalid command: $cmd - exit 1"
+                  exit 1 ;;
 esac
 
 exit 0
