@@ -15,6 +15,7 @@ require.config({
         'jquery-scrollto' : 'jquery/jquery.scrollTo.min',
         'jquery-validate' : 'jquery/jquery.validate.min',
         'jquery-hotkeys' : 'jquery/jquery.hotkeys',
+        'slick' : 'slick-1.7.1/slick.min',
         'prettify' : 'code-prettify/prettify',
         'socket.io' : 'socket.io/socket.io',
         'volume-meter' : 'sound/volume-meter',

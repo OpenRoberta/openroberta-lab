@@ -437,10 +437,53 @@ div.rightMenuButton:hover, .rightMenuButton:active {
 	z-index: 1039;	
 }
 
+#show-startup-message #popup-robot-container{
+	margin-left: 100px;
+	margin-right: 100px;
+}
+
+#show-startup-message .popup-robot {
+	background-color: #33B8CA;
+	color: #FFF;
+}
+
+#show-startup-message .popup-robot.robotSpecial {
+	background-color: transparent;
+	color: #000;
+}
+
+#show-startup-message .slick-slide {
+	transform: scale(1);
+	transition: .3s ease-in-out all;
+	opacity: 1;
+}
+
+#show-startup-message .slick-slide.slick-center {
+	transform: scale(1.2);
+	opacity: 0.8;
+}
+
+#show-startup-message .slick-prev {
+	left: -100px;
+	top: 45%;
+}
+
+#show-startup-message .slick-next {
+	right: -100px;
+	top: 45%;
+}
+
+#show-startup-message .slick-next:before, #show-startup-message .slick-prev:before {
+	color: #000;
+	font-size: 25px;
+}
+
 #show-startup-message .popup-robot a {
 	position: relative;
-	bottom: 72px;
-    right: 100px;
+	bottom: 103px;
+	left: -55px;
+	color: #000;
+	font-size: 25px;
 }
 
 #show-startup-message .popup-robot.robotSpecial a {
@@ -1147,7 +1190,7 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 .robotSpecial {
-	width: 200px;
+	width: 178px;
 	height: 180px;	
 	border: 0;
 	padding: 0;

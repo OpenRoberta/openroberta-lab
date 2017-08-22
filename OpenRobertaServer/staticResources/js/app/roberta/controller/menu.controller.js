@@ -1,6 +1,6 @@
 define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'guiState.controller', 'program.controller',
-        'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' ], function(exports, LOG, UTIL, MSG, COMM,
-        ROBOT_C, SOCKET_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+    'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' , 'slick'], function(exports, LOG, UTIL, MSG, COMM,
+                                                                                                                                 ROBOT_C, SOCKET_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
 
@@ -29,6 +29,44 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#activateAccount") {
             USER_C.activateAccount(target[1]);
         }
+        var firsttime = true
+        $('#show-startup-message').on('shown.bs.modal', function (e) {
+            $(function () {
+                if(firsttime) {
+                    $('#popup-robot-main').slick({
+                        centerMode : true,
+                        centerPadding : '60px',
+                        slidesToShow : 3,
+                        index : 2,
+                        setPosition : true,
+                        prevArrow : "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
+                        nextArrow : "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
+                        responsive : [
+                            {
+                                breakpoint : 768,
+                                settings : {
+                                    centerMode : true,
+                                    centerPadding : '40px',
+                                    slidesToShow : 2
+                                }
+                            },
+                            {
+                                breakpoint : 480,
+                                settings : {
+                                    arrows : false,
+                                    centerMode : true,
+                                    centerPadding : '40px',
+                                    slidesToShow : 1
+                                }
+                            }
+                        ]
+                    });
+                    firsttime = false
+                } else {
+                    $('#popup-robot-main').slick("refresh");
+                }
+            })
+        })
     }
 
     exports.init = init;
@@ -102,19 +140,19 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     if (!GUISTATE_C.getIsRobotBeta(robotName)) {
                         clone.find('img.img-beta').css('visibility', 'hidden');
                     }
-                    $("#popup-robot-container").append(clone);
+                    $("#popup-robot-main").append(clone);
 
                 } else { // till the next for loop we create groups for robots
                     var robotGroup = key;
                     var clone = proto.clone().prop('id', 'menu-' + robotGroup);
                     clone.attr('data-type', robotGroup);
-                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group 
+                    clone.find('span:eq( 1 )').text(robotGroup.charAt(0).toUpperCase() + robotGroup.slice(1)); // we have no real name for group
                     clone.find('span:eq( 0 )').removeClass('typcn-open');
                     clone.find('span:eq( 0 )').addClass('typcn-' + robotGroup); // so we just capitalize the first letter + add typicon
                     clone.find('img.img-beta').css('visibility', 'hidden'); // groups do not have 'beta' labels
                     addInfoLink(clone, robotGroup); // this will just kill the link tag, because no description for group
                     clone.attr('data-group', true);
-                    $("#popup-robot-container").append(clone);
+                    $("#popup-robot-main").append(clone);
                     for (var i = 0; i < groupsDict[key].length; i++) { // and here we put robots in subgroups
                         var robotName = groupsDict[key][i];
                         var clone = proto.clone().prop('id', 'menu-' + robotName);
@@ -130,7 +168,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         clone.find('span:eq( 0 )').addClass('img-' + robotName); // there are no typicons for robots
                         clone.find('span:eq( 1 )').text(GUISTATE_C.getMenuRobotRealName(robotName)); // instead we use images
                         clone.attr('data-type', robotName);
-                        $("#popup-robot-container").append(clone);
+                        $("#popup-robot-subgroup").append(clone);
                     }
                 }
             }
@@ -177,59 +215,56 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#simButtonsHead').onWrap('click', '', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
-        $('#head-navigation-gallery').onWrap('click', '', function(event) {
-            $('#navbarCollapse').collapse('hide');
-        })
 
         // EDIT Menu
         $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             switch (event.target.id) {
-            case 'menuRunProg':
-                PROGRAM_C.runOnBrick();
-                break;
-            case 'menuRunSim':
-                $('#progSim').trigger('click');
-                break;
-            case 'menuCheckProg':
-                PROGRAM_C.checkProgram();
-                break;
-            case 'menuNewProg':
-                PROGRAM_C.newProgram();
-                break;
-            case 'menuListProg':
-                $('#tabProgList').data('type', 'userProgram');
-                $('#tabProgList').click();
-                break;
-            case 'menuListExamples':
-                $('#tabProgList').data('type', 'exampleProgram');
-                $('#tabProgList').click();
-                break;
-            case 'menuSaveProg':
-                PROGRAM_C.saveToServer();
-                break;
-            case 'menuSaveAsProg':
-                PROGRAM_C.showSaveAsModal();
-                break;
-            case 'menuShowCode':
-                $('#progCode').trigger("click");
-                break;
-            case 'menuImportProg':
-                PROGRAM_C.importXml();
-                break;
-            case 'menuExportProg':
-                PROGRAM_C.exportXml();
-                break;
-            case 'menuLinkProg':
-                PROGRAM_C.linkProgram();
-                break;
-            case 'menuToolboxBeginner':
-                $('#beginner').trigger('click');
-                break;
-            case 'menuToolboxExpert':
-                $('#expert').trigger('click');
-                break;
-            default:
-                break;
+                case 'menuRunProg':
+                    PROGRAM_C.runOnBrick();
+                    break;
+                case 'menuRunSim':
+                    $('#progSim').trigger('click');
+                    break;
+                case 'menuCheckProg':
+                    PROGRAM_C.checkProgram();
+                    break;
+                case 'menuNewProg':
+                    PROGRAM_C.newProgram();
+                    break;
+                case 'menuListProg':
+                    $('#tabProgList').data('type', 'userProgram');
+                    $('#tabProgList').click();
+                    break;
+                case 'menuListExamples':
+                    $('#tabProgList').data('type', 'exampleProgram');
+                    $('#tabProgList').click();
+                    break;
+                case 'menuSaveProg':
+                    PROGRAM_C.saveToServer();
+                    break;
+                case 'menuSaveAsProg':
+                    PROGRAM_C.showSaveAsModal();
+                    break;
+                case 'menuShowCode':
+                    $('#progCode').trigger("click");
+                    break;
+                case 'menuImportProg':
+                    PROGRAM_C.importXml();
+                    break;
+                case 'menuExportProg':
+                    PROGRAM_C.exportXml();
+                    break;
+                case 'menuLinkProg':
+                    PROGRAM_C.linkProgram();
+                    break;
+                case 'menuToolboxBeginner':
+                    $('#beginner').trigger('click');
+                    break;
+                case 'menuToolboxExpert':
+                    $('#expert').trigger('click');
+                    break;
+                default:
+                    break;
             }
         }, 'program edit clicked');
 
@@ -237,23 +272,23 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-configuration-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
-            case 'menuCheckConfig':
-                MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
-                break;
-            case 'menuNewConfig':
-                CONFIGURATION_C.newConfiguration();
-                break;
-            case 'menuListConfig':
-                $('#tabConfList').click();
-                break
-            case 'menuSaveConfig':
-                CONFIGURATION_C.saveToServer();
-                break;
-            case 'menuSaveAsConfig':
-                CONFIGURATION_C.showSaveAsModal();
-                break;
-            default:
-                break;
+                case 'menuCheckConfig':
+                    MSG.displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
+                    break;
+                case 'menuNewConfig':
+                    CONFIGURATION_C.newConfiguration();
+                    break;
+                case 'menuListConfig':
+                    $('#tabConfList').click();
+                    break
+                case 'menuSaveConfig':
+                    CONFIGURATION_C.saveToServer();
+                    break;
+                case 'menuSaveAsConfig':
+                    CONFIGURATION_C.showSaveAsModal();
+                    break;
+                default:
+                    break;
             }
         }, 'configuration edit clicked');
 
@@ -274,7 +309,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     console.log(GUISTATE_C.getIsAgent());
                     console.log(GUISTATE_C.getConnection());
                     if (GUISTATE_C.getConnection() == 'arduinoAgent'
-                            || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
+                        || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
                         var robots = SOCKET_C.getRobotList();
                         $('#singleModalListInput').empty();
@@ -314,26 +349,26 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             switch (event.target.id) {
-            case 'menuLogin':
-                USER_C.showLoginForm();
-                break;
-            case 'menuLogout':
-                USER_C.logout();
-                break;
-            case 'menuNewUser':
-                USER_C.showRegisterUserModal();
-                break;
-            case 'menuChangeUser':
-                USER_C.showUserDataForm();
-                break;
-            case 'menuDeleteUser':
-                USER_C.showDeleteUserModal();
-                break;
-            case 'menuStateInfo':
-                USER_C.showUserInfo();
-                break;
-            default:
-                break;
+                case 'menuLogin':
+                    USER_C.showLoginForm();
+                    break;
+                case 'menuLogout':
+                    USER_C.logout();
+                    break;
+                case 'menuNewUser':
+                    USER_C.showRegisterUserModal();
+                    break;
+                case 'menuChangeUser':
+                    USER_C.showUserDataForm();
+                    break;
+                case 'menuDeleteUser':
+                    USER_C.showDeleteUserModal();
+                    break;
+                case 'menuStateInfo':
+                    USER_C.showUserInfo();
+                    break;
+                default:
+                    break;
             }
             return false;
         }, 'user clicked');
@@ -345,35 +380,35 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('.sim-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // head-navigation-sim-control
-            $('.menuSim').parent().removeClass('disabled'); //these two were in all cases 
+            $('.menuSim').parent().removeClass('disabled'); //these two were in all cases
             $("#simButtonsCollapse").collapse('hide'); //so I extracted them here
             switch (event.target.id) {
-            case 'menuSimSimple':
-                $('.simSimple').parent().addClass('disabled');
-                SIM.setBackground(2, SIM.setBackground);
-                break;
-            case 'menuSimDraw':
-                $('.simDraw').parent().addClass('disabled');
-                SIM.setBackground(3, SIM.setBackground);
-                break;
-            case 'menuSimRoberta':
-                $('.simRoberta').parent().addClass('disabled');
-                SIM.setBackground(4, SIM.setBackground);
-                break;
-            case 'menuSimRescue':
-                $('.simRescue').parent().addClass('disabled');
-                SIM.setBackground(5, SIM.setBackground);
-                break;
-            case 'menuSimWRO':
-                $('.simWRO').parent().addClass('disabled');
-                SIM.setBackground(6, SIM.setBackground);
-                break;
-            case 'menuSimMath':
-                $('.simMath').parent().addClass('disabled');
-                SIM.setBackground(7, SIM.setBackground);
-                break;
-            default:
-                break;
+                case 'menuSimSimple':
+                    $('.simSimple').parent().addClass('disabled');
+                    SIM.setBackground(2, SIM.setBackground);
+                    break;
+                case 'menuSimDraw':
+                    $('.simDraw').parent().addClass('disabled');
+                    SIM.setBackground(3, SIM.setBackground);
+                    break;
+                case 'menuSimRoberta':
+                    $('.simRoberta').parent().addClass('disabled');
+                    SIM.setBackground(4, SIM.setBackground);
+                    break;
+                case 'menuSimRescue':
+                    $('.simRescue').parent().addClass('disabled');
+                    SIM.setBackground(5, SIM.setBackground);
+                    break;
+                case 'menuSimWRO':
+                    $('.simWRO').parent().addClass('disabled');
+                    SIM.setBackground(6, SIM.setBackground);
+                    break;
+                case 'menuSimMath':
+                    $('.simMath').parent().addClass('disabled');
+                    SIM.setBackground(7, SIM.setBackground);
+                    break;
+                default:
+                    break;
             }
         }, 'sim clicked');
 
@@ -422,26 +457,26 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             var scene = $("#simButtonsCollapse").collapse('hide');
             $('.menuSim').parent().removeClass('disabled');
             switch (scene) {
-            case 2:
-                $('.simSimple').parent().addClass('disabled');
-                break;
-            case 3:
-                $('.simDraw').parent().addClass('disabled');
-                break;
-            case 4:
-                $('.simRoberta').parent().addClass('disabled');
-                break;
-            case 5:
-                $('.simRescue').parent().addClass('disabled');
-                break;
-            case 6:
-                $('.simWRO').parent().addClass('disabled');
-                break;
-            case 7:
-                $('.simMath').parent().addClass('disabled');
-                break;
-            default:
-                break;
+                case 2:
+                    $('.simSimple').parent().addClass('disabled');
+                    break;
+                case 3:
+                    $('.simDraw').parent().addClass('disabled');
+                    break;
+                case 4:
+                    $('.simRoberta').parent().addClass('disabled');
+                    break;
+                case 5:
+                    $('.simRescue').parent().addClass('disabled');
+                    break;
+                case 6:
+                    $('.simWRO').parent().addClass('disabled');
+                    break;
+                case 7:
+                    $('.simMath').parent().addClass('disabled');
+                    break;
+                default:
+                    break;
             }
         }, 'simScene clicked');
 
@@ -455,7 +490,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 'start with ev3 clicked');
 
         $('#startPopupBack').on('click', function(event) {
-            $('.popup-robot').removeClass('hidden');
+            $('#popup-robot-main').removeClass('hidden');
             $('.popup-robot.robotSubGroup').addClass('hidden');
             $('.robotSpecial').removeClass('robotSpecial');
             $('#startPopupBack').addClass('hidden');
@@ -464,15 +499,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             event.preventDefault();
             $('#startPopupBack').trigger('click');
             var choosenRobotType = event.target.parentElement.parentElement.dataset.type || event.target.parentElement.dataset.type
-                    || event.target.dataset.type;
+                || event.target.dataset.type || event.currentTarget.dataset.type;
             var choosenRobottGroup = event.target.parentElement.parentElement.dataset.group || event.target.parentElement.dataset.group
-                    || event.target.dataset.group;
+                || event.target.dataset.group || event.currentTarget.dataset.group;
             if (event.target.className.indexOf("info") >= 0) {
                 var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
             } else {
                 if (choosenRobotType) {
                     if (choosenRobottGroup) {
-                        $('.popup-robot').addClass('hidden');
+                        $('#popup-robot-main').addClass('hidden');
                         $('.popup-robot.' + choosenRobotType).removeClass('hidden');
                         $('.popup-robot.' + choosenRobotType).addClass('robotSpecial');
                         $('#startPopupBack').removeClass('hidden');
@@ -511,12 +546,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
 
         $('#confirmContinue').onWrap('click', function(event) {
             if ($('#confirmContinue').data('type') === 'program') {
-                var callback = $('#confirmContinue').data('callback');
-                typeof callback === "function" && callback();
+                PROGRAM_C.newProgram(true);
             } else if ($('#confirmContinue').data('type') === 'configuration') {
                 CONFIGURATION_C.newConfiguration(true);
             } else if ($('#confirmContinue').data('type') === 'switchRobot') {
-                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true, $('#confirmContinue').data('opt_callback'));
+                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true);
             } else {
                 console.log('Confirmation with unknown data type clicked');
             }
