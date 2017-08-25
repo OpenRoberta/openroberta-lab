@@ -34,7 +34,19 @@ public class Upgrader {
             System.exit(4);
         }
         LOG.info("upgrading to server version " + serverVersion);
-        if ( serverVersion.equals("2.2.7") ) {
+        if ( serverVersion.equals("2.3.0") ) {
+            String dbUrl = RobertaProperties.getStringProperty("hibernate.connection.url");
+            SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
+            Session nativeSession = sessionFactoryWrapper.getNativeSession();
+            DbSetup dbSetup = new DbSetup(nativeSession);
+            nativeSession.beginTransaction();
+            dbSetup.runDatabaseSetup(
+                "/update-2-3-0.sql",
+                "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'USER_LIKE'",
+                "select count(*) from PROGRAM where VIEWED = 0");
+            nativeSession.createSQLQuery("shutdown").executeUpdate();
+            nativeSession.close();
+        } else if ( serverVersion.equals("2.2.7") ) {
             String dbUrl = RobertaProperties.getStringProperty("hibernate.connection.url");
             SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
             Session nativeSession = sessionFactoryWrapper.getNativeSession();

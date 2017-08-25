@@ -263,9 +263,9 @@ public class ClientProgram {
                     if ( like ) {
                         lp.createLike(programName, robotName, authorName);
                         if ( lp.isOk() ) {
-                            System.out.println("ok");
+                            // nothing to do
                         } else {
-                            System.out.println("error");
+                            Util.addErrorInfo(response, Key.LIKE_SAVE_ERROR_EXISTS);
                         }
                     } else {
                         lp.deleteLike(programName, robotName, authorName);
