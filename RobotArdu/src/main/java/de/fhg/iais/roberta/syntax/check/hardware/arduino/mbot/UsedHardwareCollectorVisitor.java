@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
@@ -50,7 +51,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
     }
-    
+
     public boolean isGyroSensorUsed() {
         return this.isGyroSensorUsed;
     }
@@ -133,13 +134,13 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        this.usedActors.add(new UsedActor(null, ActorType.EXTERNAL_LED));
+        this.usedActors.add(new UsedActor(externalLedOnAction.getPort(), ActorType.EXTERNAL_LED));
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        this.usedActors.add(new UsedActor(null, ActorType.EXTERNAL_LED));
+        this.usedActors.add(new UsedActor(externalLedOffAction.getPort(), ActorType.EXTERNAL_LED));
         return null;
     }
 
@@ -177,6 +178,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         if ( this.brickConfiguration != null ) {
             this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

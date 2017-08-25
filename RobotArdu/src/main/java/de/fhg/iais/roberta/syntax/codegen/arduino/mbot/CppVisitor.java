@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.mbot.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
+import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
@@ -389,7 +390,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         if ( this.isGyroSensorUsed ) {
             for ( UsedSensor sensor : this.usedSensors ) {
 
-                if ( sensor.getType().toString().equalsIgnoreCase("GYRO") || sensor.getType().toString().equalsIgnoreCase("ACCELEROMETER")  ) {
+                if ( sensor.getType().toString().equalsIgnoreCase("GYRO") || sensor.getType().toString().equalsIgnoreCase("ACCELEROMETER") ) {
                     this.gyroSensorPort = sensor.getPort().getPortNumber();
                 }
             }
@@ -418,7 +419,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             nlIndent();
             this.sb.append("myTemp" + this.temperatureSensorPort + ".update();");
         }
-        
+
         if ( this.isGyroSensorUsed ) {
             nlIndent();
             this.sb.append("myGyro" + this.gyroSensorPort + ".update();");
@@ -525,7 +526,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                             + ");\n");
                     break;
                 case EXTERNAL_LED:
-                    this.sb.append("MeRGBLed rgbled_(0, 0);\n");
+                    this.sb.append("MeRGBLed rgbled_" + usedActor.getPort().getValues()[0] + "(" + usedActor.getPort().getValues()[0] + ", 4);\n");
                     break;
                 case LED_MATRIX:
                     break;
@@ -569,7 +570,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 this.sb.append("102, 51, 0");
                 break;
             default:
-                this.sb.append("0, 0, 0");
+                ledOnAction.getLedColor().visit(this);
                 break;
 
         }
@@ -595,7 +596,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        this.sb.append("rgbled_").append(externalLedOnAction.getPort()).append(".setColor(").append(externalLedOnAction.getLedNo() + ", ");
+        this.sb.append("rgbled_").append(externalLedOnAction.getPort().getValues()[0]).append(".setColor(").append(externalLedOnAction.getLedNo() + ", ");
         switch ( externalLedOnAction.getLedColor().toString() ) {
             case ("ColorConst [RED]"):
                 this.sb.append("255, 0, 0");
@@ -619,29 +620,39 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 this.sb.append("102, 51, 0");
                 break;
             default:
-                this.sb.append("0, 0, 0");
+                externalLedOnAction.getLedColor().visit(this);
                 break;
 
         }
         this.sb.append(");");
         nlIndent();
-        this.sb.append("rgbled_" + externalLedOnAction.getPort() + ".show();");
+        this.sb.append("rgbled_" + externalLedOnAction.getPort().getValues()[0] + ".show();");
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        this.sb.append("rgbled_" + externalLedOffAction.getPort() + ".setColor(");
+        this.sb.append("rgbled_" + externalLedOffAction.getPort().getValues()[0] + ".setColor(");
         this.sb.append(externalLedOffAction.getLedNo());
-        this.sb.append("0, 0, 0);");
+        this.sb.append(", 0, 0, 0);");
         nlIndent();
-        this.sb.append("rgbled_" + externalLedOffAction.getPort() + ".show();");
+        this.sb.append("rgbled_" + externalLedOffAction.getPort().getValues()[0] + ".show();");
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        rgbColor.getR().visit(this);
+        this.sb.append(", ");
+        rgbColor.getG().visit(this);
+        this.sb.append(", ");
+        rgbColor.getB().visit(this);
         return null;
     }
 

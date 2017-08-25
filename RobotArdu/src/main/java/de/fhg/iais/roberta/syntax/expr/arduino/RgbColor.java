@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
+import de.fhg.iais.roberta.visitor.arduino.ArduinoAstVisitor;
 
 /**
  * This class represents the <b>makeblockColours</b> block from Blockly into the AST (abstract syntax tree).
@@ -85,7 +85,7 @@ public class RgbColor<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((Bob3AstVisitor<V>) visitor).visitRgbColor(this);
+        return ((ArduinoAstVisitor<V>) visitor).visitRgbColor(this);
 
     }
 

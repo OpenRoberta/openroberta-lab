@@ -2,8 +2,12 @@ package de.fhg.iais.roberta.syntax.action.arduino.mbot;
 
 import java.util.List;
 
+import org.junit.AfterClass;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,9 +30,9 @@ import de.fhg.iais.roberta.visitor.arduino.ArduinoAstVisitor;
  */
 public class ExternalLedOffAction<V> extends Action<V> {
     private String ledNo;
-    private final String port;
+    private final IActorPort port;
 
-    private ExternalLedOffAction(String ledNo, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ExternalLedOffAction(String ledNo, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MAKEBLOCK_EXTERNAL_RGB_LED_OFF"), properties, comment);
         this.ledNo = ledNo;
         this.port = port;
@@ -43,7 +47,7 @@ public class ExternalLedOffAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ExternalLedOffAction}
      */
-    private static <V> ExternalLedOffAction<V> make(String ledNo, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> ExternalLedOffAction<V> make(String ledNo, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ExternalLedOffAction<>(ledNo, port, properties, comment);
     }
 
@@ -61,7 +65,7 @@ public class ExternalLedOffAction<V> extends Action<V> {
         return this.ledNo;
     }
 
-    public String getPort() {
+    public IActorPort getPort() {
         return this.port;
     }
 
@@ -73,18 +77,20 @@ public class ExternalLedOffAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String ledNo = helper.extractField(fields, BlocklyConstants.LEDNUMBER);
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        return ExternalLedOffAction.make(ledNo, port, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ExternalLedOffAction.make(ledNo, factory.getActorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+        String fieldValue = getPort().getValues()[0];
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LEDNUMBER, this.ledNo);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.port);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
 
     }

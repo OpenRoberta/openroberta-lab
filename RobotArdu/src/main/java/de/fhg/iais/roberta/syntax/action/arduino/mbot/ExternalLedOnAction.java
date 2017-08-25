@@ -5,6 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -32,9 +34,9 @@ import de.fhg.iais.roberta.visitor.arduino.ArduinoAstVisitor;
 public class ExternalLedOnAction<V> extends Action<V> {
     private final Expr<V> ledColor;
     private final String ledNo;
-    private final String port;
+    private final IActorPort port;
 
-    private ExternalLedOnAction(String ledNo, String port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ExternalLedOnAction(String ledNo, IActorPort port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("MAKEBLOCK_EXTERNAL_RGB_LED_ON"), properties, comment);
         Assert.notNull(ledColor);
         this.ledColor = ledColor;
@@ -51,7 +53,7 @@ public class ExternalLedOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ExternalLedOnAction}
      */
-    private static <V> ExternalLedOnAction<V> make(String ledNo, String port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> ExternalLedOnAction<V> make(String ledNo, IActorPort port, Expr<V> ledColor, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ExternalLedOnAction<>(ledNo, port, ledColor, properties, comment);
     }
 
@@ -76,7 +78,7 @@ public class ExternalLedOnAction<V> extends Action<V> {
         return this.ledNo;
     }
 
-    public String getPort() {
+    public IActorPort getPort() {
         return this.port;
     }
 
@@ -88,21 +90,24 @@ public class ExternalLedOnAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        IRobotFactory factory = helper.getModeFactory();
         List<Value> values = helper.extractValues(block, (short) 1);
         List<Field> fields = helper.extractFields(block, (short) 2);
         String ledNo = helper.extractField(fields, BlocklyConstants.LEDNUMBER);
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
-        return ExternalLedOnAction.make(ledNo, port, helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ExternalLedOnAction
+            .make(ledNo, factory.getActorPort(port), helper.convertPhraseToExpr(ledColor), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+        String fieldValue = getPort().getValues()[0];
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LEDNUMBER, this.ledNo);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.port);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.ledColor);
         return jaxbDestination;
 

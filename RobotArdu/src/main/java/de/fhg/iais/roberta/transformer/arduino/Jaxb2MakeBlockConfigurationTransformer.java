@@ -118,12 +118,26 @@ public class Jaxb2MakeBlockConfigurationTransformer {
     }
 
     private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
+        List<Field> fields;
         for ( Value value : values ) {
             if ( value.getName().startsWith("P") ) {
-                // Extract sensor/actor on port
-                sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
+                try {
+                    // Extract sensor/actor on port
+                    sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
+                } catch ( DbcException e ) {
+                    switch ( value.getBlock().getType() ) {
+                        case "robBrick_led":
+                            fields = extractFields(value.getBlock(), (short) 2);
+                            actors.add(
+                                Pair.of(
+                                    this.factory.getActorPort(value.getName()),
+                                    new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
+                            break;
+                        default:
+                            throw new DbcException("Invalide actor type!" + value.getBlock().getType());
+                    }
+                }
             } else {
-                List<Field> fields;
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_geared":

@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
@@ -36,4 +37,6 @@ public interface ArduinoAstVisitor<V>
     V visitExternalLedOnAction(ExternalLedOnAction<V> externalLedOnAction);
 
     V visitExternalLedOffAction(ExternalLedOffAction<V> externalLedOffAction);
+
+    V visitRgbColor(RgbColor<V> rgbColor);
 }
