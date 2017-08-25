@@ -1189,6 +1189,13 @@ table [data-toggle="collapse"].collapsed:after {
 	color: #333;
 	opacity: 1;
 }
+#popup-robot-main {
+	visibility: hidden;
+}
+
+#popup-robot-main.slick-initialized {
+	visibility: visible;
+}
 
 .robot-container {
 	 border: 1px solid;
@@ -1230,6 +1237,10 @@ table [data-toggle="collapse"].collapsed:after {
 }
 .robotSpecial span.img-ev3lejos {
 	background-image: url("/css/img/ev3lejos.png");		
+}
+
+.robotSpecial span.img-ev3lejosV1 {
+	background-image: url("/css/img/ev3lejosV1.png");		
 }
 
 .robotSpecial span.img-ev3dev {
