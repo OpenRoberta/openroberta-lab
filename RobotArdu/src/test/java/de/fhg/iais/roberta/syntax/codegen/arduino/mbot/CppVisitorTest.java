@@ -131,8 +131,10 @@ public class CppVisitorTest {
             + "MeDCMotor motor1(M1);"
             + "double item;"
             + MAIN_METHOD2
+            + "myGyro1.begin();"
             + "}"
             + "void loop(){"
+            + "myGyro1.update();"
             + "if (myGyro1.getGyroX() > 10 ) {"
             + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
@@ -150,8 +152,10 @@ public class CppVisitorTest {
             + "MeDCMotor motor1(M1);"
             + "double item;"
             + MAIN_METHOD2
+            + "myGyro1.begin();"
             + "}"
             + "void loop(){"
+            + "myGyro1.update();"
             + "if (myGyro1.getAngleX() > 10 ) {"
             + "        motor1.run(-1*(30)*255/100);}\n"
             + "}\n";
