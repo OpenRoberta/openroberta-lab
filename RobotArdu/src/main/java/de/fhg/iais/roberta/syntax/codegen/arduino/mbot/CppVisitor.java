@@ -676,7 +676,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         for ( int i = 0; i < 16; i++ ) {
             for ( int j = 0; j < 8; j++ ) {
                 if ( imageCharacterMatrix[j][i] == '#' ) {
-                    imageBitmap[i] += Math.pow(2, j);
+                    imageBitmap[i] += Math.pow(2, 7 - j);
                 }
             }
         }
@@ -697,7 +697,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         nlIndent();
         this.sb.append("free(drawTemp);");
         nlIndent();
-        this.sb.append("myLEDMatrix_" + displayImageAction.getPort().getValues()[0] + ".drawBitmap(0, 8, drawBuffer);");
+        this.sb.append("myLEDMatrix_" + displayImageAction.getPort().getValues()[0] + ".drawBitmap(0, 0, 16, drawBuffer);");
         nlIndent();
         return null;
     }
