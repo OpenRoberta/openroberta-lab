@@ -654,12 +654,51 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitImage(LedMatrix<Void> ledMatrix) {
+        ledMatrix.getImage();
         return null;
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        this.sb.append("myLEDMatrix_" + displayImageAction.getPort().getValues()[0] + ".");
+        String valuesToDisplay = displayImageAction.getValuesToDisplay().toString();
+        valuesToDisplay = valuesToDisplay.replaceAll("   ", "-");
+        valuesToDisplay = valuesToDisplay.replaceAll("  ", "-");
+        valuesToDisplay = valuesToDisplay.replaceAll(" #", "#");
+        String[] valuesToDisplayArray = valuesToDisplay.split("\n");
+        char[][] imageCharacterMatrix = new char[8][16];
+        valuesToDisplayArray[0] = valuesToDisplayArray[0].split("Image \\[ \\[")[1].split("]")[0];
+        imageCharacterMatrix[0] = valuesToDisplayArray[0].replaceAll(",", "").toCharArray();
+        for ( int i = 1; i < 8; i++ ) {
+            valuesToDisplayArray[i] = valuesToDisplayArray[i].replaceAll("\\[|\\]|\\] \\]", "");
+            imageCharacterMatrix[i] = valuesToDisplayArray[i].replaceAll(",", "").toCharArray();
+        }
+        int[] imageBitmap = new int[16];
+        for ( int i = 0; i < 16; i++ ) {
+            for ( int j = 0; j < 8; j++ ) {
+                if ( imageCharacterMatrix[j][i] == '#' ) {
+                    imageBitmap[i] += Math.pow(2, j);
+                }
+            }
+        }
+        this.sb.append("unsigned char drawBuffer[16];");
+        nlIndent();
+        this.sb.append("unsigned char *drawTemp;");
+        nlIndent();
+
+        this.sb.append("drawTemp = new unsigned char[16]{");
+        for ( int i = 0; i < 15; i++ ) {
+            this.sb.append(imageBitmap[i]);
+            this.sb.append(", ");
+        }
+        this.sb.append(imageBitmap[15]);
+        this.sb.append("};");
+        nlIndent();
+        this.sb.append("memcpy(drawBuffer,drawTemp,16);");
+        nlIndent();
+        this.sb.append("free(drawTemp);");
+        nlIndent();
+        this.sb.append("myLEDMatrix_" + displayImageAction.getPort().getValues()[0] + ".drawBitmap(0, 8, drawBuffer);");
+        nlIndent();
         return null;
     }
 
