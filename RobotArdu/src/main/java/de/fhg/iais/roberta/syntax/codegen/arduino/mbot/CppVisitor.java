@@ -210,58 +210,30 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
-        if ( curveAction.getDirection() == DriveDirection.FOREWARD ) {
-            this.sb.append("myDrive.steer(");
-            curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append("myDrive.steer(");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append("*255/100, ");
+        curveAction.getParamRight().getSpeed().visit(this);
+        this.sb.append("*255/100, ").append(curveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        if ( duration != null ) {
             this.sb.append(", ");
-            curveAction.getParamRight().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", 1, ");
-                duration.getValue().visit(this);
-                this.sb.append(");");
-            } else {
-                this.sb.append(", 1);");
-            }
-        } else {
-            this.sb.append("myDrive.steer(");
-            curveAction.getParamLeft().getSpeed().visit(this);
-            this.sb.append(", ");
-            curveAction.getParamRight().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", 0, ");
-                duration.getValue().visit(this);
-                this.sb.append(");");
-            } else {
-                this.sb.append(", 0);");
-            }
+            duration.getValue().visit(this);
         }
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         MotorDuration<Void> duration = turnAction.getParam().getDuration();
-        if ( turnAction.getDirection() == TurnDirection.LEFT ) {
-            this.sb.append("myDrive.turn(");
-            turnAction.getParam().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", 1, ");
-                duration.getValue().visit(this);
-                this.sb.append(");");
-            } else {
-                this.sb.append(", 1);");
-            }
-        } else {
-            this.sb.append("myDrive.turn(");
-            turnAction.getParam().getSpeed().visit(this);
-            if ( duration != null ) {
-                this.sb.append(", 0, ");
-                duration.getValue().visit(this);
-                this.sb.append(");");
-            } else {
-                this.sb.append(", 0);");
-            }
+        this.sb.append("myDrive.turn(");
+        turnAction.getParam().getSpeed().visit(this);
+        this.sb.append("*255/100, ").append(turnAction.getDirection() == TurnDirection.LEFT ? 1 : 0);
+        if ( duration != null ) {
+            this.sb.append(", ");
+            duration.getValue().visit(this);
         }
+        this.sb.append(");");
         return null;
     }
 
