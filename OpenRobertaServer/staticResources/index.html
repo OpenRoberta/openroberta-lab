@@ -224,7 +224,7 @@ limitations under the License.
 						class="head-navi-title hidden-sm hidden-md hidden-lg"
 						lkey="Blockly.Msg.MENU_USER"></span>
 				</a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu" id="head-navigation-user-dropdown">
 						<li class="logout"><a href="#" id="menuLogin"
 											  class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden
 							...</a></li>
@@ -240,6 +240,9 @@ limitations under the License.
 						<li><a href="#" id="menuStateInfo"
 							   class="typcn typcn-input-checked"
 							   lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
+						<li class="hidden" id="menuAddStatusTextWrap"><a href="#" id="menuAddStatusText"
+							   class="typcn typcn-edit"
+							   lkey="Blockly.Msg.MENU_ADD_STATUS_TEXT">Add status text</a></li>
 					</ul></li>
 				<li id="head-navigation-gallery"><a href="#"
 													id="head-navi-tooltip-gallery"
@@ -584,6 +587,7 @@ limitations under the License.
 </div>
 <!--  ################## END TABS ################## -->
 <!-- ################## POPUPS ################## -->
+
 <!-- Popup login -->
 <div class="modal fade" id="login-user" tabindex="-1" role="dialog"
 	 aria-labelledby="myModalLabel" aria-hidden="true">
@@ -623,7 +627,7 @@ limitations under the License.
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary btn-block"
+						<button type="submit" class="btn btn-primary"
 								id="doLogin">OK</button>
 						<div>
 							<button type="button" id="login_lost_btn" class="btn-link"
@@ -702,7 +706,7 @@ limitations under the License.
 						<button id="resendActivation" type="button"
 								class="btn-link hidden" lkey="Blockly.Msg.RESEND_ACTIVATION">resend
 							activation</button>
-						<button type="submit" class="btn btn-primary btn-block"
+						<button type="submit" class="btn btn-primary"
 								id="registerUser" lkey="Blockly.Msg.POPUP_REGISTER_USER"
 								value="register"></button>
 						<div>
@@ -728,7 +732,7 @@ limitations under the License.
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary btn-block"
+						<button type="submit" class="btn btn-primary"
 								id="sendEmailLostPassword" lkey="Blockly.Msg.POPUP_EMAIL_SEND">Send</button>
 						<div>
 							<button id="lost_login_btn" type="button" class="btn-link"
@@ -798,7 +802,64 @@ limitations under the License.
 		</div>
 	</div>
 </div>
-
+<!--Add Status Text-->
+<div class="modal fade" id="modal-addStatusText" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<form id="fg-addStatusText">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="statusTextEnglish" lkey="Blockly.Msg.POPUP_ENGLISH_TEXT">English text</label>
+						<div class="input-group">
+							<span class="input-group-addon typcn input-typcn typcn-document-text"></span>
+							<input class="form-control" id="statusTextEnglish" name="statusTextEnglish" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="statusTextGerman" lkey="Blockly.Msg.POPUP_GERMAN_TEXT">German text</label>
+						<div class="input-group">
+							<span class="input-group-addon typcn input-typcn typcn-document-text"></span>
+							<input class="form-control" id="statusTextGerman" name="statusTextEnglish" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="statusTextGerman" lkey="Blockly.Msg.POPUP_EXPIRE_DATE_TIME">Expire Date with Time</label>
+						<div class="input-group">
+							<span class="input-group-addon typcn input-typcn typcn-watch"></span>
+							<input class="form-control" id="statusTextTimestamp" name="statusTextTimestamp" placeholder="DD-MM-YYYY hh:mm" />
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary"
+							id="addStatusText">OK</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!--Status Text if cookies are not enabled-->
+<div class="modal fade" id="modal-statustext" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+			</div>
+			<div class="model-body">
+				<h3 id="modal-statustext-text">
+					<span id="modal-statustext-text-en" class="EN"></span>
+					<span id="modal-statustext-text-de" class="DE"></span>
+				</h3>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary"
+						id="close-modal-statustext">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Single Modal -->
 <div id="single-modal" class="modal fade">
 	<div class="modal-dialog modal-sm">
@@ -831,7 +892,6 @@ limitations under the License.
 		</div>
 	</div>
 </div>
-
 <!-- Single Modal List -->
 <div id="single-modal-list" class="modal fade">
 	<div class="modal-dialog modal-sm">
@@ -1065,8 +1125,6 @@ limitations under the License.
 					   class="btn backButton hidden" lkey="Blockly.Msg.POPUP_CANCEL"></input>
 			</div>
 			<div class="container-fluid">
-				<hr
-						style="border-color: #BACC1E;; border-width: 2px; margin: 10px 0">
 				<div class="row">
 					<div class="modal-header"
 						 style="text-align: center; font-size: 18px;">
@@ -1106,6 +1164,10 @@ limitations under the License.
 				</div>
 				<hr style="border-color: #BACC1E;; border-width: 2px;"margin: 10px 0">
 				<div class="modal-footer left-inner-addon popup-checkbox">
+					<div id="startup-message-statustext">
+						<h4 id="statustext-en" class="EN"></h4>
+						<h4 id="statustext-de" class="DE"></h4>
+					</div>
 					<input type="checkbox" name="checkbox" id="checkbox_id"
 						   value="value" /> <label for="checkbox_id" style="color: #333;"
 												   lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show

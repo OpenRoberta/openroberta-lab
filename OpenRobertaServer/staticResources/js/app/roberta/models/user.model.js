@@ -247,4 +247,23 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.deleteUserOnServer = deleteUserOnServer;
+
+    function getStatusText(successFn) {
+        COMM.json("/user", {
+            "cmd" : "getStatusText"
+        }, successFn);
+    }
+
+    exports.getStatusText = getStatusText;
+
+    function setStatusText(english, german, timestamp, successFn) {
+        COMM.json("/user", {
+            "cmd" : "setStatusText",
+            "english" : english,
+            "german" : german,
+            "timestamp" : timestamp
+        }, successFn);
+    }
+
+    exports.setStatusText = setStatusText;
 });

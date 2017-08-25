@@ -1,9 +1,8 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'guiState.controller', 'program.controller',
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller', 'program.controller',
     'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks' , 'slick'], function(exports, LOG, UTIL, MSG, COMM,
-                                                                                                                                 ROBOT_C, SOCKET_C, USER_C, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+                                                                                                                                 ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
-
         initMenu();
         initMenuEvents();
         /**
@@ -176,6 +175,14 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         proto.find('.img-beta').css('visibility', 'hidden');
         proto.find('a[href]').css('visibility', 'hidden');
         $('#show-startup-message>.modal-body').append('<input type="button" class="btn backButton hidden" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>');
+        USER.getStatusText(function (result) {
+            if(result.statustext[0] !== "" && result.statustext[1] !== "") {
+                $('#statustext-en').html("<span class='typcn typcn-info-large'></span> " + result.statustext[0]);
+                $('#statustext-de').html("<span class='typcn typcn-info-large'></span> " + result.statustext[1]);
+                $('#modal-statustext-text-en').html(result.statustext[0]);
+                $('#modal-statustext-text-de').html(result.statustext[1]);
+            }
+        })
         GUISTATE_C.setInitialState();
     }
 
@@ -366,6 +373,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     break;
                 case 'menuStateInfo':
                     USER_C.showUserInfo();
+                    break;
+                case 'menuAddStatusText':
+                    USER_C.showStatusTextModal();
                     break;
                 default:
                     break;

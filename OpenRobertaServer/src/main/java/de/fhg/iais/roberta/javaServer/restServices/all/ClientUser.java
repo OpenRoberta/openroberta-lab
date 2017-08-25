@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.sql.Timestamp;
 
 import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
@@ -51,6 +53,9 @@ public class ClientUser {
         this.mailManagement = mailManagement;
         this.isPublicServer = RobertaProperties.getBooleanProperty("server.public");
     }
+
+    private static String[] statusText = new String[2];
+    private static long statusTextTimestamp;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -240,6 +245,23 @@ public class ClientUser {
                 up.deleteUser(account, password);
                 Util.addResultInfo(response, up);
 
+            } else if ( cmd.equals("getStatusText") ) {
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                Long current = timestamp.getTime() / 1000L;
+                if (current > statusTextTimestamp) {
+                    statusText[0] = "";
+                    statusText[1] = "";
+                }
+                JSONArray statusTextJSON = new JSONArray(Arrays.asList(statusText));
+                response.put("statustext", statusTextJSON);
+                response.put("rc", "ok");
+                Util.addResultInfo(response, up);
+
+            } else if ( cmd.equals("setStatusText") && userId == 1) {
+                statusText[0] = request.getString("english");
+                statusText[1] = request.getString("german");
+                statusTextTimestamp = request.getLong("timestamp");
+                response.put("rc", "ok");
             } else {
                 ClientUser.LOG.error("Invalid command: " + cmd);
                 Util.addErrorInfo(response, Key.COMMAND_INVALID);

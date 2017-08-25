@@ -972,6 +972,10 @@ table#download-instructions
     margin-top: -14px;
     color: #333;
 }
+
+#modal-addStatusText .modal-content {
+	padding-top: 20px;
+}
     
 .bigNumber {
 	color: #8fa402;
@@ -1009,6 +1013,16 @@ table#download-instructions
 
 .modal-body {
 	padding: 0 16px;
+}
+
+#modal-statustext-text {
+	padding: 40px;
+	text-align: center;
+}
+#show-startup-message #startup-message-statustext {
+	margin-bottom: 10px;
+	text-align: center;
+	color: #333;
 }
 
 .modal-header, .modal-footer {

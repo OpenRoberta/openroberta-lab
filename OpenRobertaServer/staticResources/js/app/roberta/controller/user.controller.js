@@ -132,6 +132,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             USER.login($("#loginAccountName").val(), $('#loginPassword').val(), function(result) {
                 if (result.rc === "ok") {
                     GUISTATE_C.setLogin(result);
+                    if(result.userId === 1) {
+                        $('#menuAddStatusTextWrap').removeClass('hidden');
+                    }
                 }
                 MSG.displayInformation(result, "MESSAGE_USER_LOGIN", result.message, GUISTATE_C.getUserName());
             });
@@ -176,6 +179,26 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                     logout();
                 }
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getUserAccountName());
+            });
+        }
+    }
+
+    /**
+     * Add status text on server
+     */
+    function addStatusText() {
+        $("#fg-addStatusText").validate();
+        if ($("#fg-addStatusText").valid()) {
+            var dateTimeParts = $('#statusTextTimestamp').val().split(' '),
+                timeParts = dateTimeParts[1].split(':'),
+                dateParts = dateTimeParts[0].split('-'),
+                date;
+
+            date = new Date(dateParts[2], parseInt(dateParts[1], 10) - 1, dateParts[0], timeParts[0], timeParts[1]);
+            USER.setStatusText($("#statusTextEnglish").val(), $('#statusTextGerman').val(), date.getTime() / 1000, function(result) {
+                if (result.rc === "ok") {
+                    $('#modal-addStatusText').modal("hide");
+                }
             });
         }
     }
@@ -451,6 +474,17 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         validateLostPassword();
     }
 
+    function initStatusTextModal() {
+        $("#fg-addStatusText").onWrap("submit", function (event) {
+            event.preventDefault();
+            addStatusText();
+        })
+        $('#close-modal-statustext').on('click', function (event) {
+            event.preventDefault();
+            $('#modal-statustext').modal('hide');
+        })
+    }
+
     function initUserPasswordChangeModal() {
         $formUserPasswordChange.onWrap('submit', function(e) {
             e.preventDefault();
@@ -500,6 +534,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             }, 'icon user click');
 
             initLoginModal();
+            initStatusTextModal();
             initUserPasswordChangeModal();
             LOG.info('init user forms');
             ready.resolve();
@@ -597,6 +632,19 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $("#show-state-info").modal("show");
     }
     exports.showUserInfo = showUserInfo;
+
+    /**
+     * Show the add statustext modal
+     */
+    function showStatusTextModal() {
+        USER.getStatusText(function(result) {
+            $('#fg-addStatusText').trigger("reset");
+            $('#statusTextEnglish').val(result.statustext[0]);
+            $('#statusTextGerman').val(result.statustext[1]);
+            $('#modal-addStatusText').modal("show");
+        })
+    }
+    exports.showStatusTextModal = showStatusTextModal;
 
     function showResetPassword(target) {
         USER.checkTargetRecovery(target, function(result) {
