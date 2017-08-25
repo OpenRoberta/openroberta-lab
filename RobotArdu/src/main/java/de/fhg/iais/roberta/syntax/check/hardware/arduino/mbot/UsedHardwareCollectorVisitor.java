@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.visitor.arduino.MbotAstVisitor;
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements MbotAstVisitor<Void> {
     private boolean isToneActionUsed = false;
     private boolean isTemperatureSensorUsed = false;
+    private boolean isGyroSensorUsed = false;
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, MbotConfiguration configuration) {
         super(configuration);
@@ -48,6 +49,10 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     public boolean isTemperatureSensorUsed() {
         return this.isTemperatureSensorUsed;
+    }
+    
+    public boolean isGyroSensorUsed() {
+        return this.isGyroSensorUsed;
     }
 
     @Override
@@ -78,12 +83,14 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
         this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getCoordinate()));
+        this.isGyroSensorUsed = true;
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+        this.isGyroSensorUsed = true;
         return null;
     }
 

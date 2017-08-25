@@ -66,7 +66,9 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     private final MbotConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
     private final boolean isTemperatureSensorUsed;
+    private final boolean isGyroSensorUsed;
     private String temperatureSensorPort;
+    private String gyroSensorPort;
     private final boolean isToneActionUsed;
 
     /**
@@ -85,6 +87,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.isTemperatureSensorUsed = codePreprocessVisitor.isTemperatureSensorUsed();
+        this.isGyroSensorUsed = codePreprocessVisitor.isGyroSensorUsed();
         this.isToneActionUsed = codePreprocessVisitor.isToneActionUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
@@ -411,6 +414,17 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
+        if ( this.isGyroSensorUsed ) {
+            for ( UsedSensor sensor : this.usedSensors ) {
+
+                if ( sensor.getType().toString().equalsIgnoreCase("GYRO") || sensor.getType().toString().equalsIgnoreCase("ACCELEROMETER")  ) {
+                    this.gyroSensorPort = sensor.getPort().getPortNumber();
+                }
+            }
+
+            nlIndent();
+            this.sb.append("myGyro" + this.gyroSensorPort + ".begin();");
+        }
         nlIndent();
         generateUsedVars();
         this.sb.append("\n}");
@@ -431,6 +445,11 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
             nlIndent();
             this.sb.append("myTemp" + this.temperatureSensorPort + ".update();");
+        }
+        
+        if ( this.isGyroSensorUsed ) {
+            nlIndent();
+            this.sb.append("myGyro" + this.gyroSensorPort + ".update();");
         }
         return null;
     }
