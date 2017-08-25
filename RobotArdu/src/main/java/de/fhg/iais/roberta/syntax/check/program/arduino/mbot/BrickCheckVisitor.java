@@ -1,11 +1,14 @@
 package de.fhg.iais.roberta.syntax.check.program.arduino.mbot;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
+import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
@@ -91,6 +94,24 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
 
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitImage(LedMatrix<Void> ledMatrix) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
         // TODO Auto-generated method stub
         return null;
     }

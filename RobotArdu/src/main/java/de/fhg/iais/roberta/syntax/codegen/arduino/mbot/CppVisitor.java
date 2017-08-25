@@ -12,6 +12,8 @@ import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
@@ -34,6 +36,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.mbot.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
+import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
@@ -66,11 +69,6 @@ import de.fhg.iais.roberta.visitor.arduino.MbotAstVisitor;
 public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     private final MbotConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
-    private final boolean isTemperatureSensorUsed;
-    private final boolean isGyroSensorUsed;
-    private String temperatureSensorPort;
-    private String gyroSensorPort;
-    private final boolean isToneActionUsed;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -87,9 +85,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.usedVars = codePreprocessVisitor.getVisitedVars();
-        this.isTemperatureSensorUsed = codePreprocessVisitor.isTemperatureSensorUsed();
-        this.isGyroSensorUsed = codePreprocessVisitor.isGyroSensorUsed();
-        this.isToneActionUsed = codePreprocessVisitor.isToneActionUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
@@ -387,16 +382,17 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             nlIndent();
             this.sb.append("T.StartTimer();");
         }
-        if ( this.isGyroSensorUsed ) {
-            for ( UsedSensor sensor : this.usedSensors ) {
-
-                if ( sensor.getType().toString().equalsIgnoreCase("GYRO") || sensor.getType().toString().equalsIgnoreCase("ACCELEROMETER") ) {
-                    this.gyroSensorPort = sensor.getPort().getPortNumber();
-                }
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case GYRO:
+                    nlIndent();
+                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".begin();");
+                    break;
+                case ACCELEROMETER:
+                    nlIndent();
+                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".begin();");
+                    break;
             }
-
-            nlIndent();
-            this.sb.append("myGyro" + this.gyroSensorPort + ".begin();");
         }
         nlIndent();
         generateUsedVars();
@@ -407,22 +403,21 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             nlIndent();
             this.sb.append("T.Timer();");
         }
-
-        if ( this.isTemperatureSensorUsed ) {
-            for ( UsedSensor sensor : this.usedSensors ) {
-
-                if ( sensor.getType().toString().equalsIgnoreCase("TEMPERATURE") ) {
-                    this.temperatureSensorPort = sensor.getPort().getPortNumber();
-                }
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            switch ( usedSensor.getType() ) {
+                case GYRO:
+                    nlIndent();
+                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".update();");
+                    break;
+                case ACCELEROMETER:
+                    nlIndent();
+                    this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".update();");
+                    break;
+                case TEMPERATURE:
+                    nlIndent();
+                    this.sb.append("myTemp" + usedSensor.getPort().getPortNumber() + ".update();");
+                    break;
             }
-
-            nlIndent();
-            this.sb.append("myTemp" + this.temperatureSensorPort + ".update();");
-        }
-
-        if ( this.isGyroSensorUsed ) {
-            nlIndent();
-            this.sb.append("myGyro" + this.gyroSensorPort + ".update();");
         }
         return null;
     }
@@ -529,6 +524,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                     this.sb.append("MeRGBLed rgbled_" + usedActor.getPort().getValues()[0] + "(" + usedActor.getPort().getValues()[0] + ", 4);\n");
                     break;
                 case LED_MATRIX:
+                    this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getValues()[0] + "(" + usedActor.getPort().getValues()[0] + ");\n");
                     break;
                 case BUZZER:
                     this.sb.append("MeBuzzer buzzer;\n");
@@ -653,6 +649,25 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         rgbColor.getG().visit(this);
         this.sb.append(", ");
         rgbColor.getB().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitImage(LedMatrix<Void> ledMatrix) {
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+        this.sb.append("myLEDMatrix_" + displayImageAction.getPort().getValues()[0] + ".");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
+        this.sb.append("myLEDMatrix_" + displayTextAction.getPort().getValues()[0] + ".drawStr(0, 0, ");
+        displayTextAction.getMsg().visit(this);
+        this.sb.append(");");
         return null;
     }
 

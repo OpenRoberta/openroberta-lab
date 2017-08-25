@@ -8,6 +8,8 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
@@ -17,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
+import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
@@ -35,31 +38,14 @@ import de.fhg.iais.roberta.visitor.arduino.MbotAstVisitor;
  * @author kcvejoski
  */
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements MbotAstVisitor<Void> {
-    private boolean isToneActionUsed = false;
-    private boolean isTemperatureSensorUsed = false;
-    private boolean isGyroSensorUsed = false;
-
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, MbotConfiguration configuration) {
         super(configuration);
         check(phrasesSet);
     }
 
-    public boolean isToneActionUsed() {
-        return this.isToneActionUsed;
-    }
-
-    public boolean isTemperatureSensorUsed() {
-        return this.isTemperatureSensorUsed;
-    }
-
-    public boolean isGyroSensorUsed() {
-        return this.isGyroSensorUsed;
-    }
-
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
         this.usedSensors.add(new UsedSensor(temperatureSensor.getPort(), SensorType.TEMPERATURE, null));
-        this.isTemperatureSensorUsed = true;
         return null;
     }
 
@@ -84,14 +70,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
         this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getCoordinate()));
-        this.isGyroSensorUsed = true;
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
-        this.isGyroSensorUsed = true;
         return null;
     }
 
@@ -184,6 +168,24 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitRgbColor(RgbColor<Void> rgbColor) {
         // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitImage(LedMatrix<Void> ledMatrix) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
+        this.usedActors.add(new UsedActor(displayImageAction.getPort(), ActorType.LED_MATRIX));
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
+        this.usedActors.add(new UsedActor(displayTextAction.getPort(), ActorType.LED_MATRIX));
         return null;
     }
 

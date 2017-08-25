@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.visitor.arduino;
 
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
@@ -26,5 +29,11 @@ public interface MbotAstVisitor<V> extends ArduinoAstVisitor<V> {
     V visitAccelerometer(Accelerometer<V> accelerometer);
 
     V visitFlameSensor(FlameSensor<V> flameSensor);
+
+    V visitImage(LedMatrix<V> ledMatrix);
+
+    V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
+
+    V visitDisplayTextAction(DisplayTextAction<V> displayTextAction);
 
 }

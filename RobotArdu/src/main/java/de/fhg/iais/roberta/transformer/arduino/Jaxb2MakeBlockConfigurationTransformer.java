@@ -133,6 +133,13 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                                     this.factory.getActorPort(value.getName()),
                                     new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
+                        case "robBrick_led_matrix":
+                            fields = extractFields(value.getBlock(), (short) 1);
+                            actors.add(
+                                Pair.of(
+                                    this.factory.getActorPort(value.getName()),
+                                    new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
+                            break;
                         default:
                             throw new DbcException("Invalide actor type!" + value.getBlock().getType());
                     }
