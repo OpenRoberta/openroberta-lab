@@ -32,8 +32,8 @@ public class Configuration implements WithSurrogateId {
     @JoinColumn(name = "ROBOT_ID")
     private Robot robot;
 
-    @Column(name = "CONFIGURATION_TEXT")
-    private String configurationText;
+    @Column(name = "CONFIGURATION_HASH")
+    private String configurationHash;
 
     @Column(name = "CREATED")
     private Timestamp created;
@@ -80,12 +80,12 @@ public class Configuration implements WithSurrogateId {
         return this.name;
     }
 
-    public String getConfigurationText() {
-        return this.configurationText;
+    public String getConfigurationHash() {
+        return this.configurationHash;
     }
 
-    public void setConfigurationText(String configurationText) {
-        this.configurationText = configurationText;
+    public void setConfigurationHash(String configurationHash) {
+        this.configurationHash = configurationHash;
         this.lastChanged = Util1.getNow();
     }
 

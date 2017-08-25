@@ -29,6 +29,8 @@ Commands of the ora.sh script:
                             - this command fails if the openroberta server is running in embedded mode. You have to terminate the server to get access.
                             - if the database is used by an openroberta server in server mode, the sql client and the server have access to the database.
                               Be careful not to block the server.
+                            in server mode the database URL is like "jdbc:hsqldb:hsql://localhost/openroberta-db"'
+                            in embedded mode the database URL is like "jdbc:hsqldb:file:OpenRobertaServer/db-<serverversion>/openroberta-db"
 
   --help                    get help
   

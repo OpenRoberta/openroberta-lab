@@ -11,8 +11,8 @@
 # - avoid log files to grow and grow ...
 # - remove old database directories after successful upgrade
 
-DBLOGFILE='/var/logs/ora-db.log'
-SERVERLOGFILE='/var/logs/ora-server.log'
+DBLOGFILE='./ora-db.log'
+SERVERLOGFILE='./ora-server.log'
 
 echo 'start-ora-server-embedded.sh with the following optional parameters:'
 echo "  -logdb <file-name>         database log file. Default: $DBLOGFILE"
@@ -23,9 +23,9 @@ NOHUP=''
 while [ true ]
 do
 	case "$1" in
-	  -logdb)     DBLOGFILE=${2:-/var/logs/ora-db.log}
+	  -logdb)     DBLOGFILE=$2
 				  shift; shift ;;
-	  -logserver) SERVERLOGFILE=${2:-/var/logs/ora-server.log}
+	  -logserver) SERVERLOGFILE=$2
 				  shift; shift ;;
 	  -nohup)	  NOHUP="nohup" ;;
 	  *)		  break ;;
@@ -33,8 +33,11 @@ do
 done
 
 echo 'have a look whether a database update is needed'
-java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=${databasemode} -check-for-db-updates >>$SERVERLOGFILE
+java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=embedded --check-for-db-updates >>$SERVERLOGFILE 2>&1
 
 echo 'start the database server and the openroberta server as separate processes'
-$NOHUP java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:db-${serverVersion}/openroberta-db --dbname.0 openroberta-db \$* >>$DBLOGFILE &
-$NOHUP java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server \$* >>$SERVERLOGFILE &
+serverVersion=$(java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -v)
+database=db-${serverVersion}/openroberta-db
+echo "the database server will use database directory $database"
+$NOHUP java -cp lib/hsqldb-2.3.2.jar org.hsqldb.Server --database.0 file:$database --dbname.0 openroberta-db \$* >>$DBLOGFILE 2>&1 &
+$NOHUP java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=server \$* >>$SERVERLOGFILE 2>&1 &

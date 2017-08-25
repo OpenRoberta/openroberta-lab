@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.main;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -40,11 +38,11 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.persistence.util.Upgrader;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.RobertaProperties;
-import de.fhg.iais.roberta.util.Upgrader;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import joptsimple.OptionParser;
@@ -81,6 +79,7 @@ public class ServerStarter {
         OptionSpec<String> propertiesOpt = parser.accepts("properties").withOptionalArg().ofType(String.class);
         OptionSpec<String> defineOpt = parser.accepts("d").withRequiredArg().ofType(String.class);
         OptionSpec<Void> versionOpt = parser.accepts("version");
+        OptionSpec<Void> updateOpt = parser.accepts("check-for-db-updates");
         OptionSet options = parser.parse(args);
         String propertyPath = propertiesOpt.value(options);
         List<String> defines = defineOpt.values(options);
@@ -91,9 +90,11 @@ public class ServerStarter {
             System.out.println(robertaProperties.get("openRobertaServer.version"));
             System.exit(0);
         } else {
-            System.out.println(options.hasOptions());
             ServerStarter serverStarter = new ServerStarter(propertyPath, defines);
             checkForUpgrade();
+            if ( options.has(updateOpt) ) {
+                System.exit(0);
+            }
             Server server = serverStarter.start();
             serverStarter.checkRobotPluginsDB();
             serverStarter.logTheNumberOfStoredPrograms();
@@ -282,45 +283,19 @@ public class ServerStarter {
         File databaseParentdir = new File(databaseParentdirName);
         if ( !databaseParentdir.isDirectory() ) {
             LOG.error("Abort: database parent directory is invalid: " + databaseParentdirName);
-            System.exit(4);
+            System.exit(2);
         }
         File databaseDir = new File(databaseParentdir, "db-" + actualServerVersion);
         if ( !databaseDir.isDirectory() ) {
             // server version upgrade is necessary
             String[] previousServerVersions = RobertaProperties.getStringProperty("openRobertaServer.history").split(",");
             try {
-                upgrade(databaseParentdir, previousServerVersions, actualServerVersion);
+                new Upgrader(databaseParentdir, previousServerVersions, actualServerVersion).upgrade();
             } catch ( Exception e ) {
                 LOG.error("Abort: server version upgrade fails", e);
-                System.exit(4);
+                System.exit(2);
             }
         }
-    }
-
-    private static void upgrade(File databaseParentdir, String[] previousServerVersions, String actualServerVersion) throws Exception {
-        for ( int previousIndex = 0; previousIndex < previousServerVersions.length; previousIndex++ ) {
-            String previousServerVersion = previousServerVersions[previousIndex];
-            File dbPreviousDir = new File(databaseParentdir, "db-" + previousServerVersion);
-            if ( dbPreviousDir.isDirectory() ) {
-                LOG.info("The last version, that was found for this installation, is " + previousServerVersion);
-                File dbActualDir = new File(databaseParentdir, "db-" + actualServerVersion);
-                if ( dbActualDir.exists() ) {
-                    LOG.error("Abort: The version " + actualServerVersion + " to upgrade has a database directory");
-                    System.exit(4);
-                }
-                FileUtils.copyDirectory(dbPreviousDir, dbActualDir);
-                if ( previousIndex > 0 ) {
-                    for ( int j = previousIndex - 1; j >= 0; j-- ) {
-                        String upgradeVersion = previousServerVersions[j];
-                        Upgrader.to(upgradeVersion);
-                    }
-                }
-                Upgrader.to(actualServerVersion);
-                return;
-            }
-        }
-        LOG.error("Abort: no usable version for upgrade to " + actualServerVersion + " from one of " + Arrays.toString(previousServerVersions));
-        System.exit(4);
     }
 
     /**

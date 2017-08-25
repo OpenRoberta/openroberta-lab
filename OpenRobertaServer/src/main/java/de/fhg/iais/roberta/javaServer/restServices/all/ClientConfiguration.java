@@ -18,7 +18,6 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
-import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -83,10 +82,8 @@ public class ClientConfiguration {
                         userId = user.getId();
                     }
                 }
-                Configuration configuration = cp.getConfiguration(configurationName, userId, robotName);
-                if ( configuration != null ) {
-                    response.put("data", configuration.getConfigurationText());
-                }
+                String configurationText = cp.getConfigurationText(configurationName, userId, robotName);
+                response.put("data", configurationText);
                 Util.addResultInfo(response, cp);
 
             } else if ( cmd.equals("deleteC") && httpSessionState.isUserLoggedIn() ) {

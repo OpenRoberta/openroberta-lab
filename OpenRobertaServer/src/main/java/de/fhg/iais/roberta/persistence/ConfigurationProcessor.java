@@ -3,8 +3,11 @@ package de.fhg.iais.roberta.persistence;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.persistence.bo.Configuration;
+import de.fhg.iais.roberta.persistence.bo.ConfigurationData;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
@@ -16,11 +19,13 @@ import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util1;
 
 public class ConfigurationProcessor extends AbstractProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationProcessor.class);
+
     public ConfigurationProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState);
     }
 
-    public Configuration getConfiguration(String configurationName, int userId, String robotName) {
+    public String getConfigurationText(String configurationName, int userId, String robotName) {
         if ( !Util1.isValidJavaIdentifier(configurationName) ) {
             setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return null;
@@ -38,10 +43,17 @@ public class ConfigurationProcessor extends AbstractProcessor {
             }
             if ( configuration == null ) {
                 setError(Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
+                return null;
             } else {
-                setSuccess(Key.CONFIGURATION_GET_ONE_SUCCESS);
+                ConfigurationData configurationData = configurationDao.load(configuration.getConfigurationHash());
+                if ( configurationData == null ) {
+                    setError(Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
+                    return null;
+                } else {
+                    setSuccess(Key.CONFIGURATION_GET_ONE_SUCCESS);
+                    return configurationData.getConfigurationText();
+                }
             }
-            return configuration;
         }
     }
 
@@ -67,8 +79,8 @@ public class ConfigurationProcessor extends AbstractProcessor {
             RobotDao robotDao = new RobotDao(this.dbSession);
             User owner = userDao.get(ownerId);
             Robot robot = robotDao.loadRobot(robotName);
-            boolean success = configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist);
-            if ( success ) {
+            String resultHash = configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist);
+            if ( resultHash != null ) {
                 setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
             } else {
                 setError(Key.CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB);

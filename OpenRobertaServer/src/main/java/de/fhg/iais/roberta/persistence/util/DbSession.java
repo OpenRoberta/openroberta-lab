@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.persistence.util;
 import java.io.Serializable;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
@@ -79,11 +80,21 @@ public class DbSession {
     /**
      * create a HQL query
      *
-     * @param query the SQL query
+     * @param query the HQL query
      * @return the Query object
      */
     public Query createQuery(String query) {
         return this.session.createQuery(query);
+    }
+
+    /**
+     * create a SQL query
+     *
+     * @param query the SQL query
+     * @return the Query object
+     */
+    public SQLQuery createSqlQuery(String query) {
+        return this.session.createSQLQuery(query);
     }
 
     /**

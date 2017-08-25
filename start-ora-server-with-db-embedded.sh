@@ -2,7 +2,7 @@
 # typical use case: small standalone servers, e.g. Raspberry PI. When the server is running, the database cannot
 # be accessed with a sql client.
 # for parameter see: help message
-# if the server runs version x.y.z, the the database is expected in directory x.y.z
+# if the server runs version x.y.z, the the database is expected in directory db-x.y.z
 # note: if the database version is lower than the server version, the server first updates the database
 # - by creating a new directory,
 # - copying the database content and
@@ -11,8 +11,7 @@
 # - avoid log files to grow and grow ...
 # - remove old database directories after successful upgrade
 
-DBLOGFILE='/var/logs/ora-db.log'
-SERVERLOGFILE='/var/logs/ora-server.log'
+SERVERLOGFILE='./ora-server.log'
 NOHUP=''
 
 echo 'start-ora-server-embedded.sh with the following optional parameters:'
@@ -23,7 +22,7 @@ NOHUP=''
 while [ true ]
 do
 	case "$1" in
-	  -logserver) SERVERLOGFILE=${2:-/var/logs/ora-server.log}
+	  -logserver) SERVERLOGFILE=$2
 				  shift; shift ;;
 	  -nohup)	  NOHUP="nohup" ;;
 	  *)		  break ;;

@@ -110,6 +110,8 @@ public class ClientProgram {
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
                 String programText = request.getString("program");
+                String confName = request.optString("confName", null);
+                String confText = request.optString("confText", null);
                 Program program;
                 if ( cmd.equals("saveP") ) {
                     // update an already existing program
