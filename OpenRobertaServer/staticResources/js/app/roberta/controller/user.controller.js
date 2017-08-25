@@ -189,12 +189,13 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function addStatusText() {
         $("#fg-addStatusText").validate();
         if ($("#fg-addStatusText").valid()) {
-            var dateTimeParts = $('#statusTextTimestamp').val().split(' '),
-                timeParts = dateTimeParts[1].split(':'),
-                dateParts = dateTimeParts[0].split('-'),
+            var dateInput = $('#statusTextDate').val(),
+                timeInput = $('#statusTextTime').val(),
+                timeParts = timeInput.split(':'),
+                dateParts = dateInput.split('-'),
                 date;
 
-            date = new Date(dateParts[2], parseInt(dateParts[1], 10) - 1, dateParts[0], timeParts[0], timeParts[1]);
+            date = new Date(dateParts[0], parseInt(dateParts[1], 10) - 1, dateParts[2], timeParts[0], timeParts[1]);
             USER.setStatusText($("#statusTextEnglish").val(), $('#statusTextGerman').val(), date.getTime() / 1000, function(result) {
                 if (result.rc === "ok") {
                     $('#modal-addStatusText').modal("hide");
