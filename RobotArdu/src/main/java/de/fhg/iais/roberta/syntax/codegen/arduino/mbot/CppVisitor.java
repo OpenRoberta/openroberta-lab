@@ -665,7 +665,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.sb.append("myLEDMatrix_" + displayTextAction.getPort().getValues()[0] + ".drawStr(0, 0, ");
+        this.sb.append("myLEDMatrix_" + displayTextAction.getPort().getValues()[0] + ".drawStr(0, 7, ");
         displayTextAction.getMsg().visit(this);
         this.sb.append(");");
         return null;
