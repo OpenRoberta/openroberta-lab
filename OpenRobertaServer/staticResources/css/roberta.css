@@ -1018,11 +1018,13 @@ table#download-instructions
 #modal-statustext-text {
 	padding: 40px;
 	text-align: center;
+	color: #E2001A;
 }
+
 #show-startup-message #startup-message-statustext {
 	margin-bottom: 10px;
 	text-align: center;
-	color: #333;
+	color: #E2001A;
 }
 
 .modal-header, .modal-footer {
