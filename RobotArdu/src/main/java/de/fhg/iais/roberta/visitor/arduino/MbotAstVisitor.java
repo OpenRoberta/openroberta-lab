@@ -3,12 +3,12 @@ package de.fhg.iais.roberta.visitor.arduino;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
-import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.PIRMotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 
 public interface MbotAstVisitor<V> extends ArduinoAstVisitor<V> {
@@ -35,5 +35,7 @@ public interface MbotAstVisitor<V> extends ArduinoAstVisitor<V> {
     V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
 
     V visitDisplayTextAction(DisplayTextAction<V> displayTextAction);
+
+    V visitVoltageSensor(VoltageSensor<V> voltageSensor);
 
 }

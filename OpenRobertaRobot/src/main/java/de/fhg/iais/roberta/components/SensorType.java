@@ -23,7 +23,8 @@ public enum SensorType {
     ACCELEROMETER( "makeblockSensors_accelerometer_getSample" ),
     JOYSTICK( "arduSensors_joystick_getSample" ),
     PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
-    NAOMARK( "naoSensors_naoMark" );
+    NAOMARK( "naoSensors_naoMark" ),
+    VOLTAGE( "" );
 
     private final String[] values;
 

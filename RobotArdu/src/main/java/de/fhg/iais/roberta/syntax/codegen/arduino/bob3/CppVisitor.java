@@ -35,11 +35,10 @@ import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.AmbientLightSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.CodePadSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -451,12 +450,6 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     @Override
     public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
         this.sb.append("myBob.getID()");
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.sb.append("myBob.getMillivolt()"); // ADC_BANDGAP_CHANNEL_VOLTAGE must be below 1.28 V!!!
         return null;
     }
 

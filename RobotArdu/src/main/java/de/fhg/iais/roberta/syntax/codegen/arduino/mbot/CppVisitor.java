@@ -39,12 +39,12 @@ import de.fhg.iais.roberta.syntax.codegen.arduino.ArduinoVisitor;
 import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.PIRMotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -496,6 +496,9 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                 case FLAMESENSOR:
                     this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
                     break;
+                case VOLTAGE:
+                    this.sb.append("MePotentiometer myVoltageSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
                 default:
                     throw new DbcException("Sensor is not supported! " + usedSensor.getType());
             }
@@ -638,7 +641,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("myVoltageSensor" + voltageSensor.getPort().getPortNumber() + ".read()");
         return null;
     }
 

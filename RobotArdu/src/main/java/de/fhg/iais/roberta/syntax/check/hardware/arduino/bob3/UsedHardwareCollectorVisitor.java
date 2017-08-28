@@ -14,11 +14,10 @@ import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.AmbientLightSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.CodePadSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.botnroll.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
 
@@ -83,12 +82,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         // TODO Auto-generated method stub
         return null;
     }
