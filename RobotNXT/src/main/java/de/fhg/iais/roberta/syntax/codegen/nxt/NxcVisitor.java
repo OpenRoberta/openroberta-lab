@@ -99,9 +99,9 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
 
-    private boolean timeSensorUsed;
-    private boolean playToneActionUsed;
-    private boolean driveActionUsed;
+    private final boolean timeSensorUsed;
+    private final boolean playToneActionUsed;
+    private final boolean driveActionUsed;
     ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
@@ -270,6 +270,11 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 } else {
                     generateSubExpr(this.sb, false, binary.getRight(), binary);
                 }
+                break;
+            case DIVIDE:
+                this.sb.append("((float) ");
+                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+                this.sb.append(")");
                 break;
 
             default:
