@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.PIRMotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.VoltageSensor;
@@ -112,6 +113,12 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMbotGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
         // TODO Auto-generated method stub
         return null;
     }

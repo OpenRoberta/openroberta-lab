@@ -241,7 +241,12 @@ public final class BlocklyConstants {
     public static final String TIME = "TIME";
     public static final String COLOR = "COLOR";
     public static final String LIGHT = "LIGHT";
+    public static final String AMBIENTLIGHT = "AMBIENTLIGHT";
     public static final String SOUND = "SOUND";
+    public static final String JOYSTICK = "JOYSTICK";
+    public static final String FLAME = "FLAME";
+    public static final String PIRMOTION = "PIRMOTION";
+    public static final String VOLTAGE = "VOLTAGE";
     public static final String COMPASS = "COMPASS";
     public static final String MICROPHONE = "MICROPHONE";
     public static final String ARMSIDE = "ARM";

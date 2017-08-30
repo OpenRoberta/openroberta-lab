@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.PIRMotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.VoltageSensor;
@@ -710,6 +711,12 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.sb.append("myLEDMatrix_" + displayTextAction.getPort().getValues()[0] + ".drawStr(0, 7, ");
         displayTextAction.getMsg().visit(this);
         this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitMbotGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
+        // TODO Auto-generated method stub
         return null;
     }
 

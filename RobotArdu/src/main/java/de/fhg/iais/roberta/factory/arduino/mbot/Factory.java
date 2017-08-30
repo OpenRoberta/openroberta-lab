@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.arduino.mbot.Coordinates;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.JoystickMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
@@ -268,6 +269,24 @@ public class Factory extends AbstractRobotFactory {
             }
         }
         throw new DbcException("Invalid Gyro Sensor Mode: " + gyroSensorMode);
+    }
+
+    public Coordinates getCoordinates(String coordinates) {
+        if ( coordinates == null || coordinates.isEmpty() ) {
+            throw new DbcException("Invalid Gyro Sensor Mode: " + coordinates);
+        }
+        String sUpper = coordinates.trim().toUpperCase(Locale.GERMAN);
+        for ( Coordinates sp : Coordinates.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Gyro Sensor Mode: " + coordinates);
     }
 
     @Override

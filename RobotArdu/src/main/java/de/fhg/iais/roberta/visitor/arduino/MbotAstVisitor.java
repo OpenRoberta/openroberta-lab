@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.FlameSensor;
+import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.PIRMotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.arduino.mbot.VoltageSensor;
@@ -37,5 +38,7 @@ public interface MbotAstVisitor<V> extends ArduinoAstVisitor<V> {
     V visitDisplayTextAction(DisplayTextAction<V> displayTextAction);
 
     V visitVoltageSensor(VoltageSensor<V> voltageSensor);
+
+    V visitMbotGetSampleSensor(GetSampleSensor<V> getSampleSensor);
 
 }

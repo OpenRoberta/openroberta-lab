@@ -48,7 +48,7 @@ public class GyroSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link GyroSensor}
      */
-    static <V> GyroSensor<V> make(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> GyroSensor<V> make(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new GyroSensor<V>(mode, port, properties, comment);
     }
 

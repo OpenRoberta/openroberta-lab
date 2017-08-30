@@ -52,7 +52,7 @@ public class UltrasonicSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link UltrasonicSensor}
      */
-    static <V> UltrasonicSensor<V> make(IUltrasonicSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> UltrasonicSensor<V> make(IUltrasonicSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new UltrasonicSensor<V>(mode, port, properties, comment);
     }
 

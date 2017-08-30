@@ -49,7 +49,7 @@ public class LightSensor<V> extends BaseSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightSensor}
      */
-    static <V> LightSensor<V> make(ILightSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> LightSensor<V> make(ILightSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightSensor<V>(mode, port, properties, comment);
     }
 
