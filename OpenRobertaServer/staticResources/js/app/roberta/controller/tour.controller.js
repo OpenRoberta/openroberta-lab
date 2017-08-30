@@ -10,6 +10,7 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
             },
             onEnd : function() {
                 if (ja) {
+                    Blockly.mainWorkspace.clear()
                     $("#show-startup-message").modal("show");
                     ja = false;
                 }
@@ -139,7 +140,5 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#progSim',
         'description' : 'TOUR1_DESCRIPTION16',
         'showSkip' : false
-        // TODO: test with iPad
-        //'showNext' : true
     } ];
 });
