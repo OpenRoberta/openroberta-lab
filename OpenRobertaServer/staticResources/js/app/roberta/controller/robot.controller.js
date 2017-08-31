@@ -209,17 +209,25 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
      * Switch robot
      */
     function switchRobot(robot, opt_continue, opt_callback) {
-         if (robot === GUISTATE_C.getRobot()) {
-            return;
+
+        var further;
+        // no need to ask for saving programs if you switch the robot in between a group
+        if (typeof opt_continue === 'undefined' && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {
+            further = true;
+        } else {
+            further = opt_continue || false;
         }
-        var further = opt_continue || GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup();
         if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
+            if (robot === GUISTATE_C.getRobot()) {
+                typeof opt_callback === "function" && opt_callback();
+                return;
+            }
             ROBOT.setRobot(robot, function(result) {
                 if (result.rc === "ok") {
                     if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
-                        GUISTATE_C.setRobot(robot, result);
-                        PROGRAM_C.resetView();
+                        GUISTATE_C.setRobot(robot, result);                        
                         CONFIGURATION_C.resetView();
+                        PROGRAM_C.resetView();
                     } else {
                         GUISTATE_C.setRobot(robot, result);
                     }
@@ -233,9 +241,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                         $('.rightMenuButton.shifted').trigger('click');
                     }
                     typeof opt_callback === "function" && opt_callback();
-                } 
+                }
                 MSG.displayInformation(result, result.message, result.message, robot);
-            });          
+            });
         } else {
             $('#confirmContinue').removeData();
             $('#confirmContinue').data('type', 'switchRobot');
@@ -246,7 +254,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             } else {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
             }
-        }  
+        }
     }
     exports.switchRobot = switchRobot;
 });

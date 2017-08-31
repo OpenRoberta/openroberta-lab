@@ -185,15 +185,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     function loadFromGallery(program) {
         var programName = program[1];
         var user = program[3];
-        // check if in the GUI the right robot type is already chosen
-        var robotType = program[0]; // robot type or group
-        var robotAvailable = false;
-        var robots = GUISTATE_C.getRobots();
-        for (robot in robots) {
-            if (robots[robot].group === robotType) {
-                robotAvailable = robots[robot].name;
-                break;
-            }
+        var robotGroup = program[0];
+        var robotType;
+        if (robotGroup === GUISTATE_C.getRobotGroup()) {
+            robotType = GUISTATE_C.getRobot();
+        } else {
+            robotType = GUISTATE_C.findRobot(robotGroup);
         }
         var owner = 'Gallery';
         function loadProgramFromGallery() {
@@ -208,15 +205,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
                 MSG.displayInformation(result, "", result.message);
             });
         }
-        if (robotAvailable !== GUISTATE_C.getRobot()) {
-            ROBOT_C.switchRobot(robotAvailable, false, loadProgramFromGallery);
-        } else {
-            if (GUISTATE_C.isProgramSaved()) {
-                loadProgramFromGallery();
-            } else {
-                confirmLoadProgram(loadProgramFromGallery);
-            }
-        }
+        ROBOT_C.switchRobot(robotType, null, loadProgramFromGallery);
     }
     exports.loadFromGallery = loadFromGallery;
 
@@ -409,39 +398,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
     exports.linkProgram = linkProgram;
 
     function openProgramFromXML(target) {
-        try {
-            var robotAvailable = false;
-            for ( var robot in GUISTATE_C.getRobots()) {
-                if (!GUISTATE_C.getRobots().hasOwnProperty(robot)) {
-                    continue;
-                }
-                if (GUISTATE_C.getRobots()[robot].name === target[1]) {
-                    robotAvailable = true;
-                    break;
-                }
-            }
-            if (robotAvailable) {
-                ROBOT_C.switchRobot(target[1]);
-                var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-                var xml = Blockly.Xml.domToText(dom);
-                if (target[2] !== "") {
-                    if (target[3] !== "") {
-                        loadProgramFromXML(target[2], target[3]);
-                        $('#tabProgram').trigger('click');
-                    } else {
-                        throw "program";
-                    }
-                } else {
-                    throw "program name";
-                }
-            } else {
-                throw "robot type";
-            }
-        } catch (err) {
-            MSG.displayInformation({
-                rc : 'error'
-            }, "", Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, err);
-        }
+        var robotType = target[1];
+        var programName = target[2];
+        var programXml = target[3];
+        ROBOT_C.switchRobot(robotType, true, function() {
+            loadProgramFromXML(programName, programXml);
+        });
     }
     exports.openProgramFromXML = openProgramFromXML;
 

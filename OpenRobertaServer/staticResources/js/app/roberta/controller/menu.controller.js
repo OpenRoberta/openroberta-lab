@@ -489,15 +489,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             }
         }, 'simScene clicked');
 
-        // preliminary (not used)
-        $('#startNXT').onWrap('click', function(event) {
-            switchRobot('nxt');
-        }, 'start with nxt clicked');
-        // preliminary (not used)
-        $('#startEV3').onWrap('click', function(event) {
-            switchRobot('ev3');
-        }, 'start with ev3 clicked');
-
         $('#startPopupBack').on('click', function(event) {
             $('#popup-robot-main').removeClass('hidden');
             $('.popup-robot.robotSubGroup').addClass('hidden');
@@ -569,7 +560,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             } else if ($('#confirmContinue').data('type') === 'configuration') {
                 CONFIGURATION_C.newConfiguration(true);
             } else if ($('#confirmContinue').data('type') === 'switchRobot') {
-                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true);
+                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true, $('#confirmContinue').data('opt_callback'));
             } else {
                 console.log('Confirmation with unknown data type clicked');
             }

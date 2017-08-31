@@ -330,6 +330,18 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.findGroup = findGroup;
 
+    function findRobot(group) {
+        var robots = getRobots();
+        for (robot in robots) {
+            if (robots[robot].group === group) {
+                return robots[robot].name;
+                break;
+            }
+        }
+        return null;
+    }
+    exports.findRobot = findRobot;
+
     function setAutoConnectedBusy(busy) {
         if (busy) {
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
