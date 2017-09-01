@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
+import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
@@ -20,6 +24,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     private boolean isPlayToneUsed = false;
     private boolean isDriveUsed = false;
+    private boolean isCurveUsed = false;
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
         super(configuration);
@@ -32,6 +37,10 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     public boolean isDriveUsed() {
         return this.isDriveUsed;
+    }
+
+    public boolean isCurveUsed() {
+        return this.isCurveUsed;
     }
 
     @Override
@@ -54,6 +63,31 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         this.isDriveUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        this.isDriveUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        this.isDriveUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
+        this.isDriveUsed = true;
+        return null;
+    }
+
+    @Override
+    public Void visitCurveAction(CurveAction<Void> curveAction) {
+        this.isDriveUsed = true;
+        this.isCurveUsed = true;
         return null;
     }
 
