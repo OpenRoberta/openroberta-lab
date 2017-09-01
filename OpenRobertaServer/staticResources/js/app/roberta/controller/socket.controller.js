@@ -12,7 +12,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     function init() {
         robotSocket = GUISTATE_C.getSocket()
         if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
-            robotSocket = IO('ws://localhost:8991/');
+            robotSocket = IO('ws://127.0.0.1:8991/');
             GUISTATE_C.setSocket(robotSocket);
             GUISTATE_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');

@@ -87,7 +87,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     exports.ping = ping;
 
     function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine, successFn) {
-        var URL = 'http://localhost:8991/upload';
+        var URL = 'http://127.0.0.1:8991/upload';
         var board = 'arduino:avr:uno';
         var request = {
             'board' : board,
