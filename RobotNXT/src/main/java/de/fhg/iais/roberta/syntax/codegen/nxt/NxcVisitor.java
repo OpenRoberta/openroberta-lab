@@ -272,9 +272,9 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 }
                 break;
             case DIVIDE:
-                this.sb.append("((float) ");
+                this.sb.append("((");
                 generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
+                this.sb.append(")*1.0)");
                 break;
 
             default:
