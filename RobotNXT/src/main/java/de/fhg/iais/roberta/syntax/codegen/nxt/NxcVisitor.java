@@ -521,8 +521,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             motorOnAction.getParam().getDuration().getValue().visit(this);
         } else {
             if ( isRegulatedDrive ) {
-                this.sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", ");
-                motorOnAction.getParam().getSpeed().visit(this);
+                this.sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", __speed");
                 this.sb.append(", OUT_REGMODE_SPEED");
             } else {
                 this.sb.append(methodNamePart + "(OUT_" + motorOnAction.getPort() + ", __speed");
@@ -546,7 +545,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         nlIndent();
         final boolean reverse = this.brickConfiguration.getActorOnPort(motorSetPowerAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
         String sign = reverse ? "-" : "";
-        final String methodName = "OnReg";
+        final String methodName = "OnFwdReg";
         //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         this.sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + "," + sign + "__speed");
         this.sb.append(",OUT_REGMODE_SPEED");
