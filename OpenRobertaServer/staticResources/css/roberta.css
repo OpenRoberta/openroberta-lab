@@ -1140,21 +1140,20 @@ table [data-toggle="collapse"].collapsed:after {
 
 label.form-invalid {
     position: absolute;
-    top: 0;
+    bottom: 40px;
+    left: 0;
     right: 0;
-    z-index: 5;
-    display: block;
-    margin-top: -25px;
-    padding: 7px 9px;
-    background: #333;
-    color: #ffffff;
-    border-radius: 5px;
-    font-weight: bold;
-    font-size: 11px;
+    width: 100%;
+    padding: 6px 6px;
+    background: #ddd;
+    color: #E2001A;
+    border-radius: 2px;
+    font-size: 16px;
+    font-weight: normal;
+    z-index: 10;
 }
 label.form-invalid:after {
-    top: 100%;
-    right: 10px;
+    right: 10%;
     border: solid transparent;
     content: " ";
     height: 0;
@@ -1162,8 +1161,35 @@ label.form-invalid:after {
     position: absolute;
     pointer-events: none;
     border-color: transparent;
-    border-top-color: #333;
+    border-top-color: #E2001A;
     border-width: 6px;
+    margin-top: 28px;
+    z-index: 20;
+}
+#div-login-forms .form-group {
+    position: relative;
+}
+.form-group .hint {
+	position: absolute;
+    border-radius: 2px;
+    margin-top: 12px;
+    color: #8FA402;
+    background: #ddd;
+    font-size: 16px;
+    padding: 6px;
+    z-index: 11;
+    width: 100%;
+}
+.hint:before {
+	position: absolute;
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 6px 6px 6px;
+    border-color: transparent transparent #8FA402 transparent;
+    right: 75%;
+    top: -6px;
 }
 /***** BEGIN Input-Fields *****/
 

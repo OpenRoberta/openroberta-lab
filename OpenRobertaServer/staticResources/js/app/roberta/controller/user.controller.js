@@ -132,7 +132,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             USER.login($("#loginAccountName").val(), $('#loginPassword').val(), function(result) {
                 if (result.rc === "ok") {
                     GUISTATE_C.setLogin(result);
-                    if(result.userId === 1) {
+                    if (result.userId === 1) {
                         $('#menuAddStatusTextWrap').removeClass('hidden');
                     }
                 }
@@ -189,11 +189,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function addStatusText() {
         $("#fg-addStatusText").validate();
         if ($("#fg-addStatusText").valid()) {
-            var dateInput = $('#statusTextDate').val(),
-                timeInput = $('#statusTextTime').val(),
-                timeParts = timeInput.split(':'),
-                dateParts = dateInput.split('-'),
-                date;
+            var dateInput = $('#statusTextDate').val(), timeInput = $('#statusTextTime').val(), timeParts = timeInput.split(':'), dateParts = dateInput.split('-'), date;
 
             date = new Date(dateParts[0], parseInt(dateParts[1], 10) - 1, dateParts[2], timeParts[0], timeParts[1]);
             USER.setStatusText($("#statusTextEnglish").val(), $('#statusTextGerman').val(), date.getTime() / 1000, function(result) {
@@ -221,7 +217,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
-                label.insertAfter(element);
+                label.insertBefore(element.parent());
             },
             messages : {
                 loginAccountName : {
@@ -237,7 +233,10 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
 
     function validateRegisterUser() {
         $formRegister.removeData('validator');
-        $.validator.addMethod("loginRegex", function(value, element) {
+        $.validator.addMethod("emailRegex", function(value, element) {
+            return this.optional(element)|| /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i.test(value);
+        }, "This field must contain a valid email adress.");
+            $.validator.addMethod("loginRegex", function(value, element) {
             return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         }, "This field must contain only letters, numbers, or dashes.");
         $formRegister.validate({
@@ -262,15 +261,23 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 },
                 registerUserEmail : {
                     required : false,
-                    email : true
+                    emailRegex : true
                 },
                 registerUserAge : {
                     required : true
                 },
             },
+            onfocusout : false,
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
-                label.insertAfter(element);
+                label.insertBefore(element.parent());
+            },
+            showErrors : function(errorMap, errorList) {
+                if (errorList.length) {
+                    var firstError = errorList.shift();
+                    this.errorList = [ firstError ];
+                }
+                this.defaultShowErrors();
             },
             messages : {
                 registerAccountName : {
@@ -293,7 +300,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                 },
                 registerUserEmail : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
-                    email : Blockly.Msg["VALIDATION_VALID_EMAIL_ADDRESS"]
+                    emailRegex : Blockly.Msg["VALIDATION_VALID_EMAIL_ADDRESS"]
                 },
                 registerUserAge : {
                     required : Blockly.Msg["VALIDATION_FIELD_REQUIRED"],
@@ -318,7 +325,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
-                label.insertAfter(element);
+                label.insertBefore(element.parent());
             },
             messages : {
                 passOld : {
@@ -347,7 +354,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
-                label.insertAfter(element);
+                label.insertBefore(element.parent());
             },
             messages : {
                 lost_email : {
@@ -435,6 +442,12 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             e.preventDefault();
             createUserToServer();
         });
+        $('#register-form input.form-control, #register-form select.form-control').focus(function(e) {
+            $(this).parent().next('.hint').fadeIn($msgAnimateTime);
+        });
+        $('#register-form input.form-control, #register-form select.form-control').blur(function(e) {
+            $(this).parent().next('.hint').fadeOut($msgAnimateTime);
+        });
 
         // Login form change between sub-form
         $('#login_register_btn').onWrap('click', function() {
@@ -476,11 +489,11 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     }
 
     function initStatusTextModal() {
-        $("#fg-addStatusText").onWrap("submit", function (event) {
+        $("#fg-addStatusText").onWrap("submit", function(event) {
             event.preventDefault();
             addStatusText();
         })
-        $('#close-modal-statustext').on('click', function (event) {
+        $('#close-modal-statustext').on('click', function(event) {
             event.preventDefault();
             $('#modal-statustext').modal('hide');
         })
@@ -602,7 +615,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
-                label.insertAfter(element);
+                label.insertBefore(element.parent());
             },
             messages : {
                 singleModalInput : {
