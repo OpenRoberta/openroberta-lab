@@ -153,9 +153,9 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder addActors(List<Pair<IActorPort, Actor>> actors) {
-            for ( Pair<IActorPort, Actor> pair : actors ) {
-                this.actorMapping.put(pair.getFirst(), pair.getSecond());
-            }
+            //            for ( Pair<IActorPort, Actor> pair : actors ) {
+            //                this.actorMapping.put(pair.getFirst(), pair.getSecond());
+            //            }
             return this;
         }
 
@@ -181,9 +181,9 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
-            for ( Pair<ISensorPort, Sensor> pair : sensors ) {
-                this.sensorMapping.put(pair.getFirst(), pair.getSecond());
-            }
+            //            for ( Pair<ISensorPort, Sensor> pair : sensors ) {
+            //                this.sensorMapping.put(pair.getFirst(), pair.getSecond());
+            //            }
             return this;
         }
 

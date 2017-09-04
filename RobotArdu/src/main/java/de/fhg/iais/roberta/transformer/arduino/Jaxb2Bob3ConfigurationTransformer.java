@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.transformer.arduino;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -107,18 +106,18 @@ public class Jaxb2Bob3ConfigurationTransformer {
     }
 
     private Configuration blockToBrickConfiguration(Block block) {
-        switch ( block.getType() ) {
-            case "robBrick_EV3-Brick":
-                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
-                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
+        //        switch ( block.getType() ) {
+        //            case "robBrick_EV3-Brick":
+        //                List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
+        //                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
+        //
+        //                List<Value> values = extractValues(block, (short) 14);
+        //                extractHardwareComponent(values, sensors, actors);
 
-                List<Value> values = extractValues(block, (short) 14);
-                extractHardwareComponent(values, sensors, actors);
-
-                return new Bob3Configuration.Builder().addActors(actors).addSensors(sensors).build();
-            default:
-                throw new DbcException("There was no correct configuration block found! " + block.getType());
-        }
+        return new Bob3Configuration.Builder().addActors(null).addSensors(null).build();
+        //            default:
+        //                throw new DbcException("There was no correct configuration block found! " + block.getType());
+        //        }
     }
 
     private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
