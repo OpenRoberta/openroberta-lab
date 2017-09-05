@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.Bob3Configuration;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.codegen.arduino.bob3.CppVisitor;
@@ -70,7 +69,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      */
     @Override
     public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = CppVisitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        String sourceCode = CppVisitor.generate(data.getProgramTransformer().getTree(), true);
 
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".ino");
@@ -115,7 +114,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
             return null;
         }
 
-        return CppVisitor.generate((Bob3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return CppVisitor.generate(data.getProgramTransformer().getTree(), true);
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {

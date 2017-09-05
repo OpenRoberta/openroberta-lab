@@ -1,16 +1,12 @@
 package de.fhg.iais.roberta.components.arduino;
 
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.arduino.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
@@ -18,8 +14,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Bob3Configuration extends Configuration {
 
-    public Bob3Configuration(Map<IActorPort, Actor> actors, Map<ISensorPort, Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
-        super(actors, sensors, wheelDiameterCM, trackWidthCM);
+    public Bob3Configuration() {
+        super(null, null, -1, -1);
 
     }
 
@@ -69,68 +65,13 @@ public class Bob3Configuration extends Configuration {
      */
     @Override
     public String generateText(String name) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("robot ardu ").append(name).append(" {\n");
-        //        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) {
-        //            sb.append("  size {\n");
-        //                        sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
-        //                        sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");
-        //            sb.append("  }\n");
-        //        }
-        if ( !this.sensors.isEmpty() ) {
-            sb.append("  sensor port {\n");
-            for ( ISensorPort port : this.sensors.keySet() ) {
-                sb.append("    ").append(port.getPortNumber()).append(": ");
-                String sensor = this.sensors.get(port).getType().toString();
-                sb.append(sensor.toLowerCase()).append(";\n");
-            }
-            sb.append("  }\n");
-        }
-        if ( !this.actors.isEmpty() ) {
-            sb.append("  actor port {\n");
-            for ( IActorPort port : this.actors.keySet() ) {
-                sb.append("    ").append(port.toString()).append(": ");
-                Actor actor = this.actors.get(port);
-                if ( actor.getName() == ActorType.LARGE ) {
-                    sb.append("large");
-                } else if ( actor.getName() == ActorType.MEDIUM ) {
-                    sb.append("middle");
-                } else if ( actor.getName() == ActorType.ARDU ) {
-                    sb.append("ardu");
-                } else {
-                    throw new RuntimeException("Key.E3");
-                }
-                sb.append(" motor, ");
-                if ( actor.isRegulated() ) {
-                    sb.append("regulated");
-                } else {
-                    sb.append("unregulated");
-                }
-                sb.append(", ");
-                String rotationDirection = actor.getRotationDirection().toString().toLowerCase();
-                sb.append(rotationDirection.equals("foreward") ? "forward" : rotationDirection); // TODO: remove this hack; rename FOIREWARD tp FORWARD (be careful!)
-                MotorSide motorSide = (MotorSide) actor.getMotorSide();
-                if ( motorSide != MotorSide.NONE ) {
-                    sb.append(", ").append(motorSide.getText());
-
-                }
-                sb.append(";\n");
-            }
-            sb.append("  }\n");
-        }
-        sb.append("}");
-        return sb.toString();
+        return "";
     }
 
     /**
      * This class is a builder of {@link Configuration}
      */
     public static class Builder extends Configuration.Builder<Builder> {
-        private final Map<IActorPort, Actor> actorMapping = new TreeMap<>();
-        private final Map<ISensorPort, Sensor> sensorMapping = new TreeMap<>();
-
-        private double wheelDiameter;
-        private double trackWidth;
 
         /**
          * Add actor to the {@link Configuration}
@@ -141,7 +82,6 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder addActor(IActorPort port, Actor actor) {
-            this.actorMapping.put(port, actor);
             return this;
         }
 
@@ -153,9 +93,6 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder addActors(List<Pair<IActorPort, Actor>> actors) {
-            //            for ( Pair<IActorPort, Actor> pair : actors ) {
-            //                this.actorMapping.put(pair.getFirst(), pair.getSecond());
-            //            }
             return this;
         }
 
@@ -169,7 +106,6 @@ public class Bob3Configuration extends Configuration {
 
         @Override
         public Builder addSensor(ISensorPort port, Sensor sensor) {
-            this.sensorMapping.put(port, sensor);
             return this;
         }
 
@@ -181,9 +117,6 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
-            //            for ( Pair<ISensorPort, Sensor> pair : sensors ) {
-            //                this.sensorMapping.put(pair.getFirst(), pair.getSecond());
-            //            }
             return this;
         }
 
@@ -195,7 +128,6 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder setWheelDiameter(double wheelDiameter) {
-            this.wheelDiameter = -1;
             return this;
         }
 
@@ -207,26 +139,17 @@ public class Bob3Configuration extends Configuration {
          */
         @Override
         public Builder setTrackWidth(double trackWidth) {
-            this.trackWidth = -1;
             return this;
         }
 
         @Override
         public Configuration build() {
-            return new Bob3Configuration(this.actorMapping, this.sensorMapping, this.wheelDiameter, this.trackWidth);
+            return new Bob3Configuration();
         }
 
         @Override
         public String toString() {
-            return "Builder [actorMapping="
-                + this.actorMapping
-                + ", sensorMapping="
-                + this.sensorMapping
-                + ", wheelDiameter="
-                + this.wheelDiameter
-                + ", trackWidth="
-                + this.trackWidth
-                + "]";
+            return "No configuration provided";
         }
 
     }

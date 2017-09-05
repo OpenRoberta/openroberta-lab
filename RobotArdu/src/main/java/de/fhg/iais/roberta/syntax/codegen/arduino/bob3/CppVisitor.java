@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.bob3;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.arduino.Bob3Configuration;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -52,7 +51,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
@@ -72,12 +70,10 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private CppVisitor(Bob3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
+    private CppVisitor(ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
         super(phrases, indentation);
-        UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases, brickConfiguration);
+        UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
-        this.usedSensors = codePreprocessVisitor.getUsedSensors();
-        this.usedActors = codePreprocessVisitor.getUsedActors();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
@@ -89,10 +85,8 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
      * @param programPhrases to generate the code from
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(Bob3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
-        Assert.notNull(brickConfiguration);
-
-        CppVisitor astVisitor = new CppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
+    public static String generate(ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+        CppVisitor astVisitor = new CppVisitor(programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }

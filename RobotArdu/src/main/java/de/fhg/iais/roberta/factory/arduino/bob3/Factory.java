@@ -8,7 +8,6 @@ import java.util.Properties;
 import org.apache.commons.lang3.SystemUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.Bob3Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
@@ -434,7 +433,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return CppVisitor.generate((Bob3Configuration) brickConfiguration, phrasesSet, withWrapping);
+        return CppVisitor.generate(phrasesSet, withWrapping);
     }
 
     @Override
