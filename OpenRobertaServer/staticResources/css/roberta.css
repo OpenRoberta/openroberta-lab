@@ -1169,6 +1169,9 @@ label.form-invalid:after {
 #div-login-forms .form-group {
     position: relative;
 }
+.form-group {
+    width: 100%;
+}
 .form-group .hint {
 	position: absolute;
     border-radius: 2px;
