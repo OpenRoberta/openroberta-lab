@@ -65,9 +65,9 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.TEMPERATURE:
                 this.sensor = Bob3TemperatureSensor.make(properties, comment);
                 break;
-            // case BlocklyConstants.CODE:
-            //   this.sensor = Bob3CodePadSensor.make(properties, comment);
-            //    break;
+            case BlocklyConstants.CODE:
+                this.sensor = CodePadSensor.make(properties, comment);
+                break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }
