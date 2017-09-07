@@ -34,6 +34,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 if (firsttime) {
                     $('#popup-robot-main').slick({
                         centerMode : true,
+                        dots : true,
+                        infinite : true,
                         centerPadding : '60px',
                         slidesToShow : 3,
                         index : 2,
@@ -41,19 +43,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         prevArrow : "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
                         nextArrow : "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
                         responsive : [ {
-                            breakpoint : 768,
+                            breakpoint : 992,
                             settings : {
-                                centerMode : true,
-                                centerPadding : '40px',
-                                slidesToShow : 2
-                            }
-                        }, {
-                            breakpoint : 480,
-                            settings : {
-                                arrows : false,
-                                centerMode : true,
-                                centerPadding : '40px',
-                                slidesToShow : 1
+                                centerPadding : '5px',
+                                slidesToShow : 1,
+                                variableWidth : true
                             }
                         } ]
                     });
@@ -490,8 +484,8 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 'simScene clicked');
 
         $('#startPopupBack').on('click', function(event) {
-            $('#popup-robot-main').removeClass('hidden');
-            $('.popup-robot.robotSubGroup').addClass('hidden');
+            $('#popup-robot-main').removeClass('hidden', 1000);
+            $('.popup-robot.robotSubGroup').addClass('hidden', 1000);
             $('.robotSpecial').removeClass('robotSpecial');
             $('#startPopupBack').addClass('hidden');
             $('#popup-robot-main').slick("refresh");

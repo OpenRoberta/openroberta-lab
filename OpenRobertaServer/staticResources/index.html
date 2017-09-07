@@ -639,7 +639,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					</form>
 					<!-- Begin | Register Form -->
 					<form id="register-form" style="display: none;">
-						<div class="modal-body" style="width:'auto',height:'auto', 'max-height':'100%">
+						<div class="modal-body"
+							style="width: 'auto', height:'auto', 'max-height':'100%">
 							<div class="form-group">
 								<label for="registerAccountName"
 									lkey="Blockly.Msg.POPUP_USERNAME">Username</label>
@@ -648,7 +649,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 									<input type="text" class="form-control"
 										id="registerAccountName" name="registerAccountName" />
 								</div>
-								<div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USER_ACCOUNT">HINT_USER_ACCOUNT</div>
+								<div class="hint" style="display: none"
+									lkey="Blockly.Msg.HINT_USER_ACCOUNT">HINT_USER_ACCOUNT</div>
 							</div>
 							<div class="form-group" id="fgRegisterPass">
 								<label for="registerPass" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
@@ -658,7 +660,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 									<input type="password" class="form-control" id="registerPass"
 										name="registerPass" />
 								</div>
-								<div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USER_PASSWORT">HINT_USER_PASSWORT</div>
+								<div class="hint" style="display: none"
+									lkey="Blockly.Msg.HINT_USER_PASSWORT">HINT_USER_PASSWORT</div>
 							</div>
 							<div class="form-group" id="fgRegisterPassConfirm">
 								<label for="registerPassConfirm"
@@ -670,7 +673,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 									<input type="password" class="form-control"
 										id="registerPassConfirm" name="registerPassConfirm" />
 								</div>
-								<div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USER_PASSWORT_CONFIRM">HINT_USER_PASSWORT_CONFIRM</div>
+								<div class="hint" style="display: none"
+									lkey="Blockly.Msg.HINT_USER_PASSWORT_CONFIRM">HINT_USER_PASSWORT_CONFIRM</div>
 							</div>
 							<div class="form-group">
 								<label for="registerUserName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
@@ -680,7 +684,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 									<input type="text" class="form-control" id="registerUserName"
 										name="registerUserName" />
 								</div>
-								<div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USER_NAME">HINT_USER_NAME</div>
+								<div class="hint" style="display: none"
+									lkey="Blockly.Msg.HINT_USER_NAME">HINT_USER_NAME</div>
 							</div>
 							<div class="form-group">
 								<label for="registerUserEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
@@ -689,9 +694,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 									<input type="email" class="form-control" id="registerUserEmail"
 										name="registerUserEmail" />
 								</div>
-								<div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USER_EMAIL">HINT_USER_EMAIL</div>
+								<div class="hint" style="display: none"
+									lkey="Blockly.Msg.HINT_USER_EMAIL">HINT_USER_EMAIL</div>
 							</div>
-							<div class="form-group" id="fgUserAge" style="display:none">
+							<div class="form-group" id="fgUserAge" style="display: none">
 								<label for="registerUserAge" lkey="Blockly.Msg.POPUP_AGE">Age</label>
 								<div class="input-group">
 									<span class="input-group-addon typcn input-typcn typcn-at"></span>
@@ -701,7 +707,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 										<option value="2" lkey="Blockly.Msg.OLDER_THEN_14">C</option>
 									</select>
 								</div>
-								<div class="hint" style="display: none" lkey="Blockly.Msg.HINT_USER_AGE">HINT_USER_AGE</div>
+								<div class="hint" style="display: none"
+									lkey="Blockly.Msg.HINT_USER_AGE">HINT_USER_AGE</div>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -1121,23 +1128,27 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					style="text-align: center; font-size: 18px;">
 					<h4 lkey="Blockly.Msg.POPUP_STARTUP_START">Choose your system!</h4>
 				</div>
-				<div id="popup-robot-container" class="modal-body"
-					style="text-align: center;">
-					<div id="popup-robot-main">
-						<div id="popup-sim" class="popup-robot robot-container">
-							<span href="#" class='typcn typcn-open robot-icon'></span><span
-								class="robot-label">Open Roberta Sim</span><img class="img-beta"
-								src="/css/img/beta.png" alt="beta" /><a href="#"
-								target="_blank" style="display: inline;"> <span
-								class='robot-info typcn typcn-info-large'></span>
-							</a>
+				<div id="slick-container">
+					<div id="popup-robot-container" class="modal-body"
+						style="text-align: center;">
+						<div id="popup-robot-main">
+							<div id="popup-sim" class="popup-robot robot-container">
+								<span href="#" class='typcn typcn-open robot-icon'></span><span
+									class="robot-label">Open Roberta Sim</span><img
+									class="img-beta" src="/css/img/beta.png" alt="beta" /><a
+									href="#" target="_blank" style="display: inline;"> <span
+									class='robot-info typcn typcn-info-large'></span>
+								</a>
+							</div>
 						</div>
+						<div id="popup-robot-subgroup"></div>
 					</div>
-					<div id="popup-robot-subgroup"></div>
 				</div>
 				<div class="modal-body">
-					<input id="startPopupBack" type="button"
-						class="btn backButton hidden" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+					<a href="#" class="hidden" style="display: inline;"
+						id="startPopupBack"> <span
+						class="typcn typcn-arrow-back-outline"></span>
+					</a>
 				</div>
 				<div class="container-fluid">
 					<div class="row">
@@ -1177,7 +1188,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							</div>
 						</div>
 					</div>
-					<hr style="border-color: #BACC1E;; border-width: 2px;"margin: 10px 0">
+					<hr style="border-color: #33B8CA; border-width: 2px;"margin: 10px 0">
 					<div class="modal-footer left-inner-addon popup-checkbox">
 						<div id="startup-message-statustext">
 							<h4 id="statustext-en" class="EN"></h4>

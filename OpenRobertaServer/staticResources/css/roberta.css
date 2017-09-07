@@ -400,12 +400,23 @@ div.rightMenuButton:hover,
     margin-right: 100px;
 }
 #show-startup-message .popup-robot {
-    background-color: #33B8CA;
-    color: #FFF;
+    background-color: #fff;
+    color: #333;
 }
 #show-startup-message .popup-robot.robotSpecial {
     background-color: transparent;
     color: #000;
+}
+#slick-container {
+	background: #33B8CA;
+}
+.slick-list {    
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+}
+.slick-dots {
+    bottom: inherit; 
+    top: 160px;
 }
 #show-startup-message .slick-slide {
     transform: scale(1);
@@ -414,7 +425,6 @@ div.rightMenuButton:hover,
 }
 #show-startup-message .slick-slide.slick-center {
     transform: scale(1.2);
-    opacity: 0.8;
 }
 #show-startup-message .slick-prev {
     left: -100px;
@@ -444,8 +454,15 @@ div.rightMenuButton:hover,
     font-size: 24px;
     position: relative;
 }
+#startPopupBack {
+    font-size: 36px;
+    position: relative;
+    bottom: 50px;
+    text-decoration: none;
+    color: #333;
+}
 #show-startup-message .modal-dialog {
-    border: 2px solid #BACC1E;
+    border: 2px solid #33B8CA;
 }
 .wait,
 .ok {
@@ -1547,4 +1564,24 @@ input[type=range]:focus::-ms-fill-upper {
 img.img-responsive {
     height: 140px;
     margin: 0 auto;
+}
+@media only screen and (max-width: 768px) {
+    #show-startup-message .slick-prev {
+        left: -25px;
+    }
+    #show-startup-message .slick-next {
+        right: -25px;
+    }
+    #show-startup-message #popup-robot-container {
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+}
+@media only screen and (max-width: 480px) {
+    #show-startup-message .slick-slide.slick-center {
+        transform: scale(1);
+    }
+    .robot-container {
+        margin: 20px 8px;
+    }
 }
