@@ -31,7 +31,7 @@ public class Upgrader_2_3_0 {
      * execute the update<br>
      * 1. DDL: create and update tables<br>
      * 2. update CONFIGURATION with hashes and fill new table CONFIGURATION_DATA<br>
-     * 3. DDL: update table CONFIGURATION<br>
+     * 3. update PROGRAM with hashes 3. DDL: update table CONFIGURATION<br>
      */
     public void run() {
         this.nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -54,7 +54,8 @@ public class Upgrader_2_3_0 {
         SQLQuery updConf = dbSession.createSqlQuery("update CONFIGURATION set CONFIGURATION_HASH=:hash where CONFIGURATION_TEXT=:text");
         SQLQuery insConfData = dbSession.createSqlQuery("insert into CONFIGURATION_DATA values (:hash,:text)");
         SQLQuery checkConfData = dbSession.createSqlQuery("select count(*) from CONFIGURATION_DATA where CONFIGURATION_HASH=:hash");
-        dbSession.createSqlQuery("update CONFIGURATION set CONFIGURATION_HASH=:hash where CONFIGURATION_TEXT=:text");
+
+        // step 1: load default configurations for all robots
         @SuppressWarnings("unchecked")
         List<String[]> confs = dbSession.createSqlQuery("select NAME, CONFIGURATION_TEXT from CONFIGURATION").list();
         for ( Object[] conf : confs ) {

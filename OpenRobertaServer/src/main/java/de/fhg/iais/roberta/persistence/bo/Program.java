@@ -22,9 +22,6 @@ public class Program implements WithSurrogateId {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "NAME")
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "OWNER_ID")
     private User owner;
@@ -37,8 +34,23 @@ public class Program implements WithSurrogateId {
     @JoinColumn(name = "AUTHOR_ID")
     private User author;
 
+    @Column(name = "NAME")
+    private String name;
+
     @Column(name = "PROGRAM_TEXT")
     private String programText;
+
+    /**
+     * the name of the attached configuration. If null, configHash must be not null. If not null, configHash must be null.
+     */
+    @Column(name = "CONFIG_NAME")
+    private String configName;
+
+    /**
+     * the hash of the attached configuration. If null, configName must be not null. If not null, configName must be null.
+     */
+    @Column(name = "CONFIG_HASH")
+    private String configHash;
 
     @Column(name = "CREATED")
     private Timestamp created;
@@ -101,6 +113,38 @@ public class Program implements WithSurrogateId {
         this.lastChanged = Util1.getNow();
     }
 
+    /**
+     * get the configuration name. At least one of the configuration name and hash must be null.
+     *
+     * @return the configuration name
+     */
+    public String getConfigName() {
+        return this.configName;
+    }
+
+    /**
+     * get the configuration hash. At least one of the configuration name and hash must be null.
+     *
+     * @return the configuration hash
+     */
+    public String getConfigHash() {
+        return this.configHash;
+    }
+
+    /**
+     * set configuration name and configuration hash.<br>
+     * At least one of the both values must be null. If both are null, the default configuration is associated with this program.
+     *
+     * @param configName the name of the configuration
+     * @param configHash the hash of the configuration
+     */
+    public void setConfigData(String configName, String configHash) {
+        Assert.isTrue(configName == null || configHash == null);
+        this.configName = configName;
+        this.configHash = configHash;
+        this.lastChanged = Util1.getNow();
+    }
+
     public Timestamp getLastChecked() {
         return this.lastChecked;
     }
@@ -121,8 +165,8 @@ public class Program implements WithSurrogateId {
         return this.viewed;
     }
 
-    public void setViewed(int viewed) {
-        this.viewed = viewed;
+    public void incrViewed() {
+        this.viewed++;
     }
 
     public String getTags() {
@@ -171,20 +215,23 @@ public class Program implements WithSurrogateId {
     @Override
     public String toString() {
         return "Program [id="
-            + this.id
+            + id
             + ", name="
-            + this.name
+            + name
             + ", ownerId="
             + (this.owner == null ? "???" : this.owner.getId())
             + ", robotId="
             + (this.robot == null ? "???" : this.robot.getId())
             + ", authorId="
             + (this.author == null ? "???" : this.author.getId())
+            + ", configName="
+            + configName
+            + ", configHash="
+            + configHash
             + ", created="
-            + this.created
+            + created
             + ", lastChanged="
-            + this.lastChanged
+            + lastChanged
             + "]";
     }
-
 }

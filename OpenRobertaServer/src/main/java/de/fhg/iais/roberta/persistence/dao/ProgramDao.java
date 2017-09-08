@@ -40,14 +40,25 @@ public class ProgramDao extends AbstractDao<Program> {
      * persist a program object that is owned by the caller
      *
      * @param name the name of the program, never null
+     * @param programText the program text
+     * @param confName the name of the configuration. May be null for anonymous configurations.
+     * @param confHash the hash of the configuration. May be null if the default configuration is used.
      * @param user the user who owns the program, never null
      * @param robot the robot the program was written for
      * @param author the user who is the author of this program, never null
-     * @param programText the program text
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @return a pair of (message-key, program). If the program is persisted successfully, the program is NOT null.
      */
-    public Pair<Key, Program> persistOwnProgram(String name, User user, Robot robot, User author, String programText, Timestamp timestamp) {
+    public Pair<Key, Program> persistOwnProgram(
+        String name,
+        String programText,
+        String confName,
+        String confHash,
+        User user,
+        Robot robot,
+        User author,
+        Timestamp timestamp) //
+    {
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
@@ -58,6 +69,7 @@ public class ProgramDao extends AbstractDao<Program> {
                 // save as && the program doesn't exist.
                 program = new Program(name, user, robot, author);
                 program.setProgramText(programText);
+                program.setConfigData(confName, confHash);
                 this.session.save(program);
                 return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
             } else {
@@ -69,6 +81,7 @@ public class ProgramDao extends AbstractDao<Program> {
                 return Pair.of(Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS, null);
             } else if ( timestamp.equals(program.getLastChanged()) ) {
                 program.setProgramText(programText);
+                program.setConfigData(confName, confHash);
                 return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
             } else {
                 ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
@@ -81,13 +94,25 @@ public class ProgramDao extends AbstractDao<Program> {
      * persist a program object that the owner shared with the caller
      *
      * @param name the name of the program, never null
+     * @param programText the program text, never null
+     * @param confName the name of the configuration. May be null for anonymous configurations.
+     * @param confHash the hash of the configuration. May be null if the default configuration is used.
      * @param user the user who owns the program, never null
      * @param robotId the robot the program was written for
-     * @param programText the program text
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @return a pair of (message-key, program). If the program is persisted successfully, the program is NOT null.
      */
-    public Pair<Key, Program> persistSharedProgramText(String name, User user, Robot robot, User author, String programText, Timestamp timestamp) {
+    public Pair<Key, Program> persistSharedProgramText(
+        String name,
+        String programText,
+        String configName,
+        String configHash,
+        User user,
+        Robot robot,
+        User author,
+        Timestamp timestamp) //
+    {
+        Assert.notNull(name);
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
@@ -102,6 +127,7 @@ public class ProgramDao extends AbstractDao<Program> {
             return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
         } else {
             program.setProgramText(programText);
+            program.setConfigData(configName, configHash);
             return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
         }
     }
@@ -208,10 +234,5 @@ public class ProgramDao extends AbstractDao<Program> {
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);
-    }
-
-    public Pair<Key, Program> persistProgram(Program program) {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

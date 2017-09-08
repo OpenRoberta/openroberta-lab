@@ -142,9 +142,9 @@ public class Configuration implements WithSurrogateId {
             + ", name="
             + this.name
             + ", ownerId="
-            + this.robot
-            + ", robotId="
             + (this.owner == null ? "???" : this.owner.getId())
+            + ", robot="
+            + this.robot
             + ", created="
             + this.created
             + ", lastChanged="

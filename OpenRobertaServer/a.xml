@@ -1,0 +1,61 @@
+<export>
+	<program>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+			<instance x="346" y="50">
+				<block type="robControls_start" id="juF:ap8|,Kx26/D3xKH=" intask="true" deletable="false">
+					<mutation declare="false"></mutation>
+					<field name="DEBUG">TRUE</field>
+				</block>
+				<block type="robActions_motorDiff_on_for" id=";OYBSWPPAN6zi?SpNQ5I" intask="true">
+					<field name="DIRECTION">FOREWARD</field>
+					<value name="POWER">
+						<block type="math_number" id="|Hc=b|D4S|%bz0Dc~R[," intask="true">
+							<field name="NUM">30</field>
+						</block>
+					</value>
+					<value name="DISTANCE">
+						<block type="math_number" id="bTnl+l95Hb?[)nw3.^]g" intask="true">
+							<field name="NUM">20</field>
+						</block>
+					</value>
+				</block>
+			</instance>
+		</block_set>
+	</program>
+	<config>
+		<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="2.0" description="" tags="">
+			<instance x="0" y="0">
+				<block type="robBrick_EV3-Brick" id="T}p*L*7u-:^6uBh0ZB/`" intask="true" deletable="false">
+					<field name="WHEEL_DIAMETER">5.6</field>
+					<field name="TRACK_WIDTH">18</field>
+					<value name="S1">
+						<block type="robBrick_touch" id="n/VAG_EX8({0,Y-7btZc" intask="true"></block>
+					</value>
+					<value name="S2">
+						<block type="robBrick_gyro" id="0F./k9:aoMG3PT%eTMa}" intask="true"></block>
+					</value>
+					<value name="S3">
+						<block type="robBrick_colour" id="~Mb?R1e;W%JC!B_doZ#*" intask="true"></block>
+					</value>
+					<value name="S4">
+						<block type="robBrick_ultrasonic" id="5WEV/q4v2Jo?XXLYgE@#" intask="true"></block>
+					</value>
+					<value name="MB">
+						<block type="robBrick_motor_big" id=")C~LK?){Q3xY}QlQk.qI" intask="true">
+							<field name="MOTOR_REGULATION">TRUE</field>
+							<field name="MOTOR_REVERSE">OFF</field>
+							<field name="MOTOR_DRIVE">RIGHT</field>
+						</block>
+					</value>
+					<value name="MC">
+						<block type="robBrick_motor_big" id="_RP`dqWE]r+|X.FK4icN" intask="true">
+							<field name="MOTOR_REGULATION">TRUE</field>
+							<field name="MOTOR_REVERSE">OFF</field>
+							<field name="MOTOR_DRIVE">LEFT</field>
+						</block>
+					</value>
+				</block>
+			</instance>
+		</block_set>
+	</config>
+</export>

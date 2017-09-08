@@ -32,32 +32,41 @@ public class ConfigurationDao extends AbstractDao<Program> {
     /**
      * make a configuration object and persist it (if the configuration, identified by owner&name, does not exist) or update it (if the configuration exists)
      *
-     * @param name the name of the program; is null, if a configuration without name (associated 1:1 to a programm) is persisted
+     * @param name the name of the configuration, never null
      * @param owner the user who owns the configuration, never null
-     * @param robot
-     * @param configurationText the configuration text, maybe null
-     * @return the configuration hash; null, if an error occurs (e.g. mayExist==false, but exists)
+     * @param robot the robot the configuration is defined for, never null
+     * @param configurationText the configuration text, never null * @return the configuration hash; null, if an error occurs (e.g. mayExist==false, but exists)
      */
-    public String persistConfigurationText(String name, User owner, Robot robot, String configurationText, boolean mayExist) {
+    public boolean persistConfigurationText(String name, User owner, Robot robot, String configurationText, boolean mayExist) {
+        Assert.notNull(name);
         Assert.notNull(owner);
         Assert.notNull(robot);
+        Assert.notNull(configurationText);
         String configurationHash = optionalStore(configurationText);
-        if ( name == null ) {
-            return configurationHash;
+        Configuration configuration = load(name, owner, robot);
+        if ( configuration == null ) {
+            configuration = new Configuration(name, owner, robot);
+            configuration.setConfigurationHash(configurationHash);
+            this.session.save(configuration);
+            return true;
+        } else if ( mayExist ) {
+            configuration.setConfigurationHash(configurationHash);
+            return true;
         } else {
-            Configuration configuration = load(name, owner, robot);
-            if ( configuration == null ) {
-                configuration = new Configuration(name, owner, robot);
-                configuration.setConfigurationHash(configurationHash);
-                this.session.save(configuration);
-                return configurationHash;
-            } else if ( mayExist ) {
-                configuration.setConfigurationHash(configurationHash);
-                return configurationHash;
-            } else {
-                return null;
-            }
+            return false;
         }
+    }
+
+    /**
+     * guarantee, that a ConfigurationData object is accessible with the configurationText supplied. The <i>key</i> of the ConfigurationData object is a hash of
+     * its configurationText. A ConfigurationData object is either persisted or an existing is re-used.
+     *
+     * @param configurationText the configuration text, never null
+     * @return the configuration hash; null, if an error occurs (e.g. mayExist==false, but exists)
+     */
+    public String persistConfigurationHash(String configurationText) {
+        Assert.notNull(configurationText);
+        return optionalStore(configurationText);
     }
 
     /**
@@ -90,13 +99,13 @@ public class ConfigurationDao extends AbstractDao<Program> {
     /**
      * load a configuration from the database, identified by its content hash
      *
-     * @param configurationHash never null
+     * @param configHash never null
      * @return the program, null if the program is not found
      */
-    public ConfigurationData load(String configurationHash) {
-        Assert.notNull(configurationHash);
+    public ConfigurationData load(String configHash) {
+        Assert.notNull(configHash);
         Query hql = this.session.createQuery("from ConfigurationData where configurationHash=:configurationHash");
-        hql.setString("configurationHash", configurationHash);
+        hql.setString("configurationHash", configHash);
         @SuppressWarnings("unchecked")
         List<ConfigurationData> il = hql.list();
         Assert.isTrue(il.size() <= 1);

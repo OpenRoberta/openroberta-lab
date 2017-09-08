@@ -1,5 +1,5 @@
 define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'blocks', 'configuration.model', 'jquery', 'jquery-validate' ], function(exports,
-        LOG, UTIL, COMM, MSG, guiStateController, Blockly, CONFIGURATION, $) {
+        LOG, UTIL, COMM, MSG, GUISTATE_C, Blockly, CONFIGURATION, $) {
 
     var $formSingleModal;
 
@@ -24,7 +24,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
      *            toolbox
      */
     function initView() {
-        var toolbox = guiStateController.getConfigurationToolbox();
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
             path : '/blockly/',
             toolbox : toolbox,
@@ -43,24 +43,24 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             variableDeclaration : true,
             robControls : true
         });
-        bricklyWorkspace.setDevice(guiStateController.getRobotGroup());
+        bricklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
         bricklyWorkspace.setVersion('2.0');
         // Configurations can't be executed
         bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
         $('#progSim').hide();
-        guiStateController.setBricklyWorkspace(bricklyWorkspace);
+        GUISTATE_C.setBricklyWorkspace(bricklyWorkspace);
         bricklyWorkspace.robControls.disable('saveProgram');
     }
 
     function initEvents() {
 
         $('#tabConfiguration').on('show.bs.tab', function(e) {
-            guiStateController.setView('tabConfiguration');
+            GUISTATE_C.setView('tabConfiguration');
             bricklyWorkspace.markFocused();
         });
 
         $('#tabConfiguration').onWrap('shown.bs.tab', function(e) {
-            if (guiStateController.isConfigurationUsed()) {
+            if (GUISTATE_C.isConfigurationUsed()) {
                 bricklyWorkspace.setVisible(true);
             } else {
                 bricklyWorkspace.setVisible(false);
@@ -69,17 +69,30 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
+        	e.preventDefault();
+        	console.log('!!!: hide');
+        	$('#confirmContinue').removeData();
+            $('#confirmContinue').data('type', 'switchConfig2Program');
+            // $('#confirmContinue').data('opt_callback', opt_callback);
+            MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+        	// $('#tabConfiguration').trigger('click');
+        	return false;
+
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
-            guiStateController.setConfigurationXML(xml);
+            GUISTATE_C.setConfigurationXML(xml);
         });
         Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
             LOG.info('saveConfiguration from brickly button');
             saveToServer();
         });
         bricklyWorkspace.addChangeListener(function(event) {
-            if (listenToBricklyEvents && event.type != Blockly.Events.UI && guiStateController.isConfigurationSaved()) {
-                guiStateController.setConfigurationSaved(false);
+            if (listenToBricklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isConfigurationSaved()) {
+            	if (GUISTATE_C.isConfigurationStandard()) {
+            		GUISTATE_C.setConfigurationName('');
+                }
+                GUISTATE_C.setConfigurationSaved(false);
+                GUISTATE_C.setProgramSaved(false);
             }
             if (event.type === Blockly.Events.DELETE) {
                 if (bricklyWorkspace.getAllBlocks().length === 0) {
@@ -99,14 +112,18 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
      */
     function saveToServer() {
         $('.modal').modal('hide'); // close all opened popups
+        if (GUISTATE_C.isConfigurationStandard() || GUISTATE_C.isConfigurationAnonymous()) {
+        	LOG.error('saveToServer may only be called with an explicit config name');
+        	return;
+        }
         var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xmlText = Blockly.Xml.domToText(dom);
-        CONFIGURATION.saveConfigurationToServer(guiStateController.getConfigurationName(), xmlText, function(result) {
+        CONFIGURATION.saveConfigurationToServer(GUISTATE_C.getConfigurationName(), xmlText, function(result) {
             if (result.rc === 'ok') {
-                guiStateController.setConfigurationSaved(true);
-                LOG.info('save brick configuration ' + guiStateController.getConfigurationName());
+                GUISTATE_C.setConfigurationSaved(true);
+                LOG.info('save brick configuration ' + GUISTATE_C.getConfigurationName());
             }
-            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, guiStateController.getConfigurationName());
+            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, GUISTATE_C.getConfigurationName());
         });
     }
     exports.saveToServer = saveToServer;
@@ -119,15 +136,19 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         if ($formSingleModal.valid()) {
             $('.modal').modal('hide'); // close all opened popups
             var confName = $('#singleModalInput').val().trim();
+            if (GUISTATE_C.getConfigurationStandardName() === confName) {
+            	LOG.error('saveAsToServer may NOT use the config standard name');
+            	return;
+            }
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xmlText = Blockly.Xml.domToText(dom);
             CONFIGURATION.saveAsConfigurationToServer(confName, xmlText, function(result) {
                 if (result.rc === 'ok') {
                     result.name = confName;
-                    guiStateController.setConfiguration(result);
-                    LOG.info('save brick configuration ' + guiStateController.getConfigurationName());
+                    GUISTATE_C.setConfiguration(result);
+                    LOG.info('save brick configuration ' + GUISTATE_C.getConfigurationName());
                 }
-                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, guiStateController.getConfigurationName());
+                MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, GUISTATE_C.getConfigurationName());
             });
         }
     }
@@ -152,7 +173,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     exports.loadFromListing = loadFromListing;
 
     function initConfigurationEnvironment() {
-        var conf = guiStateController.getConfigurationConf();
+        var conf = GUISTATE_C.getConfigurationConf();
         configurationToBricklyWorkspace(conf);
         if (isVisible()) {
             if ($(window).width() < 768) {
@@ -173,7 +194,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }
         var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
-        guiStateController.setConfigurationXML(xml);
+        GUISTATE_C.setConfigurationXML(xml);
     }
     exports.initConfigurationEnvironment = initConfigurationEnvironment;
 
@@ -215,15 +236,15 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
      */
     function newConfiguration(opt_further) {
         var further = opt_further || false;
-        if (further || guiStateController.isConfigurationSaved()) {
+        if (further || GUISTATE_C.isConfigurationSaved()) {
             var result = {};
-            result.name = guiStateController.getRobot().toUpperCase() + "basis";
+            result.name = GUISTATE_C.getRobotGroup().toUpperCase() + "basis";
             result.lastChanged = '';
-            guiStateController.setConfiguration(result);
+            GUISTATE_C.setConfiguration(result);
             initConfigurationEnvironment();
         } else {
             $('#confirmContinue').data('type', 'configuration');
-            if (guiStateController.isUserLoggedIn()) {
+            if (GUISTATE_C.isUserLoggedIn()) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
             } else {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
@@ -243,8 +264,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     function showConfiguration(result) {
         if (result.rc == 'ok') {
             configurationToBricklyWorkspace(result.data);
-            guiStateController.setConfiguration(result);
-            LOG.info('show configuration ' + guiStateController.getConfigurationName());
+            GUISTATE_C.setConfiguration(result);
+            LOG.info('show configuration ' + GUISTATE_C.getConfigurationName());
         }
     }
     exports.showConfiguration = showConfiguration;
@@ -255,7 +276,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     exports.getBricklyWorkspace = getBricklyWorkspace;
 
     function reloadConf() {
-        var conf = guiStateController.getConfigurationXML();
+        var conf = GUISTATE_C.getConfigurationXML();
         configurationToBricklyWorkspace(conf);
         if (!seen) {
             if ($(window).width() < 768) {
@@ -275,27 +296,28 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
     }
 
     function reloadView() {
+    	console.log('isVisible' + isVisible());
         if (isVisible()) {
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
             configurationToBricklyWorkspace(xml);
         }
-        var toolbox = guiStateController.getConfigurationToolbox();
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
     }
     exports.reloadView = reloadView;
 
     function resetView() {
-        bricklyWorkspace.setDevice(guiStateController.getRobotGroup());
+        bricklyWorkspace.setDevice(GUISTATE_C.getRobotGroup());
         bricklyWorkspace.setVersion('2.0');
         initConfigurationEnvironment();
-        var toolbox = guiStateController.getConfigurationToolbox();
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
         bricklyWorkspace.updateToolbox(toolbox);
     }
     exports.resetView = resetView;
 
     function isVisible() {
-        return guiStateController.getView() == 'tabConfiguration';
+        return GUISTATE_C.getView() == 'tabConfiguration';
     }
 
     function configurationToBricklyWorkspace(xml) {
@@ -309,7 +331,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         setTimeout(function() {
             listenToBricklyEvents = true;
         }, 500);
-        if (guiStateController.isConfigurationUsed()) {
+        if (GUISTATE_C.isConfigurationUsed()) {
             bricklyWorkspace.setVisible(true);
         } else {
             bricklyWorkspace.setVisible(false);

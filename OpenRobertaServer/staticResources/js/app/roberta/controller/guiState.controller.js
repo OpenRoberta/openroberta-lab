@@ -87,10 +87,20 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.isProgramWritable = isProgramWritable;
 
     function isConfigurationStandard() {
-        return GUISTATE.configuration.name == getRobot().toUpperCase() + 'basis';
+        return GUISTATE.configuration.name == getRobotGroup().toUpperCase() + 'basis';
     }
     exports.isConfigurationStandard = isConfigurationStandard;
 
+    function getConfigurationStandardName() {
+    	return getRobotGroup().toUpperCase() + 'basis';
+    }
+    exports.getConfigurationStandardName = getConfigurationStandardName;
+    
+    function isConfigurationAnonymous() {
+    	return GUISTATE.configuration.name == '';
+    }
+    exports.isConfigurationAnonymous = isConfigurationAnonymous;
+    
     function setState(result) {
         if (result['server.version']) {
             GUISTATE.server.version = result['server.version'];
@@ -468,6 +478,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getRobotVersion = getRobotVersion;
 
     function setView(view) {
+    	console.log(GUISTATE.gui.view + ' -> ' + view);
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
         $('#head-navigation-program-edit > ul > li').removeClass('disabled');

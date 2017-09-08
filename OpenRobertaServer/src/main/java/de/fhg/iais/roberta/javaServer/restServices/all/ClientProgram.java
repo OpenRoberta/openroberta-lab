@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -11,14 +10,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -30,6 +24,7 @@ import org.slf4j.MDC;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -108,19 +103,19 @@ public class ClientProgram {
             ICompilerWorkflow robotCompilerWorkflow = robotFactory.getRobotCompilerWorkflow();
 
             if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
-                String programName = request.getString("name");
-                String programText = request.getString("program");
-                String confName = request.optString("confName", null);
-                String confText = request.optString("confText", null);
+                String programName = request.getString("programName");
+                String programText = request.getString("programText");
+                String configName = request.optString("configName", null);
+                String configText = request.optString("configText", null);
                 Program program;
                 if ( cmd.equals("saveP") ) {
                     // update an already existing program
                     Long timestamp = request.getLong("timestamp");
                     Timestamp programTimestamp = new Timestamp(timestamp);
                     boolean isShared = request.optBoolean("shared", false);
-                    program = pp.persistProgramText(programName, userId, robot, userId, programText, programTimestamp, !isShared);
+                    program = pp.persistProgramText(programName, programText, configName, configText, userId, robot, userId, programTimestamp, !isShared);
                 } else {
-                    program = pp.persistProgramText(programName, userId, robot, userId, programText, null, true);
+                    program = pp.persistProgramText(programName, programText, configName, configText, userId, robot, userId, null, true);
                 }
                 if ( pp.isOk() ) {
                     if ( program != null ) {
@@ -159,7 +154,10 @@ public class ClientProgram {
 
                     Program program = pp.getProgram(programName, ownerName, robot, authorName);
                     if ( program != null ) {
-                        response.put("data", program.getProgramText());
+                        response.put("programText", program.getProgramText());
+                        String configText = pp.getProgramsConfig(program);
+                        response.put("configName", program.getConfigName()); // may be null, if an anonymous configuration is used
+                        response.put("configText", configText); // may be null, if the default configuration is used
                         response.put("lastChanged", program.getLastChanged().getTime());
                         // count the views if the program is from the gallery!
                         if ( ownerName.equals("Gallery") ) {
@@ -171,27 +169,22 @@ public class ClientProgram {
             } else if ( cmd.equals("importXML") ) {
                 String xmlText = request.getString("program");
                 String programName = request.getString("name");
-                InputStream xsdStream = ClientProgram.class.getClassLoader().getResourceAsStream("blockly.xsd");
-                SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                Schema schema = schemaFactory.newSchema(new StreamSource(xsdStream));
-                Validator validator = schema.newValidator();
-
                 if ( !Util1.isValidJavaIdentifier(programName) ) {
                     programName = "NEPOprog";
                 }
-                boolean xmlIsValid = true;
+                Export jaxbImportExport = null;
                 try {
-                    validator.validate(new StreamSource(new java.io.StringReader(xmlText)));
-
+                    jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
                 } catch ( final org.xml.sax.SAXException e ) {
-                    xmlIsValid = false;
+                    jaxbImportExport = null;
                 }
-                if ( xmlIsValid ) {
-                    BlockSet jaxbProgramSet = JaxbHelper.xml2BlockSet(xmlText);
-                    String robotType = jaxbProgramSet.getRobottype();
-                    if ( robotType.equals(robot) ) {
-                        response.put("name", programName);
-                        response.put("data", xmlText);
+                if ( jaxbImportExport != null ) {
+                    String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
+                    String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
+                    if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
+                        response.put("programName", programName);
+                        response.put("programText", JaxbHelper.blockSet2xml(jaxbImportExport.getProgram().getBlockSet()));
+                        response.put("configText", JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet()));
                         Util.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
                     } else {
                         Util.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
@@ -231,7 +224,8 @@ public class ClientProgram {
                         Program program = pp.getProgram(programName, userAccount, robot, userAccount);
                         if ( program != null ) {
                             // make a copy of the user program and store it as a gallery owned program
-                            Program programCopy = pp.persistProgramText(programName, galleryId, robot, userId, program.getProgramText(), null, true);
+                            Program programCopy =
+                                pp.persistProgramText(programName, program.getProgramText(), null, null, galleryId, robot, userId, null, true);
                             if ( pp.isOk() ) {
                                 if ( programCopy != null ) {
                                     response.put("lastChanged", programCopy.getLastChanged().getTime());

@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
@@ -32,23 +33,26 @@ import de.fhg.iais.roberta.util.Util1;
 public class ClientConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(ClientConfiguration.class);
 
+    private final SessionFactoryWrapper sessionFactoryWrapper;
     private final RobotCommunicator brickCommunicator;
 
     @Inject
-    public ClientConfiguration(RobotCommunicator brickCommunicator) {
+    public ClientConfiguration(SessionFactoryWrapper sessionFactoryWrapper, RobotCommunicator brickCommunicator) {
+        this.sessionFactoryWrapper = sessionFactoryWrapper;
         this.brickCommunicator = brickCommunicator;
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
+    public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
         AliveData.rememberClientCall();
         MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
         MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
         MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));
         new ClientLogger().log(ClientConfiguration.LOG, fullRequest);
         int userId = httpSessionState.getUserId();
+        DbSession dbSession = this.sessionFactoryWrapper.getSession();
         final String robotName =
             httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup() != ""
                 ? httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup()

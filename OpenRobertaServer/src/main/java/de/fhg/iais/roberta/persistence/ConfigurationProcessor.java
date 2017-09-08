@@ -25,9 +25,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public String getConfigurationText(String configurationName, int userId, String robotName) {
-        if ( !Util1.isValidJavaIdentifier(configurationName) ) {
-            setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
+    public String getConfigurationText(String configName, int userId, String robotName) {
+        if ( !Util1.isValidJavaIdentifier(configName) ) {
+            setError(Key.CONFIGURATION_ERROR_ID_INVALID, configName);
             return null;
         } else {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
@@ -37,9 +37,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
             if ( this.httpSessionState.isUserLoggedIn() ) {
                 UserDao userDao = new UserDao(this.dbSession);
                 User owner = userDao.get(userId);
-                configuration = configurationDao.load(configurationName, owner, robot);
+                configuration = configurationDao.load(configName, owner, robot);
             } else {
-                configuration = configurationDao.load(configurationName, null, robot);
+                configuration = configurationDao.load(configName, null, robot);
             }
             if ( configuration == null ) {
                 setError(Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
@@ -64,7 +64,6 @@ public class ConfigurationProcessor extends AbstractProcessor {
      * @param ownerId the owner of the configuration
      * @param robotName
      * @param configurationText the new configuration text
-     * @param mayExist TODO
      * @param mayExist true, if an existing configuration may be changed; false if a configuration may be stored only, if it does not exist in the database
      */
     public void updateConfiguration(String configurationName, int ownerId, String robotName, String configurationText, boolean mayExist) {
@@ -79,11 +78,10 @@ public class ConfigurationProcessor extends AbstractProcessor {
             RobotDao robotDao = new RobotDao(this.dbSession);
             User owner = userDao.get(ownerId);
             Robot robot = robotDao.loadRobot(robotName);
-            String resultHash = configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist);
-            if ( resultHash != null ) {
+            if ( configurationDao.persistConfigurationText(configurationName, owner, robot, configurationText, mayExist) ) {
                 setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
             } else {
-                setError(Key.CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB);
+                setError(Key.CONFIGURATION_SAVE_ERROR);
             }
         } else {
             setError(Key.USER_ERROR_NOT_LOGGED_IN);

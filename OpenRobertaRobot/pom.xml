@@ -64,6 +64,14 @@
 							</sources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>add-test-source</id>
+						<configuration>
+							<sources>
+								<source>target/generated-test-sources/jaxb/blockly</source>
+							</sources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -83,6 +91,20 @@
 							<outputDirectory>${project.build.directory}/generated-sources/jaxb/blockly</outputDirectory>
 							<packageName>de.fhg.iais.roberta.blockly.generated</packageName>
 							<staleFile>${project.build.directory}/jaxb2/.xjc-1-StaleFlag</staleFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>xjc-2</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>src/test/resources/de/fhg/iais/roberta/testutil</schemaDirectory>
+							<schemaFiles>n1.xsd</schemaFiles>
+							<outputDirectory>${project.build.directory}/generated-test-sources/jaxb/blockly</outputDirectory>
+							<packageName>de.fhg.iais.roberta.blockly.generatedForTest</packageName>
+							<staleFile>${project.build.directory}/jaxb2/.xjc-2-StaleFlag</staleFile>
 						</configuration>
 					</execution>
 				</executions>

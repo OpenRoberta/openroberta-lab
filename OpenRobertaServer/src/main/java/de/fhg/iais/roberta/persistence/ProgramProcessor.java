@@ -8,12 +8,15 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
+import de.fhg.iais.roberta.persistence.bo.Configuration;
+import de.fhg.iais.roberta.persistence.bo.ConfigurationData;
 import de.fhg.iais.roberta.persistence.bo.Like;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.AccessRightDao;
+import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.LikeDao;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.RobotDao;
@@ -23,6 +26,8 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ProgramProcessor extends AbstractProcessor {
     public ProgramProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
@@ -66,6 +71,43 @@ public class ProgramProcessor extends AbstractProcessor {
         } else {
             setError(Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN);
             return null;
+        }
+    }
+
+    /**
+     * get the configuration attached to the program.
+     *
+     * @param program the program, whose configuration is looked up. Never null.
+     * @return the configuration's XML as String. If the configuration is not found, returns null.
+     */
+    public String getProgramsConfig(Program program) {
+        ConfigurationDao configDao = new ConfigurationDao(dbSession);
+        String configName = program.getConfigName();
+        String configHash = program.getConfigHash();
+        if ( configName != null ) {
+            Configuration config = configDao.load(configName, program.getOwner(), program.getRobot());
+            if ( config == null ) {
+                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                return null;
+            } else {
+                ConfigurationData configData = configDao.load(config.getConfigurationHash());
+                if ( configData == null ) {
+                    setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                    return null;
+                } else {
+                    return configData.getConfigurationText();
+                }
+            }
+        } else if ( configHash != null ) {
+            ConfigurationData configData = configDao.load(configHash);
+            if ( configData == null ) {
+                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                return null;
+            } else {
+                return configData.getConfigurationText();
+            }
+        } else {
+            return null; // null to indicate, that the default configuration has to be used.
         }
     }
 
@@ -190,21 +232,26 @@ public class ProgramProcessor extends AbstractProcessor {
     /**
      * insert or update a given program owned by a given user. Overwrites an existing program if mayExist == true.
      *
-     * @param programName the name of the program
+     * @param programName the name of the program. Never null.
+     * @param programText the program text. Never null.
+     * @param configName the name of the attached configuration. Null, if the configurartion is anonymous.
+     * @param configText the XML definition of the attached configuration. Null, if the configuration is the default configuration.
      * @param userId the owner of the program
-     * @param robotId the id of the robot the program was written for
-     * @param programText the program text
      * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
+     * @param robotId the id of the robot the program was written for
      */
     public Program persistProgramText(
         String programName,
+        String programText,
+        String configName,
+        String configText,
         int userId,
         String robotName,
         int authorId,
-        String programText,
         Timestamp programTimestamp,
-        boolean isOwner) {
+        boolean isOwner) //
+    {
         if ( !Util1.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
@@ -213,14 +260,27 @@ public class ProgramProcessor extends AbstractProcessor {
             UserDao userDao = new UserDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
+            ConfigurationDao confDao = new ConfigurationDao(this.dbSession);
             User user = userDao.get(userId);
             Robot robot = robotDao.loadRobot(robotName);
             User author = userDao.get(authorId);
+            String confHash;
+            if ( configText == null ) { // default configuration
+                if ( configName != null ) {
+                    throw new DbcException("if configText is missing, a configName is illegal");
+                }
+                confHash = null;
+            } else if ( configName == null ) { // anonymous configuration
+                confHash = confDao.persistConfigurationHash(configText);
+            } else { // configuration with user-supplied name
+                Assert.isTrue(confDao.persistConfigurationText(configName, user, robot, configText, true));
+                confHash = null;
+            }
             Pair<Key, Program> result;
             if ( isOwner ) {
-                result = programDao.persistOwnProgram(programName, user, robot, author, programText, programTimestamp);
+                result = programDao.persistOwnProgram(programName, programText, configName, confHash, user, robot, author, programTimestamp);
             } else {
-                result = programDao.persistSharedProgramText(programName, user, robot, author, programText, programTimestamp);
+                result = programDao.persistSharedProgramText(programName, programText, configName, confHash, user, robot, author, programTimestamp);
             }
             // a bit strange, but necessary as Java has no N-tuple
             if ( result.getFirst() == Key.PROGRAM_SAVE_SUCCESS ) {
@@ -284,7 +344,7 @@ public class ProgramProcessor extends AbstractProcessor {
         User gallery = userDao.loadUser("Gallery");
         JSONArray programs = new JSONArray();
 
-        // Find all the programs which are owned by the gallery       
+        // Find all the programs which are owned by the gallery
         List<Program> programsList = programDao.loadAll(gallery);
         for ( Program program : programsList ) {
             // check if this program only is shared with one user (the original owner) with special exclusive right X_WRITE.
@@ -298,7 +358,7 @@ public class ProgramProcessor extends AbstractProcessor {
                 JSONArray tempProgram = new JSONArray();
                 tempProgram.put(program.getRobot().getName());
                 tempProgram.put(program.getName());
-                tempProgram.put(program.getProgramText()); // only needed if we want to show the description of the program                                          
+                tempProgram.put(program.getProgramText()); // only needed if we want to show the description of the program
                 tempProgram.put(accessRights.get(0).getUser().getAccount());
                 tempProgram.put(program.getLastChanged().getTime());
                 tempProgram.put(program.getNumberOfViews());
@@ -330,7 +390,7 @@ public class ProgramProcessor extends AbstractProcessor {
                 JSONArray prog = new JSONArray();
                 prog.put(program.getRobot().getName());
                 prog.put(program.getName());
-                prog.put(program.getProgramText()); // only needed if we want to show the description of the program                                          
+                prog.put(program.getProgramText()); // only needed if we want to show the description of the program
                 prog.put(program.getAuthor().getAccount());
                 prog.put(program.getLastChanged().getTime());
                 prog.put(program.getNumberOfViews());
@@ -346,7 +406,6 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     public void addOneView(Program program) {
-        int views = program.getNumberOfViews();
-        program.setViewed(views + 1);
+        program.incrViewed();
     }
 }

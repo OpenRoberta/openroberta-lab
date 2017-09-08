@@ -560,6 +560,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 CONFIGURATION_C.newConfiguration(true);
             } else if ($('#confirmContinue').data('type') === 'switchRobot') {
                 ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true, $('#confirmContinue').data('opt_callback'));
+            } else if ($('#confirmContinue').data('type') === 'switchConfig2Program') {
+            	console.log('confirmContinue');
+            	CONFIGURATION_C.reloadView();
             } else {
                 //console.log('Confirmation with unknown data type clicked');
             }

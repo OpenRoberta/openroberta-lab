@@ -17,12 +17,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - that represents the program
      * 
      */
-    function saveAsProgramToServer(programName, timestamp, xmlText, successFn) {
+    function saveAsProgramToServer(programName, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
         COMM.json("/program", {
             "cmd" : "saveAsP",
-            "name" : programName,
-            "timestamp" : timestamp,
-            "program" : xmlText
+            "programName" : programName,
+            "programText" : xmlProgramText,
+            "configName" : configName,
+            "configText" : xmlConfigText,
+            "timestamp" : timestamp
         }, successFn, "save program to server with new name '" + programName + "'");
     }
 
@@ -42,13 +44,15 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * 
      * 
      */
-    function saveProgramToServer(programName, programShared, timestamp, xmlText, successFn) {
+    function saveProgramToServer(programName, xmlProgramText, configName, xmlConfigText, programShared, timestamp, successFn) {
         COMM.json("/program", {
             "cmd" : "saveP",
-            "name" : programName,
+            "programName" : programName,
+            "programText" : xmlProgramText,
+            "configName" : configName,
+            "configText" : xmlConfigText,
             "shared" : programShared,
-            "timestamp" : timestamp,
-            "program" : xmlText
+            "timestamp" : timestamp
         }, successFn, "save program '" + programName + "' to server");
     }
 

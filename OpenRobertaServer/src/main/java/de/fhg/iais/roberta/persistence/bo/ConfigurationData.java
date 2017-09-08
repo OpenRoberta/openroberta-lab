@@ -90,7 +90,7 @@ public class ConfigurationData {
 
     @Override
     public String toString() {
-        return "ConfigurationData [configurationHash=" + configurationHash + ", configurationText=" + configurationText + "]";
+        return "ConfigurationData [configurationHash=" + configurationHash + "]";
     }
 
     public static String createHash(String inputString) {
