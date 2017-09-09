@@ -451,8 +451,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('.menuFaq').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ");
         }, 'head navigation menu item clicked');
-        $('.menuPrivacy').onWrap('click', function(event) {
-            window.open("TODO");
+        $('.menuAboutProject').onWrap('click', function(event) {
+            if (GUISTATE_C.getLanguage() == 'de') {
+                window.open("https://www.open-roberta.org/index.php?id=134");
+            } else {
+                window.open("https://www.open-roberta.org/index.php?id=134&L=1");
+            }
         }, 'head navigation menu item clicked');
 
         $('.simScene').onWrap('click', function(event) {

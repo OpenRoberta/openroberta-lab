@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Возвращает синус угла в
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Возвращает тангенс угла в градусах.";
 Blockly.Msg.ME = "Мне";
 Blockly.Msg.MENU_ABOUT = "о";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "присоединить ...";
 Blockly.Msg.MENU_BEGINNER = "начинающий";
 Blockly.Msg.MENU_CHANGE = "изменить ...";

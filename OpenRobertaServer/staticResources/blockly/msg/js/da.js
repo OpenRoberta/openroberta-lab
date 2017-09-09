@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Returnere sinus af en vinkel (i grader).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Returnere tangens af en vinkel (i grader).";
 Blockly.Msg.ME = "Mig";
 Blockly.Msg.MENU_ABOUT = "om";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "vedhæft ...";
 Blockly.Msg.MENU_BEGINNER = "begynder";
 Blockly.Msg.MENU_CHANGE = "skift ...";

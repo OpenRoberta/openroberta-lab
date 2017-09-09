@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-09-11 07:44:58.315022",
+		"lastupdated": "2017-09-11 17:00:57.606252",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -621,7 +621,8 @@
 	"MENU_SHOW_AGAIN": "show welcome note again",
 	"MENU_ROBOT_STATE_INFO": "info",
 	"MENU_STATE_INFO": "state information",
-	"MENU_ABOUT": "about",
+	"MENU_ABOUT": "about the Open Roberta Lab",
+	"MENU_ABOUT_PROJECT": "about the Open Roberta Project",
 	"MENU_LOG_IN": "login ...",
 	"MENU_LOG_OUT": "logout",
 	"MENU_CHANGE": "change ...",
@@ -648,9 +649,9 @@
 	"MENU_SIM_ROBOT_TOOLTIP": "open/close the robot's view",
 	"TAB_PROGRAM": "Program",
 	"TAB_CONFIGURATION": "Robot configuration",
-	"POPUP_ABOUT_TEXT": "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
-	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>",
-	"POPUP_ABOUT_TEXT_GOOG": "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>",
+	"POPUP_ABOUT_TEXT": "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot/microcontroller systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
+	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/' target='_blank'>»Roberta – Learning with Robots«</a>",
+	"POPUP_ABOUT_TEXT_GOOG": "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>",
 	"POPUP_STARTUP_START": "Choose your system!",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_USERNAME": "Username",

@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Restituisce il seno di un angolo espresso i
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Restituisce la tangente di un angolo espresso in gradi (non radianti).";
 Blockly.Msg.ME = "Me";
 Blockly.Msg.MENU_ABOUT = "su";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "allega...";
 Blockly.Msg.MENU_BEGINNER = "principante";
 Blockly.Msg.MENU_CHANGE = "cambia...";

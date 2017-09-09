@@ -101,13 +101,17 @@ body.blocklyMinimalBody * {
     margin: 0 6px;
 }
 .robertaLogo {
-    background: url(../css/img/logo.png) no-repeat;
+    background: url(../css/svg/OpenRobertaLab_logo.svg) no-repeat;
 }
 .fraunhoferLogo {
     background: url(../css/img/iais_logo.gif) no-repeat;
 }
 .googleLogo {
-    background: url(../css/img/google_logo_41.png) no-repeat;
+    background: url(../css/svg/Google_logo.svg) no-repeat;
+    background-size: 100% 100%;
+}
+.img-nepo {
+        width: 244px;
 }
 .imgFloatLeft {
     float: left;

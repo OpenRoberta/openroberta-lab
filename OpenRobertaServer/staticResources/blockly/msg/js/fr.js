@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Renvoie le sinus d’un angle en degrés (p
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Renvoie la tangente d’un angle en degrés (pas en radians).";
 Blockly.Msg.ME = "Moi";
 Blockly.Msg.MENU_ABOUT = "via";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "attacher";
 Blockly.Msg.MENU_BEGINNER = "débutant";
 Blockly.Msg.MENU_CHANGE = "modifier";

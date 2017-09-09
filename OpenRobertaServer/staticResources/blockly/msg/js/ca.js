@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Retorna el sinus d'un grau (no radiant).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retorna la tangent d'un grau (no radiant).";
 Blockly.Msg.ME = "Jo";
 Blockly.Msg.MENU_ABOUT = "acerca de";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "adjuntar ...";
 Blockly.Msg.MENU_BEGINNER = "principiante";
 Blockly.Msg.MENU_CHANGE = "cambiar ...";

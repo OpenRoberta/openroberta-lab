@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Retorna o seno de um grau (não radiano).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Retorna a tangente de um grau (não radiano).";
 Blockly.Msg.ME = "Eu";
 Blockly.Msg.MENU_ABOUT = "sobre";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "anexar…";
 Blockly.Msg.MENU_BEGINNER = "iniciante";
 Blockly.Msg.MENU_CHANGE = "alterar…";

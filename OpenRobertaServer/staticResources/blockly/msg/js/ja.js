@@ -458,7 +458,8 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "番号のcosineの次数を返す";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "番号のsineの次数を返す";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "番号のtangentの次数を返す";
 Blockly.Msg.ME = "私に";
-Blockly.Msg.MENU_ABOUT = "about";  // untranslated
+Blockly.Msg.MENU_ABOUT = "about the Open Roberta Lab";  // untranslated
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "attach ...";  // untranslated
 Blockly.Msg.MENU_BEGINNER = "beginner";  // untranslated
 Blockly.Msg.MENU_CHANGE = "change ...";  // untranslated
@@ -874,9 +875,9 @@ Blockly.Msg.PLAY_TONE_TOOLTIP = "Plays a tone.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "volume";  // untranslated
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "I want to help";  // untranslated
-Blockly.Msg.POPUP_ABOUT_TEXT = "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.";  // untranslated
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>";  // untranslated
-Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>";  // untranslated
+Blockly.Msg.POPUP_ABOUT_TEXT = "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot/microcontroller systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.";  // untranslated
+Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/' target='_blank'>»Roberta – Learning with Robots«</a>";  // untranslated
+Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>";  // untranslated
 Blockly.Msg.POPUP_AGE = "Age";  // untranslated
 Blockly.Msg.POPUP_ATTENTION = "Attention";  // untranslated
 Blockly.Msg.POPUP_BEFOREUNLOAD = "You have unsaved changes in your program or configuration. Sign in and save your program or configuration.";  // untranslated

@@ -459,6 +459,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Vrátí sinus úhlu ve stupních.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Vrátí tangens úhlu ve stupních.";
 Blockly.Msg.ME = "Já";
 Blockly.Msg.MENU_ABOUT = "o aplikaci";
+Blockly.Msg.MENU_ABOUT_PROJECT = "about the Open Roberta Project";  // untranslated
 Blockly.Msg.MENU_ATTACH = "připojit...";
 Blockly.Msg.MENU_BEGINNER = "začátečník";
 Blockly.Msg.MENU_CHANGE = "změnit...";
