@@ -109,6 +109,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
     function runForAgentConnection(result) {
         GUISTATE_C.setAutoConnectedBusy(true);
+        GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+        $('#menuRunProg').parent().addClass('disabled');
         $('#head-navi-icon-robot').addClass('busy');
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
@@ -116,6 +118,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
             GUISTATE_C.setAutoConnectedBusy(false);
             $('#head-navi-icon-robot').removeClass('busy');
+            GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            $('#menuRunProg').parent().removeClass('disabled');
         } else {
 
             console.log("result not ok");

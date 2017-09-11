@@ -1,6 +1,6 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'program.model', 'prettify', 'robot.controller', 'socket.controller',
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'guiState.model', 'program.model', 'prettify', 'robot.controller', 'socket.controller',
         'progHelp.controller', 'progRun.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate',
-        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, PROGRAM, Prettify, ROBOT_C, SOCKET_C, HELP_C, RUN_C, INFO_C, CODE_C, SIM_C,
+        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, GUISTATE, PROGRAM, Prettify, ROBOT_C, SOCKET_C, HELP_C, RUN_C, INFO_C, CODE_C, SIM_C,
         Blockly, $) {
 
     var $formSingleModal;
@@ -473,6 +473,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
             });
             break;
         case connectionType.AGENT:
+            $('#menuRunProg').parent().addClass('disabled');
+            GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
             PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
                 RUN_C.runForAgentConnection(result);
             });

@@ -57,7 +57,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     });
                     if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
                         if (GUISTATE_C.getRobotPort() != "") {
-                            MSG.displayMessage(Blockly.Msg["MESSAGE_ROBOT_DISCONNECTED"], 'POPUP', '');
+                            //MSG.displayMessage(Blockly.Msg["MESSAGE_ROBOT_DISCONNECTED"], 'POPUP', '');
                         }
                         GUISTATE_C.setRobotPort("");
                     }
@@ -105,6 +105,8 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         GUISTATE_C.getSocket().emit('command', 'downloadtool avrdude 6.3.0-arduino9');
         COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
             LOG.text("Create agent upload success");
+            $('#menuRunProg').parent().removeClass('disabled');
+            $('#runOnBrick').parent().removeClass('disabled');
         });
     }
     exports.uploadProgram = uploadProgram;
