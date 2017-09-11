@@ -167,7 +167,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
      * Handle firmware conflict between server and robot
      */
     function handleFirmwareConflict() {
-        if (GUISTATE_C.getRobotFWName() != "lejos") {
+        if (GUISTATE_C.getRobotFWName() != "lejos" && GUISTATE_C.getRobotFWName() != "ev3lejosv1") {
             return false;
         }
         var regex = '^([^\.]+\.[^\.]+)[\..+]*'; // get x.y from version x.y.z
@@ -225,7 +225,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             ROBOT.setRobot(robot, function(result) {
                 if (result.rc === "ok") {
                     if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
-                        GUISTATE_C.setRobot(robot, result);                        
+                        GUISTATE_C.setRobot(robot, result);
                         CONFIGURATION_C.resetView();
                         PROGRAM_C.resetView();
                     } else {
