@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.sensor.arduino.bob3.GetSampleType;
@@ -54,7 +53,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.sensorType = sensorType;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                this.sensor = Bob3TouchSensor.make(armSide, armPart, factory.getTouchSensorMode("UPPER"), factory.getSensorPort(armSide), properties, comment);
+                this.sensor = Bob3TouchSensor.make(armSide, armPart, properties, comment);
                 break;
             case BlocklyConstants.TIME:
                 this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
@@ -153,10 +152,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this.sensor, jaxbDestination);
-
-        Mutation mutation = new Mutation();
-        mutation.setInput(getSensorType().name());
-        jaxbDestination.setMutation(mutation);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORTYPE, getSensorType().name());
         String portNameType = GetSampleType.get(getSensorType().name()).getArmPart();
         if ( !portNameType.equals("") ) {

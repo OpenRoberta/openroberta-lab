@@ -180,7 +180,7 @@ Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values fr
 /// [https://github.com/google/blockly/wiki/Loops#count-with
 /// https://github.com/google/blockly/wiki/Loops#count-with].
 /// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
+Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 while counter < %3 by %4';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
 /// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.bob3;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.BodyLEDAction;
@@ -168,8 +167,27 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
-        ITouchSensorMode arm = touchSensor.getMode();
-        this.sb.append("myBob.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
+        switch ( touchSensor.getArmPart() ) {
+            case "1":
+            case "4":
+                this.sb.append("myBob.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
+                break;
+            case "2":
+                this.sb.append(
+                    "( myBob.getArmPair("
+                        + touchSensor.getArmSide()
+                        + ", "
+                        + touchSensor.getArmPart()
+                        + ")"
+                        + " || myBob.getArmPair("
+                        + touchSensor.getArmSide()
+                        + ", 3) )");
+                break;
+            case "3":
+                this.sb.append("myBob.getArm(" + touchSensor.getArmSide() + ")");
+                break;
+            default:
+        }
         return null;
     }
 
@@ -457,9 +475,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.sb.append("myBob.receiveIRCode(");
-        receiveIRAction.getCode().visit(this);
-        this.sb.append(");");
+        this.sb.append("myBob.receiveIRCode(500);");
         return null;
     }
 

@@ -7,15 +7,11 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
 
@@ -28,11 +24,9 @@ import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
  * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ReceiveIRAction<V> extends Action<V> {
-    private final Expr<V> timeout;
 
-    private ReceiveIRAction(Expr<V> code, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ReceiveIRAction(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("BOB3_RECVIR"), properties, comment);
-        this.timeout = code;
         setReadOnly();
     }
 
@@ -44,22 +38,18 @@ public class ReceiveIRAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ReceiveIRAction}
      */
-    private static <V> ReceiveIRAction<V> make(Expr<V> code, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ReceiveIRAction<>(code, properties, comment);
+    private static <V> ReceiveIRAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ReceiveIRAction<>(properties, comment);
     }
 
     @Override
     public String toString() {
-        return "LedOnAction [ " + this.timeout + " ]";
+        return "ReceiveIRAction";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((Bob3AstVisitor<V>) visitor).visitReceiveIRAction(this);
-    }
-
-    public Expr<V> getCode() {
-        return this.timeout;
     }
 
     /**
@@ -71,15 +61,13 @@ public class ReceiveIRAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> timeout = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.NUMBER));
-        return ReceiveIRAction.make(helper.convertPhraseToExpr(timeout), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ReceiveIRAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, this.timeout);
         return jaxbDestination;
 
     }

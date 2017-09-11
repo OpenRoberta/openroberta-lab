@@ -65,7 +65,7 @@
 	"CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL": "Führe die Anweisung solange aus wie die Bedingung falsch (false) ist.",
 	"CONTROLS_FOR_HELPURL": "https://de.wikipedia.org/wiki/For-Schleife",
 	"CONTROLS_FOR_TOOLTIP": "Zähle die Variable \"%1\" von einem Startwert bis zu einem Zielwert und führe für jeden Wert eine Anweisung aus.",
-	"CONTROLS_FOR_TITLE": "Zähle %1 von %2 bis %3 mit %4",
+	"CONTROLS_FOR_TITLE": "Zähle %1 von %2 solange Zähler < %3 mit Schrittweite %4",
 	"CONTROLS_FOREACH_HELPURL": "https://de.wikipedia.org/wiki/For-Schleife",
 	"CONTROLS_FOREACH_TITLE": "Für Wert %1 aus der Liste %2",
 	"CONTROLS_FOREACH_TOOLTIP": "Führe eine Anweisung für jeden Wert in der Liste aus und setzte dabei die Variable \"%1\" auf den aktuellen Listenwert.",
