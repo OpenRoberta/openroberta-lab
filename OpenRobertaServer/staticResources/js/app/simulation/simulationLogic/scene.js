@@ -60,7 +60,7 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
         ctx.save();
         ctx.scale(sc, sc);
         if (this.backgroundImg) {
-            if (this.robot.constructor.name.indexOf("Calliope") < 0 && this.robot.constructor.name != 'Microbit') {
+            if (getFnName(this.robot.constructor).indexOf("Calliope") < 0 && getFnName(this.robot.constructor) != 'Microbit') {
                 ctx.beginPath();
                 if (this.pattern) {
                     var patternImg = this.pattern;
@@ -644,5 +644,12 @@ define([ 'simulation.simulation', 'simulation.math', 'util', 'robertaLogic.const
 
         return values;
     }
+
+    function getFnName(fn) {
+      var f = typeof fn == 'function';
+      var s = f && ((fn.name && ['', fn.name]) || fn.toString().match(/function ([^\(]+)/));
+      return (!f && 'not a function') || (s && s[1] || 'anonymous');
+    }
+
     return Scene;
 });

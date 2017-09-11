@@ -268,7 +268,8 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             var letter = letters[text[i]];
             if (!letter)
                 letter = letters['blank'];
-            var newLetter = Array(letter[0] * 5).fill(0);
+           
+            var newLetter = Array.apply(null, Array(letter[0] * 5)).map(Number.prototype.valueOf,0);
             for (var j = 1; j < letter.length; j++) {
                 newLetter[letter[j] - 1] = 255;
             }
@@ -290,7 +291,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             var letter = letters[character[i]];
             if (!letter)
                 letter = letters['blank'];
-            var newLetter = Array(25).fill(0);
+            var newLetter = Array.apply(null, Array(25)).map(Number.prototype.valueOf,0);
             var shift = Math.floor((5 - letter[0]) / 2);
             for (var j = 1; j < letter.length; j++) {
                 newLetter[letter[j] - 1 + shift * 5] = 255;
@@ -300,7 +301,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
             }
         }
         if (character.length > 1) {
-            var newLetter = Array(25).fill(0);
+            var newLetter = Array.apply(null, Array(25)).map(Number.prototype.valueOf,0);
             while (newLetter.length) {
                 string.push(newLetter.splice(0, 5));
             }
