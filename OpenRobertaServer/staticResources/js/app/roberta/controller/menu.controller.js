@@ -603,10 +603,17 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                 }
             }
         });
-
+        var blocklyWidth = 0;
         $(window).on('resize', function(e) {
             Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
             Blockly.svgResize(GUISTATE_C.getBricklyWorkspace());
+            if ($('.rightMenuButton.shifted') && $('#blockly').width() != blocklyWidth) {
+                var right = $('#blockly').width() - $('#blocklyDiv').width();
+                blocklyWidth = $('#blockly').width();
+                $('.rightMenuButton.shifted').css({
+                    right : right - 4,
+                });
+            }
         });
     }
 });
