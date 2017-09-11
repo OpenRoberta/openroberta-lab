@@ -3,17 +3,21 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
     var enjoyhint_instance;
 
     function start(tour) {
-        var ja = true;
         enjoyhint_instance = new EnjoyHint({
             onSkip : function() {
+                Blockly.mainWorkspace.clear();
+                 if ($('.rightMenuButton.shifted')) {
+                    $('.rightMenuButton.shifted').trigger('click');
+                }
                 $("#show-startup-message").modal("show");
+                 
             },
             onEnd : function() {
-                if (ja) {
-                    Blockly.mainWorkspace.clear()
-                    $("#show-startup-message").modal("show");
-                    ja = false;
-                }
+                    Blockly.mainWorkspace.clear();
+                    if ($('.rightMenuButton.shifted')) {
+                        $('.rightMenuButton.shifted').trigger('click');
+                    }  
+                    $("#show-startup-message").modal("show");                    
             }
         });
         var enjoyhint_script_steps = [ {} ];

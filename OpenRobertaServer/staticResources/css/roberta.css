@@ -1589,3 +1589,12 @@ img.img-responsive {
         margin: 20px 8px;
     }
 }
+.enjoyhint_close_btn {
+    border: 2px solid #BACC1E;
+}
+.enjoyhint_close_btn:active, .enjoyhint_close_btn:hover{
+     background: #C7D92B;
+}
+.enjoy_hint_label {
+    font-family: 'Architects Daughter', cursive;
+}
