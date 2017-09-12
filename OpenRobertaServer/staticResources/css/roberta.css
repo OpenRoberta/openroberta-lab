@@ -1075,6 +1075,10 @@ table [data-toggle="collapse"].collapsed:after {
     background-position: center;
     display: inline-block;
     text-align: center;
+    border: 4px solid white;
+    border-radius: 2px;
+    background-color: #eee;
+    background-size: contain;
 }
 .robotSpecial span.img-ev3lejos {
     background-image: url("/css/img/ev3lejos.png");
