@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.action.arduino.bob3.RecallAction;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.action.arduino.bob3.RememberAction;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.SendIRAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
@@ -111,6 +113,18 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRememberAction(RememberAction<Void> rememberAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRecallAction(RecallAction<Void> recallAction) {
         // TODO Auto-generated method stub
         return null;
     }
