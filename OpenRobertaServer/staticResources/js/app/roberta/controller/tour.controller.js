@@ -1,23 +1,30 @@
 define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollto', 'enjoyHint', 'blocks-msg' ], function(exports, COMM, MSG, LOG, Blockly, $) {
 
     var enjoyhint_instance;
+    var touchEvent;
+
+    function is_touch_device() {
+        try {
+            document.createEvent("TouchEvent");
+            return 'click touchend';
+        } catch (e) {
+            return 'click';
+        }
+    }
 
     function start(tour) {
+        var ja = true;
         enjoyhint_instance = new EnjoyHint({
             onSkip : function() {
                 Blockly.mainWorkspace.clear();
-                 if ($('.rightMenuButton.shifted')) {
-                    $('.rightMenuButton.shifted').trigger('click');
-                }
                 $("#show-startup-message").modal("show");
-                 
             },
             onEnd : function() {
+                if (ja) {
                     Blockly.mainWorkspace.clear();
-                    if ($('.rightMenuButton.shifted')) {
-                        $('.rightMenuButton.shifted').trigger('click');
-                    }  
-                    $("#show-startup-message").modal("show");                    
+                    $("#show-startup-message").modal("show");
+                    ja = false;
+                }
             }
         });
         var enjoyhint_script_steps = [ {} ];
@@ -135,12 +142,12 @@ define([ 'exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scroll
         'selector' : '#simDiv',
         'description' : 'TOUR1_DESCRIPTION15',
         'shape' : 'circle',
-        'radius' : $('#blockly').width() / 10 + $('#blockly').height() / 10,
+        'radius' : 100,
         'top' : offsetTop,
         'left' : offsetLeft,
         'showSkip' : false
     }, {
-        'event' : 'click touchend',
+        'event' : is_touch_device(),
         'selector' : '#progSim',
         'description' : 'TOUR1_DESCRIPTION16',
         'showSkip' : false
