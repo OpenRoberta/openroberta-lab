@@ -8,7 +8,36 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var cmd;
     var port;
     var robotList = [];
-
+    var agentPortList = "";
+    
+    function listRobotStart() {
+        GUISTATE_C.setIsAgent(true);
+        $('#menuConnect').parent().addClass('disabled');
+        window.setInterval(function() {
+           portList = [];
+           vendorList = [];
+           productList = [];
+           robotList = [];
+           agentPortList = COMM.listRobotsFromAgent();
+           jsonObject = JSON.parse(agentPortList);
+           jsonObject['Ports'].forEach(function(port) {
+               if (GUISTATE_C.getVendor() === port['VendorID'].toLowerCase()) {
+                   portList.push(port['Name']);
+                   vendorList.push(port['VendorID']);
+                   productList.push(port['ProductID']);
+                   robotList.push(GUISTATE_C.getRobotRealName());
+               }
+           });
+           if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
+               GUISTATE_C.setRobotPort("");
+           }
+           if (portList.length == 1) {
+               ROBOT_C.setPort(portList[0]);
+           }
+           GUISTATE_C.updateMenuStatus();
+        }, 3000);
+    }
+    
     function init() {
         robotSocket = GUISTATE_C.getSocket()
         if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {

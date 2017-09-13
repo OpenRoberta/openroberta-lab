@@ -282,7 +282,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuConnect').parent().addClass('disabled');
             break;
         case GUISTATE.gui.connectionType.AGENTORTOKEN:
-            SOCKET_C.init();
+            SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
                 //console.log('arduino based bobot was selected');
@@ -291,7 +291,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             }
             break;
         case GUISTATE.gui.connectionType.AGENT:
-            SOCKET_C.init();
+            SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
                 //console.log('arduino based bobot was selected');

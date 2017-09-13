@@ -86,6 +86,17 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
     exports.ping = ping;
 
+    function listRobotsFromAgent() {
+        var URL = 'http://127.0.0.1:8991/listrobots';
+        return $.ajax({
+            type : "GET",
+            url : URL,
+            success : WRAP.fn3(successFn, "list success"),
+            error : errorFn
+        })
+    }
+    exports.listRobotsFromAgent = listRobotsFromAgent;
+    
     function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine, successFn) {
         var URL = 'http://127.0.0.1:8991/upload';
         var board = 'arduino:avr:uno';
