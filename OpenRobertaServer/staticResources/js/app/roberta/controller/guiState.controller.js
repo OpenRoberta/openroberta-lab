@@ -292,7 +292,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             break;
         case GUISTATE.gui.connectionType.AGENT:
             SOCKET_C.init();
-            if (GUISTATE.isAgent == true) {
+            if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
                 //console.log('arduino based bobot was selected');
             } else {
