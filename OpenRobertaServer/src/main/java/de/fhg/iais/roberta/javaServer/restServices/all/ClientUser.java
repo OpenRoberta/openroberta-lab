@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
-import java.sql.Timestamp;
 
 import javax.mail.MessagingException;
 import javax.ws.rs.Consumes;
@@ -136,7 +136,7 @@ public class ClientUser {
                 if ( this.isPublicServer && !email.equals("") && up.isOk() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
                 }
                 Util.addResultInfo(response, up);
 
@@ -153,7 +153,7 @@ public class ClientUser {
                 if ( this.isPublicServer && !oldEmail.equals(email) && up.isOk() ) {
                     String lang = request.getString("language");
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
                     up.deactivateAccount(user.getId());
                 }
                 Util.addResultInfo(response, up);
@@ -202,7 +202,7 @@ public class ClientUser {
                             lostPassword.getUrlPostfix()
                         };
                     try {
-                        this.mailManagement.send(user.getEmail(), "reset", body, lang);
+                        this.mailManagement.send(user.getEmail(), "reset", body, lang, false);
                         up.setSuccess(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS);
                     } catch ( MessagingException e ) {
                         up.setError(Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL);
@@ -225,7 +225,8 @@ public class ClientUser {
                 User user = up.getUser(account);
                 if ( this.isPublicServer && user != null && !user.getEmail().equals("") ) {
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(account);
-                    sendActivationMail(up, confirmation.getUrlPostfix(), account, user.getEmail(), lang);
+                    // TODO ask here again for the age
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, user.getEmail(), lang, false);
                 }
                 Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {
@@ -248,7 +249,7 @@ public class ClientUser {
             } else if ( cmd.equals("getStatusText") ) {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                 Long current = timestamp.getTime() / 1000L;
-                if (current > statusTextTimestamp) {
+                if ( current > statusTextTimestamp ) {
                     statusText[0] = "";
                     statusText[1] = "";
                 }
@@ -257,7 +258,7 @@ public class ClientUser {
                 response.put("rc", "ok");
                 Util.addResultInfo(response, up);
 
-            } else if ( cmd.equals("setStatusText") && userId == 1) {
+            } else if ( cmd.equals("setStatusText") && userId == 1 ) {
                 statusText[0] = request.getString("english");
                 statusText[1] = request.getString("german");
                 statusTextTimestamp = request.getLong("timestamp");
@@ -282,14 +283,14 @@ public class ClientUser {
         return Response.ok(response).build();
     }
 
-    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang) throws Exception {
+    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {
         String[] body =
             {
                 account,
                 urlPostfix
             };
         try {
-            this.mailManagement.send(email, "activate", body, lang);
+            this.mailManagement.send(email, "activate", body, lang, isYoungerThen14);
             up.setSuccess(Key.USER_ACTIVATION_SENT_MAIL_SUCCESS);
         } catch ( Exception e ) {
             up.setError(Key.USER_ACTIVATION_SENT_MAIL_FAIL);

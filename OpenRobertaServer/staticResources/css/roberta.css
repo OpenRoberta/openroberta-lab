@@ -1170,7 +1170,8 @@ label.form-invalid {
     right: 0;
     width: 100%;
     padding: 6px 6px;
-    background: #ddd;
+    background: rgb(221, 221, 221);
+    background: rgba(221, 221, 221, 0.9);
     color: #E2001A;
     border-radius: 2px;
     font-size: 16px;
@@ -1202,7 +1203,9 @@ label.form-invalid:after {
     border-radius: 2px;
     margin-top: 12px;
     color: #8FA402;
-    background: #ddd;
+    color: #333;
+    background: rgb(221, 221, 221);
+    background: rgba(221, 221, 221, 0.9);
     font-size: 16px;
     padding: 6px;
     z-index: 11;

@@ -30,8 +30,10 @@ public class MailManagement {
         @Named("reset.subject.de") String resetSubjectDe,
         @Named("reset.subject.en") String resetSubjectEn,
         @Named("activate.url") String activateUrl,
-        @Named("activate.text.de") String activateTextDe,
-        @Named("activate.text.en") String activateTextEn,
+        @Named("activate.text.young.de") String activateTextYoungDe,
+        @Named("activate.text.young.en") String activateTextYoungEn,
+        @Named("activate.text.old.de") String activateTextOldDe,
+        @Named("activate.text.old.en") String activateTextOldEn,
         @Named("activate.subject.de") String activateSubjectDe,
         @Named("activate.subject.en") String activateSubjectEn,
         @Named("username") final String username,
@@ -47,8 +49,10 @@ public class MailManagement {
         this.props.put("reset.subject.de", resetSubjectDe);
         this.props.put("reset.subject.en", resetSubjectEn);
         this.props.put("activate.url", activateUrl);
-        this.props.put("activate.text.de", activateTextDe);
-        this.props.put("activate.text.en", activateTextEn);
+        this.props.put("activate.text.old.de", activateTextOldDe);
+        this.props.put("activate.text.old.en", activateTextOldEn);
+        this.props.put("activate.text.young.de", activateTextYoungDe);
+        this.props.put("activate.text.young.en", activateTextYoungEn);
         this.props.put("activate.subject.de", activateSubjectDe);
         this.props.put("activate.subject.en", activateSubjectEn);
         this.props.put("username", username);
@@ -61,7 +65,7 @@ public class MailManagement {
         });
     }
 
-    public void send(String to, String subject, String[] body, String lang) throws AddressException, MessagingException {
+    public void send(String to, String subject, String[] body, String lang, boolean isYoungerThen14) throws AddressException, MessagingException {
         // TODO support for more languages
         String language = lang.toLowerCase().equals("de") ? "DE" : "en";
         String mailText = body[0];
@@ -78,7 +82,11 @@ public class MailManagement {
             mailText = mailText.replace("$3", body[1]);
         } else if ( subject.equals("activate") ) {
             mailSubject = this.props.getProperty("activate.subject." + language.toLowerCase());
-            mailText = this.props.getProperty("activate.text." + language.toLowerCase());
+            if ( isYoungerThen14 ) {
+                mailText = this.props.getProperty("activate.text.young." + language.toLowerCase());
+            } else {
+                mailText = this.props.getProperty("activate.text.old." + language.toLowerCase());
+            }
             String url =
                 this.props.getProperty("activate.url") != null && !this.props.getProperty("activate.url").isEmpty()
                     ? this.props.getProperty("activate.url")
@@ -86,6 +94,7 @@ public class MailManagement {
             mailText = mailText.replace("$1", body[0]);
             mailText = mailText.replace("$2", url);
             mailText = mailText.replace("$3", body[1]);
+            System.out.println(mailText);
         }
         Message message = new MimeMessage(this.session);
         message.setFrom(new InternetAddress(this.props.getProperty("username")));
