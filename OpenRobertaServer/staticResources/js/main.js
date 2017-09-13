@@ -7,7 +7,7 @@ require.config({
         'bootstrap' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min',
         'bootstrap-table' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-table.min',
         'bootstrap-tagsinput' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-tagsinput.min',
-        'bootstrap.wysiwyg' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',   
+        'bootstrap.wysiwyg' : 'bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap-wysiwyg.min',
         'datatables' : 'jquery/jquery.dataTables.min',
         'enjoyHint' : 'enjoyHint/enjoyhint.min',
         'jquery' : 'jquery/jquery-2.1.4.min',
@@ -19,7 +19,7 @@ require.config({
         'prettify' : 'code-prettify/prettify',
         'socket.io' : 'socket.io/socket.io',
         'volume-meter' : 'sound/volume-meter',
-        
+
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
         'configuration.model' : '../app/roberta/models/configuration.model',
@@ -117,7 +117,7 @@ require.config({
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller',
-        'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter' , 'user.model'], function(require) {
+        'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
@@ -164,18 +164,17 @@ function init() {
         configurationController.init();
         programController.init();
         menuController.init();
-        //socketController.init();
-
-        //console.log(robotList);
         $(".cover").fadeOut(100, function() {
-            if (guiStateController.noCookie()) {
+            if (guiStateController.noCookie() && !guiStateController.getStartWithTour()) {
                 $("#show-startup-message").modal("show");
             } else {
-                userModel.getStatusText(function (result) {
-                    if(result.statustext[0] !== "" && result.statustext[1] !== "") {
-                        $('#modal-statustext').modal("show");
-                    }
-                })
+                if (!guiStateController.getStartWithTour()) {
+                    userModel.getStatusText(function(result) {
+                        if (result.statustext[0] !== "" && result.statustext[1] !== "") {
+                            $('#modal-statustext').modal("show");
+                        }
+                    });
+                }
             }
         });
         $(".pace").fadeOut(500);

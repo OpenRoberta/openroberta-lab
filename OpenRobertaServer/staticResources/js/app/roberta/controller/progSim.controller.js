@@ -1,6 +1,6 @@
-define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'tour.controller', 'blocks', 'jquery',
+define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'blocks', 'jquery',
     'jquery-validate', 'blocks-msg'
-], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, TOUR_C, Blockly, $) {
+], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, Blockly, $) {
 
     var blocklyWorkspace;
     /**
@@ -209,12 +209,6 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
                             $('#progSim').addClass('shifted');
                             $(window).resize();
                             Blockly.svgResize(blocklyWorkspace);
-                            if (TOUR_C.getInstance()) {
-                                TOUR_C.getInstance().trigger('SimLoaded');
-                            }
-                            //                            setTimeout(function() {
-                            //                                SIM.setPause(false);
-                            //                            }, 500);
                         }
                     });
                 } else {

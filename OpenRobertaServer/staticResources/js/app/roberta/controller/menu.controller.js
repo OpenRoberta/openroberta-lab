@@ -27,7 +27,11 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             PROGRAM_C.openProgramFromXML(target);
         } else if (target[0] === "#activateAccount") {
             USER_C.activateAccount(target[1]);
+        } else if (target[0] === "#overview") {
+            GUISTATE_C.setStartWithTour();
+            TOUR_C.start('overview');
         }
+
         var firsttime = true
         $('#show-startup-message').on('shown.bs.modal', function(e) {
             $(function() {
