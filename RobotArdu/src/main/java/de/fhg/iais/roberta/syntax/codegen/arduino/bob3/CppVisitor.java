@@ -156,7 +156,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("T.ShowSeconds()");
+                this.sb.append("T.ShowMilliSeconds()");
                 break;
             case RESET:
                 this.sb.append("T.ResetTimer();");
@@ -477,7 +477,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        this.sb.append("myBob.receiveIRCode(500);");
+        this.sb.append("myBob.receiveIRCode(500)");
         return null;
     }
 

@@ -187,9 +187,9 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
         PROGRAM.loadProgramFromListing(progName, "Gallery", authorName, function(result) {
             if (result.rc === 'ok') { // already shared!
                 //TODO create usefull text at least for german and english.
-                MSG.displayInformation({'rc':'error'}, '','GALLERY_SHARED_ALREADY', progName);
+                MSG.displayInformation({'rc':'error'}, 'GALLERY_SHARED_ALREADY', 'GALLERY_SHARED_ALREADY', progName);
             } else {
-                $('#textShareGallery').html('Do you really want to share your program with everybody?');
+                $('#textShareGallery').html(Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY);
                 $('#share-with-gallery').data('action', 'add');
                 PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), GUISTATE_C.getUserAccountName(), function(result) {
                     if (result.rc === 'ok') {

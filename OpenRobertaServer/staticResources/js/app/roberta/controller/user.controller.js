@@ -99,9 +99,9 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     function sendAccountActivation() {
         if ($("#registerUserEmail").val() != "") {
             USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
-                if (result.rc === "ok") {
-                    MSG.displayInformation(result, result.message, result.message);
-                }
+//                if (result.rc === "ok") {
+//                    MSG.displayInformation(result, result.message, result.message);
+//                }
                 MSG.displayInformation(result, result.message, result.message);
             });
         } else {

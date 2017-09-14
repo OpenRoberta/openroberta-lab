@@ -33,7 +33,7 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
             media : '../blockly/media/',
             zoom : {
                 controls : true,
-                wheel : true,
+                wheel : false,
                 startScale : 1.0,
                 maxScale : 4,
                 minScale : .25,

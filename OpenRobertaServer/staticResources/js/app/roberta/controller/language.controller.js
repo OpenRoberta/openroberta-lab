@@ -153,7 +153,7 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#programNameTable').find('.delete').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.PROGLIST_SHARE_TOOLTIP') {
                 $('#programNameTable').find('.share').attr('data-original-title', value);
-            } else if (lkey == 'PROGLIST_SHARE_WITH_GALLERY_TOOLTIP') {
+            } else if (lkey == 'Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP') {
                 $('#programNameTable').find('.gallery').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.PROGLIST_LOAD_TOOLTIP') {
                 $('#programNameTable').find('.load').attr('data-original-title', value);

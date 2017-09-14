@@ -242,7 +242,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     }
                     typeof opt_callback === "function" && opt_callback();
                 }
-                MSG.displayInformation(result, result.message, result.message, robot);
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
             });
         } else {
             $('#confirmContinue').removeData();

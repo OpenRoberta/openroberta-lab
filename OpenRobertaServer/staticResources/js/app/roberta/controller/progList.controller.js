@@ -181,6 +181,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'progList.model', 'program
             $('#programNameTable').find('.delete').attr('data-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
             $('#programNameTable').find('.share').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP
                     || "Click here to share your program with a friend.");
+            $('#programNameTable').find('.gallery').attr('data-original-title', Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP
+                    || "Click here to upload your program to the gallery hence share it with all other users.");
             $('#programNameTable').find('.load').attr('data-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP
                     || 'Click here to load your program in the programming environment.');
             $('#programNameTable').find('[rel="tooltip"]').tooltip();
