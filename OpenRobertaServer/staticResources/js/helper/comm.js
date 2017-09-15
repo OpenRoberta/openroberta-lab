@@ -127,7 +127,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
             type : "POST",
             url : URL,
             data : JSONrequest,
-            contentType : 'application/json; charset=utf-8',
+            contentType : 'application/x-www-form-urlencoded; charset=utf-8',
             dataType : 'json',
             statusCode : {
                 200 : function() {
@@ -139,6 +139,11 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
                 400 : errorFn,
                 403 : errorFn,
                 404 : errorFn
+            },
+            error: function(jqXHR){
+                console.log(jqXHR.status);
+                console.log(jqXHR.statusText);
+                console.log(jqXHR.responseText);
             }
         });
 
