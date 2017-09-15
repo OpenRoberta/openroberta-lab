@@ -8,9 +8,10 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var cmd;
     var port;
     var robotList = [];
-    var agentPortList = "";
+    var agentPortList = '[{"Name":"none","IdVendor":"none","IdProduct":"none"}]';
     
     function listRobotStart() {
+        console.log("list robots started");
         GUISTATE_C.setIsAgent(true);
         $('#menuConnect').parent().addClass('disabled');
         window.setInterval(function() {
@@ -18,13 +19,17 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
            vendorList = [];
            productList = [];
            robotList = [];
-           agentPortList = COMM.listRobotsFromAgent();
+           COMM.listRobotsFromAgent(function (text) {
+               console.log("listing robots");
+           }, function(response) {
+               agentPortList = response.responseText;
+           });
            jsonObject = JSON.parse(agentPortList);
-           jsonObject['Ports'].forEach(function(port) {
-               if (GUISTATE_C.getVendor() === port['VendorID'].toLowerCase()) {
+           jsonObject.forEach(function(port) {
+               if (GUISTATE_C.getVendor() === port['IdVendor'].toLowerCase()) {
                    portList.push(port['Name']);
-                   vendorList.push(port['VendorID']);
-                   productList.push(port['ProductID']);
+                   vendorList.push(port['IdVendor']);
+                   productList.push(port['IdProduct']);
                    robotList.push(GUISTATE_C.getRobotRealName());
                }
            });
@@ -37,6 +42,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
            GUISTATE_C.updateMenuStatus();
         }, 3000);
     }
+    exports.listRobotStart = listRobotStart;
     
     function init() {
         robotSocket = GUISTATE_C.getSocket()
@@ -131,7 +137,6 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     exports.getRobotList = getRobotList;
 
     function uploadProgram(programHex, robotPort) {
-        GUISTATE_C.getSocket().emit('command', 'downloadtool avrdude 6.3.0-arduino9');
         COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
             LOG.text("Create agent upload success");
             $('#menuRunProg').parent().removeClass('disabled');

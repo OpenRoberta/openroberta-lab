@@ -291,6 +291,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             }
             break;
         case GUISTATE.gui.connectionType.AGENT:
+            console.log("agent selected");
             SOCKET_C.listRobotStart();
             if (GUISTATE.gui.isAgent == true) {
                 updateMenuStatus();
