@@ -103,6 +103,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     private final boolean playToneActionUsed;
     private final boolean driveActionUsed;
     private final boolean curveActionUsed;
+    private final String tmpArr;
+    private int tmpArrCount = 0;
     ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
@@ -124,6 +126,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         this.curveActionUsed = codePreprocessVisitor.isCurveUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
+        this.tmpArr = codePreprocessVisitor.getTmpArrVar();
     }
 
     /**
@@ -907,6 +910,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             nlIndent();
             this.sb.append("float __speed1;");
         }
+        this.sb.append(this.tmpArr);
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n").append("task main() {");
@@ -928,14 +932,16 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         if ( indexOfFunct.getLocation() == IndexLocation.LAST ) {
             methodName = "ArrFindLast";
         }
-
         switch ( arrayType ) {
+            case NUMBER:
             case ARRAY_NUMBER:
                 methodName += "Num(";
                 break;
+            case STRING:
             case ARRAY_STRING:
                 methodName += "Str(";
                 break;
+            case BOOLEAN:
             case ARRAY_BOOLEAN:
                 methodName += "Bool(";
                 break;
@@ -944,7 +950,12 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         }
 
         this.sb.append(methodName);
-        indexOfFunct.getParam().get(0).visit(this);
+        if ( !indexOfFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+            this.tmpArrCount += 1;
+            this.sb.append("__tmpArr" + this.tmpArrCount);
+        } else {
+            indexOfFunct.getParam().get(0).visit(this);
+        }
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
         this.sb.append(")");
@@ -958,14 +969,24 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             methodName = "ArrIsEmpty(";
         }
         this.sb.append(methodName);
-        lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+        if ( !lengthOfIsEmptyFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+            this.tmpArrCount += 1;
+            this.sb.append("__tmpArr" + this.tmpArrCount);
+        } else {
+            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+        }
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        listGetIndex.getParam().get(0).visit(this);
+        if ( !listGetIndex.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+            this.tmpArrCount += 1;
+            this.sb.append("__tmpArr" + this.tmpArrCount);
+        } else {
+            listGetIndex.getParam().get(0).visit(this);
+        }
         this.sb.append("[");
         listGetIndex.getParam().get(1).visit(this);
         this.sb.append("]");
@@ -976,7 +997,12 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        listSetIndex.getParam().get(1).visit(this);
+        if ( !listSetIndex.getParam().get(1).getVarType().toString().contains("ARRAY") ) {
+            this.tmpArrCount += 1;
+            this.sb.append("__tmpArr" + this.tmpArrCount);
+        } else {
+            listSetIndex.getParam().get(1).visit(this);
+        }
         this.sb.append("]");
         this.sb.append(" = ");
         listSetIndex.getParam().get(2).visit(this);
@@ -1075,7 +1101,12 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             default:
                 break;
         }
-        mathOnListFunct.getParam().get(0).visit(this);
+        if ( !mathOnListFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+            this.tmpArrCount += 1;
+            this.sb.append("__tmpArr" + this.tmpArrCount);
+        } else {
+            mathOnListFunct.getParam().get(0).visit(this);
+        }
         this.sb.append(")");
         return null;
     }
