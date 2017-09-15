@@ -10,37 +10,46 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var robotList = [];
     var agentPortList = '[{"Name":"none","IdVendor":"none","IdProduct":"none"}]';
     
+    function makeRequest() {
+        portList = [];
+        vendorList = [];
+        productList = [];
+        robotList = [];
+        COMM.listRobotsFromAgent(function (text) {
+            //console.log("listing robots");
+        }, function(response) {
+            agentPortList = response.responseText;
+        },  function() {
+        });
+        try {
+            jsonObject = JSON.parse(agentPortList);
+            jsonObject.forEach(function(port) {
+                if (GUISTATE_C.getVendor() === port['IdVendor'].toLowerCase()) {
+                    portList.push(port['Name']);
+                    vendorList.push(port['IdVendor']);
+                    productList.push(port['IdProduct']);
+                    robotList.push(GUISTATE_C.getRobotRealName());
+                }
+            });
+        }
+        catch(e) {
+            GUISTATE_C.setRobotPort("");
+        }
+        if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
+            GUISTATE_C.setRobotPort("");
+        }
+        if (portList.length == 1) {
+            ROBOT_C.setPort(portList[0]);
+        }
+        GUISTATE_C.updateMenuStatus();
+    }
+    
     function listRobotStart() {
-        console.log("list robots started");
+        //console.log("list robots started");
         GUISTATE_C.setIsAgent(true);
         $('#menuConnect').parent().addClass('disabled');
-        window.setInterval(function() {
-           portList = [];
-           vendorList = [];
-           productList = [];
-           robotList = [];
-           COMM.listRobotsFromAgent(function (text) {
-               console.log("listing robots");
-           }, function(response) {
-               agentPortList = response.responseText;
-           });
-           jsonObject = JSON.parse(agentPortList);
-           jsonObject.forEach(function(port) {
-               if (GUISTATE_C.getVendor() === port['IdVendor'].toLowerCase()) {
-                   portList.push(port['Name']);
-                   vendorList.push(port['IdVendor']);
-                   productList.push(port['IdProduct']);
-                   robotList.push(GUISTATE_C.getRobotRealName());
-               }
-           });
-           if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
-               GUISTATE_C.setRobotPort("");
-           }
-           if (portList.length == 1) {
-               ROBOT_C.setPort(portList[0]);
-           }
-           GUISTATE_C.updateMenuStatus();
-        }, 3000);
+        makeRequest();
+        window.setInterval(makeRequest, 3000);
     }
     exports.listRobotStart = listRobotStart;
     

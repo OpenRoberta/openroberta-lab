@@ -86,14 +86,14 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
     }
     exports.ping = ping;
 
-    function listRobotsFromAgent(successFn, completeFn) {
+    function listRobotsFromAgent(successFn, completeFn, onError) {
         var URL = 'http://127.0.0.1:8991/listrobots';
         var response = '';
         return $.ajax({
             type : "GET",
             url : URL,
             success : WRAP.fn3(successFn, "list success"),
-            error : errorFn,
+            error : onError,
             complete: completeFn
         });
     }
