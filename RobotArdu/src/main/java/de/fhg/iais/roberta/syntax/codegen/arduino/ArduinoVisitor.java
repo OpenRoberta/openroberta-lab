@@ -275,7 +275,7 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
-        this.sb.append("delay(15);");
+        this.sb.append("delay(1);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");

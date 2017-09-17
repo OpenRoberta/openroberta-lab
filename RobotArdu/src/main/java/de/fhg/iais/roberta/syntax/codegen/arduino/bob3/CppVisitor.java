@@ -186,7 +186,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
                         + ", 3) )");
                 break;
             case "3":
-                this.sb.append("myBob.getArm(" + touchSensor.getArmSide() + ")");
+                this.sb.append("myBob.getArm(-" + touchSensor.getArmSide() + " + 3)");
                 break;
             default:
         }

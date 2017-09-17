@@ -316,7 +316,8 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         } else {
             appendBreakStmt();
         }
-        addSleepIfForeverLoop(repeatStmt);
+        nlIndent();
+        this.sb.append("uBit.sleep(1);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -1180,13 +1181,6 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
                 return "MicroBitImage";
             default:
                 throw new IllegalArgumentException("unhandled type");
-        }
-    }
-
-    private void addSleepIfForeverLoop(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == RepeatStmt.Mode.FOREVER ) {
-            nlIndent();
-            this.sb.append("uBit.sleep(1);");
         }
     }
 
