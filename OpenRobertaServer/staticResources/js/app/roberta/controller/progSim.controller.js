@@ -100,6 +100,10 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
 
             $("#simButtonsCollapse").collapse('hide');
         }, 'simValues clicked');
+        
+        $('#simResetPose').onWrap('click', function(event) {
+            SIM.resetPose();
+        }, 'simResetPose clicked');
     }
 
     function reloadProgram(opt_result) {

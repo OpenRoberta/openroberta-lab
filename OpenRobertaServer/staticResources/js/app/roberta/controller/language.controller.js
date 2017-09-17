@@ -139,6 +139,8 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
                 $('#simValues').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_SIM_IMPORT_TOOLTIP') {
                 $('#simImport').attr('data-original-title', value);
+            } else if (lkey == 'Blockly.Msg.MENU_SIM_POSE_TOOLTIP') {
+                $('#simResetPose').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP') {
                 $('#codeDownload').attr('data-original-title', value);
             } else if (lkey == 'Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP') {

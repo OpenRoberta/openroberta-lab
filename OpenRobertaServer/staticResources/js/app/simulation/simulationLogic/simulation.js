@@ -148,6 +148,13 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
     }
     exports.setInfo = setInfo;
+    
+    function resetPose() {
+        if (robot.resetPose) {
+            robot.resetPose();
+        }
+    }
+    exports.resetPose = resetPose;
 
     function stopProgram() {
         setPause(true);
@@ -214,9 +221,9 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         userProgram = program;
         if (robotType.indexOf("calliope") >= 0) {
             currentBackground = 0;
-            $('.dropdown.sim, .simScene, #simImport, #simButtonsHead').hide();
+            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
         } else if (robotType === 'microbit') {
-            $('.dropdown.sim, .simScene, #simImport, #simButtonsHead').hide();
+            $('.dropdown.sim, .simScene, #simImport, #simResetPose, #simButtonsHead').hide();
             currentBackground = 1;
         } else if (currentBackground == 0 || currentBackground == 1) {
             currentBackground = 2;
@@ -226,7 +233,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
                 $('.dropdown.sim, .simScene').show();
                 $('#simImport').hide();
             } else {
-                $('.dropdown.sim, .simScene, #simImport').show();
+                $('.dropdown.sim, .simScene, #simImport, #simResetPose').show();
             }
             if ($('#device-size').find('div:visible').first().attr('id')) {
                 $('#simButtonsHead').show();
