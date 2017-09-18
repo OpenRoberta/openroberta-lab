@@ -313,11 +313,12 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         repeatStmt.getList().visit(this);
         if ( !isWaitStmt ) {
             addContinueLabelToLoop();
+            nlIndent();
+            this.sb.append("uBit.sleep(1);");
         } else {
             appendBreakStmt();
         }
-        nlIndent();
-        this.sb.append("uBit.sleep(1);");
+
         decrIndentation();
         nlIndent();
         this.sb.append("}");
