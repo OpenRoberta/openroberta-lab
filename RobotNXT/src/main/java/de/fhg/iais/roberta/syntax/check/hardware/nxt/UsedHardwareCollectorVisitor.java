@@ -107,32 +107,26 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     //TODO: rewrite it in a nicer way, check why it is not detecting inserted arrays, fix sensors
     public Void generateArrTmpVar(Expr<Void> expr) {
-        System.out.println(expr.getVarType().toString());
         String type;
         String defVal;
-        switch ( expr.getVarType().toString() ) {
-            case "NUMBER":
-                type = "float";
-                defVal = "0";
-                break;
-            case "STRING":
-                type = "string";
-                defVal = "";
-                break;
-            case "BOOLEAN":
-                type = "bool";
-                defVal = "true";
-                break;
-            default:
-                type = "int";
-                defVal = "0";
-                break;
+        if ( expr.toString().contains("NUMBER") ) {
+            type = "float";
+            defVal = "0";
+        } else if ( expr.toString().contains("STRING") ) {
+            type = "string";
+            defVal = "";
+        } else if ( expr.toString().contains("BOOLEAN") ) {
+            type = "bool";
+            defVal = "true";
+        } else {
+            type = "int";
+            defVal = "0";
         }
 
         if ( !expr.getVarType().toString().contains("ARRAY") ) {
             this.tmpArrVarCount += 1;
             String str = expr.toString().replaceAll("defVal=ARRAY", defVal);
-            String[] val = StringUtils.substringsBetween(str.substring(18, str.length() - 1), "[", "]");
+            String[] val = StringUtils.substringsBetween(str.substring(str.indexOf("ListCreate") + 15, str.length() - 1), "[", "]");
             String values = "";
             boolean first = true;
             for ( String value : val ) {
@@ -141,7 +135,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
                 } else {
                     values += ", ";
                 }
-                if ( expr.getVarType().toString().contains("STRING") ) {
+                if ( expr.toString().contains("STRING") ) {
                     values += "\"" + value + "\"";
                 } else {
                     values += value;
@@ -168,19 +162,31 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        int listsInLine = StringUtils.countMatches(indexOfFunct.getParam().get(1).toString(), "ListCreate");
         generateArrTmpVar(indexOfFunct.getParam().get(0));
+        for ( int i = 0; i < listsInLine; i++ ) {
+            generateArrTmpVar(indexOfFunct.getParam().get(1));
+        }
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        int listsInLine = StringUtils.countMatches(listGetIndex.getParam().get(1).toString(), "ListCreate");
         generateArrTmpVar(listGetIndex.getParam().get(0));
+        for ( int i = 0; i < listsInLine; i++ ) {
+            generateArrTmpVar(listGetIndex.getParam().get(1));
+        }
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        int listsInLine = StringUtils.countMatches(listSetIndex.getParam().get(0).toString(), "ListCreate");
         generateArrTmpVar(listSetIndex.getParam().get(1));
+        for ( int i = 0; i < listsInLine; i++ ) {
+            generateArrTmpVar(listSetIndex.getParam().get(0));
+        }
         return null;
     }
 

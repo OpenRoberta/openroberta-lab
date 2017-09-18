@@ -1,7 +1,7 @@
-define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'guiState.model', 'program.model', 'prettify', 'robot.controller', 'socket.controller',
-        'progHelp.controller', 'progRun.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks', 'jquery', 'jquery-validate',
-        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, GUISTATE, PROGRAM, Prettify, ROBOT_C, SOCKET_C, HELP_C, RUN_C, INFO_C, CODE_C, SIM_C,
-        Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'guiState.model', 'program.model', 'prettify', 'robot.controller',
+        'socket.controller', 'progHelp.controller', 'progRun.controller', 'progInfo.controller', 'progCode.controller', 'progSim.controller', 'blocks',
+        'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, GUISTATE_C, GUISTATE, PROGRAM, Prettify, ROBOT_C, SOCKET_C,
+        HELP_C, RUN_C, INFO_C, CODE_C, SIM_C, Blockly, $) {
 
     var $formSingleModal;
 
@@ -534,6 +534,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         }
         programToBlocklyWorkspace(program);
     }
+    exports.reloadProgram = reloadProgram;
 
     function reloadView() {
         if (isVisible()) {
