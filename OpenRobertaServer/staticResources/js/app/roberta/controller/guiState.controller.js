@@ -856,7 +856,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                     name += ' <b><span style="color:#33B8CA;" class="typcn typcn-eye progName"></span></b><span style="color:#33B8CA;">' + opt_owner
                             + '</span>';
                 } else {
-                    console.log("Program with undefined rights from " + opt_owner + " loaded.");
+                    //console.log("Program with undefined rights from " + opt_owner + " loaded.");
                 }
             }
             $('#tabProgramName').html(name);

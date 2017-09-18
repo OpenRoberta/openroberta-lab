@@ -122,7 +122,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuRunProg').parent().removeClass('disabled');
         } else {
 
-            console.log("result not ok");
+            //console.log("result not ok");
             MSG.displayInformation(result, "", result.message, "");
             GUISTATE_C.setAutoConnectedBusy(false);
             $('#head-navi-icon-robot').removeClass('busy');

@@ -302,16 +302,13 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             var choosenRobotType = event.target.parentElement.dataset.type;
             //TODO: change from ardu to botnroll and mbot with friends
             //I guess it is changed now, check downstairs at menuConnect
-            if (GUISTATE_C.getRobot() == "ardu") {
-                console.log("bobot is ardu");
-            }
             if (choosenRobotType) {
                 ROBOT_C.switchRobot(choosenRobotType);
             } else {
                 var domId = event.target.id;
                 if (domId === 'menuConnect') {
-                    console.log(GUISTATE_C.getIsAgent());
-                    console.log(GUISTATE_C.getConnection());
+                    //console.log(GUISTATE_C.getIsAgent());
+                    //console.log(GUISTATE_C.getConnection());
                     if (GUISTATE_C.getConnection() == 'arduinoAgent'
                             || (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)) {
                         var ports = SOCKET_C.getPortList();
@@ -564,7 +561,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             } else if ($('#confirmContinue').data('type') === 'switchRobot') {
                 ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true, $('#confirmContinue').data('opt_callback'));
             } else {
-                console.log('Confirmation with unknown data type clicked');
+                //console.log('Confirmation with unknown data type clicked');
             }
         }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {

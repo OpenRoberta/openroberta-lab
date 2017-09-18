@@ -141,9 +141,6 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
                 404 : errorFn
             },
             error: function(jqXHR){
-                console.log(jqXHR.status);
-                console.log(jqXHR.statusText);
-                console.log(jqXHR.responseText);
             }
         });
 

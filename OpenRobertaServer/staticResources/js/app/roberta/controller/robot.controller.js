@@ -118,7 +118,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
             $('#single-modal-list a[href]').text(Blockly.Msg["POPUP_STARTUP_HELP"]);
             $('#single-modal-list a[href]').attr("href", "http://wiki.open-roberta.org");
         }, function() {
-            console.log(document.getElementById("singleModalListInput").value);
+            //console.log(document.getElementById("singleModalListInput").value);
             setPort(document.getElementById("singleModalListInput").value);
         }, function() {
         });
