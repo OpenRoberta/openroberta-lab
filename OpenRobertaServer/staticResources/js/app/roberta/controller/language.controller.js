@@ -29,6 +29,10 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             language = 'ru';
         } else if (navigator.language.indexOf("cs") > -1) {
             language = 'cs';
+        } else if (navigator.language.indexOf("tr") > -1) {
+            language = 'tr';
+        } else if (navigator.language.indexOf("nl") > -1) {
+            language = 'nl';
 //        } else if (navigator.language.indexOf("eu") > -1) {
 //            language = 'eu';
 //        } else if (navigator.language.indexOf("gl") > -1) {
