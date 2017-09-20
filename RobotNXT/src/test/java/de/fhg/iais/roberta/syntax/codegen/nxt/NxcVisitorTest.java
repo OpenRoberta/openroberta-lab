@@ -439,22 +439,18 @@ public class NxcVisitorTest {
     public void testCurveBlocks() throws Exception {
         final String a = "" //
             + IMPORTS_CONSTANTS
-            + "float__speed;float__speed1;task main() {"
+            + "task main() {"
             + MASMETHOD
-            + "__speed=abs(30)<100?30:30/abs(30)*100;__speed1=abs(-20)<100?-20:-20/abs(-20)*100;"
-            + "  SteerDriveEx( OUT_A, OUT_B,__speed,__speed1, true, 20 );\n"
-            + "__speed=abs(50)<100?50:50/abs(50)*100;__speed1=abs(-50)<100?-50:-50/abs(-50)*100;"
-            + "  SteerDriveEx( OUT_A, OUT_B, __speed,__speed1, false, 20 );\n"
+            + "  SteerDriveEx( OUT_A, OUT_B,SpeedTest(30),SpeedTest(-20), true, 20 );\n"
+            + "  SteerDriveEx( OUT_A, OUT_B, SpeedTest(50),SpeedTest(-50), false, 20 );\n"
             + "  while ( true ) {\n"
             + "    while ( true ) {\n"
             + "      if ( SensorLight( S3, \"LIGHT\" ) < 50 ) {\n"
-            + "__speed=abs(30)<100?30:30/abs(30)*100;__speed1=abs(10)<100?10:10/abs(10)*100;"
-            + "        SteerDrive( OUT_A, OUT_B, __speed,__speed1, true );\n"
+            + "        SteerDrive( OUT_A, OUT_B, SpeedTest(30),SpeedTest(10), true );\n"
             + "          break;\n"
             + "      }\n"
             + "      if ( SensorLight( S3, \"LIGHT\" ) >= 50 ) {\n"
-            + "__speed=abs(10)<100?10:10/abs(10)*100;__speed1=abs(30)<100?30:30/abs(30)*100;"
-            + "        SteerDrive( OUT_A, OUT_B, __speed,__speed1, true );\n"
+            + "        SteerDrive( OUT_A, OUT_B, SpeedTest(10),SpeedTest(30), true );\n"
             + "        break;\n"
             + "      }\n"
             + "      Wait( 15 );\n"

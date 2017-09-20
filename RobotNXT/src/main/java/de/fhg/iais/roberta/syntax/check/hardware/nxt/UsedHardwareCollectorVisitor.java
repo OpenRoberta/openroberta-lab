@@ -4,11 +4,6 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
-import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
@@ -40,14 +35,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         return this.isPlayToneUsed;
     }
 
-    public boolean isDriveUsed() {
-        return this.isDriveUsed;
-    }
-
-    public boolean isCurveUsed() {
-        return this.isCurveUsed;
-    }
-
     @Override
     public Void visitLightSensorAction(LightSensorAction<Void> lightSensorAction) {
         return null;
@@ -62,37 +49,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        this.isDriveUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        this.isDriveUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.isDriveUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        this.isDriveUsed = true;
-        return null;
-    }
-
-    @Override
-    public Void visitCurveAction(CurveAction<Void> curveAction) {
-        this.isDriveUsed = true;
-        this.isCurveUsed = true;
         return null;
     }
 
@@ -113,7 +69,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
             type = "int";
             defVal = "0";
         }
-    
+
         if ( !expr.getVarType().toString().contains("ARRAY") ) {
             this.tmpArrVarCount += 1;
             String str = expr.toString().replaceAll("defVal=ARRAY", defVal);
@@ -132,12 +88,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
                     values += value;
                 }
             }
-    
+
             this.tmpArrVar += "\n" + type + " __tmpArr" + this.tmpArrVarCount + "[] = {" + values + "};";
         }
         return null;
     }
-    
+
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         List<Expr<Void>> param = mathOnListFunct.getParam();
@@ -146,15 +102,15 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         generateArrTmpVar(mathOnListFunct.getParam().get(0));
         return null;
-    
+
     }
-    
+
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         generateArrTmpVar(lengthOfIsEmptyFunct.getParam().get(0));
         return null;
     }
-    
+
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         int listsInLine = StringUtils.countMatches(indexOfFunct.getParam().get(1).toString(), "ListCreate");
@@ -164,7 +120,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }
-    
+
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         int listsInLine = StringUtils.countMatches(listGetIndex.getParam().get(1).toString(), "ListCreate");
@@ -174,7 +130,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }
-    
+
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         int listsInLine = StringUtils.countMatches(listSetIndex.getParam().get(0).toString(), "ListCreate");

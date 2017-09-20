@@ -16,8 +16,7 @@ public class MathTrigTest {
 
     @Test
     public void Test1() throws Exception {
-        final String a =
-            "if(0==MathSin(0)){__speed=abs(MathAcos(0))<100?MathAcos(0):MathAcos(0)/abs(MathAcos(0))*100;OnFwdReg(OUT_BC,__speed,OUT_REGMODE_SYNC);}";
+        final String a = "if(0==MathSin(0)){OnFwdReg(OUT_BC,SpeedTest(MathAcos(0)),OUT_REGMODE_SYNC);}";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_trig1.xml");
     }

@@ -97,14 +97,12 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  *
  * @param <V>
  */
-public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
+public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
     AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
 
     private final boolean timeSensorUsed;
     private final boolean playToneActionUsed;
-    private final boolean driveActionUsed;
-    private final boolean curveActionUsed;
     //private final String tmpArr;
     //private int tmpArrCount = 0;
     ArrayList<VarDeclaration<Void>> usedVars;
@@ -124,8 +122,6 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.playToneActionUsed = codePreprocessVisitor.isPlayToneUsed();
-        this.driveActionUsed = codePreprocessVisitor.isDriveUsed();
-        this.curveActionUsed = codePreprocessVisitor.isCurveUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
         //this.tmpArr = codePreprocessVisitor.getTmpArrVar();
@@ -501,23 +497,15 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("__speed").append(" = abs(");
-        motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(") < 100  ? ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(" : ");
-        motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append("/abs(");
-        motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(")*100;");
-        nlIndent();
         final boolean reverse = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
         final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         String sign = reverse ? "-" : "";
         String methodNamePart = reverse ? "OnRev" : "OnFwd";
         if ( isDuration ) {
-            this.sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", " + sign + "__speed");
+            this.sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", " + sign + "SpeedTest(");
+            motorOnAction.getParam().getSpeed().visit(this);
+            this.sb.append(")");
             if ( motorOnAction.getDurationMode() == MotorMoveMode.ROTATIONS ) {
                 this.sb.append(", 360 * ");
             } else {
@@ -526,10 +514,13 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
             motorOnAction.getParam().getDuration().getValue().visit(this);
         } else {
             if ( isRegulatedDrive ) {
-                this.sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", __speed");
-                this.sb.append(", OUT_REGMODE_SPEED");
+                this.sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", SpeedTest(");
+                motorOnAction.getParam().getSpeed().visit(this);
+                this.sb.append("), OUT_REGMODE_SPEED");
             } else {
-                this.sb.append(methodNamePart + "(OUT_" + motorOnAction.getPort() + ", __speed");
+                this.sb.append(methodNamePart + "(OUT_" + motorOnAction.getPort() + "SpeedTest(");
+                motorOnAction.getParam().getSpeed().visit(this);
+                this.sb.append(")");
             }
         }
         this.sb.append(");");
@@ -538,22 +529,13 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        this.sb.append("__speed").append(" = abs(");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(") < 100  ? ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(" : ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append("/abs(");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(")*100;");
-        nlIndent();
         final boolean reverse = this.brickConfiguration.getActorOnPort(motorSetPowerAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
         String sign = reverse ? "-" : "";
         final String methodName = "OnFwdReg";
         //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        this.sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + "," + sign + "__speed");
-        this.sb.append(",OUT_REGMODE_SPEED");
+        this.sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + ", " + sign + "SpeedTest(");
+        motorSetPowerAction.getPower().visit(this);
+        this.sb.append(") ,OUT_REGMODE_SPEED");
         this.sb.append(");");
         return null;
     }
@@ -579,16 +561,6 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        this.sb.append("__speed").append(" = abs(");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(") < 100  ? ");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(" : ");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append("/abs(");
-        driveAction.getParam().getSpeed().visit(this);
-        this.sb.append(")*100;");
-        nlIndent();
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -613,7 +585,9 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
         } else {
             this.sb.append(", ");
         }
-        this.sb.append("__speed").append(", ");
+        this.sb.append("SpeedTest(");
+        driveAction.getParam().getSpeed().visit(this);
+        this.sb.append(")").append(", ");
         if ( isDuration ) {
             this.sb.append("(");
             driveAction.getParam().getDuration().getValue().visit(this);
@@ -629,16 +603,6 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        this.sb.append("__speed").append(" = abs(");
-        turnAction.getParam().getSpeed().visit(this);
-        this.sb.append(") < 100  ? ");
-        turnAction.getParam().getSpeed().visit(this);
-        this.sb.append(" : ");
-        turnAction.getParam().getSpeed().visit(this);
-        this.sb.append("/abs(");
-        turnAction.getParam().getSpeed().visit(this);
-        this.sb.append(")*100;");
-        nlIndent();
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -663,7 +627,9 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
         if ( reverse ) {
             turnpct *= -1;
         }
-        this.sb.append(", __speed");
+        this.sb.append(", SpeedTest(");
+        turnAction.getParam().getSpeed().visit(this);
+        this.sb.append(")");
         if ( turnAction.getDirection() == TurnDirection.LEFT ) {
             turnpct *= -1;
         }
@@ -683,26 +649,6 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        this.sb.append("__speed").append(" = abs(");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(") < 100  ? ");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(" : ");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append("/abs(");
-        curveAction.getParamLeft().getSpeed().visit(this);
-        this.sb.append(")*100;");
-        nlIndent();
-        this.sb.append("__speed1").append(" = abs(");
-        curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append(") < 100  ? ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append(" : ");
-        curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append("/abs(");
-        curveAction.getParamRight().getSpeed().visit(this);
-        this.sb.append(")*100;");
-        nlIndent();
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
         final boolean confForward =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.FOREWARD;
@@ -716,7 +662,11 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
         this.sb.append(methodName);
         this.sb.append("(OUT_" + this.brickConfiguration.getLeftMotorPort());
         this.sb.append(", OUT_" + this.brickConfiguration.getRightMotorPort());
-        this.sb.append(", __speed, __speed1, ");
+        this.sb.append(", SpeedTest(");
+        curveAction.getParamLeft().getSpeed().visit(this);
+        this.sb.append("), SpeedTest(");
+        curveAction.getParamRight().getSpeed().visit(this);
+        this.sb.append("), ");
         this.sb.append(confForward == blockForward);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -903,14 +853,6 @@ public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void
         if ( this.timeSensorUsed ) {
             nlIndent();
             this.sb.append("long timer1;");
-        }
-        if ( this.driveActionUsed ) {
-            nlIndent();
-            this.sb.append("float __speed;");
-        }
-        if ( this.curveActionUsed ) {
-            nlIndent();
-            this.sb.append("float __speed1;");
         }
         //this.sb.append(this.tmpArr);
         mainTask.getVariables().visit(this);
