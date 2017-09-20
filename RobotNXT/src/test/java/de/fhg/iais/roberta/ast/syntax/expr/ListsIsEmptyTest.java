@@ -9,7 +9,7 @@ public class ListsIsEmptyTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "ArrIsEmpty(__tmpArr1)";
+        final String a = "ArrIsEmpty({0,0,0})";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_is_empty.xml");
     }

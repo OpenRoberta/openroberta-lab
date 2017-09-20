@@ -2,8 +2,6 @@ package de.fhg.iais.roberta.syntax.check.hardware.nxt;
 
 import java.util.ArrayList;
 
-import org.apache.commons.lang3.StringUtils;
-
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
@@ -14,12 +12,6 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.lang.functions.IndexOfFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.LengthOfIsEmptyFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
-import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
@@ -33,17 +25,16 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     private boolean isPlayToneUsed = false;
     private boolean isDriveUsed = false;
     private boolean isCurveUsed = false;
-    private int tmpArrVarCount = 0;
-    private String tmpArrVar = "";
+    //private String tmpArrVar = "";
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
         super(configuration);
         check(phrasesSet);
     }
 
-    public String getTmpArrVar() {
+    /*public String getTmpArrVar() {
         return this.tmpArrVar;
-    }
+    }*/
 
     public boolean isPlayToneUsed() {
         return this.isPlayToneUsed;
@@ -105,7 +96,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         return null;
     }
 
-    //TODO: rewrite it in a nicer way, check why it is not detecting inserted arrays, fix sensors
+    /*TODO: rewrite it in a nicer way, check why it is not detecting inserted arrays, fix sensors
     public Void generateArrTmpVar(Expr<Void> expr) {
         String type;
         String defVal;
@@ -122,7 +113,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
             type = "int";
             defVal = "0";
         }
-
+    
         if ( !expr.getVarType().toString().contains("ARRAY") ) {
             this.tmpArrVarCount += 1;
             String str = expr.toString().replaceAll("defVal=ARRAY", defVal);
@@ -141,25 +132,29 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
                     values += value;
                 }
             }
-
+    
             this.tmpArrVar += "\n" + type + " __tmpArr" + this.tmpArrVarCount + "[] = {" + values + "};";
         }
         return null;
     }
-
+    
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        List<Expr<Void>> param = mathOnListFunct.getParam();
+        for ( Expr<Void> expr : param ) {
+            expr.visit(this);
+        }
         generateArrTmpVar(mathOnListFunct.getParam().get(0));
         return null;
-
+    
     }
-
+    
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         generateArrTmpVar(lengthOfIsEmptyFunct.getParam().get(0));
         return null;
     }
-
+    
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         int listsInLine = StringUtils.countMatches(indexOfFunct.getParam().get(1).toString(), "ListCreate");
@@ -169,7 +164,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }
-
+    
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         int listsInLine = StringUtils.countMatches(listGetIndex.getParam().get(1).toString(), "ListCreate");
@@ -179,7 +174,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }
-
+    
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         int listsInLine = StringUtils.countMatches(listSetIndex.getParam().get(0).toString(), "ListCreate");
@@ -188,6 +183,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
             generateArrTmpVar(listSetIndex.getParam().get(0));
         }
         return null;
-    }
+    }*/
 
 }

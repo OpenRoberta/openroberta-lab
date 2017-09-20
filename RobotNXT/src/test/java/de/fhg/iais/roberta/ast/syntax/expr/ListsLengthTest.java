@@ -9,7 +9,7 @@ public class ListsLengthTest {
 
     @Test
     public void Test() throws Exception {
-        final String a = "ArrayLen(__tmpArr1)";
+        final String a = "ArrayLen({0.1,0.0,0})";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_length.xml");
     }

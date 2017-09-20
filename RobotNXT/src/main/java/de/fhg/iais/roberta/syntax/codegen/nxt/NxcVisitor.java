@@ -94,8 +94,10 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable NXC code representation of a phrase to a
  * StringBuilder. <b>This representation is correct NXC code for NXT.</b> <br>
+ *
+ * @param <V>
  */
-public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
+public class NxcVisitor<V> extends RobotCppVisitor implements NxtAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
     AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     private final NxtConfiguration brickConfiguration;
 
@@ -103,8 +105,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     private final boolean playToneActionUsed;
     private final boolean driveActionUsed;
     private final boolean curveActionUsed;
-    private final String tmpArr;
-    private int tmpArrCount = 0;
+    //private final String tmpArr;
+    //private int tmpArrCount = 0;
     ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
@@ -126,7 +128,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         this.curveActionUsed = codePreprocessVisitor.isCurveUsed();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
         this.userDefinedMethods = codePreprocessVisitor.getUserDefinedMethods();
-        this.tmpArr = codePreprocessVisitor.getTmpArrVar();
+        //this.tmpArr = codePreprocessVisitor.getTmpArrVar();
     }
 
     /**
@@ -910,7 +912,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             nlIndent();
             this.sb.append("float __speed1;");
         }
-        this.sb.append(this.tmpArr);
+        //this.sb.append(this.tmpArr);
         mainTask.getVariables().visit(this);
         incrIndentation();
         this.sb.append("\n").append("task main() {");
@@ -950,12 +952,12 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         }
 
         this.sb.append(methodName);
-        if ( !indexOfFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+        /*if ( !indexOfFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
             this.tmpArrCount += 1;
             this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {
-            indexOfFunct.getParam().get(0).visit(this);
-        }
+        } else {*/
+        indexOfFunct.getParam().get(0).visit(this);
+        //}
         this.sb.append(", ");
         indexOfFunct.getParam().get(1).visit(this);
         this.sb.append(")");
@@ -969,24 +971,24 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             methodName = "ArrIsEmpty(";
         }
         this.sb.append(methodName);
-        if ( !lengthOfIsEmptyFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+        /*if ( !lengthOfIsEmptyFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
             this.tmpArrCount += 1;
             this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {
-            lengthOfIsEmptyFunct.getParam().get(0).visit(this);
-        }
+        } else {*/
+        lengthOfIsEmptyFunct.getParam().get(0).visit(this);
+        //}
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( !listGetIndex.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
-            this.tmpArrCount += 1;
-            this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {
-            listGetIndex.getParam().get(0).visit(this);
-        }
+        /*if ( !listGetIndex.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+        this.tmpArrCount += 1;
+        this.sb.append("__tmpArr" + this.tmpArrCount);
+        } else {*/
+        listGetIndex.getParam().get(0).visit(this);
+        //}
         this.sb.append("[");
         listGetIndex.getParam().get(1).visit(this);
         this.sb.append("]");
@@ -997,12 +999,12 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append("[");
-        if ( !listSetIndex.getParam().get(1).getVarType().toString().contains("ARRAY") ) {
+        /*if ( !listSetIndex.getParam().get(1).getVarType().toString().contains("ARRAY") ) {
             this.tmpArrCount += 1;
             this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {
-            listSetIndex.getParam().get(1).visit(this);
-        }
+        } else {*/
+        listSetIndex.getParam().get(1).visit(this);
+        //}
         this.sb.append("]");
         this.sb.append(" = ");
         listSetIndex.getParam().get(2).visit(this);
@@ -1101,12 +1103,12 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             default:
                 break;
         }
-        if ( !mathOnListFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
+        /*if ( !mathOnListFunct.getParam().get(0).getVarType().toString().contains("ARRAY") ) {
             this.tmpArrCount += 1;
             this.sb.append("__tmpArr" + this.tmpArrCount);
-        } else {
-            mathOnListFunct.getParam().get(0).visit(this);
-        }
+        } else {*/
+        mathOnListFunct.getParam().get(0).visit(this);
+        //}
         this.sb.append(")");
         return null;
     }
