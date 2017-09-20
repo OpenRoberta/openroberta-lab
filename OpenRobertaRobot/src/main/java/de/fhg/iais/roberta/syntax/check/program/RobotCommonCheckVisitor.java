@@ -313,7 +313,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
             Double speedRightNumConst = Double.valueOf(((NumConst<Void>) speedRight).getValue());
             int signLeft = (int) Math.signum(speedLeftNumConst);
             int signRight = (int) Math.signum(speedRightNumConst);
-            if ( speedLeftNumConst == speedRightNumConst && (signLeft != signRight && signLeft != 0 && signRight != 0) ) {
+            if ( Math.abs(speedLeftNumConst) == Math.abs(speedRightNumConst) && (signLeft != signRight && signLeft != 0 && signRight != 0) ) {
                 action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
