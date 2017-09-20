@@ -40,7 +40,7 @@ public class Ev3RobProgramCheckVisitorTest {
 
         BrickCheckVisitor checkVisitor = new BrickCheckVisitor(makeConfiguration());
         checkVisitor.check(phrases);
-        Assert.assertEquals(5, checkVisitor.getWarningCount());
+        Assert.assertEquals(2, checkVisitor.getWarningCount());
 
     }
 }

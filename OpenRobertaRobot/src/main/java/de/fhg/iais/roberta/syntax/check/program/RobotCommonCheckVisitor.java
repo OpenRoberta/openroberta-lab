@@ -101,8 +101,10 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
         checkDiffDrive(driveAction);
         Expr<Void> speed = driveAction.getParam().getSpeed();
         speed.visit(this);
-        checkForZeroSpeed(speed, driveAction);
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
+        if ( duration != null ) {
+            checkForZeroSpeed(speed, driveAction);
+        }
         visitMotorDuration(duration);
         return null;
     }
@@ -112,8 +114,10 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
         checkDiffDrive(turnAction);
         Expr<Void> speed = turnAction.getParam().getSpeed();
         speed.visit(this);
-        checkForZeroSpeed(speed, turnAction);
         MotorDuration<Void> duration = turnAction.getParam().getDuration();
+        if ( duration != null ) {
+            checkForZeroSpeed(speed, turnAction);
+        }
         visitMotorDuration(duration);
         return null;
     }
@@ -127,8 +131,10 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         checkMotorPort(motorOnAction);
-        checkForZeroSpeed(motorOnAction.getParam().getSpeed(), motorOnAction);
         MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
+        if ( duration != null ) {
+            checkForZeroSpeed(motorOnAction.getParam().getSpeed(), motorOnAction);
+        }
         visitMotorDuration(duration);
         return null;
     }
@@ -170,8 +176,8 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
     @Override
     public Void visitCurveAction(CurveAction<Void> driveAction) {
         checkDiffDrive(driveAction);
-        checkForZeroSpeed(driveAction.getParamLeft().getSpeed(), driveAction);
-        checkForZeroSpeed(driveAction.getParamRight().getSpeed(), driveAction);
+        checkForZeroSpeedInCurve(driveAction.getParamLeft().getSpeed(), driveAction.getParamRight().getSpeed(), driveAction);
+
         return null;
     }
 
@@ -296,6 +302,19 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
             NumConst<Void> speedNumConst = (NumConst<Void>) speed;
             if ( Integer.valueOf(speedNumConst.getValue()) == 0 ) {
                 action.addInfo(NepoInfo.warning("MOTOR_SPEED_0"));
+                this.warningCount++;
+            }
+        }
+    }
+
+    private void checkForZeroSpeedInCurve(Expr<Void> speedLeft, Expr<Void> speedRight, Action<Void> action) {
+        if ( speedLeft.getKind().hasName("NUM_CONST") && speedRight.getKind().hasName("NUM_CONST") ) {
+            Double speedLeftNumConst = Double.valueOf(((NumConst<Void>) speedLeft).getValue());
+            Double speedRightNumConst = Double.valueOf(((NumConst<Void>) speedRight).getValue());
+            int signLeft = (int) Math.signum(speedLeftNumConst);
+            int signRight = (int) Math.signum(speedRightNumConst);
+            if ( speedLeftNumConst == speedRightNumConst && (signLeft != signRight && signLeft != 0 && signRight != 0) ) {
+                action.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
                 this.warningCount++;
             }
         }
