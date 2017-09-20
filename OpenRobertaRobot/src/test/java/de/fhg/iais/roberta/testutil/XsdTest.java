@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
-import de.fhg.iais.roberta.blockly.generatedForTest.Export;
+import de.fhg.iais.roberta.blockly.generated.Export;
 
 public class XsdTest {
     @Test
