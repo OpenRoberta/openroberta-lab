@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-09-17 08:27:13.428506",
+		"lastupdated": "2017-09-20 14:47:52.367823",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1199,5 +1199,6 @@
 	"SENSOR_ARM_TOOLTIP": "Returns true, if the selected part of the arm is touched, otherwise false.",
 	"SET_LED": "turn LED",
 	"CONNECTION_BOB3_RECEIVE_TOOLTIP": "Reads a message via the IR receiver. Only numbers can be received.",
-	"CONNECTION_BOB3_SEND_TOOLTIP": "Sends a message of type number to another Bob3. Hold the Bob3's face to face!"
+	"CONNECTION_BOB3_SEND_TOOLTIP": "Sends a message of type number to another Bob3. Hold the Bob3's face to face!",
+	"BLOCK_NOT_EXECUTED": "The exection of this block will have no effect!"
 }

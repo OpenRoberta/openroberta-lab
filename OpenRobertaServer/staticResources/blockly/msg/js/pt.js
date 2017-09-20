@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Representa a placa do Bot´n Roll com atuadores e sensores conectados. Estão disponiveis também atuadores e sensores embutidos, ex. botões, ecrã…";
 Blockly.Msg.AUTH = "Por favor autorize esta aplicação para permitir que o seu trabalho seja gravado e que o possa partilhar.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Obter a tensão atual da bateria.";
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "ambos";
 Blockly.Msg.BRICKLIGHT = "luz indicadora";
 Blockly.Msg.BRICKLIGHT_BLUE = "Azul";

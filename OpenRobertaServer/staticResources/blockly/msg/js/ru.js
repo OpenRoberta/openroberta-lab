@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Представляет плату Bot'n Roll c подключенными актюаторами и датчиками. Также доступны  встроенные акторы и датчики, такие как кнопки, дисплей и прочие.";
 Blockly.Msg.AUTH = "Пожалуйста, авторизуйте это приложение, чтоб можно было сохранять вашу работу и чтобы дать возможность вам делиться ей.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Возвращает текущий заряд батареи.";
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "Оба";
 Blockly.Msg.BRICKLIGHT = "Подсветка программного блока";
 Blockly.Msg.BRICKLIGHT_BLUE = "Синий";

@@ -370,6 +370,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
         this.userDefinedMethods.add(methodVoid);
+        methodVoid.getParameters().visit(this);
         methodVoid.getBody().visit(this);
         return null;
     }
@@ -377,6 +378,7 @@ public abstract class CheckVisitor implements AstLanguageVisitor<Void> {
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
         this.userDefinedMethods.add(methodReturn);
+        methodReturn.getParameters().visit(this);
         methodReturn.getBody().visit(this);
         methodReturn.getReturnValue().visit(this);
         return null;

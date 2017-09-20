@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Represents the Bot'n Roll board with connected actors and sensors. There are also inbuilt actors and sensors available, e.g. pushbuttons, display ...";  // untranslated
 Blockly.Msg.AUTH = "당신의 작업을 저장하고 다른 사람과 공유할 수 있도록 이 애플리케이션을 인증해 주십시오.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the battery.";  // untranslated
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "both";  // untranslated
 Blockly.Msg.BRICKLIGHT = "brick light";  // untranslated
 Blockly.Msg.BRICKLIGHT_BLUE = "blue";  // untranslated

@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Represents the Bot'n Roll board with connected actors and sensors. There are also inbuilt actors and sensors available, e.g. pushbuttons, display ...";
 Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the battery.";
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";
 Blockly.Msg.BOTH = "both";
 Blockly.Msg.BRICKLIGHT = "brick light";
 Blockly.Msg.BRICKLIGHT_BLUE = "blue";

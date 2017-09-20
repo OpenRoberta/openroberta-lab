@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Představuje desku Bot'n Roll s připojenými pohony a senzory. Jsou tam také dostupné zabudované pohony a senzory, například tlačítka, displej...";
 Blockly.Msg.AUTH = "Prosím udělte oprávnění této aplikaci aby jste mohli uložit a sdílet svou práci.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Vrátí aktuální napětí baterie.";
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "obě";
 Blockly.Msg.BRICKLIGHT = "LED na kostce";
 Blockly.Msg.BRICKLIGHT_BLUE = "modrá";

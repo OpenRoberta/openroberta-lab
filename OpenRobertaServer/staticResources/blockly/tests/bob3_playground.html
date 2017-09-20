@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 <script src="../blockly_compressed.js"></script>
-<script src="../msg/js/de.js"></script>
+<script src="../robMsg/robMessages.js"></script>	
+<script src="../msg/js/de.js"></script>		
 <script src="../core/blockly.js"></script>
 <script src="../core/css.js"></script>
 <script src="../core/inject.js"></script>
@@ -278,24 +279,24 @@ h1 {
       </block>
     </value>
   </block>
-  <block type="makeblockActions_leds_off" />
-  <block type="bob3Actions_set_led" />
+  <block type="makeblockActions_leds_off" ></block>
+  <block type="bob3Actions_set_led" ></block>
 </category>
 <category name="TOOLBOX_SENSOR" svg="true">
-  <block type="bob3Sensors_ambientlight" />
-  <block type='bob3Sensors_touch_getSample' />
-  <block type='bob3Sensors_temperature_getSample' />
-  <block type='bob3Sensors_getCode' />
-  <block type="robSensors_timer_getSample" />
-  <block type="robSensors_timer_reset" />
+  <block type="bob3Sensors_ambientlight" ></block>
+  <block type='bob3Sensors_touch_getSample' ></block>
+  <block type='bob3Sensors_temperature_getSample' ></block>
+  <block type='bob3Sensors_getCode' ></block>
+  <block type="robSensors_timer_getSample" ></block>
+  <block type="robSensors_timer_reset" ></block>
 </category>
 <category name="TOOLBOX_CONTROL" svg="true">
   <category name="TOOLBOX_DECISION" svg="true">
-    <block type="robControls_if" />
-    <block type="robControls_ifElse" />
+    <block type="robControls_if" ></block>
+    <block type="robControls_ifElse" ></block>
   </category>
   <category name="TOOLBOX_LOOP" svg="true">
-    <block type="robControls_loopForever" />
+    <block type="robControls_loopForever" ></block>
     <block type="controls_repeat_ext">
       <value name="TIMES">
         <block type="math_number">
@@ -303,7 +304,7 @@ h1 {
         </block>
       </value>
     </block>
-    <block type="controls_whileUntil" />
+    <block type="controls_whileUntil" ></block>
     <block type="robControls_for">
       <value name="FROM">
         <block type="math_number">
@@ -321,11 +322,11 @@ h1 {
         </block>
       </value>
     </block>
-    <block type="robControls_forEach" />
-    <block type="controls_flow_statements" />
+    <block type="robControls_forEach" ></block>
+    <block type="controls_flow_statements" ></block>
   </category>
   <category name="TOOLBOX_WAIT" svg="true">
-    <block type="robControls_wait" />
+    <block type="robControls_wait"  ></block>
     <block type="robControls_wait_time">
       <value name="WAIT">
         <block type="math_number">
@@ -337,10 +338,10 @@ h1 {
       <value name="WAIT0">
         <block type="logic_compare">
           <value name="A">
-            <block type="bob3Sensors_getSample_bob3" />
+            <block type="bob3Sensors_getSample_bob3" ></block>
           </value>
           <value name="B">
-            <block type="logic_boolean" />
+            <block type="logic_boolean" ></block>
           </value>
         </block>
       </value>
@@ -348,20 +349,20 @@ h1 {
   </category>
 </category>
 <category name="TOOLBOX_LOGIC" svg="true">
-  <block type="logic_compare" />
-  <block type="logic_operation" />
-  <block type="logic_negate" />
-  <block type="logic_boolean" />
-  <block type="logic_null" />
-  <block type="logic_ternary" />
+  <block type="logic_compare" ></block>
+  <block type="logic_operation" ></block>
+  <block type="logic_negate" ></block>
+  <block type="logic_boolean" ></block>
+  <block type="logic_null" ></block>
+  <block type="logic_ternary" ></block>
 </category>
 <category name="TOOLBOX_MATH" svg="true">
-  <block type="math_number" />
-  <block type="math_arithmetic" />
-  <block type="math_single" />
-  <block type="math_trig" />
-  <block type="math_constant" />
-  <block type="math_number_property" />
+  <block type="math_number" ></block>
+  <block type="math_arithmetic" ></block>
+  <block type="math_single" ></block>
+  <block type="math_trig" ></block>
+  <block type="math_constant" ></block>
+  <block type="math_number_property" ></block>
   <block type="robMath_change">
     <value name="DELTA">
       <block type="math_number">
@@ -369,9 +370,9 @@ h1 {
       </block>
     </value>
   </block>
-  <block type="math_round" />
-  <block type="math_on_list" />
-  <block type="math_modulo" />
+  <block type="math_round" ></block>
+  <block type="math_on_list" ></block>
+  <block type="math_modulo" ></block>
   <block type="math_constrain">
     <value name="LOW">
       <block type="math_number">
@@ -399,8 +400,8 @@ h1 {
   <block type="math_random_float" />
 </category>
 <category name="TOOLBOX_TEXT" svg="true">
-  <block type="text" />
-  <block type="robText_append" />
+  <block type="text" ></block>
+  <block type="robText_append" ></block>
 </category>
 <category name="TOOLBOX_LIST" svg="true">
   <block type="robLists_create_with">
@@ -408,20 +409,20 @@ h1 {
   </block>
   <block type="robLists_create_with">
     <value name="ADD0">
-      <block type="math_number" />
+      <block type="math_number" ></block>
     </value>
     <value name="ADD1">
-      <block type="math_number" />
+      <block type="math_number" ></block>
     </value>
     <value name="ADD2">
-      <block type="math_number" />
+      <block type="math_number" ></block>
     </value>
   </block>
-  <block type="robLists_length" />
-  <block type="robLists_isEmpty" />
-  <block type="robLists_indexOf" />
-  <block type="robLists_getIndex" />
-  <block type="robLists_setIndex" />
+  <block type="robLists_length" ></block>
+  <block type="robLists_isEmpty" ></block>
+  <block type="robLists_indexOf" ></block>
+  <block type="robLists_getIndex" ></block>
+  <block type="robLists_setIndex" ></block>
 </category>
 <category name="TOOLBOX_COLOUR" svg="true">
   <block type="robColour_picker">
@@ -482,15 +483,12 @@ h1 {
     <field name="COLOUR">#000000</field>
   </block>
 </category>
-<category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" />
-<category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true" />
+<category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" ></category>
+<category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true" ></category>
 <category name="TOOLBOX_COMMUNICATION" svg="true">
-  <block type="bob3Communication_sendBlock" />
-  <block type="bob3Communication_receiveBlock" />
+  <block type="bob3Communication_sendBlock" ></block>
+  <block type="bob3Communication_receiveBlock" ></block>
 </category>
-
-
-<category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true" />
 </toolbox_set>
 
   <h1>Blockly Playground</h1>

@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Reprezentuje Bot'n Roll z podłączonymi aktorami i czujnikami. Są również dostępne wbudowane czujniki i aktorzy, na przykład przyciski, wyświetlacz ...";
 Blockly.Msg.AUTH = "Autoryzuj ten program, aby można było zapisać Twoją pracę i umożliwić Ci dzielenie się nią z innymi.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Pobiera aktualne napięcie z baterii";
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "obie";
 Blockly.Msg.BRICKLIGHT = "kolcek światła";
 Blockly.Msg.BRICKLIGHT_BLUE = "niebieski";

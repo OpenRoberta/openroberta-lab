@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analogen";
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Block für das Bot'n Roll board mit den angeschlossenen Aktoren und Sensoren. Es gibt auch weitere eingebaute Aktoren und Sensoren, wie z. B. das Display, die Tasten ...";
 Blockly.Msg.AUTH = "Bitte autorisiere diese App zum Aktivieren der Speicherung deiner Arbeit und zum Teilen.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the battery.";  // untranslated
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "beide";
 Blockly.Msg.BRICKLIGHT = "Statusleuchte";
 Blockly.Msg.BRICKLIGHT_BLUE = "blau";

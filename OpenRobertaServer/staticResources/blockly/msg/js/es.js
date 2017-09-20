@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Representa un tablero de Bot 'n Roll con actuadores y sensores conectados. Tabién hay actuadores y sensores internos disponibles, como teclas, la pantalla, ...";
 Blockly.Msg.AUTH = "Autoriza a esta aplicación para guardar tu trabajo y permitir que lo compartas.";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Obtiene el voltaje actual de la batería";
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "ambos";
 Blockly.Msg.BRICKLIGHT = "Luz del ladrillo EV3";
 Blockly.Msg.BRICKLIGHT_BLUE = "azul";

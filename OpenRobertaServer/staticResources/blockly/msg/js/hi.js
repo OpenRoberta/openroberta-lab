@@ -17,6 +17,7 @@ Blockly.Msg.ANALOG = "analog";  // untranslated
 Blockly.Msg.ARDUBRICK_TOOLTIP = "Represents the Bot'n Roll board with connected actors and sensors. There are also inbuilt actors and sensors available, e.g. pushbuttons, display ...";  // untranslated
 Blockly.Msg.AUTH = "अपने कार्य को सहेजना सक्षम करने और अपने साथ इसे साझा करने हेतु कृपया इस एप्प को अधिकृत करें।";
 Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Gets the current voltage from the battery.";  // untranslated
+Blockly.Msg.BLOCK_NOT_EXECUTED = "The exection of this block will have no effect!";  // untranslated
 Blockly.Msg.BOTH = "both";  // untranslated
 Blockly.Msg.BRICKLIGHT = "brick light";  // untranslated
 Blockly.Msg.BRICKLIGHT_BLUE = "blue";  // untranslated
