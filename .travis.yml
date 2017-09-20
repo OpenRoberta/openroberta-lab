@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
 
 before_script:
-- ./ora.sh --reset-db
+- yes yes | ./ora.sh --reset-db
 - cd OpenRobertaParent
 
 after_success:
