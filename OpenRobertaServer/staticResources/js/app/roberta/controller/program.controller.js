@@ -127,6 +127,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
 		            if (result.rc === 'ok') {
 		                GUISTATE_C.setProgramTimestamp(result.lastChanged);
 		                GUISTATE_C.setProgramSaved(true);
+		                GUISTATE_C.setConfigurationSaved(true);
 		                LOG.info('save program ' + GUISTATE_C.getProgramName());
 		            }
 		            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, GUISTATE_C.getProgramName());

@@ -69,14 +69,14 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
         }, 'tabConfiguration clicked');
 
         $('#tabConfiguration').on('hide.bs.tab', function(e) {
-        	e.preventDefault();
-        	console.log('!!!: hide');
-        	$('#confirmContinue').removeData();
-            $('#confirmContinue').data('type', 'switchConfig2Program');
-            // $('#confirmContinue').data('opt_callback', opt_callback);
-            MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
-        	// $('#tabConfiguration').trigger('click');
-        	return false;
+//        	e.preventDefault();
+//        	console.log('!!!: hide');
+//        	$('#confirmContinue').removeData();
+//            $('#confirmContinue').data('type', 'switchConfig2Program');
+//            // $('#confirmContinue').data('opt_callback', opt_callback);
+//            MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
+//        	// $('#tabConfiguration').trigger('click');
+//        	return false;
 
             var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
             var xml = Blockly.Xml.domToText(dom);
@@ -98,7 +98,8 @@ define([ 'exports', 'log', 'util', 'comm', 'message', 'guiState.controller', 'bl
                 if (bricklyWorkspace.getAllBlocks().length === 0) {
                     newConfiguration(true);
                 }
-            }
+            }            
+            
         });
     }
 

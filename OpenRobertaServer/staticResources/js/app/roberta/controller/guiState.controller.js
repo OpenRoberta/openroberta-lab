@@ -92,15 +92,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.isConfigurationStandard = isConfigurationStandard;
 
     function getConfigurationStandardName() {
-    	return getRobotGroup().toUpperCase() + 'basis';
+        return getRobotGroup().toUpperCase() + 'basis';
     }
     exports.getConfigurationStandardName = getConfigurationStandardName;
-    
+
     function isConfigurationAnonymous() {
-    	return GUISTATE.configuration.name == '';
+        return GUISTATE.configuration.name == '';
     }
     exports.isConfigurationAnonymous = isConfigurationAnonymous;
-    
+
     function setState(result) {
         if (result['server.version']) {
             GUISTATE.server.version = result['server.version'];
@@ -478,24 +478,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getRobotVersion = getRobotVersion;
 
     function setView(view) {
-    	console.log(GUISTATE.gui.view + ' -> ' + view);
+        console.log(GUISTATE.gui.view + ' -> ' + view);
+        $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
+        $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
-        $('#head-navigation-program-edit > ul > li').removeClass('disabled');
-        $('#head-navigation-configuration-edit > ul > li').removeClass('disabled');
-        $('.nav > li > ul').removeClass('disabled');
-        $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
-        if (isUserLoggedIn()) {
-            $('.nav > li > ul > .logout').addClass('disabled');
-            if (isProgramSaved()) {
-                $('#menuSaveProg').parent().addClass('disabled');
-            }
-            if (isConfigurationSaved()) {
-                $('#menuSaveConfig').parent().addClass('disabled');
-            }
-        } else {
-            $('.nav > li > ul > .login').addClass('disabled');
-        }
         if (!isRobotConnected()) {
             $('#menuRunProg').parent().addClass('disabled');
             getBlocklyWorkspace().robControls.disable('runOnBrick');
@@ -511,8 +498,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuTabConfiguration').parent().removeClass('disabled');
             $('#menuTabProgram').parent().addClass('disabled');
         } else {
-            $('#head-navigation-program-edit > ul > li').addClass('disabled');
-            $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
+            $('#head-navi-tooltip-program').attr('data-toggle', '');
+            $('#head-navi-tooltip-configuration').attr('data-toggle', '');
         }
     }
 
@@ -564,6 +551,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
                 $('#menuSaveProg').parent().removeClass('disabled');
                 getBlocklyWorkspace().robControls.enable('saveProgram');
             } else {
+                $('#menuSaveProg').parent().removeClass('disabled');
                 $('#menuSaveProg').parent().addClass('disabled');
                 getBlocklyWorkspace().robControls.disable('saveProgram');
             }
@@ -584,11 +572,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             getBricklyWorkspace().robControls.disable('saveProgram');
 
         } else {
-            if (isUserLoggedIn() && !isConfigurationStandard()) {
+            if (isUserLoggedIn() && !isConfigurationStandard() && !isConfigurationAnonymous()) {
                 $('#menuSaveConfig').parent().removeClass('disabled');
                 getBricklyWorkspace().robControls.enable('saveProgram');
             } else {
+                $('#menuSaveConfig').parent().removeClass('disabled');
                 $('#menuSaveConfig').parent().addClass('disabled');
+                getBricklyWorkspace().robControls.disable('saveProgram');
             }
         }
         GUISTATE.configuration.saved = save;
@@ -645,20 +635,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         GUISTATE.program.name = name;
     }
     exports.setProgramName = setProgramName;
-
-    /*
-     * function getSocketPorts() { return GUISTATE.socket.portNames; }
-     * exports.getSocketPorts = getSocketPorts;
-     * 
-     * function setSocketPorts(ports) { GUISTATE.socket.portNames = ports; }
-     * exports.setSocketPorts = setSocketPorts;
-     * 
-     * function getSocketVendorIds() { return GUISTATE.socket.vendorIds; }
-     * exports.getSocketVendorIds = getSocketVendorIds;
-     * 
-     * function setSocketVendorIds(vendorIds) { GUISTATE.socket.vendorIds =
-     * vendorIds; } exports.setSocketVendorIds = setSocketVendorIds;
-     */
 
     function getConfigurationName() {
         return GUISTATE.configuration.name;
@@ -762,12 +738,12 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         return !GUISTATE.gui.cookie;
     }
     exports.noCookie = noCookie;
-    
+
     function getStartWithTour() {
         return GUISTATE.gui.startWithTour;
     }
     exports.getStartWithTour = getStartWithTour;
-    
+
     function setStartWithTour() {
         return GUISTATE.gui.startWithTour = true;
     }
@@ -852,6 +828,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             GUISTATE.program.shared = result.programShared;
             GUISTATE.program.timestamp = result.lastChanged;
             setProgramSaved(true);
+            setConfigurationSaved(true);
             var name = result.name;
             if (opt_owner) {
                 if (opt_owner === 'Gallery' && GUISTATE.program.shared == 'X_WRITE') { // user has uploaded this program to the gallery
@@ -886,6 +863,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             GUISTATE.configuration.name = result.name;
             GUISTATE.configuration.timestamp = result.lastChanged;
             setConfigurationSaved(true);
+            setProgramSaved(false);
             $('#tabConfigurationName').html(result.name);
         }
     }
