@@ -226,18 +226,20 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                     this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar())).append(" ");
                     this.sb.append("__");
                 }
-                this.sb.append(var.getName()).append(var.getTypeVar().isArray() ? "[]" : "").append(" = ");
+                this.sb.append(var.getName());
+                this.sb.append(var.getTypeVar().isArray() ? "[]" : "");
+                this.sb.append(" = ");
                 var.getValue().visit(this);
                 this.sb.append(";");
                 if ( var.getTypeVar().isArray() ) {
                     nlIndent();
-                    this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
-                    incrIndentation();
-                    nlIndent();
-                    this.sb.append(var.getName()).append("[i] = __" + var.getName() + "[i];");
-                    decrIndentation();
-                    nlIndent();
-                    this.sb.append("}");
+                    //this.sb.append("for(int i = 0; i < ArrayLen(" + var.getName() + "); i++) {");
+                    //incrIndentation();
+                    //nlIndent();
+                    this.sb.append(var.getName()).append(" = __" + var.getName() + ";");
+                    //decrIndentation();
+                    //nlIndent();
+                    //this.sb.append("}");
                 }
             }
         }
@@ -253,7 +255,10 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             ListCreate<Void> list = var.getValue().getKind().hasName("EMPTY_EXPR") ? null : (ListCreate<Void>) var.getValue();
             this.sb.append(var.getValue().getKind().hasName("EMPTY_EXPR") ? "" : list.getValue().get().size());
             this.sb.append("]");
-        }
+        } // else if ( var.getTypeVar().toString().equals("ARRAY_STRING") ) {
+          //    this.sb.append("[] = ");
+          //    var.getValue().visit(this);
+          //}
         return null;
     }
 
@@ -414,6 +419,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 }
                 break;
             case CAPTURED_TYPE:
+                System.out.println(showTextAction.getMsg());
                 if ( showTextAction.getMsg().toString().contains("Number")
                     || showTextAction.getMsg().toString().contains("ADD")
                     || showTextAction.getMsg().toString().contains("MINUS")
@@ -424,7 +430,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 } else if ( showTextAction.getMsg().toString().contains("String") ) {
                     methodName = "TextOut";
                 } else {
-                    methodName = "BoolOut";
+                    methodName = "TextOut";
                 }
                 break;
             default:
@@ -945,11 +951,11 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             this.tmpArrCount += 1;
             this.sb.append("__tmpArr" + this.tmpArrCount);
         } else {*/
-        listSetIndex.getParam().get(1).visit(this);
+        listSetIndex.getParam().get(2).visit(this);
         //}
         this.sb.append("]");
         this.sb.append(" = ");
-        listSetIndex.getParam().get(2).visit(this);
+        listSetIndex.getParam().get(1).visit(this);
         this.sb.append(";");
         return null;
     }

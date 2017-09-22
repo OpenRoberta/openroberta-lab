@@ -527,8 +527,7 @@ public class NxcVisitorTest {
             + "float item2[3];"
             + "task main() {"
             + "float __item2[] = {0, 0, 0};"
-            + "for(int i = 0; i < ArrayLen(item2); i++) {"
-            + "item2[i] = __item2[i];}"
+            + "item2=__item2;"
             + MASMETHOD
             + "while (true) {"
             + "if (30 == 20) {"
