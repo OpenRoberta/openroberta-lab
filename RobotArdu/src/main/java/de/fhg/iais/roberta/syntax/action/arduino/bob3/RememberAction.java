@@ -66,7 +66,7 @@ public class RememberAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> code = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, BlocklyType.NUMBER));
+        Phrase<V> code = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER));
         return RememberAction.make(helper.convertPhraseToExpr(code), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -74,7 +74,7 @@ public class RememberAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, this.code);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.code);
         return jaxbDestination;
 
     }

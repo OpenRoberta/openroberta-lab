@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-09-20 15:01:09.797482",
+		"lastupdated": "2017-09-22 11:51:20.005906",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1200,5 +1200,8 @@
 	"SET_LED": "turn LED",
 	"CONNECTION_BOB3_RECEIVE_TOOLTIP": "Reads a message via the IR receiver. Only numbers can be received.",
 	"CONNECTION_BOB3_SEND_TOOLTIP": "Sends a message of type number to another Bob3. Hold the Bob3's face to face!",
-	"BLOCK_NOT_EXECUTED": "The exection of this block will have no effect!"
+	"BLOCK_NOT_EXECUTED": "The exection of this block will have no effect!",
+	"BOB3_RECALL_NUMBER": "recall number",
+	"BOB3_REMEMBER_NUMBER": "remember number",
+	"BOB3_SAVENUMBER_TOOLTIP": "Numbers must be integral values in the range of 0 to 255"
 }

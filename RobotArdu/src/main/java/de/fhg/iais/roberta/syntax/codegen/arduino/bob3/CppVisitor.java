@@ -501,15 +501,15 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitRememberAction(RememberAction<Void> rememberAction) {
-        this.sb.append("remember(");
+        this.sb.append("remember((int)(");
         rememberAction.getCode().visit(this);
-        this.sb.append(");");
+        this.sb.append("));");
         return null;
     }
 
     @Override
     public Void visitRecallAction(RecallAction<Void> recallAction) {
-        this.sb.append("recall();");
+        this.sb.append("recall()");
         return null;
     }
 }
