@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-09-22 11:51:20.005906",
+		"lastupdated": "2017-09-22 15:17:10.752948",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1203,5 +1203,7 @@
 	"BLOCK_NOT_EXECUTED": "The exection of this block will have no effect!",
 	"BOB3_RECALL_NUMBER": "recall number",
 	"BOB3_REMEMBER_NUMBER": "remember number",
-	"BOB3_SAVENUMBER_TOOLTIP": "Numbers must be integral values in the range of 0 to 255"
+	"BOB3_SAVENUMBER_TOOLTIP": "Numbers must be integral values in the range of 0 to 255",
+	"NAO_RECOGNIZEWORD": "recognize word from list",
+	"NAO_RECOGNIZEWORD_TOOLTIP": "Return a word from the given list when recognized by NAO"
 }
