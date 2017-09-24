@@ -26,8 +26,6 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class ProgramProcessor extends AbstractProcessor {
     public ProgramProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
@@ -265,16 +263,19 @@ public class ProgramProcessor extends AbstractProcessor {
             Robot robot = robotDao.loadRobot(robotName);
             User author = userDao.get(authorId);
             String confHash;
-            if ( configText == null ) { // default configuration
-                if ( configName != null ) {
-                    throw new DbcException("if configText is missing, a configName is illegal");
+            if ( configName == null && configText == null ) { // default configuration
+                confHash = null;
+            } else if ( configName == null && configText != null ) { // anonymous configuration
+                confHash = confDao.persistConfigurationHash(configText);
+            } else if ( configName != null && configText == null ) { // named configuration (must be persisted already! Check that!)
+                if ( confDao.load(configName, author, robot) == null ) {
+                    setError(Key.SERVER_ERROR);
+                    return null;
                 }
                 confHash = null;
-            } else if ( configName == null ) { // anonymous configuration
-                confHash = confDao.persistConfigurationHash(configText);
-            } else { // configuration with user-supplied name
-                Assert.isTrue(confDao.persistConfigurationText(configName, user, robot, configText, true));
-                confHash = null;
+            } else { // illegal call (frontend error)
+                setError(Key.SERVER_ERROR);
+                return null;
             }
             Pair<Key, Program> result;
             if ( isOwner ) {

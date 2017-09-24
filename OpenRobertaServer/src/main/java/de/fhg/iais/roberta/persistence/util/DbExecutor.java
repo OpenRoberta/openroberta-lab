@@ -30,8 +30,7 @@ public class DbExecutor {
 
     /**
      * execute the sql statements found in a resource. Check if the execution is necessary. It not, return. After loading, check if the execution was
-     * successful.
-     * If not, throw an exception.
+     * successful. If not, throw an exception.
      *
      * @param sqlResource contains SQL statements separated by a semicolon AT THE END of a LINE.
      * @param sqlPositiveIfSqlFileAlreadyLoaded sql returning positive number if sql file has already been loaded. May be null. Executed before loading.
@@ -133,7 +132,7 @@ public class DbExecutor {
         List<Object> resultSet = this.session.createSQLQuery(sqlStmt).list();
         Assert.isTrue(resultSet.size() == 1, "result set should contain 1 row, but contains " + resultSet.size() + " rows");
         Object result = resultSet.get(0);
-        DbExecutor.LOG.debug(result.toString());
+        DbExecutor.LOG.debug(result == null ? "null" : result.toString());
         return result;
     }
 

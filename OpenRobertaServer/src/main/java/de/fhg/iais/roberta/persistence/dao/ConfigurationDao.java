@@ -70,11 +70,12 @@ public class ConfigurationDao extends AbstractDao<Program> {
     }
 
     /**
-     * load a configuration from the database, identified by its owner and its name (both make up the "business" key of a configuration)
+     * load a configuration from the database, identified by its name, its owner and the robot it is usable for (these make up the "business" key of a
+     * configuration)
      *
-     * @param robot
-     * @param projectName the project, never null
-     * @param programName the name of the program, never null
+     * @param name the name of the configuration, never null
+     * @param user the owner of the configuration, never null
+     * @param robot the robot this configuration is usable for
      * @return the configuration, null if the configuration is not found
      */
     public Configuration load(String name, User user, Robot robot) {
