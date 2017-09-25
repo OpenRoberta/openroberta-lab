@@ -89,8 +89,8 @@ import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
-public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>, AstActorDisplayVisitor<V>,
-    AstActorMotorVisitor<V>, AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
+public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>, AstSensorsVisitor<V>, AstActorCommunicationVisitor<V>,
+    AstActorDisplayVisitor<V>, AstActorMotorVisitor<V>, AstActorLightVisitor<V>, AstActorSoundVisitor<V> {
     protected int loopsCounter = 0;
     protected int currentLoop = 0;
     protected int stmtsNumber = 0;
@@ -279,6 +279,9 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
                 break;
             case ARRAY_BOOLEAN:
                 this.sb.append("createConstant(CONST.ARRAY_BOOLEAN, [createConstant(CONST.BOOLEAN, false)])");
+                break;
+            case ARRAY_CONNECTION:
+                this.sb.append("createConstant(CONST.ARRAY_CONNECTION, [createConstant(CONST.CONNECTION, false)])");
                 break;
             case ARRAY_STRING:
                 this.sb.append("createConstant(CONST.ARRAY_STRING, [createConstant(CONST.STRING, '')])");

@@ -62,7 +62,7 @@ public enum BlocklyType {
     NOTHING("", false,REF, PRIM),
     VOID("",false),
     CONNECTION("Connection",false, ANY),
-    CAPTURED_TYPE("",false), R("",false), S("",false), T("",false);
+    CAPTURED_TYPE("",false), R("",false), S("",false), T("",false), ARRAY_CONNECTION("Array_Connection",true, COMPARABLE);
     // @formatter:on
 
     private final String blocklyName;

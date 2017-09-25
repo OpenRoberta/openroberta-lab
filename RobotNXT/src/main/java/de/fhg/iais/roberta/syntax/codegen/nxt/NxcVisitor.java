@@ -884,6 +884,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         }
         switch ( arrayType ) {
             case NUMBER:
+            case ARRAY_CONNECTION:
             case ARRAY_NUMBER:
                 methodName += "Num(";
                 break;
@@ -1259,6 +1260,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 return "string";
             case ARRAY_BOOLEAN:
                 return "bool";
+            case ARRAY_CONNECTION:
+                return "int";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
