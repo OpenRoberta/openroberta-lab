@@ -97,7 +97,7 @@ public class ListGetIndex<V> extends Function<V> {
 
     @Override
     public BlocklyType getReturnType() {
-        return BlocklyType.CAPTURED_TYPE;
+        return this.param.get(0).getVarType();
     }
 
     @Override

@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -393,9 +394,11 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         String methodName;
         switch ( showTextAction.getMsg().getVarType() ) {
+            case ARRAY_STRING:
             case STRING:
                 methodName = "TextOut";
                 break;
+            case ARRAY_BOOLEAN:
             case BOOLEAN:
                 methodName = "BoolOut";
                 break;
@@ -403,32 +406,39 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
                 methodName = "ColorOut";
                 break;
             case NOTHING:
-                switch ( showTextAction.getMsg().getProperty().getBlockType() ) {
-                    case "robSensors_key_isPressed":
-                    case "robSensors_touch_isPressed":
-                        methodName = "BoolOut";
-                        break;
-                    case "robSensors_colour_getSample":
-                        if ( showTextAction.getMsg().toString().indexOf("mode=COLOUR") != -1 ) {
-                            methodName = "ColorOut";
-                            break;
-                        }
-                    default:
-                        methodName = "NumOut";
-                        break;
+                if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("isPressed") ) {
+                    methodName = "BoolOut";
+                } else if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("colour") ) {
+                    methodName = "ColorOut";
+                } else if ( showTextAction.getMsg().getProperty().getBlockType().toString().contains("robSensors") ) {
+                    methodName = "NumOut";
+                } else {
+                    methodName = "TextOut";
                 }
                 break;
             case CAPTURED_TYPE:
-                System.out.println(showTextAction.getMsg());
                 if ( showTextAction.getMsg().toString().contains("Number")
                     || showTextAction.getMsg().toString().contains("ADD")
                     || showTextAction.getMsg().toString().contains("MINUS")
                     || showTextAction.getMsg().toString().contains("MULTIPLY")
                     || showTextAction.getMsg().toString().contains("DIVIDE")
-                    || showTextAction.getMsg().toString().contains("MOD") ) {
+                    || showTextAction.getMsg().toString().contains("MOD")
+                    || showTextAction.getMsg().toString().contains("LISTS_LENGTH")
+                    || showTextAction.getMsg().toString().contains("IndexOfFunct")
+                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
+                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION") ) {
                     methodName = "NumOut";
-                } else if ( showTextAction.getMsg().toString().contains("String") ) {
-                    methodName = "TextOut";
+                } else if ( showTextAction.getMsg().toString().contains("EQ")
+                    || showTextAction.getMsg().toString().contains("NEQ")
+                    || showTextAction.getMsg().toString().contains("LT")
+                    || showTextAction.getMsg().toString().contains("LTE")
+                    || showTextAction.getMsg().toString().contains("GT")
+                    || showTextAction.getMsg().toString().contains("GTE")
+                    || showTextAction.getMsg().toString().contains("LIST_IS_EMPTY")
+                    || showTextAction.getMsg().toString().contains("AND")
+                    || showTextAction.getMsg().toString().contains("OR")
+                    || showTextAction.getMsg().toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN") ) {
+                    methodName = "BoolOut";
                 } else {
                     methodName = "TextOut";
                 }

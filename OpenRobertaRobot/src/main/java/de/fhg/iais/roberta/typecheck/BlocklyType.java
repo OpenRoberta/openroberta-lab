@@ -50,7 +50,8 @@ public enum BlocklyType {
     ARRAY_STRING("Array_String", true,COMPARABLE),
     ARRAY_COLOUR("Array_Colour", true,COMPARABLE),
     ARRAY_BOOLEAN("Array_Boolean", true,COMPARABLE),
-    ARRAY_IMAGE("Array_Image", true,COMPARABLE),
+    ARRAY_IMAGE("Array_Image", true, COMPARABLE),
+    ARRAY_CONNECTION("Array_Connection", true, COMPARABLE),
     BOOLEAN("Boolean", false,COMPARABLE),
     NUMBER("Number", false,COMPARABLE, ADDABLE), NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
     STRING("String", false,COMPARABLE, ADDABLE),
@@ -59,10 +60,10 @@ public enum BlocklyType {
     PREDEFINED_IMAGE("PredefinedImage", false, ANY),
     NULL("", false,STRING, COLOR),
     REF("", false,NULL), PRIM("",false, NUMBER, BOOLEAN),
-    NOTHING("", false,REF, PRIM),
+    NOTHING("", false, REF, PRIM),
     VOID("",false),
     CONNECTION("Connection",false, ANY),
-    CAPTURED_TYPE("",false), R("",false), S("",false), T("",false), ARRAY_CONNECTION("Array_Connection",true, COMPARABLE);
+    CAPTURED_TYPE("",false), R("",false), S("",false), T("",false);
     // @formatter:on
 
     private final String blocklyName;
