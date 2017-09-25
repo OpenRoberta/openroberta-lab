@@ -1,0 +1,279 @@
+#! /bin/sh
+# run this command with 7 parameters the mode the AP name/address
+# IP address, the netmask, broadcast, gateway, dns server and domain.
+# if any is missing a default will be read from the file system
+. /etc/default/lejos
+. ${LEJOS_HOME}/bin/funcs.sh
+
+# local functions
+writeDHCPConf()
+{
+  echo interface br0 > ${LJBIN}/udhcpd.conf
+  echo start $1 >> ${LJBIN}/udhcpd.conf
+  echo end $2 >> ${LJBIN}/udhcpd.conf
+  echo opt subnet $3 >> ${LJBIN}/udhcpd.conf
+  echo opt broadcast $4 >> ${LJBIN}/udhcpd.conf
+  if [ $5 != "0.0.0.0" ]; then
+    echo opt router $5 >> ${LJBIN}/udhcpd.conf
+  fi
+  if [ $6 != "0.0.0.0" ]; then
+    echo opt dns $6 >> ${LJBIN}/udhcpd.conf
+  fi
+  if [ -n "$7" ]; then
+    echo opt domain $7 >> ${LJBIN}/udhcpd.conf
+  fi
+  echo pidfile /var/run/pandhcp.pid >> ${LJBIN}/udhcpd.conf
+}
+
+stopServices()
+{
+  log "Stop services"
+  pand --killall
+  if [ -f /var/run/pandhcp.pid ]; then
+    kill `cat /var/run/pandhcp.pid`
+  fi
+  killall pand 2> /dev/null
+  # give things time to notice they have gone
+  sleep 2
+  # drop any stale address
+  ifconfig br0 0.0.0.0
+}
+
+configureBridge()
+{
+  if [ $3 = "0.0.0.0" ]; then
+    ifconfig br0 $1 netmask $2
+  else
+    ifconfig br0 $1 netmask $2 broadcast $3
+  fi
+}
+
+showStatus()
+{
+  if [ $persist = "Y" ]; then
+    return
+  fi
+  count=20
+  while [ $count -gt 0 ]; do
+    log "Searching: $count"
+    state=`pand --show 2> /dev/null`
+    case $state in
+      "")
+        let count=count-1
+        ;;
+      *)
+        addr=${state:6:17}
+	log "Connect $addr"
+        return
+        ;;
+    esac
+    sleep 1
+  done
+  warning "No access point"
+  exit 1
+}
+
+runDHCP()
+{
+  log "Request address"
+  ifconfig br0 0.0.0.0
+  udhcpc --background --retries=4 --timeout=2 -i br0 -h ${hostname} --pidfile /var/run/pandhcp.pid > /dev/null &
+  if [ $persist = "Y" ]; then
+    return
+  fi
+  count=20
+  while [ $count -gt 0 ]; do
+    log "Waiting: $count"
+    state=`ifconfig br0 | grep "inet" 2> /dev/null`
+    if [ "$state" != "" ]; then
+      state=`expr match "$state" '.*addr:\(.*\..*\..*\..*\)  Bcast.*'`
+      log "IP $state"
+      return
+    fi
+    let count=count-1
+    sleep 1
+  done
+  warning "Failed to get IP"
+  if [ -f /var/run/pandhcp.pid ]; then
+    kill `cat /var/run/wifidhcp.pid`
+  fi
+  exit 1
+}
+
+setGateway()
+{
+  if [ $1 != "0.0.0.0"  ]; then
+    route add default gw $1 br0
+  fi
+}
+
+log "Configure PAN"
+LJBIN=${LEJOS_HOME}/bin
+IFS=' ' read mode apname apaddress ipaddress netmask broadcast gateway dns service persist < ${LEJOS_HOME}/config/pan.config 2> /dev/null
+#echo $mode $service $persist
+#echo ip $ipaddress mask $netmask bcast $broadcast gw $gateway dns $dns
+# turn off globing to avoid issues with the "*" in apaddress etc.
+set -f
+# set default values if not on command line
+mode=${1:-$mode}
+mode=${mode:-AP}
+apname=${2:-$apname}
+apname=${apname:-"\*"}
+apaddress=${3:-$apaddress}
+apaddress=${apaddress:-"\*"}
+ipaddress=${4:-$ipaddress}
+ipaddress=${ipaddress:-0.0.0.0}
+netmask=${5:-$netmask}
+netmask=${netmask:-0.0.0.0}
+broadcast=${6:-$broadcast}
+broadcast=${broadcast:-0.0.0.0}
+gateway=${7:-$gateway}
+gateway=${gateway:-0.0.0.0}
+dns=${8:-$dns}
+dns=${dns:-0.0.0.0}
+#echo mode $mode apname "$apname" apaddress "$apaddress" ip $ipaddress mask $netmask gw $gateway dns $dns > /panlog
+hostname=`hostname`
+#echo host $hostname mode $mode
+
+if [ $netmask = "0.0.0.0" ]; then
+  netmask=255.255.255.0
+fi
+#echo netmask $netmask
+log "Mode: $mode"
+
+
+# validate the address
+if [ $ipaddress = "0.0.0.0" ]; then
+  case $mode in
+    "AP"|"AP+")
+      warning "Invalid address"
+      exit
+      ;;
+  esac
+fi
+
+# setup paremeters for access point modes
+apaddr=`expr match "$ipaddress" '.*\.\(.*\)'`
+apnet=`expr match "$ipaddress" '\(.*\)\..*'`
+#echo ap $apaddr
+#echo apnet $apnet 
+ifnetmask=$netmask
+
+file="/var/run/bootlock"
+if [ ! -e "$file" ]
+then
+  stopServices
+fi
+# configure access point specific settings
+case $mode in
+  "AP+")
+    log "Start AP+"
+    # set global defaults for unspecified values
+    if [ $dns = "0.0.0.0" ]; then
+      dns=
+      domain=
+      while read k1 v1;
+      do
+        case "$k1" in
+          "search")
+            domain=${domain:-$v1};;
+          "nameserver")
+            dns=${dns:-$v1};;
+        esac 
+      done < /etc/resolv.conf
+    fi
+
+#echo dns $dns domain $domain
+    if [ $gateway = "0.0.0.0" ]; then
+      route -n > /tmp/tmproute
+      while read dest gw ignore;
+      do
+        if [ $dest = "0.0.0.0" ]; then
+          gateway=$gw
+          break
+        fi
+      done < /tmp/tmproute
+      rm /tmp/tmproute
+    fi
+#echo gateway $gateway
+    # extract base address and validate it is start of pico sub net
+    picomask=240
+    apmask=`expr match "$netmask" '\(.*\)\..*'`
+    maskaddr=$(( ~$picomask & $apaddr ))
+    #echo maskaddr $maskaddr
+    if [ $maskaddr != "0" ]; then
+      warning "Invalid AP subnet"
+      exit
+    fi
+    ifnetmask="$apmask.$picomask"
+    bcast=$(( $apaddr + 15 ))
+    
+    startaddr="$apnet.$(($apaddr + 1))"
+    endaddr="$apnet.$(($apaddr + 14))"
+    if [ $broadcast = "0.0.0.0" ]; then
+      dhcpbcast="$apnet.$bcast"
+    else
+      dhcpbcast=$broadcast
+    fi
+    hciconfig hci0 lm master
+    writeDHCPConf "$startaddr" "$endaddr" "$netmask" "$dhcpbcast" "$gateway" "$dns" "$domain"
+    configureBridge "$ipaddress" "$ifnetmask" "0.0.0.0"
+    # turn on forwarding
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    # and arp forwarding
+    echo 1 > /proc/sys/net/ipv4/conf/br0/proxy_arp
+    echo 1 > /proc/sys/net/ipv4/conf/wlan0/proxy_arp
+    udhcpd ${LJBIN}/udhcpd.conf
+    pand --listen --role NAP --devup ${LJBIN}/btup --devdown ${LJBIN}/btdown
+    ;;
+  "AP")
+    log "Start AP"
+    startaddr="$apnet.$(($apaddr + 1))"
+    endaddr="$apnet.$(($apaddr + 16))"
+    if [ $broadcast = "0.0.0.0" ]; then
+      dhcpbcast="$apnet.255"
+    else
+      dhcpbcast=$broadcast
+    fi
+    hciconfig hci0 lm master
+    writeDHCPConf "$startaddr" "$endaddr" "$netmask" "$dhcpbcast" "$gateway" "$dns" "$domain"
+    configureBridge "$ipaddress" "$netmask" "0.0.0.0"
+    udhcpd ${LJBIN}/udhcpd.conf
+    pand --listen --role NAP --devup ${LJBIN}/btup --devdown ${LJBIN}/btdown
+    ;;
+  "NONE")
+    ;;
+  "USB")
+    log "Start USB client"
+    if [ $ipaddress != 0.0.0.0 ]; then
+      configureBridge "$ipaddress" "$netmask" "$broadcast"
+      setGateway "$gateway"
+    else
+      runDHCP
+    fi
+    ;;
+  "BT")
+    hciconfig hci0 lm none
+    if [ $persist = "Y" ]; then
+      extra="--persist 10"
+    else
+      extra=""
+    fi
+    if [ $apaddress = "*" ]; then
+      log "Find access point"
+      pand --auth --role PANU --search --service $service $extra --devup ${LJBIN}/btup --devdown ${LJBIN}/btdown
+    else
+      log "Connect to $apname"
+      pand --auth --role PANU --connect $apaddress --service $service $extra --devup ${LJBIN}/btup --devdown ${LJBIN}/btdown
+    fi
+    showStatus
+    if [ $ipaddress != "0.0.0.0" ]; then
+      configureBridge "$ipaddress" "$netmask" "$broadcast"
+      setGateway "$gateway"
+    else
+      runDHCP
+    fi
+    ;;
+  *)
+    log "Invalid mode"
+esac

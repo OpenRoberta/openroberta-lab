@@ -1,0 +1,10 @@
+#! /bin/sh
+. /etc/default/lejos
+export LD_LIBRARY_PATH=${LEJOS_HOME}/libjna/usr/lib/arm-linux-gnueabi/:${LEJOS_HOME}/libjna/usr/lib/jni/
+classpath=${LEJOS_HOME}/lib/ev3classes.jar:${LEJOS_HOME}/lib/dbusjava.jar:${LEJOS_HOME}/libjna/usr/share/java/jna.jar:/home/roberta/lib/json.jar:/home/roberta/lib/OpenRobertaShared.jar:/home/roberta/lib/OpenRobertaRuntime.jar:/home/roberta/lib/Java-WebSocket.jar:.
+if [ "$1" = "-cp" ]
+then
+        classpath="$2":$classpath
+        shift 2
+fi
+exec ${LEJOS_HOME}/ejre*/bin/java -classpath $classpath $*

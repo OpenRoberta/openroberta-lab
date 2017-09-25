@@ -1,0 +1,21 @@
+#! /bin/sh
+. /etc/default/lejos
+. ${LEJOS_HOME}/bin/funcs.sh
+startLog
+log "Starting leJOS"
+touch /var/run/bootlock
+#${LEJOS_HOME}/bin/updatejre
+${LEJOS_HOME}/bin/init
+echo -n "3 " > /dev/lms_ui
+# start menu in background it will wait until startup is complete
+${LEJOS_HOME}/bin/startmenu &
+${LEJOS_HOME}/bin/startbt
+${LEJOS_HOME}/bin/startnetwork
+#echo "Mount dev system"
+#busybox mount -t nfs -o nolock legovm:/export/lejos /home/lejos
+log "Start menu"
+# stop console output going to sensor port 1
+dmesg -n 1
+stopLog
+rm /var/run/bootlock
+sleep 100000000

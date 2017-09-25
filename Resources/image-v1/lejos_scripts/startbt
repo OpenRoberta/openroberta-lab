@@ -1,0 +1,39 @@
+#! /bin/sh
+# run this command with 1 parameter a PIN
+# if it is missing a default will be read from the file system
+. /etc/default/lejos
+. ${LEJOS_HOME}/bin/funcs.sh
+
+stopServices()
+{
+  log "Stop services"
+  killall agent 2> /dev/null
+  # give things time to notice they have gone
+  sleep 2
+}
+
+configureBluetooth()
+{
+  log "Configure Bluetooth"
+  hciconfig hci0 name ${hostname}
+  hciconfig hci0 auth
+  # make us discoverable
+  hciconfig hci0 piscan
+  log "Set PIN"
+  agent -a hci0 $1 &
+}
+
+log "Start Bluetooth"
+LJBIN=${LEJOS_HOME}/bin
+file="/var/run/bootlock"
+# set default values if not on command line
+hostname=`hostname`
+# load default pin
+pin=`cat /etc/bluetooth/btpin 2> /dev/null`
+pin=${1:-$pin} 
+pin=${pin:-1234}
+if [ ! -e "$file" ]
+then
+  stopServices
+fi
+configureBluetooth $pin
