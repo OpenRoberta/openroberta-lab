@@ -10,7 +10,7 @@ public class Bob3ArmsTest {
 
     @Test
     public void getLeftArmRightArmLight() throws Exception {
-        final String a = "void setup(){Serial.begin(9600);}void loop(){if(myBob.getArmPair(1,1)){}else if(myBob.getArmPair(2,1)){}";
+        final String a = "void setup(){Serial.begin(9600);}void loop(){if((myBob.getArm(1)==1)){}elseif((myBob.getArm(2)==1)){}";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_bob3Arms.xml", false);
     }

@@ -169,26 +169,10 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
 
     @Override
     public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
-        switch ( touchSensor.getArmPart() ) {
-            case "1":
-            case "4":
-                this.sb.append("myBob.getArmPair(" + touchSensor.getArmSide() + ", " + touchSensor.getArmPart() + ")");
-                break;
-            case "2":
-                this.sb.append(
-                    "( myBob.getArmPair("
-                        + touchSensor.getArmSide()
-                        + ", "
-                        + touchSensor.getArmPart()
-                        + ")"
-                        + " || myBob.getArmPair("
-                        + touchSensor.getArmSide()
-                        + ", 3) )");
-                break;
-            case "3":
-                this.sb.append("myBob.getArm(-" + touchSensor.getArmSide() + " + 3)");
-                break;
-            default:
+        if ( touchSensor.getArmPart().equals("0") ) {
+            this.sb.append("( myBob.getArm(" + touchSensor.getArmSide() + ") > " + touchSensor.getArmPart() + ")");
+        } else {
+            this.sb.append("( myBob.getArm(" + touchSensor.getArmSide() + ") == " + touchSensor.getArmPart() + ")");
         }
         return null;
     }
