@@ -259,7 +259,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         connectionType = getConnection();
         switch (getConnection()) {
         case GUISTATE.gui.connectionType.TOKEN:
-            SOCKET_C.closeConnection();
+            SOCKET_C.listRobotStop();
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').removeClass('wait');
@@ -270,7 +270,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuConnect').parent().removeClass('disabled');
             break;
         case GUISTATE.gui.connectionType.AUTO:
-            SOCKET_C.closeConnection();
+            SOCKET_C.listRobotStop();
             //console.log('autoConnection');
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');

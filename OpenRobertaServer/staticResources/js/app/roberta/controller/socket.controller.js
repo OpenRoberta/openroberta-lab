@@ -9,6 +9,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var port;
     var robotList = [];
     var agentPortList = '[{"Name":"none","IdVendor":"none","IdProduct":"none"}]';
+    var timerId;
     
     function makeRequest() {
         portList = [];
@@ -49,9 +50,17 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         GUISTATE_C.setIsAgent(true);
         $('#menuConnect').parent().addClass('disabled');
         makeRequest();
-        window.setInterval(makeRequest, 3000);
+        timerId = window.setInterval(makeRequest, 3000);
     }
     exports.listRobotStart = listRobotStart;
+    
+    function listRobotStop() {
+        //console.log("list robots stopped");
+        GUISTATE_C.setIsAgent(false);
+        $('#menuConnect').parent().addClass('disabled');
+        window.clearInterval(timerId);
+    }
+    exports.listRobotStop = listRobotStop;
     
     function init() {
         robotSocket = GUISTATE_C.getSocket()

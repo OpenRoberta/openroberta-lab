@@ -92,7 +92,7 @@ define([ 'exports', 'jquery', 'wrap', 'log' ], function(exports, $, WRAP, LOG) {
         return $.ajax({
             type : "GET",
             url : URL,
-            success : WRAP.fn3(successFn, "list success"),
+            //success : WRAP.fn3(successFn, "list success"),
             error : onError,
             complete: completeFn
         });
