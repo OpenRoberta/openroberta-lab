@@ -553,20 +553,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             });
         }, 'show more releases clicked');
 
-        $('#confirmContinue').onWrap('click', function(event) {
-            if ($('#confirmContinue').data('type') === 'program') {
-                PROGRAM_C.newProgram(true);
-            } else if ($('#confirmContinue').data('type') === 'configuration') {
-                CONFIGURATION_C.newConfiguration(true);
-            } else if ($('#confirmContinue').data('type') === 'switchRobot') {
-                ROBOT_C.switchRobot($('#confirmContinue').data('robot'), true, $('#confirmContinue').data('opt_callback'));
-            } else if ($('#confirmContinue').data('type') === 'switchConfig2Program') {
-            	console.log('confirmContinue');
-            	CONFIGURATION_C.reloadView();
-            } else {
-                //console.log('Confirmation with unknown data type clicked');
-            }
-        }, 'continue new program clicked');
         $('#takeATour').onWrap('click', function(event) {
             if (GUISTATE_C.getRobotGroup() !== 'ev3') {
                 ROBOT_C.switchRobot('ev3lejos', true);

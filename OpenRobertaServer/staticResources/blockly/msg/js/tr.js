@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "Program ya da konfigürasyonunuzda kaydetmedig
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Program ya da konfigürasyonunuzda kaydetmediginiz degisiklikler var.";
 Blockly.Msg.POPUP_CANCEL = "Iptal et";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "Parolayi degistir ...";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Bu konfigürasyonu silmek istediginize emin misiniz?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Bu programi silmek istediginize emin misiniz?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Robotunuz icin yeni bir aygit yazilimi versiyonu mevcut. Programlarinizi eski versiyonla calistirmayi deneyebilirsiniz fakat robotunuzu simdi güncellemeniz, en iyi secenek!  Sadece >>Update now<<'a tiklayin.";

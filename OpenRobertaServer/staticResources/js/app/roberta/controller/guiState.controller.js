@@ -478,7 +478,6 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     exports.getRobotVersion = getRobotVersion;
 
     function setView(view) {
-        console.log(GUISTATE.gui.view + ' -> ' + view);
         $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
         $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
         GUISTATE.gui.prevView = GUISTATE.gui.view;
@@ -860,7 +859,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
      */
     function setConfiguration(result) {
         if (result) {
-            GUISTATE.configuration.name = result.name;
+            setConfigurationName(result.name);
             GUISTATE.configuration.timestamp = result.lastChanged;
             setConfigurationSaved(true);
             setProgramSaved(false);

@@ -275,8 +275,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="cs"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="pl"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="tr"></a></li>
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="nl"></a></li>							
-							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>													
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="nl"></a></li>
+							<li><a role="menuitem" href="#" class="lang-lbl" lang="fi"></a></li>
 							<li><a role="menuitem" href="#" class="lang-lbl" lang="da"></a></li>
 						</ul></li>
 					<!-- Menu Navigation -->
@@ -594,6 +594,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 
 	<!-- Popup login -->
 	<div class="modal fade" id="login-user" tabindex="-1" role="dialog"
+		data-backdrop="static" data-keyboard="false"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
@@ -763,7 +764,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	</div>
 	<!-- Popup change password -->
 	<div id="change-user-password" class="modal fade"
-		data-backdrop="static" data-keyboard="false">
+		data-backdrop="static" data-keyboard="false" data-backdrop="static"
+		data-keyboard="false">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -1272,7 +1274,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		</div>
 	</div>
 	<!-- Popup show message with cancel -->
-	<div id="show-messageContinue" class="modal fade">
+	<div id="show-message-confirm" class="modal fade"
+		data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -1281,13 +1284,13 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
 				</div>
 				<div class="modal-body left-inner-addon">
-					<span id="messageContinue">Message to show</span>
+					<span id="messageConfirm">Message to show</span>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn" data-dismiss="modal" autofocus>OK</button>
-					<input type="button" id="confirmContinue" class="btn"
-						data-dismiss="modal" value="continue anyway"
-						lkey="Blockly.Msg.POPUP_CONTINUE"></input>
+					<input type="button" id="confirm" class="btn"
+						data-dismiss="modal" value="OK"></input>
+					<input type="button" id="confirmCancel" class="btn"
+						data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL" value="cancel"></input>
 				</div>
 			</div>
 		</div>

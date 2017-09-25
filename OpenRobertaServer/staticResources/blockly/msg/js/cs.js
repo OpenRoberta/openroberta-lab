@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "V programu nebo nastavení jsou neuložené zm
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "V programu nebo nastavení jsou neuložené změny.";
 Blockly.Msg.POPUP_CANCEL = "Storno";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "změna hesla...";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Opravdu chcete smazat nastavení?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Opravdu chcete smazat program?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Pro vašeho robota je k dispozici nový firmware. Můžete zkusit spustit program se starým firmware, ale nejlépe bude když firmware svého robota nyní aktualizujete! Stačí, když kliknete na >>Aktualizovat nyní<<.";

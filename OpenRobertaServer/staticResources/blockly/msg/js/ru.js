@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "У Вас есть несохраненные 
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "У Вас есть несохраненные изменения в Вашей программе или конфигурации.";
 Blockly.Msg.POPUP_CANCEL = "Отмена";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "изменить пароль ...";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Вы действительно хотите удалить конфигурацию?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Вы действительно хотите удалить программу?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Доступна новая версия прошивки для Вашего робота. Вы можете попробовать запустить программу со старой версией, но лучше обновить вашего робота сейчас! Вам просто нужно нажать кнопку »Обновить сейчас«.";

@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "Tienes cambios sin guardar en tu programa o co
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Tienes cambios sin guardar en tu programa o configuración.";
 Blockly.Msg.POPUP_CANCEL = "Cancelar";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "cambiar contraeña ...";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "¿Estás seguro de querer borrar esta configuración?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "¿Estás seguro de querer borrar este programa?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Hay disponible una nueva versión de firmware para tu robot. Puedes intentar ejecutar programas con la versión antigua, pero la mejor opción es actualizar tu robot ahora. Lo único que tienes que hacer es hacer clic sobre >>Actualiza ahora<< y reiniciar el robot a continuación.";

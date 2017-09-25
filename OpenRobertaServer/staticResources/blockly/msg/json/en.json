@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-09-28 09:09:25.094892",
+		"lastupdated": "2017-09-28 14:06:44.808636",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1205,5 +1205,6 @@
 	"BOB3_REMEMBER_NUMBER": "remember number",
 	"BOB3_SAVENUMBER_TOOLTIP": "Numbers must be integral values in the range of 0 to 255",
 	"NAO_RECOGNIZEWORD": "recognize word from list",
-	"NAO_RECOGNIZEWORD_TOOLTIP": "Return a word from the given list when recognized by NAO"
+	"NAO_RECOGNIZEWORD_TOOLTIP": "Return a word from the given list when recognized by NAO",
+	"POPUP_CONFIRM_CONTINUE": "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>"
 }

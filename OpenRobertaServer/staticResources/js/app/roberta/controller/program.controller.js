@@ -59,8 +59,33 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
             'axis' : 'x',
             'cursor' : 'col-resize'
         });
+        $('#tabProgram').on('click', function(e) {
+            e.preventDefault();
+            if (GUISTATE_C.getView() === 'tabConfiguration' && GUISTATE_C.isUserLoggedIn() && !GUISTATE_C.isConfigurationSaved()
+                    && !GUISTATE_C.isConfigurationAnonymous()) {
+                $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                    $('#confirm').off();
+                    $('#confirm').on('click', function(e) {
+                        e.preventDefault();
+                        // TODO, check if we want to give the user the opportunity to convert the named configuration into an anonymous one
+                        GUISTATE_C.setConfigurationName('');
+                        // or reset to last saved version:
+                        //$('#tabConfiguration').trigger('reload');
+                        $('#tabProgram').tab('show');
+                    });
+                    $('#confirmCancel').off();
+                    $('#confirmCancel').on('click', function(e) {
+                        e.preventDefault();
+                        $('.modal').modal('hide');
+                    });
+                });
+                MSG.displayMessage("POPUP_CONFIGURATION_UNSAVED", "POPUP", "", true);
+                return false;
+            } else {
+                $('#tabProgram').tab('show');
+            }
+        });
         $('#tabProgram').on('show.bs.tab', function(e) {
-        	console.log('program show');
             GUISTATE_C.setView('tabProgram');
             blocklyWorkspace.markFocused();
         });
@@ -118,20 +143,23 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         $('.modal').modal('hide'); // close all opened popups
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlProgramText = Blockly.Xml.domToText(xmlProgram);
-        var configName = GUISTATE_C.isConfigurationStandard() ? null : GUISTATE_C.getConfigurationName();
-        var xmlConfigText = GUISTATE_C.isConfigurationSaved() ? null : GUISTATE_C.getConfigurationXML();
+        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), xmlProgramText, configName, xmlConfigText,
-        		GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(),
-        		function(result) {
-		            if (result.rc === 'ok') {
-		                GUISTATE_C.setProgramTimestamp(result.lastChanged);
-		                GUISTATE_C.setProgramSaved(true);
-		                GUISTATE_C.setConfigurationSaved(true);
-		                LOG.info('save program ' + GUISTATE_C.getProgramName());
-		            }
-		            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, GUISTATE_C.getProgramName());
-		        });
+//        var configName = GUISTATE_C.isConfigurationStandard() ? null : GUISTATE_C.getConfigurationName();
+//        var xmlConfigText = GUISTATE_C.isConfigurationSaved() ? null : GUISTATE_C.getConfigurationXML();
+
+        PROGRAM.saveProgramToServer(GUISTATE_C.getProgramName(), xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramShared() ? true : false, GUISTATE_C.getProgramTimestamp(), function(
+                result) {
+            if (result.rc === 'ok') {
+                GUISTATE_C.setProgramTimestamp(result.lastChanged);
+                GUISTATE_C.setProgramSaved(true);
+                GUISTATE_C.setConfigurationSaved(true);
+                LOG.info('save program ' + GUISTATE_C.getProgramName());
+            }
+            MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, GUISTATE_C.getProgramName());
+        });
     }
     exports.saveToServer = saveToServer;
 
@@ -145,20 +173,20 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
             var progName = $('#singleModalInput').val().trim();
             var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgramText = Blockly.Xml.domToText(xmlProgram);
-            var configName = GUISTATE_C.getConfigurationName();
-            var xmlConfigText = GUISTATE_C.getConfigurationXML();
+            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
             LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
-            PROGRAM.saveAsProgramToServer(progName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(),
-            	function(result) {
-	                UTIL.response(result);
-	                if (result.rc === 'ok') {
-	                    result.name = progName;
-	                    result.programShared = false;
-	                    GUISTATE_C.setProgram(result);
-	                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
-	                }
-	            });
+            PROGRAM.saveAsProgramToServer(progName, xmlProgramText, configName, xmlConfigText, GUISTATE_C.getProgramTimestamp(), function(result) {
+                UTIL.response(result);
+                if (result.rc === 'ok') {
+                    result.name = progName;
+                    result.programShared = false;
+                    GUISTATE_C.setProgram(result);
+                    MSG.displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, GUISTATE_C.getProgramName());
+                }
+            });
         }
     }
 
@@ -183,17 +211,17 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
                 GUISTATE_C.setProgram(result, alien);
                 GUISTATE_C.setProgramXML(result.programText);
                 if (result.configName === null) {
-                	if (result.configText === null) {
-                		GUISTATE_C.setConfigurationXML(result.configText);               	
-                	} else {
-                		GUISTATE_C.setConfigurationXML(result.configText);               	                		
-                	}
+                    if (result.configText === null) {
+                        GUISTATE_C.setConfigurationXML(result.configText);
+                    } else {
+                        GUISTATE_C.setConfigurationXML(result.configText);
+                    }
                 } else {
-                	GUISTATE_C.setConfigurationName(result.configName);
-                	GUISTATE_C.setConfigurationXML(result.configText);	
+                    GUISTATE_C.setConfigurationName(result.configName);
+                    GUISTATE_C.setConfigurationXML(result.configText);
                 }
                 if (!(result.configText === null)) {
-                	GUISTATE_C.setConfigurationXML(result.configText);               	
+                    GUISTATE_C.setConfigurationXML(result.configText);
                 }
                 $('#tabProgram').trigger('click');
             }
@@ -310,15 +338,24 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         if (further || GUISTATE_C.isProgramSaved()) {
             loadNewProgram();
         } else {
-            confirmLoadProgram(loadNewProgram);
+            confirmLoadProgram();
         }
     }
     exports.newProgram = newProgram;
 
-    function confirmLoadProgram(callback) {
-        $('#confirmContinue').removeData();
-        $('#confirmContinue').data('type', 'program');
-        $('#confirmContinue').data('callback', callback);
+    function confirmLoadProgram() {
+        $('#show-message-confirm').one('shown.bs.modal', function(e) {
+            $('#confirm').off();
+            $('#confirm').on('click', function(e) {
+                e.preventDefault();
+                newProgram(true);
+            });
+            $('#confirmCancel').off();
+            $('#confirmCancel').on('click', function(e) {
+                e.preventDefault();
+                $('.modal').modal('hide');
+            });
+        });
         if (GUISTATE_C.isUserLoggedIn()) {
             MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
         } else {
@@ -437,8 +474,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
                     GUISTATE_C.setProgram(result);
                     GUISTATE_C.setProgramXML(result.programText);
                     GUISTATE_C.setConfigurationName('');
-                    GUISTATE_C.setConfigurationXML(result.configText);	
-                     
+                    GUISTATE_C.setConfigurationXML(result.configText);
+
                     LOG.info('show program ' + GUISTATE_C.getProgramName());
                 } catch (e) {
                     // restore old Program
@@ -457,7 +494,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
      */
     function exportXml() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>' + GUISTATE_C.getConfigurationXML() + '</config></export>';
+        var xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + Blockly.Xml.domToText(dom) + '</program><config>'
+                + GUISTATE_C.getConfigurationXML() + '</config></export>';
         UTIL.download(GUISTATE_C.getProgramName() + ".xml", xml);
         MSG.displayMessage("MENU_MESSAGE_DOWNLOAD", "TOAST", GUISTATE_C.getProgramName());
     }

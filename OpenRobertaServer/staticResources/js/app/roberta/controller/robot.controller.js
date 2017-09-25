@@ -245,14 +245,22 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
             });
         } else {
-            $('#confirmContinue').removeData();
-            $('#confirmContinue').data('type', 'switchRobot');
-            $('#confirmContinue').data('robot', robot);
-            $('#confirmContinue').data('opt_callback', opt_callback);
-            if (GUISTATE_C.isUserLoggedIn) {
-                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
-            } else {
+            $('#show-message-confirm').one('shown.bs.modal', function(e) {
+                $('#confirm').off();
+                $('#confirm').on('click', function(e) {
+                    e.preventDefault();
+                    switchRobot(robot, true, opt_callback);
+                });
+                $('#confirmCancel').off();
+                $('#confirmCancel').on('click', function(e) {
+                    e.preventDefault();
+                    $('.modal').modal('hide');
+                });
+            });
+            if (GUISTATE_C.isUserLoggedIn()) {
                 MSG.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "", true);
+            } else {
+                MSG.displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "", true);
             }
         }
     }

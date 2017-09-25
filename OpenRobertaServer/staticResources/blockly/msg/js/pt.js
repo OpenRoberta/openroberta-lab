@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "Tens alterações não guardadas no teu progra
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Tens alterações não guardadas no teu programa ou configuração.";
 Blockly.Msg.POPUP_CANCEL = "Cancelar";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "alterar palavra-passe …";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Pretendes mesmo apagar a configuração?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Pretendes mesmo apagar o programa?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Está disponível uma nova versão de firmware para o teu robô. Podes tentar programar robô com a versão antiga, no entanto o ideal será atualizares o teu robô agora! Só tens que clicar em >>Atualizar agora<<.";

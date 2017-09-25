@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "Du har ændringer i dit program eller din konf
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Du har gemmer ændringer i dit program eller din konfiguration der ikke er gemt.";
 Blockly.Msg.POPUP_CANCEL = "Afbryd";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "change password ...";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Er du sikker på at du vil slette konfigurationen ?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Vil du virkeligt slette programmet ?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Der er en ny software opdatering til din robot. Du kan forsøge at køre programmer med den gamle version, men det anbefales at du opdaterer din robot nu! Klik >>Opdater nu<< og genstart din robot bagefter.";

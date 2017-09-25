@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "Il faut enregistrer ta configuration et t'insc
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Il faut enregistrer ta configuration avant pouvoir quitter cette page. Sinon tu vas perdre tout ton travail !";
 Blockly.Msg.POPUP_CANCEL = "annuler";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "changer le mot de passe";
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Veux-tu vraiment supprimer ta configuration du robot ?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Veux-tu vraiment supprimer ton programme ?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Le firmware du robot a changé. il se peut que tes programmes fonctionnent encore, mais nous te conseillons de le mettre à jour. Clique sur >> actualiser <<";

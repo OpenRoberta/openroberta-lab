@@ -893,6 +893,7 @@ Blockly.Msg.POPUP_BEFOREUNLOAD = "You have unsaved changes in your program or co
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "You have unsaved changes in your program or configuration.";  // untranslated
 Blockly.Msg.POPUP_CANCEL = "Peru";
 Blockly.Msg.POPUP_CHANGE_PASSWORD = "change password ...";  // untranslated
+Blockly.Msg.POPUP_CONFIRM_CONTINUE = "<br><br><i>Press »OK« to discard your work. Press »Cancel« to stay here and save your work first.</i>";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Haluatko varmasti poistaa asetukset?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Haluatko varmasti poistaa ohjelman?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click »Update now«.";  // untranslated
