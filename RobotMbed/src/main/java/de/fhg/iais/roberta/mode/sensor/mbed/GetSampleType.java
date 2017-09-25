@@ -16,6 +16,7 @@ public enum GetSampleType {
     LIGHT_LEVEL( "", "LIGHT_LEVEL", "LIGHT_LEVEL" ),
     ACCELERATION( "DIRECTION", "ACCELERATION", "ACCELERATION" ),
     ORIENTATION( "ORIENTATION", "ORIENTATION", "ORIENTATION" ),
+    PIN_TOUCHED( "PIN", "PIN_TOUCHED", "PIN_TOUCHED" ),
     TIME( "SENSORNUM", "TIME", "TIME" );
 
     private final String portTypeName;

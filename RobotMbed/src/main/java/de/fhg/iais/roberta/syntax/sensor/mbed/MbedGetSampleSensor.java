@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.mode.action.mbed.MbedPins;
 import de.fhg.iais.roberta.mode.sensor.mbed.GetSampleType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -51,6 +52,9 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.KEY_PRESSED:
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);
+                break;
+            case BlocklyConstants.PIN_TOUCHED:
+                this.sensor = PinTouchSensor.make(MbedPins.findPin(port), properties, comment);
                 break;
             case BlocklyConstants.GESTURE_ACTIVE:
                 this.sensor = GestureSensor.make(GestureSensor.GestureMode.valueOf(port), properties, comment);
