@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'socket.io', 'comm' ], function(exports, UTIL, LOG, MSG, $,
-        ROBOT_C, GUISTATE_C, IO, COMM) {
+define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'guiState.controller', 'guiState.model', 'socket.io', 'comm' ], function(exports,
+        UTIL, LOG, MSG, $, ROBOT_C, GUISTATE_C, GUISTATE, IO, COMM) {
 
     var portList = [];
     var vendorList = [];
@@ -10,17 +10,17 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
     var robotList = [];
     var agentPortList = '[{"Name":"none","IdVendor":"none","IdProduct":"none"}]';
     var timerId;
-    
+
     function makeRequest() {
         portList = [];
         vendorList = [];
         productList = [];
         robotList = [];
-        COMM.listRobotsFromAgent(function (text) {
+        COMM.listRobotsFromAgent(function(text) {
             //console.log("listing robots");
         }, function(response) {
             agentPortList = response.responseText;
-        },  function() {
+        }, function() {
         });
         try {
             jsonObject = JSON.parse(agentPortList);
@@ -32,8 +32,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
                     robotList.push(GUISTATE_C.getRobotRealName());
                 }
             });
-        }
-        catch(e) {
+        } catch (e) {
             GUISTATE_C.setRobotPort("");
         }
         if (portList.indexOf(GUISTATE_C.getRobotPort()) < 0) {
@@ -44,16 +43,21 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         }
         GUISTATE_C.updateMenuStatus();
     }
-    
+
     function listRobotStart() {
         //console.log("list robots started");
-        GUISTATE_C.setIsAgent(true);
         $('#menuConnect').parent().addClass('disabled');
         makeRequest();
-        timerId = window.setInterval(makeRequest, 3000);
+        if (portList.length < 1 && GUISTATE_C.getConnection() === GUISTATE.gui.connectionType.AGENTORTOKEN) {
+            GUISTATE_C.setIsAgent(false);
+            timerId = window.setInterval(makeRequest, 10000);
+        } else {
+            GUISTATE_C.setIsAgent(true);
+            timerId = window.setInterval(makeRequest, 3000);
+        }
     }
     exports.listRobotStart = listRobotStart;
-    
+
     function listRobotStop() {
         //console.log("list robots stopped");
         GUISTATE_C.setIsAgent(false);
@@ -61,7 +65,7 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         window.clearInterval(timerId);
     }
     exports.listRobotStop = listRobotStop;
-    
+
     function init() {
         robotSocket = GUISTATE_C.getSocket()
         if (robotSocket == null || GUISTATE_C.getIsAgent() == false) {
