@@ -49,7 +49,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
             }, ]
         });
         $('#galleryPreview').bootstrapTable({
-            height : 312,
+            height : 376,
             cardView : 'true',
             rowStyle : GALLERY_C.rowStyle,
             rowAttributes : GALLERY_C.rowAttributes,

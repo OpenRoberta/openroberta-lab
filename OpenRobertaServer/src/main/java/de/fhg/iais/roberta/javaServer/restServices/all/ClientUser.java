@@ -217,8 +217,10 @@ public class ClientUser {
                 }
                 if ( up.getMessage() == Key.USER_ACTIVATION_SUCCESS ) {
                     pendingConfirmationProcessor.deleteEmailConfirmation(userActivationLink);
+                    Util.addResultInfo(response, up);
+                } else {
+                    Util.addErrorInfo(response, Key.USER_ACTIVATION_INVALID_URL);
                 }
-                Util.addResultInfo(response, up);
             } else if ( cmd.equals("resendActivation") ) {
                 String account = request.getString("accountName");
                 String lang = request.getString("language");

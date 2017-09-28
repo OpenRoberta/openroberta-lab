@@ -44,7 +44,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
                         }
                     });
                 }
-                MSG.displayInformation(result, "", result.message);
+                MSG.displayInformation(result, result.message, result.message);
             });
         }
     }
@@ -94,29 +94,21 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
     }
 
     /**
-     * Send account activation
+     * resend account activation
      */
     function sendAccountActivation() {
-        if ($("#registerUserEmail").val() != "") {
-            USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
-//                if (result.rc === "ok") {
-//                    MSG.displayInformation(result, result.message, result.message);
-//                }
-                MSG.displayInformation(result, result.message, result.message);
-            });
-        } else {
-
-        }
+//        if ($("#registerUserEmail").val() != "") {
+        USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
+            MSG.displayInformation(result, result.message, result.message);
+        });
+//        } 
     }
 
     /**
-     * Send account activation
+     * account activation
      */
     function activateAccount(url) {
         USER.userActivateAccount(url, function(result) {
-            if (result.rc === "ok") {
-                MSG.displayInformation(result, result.message, result.message);
-            }
             MSG.displayInformation(result, result.message, result.message)
         });
     }
@@ -521,7 +513,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         });
 
         $('#resendActivation').onWrap('click', function() {
-            sendAccountActivation()
+            sendAccountActivation();
         });
 
         $('#change-user-password').onWrap('hidden.bs.modal', function() {
@@ -573,6 +565,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
         $formRegister.unbind('submit');
         $formRegister.onWrap('submit', function(e) {
             e.preventDefault();
+            console.log(e);
             updateUserToServer();
         });
         $("#registerUser").text("OK");

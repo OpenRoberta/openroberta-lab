@@ -334,7 +334,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#head-navigation-help').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
-            if (domId === 'menuShowRelease') { // Submenu 'Help'
+            if (domId === 'menuShowStart') { // Submenu 'Help'
                 if ($.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
                     $('#checkbox_id').prop('checked', true);
                 }
@@ -438,13 +438,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.navbar-fixed-top .dropdown').removeClass('open');
         });
 
-        $('#imgLogo, #imgBeta').onWrap('click', function() {
-            window.open('http://open-roberta.org');
+        $('#img-nepo').onWrap('click', function() {
+            if ($.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
+                $('#checkbox_id').prop('checked', true);
+            }
+            $("#show-startup-message").modal("show");
         }, 'logo was clicked');
-
-        $('#beta').onWrap('click', function() {
-            window.open('http://open-roberta.org');
-        }, 'beta logo was clicked');
 
         $('.menuGeneral').onWrap('click', function(event) {
             window.open("https://jira.iais.fraunhofer.de/wiki/display/ORInfo");

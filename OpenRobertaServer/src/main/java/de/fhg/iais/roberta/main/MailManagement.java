@@ -94,7 +94,6 @@ public class MailManagement {
             mailText = mailText.replace("$1", body[0]);
             mailText = mailText.replace("$2", url);
             mailText = mailText.replace("$3", body[1]);
-            System.out.println(mailText);
         }
         Message message = new MimeMessage(this.session);
         message.setFrom(new InternetAddress(this.props.getProperty("username")));

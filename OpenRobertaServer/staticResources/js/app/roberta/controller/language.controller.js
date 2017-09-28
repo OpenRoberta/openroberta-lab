@@ -104,7 +104,7 @@ define([ 'exports', 'log', 'jquery', 'guiState.controller', 'program.controller'
             var key = lkey.replace("Blockly.Msg.", "");
             var value = Blockly.Msg[key];
             if (value == undefined) {
-                //console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
+                console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
             }
             if (lkey === 'Blockly.Msg.MENU_EDIT_TOOLTIP') {
                 $('#head-navi-tooltip-program').attr('data-original-title', value);
