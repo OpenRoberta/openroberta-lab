@@ -11,7 +11,6 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.arduino.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.action.arduino.botnroll.BlinkMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.InfraredSensorMode;
@@ -52,7 +51,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -485,21 +483,6 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("T.ShowSeconds()");
-                break;
-            case RESET:
-                this.sb.append("T.ResetTimer();");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         return null;
     }
@@ -519,6 +502,10 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
+        if ( this.isTimerSensorUsed ) {
+            nlIndent();
+            this.sb.append("unsigned long __time = millis(); \n");
+        }
         incrIndentation();
         generateUserDefinedMethods();
         this.sb.append("\n \n void setup() \n");
@@ -544,18 +531,10 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         this.sb.append("bnr.setBrm(brm);");
         nlIndent();
         this.generateSensors();
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.StartTimer(); \n");
-        }
         generateUsedVars();
         this.sb.append("\n}\n");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.Timer();");
-        }
         return null;
     }
 
@@ -566,7 +545,6 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         }
 
         this.sb.append("#include <math.h> \n");
-        this.sb.append("#include <CountUpDownTimer.h> \n");
         // Bot'n Roll ONE A library:
         this.sb.append("#include <BnrOneA.h>   // Bot'n Roll ONE A library \n");
         //Bot'n Roll CoSpace Rescue Module library (for the additional sonar kit):
@@ -583,9 +561,6 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         this.sb.append("BnrRescue brm; \n");
         this.sb.append("RobertaFunctions rob;  \n");
         this.sb.append("BnrRoberta bnr(one, brm);  \n");
-        if ( this.isTimerSensorUsed ) {
-            this.sb.append("CountUpDownTimer T(UP, HIGH); \n");
-        }
         this.sb.append("#define SSPIN  2 \n");
         this.sb.append("#define MODULE_ADDRESS 0x2C \n");
         this.sb.append("byte colorsLeft[3]={0,0,0}; \n");
@@ -614,6 +589,7 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
                     nlIndent();
                     this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
+                case TIMER:
                 case LIGHT:
                 case COMPASS:
                 case SOUND:

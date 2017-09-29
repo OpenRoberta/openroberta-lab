@@ -24,7 +24,9 @@ public enum SensorType {
     JOYSTICK( "arduSensors_joystick_getSample" ),
     PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
     NAOMARK( "naoSensors_naoMark" ),
-    VOLTAGE( "" );
+    VOLTAGE( "" ),
+    TIMER( "" ),
+    NONE( "" );
 
     private final String[] values;
 

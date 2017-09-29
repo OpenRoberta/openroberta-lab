@@ -1,7 +1,11 @@
 package de.fhg.iais.roberta.syntax.check.hardware.arduino.bob3;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.RecallAction;
@@ -28,6 +32,8 @@ import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
  * @author VinArt
  */
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements Bob3AstVisitor<Void> {
+
+    protected final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         super(null);
@@ -99,9 +105,19 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         return null;
     }
 
+    public Set<UsedSensor> getTimer() {
+        return this.usedSensors;
+    }
+
     @Override
     public Void visitBob3GetSampleSensor(GetSampleSensor<Void> bob3GetSampleSensor) {
-        this.isTimerSensorUsed = true;
+        if ( bob3GetSampleSensor.getSensorType().toString().equals("TIME") ) {
+            this.usedSensors.add(new UsedSensor(null, SensorType.TIMER, null));
+            System.out.println(this.usedSensors);
+            System.out.println(this.usedSensors.toString().contains("TIMER"));
+        } else {
+            this.usedSensors.add(new UsedSensor(null, SensorType.NONE, null));
+        }
         return null;
     }
 

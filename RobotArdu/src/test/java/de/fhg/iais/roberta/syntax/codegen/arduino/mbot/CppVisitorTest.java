@@ -12,7 +12,6 @@ public class CppVisitorTest {
         + "#include <MeMCore.h> \n"
         + "#include <Wire.h>\n"
         + "#include <SoftwareSerial.h>\n"
-        + "#include <CountUpDownTimer.h>\n"
         + "#include <RobertaFunctions.h>\n"
         + "#include \"MeDrive.h\"\n\n";
 
@@ -246,16 +245,13 @@ public class CppVisitorTest {
 
         final String a = "" //
             + MAIN_METHOD1
-            + "#include<CountUpDown.h>"
-            + "CountUpDownTimer T(UP,HIGH);"
             + "RobertaFunctions rob;"
             + "double item;"
+            + "unsigned long __time = millis();"
             + MAIN_METHOD2
-            + "T.StartTimer();"
             + "}"
             + "void loop(){"
-            + "T.Timer();"
-            + "if (T.ShowSeconds() > 60 ) {"
+            + "if ((int)(millis()-__time)  > 60 ) {"
             + "       delay(500);}\n"
             + "}\n";
 

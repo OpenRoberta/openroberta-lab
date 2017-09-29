@@ -9,14 +9,14 @@ public class TimerSensorTest {
 
     @Test
     public void getTimerValue() throws Exception {
-        String a = "\nT.ShowSeconds()";
+        String a = "\n(int)(millis()-__time)";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_getSampleTimer.xml", false);
     }
 
     @Test
     public void resetTimer() throws Exception {
-        String a = "\nT.ResetTimer();";
+        String a = "\n__time = millis();";
 
         this.h.assertCodeIsOk(a, "/ast/sensors/sensor_resetTimer.xml", false);
     }

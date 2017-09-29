@@ -151,6 +151,7 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
+        this.usedSensors.add(new UsedSensor(null, SensorType.TIMER, null));
         this.isTimerSensorUsed = true;
         return null;
     }

@@ -1,8 +1,9 @@
 package de.fhg.iais.roberta.syntax.codegen.arduino.bob3;
 
 import java.util.ArrayList;
+import java.util.Set;
 
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.BodyLEDAction;
 import de.fhg.iais.roberta.syntax.action.arduino.bob3.RecallAction;
@@ -48,11 +49,9 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorLightVisitor;
 import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
@@ -63,6 +62,7 @@ import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
  */
 public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, AstActorLightVisitor<Void> {
     private final boolean isTimerSensorUsed;
+    private Set<UsedSensor> usedTimer;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -76,6 +76,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         UsedHardwareCollectorVisitor codePreprocessVisitor = new UsedHardwareCollectorVisitor(phrases);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.isTimerSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
+        this.usedTimer = codePreprocessVisitor.getTimer();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
     }
 
@@ -153,21 +154,6 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("T.ShowMilliSeconds()");
-                break;
-            case RESET:
-                this.sb.append("T.ResetTimer();");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
         if ( touchSensor.getArmPart().equals("0") ) {
             this.sb.append("( myBob.getArm(" + touchSensor.getArmSide() + ") > " + touchSensor.getArmPart() + ")");
@@ -181,26 +167,21 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
+        if ( this.isTimerSensorUsed || this.usedTimer.toString().contains("TIMER") ) {
+            nlIndent();
+            this.sb.append("unsigned long __time = millis(); \n");
+        }
         incrIndentation();
         generateUserDefinedMethods();
         this.sb.append("\nvoid setup() \n");
         this.sb.append("{");
         nlIndent();
         this.sb.append("Serial.begin(9600); ");
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.StartTimer();");
-        }
         nlIndent();
         generateUsedVars();
         this.sb.append("\n}");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.Timer();");
-        }
         return null;
     }
 
@@ -214,14 +195,7 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         this.sb.append("#include <BOB3.h> \n");
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n");
-        this.sb.append("#include <CountUpDownTimer.h>\n");
         this.sb.append("#include <RobertaFunctions.h>\n");
-
-        if ( this.isTimerSensorUsed ) {
-            //this.sb.append("#include <CountUpDown.h>\n\n");
-            this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
-        }
-
         this.sb.append("RobertaFunctions rob;\n");
         this.sb.append("Bob3 myBob;\n");
 

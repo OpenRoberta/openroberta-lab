@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -55,7 +54,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -320,21 +318,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     }
 
     @Override
-    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case GET_SAMPLE:
-                this.sb.append("T.ShowSeconds()");
-                break;
-            case RESET:
-                this.sb.append("T.ResetTimer();");
-                break;
-            default:
-                throw new DbcException("Invalid Time Mode!");
-        }
-        return null;
-    }
-
-    @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         this.sb.append("myTouch" + touchSensor.getPort().getPortNumber() + ".touched()");
         return null;
@@ -372,6 +355,10 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     public Void visitMainTask(MainTask<Void> mainTask) {
         decrIndentation();
         mainTask.getVariables().visit(this);
+        if ( this.isTimerSensorUsed ) {
+            nlIndent();
+            this.sb.append("unsigned long __time = millis(); \n");
+        }
         incrIndentation();
         generateUserDefinedMethods();
         this.sb.append("\nvoid setup() \n");
@@ -379,10 +366,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         nlIndent();
 
         this.sb.append("Serial.begin(9600); ");
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.StartTimer();");
-        }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             switch ( usedSensor.getType() ) {
                 case GYRO:
@@ -400,10 +383,6 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.sb.append("\n}");
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
-        if ( this.isTimerSensorUsed ) {
-            nlIndent();
-            this.sb.append("T.Timer();");
-        }
         for ( UsedSensor usedSensor : this.usedSensors ) {
             switch ( usedSensor.getType() ) {
                 case GYRO:
@@ -433,15 +412,8 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.sb.append("#include <MeMCore.h> \n");
         this.sb.append("#include <Wire.h>\n");
         this.sb.append("#include <SoftwareSerial.h>\n");
-        this.sb.append("#include <CountUpDownTimer.h>\n");
         this.sb.append("#include <RobertaFunctions.h>\n");
         this.sb.append("#include \"MeDrive.h\"\n\n");
-
-        if ( this.isTimerSensorUsed ) {
-            this.sb.append("#include <CountUpDown.h>\n\n");
-            this.sb.append("CountUpDownTimer T(UP, HIGH);\n");
-        }
-
         this.sb.append("RobertaFunctions rob;\n");
 
         this.generateSensors();
@@ -499,6 +471,8 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
                     break;
                 case VOLTAGE:
                     this.sb.append("MePotentiometer myVoltageSensor" + usedSensor.getPort().getPortNumber() + "(" + usedSensor.getPort() + ");\n");
+                    break;
+                case TIMER:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported! " + usedSensor.getType());
