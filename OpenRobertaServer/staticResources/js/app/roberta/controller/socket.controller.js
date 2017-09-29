@@ -48,19 +48,12 @@ define([ 'exports', 'util', 'log', 'message', 'jquery', 'robot.controller', 'gui
         //console.log("list robots started");
         $('#menuConnect').parent().addClass('disabled');
         makeRequest();
-        if (portList.length < 1 && GUISTATE_C.getConnection() === GUISTATE.gui.connectionType.AGENTORTOKEN) {
-            GUISTATE_C.setIsAgent(false);
-            timerId = window.setInterval(makeRequest, 10000);
-        } else {
-            GUISTATE_C.setIsAgent(true);
-            timerId = window.setInterval(makeRequest, 3000);
-        }
+        timerId = window.setInterval(makeRequest, 3000);
     }
     exports.listRobotStart = listRobotStart;
 
     function listRobotStop() {
         //console.log("list robots stopped");
-        GUISTATE_C.setIsAgent(false);
         $('#menuConnect').parent().addClass('disabled');
         window.clearInterval(timerId);
     }

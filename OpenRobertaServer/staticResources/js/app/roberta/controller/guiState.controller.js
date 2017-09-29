@@ -937,16 +937,22 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     function updateMenuStatus() {
         switch (SOCKET_C.getPortList().length) {
         case 0:
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            if (GUISTATE.gui.blocklyWorkspace) {
-                GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            if (getConnection() !== GUISTATE.gui.connectionType.AGENTORTOKEN) {
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').removeClass('wait');
+                if (GUISTATE.gui.blocklyWorkspace) {
+                    GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+                }
+                $('#menuRunProg').parent().addClass('disabled');
+                $('#menuConnect').parent().addClass('disabled');
+                setIsAgent(true);
+            } else {
+                setIsAgent(false);
             }
-            $('#menuRunProg').parent().addClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
             break;
         case 1:
+            setIsAgent(true);
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
@@ -957,6 +963,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             $('#menuConnect').parent().addClass('disabled');
             break;
         default:
+            setIsAgent(true);
             // Always:
             $('#menuConnect').parent().removeClass('disabled');
             // If the port is not chosen:
