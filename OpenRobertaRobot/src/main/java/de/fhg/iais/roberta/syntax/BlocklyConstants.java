@@ -323,4 +323,8 @@ public final class BlocklyConstants {
     public static final String NAO_RECOGNIZEDWORD = "RECOGNIZEDWORD";
     public static final String CODE = "CODE";
     public static final String PIN_TOUCHED = "PIN_TOUCHED";
+    public static final String PIN_ANALOG = "PIN_ANALOG";
+    public static final String PIN_DIGITAL = "PIN_DIGITAL";
+    public static final String PIN_PULSEHIGH = "PIN_PULSEHIGH";
+    public static final String PIN_PULSELOW = "PIN_PULSELOW";
 }
