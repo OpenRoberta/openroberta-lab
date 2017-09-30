@@ -186,6 +186,7 @@ Blockly.Msg.EXPAND_BLOCK = "Expandir bloc";
 Blockly.Msg.EXTERNAL_INPUTS = "Entrades externes";
 Blockly.Msg.FLAME_GETSAMPLE_TOOLTIP = "Gets the current reading from the flame sensor.";  // untranslated
 Blockly.Msg.FLAME_TOOLTIP = "Represents a flame sensor.";  // untranslated
+Blockly.Msg.FLYOUT_VARIABLE_TEXT = "You need a variable? Please declare it first with a click on the + sign at the »start« block.";  // untranslated
 Blockly.Msg.FOR = "per a";
 Blockly.Msg.GALLERY_SHARED_ALREADY = "You have already uploaded this program to the gallery. If you want to change it, look for the copy from the gallery and modify it. You can also remove it from the gallery while deleting the copy from the gallery.";  // untranslated
 Blockly.Msg.GET = "obté";
