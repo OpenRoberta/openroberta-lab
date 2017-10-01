@@ -18,27 +18,39 @@ limitations under the License.
 -->
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="description"
+	content="Open Roberta Lab - Online-Programmierumgebung für Roboter mit der grafischen Programmiersprache NEPO®" />
+<meta property="og:image"
+	content="https://lab.open-roberta.org/css/svg/OpenRobertaLab_logo.svg" />
+<meta name="keywords"
+	content="Open, Roberta, Programmierumgebung, NEPO, Initiative" />
 <link rel="stylesheet" type="text/css"
 	href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css"
 	href="js/libs/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap-table.min.css"></link>
-<link rel="stylesheet" href="js/libs/slick-1.7.1/slick.css">
-<link rel="stylesheet" href="js/libs/slick-1.7.1/slick-theme.css">
+<link rel="stylesheet"
+	href="js/libs/slick-1.7.1/slick.css?version=2.3.0">
+<link rel="stylesheet"
+	href="js/libs/slick-1.7.1/slick-theme.css?version=2.3.0">
 <link rel="stylesheet" type="text/css" href="/css/languages.min.css"></link>
-<link rel="stylesheet" type="text/css" href="/css/typicons.css"></link>
+<link rel="stylesheet" type="text/css"
+	href="/css/typicons.css?version=2.3.0"></link>
 <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"></link>
-<link rel="stylesheet" type="text/css" href="/css/wysiwyg.css"></link>
 <link rel="stylesheet" type="text/css"
-	href="/css/bootstrap-tagsinput.css"></link>
-<link href="/css/enjoyhint.css" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
+	href="/css/wysiwyg.css?version=2.3.0"></link>
 <link rel="stylesheet" type="text/css"
-	href="js/libs/code-prettify/prettify.css"></link>
+	href="/css/bootstrap-tagsinput.css?version=2.3.0"></link>
+<link href="/css/enjoyhint.css?version=2.3.0" rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="/css/roberta.css?version=2.3.0"></link>
+<link rel="stylesheet" type="text/css"
+	href="js/libs/code-prettify/prettify.css?version=2.3.0"></link>
 <!-- Make sure css files are loaded before js files -->
 <script data-main="js/main" src="js/require.js"></script>
 <link rel="manifest" href="manifest.webapp.json"></link>
 <link rel="SHORTCUT ICON" href="../css/img/NEPO.ico"
 	type="image/vnd.microsoft.icon"></link>
+<link rel="apple-touch-icon" sizes="144x144" href="/css/img/Nepo_N.png" />
 <!-- enable linenumbers for all lines on highlighted source code -->
 <style>
 li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
@@ -352,7 +364,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 		</div>
 		<!-- Roberta-Logo -->
 		<div class="logo">
-			<img href="#" id="img-nepo" class="img-nepo" src="/css/svg/NEPO_Logo_RGB.svg" />
+			<img href="#" id="img-nepo" class="img-nepo"
+				src="/css/svg/NEPO_Logo_RGB.svg" />
 		</div>
 		<!-- Toasts -->
 		<div class="panel-body" id="toastContainer">
@@ -1056,6 +1069,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
 				</div>
 				<div class="modal-body left-inner-addon">
 					<span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Do you
@@ -1077,6 +1091,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
+					<h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
 				</div>
 				<div class="modal-body left-inner-addon">
 					<span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Do
@@ -1199,10 +1214,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							lkey="Blockly.Msg.POPUP_STARTUP_HIDE">Okay, don't show
 							this again.</label><br /> <span lkey="Blockly.Msg.POPUP_STARTUP_COOKIES">
 							We use cookies to personalise content and to analyse our traffic.</span>
-						<a href="https://www.open-roberta.org/index.php?id=137"
+						<a href="http://typo3.p404214.webspaceconfig.de/index.php?id=137"
 							target="_blank" class="DE" style="display: inline;">Details
 							ansehen.</a> <a
-							href="https://www.open-roberta.org/index.php?id=137&L=1"
+							href="http://typo3.p404214.webspaceconfig.de/index.php?id=137&L=1"
 							target="_blank" class="EN" style="display: inline;">Show
 							details.</a>
 					</div>
@@ -1287,10 +1302,10 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 					<span id="messageConfirm">Message to show</span>
 				</div>
 				<div class="modal-footer">
-					<input type="button" id="confirm" class="btn"
-						data-dismiss="modal" value="OK"></input>
-					<input type="button" id="confirmCancel" class="btn"
-						data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL" value="cancel"></input>
+					<input type="button" id="confirm" class="btn" data-dismiss="modal"
+						value="OK"></input> <input type="button" id="confirmCancel"
+						class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"
+						value="cancel"></input>
 				</div>
 			</div>
 		</div>

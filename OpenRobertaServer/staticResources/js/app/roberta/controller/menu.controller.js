@@ -453,9 +453,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 'head navigation menu item clicked');
         $('.menuAboutProject').onWrap('click', function(event) {
             if (GUISTATE_C.getLanguage() == 'de') {
-                window.open("https://www.open-roberta.org/index.php?id=135");
+                window.open("http://typo3.p404214.webspaceconfig.de/index.php?id=135");
             } else {
-                window.open("https://www.open-roberta.org/index.php?id=135&L=1");
+                window.open("http://typo3.p404214.webspaceconfig.de/index.php?id=135&L=1");
             }
         }, 'head navigation menu item clicked');
 

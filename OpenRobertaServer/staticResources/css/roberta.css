@@ -1301,6 +1301,18 @@ td.bs-checkbox {
     top: 4px;
     left: 40px;
 }
+.galleryProgramname {
+	font-weight:bold; 
+	font-size:24px; 
+	text-align:center; 
+	margin-top:60px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    word-break: break-word;
+    width: 100%;
+    margin-bottom: 12px;
+}
 div.galleryLike {
     color: #fff;
     font-size: 16px;

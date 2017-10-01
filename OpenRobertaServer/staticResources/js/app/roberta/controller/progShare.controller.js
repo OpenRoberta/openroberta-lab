@@ -49,7 +49,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
             }, ]
         });
         $('#galleryPreview').bootstrapTable({
-            height : 376,
+            height : 388,
             cardView : 'true',
             rowStyle : GALLERY_C.rowStyle,
             rowAttributes : GALLERY_C.rowAttributes,
@@ -178,7 +178,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
     function showShareWithGallery(row) {
         var progName = row[0];
         var authorName = row[3];
-        $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '« with gallery').end();
+        $('#share-with-gallery h3').html('');
         $('#galleryPreview').html('');
         $('#textShareGallery').html('');
         $('#share-with-gallery').data('progName', progName);
@@ -194,7 +194,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                 PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), GUISTATE_C.getUserAccountName(), function(result) {
                     if (result.rc === 'ok') {
                         var progName = row[0];
-                        $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '« with gallery').end();
+                        $('#share-with-gallery h3').text(Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY.replace("$", progName));
                         $('#galleryPreview').bootstrapTable("load", new Array(result.program));
                         $('.infoTags').tagsinput();
                         $('#galleryPreview .bootstrap-tagsinput').addClass('galleryTags');
@@ -250,7 +250,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
                 LOG.info("share program " + progName + " with Gallery");
                 $('#progList').find('button[name="refresh"]').trigger('click');
             }
-            MSG.displayInformation(result, result.message, result.message, 'Gallery');
+            MSG.displayInformation(result, result.message, result.message, progName);
         });       
         $('#share-with-gallery').modal("hide");
     }

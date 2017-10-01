@@ -163,20 +163,20 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     }
     exports.rowAttributes = rowAttributes;
 
-    var titleAuthor = "<span lkey='Blockly.Msg.DATATABLE_BY'>" + (Blockly.Msg.DATATABLE_BY || "von") + "</span>";
+    var titleAuthor = "<span lkey='Blockly.Msg.GALLERY_BY'>" + (Blockly.Msg.GALLERY_BY || "von") + "</span>";
     exports.titleAuthor = titleAuthor;
 
     var titleNumberOfViews = '<span class="galleryIcon typcn typcn-eye-outline" />';
     exports.titleNumberOfViews = titleNumberOfViews;
 
-    var titleDate = "<span lkey='Blockly.Msg.DATATABLE_DATE'>" + (Blockly.Msg.DATATABLE_DATE || "Datum") + "</span>";
+    var titleDate = "<span lkey='Blockly.Msg.GALLERY_DATE'>" + (Blockly.Msg.GALLERY_DATE || "erstellt") + "</span>";
     exports.titleDate = titleDate;
 
     var titleLikes = '<span class="galleryIcon typcn typcn-heart-full-outline" />';
     exports.titleLikes = titleLikes;
 
     var formatProgramName = function(value, row, index) {
-        return '<div style="font-weight:bold; font-size:24px; text-align:center; margin-top:60px">' + value + '</div>';
+        return '<div class="galleryProgramname">' + value + '</div>';
     }
     exports.formatProgramName = formatProgramName;
 
@@ -205,10 +205,10 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     var formatLike = function(value, row, index) {
         if (GUISTATE_C.isUserLoggedIn()) {
             if (value) {
-                return '<div class="galleryLike"><a href="#" class="dislike galleryLike typcn typcn-heart-half-outline"><span lkey="Blockly.Msg.DATATABLE_DISLIKE">'
+                return '<div class="galleryLike"><a href="#" class="dislike galleryLike typcn typcn-heart-half-outline"><span lkey="Blockly.Msg.GALLERY_DISLIKE">'
                         + (Blockly.Msg.GALLERY_DISLIKE || 'gefällt mir nicht mehr') + '</span></a></div>';
             } else {
-                return '<div class="galleryLike"><a href="#" class="like galleryLike typcn typcn-heart-full-outline"><span lkey="Blockly.Msg.DATATABLE_LIKE">'
+                return '<div class="galleryLike"><a href="#" class="like galleryLike typcn typcn-heart-full-outline"><span lkey="Blockly.Msg.GALLERY_LIKE">'
                         + (Blockly.Msg.GALLERY_LIKE || 'gefällt mir') + '</span></a></div>';
             }
         } else {
