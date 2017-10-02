@@ -16,6 +16,7 @@ tmp='temp'
 work='/tmp/openroberta'
 # folder in which scripts are in
 scripts='lejos_scripts'
+espeak='espeak'
 
 # Directory contains files for updating the brick after successful maven install
 libdir='../../RobotEV3/resources/updateResources/lejos_v1'
@@ -24,7 +25,7 @@ libdir='../../RobotEV3/resources/updateResources/lejos_v1'
 # for example "sh CreateImage.sh 1.4.0"
 # the version only defines the file name
 # the "real" version comes from the maven install procedure
-version='1.3.2'
+version='2.3.0'
 
 menu=${libdir}/EV3Menu.jar
 json=${libdir}/json.jar
@@ -106,6 +107,7 @@ rm lejosimage.bz2
 echo "Replace files..."
 rm ${work}/lejosimage/lejosfs/home/root/lejos/bin/utils/EV3Menu.jar
 mkdir -p ${work}/lejosimage/lejosfs/home/roberta/lib
+mkdir -p ${work}/lejosimage/lejosfs/usr/lib
 
 cd - > /dev/null 2>&1
 cp ${menu} ${work}/lejosimage/lejosfs/home/root/lejos/bin/utils
@@ -119,6 +121,11 @@ cp ${scripts}/jrun ${work}/lejosimage/lejosfs/home/root/lejos/bin
 cp ${scripts}/startbt ${work}/lejosimage/lejosfs/home/root/lejos/bin
 cp ${scripts}/startpan ${work}/lejosimage/lejosfs/home/root/lejos/bin
 cp ${scripts}/startup ${work}/lejosimage/lejosfs/home/root/lejos/bin
+
+cp ${espeak}/bin/speak ${work}/lejosimage/lejosfs/usr/bin/speak
+cp ${espeak}/lib/* ${work}/lejosimage/lejosfs/usr/lib/
+cp -r ${espeak}/share/espeak-data ${work}/lejosimage/lejosfs/usr/share
+
 # ---
 
 # Pack everything together again
