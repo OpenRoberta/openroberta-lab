@@ -582,16 +582,19 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
 
         $(window).on('beforeunload', function(e) {
-            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
-                if (GUISTATE_C.isUserLoggedIn()) {
-                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
-                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
-                } else {
-                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
-                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
-                }
-            }
+            return Blockly.Msg.POPUP_BEFOREUNLOAD;
+            // the following code doesn't work anymore, TODO check for a better solution.
+//            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
+//                if (GUISTATE_C.isUserLoggedIn()) {
+//                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
+//                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+//                } else {
+//                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
+//                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
+//                }
+//            }
         });
+        
         var blocklyWidth = 0;
         $(window).on('resize', function(e) {
             Blockly.svgResize(GUISTATE_C.getBlocklyWorkspace());
