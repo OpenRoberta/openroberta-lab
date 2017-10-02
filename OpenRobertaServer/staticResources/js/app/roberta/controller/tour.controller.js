@@ -117,7 +117,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
                 }
             }
         }, {
-            'event': 'click touchend',
+            'event': 'mousedown touchstart',
             'timeout':1000,            
             'selector': '#simControl',
             'description': 'TOUR1_DESCRIPTION13a',
@@ -275,7 +275,7 @@ define(['exports', 'comm', 'message', 'log', 'blocks', 'jquery', 'jquery-scrollt
                 }
             }
         }, {
-            'event': 'click touchend',
+            'event': 'mousedown touchstart',
             'timeout':1000,            
             'selector': '#simControl',
             'description': 'TOUR1_DESCRIPTION13a',
