@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.nao;
+package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import java.util.List;
 
