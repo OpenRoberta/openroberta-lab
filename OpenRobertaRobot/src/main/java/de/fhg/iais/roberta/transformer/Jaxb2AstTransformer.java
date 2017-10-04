@@ -113,7 +113,7 @@ abstract public class Jaxb2AstTransformer<V> {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.OpUnary.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
+        return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
     }
 
     /**

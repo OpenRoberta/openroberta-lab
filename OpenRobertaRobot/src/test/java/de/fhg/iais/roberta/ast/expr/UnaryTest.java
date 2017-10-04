@@ -24,7 +24,7 @@ public class UnaryTest {
     public void getOp() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(Unary.OpUnary.NEG, unary.getOp());
+        Assert.assertEquals(Unary.Op.NEG, unary.getOp());
     }
 
     @Test
@@ -50,16 +50,16 @@ public class UnaryTest {
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        Unary.OpUnary.get("");
+        Unary.Op.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        Unary.OpUnary.get(null);
+        Unary.Op.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        Unary.OpUnary.get("asdf");
+        Unary.Op.get("asdf");
     }
 }

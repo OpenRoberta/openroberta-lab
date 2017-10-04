@@ -404,7 +404,7 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
     }
 
     @Override
-    protected String getUnaryOperatorSymbol(Unary.OpUnary op) {
+    protected String getUnaryOperatorSymbol(Unary.Op op) {
         return unaryOpSymbols().get(op);
     }
 
@@ -437,14 +437,14 @@ public abstract class RobotCppVisitor extends CommonLanguageVisitor {
         ).collect(entriesToMap()));
     }
 
-    protected static Map<Unary.OpUnary, String> unaryOpSymbols() {
+    protected static Map<Unary.Op, String> unaryOpSymbols() {
         return Collections.unmodifiableMap(Stream.of(
 
-            entry(Unary.OpUnary.PLUS, "+"),
-            entry(Unary.OpUnary.NEG, "-"),
-            entry(Unary.OpUnary.NOT, "!"),
-            entry(Unary.OpUnary.POSTFIX_INCREMENTS, "++"),
-            entry(Unary.OpUnary.PREFIX_INCREMENTS, "++")
+            entry(Unary.Op.PLUS, "+"),
+            entry(Unary.Op.NEG, "-"),
+            entry(Unary.Op.NOT, "!"),
+            entry(Unary.Op.POSTFIX_INCREMENTS, "++"),
+            entry(Unary.Op.PREFIX_INCREMENTS, "++")
 
         ).collect(entriesToMap()));
     }

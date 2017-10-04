@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary.OpUnary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
@@ -166,9 +165,9 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        Unary.OpUnary op = unary.getOp();
+        Unary.Op op = unary.getOp();
         String sym = getUnaryOperatorSymbol(op);
-        if ( op == Unary.OpUnary.POSTFIX_INCREMENTS ) {
+        if ( op == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
             this.sb.append(sym);
         } else {
@@ -252,8 +251,7 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
     }
 
     protected void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        System.out.println(unary.getOp() == OpUnary.NEG);
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == OpUnary.NEG ) {
+        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() || unary.getOp() == Unary.Op.NEG ) {
             sb.append("(");
             unary.getExpr().visit(this);
             sb.append(")");
@@ -341,7 +339,7 @@ public abstract class CommonLanguageVisitor implements AstLanguageVisitor<Void> 
 
     abstract protected String getBinaryOperatorSymbol(Binary.Op op);
 
-    abstract protected String getUnaryOperatorSymbol(Unary.OpUnary op);
+    abstract protected String getUnaryOperatorSymbol(Unary.Op op);
 
     protected static <K, V> Map.Entry<K, V> entry(K key, V value) {
         return new AbstractMap.SimpleEntry<>(key, value);

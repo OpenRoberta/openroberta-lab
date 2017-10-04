@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
-import de.fhg.iais.roberta.syntax.lang.expr.Unary.OpUnary;
+import de.fhg.iais.roberta.syntax.lang.expr.Unary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.transformer.ExprParam;
@@ -193,7 +193,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(modee) ) {
                     exprr =
                         Unary.make(
-                            OpUnary.NOT,
+                            Op.NOT,
                             helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, BlocklyType.BOOLEAN))),
                             helper.extractBlockProperties(block),
                             helper.extractComment(block));
