@@ -22,15 +22,15 @@ import de.fhg.iais.roberta.visitor.lang.AstLanguageVisitor;
  * <br>
  * Client must provide operation and expression over which operation is executed. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(Op, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * To create an instance from this class use the method {@link #make(OpUnary, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>
- * The enumeration {@link Op} contains all allowed unary operations.
+ * The enumeration {@link OpUnary} contains all allowed unary operations.
  */
 public class Unary<V> extends Expr<V> {
-    private final Op op;
+    private final OpUnary op;
     private final Expr<V> expr;
 
-    private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Unary(OpUnary op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("UNARY"), properties, comment);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
@@ -47,14 +47,14 @@ public class Unary<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Unary}
      */
-    public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> Unary<V> make(OpUnary op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Unary<V>(op, expr, properties, comment);
     }
 
     /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
+     * @return the operation in the binary expression. See enum {@link OpUnary} for all possible operations
      */
-    public Op getOp() {
+    public OpUnary getOp() {
         return this.op;
     }
 
@@ -88,7 +88,7 @@ public class Unary<V> extends Expr<V> {
     /**
      * Operators for the unary expression.
      */
-    public static enum Op {
+    public static enum OpUnary {
         PLUS( 10, Assoc.LEFT, "+" ),
         NEG( 10, Assoc.LEFT, "-" ),
         NOT( 300, Assoc.RIGHT, "!", "not" ),
@@ -99,7 +99,7 @@ public class Unary<V> extends Expr<V> {
         private final int precedence;
         private final Assoc assoc;
 
-        private Op(int precedence, Assoc assoc, String... values) {
+        private OpUnary(int precedence, Assoc assoc, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
             this.values = values;
@@ -120,18 +120,18 @@ public class Unary<V> extends Expr<V> {
         }
 
         /**
-         * get operator from {@link Op} from string parameter. It is possible for one operator to have multiple string mappings.
+         * get operator from {@link OpUnary} from string parameter. It is possible for one operator to have multiple string mappings.
          * Throws exception if the operator does not exists.
          *
          * @param name of the operator
-         * @return operator from the enum {@link Op}, never null
+         * @return operator from the enum {@link OpUnary}, never null
          */
-        public static Op get(String s) {
+        public static OpUnary get(String s) {
             if ( s == null || s.isEmpty() ) {
                 throw new DbcException("Invalid unary operator symbol: " + s);
             }
             String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-            for ( Op op : Op.values() ) {
+            for ( OpUnary op : OpUnary.values() ) {
                 if ( op.toString().equals(sUpper) ) {
                     return op;
                 }

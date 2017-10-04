@@ -98,7 +98,7 @@ public class Ev3TextlyTree2Ev3Ast extends TextlyBaseVisitor<Phrase<Void>> {
     public Phrase<Void> visitUnary(UnaryContext ctx) {
         String op = ctx.getChild(0).getText(); // strange name for the operand. Obviously from the last rule!
         Phrase<Void> expr = visit(ctx.getChild(1));
-        return Unary.make(Unary.Op.get(op), (Expr<Void>) expr, null, null);
+        return Unary.make(Unary.OpUnary.get(op), (Expr<Void>) expr, null, null);
     }
 
     @Override
