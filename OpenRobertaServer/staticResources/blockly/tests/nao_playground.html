@@ -404,6 +404,20 @@ h1 {
                     </block>
                 </value>
         	</block>
+		<block type='naoActions_learnFace'>
+            		<value name='NAME'>
+                	    <block type='text'>
+                	        <field name='TEXT'>roberta</field>
+                	    </block>
+                	</value>
+        	</block>
+        	<block type='naoActions_forgetFace'>
+            		<value name='NAME'>
+                	    <block type='text'>
+                        	<field name='TEXT'>roberta</field>
+                    	</block>
+                	</value>
+        	</block>
         </category>
         <category name='TOOLBOX_LIGHT' svg="true">
 	    <block type='naoActions_rgbLeds'>
@@ -444,25 +458,10 @@ h1 {
         <block type='naoSensors_gyrometer'></block>
         <block type='naoSensors_accelerometer'></block>
         <block type='naoSensors_fsr'></block>
-        <block type='naoSensors_naoMark'></block>
         <block type='naoSensors_getCurrent'></block>
-        <block type='naoSensors_recognizeWord'></block>
       	<block type='naoSensors_recognizedWord'></block>
-              <block type='naoSensors_learnFace'>
-                  	<value name='NAME'>
-                          <block type='text'>
-                              <field name='TEXT'>roberta</field>
-                          </block>
-                      </value>
-        </block>
-        <block type='naoSensors_forgetFace'>
-            	<value name='NAME'>
-                    <block type='text'>
-                        <field name='TEXT'>roberta</field>
-                    </block>
-                </value>
-        </block>
-        <block type='naoSensors_detectFace'></block>
+        <block type='naoSensors_naoMark'></block>
+       	<block type='naoSensors_detectFace'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg="true">
         <category name='TOOLBOX_DECISION'>

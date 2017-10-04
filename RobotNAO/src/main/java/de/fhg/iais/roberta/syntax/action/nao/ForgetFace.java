@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensor.nao;
+package de.fhg.iais.roberta.syntax.action.nao;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -25,11 +25,11 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * <br>
  * <br>
  */
-public class LearnFace<V> extends Sensor<V> {
+public class ForgetFace<V> extends Action<V> {
     private final Expr<V> msg;
 
-    private LearnFace(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockTypeContainer.getByName("LEARN_FACE"), properties, comment);
+    private ForgetFace(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(BlockTypeContainer.getByName("FORGET_FACE"), properties, comment);
         Assert.isTrue(msg != null);
         this.msg = msg;
         setReadOnly();
@@ -43,8 +43,8 @@ public class LearnFace<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> LearnFace<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LearnFace<>(msg, properties, comment);
+    private static <V> ForgetFace<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ForgetFace<>(msg, properties, comment);
     }
 
     /**
@@ -56,12 +56,12 @@ public class LearnFace<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return "LearnFace [" + this.msg + "]";
+        return "ForgetFace [" + this.msg + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((NaoAstVisitor<V>) visitor).visitLearnFace(this);
+        return ((NaoAstVisitor<V>) visitor).visitForgetFace(this);
 
     }
 
@@ -75,7 +75,7 @@ public class LearnFace<V> extends Sensor<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.NAME, BlocklyType.STRING));
-        return LearnFace.make(helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ForgetFace.make(helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
