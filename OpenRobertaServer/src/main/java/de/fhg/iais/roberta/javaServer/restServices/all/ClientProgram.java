@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.UnmarshalException;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -172,10 +173,11 @@ public class ClientProgram {
                 if ( !Util1.isValidJavaIdentifier(programName) ) {
                     programName = "NEPOprog";
                 }
+
                 Export jaxbImportExport = null;
                 try {
                     jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
-                } catch ( final org.xml.sax.SAXException e ) {
+                } catch ( final UnmarshalException | org.xml.sax.SAXException e ) {
                     jaxbImportExport = null;
                 }
                 if ( jaxbImportExport != null ) {

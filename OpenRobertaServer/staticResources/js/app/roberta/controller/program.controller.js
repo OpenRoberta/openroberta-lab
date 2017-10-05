@@ -458,6 +458,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
     exports.openProgramFromXML = openProgramFromXML;
 
     function loadProgramFromXML(name, xml) {
+        if (xml.search("<export") === -1) {
+            xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
+                    + '</config></export>';
+        }
         PROGRAM.loadProgramFromXML(name, xml, function(result) {
             if (result.rc == "ok") {
                 // save the old program that it can be restored
