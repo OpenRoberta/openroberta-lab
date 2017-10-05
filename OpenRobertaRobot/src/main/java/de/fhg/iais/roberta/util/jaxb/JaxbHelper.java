@@ -84,6 +84,7 @@ public class JaxbHelper {
      */
     public static String blockSet2xml(BlockSet blockSet) throws Exception {
         Marshaller jaxbmarshaller = jaxbContext.createMarshaller();
+        jaxbmarshaller.setProperty("com.sun.xml.bind.xmlDeclaration", Boolean.FALSE);
         jaxbmarshaller.setSchema(blockSetSchema);
         StringWriter writer = new StringWriter();
         jaxbmarshaller.marshal(blockSet, writer);
