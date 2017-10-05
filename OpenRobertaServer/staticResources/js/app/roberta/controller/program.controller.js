@@ -210,17 +210,15 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
                 result.name = program[0];
                 GUISTATE_C.setProgram(result, alien);
                 GUISTATE_C.setProgramXML(result.programText);
-                if (result.configName === null) {
-                    if (result.configText === null) {
-                        GUISTATE_C.setConfigurationXML(result.configText);
-                    } else {
+                if (result.configName === null || result.configName === undefined) {
+                    if (!(result.configText === null || result.configText === undefined)) {
                         GUISTATE_C.setConfigurationXML(result.configText);
                     }
                 } else {
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.configText);
                 }
-                if (!(result.configText === null)) {
+                if (!(result.configText === null || result.configText === undefined)) {
                     GUISTATE_C.setConfigurationXML(result.configText);
                 }
                 $('#tabProgram').trigger('click');
@@ -432,6 +430,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
     function linkProgram() {
         var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xml = Blockly.Xml.domToText(dom);
+        xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
+                + '</config></export>';
         var link = 'https://lab.open-roberta.org/#loadProgram';
         link += '&' + GUISTATE_C.getRobot();
         link += '&' + GUISTATE_C.getProgramName();
