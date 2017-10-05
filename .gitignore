@@ -4,6 +4,7 @@
 **/*.class
 Resources/resources/**/*.jar
 Resources/updateResources/**/*.jar
+Resources/**/*.zip
 RobotEV3/resources/**/*.jar
 OpenRobertaRuntime/userProjects/*
 OpenRobertaServer/userProjects/*
