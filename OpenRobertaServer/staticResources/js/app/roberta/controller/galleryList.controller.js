@@ -146,7 +146,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var rowStyle = function(row, index) {
         return {
-            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6' // the robot typicon as background image
+            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6' 
         };
     }
     exports.rowStyle = rowStyle;

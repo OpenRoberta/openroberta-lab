@@ -75,6 +75,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         }
         setPause(true);
         $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
         if (num === -1) {
             currentBackground += 1;
             if (currentBackground >= imgObjectList.length) {
@@ -119,8 +120,10 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         } else {
             if (value) {
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
             } else {
                 $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
+                $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
             }
             pause = value;
         }
@@ -324,6 +327,7 @@ define([ 'exports', 'simulation.scene', 'simulation.program.eval', 'simulation.m
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
+        $('#simControl').attr('data-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
     }
 
     function setObstacle() {
