@@ -3,9 +3,11 @@ package de.fhg.iais.roberta.visitor.nao;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
+import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
+import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
@@ -34,13 +36,10 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
-import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
-import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -181,13 +180,6 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
      * @param dialog phrase to be visited
      */
     V visitDialog(Dialog<V> dialog);
-
-    /**
-     * visit a {@link RecognizedWord}.
-     *
-     * @param recognized word phrase to be visited
-     */
-    V visitRecognizedWord(RecognizedWord<V> recognizedWord);
 
     /**
      * visit a {@link SetLeds}.

@@ -9,9 +9,11 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
+import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
+import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.action.nao.LedOff;
 import de.fhg.iais.roberta.syntax.action.nao.LedReset;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
@@ -41,13 +43,10 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
-import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
-import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.syntax.sensor.nao.RecognizedWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
@@ -168,12 +167,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitDialog(Dialog<Void> dialog) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitRecognizedWord(RecognizedWord<Void> recognizedWord) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.sensor.nao.GetSampleType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -13,9 +14,12 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -38,6 +42,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
     private final String touchSide;
     private final String Coordinate;
     private final String fsrSide;
+    private final Expr<V> recognized;
     private final GetSampleType sensorType;
 
     private NaoGetSampleSensor(
@@ -46,6 +51,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         String side,
         String coordinate,
         String fsrSide,
+        Expr<V> recognized,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
@@ -56,6 +62,7 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         this.touchSide = side;
         this.Coordinate = coordinate;
         this.fsrSide = fsrSide;
+        this.recognized = recognized;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.NAO_TOUCHSENSOR:
                 this.sensor = Touchsensors.make(Touchsensors.SensorType.valueOf(touchsensor), Touchsensors.TouchSide.valueOf(side), properties, comment);
@@ -78,8 +85,8 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.NAO_FSR:
                 this.sensor = ForceSensor.make(ForceSensor.Side.valueOf(fsrSide), properties, comment);
                 break;
-            case BlocklyConstants.NAO_RECOGNIZEDWORD:
-                this.sensor = RecognizedWord.make(properties, comment);
+            case BlocklyConstants.NAO_RECOGNIZEWORD:
+                this.sensor = RecognizeWord.make(recognized, properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
@@ -102,10 +109,11 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
         String touchSide,
         String coordinate,
         String fsrSide,
+        Expr<V> recognized,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new NaoGetSampleSensor<V>(sensorType, touchSensor, touchSide, coordinate, fsrSide, properties, comment, factory);
+        return new NaoGetSampleSensor<V>(sensorType, touchSensor, touchSide, coordinate, fsrSide, recognized, properties, comment, factory);
     }
 
     public String getFsrSide() {
@@ -126,6 +134,10 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
 
     public String getCoordinate() {
         return this.Coordinate;
+    }
+
+    public Expr<V> getRecognized() {
+        return this.recognized;
     }
 
     public GetSampleType getSensorType() {
@@ -172,12 +184,20 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
             fsrSide = helper.extractField(fields, fsrSideName);
         }
 
+        String vocabulary = GetSampleType.get(modeName).getRecognizedWord();
+        Expr<V> recognized = null;
+        if ( !vocabulary.equals("") ) {
+            List<Value> values = helper.extractValues(block, (short) 1);
+            recognized = (Expr<V>) helper.extractValue(values, new ExprParam(BlocklyConstants.WORD, BlocklyType.ARRAY_STRING));
+        }
+
         return NaoGetSampleSensor.make(
             GetSampleType.get(modeName),
             touchSensor,
             touchSide,
             coordinate,
             fsrSide,
+            recognized,
             helper.extractBlockProperties(block),
             helper.extractComment(block),
             helper.getModeFactory());
@@ -197,6 +217,8 @@ public class NaoGetSampleSensor<V> extends Sensor<V> {
             + this.fsrSide
             + ", sensorType="
             + this.sensorType
+            + "vocabulary="
+            //+ this.vocabulary
             + "]";
     }
 

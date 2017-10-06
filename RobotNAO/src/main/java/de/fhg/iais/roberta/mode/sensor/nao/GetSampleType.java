@@ -8,14 +8,14 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * This enumeration contain all types of sensors that are used in <b>naoSensors_getSample</b> Blockly block.
  */
 public enum GetSampleType {
-    NAO_TOUCHSENSOR( "TOUCHSENSOR", "POSITION", "SIDE", "", "", "" ),
-    NAO_DETECTFACE( "DETECTFACE", "", "", "", "", "" ),
-    NAO_NAOMARK( "NAOMARK", "", "", "", "", "" ),
-    NAO_SONAR( "SONAR", "", "", "", "", "" ),
-    NAO_GYROMETER( "GYROMETER", "", "", "COORDINATE", "", "" ),
-    NAO_ACCELEROMETER( "ACCELEROMETER", "", "", "COORDINATE", "", "" ),
-    NAO_FSR( "FSR", "", "", "", "SIDE", "" ),
-    NAO_RECOGNIZEDWORD( "RECOGNIZEDWORD", "", "", "", "", "" );
+    NAO_TOUCHSENSOR( "TOUCHSENSOR", "POSITION", "SIDE", "", "", "", "" ),
+    NAO_DETECTFACE( "DETECTFACE", "", "", "", "", "", "" ),
+    NAO_NAOMARK( "NAOMARK", "", "", "", "", "", "" ),
+    NAO_SONAR( "SONAR", "", "", "", "", "", "" ),
+    NAO_GYROMETER( "GYROMETER", "", "", "COORDINATE", "", "", "" ),
+    NAO_ACCELEROMETER( "ACCELEROMETER", "", "", "COORDINATE", "", "", "" ),
+    NAO_FSR( "FSR", "", "", "", "SIDE", "", "" ),
+    NAO_RECOGNIZEWORD( "RECOGNIZEWORD", "", "", "", "", "WORD", "" );
 
     private final String sensorType;
     private final String touchSensorName;
@@ -23,9 +23,14 @@ public enum GetSampleType {
     private final String coordinateName;
     private final String fsrSide;
     private final String[] values;
+    private final String recognize;
 
     public String getTouchSideName() {
         return this.touchSideName;
+    }
+
+    public String getRecognizedWord() {
+        return this.recognize;
     }
 
     public String getCoordinateName() {
@@ -36,13 +41,21 @@ public enum GetSampleType {
         return this.fsrSide;
     }
 
-    private GetSampleType(String sensorType, String touchSensorName, String touchSideName, String coordinateName, String fsrSide, String... values) {
+    private GetSampleType(
+        String sensorType,
+        String touchSensorName,
+        String touchSideName,
+        String coordinateName,
+        String fsrSide,
+        String recognize,
+        String... values) {
         this.values = values;
         this.sensorType = sensorType;
         this.touchSensorName = touchSensorName;
         this.touchSideName = touchSideName;
         this.coordinateName = coordinateName;
         this.fsrSide = fsrSide;
+        this.recognize = recognize;
     }
 
     public String getTouchSensorName() {
