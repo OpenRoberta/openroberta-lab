@@ -45,7 +45,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             },
             columns : [ {
                 sortable : true,
-                visible : false,
+                //visible : false,
+                formatter : formatRobot,
             }, {
                 sortable : true,
                 formatter : formatProgramName,
@@ -145,8 +146,8 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var rowStyle = function(row, index) {
         return {
-            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6 typcn typcn-' + row[0] // the robot typicon as background image
-        }
+            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6' // the robot typicon as background image
+        };
     }
     exports.rowStyle = rowStyle;
 
@@ -174,6 +175,11 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var titleLikes = '<span class="galleryIcon typcn typcn-heart-full-outline" />';
     exports.titleLikes = titleLikes;
+
+    var formatRobot = function(value, row, index) {
+        return '<div class="typcn typcn-' + row[0] + '"></div>';
+    }
+    exports.formatRobot = formatRobot;
 
     var formatProgramName = function(value, row, index) {
         return '<div class="galleryProgramname">' + value + '</div>';
