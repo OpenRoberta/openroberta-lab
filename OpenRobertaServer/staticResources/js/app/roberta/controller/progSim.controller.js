@@ -1,10 +1,9 @@
-define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'blocks', 'jquery',
-    'jquery-validate', 'blocks-msg'
-], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, Blockly, $) {
+define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'guiState.controller', 'program.model', 'blocks', 'jquery', 'jquery-validate',
+        'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL, SIM, GUISTATE_C, PROGRAM, Blockly, $) {
 
     var blocklyWorkspace;
     /**
-     *
+     * 
      */
     function init(workspace) {
         blocklyWorkspace = workspace;
@@ -27,10 +26,12 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
                 Blockly.hideChaff();
                 var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
                 var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-                var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
-                GUISTATE_C.setConfigurationXML(xmlTextConfiguration);
 
-                PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+                var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+                var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+                var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+
+                PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                         $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
@@ -55,7 +56,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
         }, 'simImport clicked');
 
         $('#simButtonsCollapse').collapse({
-            'toggle': false
+            'toggle' : false
         });
         $('#simRobotModal').removeClass("modal-backdrop");
 
@@ -72,14 +73,14 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
             if (robot == 'calliope' || robot == 'microbit') {
                 position.left = $("#blocklyDiv").width() + 12;
                 $("#simRobotModal").css({
-                    top: position.top,
-                    left: position.left
+                    top : position.top,
+                    left : position.left
                 });
             } else {
                 position.left += 48;
                 $("#simRobotModal").css({
-                    top: position.top,
-                    left: position.left
+                    top : position.top,
+                    left : position.left
                 });
             }
             $('#simRobotModal').draggable();
@@ -91,16 +92,16 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
             var position = $("#simDiv").position();
             position.top += 12;
             $("#simValuesModal").css({
-                top: position.top,
-                right: 12,
-                left: 'initial',
-                bottom: 'inherit'
+                top : position.top,
+                right : 12,
+                left : 'initial',
+                bottom : 'inherit'
             });
             $('#simValuesModal').draggable();
 
             $("#simButtonsCollapse").collapse('hide');
         }, 'simValues clicked');
-        
+
         $('#simResetPose').onWrap('click', function(event) {
             SIM.resetPose();
         }, 'simResetPose clicked');
@@ -119,6 +120,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
         // update right panel if it is already open
         if ($('.fromRight').hasClass('rightActive')) {
             $('#infoContent').html(blocklyWorkspace.description);
+            //TODO this should be revised with Beate and Kostadin
             var xmlConfiguration = GUISTATE_C.getConfigurationXML();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
@@ -139,22 +141,22 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
             $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
             Blockly.svgResize(blocklyWorkspace);
             $('#progSim').animate({
-                right: '0px',
+                right : '0px',
             }, {
-                duration: 750
+                duration : 750
             });
             $('#blocklyDiv').animate({
-                width: '100%'
+                width : '100%'
             }, {
-                duration: 750,
-                start: function() {
+                duration : 750,
+                start : function() {
                     $(".modal").modal("hide");
                 },
-                step: function() {
+                step : function() {
                     $(window).resize();
                     Blockly.svgResize(blocklyWorkspace);
                 },
-                done: function() {
+                done : function() {
                     $('#blocklyDiv').removeClass('rightActive');
                     $('#simDiv').removeClass('rightActive');
                     $('#menuSim').parent().addClass('disabled');
@@ -170,9 +172,12 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
             //LOG.info('run ' + GUISTATE_C.getProgramName() + 'in simulation');
             var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
-            var xmlTextConfiguration = GUISTATE_C.getConfigurationXML();
-            GUISTATE_C.setConfigurationXML(xmlTextConfiguration);
-            PROGRAM.runInSim(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlTextProgram, xmlTextConfiguration, function(result) {
+
+            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+
+            PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
                 if (result.rc == "ok") {
                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                     SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());
@@ -180,7 +185,7 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
                     $('#blocklyDiv').addClass('rightActive');
                     $('#simDiv').addClass('rightActive');
                     $('#simButtonsCollapse').collapse({
-                        'toggle': false
+                        'toggle' : false
                     });
                     var width;
                     var smallScreen = $('#device-size').find('div:visible').first().attr('id') == 'xs';
@@ -190,24 +195,24 @@ define(['exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'g
                         width = $('#blocklyDiv').width() * 0.3;
                     }
                     $('#progSim').animate({
-                        right: $('#blocklyDiv').width() - width + 4,
+                        right : $('#blocklyDiv').width() - width + 4,
                     }, {
-                        duration: 750
+                        duration : 750
                     });
                     $('#blocklyDiv').animate({
-                        width: width
+                        width : width
                     }, {
-                        duration: 750,
-                        step: function() {
+                        duration : 750,
+                        step : function() {
                             $(window).resize();
                             Blockly.svgResize(blocklyWorkspace);
                         },
-                        done: function() {
+                        done : function() {
                             if (smallScreen) {
                                 $('.blocklyToolboxDiv').css('display', 'none');
                             }
                             $('#sliderDiv').css({
-                                'left': width - 10
+                                'left' : width - 10
                             });
                             $('#sliderDiv').show();
                             $('#progSim').addClass('shifted');

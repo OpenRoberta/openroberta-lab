@@ -646,6 +646,11 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.setConfigurationName = setConfigurationName;
 
+    function setConfigurationNameDefault() {
+        setConfigurationName(getConfigurationStandardName());
+    }
+    exports.setConfigurationNameDefault = setConfigurationNameDefault;
+
     function setProgramToolboxLevel(level) {
         $('.level').removeClass('disabled');
         $('.level.' + level).addClass('disabled');

@@ -71,9 +71,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'pr
         } else {
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
-            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
 
-            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), GUISTATE_C.getConfigurationName(), xmlProgram, xmlConfiguration, function(result) {
+            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, function(result) {
                 GUISTATE_C.setState(result);
                 $('#blocklyDiv').addClass('rightActive');
                 $('#codeDiv').addClass('rightActive');

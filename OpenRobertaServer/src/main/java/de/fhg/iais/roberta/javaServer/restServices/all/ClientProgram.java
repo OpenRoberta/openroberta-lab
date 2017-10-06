@@ -32,12 +32,14 @@ import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
+import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.DummyProcessor;
 import de.fhg.iais.roberta.persistence.LikeProcessor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -98,6 +100,7 @@ public class ClientProgram {
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             LikeProcessor lp = new LikeProcessor(dbSession, httpSessionState);
+            ConfigurationProcessor configurationProcessor = new ConfigurationProcessor(dbSession, httpSessionState);
 
             IRobotFactory robotFactory = httpSessionState.getRobotFactory();
 
@@ -131,9 +134,16 @@ public class ClientProgram {
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.getString("programText");
-                String configurationText = request.getString("configurationText");
-                String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText);
+                String configName = request.optString("configuration", null);
+                String configurationText = request.optString("configurationText", null);
 
+                if ( configName != null ) {
+                    configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
+                } else if ( configurationText == null ) {
+                    configurationText = robotFactory.getConfigurationDefault();
+                }
+
+                String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( sourceCode == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
@@ -224,10 +234,22 @@ public class ClientProgram {
                     if ( !this.isPublicServer || (user != null && user.isActivated()) ) {
                         // get the program from the origin user to share with the gallery
                         Program program = pp.getProgram(programName, userAccount, robot, userAccount);
+
+                        String confText;
                         if ( program != null ) {
+                            if ( program.getConfigName() == null ) {
+                                if ( program.getConfigHash() == null ) {
+                                    confText = null;
+                                } else {
+                                    ConfigurationDao confDao = new ConfigurationDao(dbSession);
+                                    confText = confDao.load(program.getConfigHash()).getConfigurationText();
+                                }
+                            } else {
+                                confText = configurationProcessor.getConfigurationText(program.getConfigName(), userId, robot);
+                            }
                             // make a copy of the user program and store it as a gallery owned program
                             Program programCopy =
-                                pp.persistProgramText(programName, program.getProgramText(), null, null, galleryId, robot, userId, null, true);
+                                pp.persistProgramText(programName, program.getProgramText(), null, confText, galleryId, robot, userId, null, true);
                             if ( pp.isOk() ) {
                                 if ( programCopy != null ) {
                                     response.put("lastChanged", programCopy.getLastChanged().getTime());
@@ -350,13 +372,20 @@ public class ClientProgram {
                 }
 
             } else if ( cmd.equals("runP") ) {
+                boolean wasRobotWaiting = false;
                 Key messageKey = null;
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
-                String configurationText = request.optString("configurationText");
+                String configName = request.optString("configuration", null);
+                String configurationText = request.optString("configurationText", null);
 
-                boolean wasRobotWaiting = false;
+                if ( configName != null ) {
+                    configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
+                } else if ( configurationText == null ) {
+                    configurationText = robotFactory.getConfigurationDefault();
+                }
+
                 //TODO: Add the checkers in workflow compiler
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
@@ -381,7 +410,14 @@ public class ClientProgram {
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
-                String configurationText = request.optString("configurationText");
+                String configName = request.optString("configuration", null);
+                String configurationText = request.optString("configurationText", null);
+
+                if ( configName != null ) {
+                    configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
+                } else if ( configurationText == null ) {
+                    configurationText = robotFactory.getConfigurationDefault();
+                }
 
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
@@ -406,12 +442,20 @@ public class ClientProgram {
                 response.put("data", programText);
 
             } else if ( cmd.equals("runPsim") ) {
+                boolean wasRobotWaiting = false;
+
                 Key messageKey = null;
                 String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.optString("programText");
-                String configurationText = request.optString("configurationText");
-                boolean wasRobotWaiting = false;
+                String configName = request.optString("configuration", null);
+                String configurationText = request.optString("configurationText", null);
+
+                if ( configName != null ) {
+                    configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
+                } else if ( configurationText == null ) {
+                    configurationText = robotFactory.getConfigurationDefault();
+                }
 
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
