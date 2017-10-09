@@ -83,7 +83,7 @@ If you have a fresh clone of the server, make sure that the OpenRobertaServer fo
 * copy the folder **dbBase** (also in OpenRobertaServer) under the name **db-x.y.z**
 * or create an empty database with
 
-    ./ora.sh --createemptydb OpenRobertaServer/db-x.y.z/openroberta-db (from the root folder)
+    ./ora.sh --createEmptydb OpenRobertaServer/db-x.y.z/openroberta-db (from the root folder)
     
 If you update the server with git pull, your database will not be changed. 
 
