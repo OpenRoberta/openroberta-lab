@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-10-06 21:28:20.784011",
+		"lastupdated": "2017-10-09 17:46:07.664728",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -400,7 +400,7 @@
 	"TOUCH_ISPRESSED_TOOLTIP": "Is the touch sensor pressed?",
 	"KEY_ISPRESSED_TOOLTIP": "Is the selected button pressed?",
 	"PIN_ISTOUCHED_TOOLTIP": "Is the selected pin touched?",
-	"ULTRASONIC_GETSAMPLE_TOOLTIP": "Gets the current reading from the ultrasonic sensor.",
+	"ULTRASONIC_GETSAMPLE_TOOLTIP": "Gets the current reading from the ultrasonic sensor in cm. Maximum distance to messure is 255 cm.",
 	"COLOUR_GETSAMPLE_TOOLTIP": "Gets the current reading from the colour sensor.",
 	"INFRARED_GETSAMPLE_TOOLTIP": "Gets the current reading from the infrared sensor.",
 	"ENCODER_RESET_TOOLTIP": "Resets the motor encoder.",

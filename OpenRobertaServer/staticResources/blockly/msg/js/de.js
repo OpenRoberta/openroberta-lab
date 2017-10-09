@@ -1174,7 +1174,7 @@ Blockly.Msg.TOUR1_DESCRIPTION13 = "Öffne nun die Simulation ...";
 Blockly.Msg.TOUR1_DESCRIPTION13a = "und probiere dein Programm in der Simulation aus!";
 Blockly.Msg.TOUR1_DESCRIPTION15 = "Super,<br>dein Roboter ist jetzt 20 cm vorwärts gefahren,<br>genau wie du es programmiert hast!";
 Blockly.Msg.TOUR1_DESCRIPTION16 = "Tschüss und viel Spaß beim Ausprobieren!";
-Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Ultraschallsensors zurück.";
+Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Ultraschallsensors in cm zurück. Die weiteste Entfernung ist 255 cm.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Block für den Ultraschallsensor.";
 Blockly.Msg.UNDO = "Rückgängig";
 Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Gültige Sonderzeichen sind: =+!?.,%#+&^@_-";

@@ -1174,7 +1174,7 @@ Blockly.Msg.TOUR1_DESCRIPTION13 = "Now open the simulation ...";
 Blockly.Msg.TOUR1_DESCRIPTION13a = "and test your program in the simulation!";
 Blockly.Msg.TOUR1_DESCRIPTION15 = "Perfect,<br>your robot is driving 20 cm forward,<br>this is what you have programmed!";
 Blockly.Msg.TOUR1_DESCRIPTION16 = "Bye and have fun trying out more!";
-Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor.";
+Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor in cm. Maximum distance to messure is 255 cm.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Represents an ultrasonic sensor.";
 Blockly.Msg.UNDO = "Undo";
 Blockly.Msg.VALIDATION_CONTAINS_SPECIAL_CHARACTERS = "Valid special characters: »=+!?.,%#+&^@_-«";

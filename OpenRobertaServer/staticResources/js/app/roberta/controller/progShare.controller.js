@@ -49,7 +49,7 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
             }, ]
         });
         $('#galleryPreview').bootstrapTable({
-            height : 388,
+            height : 410,
             cardView : 'true',
             rowStyle : GALLERY_C.rowStyle,
             rowAttributes : GALLERY_C.rowAttributes,
@@ -57,7 +57,8 @@ define([ 'require', 'exports', 'log', 'util', 'message', 'comm', 'guiState.contr
             iconsPrefix : 'typcn',
             columns : [ {
                 sortable : true,
-                visible : false,
+              //visible : false,
+                formatter : GALLERY_C.formatRobot,
             }, {
                 sortable : true,
                 formatter : GALLERY_C.formatProgramName,
