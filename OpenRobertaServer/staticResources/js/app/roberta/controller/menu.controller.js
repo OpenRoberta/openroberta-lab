@@ -43,6 +43,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         centerPadding : '60px',
                         slidesToShow : 3,
                         index : 2,
+                        swipeToSlide: true,
                         setPosition : true,
                         prevArrow : "<button type='button' class='slick-prev slick-arrow typcn typcn-arrow-left-outline'></button>",
                         nextArrow : "<button type='button' class='slick-next slick-arrow typcn typcn-arrow-right-outline'></button>",
@@ -51,6 +52,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                             settings : {
                                 centerPadding : '5px',
                                 slidesToShow : 1,
+                                swipeToSlide: true,
                                 variableWidth : true
                             }
                         } ]
