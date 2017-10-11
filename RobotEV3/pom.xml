@@ -27,7 +27,7 @@
 		<ev3classes.v0.version>0.9.0-beta</ev3classes.v0.version>
 		<ev3classes.v1.version>0.9.1-beta</ev3classes.v1.version>
 		<ev3runtime.v0.version>2.3.0</ev3runtime.v0.version>
-		<ev3runtime.v1.version>2.3.0</ev3runtime.v1.version>
+		<ev3runtime.v1.version>2.3.1</ev3runtime.v1.version>
 	</properties>
 	<dependencies>
 		<dependency>
