@@ -29,14 +29,14 @@ public class Upgrader {
 
     public void upgrade() throws Exception {
         while ( true ) {
-            for ( int previousIndex = 0; previousIndex < previousServerVersions.length; previousIndex++ ) {
-                String previousServerVersion = previousServerVersions[previousIndex];
-                File dbPreviousDir = new File(databaseParentdir, "db-" + previousServerVersion);
+            for ( int previousIndex = 0; previousIndex < this.previousServerVersions.length; previousIndex++ ) {
+                String previousServerVersion = this.previousServerVersions[previousIndex];
+                File dbPreviousDir = new File(this.databaseParentdir, "db-" + previousServerVersion);
                 if ( dbPreviousDir.isDirectory() ) {
                     LOG.info("The last version, that was found for this installation, is " + previousServerVersion);
                     boolean upgradeToActualVersion = previousIndex == 0;
-                    String nextServerVersion = upgradeToActualVersion ? actualServerVersion : previousServerVersions[previousIndex - 1];
-                    File dbActualDir = new File(databaseParentdir, "db-" + nextServerVersion);
+                    String nextServerVersion = upgradeToActualVersion ? this.actualServerVersion : this.previousServerVersions[previousIndex - 1];
+                    File dbActualDir = new File(this.databaseParentdir, "db-" + nextServerVersion);
                     if ( dbActualDir.exists() ) {
                         LOG.error("Abort: The version " + nextServerVersion + " to upgrade to has already a database directory");
                         System.exit(2);
@@ -72,8 +72,10 @@ public class Upgrader {
         String dbUrl = "jdbc:hsqldb:file:" + pathToDatabaseDirectory + "/openroberta-db";
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", dbUrl);
         LOG.info("upgrading to server version " + serverVersion);
-        if ( serverVersion.equals("2.3.1") ) {
-            // do nothing            
+        if ( serverVersion.equals("2.3.2") ) {
+            // do nothing
+        } else if ( serverVersion.equals("2.3.1") ) {
+            // do nothing
         } else if ( serverVersion.equals("2.3.0") ) {
             new Upgrader_2_3_0(sessionFactoryWrapper).run();
         } else if ( serverVersion.equals("2.2.7") ) {
