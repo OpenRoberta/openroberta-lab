@@ -95,7 +95,7 @@ public final class Gyrometer<V> extends Sensor<V> {
         }
 
         public String getPythonCode() {
-            return this.pythonCode;
+            return "'" + this.pythonCode + "'";
         }
     }
 

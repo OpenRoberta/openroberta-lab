@@ -95,7 +95,7 @@ public final class ForceSensor<V> extends Sensor<V> {
         }
 
         public String getPythonCode() {
-            return this.pythonCode;
+            return "'" + this.pythonCode + "'";
         }
     }
 }

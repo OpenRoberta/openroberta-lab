@@ -6,6 +6,7 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
@@ -127,10 +128,10 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         return astVisitor.sb.toString();
     }
 
-    //    @Override
-    //    protected String getEnumCode(IMode value) {
-    //        return "'" + value.toString().toLowerCase() + "'";
-    //    }
+    @Override
+    public String getEnumCode(IMode value) {
+        return "'" + value.toString().toUpperCase() + "'";
+    }
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
@@ -563,16 +564,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitAutonomous(Autonomous<Void> autonomous) {
-        this.sb.append("h.autonomous(");
-
-        switch ( autonomous.getOnOff() ) {
-            case ON:
-                this.sb.append("1)");
-                break;
-            case OFF:
-                this.sb.append("2)");
-                break;
-        }
+        this.sb.append("h.setAutonomousLife(" + getEnumCode(autonomous.getOnOff()) + ")");
         return null;
     }
 
@@ -766,33 +758,17 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        this.sb.append("h.pointLookAt(");
+        this.sb.append("h.pointLookAt(" + getEnumCode(pointLookAt.getPointLook()));
+        this.sb.append(", " + pointLookAt.getFrame().getValues()[0] + ", ");
+
         pointLookAt.getpointX().visit(this);
         this.sb.append(", ");
         pointLookAt.getpointY().visit(this);
         this.sb.append(", ");
         pointLookAt.getpointZ().visit(this);
         this.sb.append(", ");
-        switch ( pointLookAt.getFrame() ) {
-            case TORSO:
-                this.sb.append("0, ");
-                break;
-            case WORLD:
-                this.sb.append("1, ");
-                break;
-            case ROBOT:
-                this.sb.append("2, ");
-                break;
-        }
         pointLookAt.getSpeed().visit(this);
-        switch ( pointLookAt.getPointLook() ) {
-            case LOOK:
-                this.sb.append(", 1)");
-                break;
-            case POINT:
-                this.sb.append(", 0)");
-                break;
-        }
+        this.sb.append(")");
         return null;
     }
 
@@ -1193,7 +1169,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
-        this.sb.append("h.learnFace(");
+        this.sb.append("faceRecognitionModule.learnFace(");
         learnFace.getMsg().visit(this);
         this.sb.append(")");
         return null;
@@ -1201,7 +1177,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
-        this.sb.append("h.forgetFace(");
+        this.sb.append("faceRecognitionModule.forgetFace(");
         forgetFace.getMsg().visit(this);
         this.sb.append(")");
         return null;
@@ -1209,7 +1185,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     @Override
     public Void visitDetectFace(DetectFace<Void> detectFace) {
-        this.sb.append("h.detectFace()");
+        this.sb.append("faceRecognitionModule.detectFace()");
         return null;
     }
 
@@ -1316,8 +1292,10 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("import time\n");
         this.sb.append("from roberta import Hal\n");
         this.sb.append("from roberta import SpeechRecognitionModule\n");
+        this.sb.append("from roberta import FaceRecognitionModule\n");
         this.sb.append("from roberta import BlocklyMethods\n");
         this.sb.append("h = Hal()\n");
+        this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
         this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
         this.sb.append("speechRecognitionModule.pauseASR()");
         this.generateSensors();
