@@ -90,7 +90,7 @@ public final class Hand<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SIDE, this.turnDirection.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.modus.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.modus.getValues()[0]);
 
         return jaxbDestination;
     }

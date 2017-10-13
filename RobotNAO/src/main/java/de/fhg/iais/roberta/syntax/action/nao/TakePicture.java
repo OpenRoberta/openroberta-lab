@@ -96,7 +96,7 @@ public final class TakePicture<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CAMERA, this.camera.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CAMERA, this.camera.getValues()[0]);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FILENAME, this.msg);
 
         return jaxbDestination;

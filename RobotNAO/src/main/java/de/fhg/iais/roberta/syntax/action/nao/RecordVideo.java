@@ -123,8 +123,8 @@ public final class RecordVideo<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.RESOLUTION, this.resolution.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CAMERA, this.camera.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.RESOLUTION, this.resolution.getValues()[0]);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CAMERA, this.camera.getValues()[0]);
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DURATION, this.duration);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FILENAME, this.msg);

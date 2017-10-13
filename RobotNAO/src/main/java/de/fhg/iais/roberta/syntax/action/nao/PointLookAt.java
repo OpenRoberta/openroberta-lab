@@ -149,8 +149,8 @@ public final class PointLookAt<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.pointLook.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.frame.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, this.pointLook.getValues()[0]);
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.frame.getValues()[0]);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X, this.pointX);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y, this.pointY);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Z, this.pointZ);
