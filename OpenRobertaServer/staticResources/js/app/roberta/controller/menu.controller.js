@@ -210,6 +210,10 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         $('#navbarCollapse').onWrap('click', '.dropdown-menu a,.visible-xs', function(event) {
             $('#navbarCollapse').collapse('hide');
         });
+        // for gallery
+        $('#head-navigation-gallery').onWrap('click', 'a,.visible-xs', function(event) {
+            $('#navbarCollapse').collapse('hide');
+        });
         $('#simButtonsCollapse').onWrap('click', 'a', function(event) {
             $('#simButtonsCollapse').collapse('hide');
         });
