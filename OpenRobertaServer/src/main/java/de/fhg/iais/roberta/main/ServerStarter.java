@@ -171,6 +171,7 @@ public class ServerStarter {
 
         staticResourceServlet.setInitParameter("gzip", "true");
         staticResourceServlet.setInitParameter("resourceBase", ServerStarter.class.getResource("/staticResources").toExternalForm());
+        staticResourceServlet.setInitParameter("cacheControl", "private, must-revalidate");
 
         // websockets with /ws/<version>/ prefix
         ServletContextHandler wsHandler = new ServletContextHandler();
