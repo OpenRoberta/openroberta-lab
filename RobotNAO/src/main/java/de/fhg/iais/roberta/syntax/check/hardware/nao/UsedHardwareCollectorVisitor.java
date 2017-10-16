@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -311,6 +312,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
         // TODO Auto-generated method stub
         return null;
     }

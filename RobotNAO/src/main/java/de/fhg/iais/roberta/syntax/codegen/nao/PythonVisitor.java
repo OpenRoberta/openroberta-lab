@@ -76,6 +76,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -1297,7 +1298,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("h = Hal()\n");
         this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
         this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
-        this.sb.append("speechRecognitionModule.pauseASR()");
+        this.sb.append("speechRecognitionModule.pauseASR()\n");
         this.generateSensors();
         nlIndent();
         this.sb.append("class BreakOutOfALoop(Exception): pass\n");
@@ -1400,6 +1401,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
         this.sb.append("speechRecognitionModule.recognizeWordFromDictionary(");
         recognizeWord.getVocabulary().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
+        this.sb.append("h.getNaoMarkInformation(");
+        naoMarkInformation.getNaoMarkId().visit(this);
         this.sb.append(")");
         return null;
     }

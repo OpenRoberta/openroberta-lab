@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Gyrometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMark;
+import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
@@ -306,4 +307,6 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     V visitColorHexString(ColorHexString<V> colorHexString);
 
     V visitRecognizeWord(RecognizeWord<V> recognizeWord);
+
+    V visitNaoMarkInformation(NaoMarkInformation<V> naoMarkInformation);
 }
