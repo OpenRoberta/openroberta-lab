@@ -91,7 +91,7 @@ public final class SetLeds<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LED, this.led.toString());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COLOUR, this.Color);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COLOR, this.Color);
 
         return jaxbDestination;
     }
