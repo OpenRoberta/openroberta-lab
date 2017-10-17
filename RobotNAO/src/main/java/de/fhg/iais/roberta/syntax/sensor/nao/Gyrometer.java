@@ -53,6 +53,11 @@ public final class Gyrometer<V> extends Sensor<V> {
     }
 
     @Override
+    public String toString() {
+        return "Gyrometer [" + this.coordinate + "]";
+    }
+
+    @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((NaoAstVisitor<V>) visitor).visitGyrometer(this);
     }

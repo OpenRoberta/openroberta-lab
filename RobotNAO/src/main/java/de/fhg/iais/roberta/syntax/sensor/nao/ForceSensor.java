@@ -53,6 +53,11 @@ public final class ForceSensor<V> extends Sensor<V> {
     }
 
     @Override
+    public String toString() {
+        return "ForceSensor [" + this.side + "]";
+    }
+
+    @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((NaoAstVisitor<V>) visitor).visitForceSensor(this);
     }

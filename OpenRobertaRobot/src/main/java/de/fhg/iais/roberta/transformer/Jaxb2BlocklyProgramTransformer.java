@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -34,6 +34,7 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
         this.data.setRobotType(set.getRobottype());
         this.data.setXmlVersion(set.getXmlversion());
         this.data.setDescription(set.getDescription());
+        this.data.setTags(set.getTags());
         List<Instance> instances = set.getInstance();
         for ( Instance instance : instances ) {
             instanceToAST(instance);

@@ -8,6 +8,7 @@ public class Jaxb2AstTransformerData<V> {
     private String robotType = "";
     private String xmlVersion = "";
     private String description = "";
+    private String tags = "";
     private ArrayList<ArrayList<Phrase<V>>> tree = new ArrayList<>();
 
     public String getRobotType() {
@@ -32,6 +33,14 @@ public class Jaxb2AstTransformerData<V> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public ArrayList<ArrayList<Phrase<V>>> getTree() {

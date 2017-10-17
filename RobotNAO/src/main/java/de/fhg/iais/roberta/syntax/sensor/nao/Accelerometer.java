@@ -53,6 +53,11 @@ public final class Accelerometer<V> extends Sensor<V> {
     }
 
     @Override
+    public String toString() {
+        return "Accelerometer [" + this.coordinate + "]";
+    }
+
+    @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((NaoAstVisitor<V>) visitor).visitAccelerometer(this);
     }

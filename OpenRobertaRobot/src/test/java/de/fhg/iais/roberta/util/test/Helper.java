@@ -19,23 +19,6 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
-import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
-import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
-import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -163,6 +146,7 @@ public abstract class Helper {
         blockSet.setXmlversion(transformer.getData().getXmlVersion());
         blockSet.setRobottype(transformer.getData().getRobotType());
         blockSet.setDescription(transformer.getData().getDescription());
+        blockSet.setTags(transformer.getData().getTags());
 
         Instance instance = null;
         for ( ArrayList<Phrase<Void>> tree : transformer.getTree() ) {

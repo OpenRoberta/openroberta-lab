@@ -56,7 +56,7 @@ public class RecognizeWord<V> extends Sensor<V> {
 
     @Override
     public String toString() {
-        return "SayText [" + this.vocabulary + "]";
+        return "RecognizeWord [" + this.vocabulary + "]";
     }
 
     @Override
