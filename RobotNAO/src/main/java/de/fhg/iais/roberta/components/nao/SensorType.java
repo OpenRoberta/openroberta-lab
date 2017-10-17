@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.components;
+package de.fhg.iais.roberta.components.nao;
 
 import java.util.Arrays;
 import java.util.Locale;
 
+import de.fhg.iais.roberta.components.ISensorType;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum SensorType implements ISensorType {
     COLOR( "robBrick_colour" ),
-    HT_COLOR( "robBrick_HiTechnic_colour" ),
     TOUCH( "robBrick_touch" ),
     ULTRASONIC( "robBrick_ultrasonic" ),
     INFRARED( "robBrick_infrared" ),
@@ -24,6 +24,8 @@ public enum SensorType implements ISensorType {
     JOYSTICK( "arduSensors_joystick_getSample" ),
     PIR_MOTION( "makeblockSensors_motionSensor_getSample" ),
     NAOMARK( "naoSensors_naoMark" ),
+    NAOFACE( "naoSensors_detectFace" ),
+    NAOSPEECH( "naoSensors_recognizeWord" ),
     VOLTAGE( "" ),
     TIMER( "" ),
     NONE( "" );

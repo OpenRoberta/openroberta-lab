@@ -34,22 +34,22 @@ public final class RecordVideo<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "RecordVideo [" + this.resolution + ", " + this.camera + ", " + this.duration + ", " + this.msg + "]";
+        return "RecordVideo [" + this.resolution + ", " + this.camera + ", " + this.duration + ", " + this.videoName + "]";
     }
 
     private final Resolution resolution;
     private final Camera camera;
     private final Expr<V> duration;
-    private final Expr<V> msg;
+    private final Expr<V> videoName;
 
-    private RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private RecordVideo(Resolution resolution, Camera camera, Expr<V> duration, Expr<V> videoName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("RECORD_VIDEO"), properties, comment);
         Assert.notNull(resolution, "Missing resolution in RecordVideo block!");
         Assert.notNull(camera, "Missing camera in RecordVideo block!");
         this.resolution = resolution;
         this.camera = camera;
         this.duration = duration;
-        this.msg = msg;
+        this.videoName = videoName;
         setReadOnly();
     }
 
@@ -66,10 +66,10 @@ public final class RecordVideo<V> extends Action<V> {
         Resolution resolution,
         Camera camera,
         Expr<V> duration,
-        Expr<V> msg,
+        Expr<V> videoName,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new RecordVideo<V>(resolution, camera, duration, msg, properties, comment);
+        return new RecordVideo<V>(resolution, camera, duration, videoName, properties, comment);
     }
 
     public Resolution getResolution() {
@@ -84,8 +84,8 @@ public final class RecordVideo<V> extends Action<V> {
         return this.duration;
     }
 
-    public Expr<V> getMsg() {
-        return this.msg;
+    public Expr<V> getVideoName() {
+        return this.videoName;
     }
 
     @Override
@@ -127,7 +127,7 @@ public final class RecordVideo<V> extends Action<V> {
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CAMERA, this.camera.getValues()[0]);
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DURATION, this.duration);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FILENAME, this.msg);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FILENAME, this.videoName);
 
         return jaxbDestination;
     }

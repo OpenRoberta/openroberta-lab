@@ -13,10 +13,10 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 
 public class UsedSensor {
     private final ISensorPort port;
-    private final SensorType type;
+    private final ISensorType type;
     private final IMode mode;
 
-    public UsedSensor(ISensorPort port, SensorType type, IMode mode) {
+    public UsedSensor(ISensorPort port, ISensorType type, IMode mode) {
         this.port = port;
         this.type = type;
         this.mode = mode;
@@ -32,7 +32,7 @@ public class UsedSensor {
     /**
      * @return the sensorType
      */
-    public SensorType getType() {
+    public ISensorType getType() {
         return this.type;
     }
 

@@ -929,7 +929,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
 
     private String generateRegenerateUsedSensor(UsedSensor usedSensor) {
         StringBuilder sb = new StringBuilder();
-        SensorType sensor = usedSensor.getType();
+        SensorType sensor = (SensorType) usedSensor.getType();
         IMode mode = usedSensor.getMode();
 
         sb.append("new UsedSensor(");

@@ -32,20 +32,20 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 public final class TakePicture<V> extends Action<V> {
 
     private final Camera camera;
-    private final Expr<V> msg;
+    private final Expr<V> pictureName;
 
-    private TakePicture(Camera camera, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private TakePicture(Camera camera, Expr<V> pictureName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("TAKE_PICTURE"), properties, comment);
         Assert.notNull(camera, "Missing camera in TakePicture block!");
-        Assert.isTrue(msg != null);
+        Assert.isTrue(pictureName != null);
         this.camera = camera;
-        this.msg = msg;
+        this.pictureName = pictureName;
         setReadOnly();
     }
 
     @Override
     public String toString() {
-        return "TakePicture [" + this.camera + ", " + this.msg + "]";
+        return "TakePicture [" + this.camera + ", " + this.pictureName + "]";
     }
 
     /**
@@ -65,8 +65,8 @@ public final class TakePicture<V> extends Action<V> {
         return this.camera;
     }
 
-    public Expr<V> getMsg() {
-        return this.msg;
+    public Expr<V> getPictureName() {
+        return this.pictureName;
     }
 
     @Override
@@ -97,7 +97,7 @@ public final class TakePicture<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.CAMERA, this.camera.getValues()[0]);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FILENAME, this.msg);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FILENAME, this.pictureName);
 
         return jaxbDestination;
     }

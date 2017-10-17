@@ -6,6 +6,7 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
+import de.fhg.iais.roberta.components.nao.SensorType;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
@@ -110,6 +111,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
+
     }
 
     /**
@@ -119,8 +121,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
-    {
+    public static String generate(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
 
         PythonVisitor astVisitor = new PythonVisitor(brickConfiguration, phrasesSet, 0);
@@ -185,7 +186,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
-        this.sb.append("\n").append("def run():");
+        this.sb.append("def run():");
         incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
@@ -1134,7 +1135,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         } else if ( takePicture.getCamera() == Camera.BOTTOM ) {
             this.sb.append("\"Bottom\", ");
         }
-        takePicture.getMsg().visit(this);
+        takePicture.getPictureName().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -1163,7 +1164,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         }
         recordVideo.getDuration().visit(this);
         this.sb.append(", ");
-        recordVideo.getMsg().visit(this);
+        recordVideo.getVideoName().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -1292,17 +1293,16 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("import math\n");
         this.sb.append("import time\n");
         this.sb.append("from roberta import Hal\n");
-        this.sb.append("from roberta import SpeechRecognitionModule\n");
-        this.sb.append("from roberta import FaceRecognitionModule\n");
         this.sb.append("from roberta import BlocklyMethods\n");
         this.sb.append("h = Hal()\n");
-        this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
-        this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
-        this.sb.append("speechRecognitionModule.pauseASR()\n");
+
         this.generateSensors();
-        nlIndent();
-        this.sb.append("class BreakOutOfALoop(Exception): pass\n");
-        this.sb.append("class ContinueLoop(Exception): pass\n\n");
+
+        if ( !this.loopsLabels.isEmpty() ) {
+            nlIndent();
+            this.sb.append("class BreakOutOfALoop(Exception): pass\n");
+            this.sb.append("class ContinueLoop(Exception): pass\n\n");
+        }
 
     }
 
@@ -1318,10 +1318,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("h.say(\"Error!\" + str(e))\n");
         this.sb.append(INDENT).append("finally:\n");
-        if ( this.usedSensors.size() < 1 ) {
-            this.sb.append(INDENT).append(INDENT).append("pass");
-        }
         this.removeSensors();
+
+        this.sb.append(INDENT).append(INDENT).append("h.myBroker.shutdown()");
 
         this.sb.append("\n\n");
         this.sb.append("if __name__ == \"__main__\":\n");
@@ -1347,16 +1346,26 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
+            switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
                     break;
                 case INFRARED:
                     break;
                 case ULTRASONIC:
-                    this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")");
+                    this.sb.append("h.sonar.subscribe(\"OpenRobertaApp\")\n");
                     break;
                 case NAOMARK:
-                    this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
+                    this.sb.append("h.mark.subscribe(\"RobertaLab\", 500, 0.0)\n");
+                    break;
+                case NAOFACE:
+                    this.sb.append("\nfrom roberta import FaceRecognitionModule\n");
+                    this.sb.append("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")\n");
+                    break;
+                case NAOSPEECH:
+                    this.sb.append("\nfrom roberta import SpeechRecognitionModule\n");
+                    this.sb.append("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")\n");
+                    this.sb.append("speechRecognitionModule.pauseASR()\n");
+                    break;
                 case LIGHT:
                 case COMPASS:
                 case SOUND:
@@ -1370,16 +1379,22 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     private void removeSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
+            switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
                     break;
                 case INFRARED:
                     break;
                 case ULTRASONIC:
-                    this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")");
+                    this.sb.append(INDENT).append(INDENT).append("h.sonar.unsubscribe(\"OpenRobertaApp\")\n");
                     break;
                 case NAOMARK:
-                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\", 500, 0.0)");
+                    this.sb.append(INDENT).append(INDENT).append("h.mark.unsubscribe(\"RobertaLab\", 500, 0.0)\n");
+                    break;
+                case NAOFACE:
+                    this.sb.append(INDENT).append(INDENT).append("faceRecognitionModule.unsubscribe()\n");
+                    break;
+                case NAOSPEECH:
+                    this.sb.append(INDENT).append(INDENT).append("speechRecognitionModule.unsubscribe()\n");
                 case LIGHT:
                 case COMPASS:
                 case SOUND:

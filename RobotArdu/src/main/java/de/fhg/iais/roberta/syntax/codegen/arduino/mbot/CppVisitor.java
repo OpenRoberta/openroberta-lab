@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
@@ -367,7 +368,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
         this.sb.append("Serial.begin(9600); ");
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
+            switch ( (SensorType) usedSensor.getType() ) {
                 case GYRO:
                     nlIndent();
                     this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".begin();");
@@ -384,7 +385,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         this.sb.append("\n").append("void loop() \n");
         this.sb.append("{");
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
+            switch ( (SensorType) usedSensor.getType() ) {
                 case GYRO:
                     nlIndent();
                     this.sb.append("myGyro" + usedSensor.getPort().getPortNumber() + ".update();");
@@ -429,7 +430,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
+            switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
                     break;
                 case INFRARED:

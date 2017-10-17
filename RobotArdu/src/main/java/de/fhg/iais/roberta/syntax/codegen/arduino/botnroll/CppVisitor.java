@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.botnroll;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
@@ -576,7 +577,7 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( usedSensor.getType() ) {
+            switch ( (SensorType) usedSensor.getType() ) {
                 case COLOR:
                     nlIndent();
                     this.sb.append("brm.setRgbStatus(ENABLE);");

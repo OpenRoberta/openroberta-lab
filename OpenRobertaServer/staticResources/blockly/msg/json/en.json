@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-10-17 11:03:47.504962",
+		"lastupdated": "2017-10-17 15:29:30.155481",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1221,5 +1221,7 @@
 	"ORA_USER_ACTIVATION_INVALID_URL": "The link is not valid anymore. Please ask for resending your verification mail again",
 	"FLYOUT_VARIABLE_TEXT": "You need a variable? Please declare it first with a click on the + sign at the »start«\u00a0block.",
 	"NAO_MARK_GET_INFORMATION": "get information about NAO mark",
-	"NAO_MARK_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given NAO mark in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles."
+	"NAO_MARK_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given NAO mark in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
+	"NAO_FACE_GET_INFORMATION": "get information about recognized face",
+	"NAO_FACE_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given recognized face in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles."
 }

@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.syntax.check.hardware.nao;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.components.nao.SensorType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -66,145 +66,137 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitSetMode(SetMode<Void> mode) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitApplyPosture(ApplyPosture<Void> applyPosture) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSetStiffness(SetStiffness<Void> setStiffness) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitHand(Hand<Void> hand) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMoveJoint(MoveJoint<Void> moveJoint) {
-        // TODO Auto-generated method stub
+        moveJoint.getDegrees().visit(this);
         return null;
     }
 
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
-        // TODO Auto-generated method stub
+        walkDistance.getDistanceToWalk().visit(this);
         return null;
     }
 
     @Override
     public Void visitTurnDegrees(TurnDegrees<Void> turnDegrees) {
-        // TODO Auto-generated method stub
+        turnDegrees.getDegreesToTurn().visit(this);
         return null;
     }
 
     @Override
     public Void visitWalkTo(WalkTo<Void> walkTo) {
-        // TODO Auto-generated method stub
+        walkTo.getWalkToTheta().visit(this);
+        walkTo.getWalkToX().visit(this);
+        walkTo.getWalkToY().visit(this);
         return null;
     }
 
     @Override
     public Void visitStop(Stop<Void> stop) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitAnimation(Animation<Void> animation) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitPointLookAt(PointLookAt<Void> pointLookAt) {
-        // TODO Auto-generated method stub
+        pointLookAt.getpointX().visit(this);
+        pointLookAt.getpointY().visit(this);
+        pointLookAt.getpointZ().visit(this);
+        pointLookAt.getSpeed().visit(this);
         return null;
     }
 
     @Override
     public Void visitSetVolume(SetVolume<Void> setVolume) {
-        // TODO Auto-generated method stub
+        setVolume.getVolume().visit(this);
         return null;
     }
 
     @Override
     public Void visitGetVolume(GetVolume<Void> getVolume) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitGetLanguage(GetLanguage<Void> getLanguage) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSayText(SayText<Void> sayText) {
-        // TODO Auto-generated method stub
+        sayText.getMsg().visit(this);
         return null;
     }
 
     @Override
     public Void visitPlayFile(PlayFile<Void> playFile) {
-        // TODO Auto-generated method stub
+        playFile.getMsg().visit(this);
         return null;
     }
 
     @Override
     public Void visitDialog(Dialog<Void> dialog) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSetLeds(SetLeds<Void> setLeds) {
-        // TODO Auto-generated method stub
+        setLeds.getColor().visit(this);
         return null;
     }
 
     @Override
     public Void visitLedOff(LedOff<Void> ledOff) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLedReset(LedReset<Void> ledReset) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitRandomEyesDuration(RandomEyesDuration<Void> randomEyesDuration) {
-        // TODO Auto-generated method stub
+        randomEyesDuration.getDuration().visit(this);
         return null;
     }
 
     @Override
     public Void visitRastaDuration(RastaDuration<Void> rastaDuration) {
-        // TODO Auto-generated method stub
+        rastaDuration.getDuration().visit(this);
         return null;
     }
 
     @Override
     public Void visitTouchsensors(Touchsensors<Void> touchsensors) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -216,19 +208,16 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitGyrometer(Gyrometer<Void> gyrometer) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitForceSensor(ForceSensor<Void> forceSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -240,85 +229,84 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitTakePicture(TakePicture<Void> takePicture) {
-        // TODO Auto-generated method stub
+        takePicture.getPictureName().visit(this);
         return null;
     }
 
     @Override
     public Void visitRecordVideo(RecordVideo<Void> recordVideo) {
-        // TODO Auto-generated method stub
+        recordVideo.getDuration().visit(this);
+        recordVideo.getVideoName().visit(this);
         return null;
     }
 
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
 
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
 
     @Override
     public Void visitDetectFace(DetectFace<Void> detectFace) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
 
     @Override
     public Void visitNaoGetSampleSensor(NaoGetSampleSensor<Void> naoGetSampleSensor) {
-        // TODO Auto-generated method stub
+        naoGetSampleSensor.getSensor().visit(this);
         return null;
     }
 
     @Override
     public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitSetIntensity(SetIntensity<Void> setIntensity) {
-        // TODO Auto-generated method stub
+        setIntensity.getIntensity().visit(this);
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitWalkAsync(WalkAsync<Void> walkAsync) {
-        // TODO Auto-generated method stub
+        walkAsync.getXSpeed().visit(this);
+        walkAsync.getYSpeed().visit(this);
+        walkAsync.getZSpeed().visit(this);
         return null;
     }
 
     @Override
     public Void visitAutonomous(Autonomous<Void> autonomous) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitColorHexString(ColorHexString<Void> colorHexString) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOSPEECH, null));
         return null;
     }
 
     @Override
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
-        // TODO Auto-generated method stub
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOMARK, null));
         return null;
     }
 
