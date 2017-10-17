@@ -11,6 +11,23 @@ ul,
 ol {
     margin: 0;
 }
+@font-face { font-family: 'Roboto';
+             src: url('fonts/Roboto-Regular.ttf') format('truetype'); 
+}
+@font-face { font-family: 'Roboto';
+             src: url('fonts/Roboto-Italic.ttf') format('truetype');
+             font-style: italic; 
+}
+@font-face { font-family: 'Roboto';
+             src: url('fonts/Roboto-Bold.ttf') format('truetype');
+             font-weight: bold; 
+             }
+@font-face { font-family: 'Roboto';
+             src: url('fonts/Roboto-BoldItalic.ttf') format('truetype');
+             font-weight: bold;
+             font-style: italic; 
+}
+       
 html,
 body {
     margin: 0;
@@ -628,7 +645,7 @@ div.rightMenuButton:hover,
     margin: 4px 4px 4px 0;
 }
 .navbar-default .navbar-toggle:not(:first-child) {
-    margin: 4 px 4 px 4 px 4 px;
+    margin: 4px 4px 4px 4px;
 }
 .navbar-default {
     background-color: #fff;
@@ -926,13 +943,13 @@ table#download-instructions {
     box-shadow: none;
 }
 .btn:not(.editor) {
-    margin-right: 16 px;
+    margin-right: 16px;
     margin-left: 0;
     background-color: #BACC1E;
     color: #fff;
-    font-size: 16 px;
+    font-size: 16px;
     border: none;
-    border-radius: 2 px;
+    border-radius: 2px;
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
@@ -1613,7 +1630,4 @@ img.img-responsive {
 }
 .enjoyhint_close_btn:active, .enjoyhint_close_btn:hover{
      background: #C7D92B;
-}
-.enjoy_hint_label {
-    font-family: 'Architects Daughter', cursive;
 }
