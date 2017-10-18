@@ -1,6 +1,6 @@
-define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller',
+define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socket.controller', 'user.controller', 'user.model', 'guiState.controller', 'cookieDisclaimer.controller',
         'program.controller', 'configuration.controller', 'enjoyHint', 'tour.controller', 'simulation.simulation', 'jquery', 'blocks', 'slick' ], function(
-        exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
+        exports, LOG, UTIL, MSG, COMM, ROBOT_C, SOCKET_C, USER_C, USER, GUISTATE_C, CookieDisclaimer, PROGRAM_C, CONFIGURATION_C, EnjoyHint, TOUR_C, SIM, $, Blockly) {
 
     function init() {
         initMenu();
@@ -345,9 +345,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
             if (domId === 'menuShowStart') { // Submenu 'Help'
-                if ($.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
-                    $('#checkbox_id').prop('checked', true);
-                }
                 $("#show-startup-message").modal("show");
             } else if (domId === 'menuAbout') { // Submenu 'Help'
                 $("#version").text(GUISTATE_C.getServerVersion() + '-SNAPSHOT');
@@ -449,9 +446,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
 
         $('#img-nepo').onWrap('click', function() {
-            if ($.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
-                $('#checkbox_id').prop('checked', true);
-            }
             $("#show-startup-message").modal("show");
         }, 'logo was clicked');
 
@@ -534,22 +528,15 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                         ROBOT_C.switchRobot(choosenRobotType, true);
                     }
                 }
-                if ($('#checkbox_id').is(':checked')) {
-                    $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
-                        expires : 99,
-                        secure : true,
-                        domain : ''
-                    });
-                    // check if it is really stored: chrome issue
-                    if (!$.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion())) {
-                        $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
-                            expires : 99,
-                            domain : ''
-                        });
-                    }
-                } else {
-                    $.removeCookie("OpenRoberta_" + GUISTATE_C.getServerVersion());
-                }
+                
+                // Always save a cookie. If cookies are not allowed, the maxExpirationTime will be set to 0 and the browser will delete the cookie
+                $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
+                    expires : CookieDisclaimer.maxExpirationTime(99),
+                    secure : GUISTATE_C.isPublicServerVersion(),
+                    path:"/",
+                    domain : ''
+                });
+                
                 $('#show-startup-message').modal('hide');
             }
         }, 'robot choosen in start popup');

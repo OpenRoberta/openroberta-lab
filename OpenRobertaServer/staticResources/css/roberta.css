@@ -1631,3 +1631,36 @@ img.img-responsive {
 .enjoyhint_close_btn:active, .enjoyhint_close_btn:hover{
      background: #C7D92B;
 }
+
+#cookieDisclaimer {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2999;
+	padding: 16px;
+	background-color: #fff;
+	border-top: 1px solid #d8d8d8;
+	transition: bottom 1s ease-in-out;
+}
+
+#cookieDisclaimer.accepted {
+	bottom: -100%;
+}
+
+
+#cookieDisclaimer > span,
+#cookieDisclaimer > button {
+	display: inline-block !important;
+	vertical-align: middle;
+}
+
+#cookieDisclaimer > span {
+	width: 80%;
+	width: calc(100% - 5em);
+	padding-right: 16px;
+}
+
+#cookieDisclaimer > button {
+	margin-right: 0;
+}

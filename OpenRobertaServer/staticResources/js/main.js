@@ -50,6 +50,7 @@ require.config({
         'user.model' : '../app/roberta/models/user.model',
         'rest.robot' : '../app/roberta/rest/robot',
         'socket.controller' : '../app/roberta/controller/socket.controller',
+        'cookieDisclaimer.controller' : '../app/roberta/controller/cookieDisclaimer.controller',
 
         'simulation.constants' : '../app/simulation/simulationLogic/constants',
         'simulation.math' : '../app/simulation/simulationLogic/math',
@@ -116,7 +117,7 @@ require.config({
 });
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
-        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'menu.controller', 'user.controller', 'robot.controller',
+        'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'user.controller', 'robot.controller',
         'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model' ], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
@@ -128,6 +129,7 @@ require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', '
     guiStateController = require('guiState.controller');
     languageController = require('language.controller');
     logListController = require('logList.controller');
+    cookieDisclaimer = require('cookieDisclaimer.controller');
     menuController = require('menu.controller');
     progDeleteController = require('progDelete.controller');
     progListController = require('progList.controller');
@@ -164,11 +166,12 @@ function init() {
         configurationController.init();
         programController.init();
         menuController.init();
+        cookieDisclaimer.init();
         $(".cover").fadeOut(100, function() {
-            if (guiStateController.noCookie() && !guiStateController.getStartWithoutPopup()) {
-                $("#show-startup-message").modal("show");
-            } else {
-                if (!guiStateController.getStartWithoutPopup()) {
+            if (!guiStateController.getStartWithoutPopup()) {
+                if (guiStateController.noCookie()) {
+                    $("#show-startup-message").modal("show");
+                } else {
                     userModel.getStatusText(function(result) {
                         if (result.statustext[0] !== "" && result.statustext[1] !== "") {
                             $('#modal-statustext').modal("show");
