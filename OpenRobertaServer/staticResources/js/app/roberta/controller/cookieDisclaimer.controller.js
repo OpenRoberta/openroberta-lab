@@ -6,7 +6,7 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
         expires: 60,
         path: "/",
         domain: "",
-        secure: false // Set to false for debugging:
+        secure: true // Set to false for debugging
     };
     
     function init() {
@@ -14,7 +14,7 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
         
         $.when(GUISTATE_C.init()).then(function(){
             
-            if (cookieExists() || GUISTATE_C.isPublicServerVersion()) {
+            if (cookieExists() || !GUISTATE_C.isPublicServerVersion()) {
                 refreshCookie();
             } else {
                 $disclaimer.find("button").click(refreshCookie);
