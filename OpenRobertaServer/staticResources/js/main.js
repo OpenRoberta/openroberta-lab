@@ -165,10 +165,10 @@ function init() {
         programController.init();
         menuController.init();
         $(".cover").fadeOut(100, function() {
-            if (guiStateController.noCookie() && !guiStateController.getStartWithTour()) {
+            if (guiStateController.noCookie() && !guiStateController.getStartWithoutPopup()) {
                 $("#show-startup-message").modal("show");
             } else {
-                if (!guiStateController.getStartWithTour()) {
+                if (!guiStateController.getStartWithoutPopup()) {
                     userModel.getStatusText(function(result) {
                         if (result.statustext[0] !== "" && result.statustext[1] !== "") {
                             $('#modal-statustext').modal("show");

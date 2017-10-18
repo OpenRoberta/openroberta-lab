@@ -14,7 +14,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
             GUISTATE.gui.view = 'tabProgram';
             GUISTATE.gui.prevView = 'tabProgram';
             GUISTATE.gui.language = language;
-            GUISTATE.gui.startWithTour = false;
+            GUISTATE.gui.startWithoutPopup = false;
 
             GUISTATE.gui.robot = GUISTATE.gui.cookie || GUISTATE.server.defaultRobot;
 
@@ -743,15 +743,15 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     }
     exports.noCookie = noCookie;
 
-    function getStartWithTour() {
-        return GUISTATE.gui.startWithTour;
+    function getStartWithoutPopup() {
+        return GUISTATE.gui.startWithoutPopup;
     }
-    exports.getStartWithTour = getStartWithTour;
+    exports.getStartWithoutPopup = getStartWithoutPopup;
 
-    function setStartWithTour() {
-        return GUISTATE.gui.startWithTour = true;
+    function setStartWithoutPopup() {
+        return GUISTATE.gui.startWithoutPopup = true;
     }
-    exports.setStartWithTour = setStartWithTour;
+    exports.setStartWithoutPopup = setStartWithoutPopup;
 
     function getServerVersion() {
         return GUISTATE.server.version;

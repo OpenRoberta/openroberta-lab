@@ -28,8 +28,12 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#activateAccount") {
             USER_C.activateAccount(target[1]);
         } else if (target[0] === "#overview") {
-            GUISTATE_C.setStartWithTour();
+            GUISTATE_C.setStartWithoutPopup();
             TOUR_C.start('overview');
+        } else if (target[0] === "#gallery") {
+            GUISTATE_C.setStartWithoutPopup();
+            $('#tabGalleryList').click();
+            return false;
         }
 
         var firsttime = true
