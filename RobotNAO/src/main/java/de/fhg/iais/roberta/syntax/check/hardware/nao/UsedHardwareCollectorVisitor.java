@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
@@ -242,12 +243,14 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
+        learnFace.getFaceName().visit(this);
         this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
 
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
+        forgetFace.getFaceName().visit(this);
         this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
@@ -300,13 +303,22 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitRecognizeWord(RecognizeWord<Void> recognizeWord) {
+        recognizeWord.getVocabulary().visit(this);
         this.usedSensors.add(new UsedSensor(null, SensorType.NAOSPEECH, null));
         return null;
     }
 
     @Override
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
+        naoMarkInformation.getNaoMarkId().visit(this);
         this.usedSensors.add(new UsedSensor(null, SensorType.NAOMARK, null));
+        return null;
+    }
+
+    @Override
+    public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+        detectedFaceInformation.getFaceName().visit(this);
+        this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
 

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-10-17 15:29:30.155481",
+		"lastupdated": "2017-10-18 12:32:32.087321",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -992,7 +992,7 @@
 	"NAO_RECOGNIZEWORDOR": "or recognize word",
 	"NAO_LEARNFACEOF": "learn face of",
 	"NAO_FORGETFACEOF": "forget face of",
-	"NAO_DETECTFACE": "detect face",
+	"NAO_DETECTFACE": "get last recognized face(s)",
 	"NAO_PERFORM": "perform",
 	"NAO_MOVE": "move",
 	"NAO_CURRENT": "electric current of",

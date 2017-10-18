@@ -71,6 +71,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
@@ -186,7 +187,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitMainTask(MainTask<Void> mainTask) {
         StmtList<Void> variables = mainTask.getVariables();
         variables.visit(this);
-        this.sb.append("def run():");
+        this.sb.append("\n\ndef run():");
         incrIndentation();
         List<Stmt<Void>> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
@@ -1172,7 +1173,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public Void visitLearnFace(LearnFace<Void> learnFace) {
         this.sb.append("faceRecognitionModule.learnFace(");
-        learnFace.getMsg().visit(this);
+        learnFace.getFaceName().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -1180,7 +1181,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public Void visitForgetFace(ForgetFace<Void> forgetFace) {
         this.sb.append("faceRecognitionModule.forgetFace(");
-        forgetFace.getMsg().visit(this);
+        forgetFace.getFaceName().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -1424,6 +1425,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitNaoMarkInformation(NaoMarkInformation<Void> naoMarkInformation) {
         this.sb.append("h.getNaoMarkInformation(");
         naoMarkInformation.getNaoMarkId().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitDetecedFaceInformation(DetectedFaceInformation<Void> detectedFaceInformation) {
+        this.sb.append("faceRecognitionModule.getFaceInformation(");
+        detectedFaceInformation.getFaceName().visit(this);
         this.sb.append(")");
         return null;
     }

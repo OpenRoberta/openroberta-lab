@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 //import de.fhg.iais.roberta.syntax.expr.nao.LedColor;
 import de.fhg.iais.roberta.syntax.sensor.nao.Accelerometer;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.Dialog;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
 import de.fhg.iais.roberta.syntax.sensor.nao.ForceSensor;
@@ -308,5 +309,17 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
 
     V visitRecognizeWord(RecognizeWord<V> recognizeWord);
 
+    /**
+     * visit a {@link NaoMarkInformation}.
+     *
+     * @param naoMarkInformation on phrase to be visited
+     */
     V visitNaoMarkInformation(NaoMarkInformation<V> naoMarkInformation);
+
+    /**
+     * visit a {@link DetectedFaceInformation}.
+     *
+     * @param detectedFaceInformation on phrase to be visited
+     */
+    V visitDetecedFaceInformation(DetectedFaceInformation<V> detectedFaceInformation);
 }

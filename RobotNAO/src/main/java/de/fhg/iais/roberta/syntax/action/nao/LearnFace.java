@@ -26,37 +26,37 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * <br>
  */
 public class LearnFace<V> extends Action<V> {
-    private final Expr<V> msg;
+    private final Expr<V> faceName;
 
-    private LearnFace(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LearnFace(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LEARN_FACE"), properties, comment);
-        Assert.isTrue(msg != null);
-        this.msg = msg;
+        Assert.isTrue(faceName != null);
+        this.faceName = faceName;
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link DisplayTextAction}. This instance is read only and can not be modified.
      *
-     * @param msg {@link msg} that will be printed on the display of the brick; must be <b>not</b> null,
+     * @param faceName {@link msg} that will be printed on the display of the brick; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> LearnFace<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LearnFace<>(msg, properties, comment);
+    private static <V> LearnFace<V> make(Expr<V> faceName, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LearnFace<>(faceName, properties, comment);
     }
 
     /**
      * @return the message.
      */
-    public Expr<V> getMsg() {
-        return this.msg;
+    public Expr<V> getFaceName() {
+        return this.faceName;
     }
 
     @Override
     public String toString() {
-        return "LearnFace [" + this.msg + "]";
+        return "LearnFace [" + this.faceName + "]";
     }
 
     @Override
@@ -83,7 +83,7 @@ public class LearnFace<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NAME, this.msg);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NAME, this.faceName);
 
         return jaxbDestination;
     }
