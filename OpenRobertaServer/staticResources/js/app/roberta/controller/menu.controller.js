@@ -463,9 +463,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 'head navigation menu item clicked');
         $('.menuAboutProject').onWrap('click', function(event) {
             if (GUISTATE_C.getLanguage() == 'de') {
-                window.open("http://typo3.p404214.webspaceconfig.de/index.php?id=135");
+                window.open("https://www.roberta-home.de /index.php?id=135");
             } else {
-                window.open("http://typo3.p404214.webspaceconfig.de/index.php?id=135&L=1");
+                window.open("https://www.roberta-home.de /index.php?id=135&L=1");
             }
         }, 'head navigation menu item clicked');
 

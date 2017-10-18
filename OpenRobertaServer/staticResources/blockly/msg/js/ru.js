@@ -200,8 +200,8 @@ Blockly.Msg.GYRO_RESET_TOOLTIP = "Сбрасывает гиросенсор.";
 Blockly.Msg.GYRO_TOOLTIP = "Представляет гиросенсор.";
 Blockly.Msg.HELP = "Справка";
 Blockly.Msg.HINT_USER_ACCOUNT = "»IAmBotman« or »RobellaStracciatella«? Not everyone needs to know your real name. Think of a cool nickname that you can easily remember.";  // untranslated
-Blockly.Msg.HINT_USER_AGE = "Are you under 14? Then please ask your parents to help you. They can specify their e-mail address to confirm your account.";  // untranslated
-Blockly.Msg.HINT_USER_EMAIL = "This is voluntary! However, some functions of the lab are only available if you have verified your account by e-mail. You are younger than 14? Please ask your parents to help you out with one of their e-mail addresses. <br><a href='http://typo3.p404214.webspaceconfig.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>";  // untranslated
+Blockly.Msg.HINT_USER_AGE = "Are you under 16? Then please ask your parents to help you. They can specify their e-mail address to confirm your account.";  // untranslated
+Blockly.Msg.HINT_USER_EMAIL = "This is voluntary! However, some functions of the lab are only available if you have verified your account by e-mail. You are younger than 16? Please ask your parents to help you out with one of their e-mail addresses. <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>";  // untranslated
 Blockly.Msg.HINT_USER_NAME = "Enter your real name here if you like. This is just for you, no one else will see it.";  // untranslated
 Blockly.Msg.HINT_USER_PASSWORT = "12345 is no secure password. Rather think of a safe combination of numbers and letters that you will not forget.";  // untranslated
 Blockly.Msg.HINT_USER_PASSWORT_CONFIRM = "Got it? Better make sure!";  // untranslated
@@ -783,9 +783,9 @@ Blockly.Msg.NEW_VARIABLE_TITLE = "Имя новой переменной:";
 Blockly.Msg.NO = "нет";
 Blockly.Msg.NXTBRICK_TOOLTIP = "Представляет программный блок NXT c подключенными актюаторами и датчиками. Также доступны  встроенные акторы и датчики, такие как кнопки, дисплей и прочие.";
 Blockly.Msg.OFF = "выключить";
-Blockly.Msg.OLDER_THEN_14 = "I am 14 or older than 14!";  // untranslated
+Blockly.Msg.OLDER_THEN_14 = "I am 16 or older than 16!";  // untranslated
 Blockly.Msg.ON = "включить";
-Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Your are not allowed to share. Please activate your account!";  // untranslated
+Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Your are not allowed to share. Please activate your account! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>";  // untranslated
 Blockly.Msg.ORA_COMMAND_INVALID = "Неверная Javascript-комманда";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "На сервере невозможно найти конфигурацию робота.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Конфигурация робота не может быть преобразована и записана в языке программирования используемом для данного робота.";
@@ -857,6 +857,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using s
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Проверить, все ли необходимые поля ввода были заполнены.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Данное имя пользователя уже существует в базе данных. Пожалуйста, выберите другое имя пользователя.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Пользователь был успешно создан";
+Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Your account is currently not verified, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Ошибка при удалении пользователя.";
 Blockly.Msg.ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB = "Ошибка при удалении пользователя в базе данных.";
 Blockly.Msg.ORA_USER_DELETE_SUCCESS = "Пользователь был успешно удален";
@@ -985,7 +986,7 @@ Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP = "Click here to delete all selected pro
 Blockly.Msg.PROGLIST_DELETE_TOOLTIP = "Click here to delete your program.";  // untranslated
 Blockly.Msg.PROGLIST_LOAD_TOOLTIP = "Click here to load your robot configuration in the configuration environment.";  // untranslated
 Blockly.Msg.PROGLIST_SHARE_TOOLTIP = "Click here to share your program with a friend.";  // untranslated
-Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY = "Do you really want to share your program with everybody? If you are not sure please check the question and answers <a href='http://typo3.p404214.webspaceconfig.de/index.php?id=138&L=1' target='_blank'>here</a>.";  // untranslated
+Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY = "Do you really want to share your program with everybody? If you are not sure please check the question and answers <a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>here</a>.";  // untranslated
 Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP = "Click here to upload your program to the gallery hence share it with all other users.";  // untranslated
 Blockly.Msg.PULSE_HIGH = "pulse time HIGH";  // untranslated
 Blockly.Msg.PULSE_LOW = "pulse time LOW";  // untranslated
@@ -1224,7 +1225,7 @@ Blockly.Msg.X = "x";  // untranslated
 Blockly.Msg.Y = "y";  // untranslated
 Blockly.Msg.YAW = "yaw";  // untranslated
 Blockly.Msg.YES = "да";
-Blockly.Msg.YOUNGER_THEN_14 = "I am younger than 14!";  // untranslated
+Blockly.Msg.YOUNGER_THEN_14 = "I am younger than 16!";  // untranslated
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;

@@ -200,8 +200,8 @@ Blockly.Msg.GYRO_RESET_TOOLTIP = "Setzt den Kreiselensor zurück.";
 Blockly.Msg.GYRO_TOOLTIP = "Block für den Kreiselsensor.";
 Blockly.Msg.HELP = "Hilfe";
 Blockly.Msg.HINT_USER_ACCOUNT = "»IchBinBotman« oder »RobellaStracciatella«? Deinen richtigen Namen muss nicht jeder kennen. Denk dir lieber einen Spitznamen aus, an den du dich gut erinnern kannst!";
-Blockly.Msg.HINT_USER_AGE = "Bist du jünger als 14 Jahre? Dann bitte deine Eltern, dir zu helfen. Sie können oben ihre E-Mail-Adresse zur Bestätigung deines Kontos angeben.";
-Blockly.Msg.HINT_USER_EMAIL = "Diese Angabe ist freiwillig! Einige Funktionen sind aber nur mit E-Mail möglich. Du bist unter 14 Jahre alt? Dann bitte deine Eltern, dir bei der Anmeldung zu helfen, und gib ihre Mail-Adresse ein. <br><a href='http://typo3.p404214.webspaceconfig.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
+Blockly.Msg.HINT_USER_AGE = "Bist du jünger als 16 Jahre? Dann bitte deine Eltern, dir zu helfen. Sie können oben ihre E-Mail-Adresse zur Bestätigung deines Kontos angeben.";
+Blockly.Msg.HINT_USER_EMAIL = "Diese Angabe ist freiwillig! Einige Funktionen sind aber nur mit E-Mail möglich. Du bist unter 16 Jahre alt? Dann bitte deine Eltern, dir bei der Anmeldung zu helfen, und gib ihre Mail-Adresse ein. <br><a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
 Blockly.Msg.HINT_USER_NAME = "In diesem Feld kannst du deinen richtigen Namen eintragen, aber nur wenn du möchtest. Dieser Name wird nur dir angezeigt, z. B. wenn das Lab dich begrüßt.";
 Blockly.Msg.HINT_USER_PASSWORT = "12345 ist kein gutes Passwort ;-)! Such dir lieber eine sichere Kombination aus Zahlen und Buchstaben aus, die du gut behalten kannst! Es muss mindestens sechs Zeichen lang sein!";
 Blockly.Msg.HINT_USER_PASSWORT_CONFIRM = "Alles richtig geschrieben? Gib dein Passwort vorsichtshalber nochmal ein.";
@@ -783,9 +783,9 @@ Blockly.Msg.NEW_VARIABLE_TITLE = "Name der neuen Variable:";
 Blockly.Msg.NO = "nein";
 Blockly.Msg.NXTBRICK_TOOLTIP = "Block für den NXT Stein mit den angeschlossenen Aktoren und Sensoren. Es gibt auch weitere eingebaute Aktoren und Sensoren, wie z. B. das Display, die Tasten ...";
 Blockly.Msg.OFF = "aus";
-Blockly.Msg.OLDER_THEN_14 = "Ich bin 14 oder älter!";
+Blockly.Msg.OLDER_THEN_14 = "Ich bin 16 oder älter!";
 Blockly.Msg.ON = "an";
-Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du kannst Programme nur teilen oder in die Gallerie hochladen, wenn dein Benutzerkonto verifiziert wurde.";
+Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du kannst Programme nur teilen oder in die Gallerie hochladen, wenn dein Benutzerkonto verifiziert wurde.<br><a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
 Blockly.Msg.ORA_COMMAND_INVALID = "Dein Konfigurationsname ist vom System reserviert. Wähle bitte einen anderen Namen und versuche es noch einmal!";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Der Server konnte die Roboterkonfiguration nicht finden.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Die Roboterkonfiguration konnte nicht in die entsprechende Programmiersprache übertragen werden.";
@@ -849,7 +849,7 @@ Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = "An error error has occurre
 Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = "Die Toolbox wurde gespeichert.";
 Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = "Transformation Fehler?";
 Blockly.Msg.ORA_USER_ACTIVATION_INVALID_URL = "Dieser Link ist nicht mehr gültig. Bitte lasse dir die Verifizierungsmail nocheinmal zusenden.";
-Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_FAIL = "Entschuldigun, wir konnten dir keine Mail zuschicken, bitte melde dich hier: »roberta-zentrale@iais.fraunhofer.de«.";
+Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_FAIL = "Entschuldigung, wir konnten dir keine Mail zuschicken, bitte melde dich hier: »roberta-zentrale@iais.fraunhofer.de«.";
 Blockly.Msg.ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS = "Wir haben dir eine Mail geschickt. Bitte schaue in deinem Postfach nach!";
 Blockly.Msg.ORA_USER_ACTIVATION_SUCCESS = "Dein Benutzerkonto wurde erfolgreich verifiziert. Bitte logge dich ein!";
 Blockly.Msg.ORA_USER_CREATE_ERROR_ACCOUNT_LENGTH = "Dein Benutzername oder dein Name ist länger als 25 Zeichen, bitte geben einen kürzeren ein. Das Benutzerkonto konnte nicht erstellt werden.";
@@ -857,6 +857,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Bitte benutze k
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Schaue nach, ob du alle Felder ausgefüllt hast. Das Benutzerkonto konnte nicht erstellt werden.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Es gibt bereits einen Benutzer mit diesem Namen, versuche es mit einem anderen Benutzernamen.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Das Benutzerkonto »$« wurde für dich angelegt!";
+Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Dein Benutzerkonto ist nicht mehr verifiziert. Bitte schaue in deinem Postfach nach!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Ein Fehler ist beim Löschen des Benutzers »$« aufgetreten.";
 Blockly.Msg.ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB = "Ein Fehler ist beim Löschen des Benutzers »$« in der Datenbank aufgetreten.";
 Blockly.Msg.ORA_USER_DELETE_SUCCESS = "Du hast dein Benutzerkonto »$« gelöscht. Hoffentlich kommst du bald wieder!";
@@ -985,7 +986,7 @@ Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP = "Klicke hier um alle ausgewählten Pro
 Blockly.Msg.PROGLIST_DELETE_TOOLTIP = "Klicke hier um dein Programm zu löschen.";
 Blockly.Msg.PROGLIST_LOAD_TOOLTIP = "Klicke hier um dein Programm in die Programmierumgebung zu laden.";
 Blockly.Msg.PROGLIST_SHARE_TOOLTIP = "Klicke hier um dein Programm mit einem Freund zu teilen.";
-Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY = "Möchtest du dein Programm wirklich in die Gallerie hochladen und mit allen anderen Benutzern teilen? Wenn du dir nicht sicher bist, schaue <a href='http://typo3.p404214.webspaceconfig.de/index.php?id=138' target='_blank'>hier</a> nochmal genau nach!";
+Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY = "Möchtest du dein Programm wirklich in die Gallerie hochladen und mit allen anderen Benutzern teilen? Wenn du dir nicht sicher bist, schaue <a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>hier</a> nochmal genau nach!";
 Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP = "Klicke hier um dein Programm in der Galerie hochzuladen und es mit allen anderen Benutzern zu teilen.";
 Blockly.Msg.PULSE_HIGH = "Pulszeit HIGH";
 Blockly.Msg.PULSE_LOW = "Pulszeit LOW";
@@ -1224,7 +1225,7 @@ Blockly.Msg.X = "x";  // untranslated
 Blockly.Msg.Y = "y";  // untranslated
 Blockly.Msg.YAW = "yaw";  // untranslated
 Blockly.Msg.YES = "ja";
-Blockly.Msg.YOUNGER_THEN_14 = "Ich bin jünger als 14!";
+Blockly.Msg.YOUNGER_THEN_14 = "Ich bin jünger als 16!";
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
