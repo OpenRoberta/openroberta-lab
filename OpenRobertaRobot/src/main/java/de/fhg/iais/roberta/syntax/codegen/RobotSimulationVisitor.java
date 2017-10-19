@@ -512,6 +512,7 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
 
     @Override
     public V visitFunctionStmt(FunctionStmt<V> functionStmt) {
+        functionStmt.getFunction().visit(this);
         return null;
     }
 
