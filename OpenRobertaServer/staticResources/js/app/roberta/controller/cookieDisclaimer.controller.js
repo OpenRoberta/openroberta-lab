@@ -13,7 +13,7 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
     function init() {
         cookieSettings.secure = GUISTATE_C.isPublicServerVersion();
         
-        if (cookieExists()) {
+        if (cookieExists() || !GUISTATE_C.isPublicServerVersion()) {
             refreshCookie();
         } else {
             addHandler(refreshCookie);
