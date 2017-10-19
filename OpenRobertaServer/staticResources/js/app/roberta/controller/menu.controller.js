@@ -345,6 +345,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
             if (domId === 'menuShowStart') { // Submenu 'Help'
+                if (!GUISTATE_C.noCookie()) {
+                    $('#checkbox_id').prop('checked', true);
+                }
                 $("#show-startup-message").modal("show");
             } else if (domId === 'menuAbout') { // Submenu 'Help'
                 $("#version").text(GUISTATE_C.getServerVersion() + '-SNAPSHOT');
@@ -446,6 +449,9 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         });
 
         $('#img-nepo').onWrap('click', function() {
+            if (!GUISTATE_C.noCookie()) {
+                $('#checkbox_id').prop('checked', true);
+            }
             $("#show-startup-message").modal("show");
         }, 'logo was clicked');
 
@@ -529,13 +535,29 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     }
                 }
                 
-                // Always save a cookie. If cookies are not allowed, the maxExpirationTime will be set to 0 and the browser will delete the cookie
-                $.cookie("OpenRoberta_" + GUISTATE_C.getServerVersion(), choosenRobotType, {
-                    expires : CookieDisclaimer.maxExpirationTime(99),
-                    secure : GUISTATE_C.isPublicServerVersion(),
-                    path:"/",
-                    domain : ''
-                });
+                
+                if ($('#checkbox_id').is(':checked')) {
+                    var cookieSettings = {
+                            expires: 99,
+                            secure : GUISTATE_C.isPublicServerVersion(),
+                            domain : ''
+                        }
+                        cookieName = "OpenRoberta_" + GUISTATE_C.getServerVersion();
+                    
+                    if (CookieDisclaimer.cookiesAllowed()) {
+                        cookieSettings.expires = CookieDisclaimer.maxExpirationTime(cookieSettings.expires);
+                        $.cookie(cookieName, choosenRobotType, cookieSettings);
+                    } else {
+                        CookieDisclaimer.addHandler(function() {
+                            cookieSettings.expires = CookieDisclaimer.maxExpirationTime(cookieSettings.expires) || cookieSettings.expires; // In case the "enable cookies" handler is fired after this one
+                            $.cookie(cookieName, choosenRobotType, cookieSettings);
+                        });
+                    }
+                } else {
+                    if (!GUISTATE_C.noCookie()) {
+                        $.removeCookie(cookieName);
+                    }
+                }
                 
                 $('#show-startup-message').modal('hide');
             }

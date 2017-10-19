@@ -1,29 +1,24 @@
 define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTATE_C) {
     var $disclaimer = $("#cookieDisclaimer"),
-    cookieName = "OpenRoberta_Cookie",
-    cookieValue = "accepted",
-    cookieSettings = {
-        expires: 60,
-        path: "/",
-        domain: "",
-        secure: true // Set to false for debugging
-    };
+        $okButton = $disclaimer.children("button"),
+        cookieName = "OpenRoberta_Cookie",
+        cookieValue = "accepted",
+        cookieSettings = {
+            expires: 30,
+            path: "/",
+            domain: "",
+            secure: true
+        };
     
     function init() {
-        var $async = $.Deferred();
+        cookieSettings.secure = GUISTATE_C.isPublicServerVersion();
         
-        $.when(GUISTATE_C.init()).then(function(){
-            
-            if (cookieExists() || !GUISTATE_C.isPublicServerVersion()) {
-                refreshCookie();
-            } else {
-                $disclaimer.find("button").click(refreshCookie);
-                showDisclaimer();
-            }
-            
-            $async.resolve();
-        });
-        return $async.promise();
+        if (cookieExists()) {
+            refreshCookie();
+        } else {
+            addHandler(refreshCookie);
+            showDisclaimer();
+        }
     }
     
     exports.init = init;
@@ -40,10 +35,9 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
      * @private
      */
     function hideDisclaimer() {
-        if (!$disclaimer.hasClass("accepted")) {
-            $disclaimer.addClass("accepted");
-        }
+        $disclaimer.addClass("accepted");
     }
+    
     /**
      * @private
      */
@@ -56,14 +50,26 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
         return typeof $.cookie(cookieName) !== "undefined";
     }
     
-    exports.allowCookies = cookieExists;
+    function cookiesAllowed() {
+        return cookieExists();
+    }
+    exports.cookiesAllowed = cookiesAllowed;
+
+    /**
+     * @private
+     */
+    function addHandler(func) {
+        if (typeof func === "function") {
+            $okButton.click(func);
+        }
+    }
+    exports.addHandler = addHandler;
     
     function maxExpirationTime(maximum = 364) {
         if (typeof maximum !== "number") {
             maximum = 364;
         }
-        return cookieExists() ? Math.min(maximum, 364) : 0;
+        return cookieExists() ? Math.min(maximum, 364) : null;
     }
-    
     exports.maxExpirationTime = maxExpirationTime;
 });
