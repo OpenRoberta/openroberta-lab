@@ -24,6 +24,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         if (target[0] === "#forgotPassword") {
             USER_C.showResetPassword(target[1]);
         } else if (target[0] === "#loadProgram" && target.length >= 4) {
+            GUISTATE_C.setStartWithoutPopup();
             PROGRAM_C.openProgramFromXML(target);
         } else if (target[0] === "#activateAccount") {
             USER_C.activateAccount(target[1]);
@@ -33,7 +34,6 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         } else if (target[0] === "#gallery") {
             GUISTATE_C.setStartWithoutPopup();
             $('#tabGalleryList').click();
-            return false;
         }
 
         var firsttime = true
