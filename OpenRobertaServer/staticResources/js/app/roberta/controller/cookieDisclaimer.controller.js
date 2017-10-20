@@ -13,7 +13,18 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
     function init() {
         cookieSettings.secure = GUISTATE_C.isPublicServerVersion();
         
-        if (cookieExists() || !GUISTATE_C.isPublicServerVersion()) {
+        $(window).on('unload', function(){
+            if (!cookiesAllowed()) {
+                var cookies = $.cookie();
+                for (var cookie in cookies) {
+                    if (cookies.hasOwnProperty(cookie)) {
+                        $.removeCookie(cookie);
+                    }
+                }
+            }
+        });
+        
+        if (cookiesAllowed() || !GUISTATE_C.isPublicServerVersion()) {
             refreshCookie();
         } else {
             addHandler(refreshCookie);
@@ -60,7 +71,7 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
      */
     function addHandler(func) {
         if (typeof func === "function") {
-            $okButton.click(func);
+            $okButton.one('click', func);
         }
     }
     exports.addHandler = addHandler;
