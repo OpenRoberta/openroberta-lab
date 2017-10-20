@@ -76,7 +76,7 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
     }
     exports.addHandler = addHandler;
     
-    function maxExpirationTime(maximum = 364) {
+    function maxExpirationTime(maximum) {
         if (typeof maximum !== "number") {
             maximum = 364;
         }
