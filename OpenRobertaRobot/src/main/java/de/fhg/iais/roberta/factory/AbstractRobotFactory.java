@@ -312,7 +312,14 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
         return null;
     }
 
-    protected void addBlockTypesFromProperties(String propertyFileName, Properties properties) {
+    /**
+     * should be called only from subclasses. Made public and static for tests (see call hierarchy). Another example, that shows, that static variables
+     * (singletons) are bad. TODO: rewrite the BlockTypeContainer map singleton and inject
+     * 
+     * @param propertyFileName
+     * @param properties
+     */
+    public static void addBlockTypesFromProperties(String propertyFileName, Properties properties) {
         boolean alreadyLoaded = BlockTypeContainer.register(propertyFileName);
         if ( alreadyLoaded ) {
             return;

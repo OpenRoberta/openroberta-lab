@@ -1,17 +1,29 @@
 package de.fhg.iais.roberta.ast.expr;
 
+import java.util.Properties;
+
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
 public class SensorExprTest {
+
+    @Before
+    public void addBlockProperties() {
+        Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
+        AbstractRobotFactory.addBlockTypesFromProperties("Robot.properties", robotProperties);
+    }
+
     HelperBotNroll h = new HelperBotNroll();
 
     @Test
