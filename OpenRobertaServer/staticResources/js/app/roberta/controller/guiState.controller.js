@@ -7,8 +7,10 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
 
         var ready = $.Deferred();
         $.when(GUISTATE.init()).then(function() {
-            if ($.cookie("OpenRoberta_" + GUISTATE.server.version)) {
-                GUISTATE.gui.cookie = $.cookie("OpenRoberta_" + GUISTATE.server.version);
+            var cookieName = "OpenRoberta_" + GUISTATE.server.version;
+            
+            if ($.cookie(cookieName)) {
+                GUISTATE.gui.cookie = $.cookie(cookieName);
             }
 
             GUISTATE.gui.view = 'tabProgram';

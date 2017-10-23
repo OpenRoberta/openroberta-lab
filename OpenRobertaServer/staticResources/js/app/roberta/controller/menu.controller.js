@@ -535,28 +535,20 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
                     }
                 }
                 
+                var cookieName = "OpenRoberta_" + GUISTATE_C.getServerVersion();
                 
                 if ($('#checkbox_id').is(':checked')) {
+                    
                     var cookieSettings = {
                             expires: 99,
                             secure : GUISTATE_C.isPublicServerVersion(),
                             domain : ''
-                        }
-                        cookieName = "OpenRoberta_" + GUISTATE_C.getServerVersion();
+                        };
                     
-                    if (CookieDisclaimer.cookiesAllowed()) {
-                        cookieSettings.expires = CookieDisclaimer.maxExpirationTime(cookieSettings.expires);
-                        $.cookie(cookieName, choosenRobotType, cookieSettings);
-                    } else {
-                        CookieDisclaimer.addHandler(function() {
-                            cookieSettings.expires = CookieDisclaimer.maxExpirationTime(cookieSettings.expires) || cookieSettings.expires; // In case the "enable cookies" handler is fired after this one
-                            $.cookie(cookieName, choosenRobotType, cookieSettings);
-                        });
-                    }
+                    CookieDisclaimer.saveCookie(cookieName, choosenRobotType, cookieSettings);
+                    
                 } else {
-                    if (!GUISTATE_C.noCookie()) {
-                        $.removeCookie(cookieName);
-                    }
+                    $.removeCookie(cookieName);
                 }
                 
                 $('#show-startup-message').modal('hide');

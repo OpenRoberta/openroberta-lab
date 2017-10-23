@@ -788,6 +788,12 @@ table#download-instructions {
     padding-left: 12px;
     vertical-align: top;
 }
+#download-instructions #liA,
+#download-instructions #liB,
+#download-instructions #liC,
+#download-instructions #liD {
+	background-repeat: no-repeat;
+}
 #programLink a {
     text-decoration: underline;
     color: #337ab7;
@@ -1650,7 +1656,7 @@ img.img-responsive {
 
 
 #cookieDisclaimer > span,
-#cookieDisclaimer > button {
+#cookieDisclaimer > .ok-button {
 	display: inline-block !important;
 	vertical-align: middle;
 }
@@ -1661,6 +1667,39 @@ img.img-responsive {
 	padding-right: 16px;
 }
 
-#cookieDisclaimer > button {
+#cookieDisclaimer > .ok-button {
 	margin-right: 0;
+}
+
+#cookieDisclaimer > .no-button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0 6px;
+	font-size: 28px;
+}
+
+.cookies-enabled.cookie-hide,
+.cookies-disabled:not(.cookie-show) {
+	display: none;
+}
+
+@media (max-width: 30em) {
+	#cookieDisclaimer {
+		padding-top: 28px;
+	}
+	#cookieDisclaimer > span,
+	#cookieDisclaimer > .ok-button {
+		display: block !important;
+	}
+	
+	#cookieDisclaimer > span {
+		width: 100%;
+		padding-bottom: 16px;
+		padding-right: 0;
+	}
+	
+	#cookieDisclaimer > .ok-button {
+		margin-left: auto;
+	}
 }

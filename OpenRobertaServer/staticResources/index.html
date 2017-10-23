@@ -1202,8 +1202,8 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 							</div>
 						</div>
 					</div>
-					<hr style="border: 2px solid #33B8CA; margin: 10px 0">
-					<div class="modal-footer left-inner-addon popup-checkbox">
+					<hr class="cookies-enabled" style="border: 2px solid #33B8CA; margin: 10px 0">
+					<div class="modal-footer left-inner-addon popup-checkbox cookies-enabled">
 						<div id="startup-message-statustext">
 							<h4 id="statustext-en" class="EN"></h4>
 							<h4 id="statustext-de" class="DE"></h4>
@@ -1384,13 +1384,14 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 	<div id="device-size">
 		<div id="xs" class="visible-xs"></div>
 	</div>
-	<div id="cookieDisclaimer" class="hidden">
+	<div id="cookieDisclaimer" class="cookies-enabled hidden">
 		<span>
 			<span lkey="Blockly.Msg.POPUP_STARTUP_COOKIES">We use cookies to personalise content and to analyse our traffic.</span>
 			<a href="https://www.roberta-home.de/index.php?id=137" target="_blank" class="DE" style="display: inline;">Details ansehen.</a> 
 			<a href="https://www.roberta-home.de/index.php?id=137&L=1" target="_blank" class="EN" style="display: inline;">Show details.</a>
 		</span>
-		<button class="btn btn-primary"  type="button">OK</button>
+		<button class="close no-button" type="button" aria-hidden="true">×</button>
+		<button class="btn btn-primary ok-button"  type="button">OK</button>
 	</div>
 </body>
 </html>

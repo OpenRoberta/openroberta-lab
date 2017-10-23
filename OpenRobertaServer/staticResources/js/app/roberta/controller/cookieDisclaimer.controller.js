@@ -1,6 +1,6 @@
 define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTATE_C) {
     var $disclaimer = $("#cookieDisclaimer"),
-        $okButton = $disclaimer.children("button"),
+        $okButton = $disclaimer.children(".ok-button"),
         cookieName = "OpenRoberta_Cookie",
         cookieValue = "accepted",
         cookieSettings = {
@@ -8,9 +8,17 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
             path: "/",
             domain: "",
             secure: true
-        };
+        },
+        cookiesEnabled = cookiesAllowedByBrowser();
     
     function init() {
+        
+        toggleCookieRelatedContent();
+        
+        if (!cookiesEnabled) {
+           return;
+        }
+        
         cookieSettings.secure = GUISTATE_C.isPublicServerVersion();
         
         $(window).on('unload', function(){
@@ -24,6 +32,12 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
             }
         });
         
+        $disclaimer.children("button").click(hideDisclaimer);
+        $disclaimer.children(".no-button").click(function(){
+            cookiesEnabled = false; 
+            toggleCookieRelatedContent();
+        });
+        
         if (cookiesAllowed() || !GUISTATE_C.isPublicServerVersion()) {
             refreshCookie();
         } else {
@@ -33,6 +47,32 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
     }
     
     exports.init = init;
+    
+    function saveCookie(cookieName, cookieValue, cookieSettings) {
+        if (!cookiesEnabled) {
+            return false;
+        }
+        
+        // Only allow secure cookies on the live server
+        cookieSettings.secure = cookieSettings.secure || GUISTATE_C.isPublicServerVersion();
+        
+        if (cookiesAllowed()) {
+            if (cookieSettings.expires) {
+                cookieSettings.expires = maxExpirationTime(cookieSettings.expires);
+            }
+            $.cookie(cookieName, cookieValue, cookieSettings);
+            return true;
+        } else {
+            addHandler(function(){
+                if (cookieSettings.expires) {
+                    cookieSettings.expires = maxExpirationTime(cookieSettings.expires);
+                }
+                $.cookie(cookieName, cookieValue, cookieSettings);
+            });
+            return false;
+        }
+    }
+    exports.saveCookie = saveCookie;
 
     /**
      * @private
@@ -61,6 +101,30 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
         return typeof $.cookie(cookieName) !== "undefined";
     }
     
+    function cookiesAllowedByBrowser() {
+        // If that setting exists and is true, the browser accepts cookies
+        if (navigator.cookieEneabled) {
+            return true;
+        }
+
+        var testCookie = "BrowserCookieTest",
+            testCookieValue = "test",
+            cookiesDeactivated = false;
+        
+        // For some browsers we simply have to test the functionality
+        $.cookie(testCookie, testCookieValue, {
+            expires: 1,
+            secure: false
+        });
+        
+        cookiesDeactivated = $.cookie(testCookie) === testCookieValue;
+
+        $.removeCookie(testCookie);
+        
+        return cookiesDeactivated;
+    }
+    exports.cookiesAllowedByBrowser = cookiesAllowedByBrowser;
+    
     function cookiesAllowed() {
         return cookieExists();
     }
@@ -83,4 +147,9 @@ define(["exports", "jquery", "guiState.controller"], function(exports, $, GUISTA
         return cookieExists() ? Math.min(maximum, 364) : null;
     }
     exports.maxExpirationTime = maxExpirationTime;
+    
+    function toggleCookieRelatedContent() {
+        $('.cookies-enabled').toggleClass("cookie-hide", !cookiesEnabled);
+        $('.cookies-disabled').toggleClass("cookie-show", !cookiesEnabled);
+    }
 });
