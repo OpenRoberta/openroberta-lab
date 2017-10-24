@@ -50,6 +50,7 @@ import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -386,12 +387,12 @@ public class ClientProgram {
                     configurationText = robotFactory.getConfigurationDefault();
                 }
 
-                //TODO: Add the checkers in workflow compiler
+                //TODO: Add the checkers in workflow compiler and should be thoroughly revised
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
                 RobotBrickCheckVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
+                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
                     messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);
@@ -460,9 +461,9 @@ public class ClientProgram {
                 BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                     BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
                 messageKey = programAndConfigTransformer.getErrorMessage();
-                //TODO program checks should be in compiler workflow
+                //TODO program checks should be in compiler workflow and should be thoroughly revised
                 RobotSimulationCheckVisitor programChecker = robotFactory.getSimProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
-                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer.getTransformedProgram(), programChecker);
+                messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
 
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
@@ -497,16 +498,20 @@ public class ClientProgram {
         return Response.ok(response).build();
     }
 
-    private Key programConfigurationCompatibilityCheck(JSONObject response, ArrayList<ArrayList<Phrase<Void>>> program, RobotCommonCheckVisitor programChecker)
+    private Key programConfigurationCompatibilityCheck(
+        JSONObject response,
+        BlocklyProgramAndConfigTransformer programAndConfigTransformer,
+        RobotCommonCheckVisitor programChecker)
         throws JSONException,
         JAXBException {
+        Jaxb2AstTransformerData<Void> data = programAndConfigTransformer.getProgramTransformer().getData();
         if ( programChecker == null ) {
-            response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(program)));
+            response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programAndConfigTransformer.getProgramTransformer().getTree(), data)));
             return null;
         }
-        programChecker.check(program);
+        programChecker.check(programAndConfigTransformer.getTransformedProgram());
         final int errorCounter = programChecker.getErrorCount();
-        response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
+        response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram(), data)));
         response.put("errorCounter", errorCounter);
         if ( errorCounter > 0 ) {
             return Key.PROGRAM_INVALID_STATEMETNS;
@@ -523,8 +528,12 @@ public class ClientProgram {
         return writer.toString();
     }
 
-    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
-        final BlockSet blockSet = new BlockSet();
+    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram, Jaxb2AstTransformerData<Void> data) {
+        BlockSet blockSet = new BlockSet();
+        blockSet.setDescription(data.getDescription());
+        blockSet.setRobottype(data.getRobotType());
+        blockSet.setTags(data.getTags());
+        blockSet.setXmlversion(data.getXmlVersion());
 
         Instance instance = null;
         for ( final ArrayList<Phrase<Void>> tree : astProgram ) {
