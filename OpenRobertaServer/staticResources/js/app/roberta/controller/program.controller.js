@@ -488,12 +488,14 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         case connectionType.TOKEN:
             PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
                 RUN_C.runForToken(result);
+                reloadProgram(result);
             });
             break;
         case connectionType.AUTO:
             GUISTATE_C.setAutoConnectedBusy(true);
             PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
                 RUN_C.runForAutoConnection(result);
+                reloadProgram(result);
             });
             break;
         case connectionType.AGENT:
@@ -511,6 +513,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
             } else {
                 PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
                     RUN_C.runForToken(result);
+                    reloadProgram(result);
                 });
             }
             break;
