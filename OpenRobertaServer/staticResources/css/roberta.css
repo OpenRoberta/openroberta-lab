@@ -1156,6 +1156,12 @@ table [data-toggle="collapse"].collapsed:after {
     white-space: nowrap;
     overflow-x: auto;
     width: 100%;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 .bootstrap-tagsinput .tag {
     background-color: #bbb;
@@ -1331,10 +1337,14 @@ td.bs-checkbox {
 	margin-top:80px;
 	overflow: hidden;
     text-overflow: ellipsis;
-    word-wrap: break-word;
-    word-break: break-word;
     width: 100%;
     margin-bottom: 12px;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 div.galleryLike {
     color: #fff;

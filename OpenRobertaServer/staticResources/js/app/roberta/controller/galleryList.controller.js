@@ -146,7 +146,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
 
     var rowStyle = function(row, index) {
         return {
-            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6' 
+            classes : 'col-xl-2 col-lg-3 col-md-4 col-sm-6'
         };
     }
     exports.rowStyle = rowStyle;
@@ -157,9 +157,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
         var colorIndex = hash % BACKGROUND_COLORS.length;
         return {
             style : 'background-color :' + BACKGROUND_COLORS[colorIndex] + ';' + //
-            'padding: 24px ;' + //
-            'border: solid 12px white;' + //
-            'z-index: 1'
+            'padding: 24px; border: solid 12px white; z-index: 1; cursor: pointer;'
         }
     }
     exports.rowAttributes = rowAttributes;
