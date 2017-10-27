@@ -9,8 +9,10 @@ import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.util.test.ev3.Helper;
 
 public class SensorExprTest {
+    Helper h = new Helper();
 
     @Test
     public void make() throws Exception {
