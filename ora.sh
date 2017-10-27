@@ -95,10 +95,11 @@ function _exportApplication {
         echo "target directory \"$exportpath\" already exists - exit 1"
         exit 1
     fi
-	serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
-    echo "serverVersion: ${serverVersion}"
     mkAndCheckDir "$exportpath"
     exportpath=$(cd "$exportpath"; pwd)
+    cd OpenRobertaParent
+	  serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
+    echo "serverVersion: ${serverVersion}"
     echo "created the target directory \"$exportpath\""
     echo "copying all jars"
     mkAndCheckDir "${exportpath}/lib"
@@ -118,6 +119,7 @@ function _exportApplication {
             cd ..
         fi
     done
+    cd ..
     echo 'copy start scripts'
     cp start-*.sh ${exportpath}
     chmod ugo+rx ${exportpath}/*.sh
@@ -125,6 +127,7 @@ function _exportApplication {
 }
 
 function _updateLejos {
+  cd OpenRobertaParent
   run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos_${lejosVersion}/EV3Menu.jar root@${LEJOSIPADDR}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
@@ -140,10 +143,11 @@ function _updateLejos {
   run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 ${runtime} ${json} ${websocket} root@${LEJOSIPADDR}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
+  cd ..
 }
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
-if [ -d OpenRobertaServer ]
+if [ -d OpenRobertaParent ]
 then
   :
 else
@@ -154,17 +158,17 @@ cmd="$1"
 shift
 
 # often used values
-DBEMPTY='OpenRobertaServer/dbEmpty'
-DBBASE='OpenRobertaServer/dbBase'
+DBEMPTY='OpenRobertaParent/OpenRobertaServer/dbEmpty'
+DBBASE='OpenRobertaParent/OpenRobertaServer/dbBase'
 
 case "$cmd" in
 --export)         _exportApplication $* ;;
 
---start-from-git) java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded $* ;;
+--start-from-git) java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer $* ;;
 
---sqlclient)      dir="OpenRobertaServer/target/resources"
+--sqlclient)      dir="OpenRobertaParent/OpenRobertaServer/target/resources"
                   databaseurl="$1"
-                  java -jar "$dir/hsqldb-2.3.2.jar" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
+                  java -jar "$dir/hsqldb-*.jar" --driver org.hsqldb.jdbc.JDBCDriver --url "$databaseurl" --user orA --password Pid ;;
 
 ''|--help|-h)     # Be careful when editing the file 'ora-help.txt'. Words starting with "--" are used by compgen for completion
                   $0 --java
@@ -193,8 +197,8 @@ case "$cmd" in
                   *)   echo "nothing done"
                        exit 0 ;;
                   esac
-				  serverVersion=$(java -cp OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
-                  DB="OpenRobertaServer/db-${serverVersion}"
+				  serverVersion=$(java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -v)
+                  DB="OpenRobertaParent/OpenRobertaServer/db-${serverVersion}"
 				  echo "the database at $DB is resetted to $DBBASE"
 				  rm -rf "$DB"
                   cp -a "$DBBASE" "$DB" ;;
@@ -208,7 +212,7 @@ case "$cmd" in
                   esac
                   rm -rf $DBEMPTY
 				  main='de.fhg.iais.roberta.main.Administration'
-                  java -cp 'OpenRobertaServer/target/resources/*' "${main}" createemptydb "$DBEMPTY/openroberta-db" ;;
+                  java -cp 'OpenRobertaParent/OpenRobertaServer/target/resources/*' "${main}" createemptydb "$DBEMPTY/openroberta-db" ;;
 
 --resetDbBase)    echo -n "do you really want to make DBBASE equal to DBEMPTY? The old defaults will be LOST. 'yes', 'no') "
                   read ANSWER
