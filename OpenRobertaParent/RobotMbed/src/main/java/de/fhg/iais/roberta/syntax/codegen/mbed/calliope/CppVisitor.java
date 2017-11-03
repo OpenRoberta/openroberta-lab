@@ -72,6 +72,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
@@ -116,9 +117,6 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
     AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
-    @SuppressWarnings("unused")
-    private final CalliopeConfiguration brickConfiguration;
-
     private final UsedHardwareCollectorVisitor codePreprocess;
     ArrayList<VarDeclaration<Void>> usedVars;
 
@@ -132,7 +130,6 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     private CppVisitor(CalliopeConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        this.brickConfiguration = brickConfiguration;
         this.codePreprocess = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
 
         this.loopsLabels = this.codePreprocess.getloopsLabelContainer();
@@ -195,8 +192,12 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         //TODO there must be a way to make this code simpler
         this.sb.append(getLanguageVarTypeFromBlocklyType(var.getTypeVar()));
         if ( var.getTypeVar().isArray() ) {
-            ListCreate<Void> list = (ListCreate<Void>) var.getValue();
-            this.sb.append(list.getValue().get().size() + ">");
+            if ( !var.getValue().getKind().hasName("EMPTY_EXPR") ) {
+                ListCreate<Void> list = (ListCreate<Void>) var.getValue();
+                this.sb.append(list.getValue().get().size() + ">");
+            } else {
+                this.sb.append("N>");
+            }
         }
         this.sb.append(whitespace() + var.getName());
         return null;
@@ -1221,6 +1222,19 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("#include <array>\n");
         this.sb.append("#include <stdlib.h>\n");
         this.sb.append("MicroBit uBit;\n\n");
+    }
+
+    @Override
+    protected void generateSignaturesOfUserDefinedMethods() {
+        for ( Method<Void> phrase : this.userDefinedMethods ) {
+            appendTemplateIfArrayParameter(phrase.getParameters().get());
+            nlIndent();
+            this.sb.append(getLanguageVarTypeFromBlocklyType(phrase.getReturnType()) + " ");
+            this.sb.append(phrase.getMethodName() + "(");
+            phrase.getParameters().visit(this);
+            this.sb.append(");");
+            nlIndent();
+        }
     }
 
 }

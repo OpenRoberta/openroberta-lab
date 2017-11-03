@@ -564,6 +564,31 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitUserDefinedMethod__ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + "#define_GNU_SOURCE\n\n"
+                + "#include \"MicroBit.h\"" //
+                + "#include <array>\n"
+                + "#include <stdlib.h>\n"
+                + "MicroBituBit;"
+                + "template<size_t N>"
+                + "void doSomething(array<MicroBitImage,N> x);"
+                + "int initTime=uBit.systemTime();\n"
+                + "array<MicroBitImage,3> item;\n"
+                + MAIN
+                + "item={MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\"),MicroBitImage(\"0,0,0,0,0\\n0,255,0,255,0\\n0,255,255,255,0\\n0,0,255,0,0\\n0,0,0,0,0\\n\"),MicroBitImage(\"0,255,0,255,0\\n255,255,255,255,255\\n255,255,255,255,255\\n0,255,255,255,0\\n0,0,255,0,0\\n\")};"
+                + "doSomething(item);"
+                + END
+                + "template<size_t N>"
+                + "void doSomething(array<MicroBitImage, N> x) {"
+                + "uBit.display.animateImages(x,200);"
+                + "}";
+
+        assertCodeIsOk(expectedResult, "/function/user_defined_function.xml");
+    }
+
+    @Test
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //
