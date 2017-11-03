@@ -91,7 +91,7 @@ public class NxtConfiguration extends Configuration {
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
         sb.append("robot ev3 ").append(name).append(" {\n");
-        if ( this.wheelDiameterCM != 0.0 || this.trackWidthCM != 0.0 ) {
+        if ( this.wheelDiameterCM != 0 || this.trackWidthCM != 0 ) {
             sb.append("  size {\n");
             sb.append("    wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm;\n");
             sb.append("    track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm;\n");

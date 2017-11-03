@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.syntax.codegen.mbed;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.mode.action.mbed.DisplayImageMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -260,11 +259,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
         String end = createClosingBracket();
         this.sb.append("createDisplayImageAction(CONST.");
         this.sb.append(displayImageAction.getDisplayImageMode() + ", ");
-        if ( displayImageAction.getDisplayImageMode() == DisplayImageMode.ANIMATION ) {
-            displayImageAction.getValuesToDisplay().visit(this);
-        } else {
-            displayImageAction.getValuesToDisplay().visit(this);
-        }
+        displayImageAction.getValuesToDisplay().visit(this);
         this.sb.append(end);
         return null;
     }

@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.action.arduino.bob3;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -60,7 +57,6 @@ public class ReceiveIRAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
         return ReceiveIRAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

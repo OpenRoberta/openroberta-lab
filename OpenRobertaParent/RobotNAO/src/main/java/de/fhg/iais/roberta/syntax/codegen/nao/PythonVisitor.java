@@ -93,7 +93,6 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  */
 public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<Void> {
 
-    private final NAOConfiguration brickConfiguration;
     protected Set<UsedSensor> usedSensors;
 
     /**
@@ -106,7 +105,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     private PythonVisitor(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
-        this.brickConfiguration = brickConfiguration;
         UsedHardwareCollectorVisitor checker = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.usedSensors = checker.getUsedSensors();
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
@@ -1278,8 +1276,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
                 break;
             case LANKLEROLL:
                 this.sb.append("\"LAnkleRoll\"");
-            default:
                 break;
+            default:
+                throw new DbcException("Invalide Joint!");
         }
         this.sb.append(")");
         return null;

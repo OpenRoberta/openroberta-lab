@@ -31,7 +31,7 @@ public class LikeProcessor extends AbstractProcessor {
 
             User gallery = userDao.loadUser("Gallery");
             User author = userDao.loadUser(authorName);
-            User userWhoLike = userDao.loadUser(httpSessionState.getUserId());
+            User userWhoLike = userDao.loadUser(this.httpSessionState.getUserId());
 
             Robot robot = robotDao.loadRobot(robotName);
             if ( robot == null ) {
@@ -88,7 +88,6 @@ public class LikeProcessor extends AbstractProcessor {
 
     public List<Like> getLikesPerUser(User user) {
         LikeDao likeDao = new LikeDao(this.dbSession);
-        JSONArray likes = new JSONArray();
         List<Like> likesList = likeDao.loadLikesByUser(user);
         return likesList;
     }
@@ -101,7 +100,7 @@ public class LikeProcessor extends AbstractProcessor {
 
         User gallery = userDao.loadUser("Gallery");
         User author = userDao.loadUser(authorName);
-        User userWhoLike = userDao.loadUser(httpSessionState.getUserId());
+        User userWhoLike = userDao.loadUser(this.httpSessionState.getUserId());
 
         Robot robot = robotDao.loadRobot(robotName);
         if ( robot == null ) {

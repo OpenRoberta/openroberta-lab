@@ -107,7 +107,7 @@ abstract public class Phrase<V> {
      */
     public final V visit(AstVisitor<V> visitor) {
         // LOG.info("{}", this);
-        if ( getProperty().isDisabled() | (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
+        if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
             return null;
         }
         return this.accept(visitor);

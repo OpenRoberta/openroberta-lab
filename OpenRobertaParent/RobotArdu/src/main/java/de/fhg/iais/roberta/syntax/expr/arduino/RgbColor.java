@@ -98,11 +98,9 @@ public class RgbColor<V> extends Expr<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values;
-        boolean oldVersion = false;
         try {
             values = helper.extractValues(block, (short) 4);
         } catch ( Exception e ) {
-            oldVersion = true;
             values = helper.extractValues(block, (short) 3);
         }
 

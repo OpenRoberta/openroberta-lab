@@ -79,7 +79,7 @@ public class ProgramProcessor extends AbstractProcessor {
      * @return the configuration's XML as String. If the configuration is not found, returns null.
      */
     public String getProgramsConfig(Program program) {
-        ConfigurationDao configDao = new ConfigurationDao(dbSession);
+        ConfigurationDao configDao = new ConfigurationDao(this.dbSession);
         String configName = program.getConfigName();
         String configHash = program.getConfigHash();
         if ( configName != null ) {
@@ -121,7 +121,7 @@ public class ProgramProcessor extends AbstractProcessor {
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(ownerId);
         Robot robot = robotDao.loadRobot(robotName);
-        User author = userDao.get(authorId);
+
         // First we obtain all programs owned by the user
         List<Program> programs = programDao.loadAll(owner, robot);
 
