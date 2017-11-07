@@ -187,29 +187,48 @@ public abstract class ArduinoVisitor extends RobotCppVisitor {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        generateSubExpr(this.sb, false, binary.getLeft(), binary);
         Op op = binary.getOp();
+        if ( op == Op.MOD ) {
+            appendFloatModulo(binary);
+            return null;
+        }
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
         String sym = getBinaryOperatorSymbol(op);
         this.sb.append(whitespace() + sym + whitespace());
-        switch ( op ) {
-            case TEXT_APPEND:
-                if ( binary.getRight().getVarType() == BlocklyType.BOOLEAN ) {
-                    this.sb.append("rob.boolToString(");
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                    this.sb.append(")");
-                } else {
-                    generateSubExpr(this.sb, false, binary.getRight(), binary);
-                }
-                break;
-            case DIVIDE:
-                this.sb.append("((float) ");
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-                this.sb.append(")");
-                break;
-            default:
-                generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        if ( op == Op.TEXT_APPEND ) {
+            appendCastToStringIfBoolean(binary);
+            return null;
+        } else if ( op == Op.DIVIDE ) {
+            appendCastToFloat(binary);
+            return null;
+        } else {
+            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
         return null;
+    }
+
+    private void appendFloatModulo(Binary<Void> binary) {
+        this.sb.append("fmod(");
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(", ");
+        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        this.sb.append(")");
+    }
+
+    private void appendCastToFloat(Binary<Void> binary) {
+        this.sb.append("((float) ");
+        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        this.sb.append(")");
+    }
+
+    private void appendCastToStringIfBoolean(Binary<Void> binary) {
+        if ( binary.getRight().getVarType() == BlocklyType.BOOLEAN ) {
+            this.sb.append("rob.boolToString(");
+            generateSubExpr(this.sb, false, binary.getRight(), binary);
+            this.sb.append(")");
+        } else {
+            generateSubExpr(this.sb, false, binary.getRight(), binary);
+        }
     }
 
     @Override

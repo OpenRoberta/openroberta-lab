@@ -165,7 +165,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
                         "-fqbn=nicai:avr:bob3",
                         "-prefs=compiler.path=" + this.robotCompilerDir,
                         "-build-path=" + base.resolve(path).toAbsolutePath().normalize().toString() + "/target/",
-                        "-verbose",
+                        //                        "-verbose",
                         base.resolve(path).toAbsolutePath().normalize().toString() + "/src/" + mainFile + ".ino"
                     });
 
