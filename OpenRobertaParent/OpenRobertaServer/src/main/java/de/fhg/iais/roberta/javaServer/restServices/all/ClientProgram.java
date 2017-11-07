@@ -535,18 +535,17 @@ public class ClientProgram {
         blockSet.setTags(data.getTags());
         blockSet.setXmlversion(data.getXmlVersion());
 
-        Instance instance = new Instance();
-        for ( final ArrayList<Phrase<Void>> tree : astProgram ) {
-            for ( final Phrase<Void> phrase : tree ) {
+        for ( ArrayList<Phrase<Void>> tree : astProgram ) {
+            Instance instance = new Instance();
+            blockSet.getInstance().add(instance);
+            for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind().hasName("LOCATION") ) {
-                    blockSet.getInstance().add(instance);
                     instance.setX(((Location<Void>) phrase).getX());
                     instance.setY(((Location<Void>) phrase).getY());
                 }
                 instance.getBlock().add(phrase.astToBlock());
             }
         }
-        blockSet.getInstance().add(instance);
         return blockSet;
     }
 

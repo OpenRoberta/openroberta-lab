@@ -39,7 +39,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Factory extends AbstractRobotFactory {
 
-    private CompilerWorkflow compilerWorkflow;
+    private final CompilerWorkflow compilerWorkflow;
     private final SimCompilerWorkflow microbitSimCompilerWorkflow;
     private final Properties microbitProperties;
     private final String name;
@@ -54,6 +54,8 @@ public class Factory extends AbstractRobotFactory {
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
                 RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.dir"));
         this.microbitSimCompilerWorkflow = new SimCompilerWorkflow();
+        Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
+        addBlockTypesFromProperties("Mbed.properties", mbedProperties);
         addBlockTypesFromProperties("Microbit.properties", this.microbitProperties);
     }
 
@@ -64,7 +66,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<IBlinkMode> getBlinkModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -133,7 +134,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<IColorSensorMode> getColorSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -155,7 +155,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<ISoundSensorMode> getSoundSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -166,7 +165,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<IGyroSensorMode> getGyroSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -177,7 +175,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<IInfraredSensorMode> getInfraredSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -213,7 +210,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<IMotorTachoMode> getMotorTachoModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -224,7 +220,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<IUltrasonicSensorMode> getUltrasonicSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -235,7 +230,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<ITouchSensorMode> getTouchSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -264,25 +258,21 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ILightSensorActionMode getLightActionColor(String mode) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<ILightSensorActionMode> getLightActionColors() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IWorkingState getWorkingState(String mode) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<IWorkingState> getWorkingStates() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -373,31 +363,26 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<IJoystickMode> getJoystickMode() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getVendorId() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getCommandline() {
-        // TODO Auto-generated method stub
         return null;
     }
 

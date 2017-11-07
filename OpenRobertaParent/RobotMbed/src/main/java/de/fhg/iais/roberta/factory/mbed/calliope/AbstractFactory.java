@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.factory.mbed.calliope;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -19,6 +20,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -30,9 +32,12 @@ import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.MotorStopMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.mbed.calliope.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractFactory extends AbstractRobotFactory {
@@ -45,6 +50,10 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     public AbstractFactory() {
         super();
+        Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
+        addBlockTypesFromProperties("Mbed.properties", mbedProperties);
+
+        this.calliopeSimCompilerWorkflow = new SimCompilerWorkflow();
     }
 
     @Override
@@ -309,6 +318,36 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
     }
 
     @Override
+    public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+        return null;
+    }
+
+    @Override
+    public IJoystickMode getJoystickMode(String joystickMode) {
+        return null;
+    }
+
+    @Override
+    public List<IJoystickMode> getJoystickMode() {
+        return null;
+    }
+
+    @Override
+    public String getVendorId() {
+        return null;
+    }
+
+    @Override
+    public String getCommandline() {
+        return null;
+    }
+
+    @Override
+    public String getSignature() {
+        return null;
+    }
+
+    @Override
     public String getFileExtension() {
         return "cpp";
     }
@@ -388,6 +427,11 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
         return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
             ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
             : this.name;
+    }
+
+    @Override
+    public RobotBrickCheckVisitor getRobotProgramCheckVisitor(Configuration brickConfiguration) {
+        return null;
     }
 
 }
