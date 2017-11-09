@@ -100,6 +100,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -1013,7 +1014,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitRadioSendAction(RadioSendAction<Void> radioSendAction) {
-        this.sb.append("uBit.radio.setTransmitPower(" + radioSendAction.getPower() + "); ");
+        this.sb.append("uBit.radio.setTransmitPower(" + radioSendAction.getPower() + ");\n");
         this.sb.append("uBit.radio.datagram.send(");
         radioSendAction.getMsg().visit(this);
         this.sb.append(");");
@@ -1031,6 +1032,12 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("uBit.radio.setGroup(");
         radioSetChannelAction.getChannel().visit(this);
         this.sb.append(");\n");
+        return null;
+    }
+
+    @Override
+    public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
+        this.sb.append("uBit.radio.getRSSI()");
         return null;
     }
 
@@ -1236,5 +1243,4 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
             nlIndent();
         }
     }
-
 }

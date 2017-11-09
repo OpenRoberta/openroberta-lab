@@ -373,6 +373,19 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitRadioRssiSensor_DisplayRssiValue_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "uBit.radio.enable();\n"
+                + "uBit.display.scroll(ManagedString(uBit.radio.getRSSI()));\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/sensor/radio_rssi.xml");
+    }
+
+    @Test
     public void visitMotorStopAction_StopMotorFloatNonFloat_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

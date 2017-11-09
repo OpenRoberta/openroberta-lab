@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 /**
@@ -238,4 +239,11 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param singleMotorStopAction phrase to be visited
      */
     V visitSingleMotorStopAction(SingleMotorStopAction<V> singleMotorStopAction);
+
+    /**
+     * visit a {@link SingleMotorStopAction}.
+     *
+     * @param singleMotorStopAction phrase to be visited
+     */
+    V visitRadioRssiSensor(RadioRssiSensor<V> radioRssiSensor);
 }

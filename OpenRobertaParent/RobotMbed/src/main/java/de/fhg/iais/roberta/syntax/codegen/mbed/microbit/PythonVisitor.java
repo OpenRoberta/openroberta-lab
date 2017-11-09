@@ -91,6 +91,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.actor.AstActorDisplayVisitor;
@@ -107,8 +108,6 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<Void>, AstSensorsVisitor<Void>, AstActorMotorVisitor<Void>,
     AstActorDisplayVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
-    @SuppressWarnings("unused")
-    private final MicrobitConfiguration brickConfiguration;
     private final UsedHardwareCollectorVisitor usedHardwareVisitor;
 
     /**
@@ -120,8 +119,6 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
      */
     private PythonVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
-
-        this.brickConfiguration = brickConfiguration;
 
         this.usedHardwareVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.loopsLabels = this.usedHardwareVisitor.getloopsLabelContainer();
@@ -859,6 +856,11 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
         return null;
     }
 }

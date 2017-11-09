@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
 
 /**
@@ -255,6 +256,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitSingleMotorStopAction(SingleMotorStopAction<Void> singleMotorStopAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
+        this.radioUsed = true;
         return null;
     }
 

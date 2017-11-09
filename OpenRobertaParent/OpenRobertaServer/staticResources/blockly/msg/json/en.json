@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-10-18 17:27:06.098461",
+		"lastupdated": "2017-11-09 11:57:59.097459",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1139,6 +1139,9 @@
 	"MESSAGE_EDIT_SAVE_GROUP_AS": "Your group has been created",
 	"ORA_GROUP_CREATE_ERROR_NOT_SAVED_TO_DB": "This group already exists",
 	"ORA_USER_GROUP_SAVE_AS_ERROR_USER_GROUP_EXISTS": "This user already belongs to the group",
+	"GO_TO_GROUPS": "Go to groups",
+	"POPUP_CONFIRM_DELETE_GROUP": "Confirm delete group",
+	"POPUP_CONFIRM_DELETE_USER_GROUP": "Confirm delet ",
 	"LIST_BACK_TOOLTIP": "Back to previous view.",
 	"PROGLIST_DELETE_ALL_TOOLTIP": "Click here to delete all selected programs.",
 	"PROGLIST_DELETE_TOOLTIP": "Click here to delete your program.",
@@ -1224,5 +1227,7 @@
 	"NAO_MARK_GET_INFORMATION": "get information about NAO mark",
 	"NAO_MARK_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given NAO mark in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
 	"NAO_FACE_GET_INFORMATION": "get information about recognized face",
-	"NAO_FACE_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given recognized face in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles."
+	"NAO_FACE_GET_INFORMATION_TOOLTIP": "This block will return additional information about the given recognized face in the format on a 1-d array with following values: [XAngle, YAngle, XSize, YSize, Heading], please note that all values are given in camera angles.",
+	"SENSOR_RADIO_RSSI": "radio RSSI sensor",
+	"RADIO_GET_RSSI_TOOLTIP": "Gets the RSSI of the last package."
 }
