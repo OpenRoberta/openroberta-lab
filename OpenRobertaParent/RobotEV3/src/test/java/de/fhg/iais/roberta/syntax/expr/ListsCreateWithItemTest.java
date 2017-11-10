@@ -9,7 +9,7 @@ public class ListsCreateWithItemTest {
 
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.createListWithItem(1, 5)}";
+        String a = "BlocklyMethods.createListWithItem((float) 1, 5)}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_create_with_item.xml");
     }

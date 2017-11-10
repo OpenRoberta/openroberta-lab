@@ -557,6 +557,16 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
 
+    function createIfReturn(condition, return_) {
+        var result = {};
+        result[CONST.STMT] = CONST.IF_RETURN;
+        result[CONST.NAME] = methodName;
+        result[CONST.STMT_LIST] = stmts;
+        result[CONST.RETURN_TYPE] = returnType;
+        result[CONST.RETURN] = return_;
+        return result;
+    }
+
     function createMethodCallVoid(methodName, parameters) {
         var result = {};
         result[CONST.STMT] = CONST.METHOD_CALL_VOID;

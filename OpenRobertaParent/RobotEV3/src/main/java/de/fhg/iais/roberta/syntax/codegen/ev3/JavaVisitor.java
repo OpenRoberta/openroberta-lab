@@ -78,6 +78,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -583,6 +584,9 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(methodName);
         indexOfFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
+        if ( indexOfFunct.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
+            this.sb.append(" (float) ");
+        }
         indexOfFunct.getParam().get(1).visit(this);
         this.sb.append(")");
         return null;
@@ -621,6 +625,9 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
         this.sb.append("BlocklyMethods.createListWithItem(");
+        if ( listRepeat.getParam().get(0).getVarType() == BlocklyType.NUMBER ) {
+            this.sb.append(" (float) ");
+        }
         listRepeat.getParam().get(0).visit(this);
         this.sb.append(", ");
         listRepeat.getParam().get(1).visit(this);
@@ -654,6 +661,9 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(", ");
         this.sb.append(getEnumCode(listSetIndex.getElementOperation()));
         this.sb.append(", ");
+        if ( listSetIndex.getParam().get(1).getVarType() == BlocklyType.NUMBER ) {
+            this.sb.append(" (float) ");
+        }
         listSetIndex.getParam().get(1).visit(this);
         this.sb.append(", ");
         this.sb.append(getEnumCode(listSetIndex.getLocation()));
