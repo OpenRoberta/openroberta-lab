@@ -322,6 +322,20 @@ public class CppVisitorTest {
     }
 
     @Test
+    public void visitPlayNoteAction_PlayNote261dot626Hz2000ms_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN
+                + "uBit.soundmotor.soundOn(261.626);\n"
+                + "uBit.sleep(2000);\n"
+                + "uBit.soundmotor.soundOff();\n"
+                + END;
+
+        assertCodeIsOk(expectedResult, "/action/play_note.xml");
+    }
+
+    @Test
     public void visitTAmbientLightSensor_GetAmbientLigthAndDisplay_ReturnsCorrectCppProgram() throws Exception {
         String expectedResult =
             "" //

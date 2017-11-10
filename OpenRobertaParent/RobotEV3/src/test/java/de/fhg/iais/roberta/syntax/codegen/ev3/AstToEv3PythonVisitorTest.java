@@ -788,6 +788,31 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/visitors/python_global_variables_check_two_used_variables.xml");
     }
 
+    @Test
+    public void visitToneAction_PlayTone50Hz500ms_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "hal.playTone(50, 500)\n"
+                + "\n"
+                + MAIN_METHOD;
+
+        assertCodeIsOk(expectedResult, "/ast/actions/action_PlayTone.xml");
+    }
+
+    @Test
+    public void visitPlayNoteAction_PlayNote261dot626Hz2000ms_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + GLOBALS
+                + "hal.playTone(261.626, 2000)\n"
+                + "\n"
+                + MAIN_METHOD;
+        assertCodeIsOk(expectedResult, "/ast/actions/action_PlayNote.xml");
+    }
+
     // TODO: add tests for files from "/syntax/text/*.xml"
 
     private String make_globals(String motors, String sensors) {

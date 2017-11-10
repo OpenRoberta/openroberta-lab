@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
@@ -297,6 +298,16 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb.append("hal.playTone(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(", ");
+        this.sb.append(playNoteAction.getDuration());
         this.sb.append(");");
         return null;
     }

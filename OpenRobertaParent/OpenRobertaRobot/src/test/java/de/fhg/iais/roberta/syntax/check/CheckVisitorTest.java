@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotCommonCheckVisitor;
@@ -62,6 +63,11 @@ public class CheckVisitorTest {
 
         @Override
         public Void visitToneAction(ToneAction<Void> toneAction) {
+            return null;
+        }
+
+        @Override
+        public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
             return null;
         }
 

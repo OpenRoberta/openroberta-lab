@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.mbot.UsedHardwareCollectorVisitor;
@@ -146,6 +147,19 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
+        this.sb.append(");");
+        nlIndent();
+        this.sb.append("delay(20); ");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        //8 - sound port
+        this.sb.append("buzzer.tone(8, ");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(", ");
+        this.sb.append(playNoteAction.getDuration());
         this.sb.append(");");
         nlIndent();
         this.sb.append("delay(20); ");
@@ -523,25 +537,25 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
             this.sb.append("2, ");
         }
         switch ( ledOnAction.getLedColor().toString() ) {
-            case ("ColorConst [RED]"):
+            case "ColorConst [RED]":
                 this.sb.append("255, 0, 0");
                 break;
-            case ("ColorConst [BLACK]"):
+            case "ColorConst [BLACK]":
                 this.sb.append("0, 0, 0");
                 break;
-            case ("ColorConst [BLUE]"):
+            case "ColorConst [BLUE]":
                 this.sb.append("0, 0, 255");
                 break;
-            case ("ColorConst [GREEN]"):
+            case "ColorConst [GREEN]":
                 this.sb.append("0, 255, 0");
                 break;
-            case ("ColorConst [YELLOW]"):
+            case "ColorConst [YELLOW]":
                 this.sb.append("255, 255, 0");
                 break;
-            case ("ColorConst [WHITE]"):
+            case "ColorConst [WHITE]":
                 this.sb.append("255, 255, 255");
                 break;
-            case ("ColorConst [BROWN]"):
+            case "ColorConst [BROWN]":
                 this.sb.append("102, 51, 0");
                 break;
             default:
@@ -573,25 +587,25 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
         this.sb.append("rgbled_").append(externalLedOnAction.getPort().getValues()[0]).append(".setColor(").append(externalLedOnAction.getLedNo() + ", ");
         switch ( externalLedOnAction.getLedColor().toString() ) {
-            case ("ColorConst [RED]"):
+            case "ColorConst [RED]":
                 this.sb.append("255, 0, 0");
                 break;
-            case ("ColorConst [BLACK]"):
+            case "ColorConst [BLACK]":
                 this.sb.append("0, 0, 0");
                 break;
-            case ("ColorConst [BLUE]"):
+            case "ColorConst [BLUE]":
                 this.sb.append("0, 0, 255");
                 break;
-            case ("ColorConst [GREEN]"):
+            case "ColorConst [GREEN]":
                 this.sb.append("0, 255, 0");
                 break;
-            case ("ColorConst [YELLOW]"):
+            case "ColorConst [YELLOW]":
                 this.sb.append("255, 255, 0");
                 break;
-            case ("ColorConst [WHITE]"):
+            case "ColorConst [WHITE]":
                 this.sb.append("255, 255, 255");
                 break;
-            case ("ColorConst [BROWN]"):
+            case "ColorConst [BROWN]":
                 this.sb.append("102, 51, 0");
                 break;
             default:

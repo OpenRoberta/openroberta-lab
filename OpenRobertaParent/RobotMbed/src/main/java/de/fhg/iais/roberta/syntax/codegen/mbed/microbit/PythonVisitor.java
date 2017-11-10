@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
-import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -39,6 +38,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
@@ -293,6 +293,11 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 
@@ -741,11 +746,6 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
         this.sb.append("radio.config(group=");
         radioSetChannelAction.getChannel().visit(this);
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 

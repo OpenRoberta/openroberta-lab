@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.botnroll.UsedHardwareCollectorVisitor;
@@ -195,6 +196,17 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
     }
 
     @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        //9 - sound port
+        this.sb.append("tone(9, ");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(", ");
+        this.sb.append(playNoteAction.getDuration());
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final boolean reverse =
             this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD
@@ -271,7 +283,7 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         }
         methodName = methodName + "(";
         this.sb.append(methodName);
-        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
+        if ( !reverse && localReverse || reverse && !localReverse ) {
             sign = "-";
         }
         this.sb.append(sign);
@@ -309,7 +321,7 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         }
         methodName = methodName + "(";
         this.sb.append(methodName);
-        if ( (!reverse && localReverse) || (reverse && !localReverse) ) {
+        if ( !reverse && localReverse || reverse && !localReverse ) {
             sign = "-";
         }
         this.sb.append(sign);
@@ -637,4 +649,5 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         // TODO Auto-generated method stub
         return null;
     }
+
 }

@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
@@ -110,6 +111,11 @@ public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor {
     public Void visitToneAction(ToneAction<Void> toneAction) {
         toneAction.getDuration().visit(this);
         toneAction.getFrequency().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 

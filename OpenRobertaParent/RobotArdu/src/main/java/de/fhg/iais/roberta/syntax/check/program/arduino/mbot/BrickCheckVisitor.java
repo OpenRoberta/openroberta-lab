@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
@@ -119,6 +120,12 @@ public class BrickCheckVisitor extends RobotBrickCheckVisitor implements MbotAst
 
     @Override
     public Void visitMbotGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         // TODO Auto-generated method stub
         return null;
     }

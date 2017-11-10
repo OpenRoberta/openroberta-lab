@@ -17,7 +17,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
-import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -261,17 +260,6 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
         this.sb.append("createDisplayImageAction(CONST.");
         this.sb.append(displayImageAction.getDisplayImageMode() + ", ");
         displayImageAction.getValuesToDisplay().visit(this);
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        String end = createClosingBracket();
-        this.sb.append("createToneAction(");
-        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getFrequency() + ")");
-        this.sb.append(", ");
-        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getDuration() + ")");
         this.sb.append(end);
         return null;
     }

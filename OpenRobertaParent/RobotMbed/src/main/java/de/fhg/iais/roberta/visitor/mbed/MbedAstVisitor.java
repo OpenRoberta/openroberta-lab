@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
-import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -57,13 +56,6 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param displayImageAction phrase to be visited
      */
     V visitDisplayImageAction(DisplayImageAction<V> displayImageAction);
-
-    /**
-     * visit a {@link PlayNoteAction}.
-     *
-     * @param playNoteAction phrase to be visited
-     */
-    V visitPlayNoteAction(PlayNoteAction<V> playNoteAction);
 
     /**
      * visit a {@link ImageShiftFunction}.

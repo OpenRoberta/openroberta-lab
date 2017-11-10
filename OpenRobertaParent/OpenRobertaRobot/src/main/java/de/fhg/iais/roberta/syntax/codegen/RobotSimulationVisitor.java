@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
@@ -95,7 +96,7 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
     protected int currentLoop = 0;
     protected int stmtsNumber = 0;
     protected int methodsNumber = 0;
-    private ArrayList<Boolean> inStmt = new ArrayList<>();
+    private final ArrayList<Boolean> inStmt = new ArrayList<>();
 
     protected final StringBuilder sb = new StringBuilder();
     protected final Configuration brickConfiguration;
@@ -218,6 +219,17 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public V visitPlayNoteAction(PlayNoteAction<V> playNoteAction) {
+        String end = createClosingBracket();
+        this.sb.append("createToneAction(");
+        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getFrequency() + ")");
+        this.sb.append(", ");
+        this.sb.append("createConstant(CONST.NUM_CONST, " + playNoteAction.getDuration() + ")");
         this.sb.append(end);
         return null;
     }

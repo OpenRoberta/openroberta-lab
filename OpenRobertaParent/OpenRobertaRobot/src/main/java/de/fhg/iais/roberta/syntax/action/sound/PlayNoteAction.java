@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.mbed;
+package de.fhg.iais.roberta.syntax.action.sound;
 
 import java.util.List;
 
@@ -12,20 +12,17 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
-import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
- * This class represents the <b>mbedActions_leds_on</b> blocks from Blockly into the AST (abstract syntax tree).
- * Object from this class will generate code for turning on the Led.<br/>
- * <br>
- * The client must provide the {@link ColorConst} color of the led. <br>
- * <br>
- * To create an instance from this class use the method {@link #make(ColorConst, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * This class represents the <b>mbedActions_play_note</b> blocks from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for playing a specific note.<br/>
+ * <br/>
+ * The client must provide the note value and note of the sound. <br>
  */
 public class PlayNoteAction<V> extends Action<V> {
     private final String duration;
@@ -33,6 +30,7 @@ public class PlayNoteAction<V> extends Action<V> {
 
     private PlayNoteAction(String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
+        System.out.println(this.getKind());
         Assert.isTrue(NumberUtils.isNumber(duration) && NumberUtils.isNumber(frequency));
         this.duration = duration;
         this.frequency = frequency;
@@ -42,7 +40,8 @@ public class PlayNoteAction<V> extends Action<V> {
     /**
      * Creates instance of {@link PlayNoteAction}. This instance is read only and can not be modified.
      *
-     * @param ledColor {@link ColorConst} color of the led; must <b>not</b> be null,
+     * @param duration of the sound, the note value,
+     * @param frequency of the sound, the note,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link PlayNoteAction}
@@ -52,14 +51,14 @@ public class PlayNoteAction<V> extends Action<V> {
     }
 
     /**
-     * @return get the duration of this action.
+     * @return the duration of the sound.
      */
     public String getDuration() {
         return this.duration;
     }
 
     /**
-     * @return get the duration of this action.
+     * @return the frequency of this action.
      */
     public String getFrequency() {
         return this.frequency;
@@ -72,7 +71,7 @@ public class PlayNoteAction<V> extends Action<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((MbedAstVisitor<V>) visitor).visitPlayNoteAction(this);
+        return ((AstActorSoundVisitor<V>) visitor).visitPlayNoteAction(this);
     }
 
     /**

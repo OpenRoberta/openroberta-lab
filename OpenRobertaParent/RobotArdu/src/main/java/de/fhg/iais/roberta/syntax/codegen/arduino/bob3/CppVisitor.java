@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.arduino.bob3.UsedHardwareCollectorVisitor;
@@ -62,7 +63,7 @@ import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
  */
 public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, AstActorLightVisitor<Void> {
     private final boolean isTimerSensorUsed;
-    private Set<UsedSensor> usedTimer;
+    private final Set<UsedSensor> usedTimer;
 
     /**
      * Initialize the C++ code generator visitor.
@@ -383,6 +384,12 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
     }
 
     @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         // TODO Auto-generated method stub
         return null;
@@ -470,4 +477,5 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         this.sb.append("recall()");
         return null;
     }
+
 }

@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
@@ -89,8 +90,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
-public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>,
-    AstActorDisplayVisitor<Void>, AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
+public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisitor<Void>, AstActorCommunicationVisitor<Void>, AstActorDisplayVisitor<Void>,
+    AstActorMotorVisitor<Void>, AstActorLightVisitor<Void>, AstActorSoundVisitor<Void> {
     protected final EV3Configuration brickConfiguration;
 
     protected final Map<String, String> predefinedImage = new HashMap<String, String>();
@@ -242,6 +243,16 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb.append("hal.playTone(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(", ");
+        this.sb.append(playNoteAction.getDuration());
         this.sb.append(")");
         return null;
     }

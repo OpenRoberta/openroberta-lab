@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
@@ -383,6 +384,11 @@ public class TypecheckVisitor implements AstLanguageVisitor<BlocklyType>, AstSen
 
     @Override
     public BlocklyType visitToneAction(ToneAction<BlocklyType> toneAction) {
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitPlayNoteAction(PlayNoteAction<BlocklyType> playNoteAction) {
         return null;
     }
 

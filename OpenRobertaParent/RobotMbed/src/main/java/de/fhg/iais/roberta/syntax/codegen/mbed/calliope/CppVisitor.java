@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
-import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -39,6 +38,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
@@ -411,6 +411,18 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("); ");
         this.sb.append("uBit.sleep(");
         toneAction.getDuration().visit(this);
+        this.sb.append("); ");
+        this.sb.append("uBit.soundmotor.soundOff();");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb.append("uBit.soundmotor.soundOn(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append("); ");
+        this.sb.append("uBit.sleep(");
+        this.sb.append(playNoteAction.getDuration());
         this.sb.append("); ");
         this.sb.append("uBit.soundmotor.soundOff();");
         return null;
@@ -1038,18 +1050,6 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor<Void> radioRssiSensor) {
         this.sb.append("uBit.radio.getRSSI()");
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        this.sb.append("uBit.soundmotor.soundOn(");
-        this.sb.append(playNoteAction.getFrequency());
-        this.sb.append("); ");
-        this.sb.append("uBit.sleep(");
-        this.sb.append(playNoteAction.getDuration());
-        this.sb.append("); ");
-        this.sb.append("uBit.soundmotor.soundOff();");
         return null;
     }
 

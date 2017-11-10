@@ -634,6 +634,40 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
+    public void visitToneAction_PlayTone50Hz500ms_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION_DECL
+                + USED_SENSORS_DECL
+                + HAL
+                + MAIN_METHOD
+                + "        hal.playTone(50, 500);"
+                + "    }\n"
+                + "}\n";
+
+        assertCodeIsOk(expectedResult, "/ast/actions/action_PlayTone.xml");
+    }
+
+    @Test
+    public void visitPlayNoteAction_PlayNote261dot626Hz2000ms_ReturnsCorrectCppProgram() throws Exception {
+        String expectedResult =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION_DECL
+                + USED_SENSORS_DECL
+                + HAL
+                + MAIN_METHOD
+                + "    hal.playTone(261.626, 2000);"
+                + "    }\n"
+                + "}\n";
+
+        assertCodeIsOk(expectedResult, "/ast/actions/action_PlayNote.xml");
+    }
+
+    @Test
     public void check_noLoops_returnsNoLabeledLoops() throws Exception {
         String a =
             "" //

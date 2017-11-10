@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.nxt.UsedHardwareCollectorVisitor;
@@ -47,7 +48,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
@@ -507,6 +507,20 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
         nlIndent();
         this.sb.append("Wait(");
         toneAction.getDuration().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        this.sb.append("PlayToneEx(");
+        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(", ");
+        this.sb.append(playNoteAction.getDuration());
+        this.sb.append(", volume, false);");
+        nlIndent();
+        this.sb.append("Wait(");
+        this.sb.append(playNoteAction.getDuration());
         this.sb.append(");");
         return null;
     }

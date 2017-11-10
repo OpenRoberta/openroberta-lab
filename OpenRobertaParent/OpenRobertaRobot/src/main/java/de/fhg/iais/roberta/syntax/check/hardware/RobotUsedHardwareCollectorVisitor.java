@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
@@ -277,6 +278,11 @@ public abstract class RobotUsedHardwareCollectorVisitor extends CheckVisitor imp
     public Void visitToneAction(ToneAction<Void> toneAction) {
         toneAction.getDuration().visit(this);
         toneAction.getFrequency().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 

@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expr.arduino.LedMatrix;
@@ -95,6 +96,13 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         super.visitToneAction(toneAction);
+        this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        super.visitPlayNoteAction(playNoteAction);
         this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
         return null;
     }

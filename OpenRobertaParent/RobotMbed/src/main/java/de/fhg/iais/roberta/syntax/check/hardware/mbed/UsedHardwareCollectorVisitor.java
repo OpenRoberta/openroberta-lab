@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplaySetPixelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedOnAction;
 import de.fhg.iais.roberta.syntax.action.mbed.PinWriteValue;
-import de.fhg.iais.roberta.syntax.action.mbed.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
@@ -191,11 +190,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitPredefinedImage(PredefinedImage<Void> predefinedImage) {
-        return null;
-    }
-
-    @Override
-    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         return null;
     }
 
