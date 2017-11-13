@@ -547,6 +547,9 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
     var evalMethodCallVoid = function(obj, stmt) {
         var methodName = stmt.name;
         var method = obj.program.getMethod(methodName);
+        method.stmtList.forEach(function(stmt) {
+            stmt['callFromFunction'] = methodName;  
+        });
         obj.program.prepend(method.stmtList);
         obj.program.prepend(stmt.parameters);
     };
@@ -577,15 +580,8 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var condition = evalExpr(obj, "expr");
         var functionCallName = stmt.callFromFunction;
         if (condition) {
-            var stopLoop = true;           
-            while (stopLoop) {
-                var curStmt = obj.program.get();
-                if (curStmt.callFromFunction == functionCallName) {      
-                    obj.program.getRemove()
-                }
-                else {
-                    stopLoop = false;
-                }
+            while (obj.program.get().callFromFunction == functionCallName && obj.program.get().callFromFunction != undefined) {
+                obj.program.getRemove();
             }
             var returnVariable = createReturnPlaceHolderVariable(stmt, functionCallName);
             obj.program.prepend([returnVariable]);            

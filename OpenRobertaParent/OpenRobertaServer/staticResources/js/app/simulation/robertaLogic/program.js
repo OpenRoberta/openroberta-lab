@@ -65,7 +65,7 @@ define([ 'robertaLogic.timer' ], function(Timer) {
     Program.prototype.addCustomMethodForEvaluation = function(stmts, methodCallName) {
       if (stmts != undefined) {
           stmts.forEach(function(stmt) { 
-             stmt['callFromFunction'] = methodCallName;      
+             stmt['callFromFunction'] = methodCallName;       
           });
           privateMem.get(this).currentMethods = privateMem.get(this).currentMethods.concat(stmts);
       }
