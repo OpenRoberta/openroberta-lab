@@ -16,7 +16,7 @@ tmp='temp'
 work='/tmp/openroberta'
 
 # Directory contains files for updating the brick after successful maven install
-libdir='../../RobotEV3/resources/updateResources/lejos_v0'
+libdir='../../OpenRobertaParent/RobotEV3/resources/updateResources/lejos_v0'
 
 #Open Roberta default version, can be modified by the first input parameter
 # for example "sh CreateImage.sh 1.4.0"

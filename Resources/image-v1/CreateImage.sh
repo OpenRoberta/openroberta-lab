@@ -19,13 +19,13 @@ scripts='lejos_scripts'
 espeak='espeak'
 
 # Directory contains files for updating the brick after successful maven install
-libdir='../../RobotEV3/resources/updateResources/lejos_v1'
+libdir='../../OpenRobertaParent/RobotEV3/resources/updateResources/lejos_v1'
 
 # Open Roberta default version, can be modified by the first input parameter
 # for example "sh CreateImage.sh 1.4.0"
 # the version only defines the file name
 # the "real" version comes from the maven install procedure
-version='2.3.0'
+version='2.4.0'
 
 menu=${libdir}/EV3Menu.jar
 json=${libdir}/json.jar
