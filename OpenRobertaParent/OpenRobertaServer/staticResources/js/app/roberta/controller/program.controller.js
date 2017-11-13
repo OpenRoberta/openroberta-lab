@@ -248,8 +248,20 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
                     result.name = programName;
                     GUISTATE_C.setProgram(result, owner, user);
                     GUISTATE_C.setProgramXML(result.programText);
-                    GUISTATE_C.setConfigurationName('');
-                    GUISTATE_C.setConfigurationXML(result.configText);
+//                    GUISTATE_C.setConfigurationName('');
+//                    GUISTATE_C.setConfigurationXML(result.configText);
+                    if (result.configName === undefined) {
+                        if (result.configText === undefined) {
+                            GUISTATE_C.setConfigurationNameDefault();
+                            GUISTATE_C.setConfigurationXML(GUISTATE_C.getConfigurationConf());
+                        } else {
+                            GUISTATE_C.setConfigurationName('');
+                            GUISTATE_C.setConfigurationXML(result.configText);
+                        }
+                    } else {
+                        GUISTATE_C.setConfigurationName(result.configName);
+                        GUISTATE_C.setConfigurationXML(result.configText);
+                    }
                     $('#tabProgram').trigger('click');
                 }
                 MSG.displayInformation(result, "", result.message);
@@ -392,9 +404,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML()
                 + '</config></export>';
         var link = 'https://lab.open-roberta.org/#loadProgram';
-        link += '&' + GUISTATE_C.getRobot();
-        link += '&' + GUISTATE_C.getProgramName();
-        link += '&' + xml;
+        link += '&&' + GUISTATE_C.getRobot();
+        link += '&&' + GUISTATE_C.getProgramName();
+        link += '&&' + xml;
         link = encodeURI(link);
         var $temp = $("<input>");
         $("body").append($temp);

@@ -20,7 +20,7 @@ define([ 'exports', 'log', 'util', 'message', 'comm', 'robot.controller', 'socke
         }, 3000);
         LOG.info('init menu view');
 
-        var target = decodeURI(document.location.hash).split("&");
+        var target = decodeURI(document.location.hash).split("&&");
         if (target[0] === "#forgotPassword") {
             USER_C.showResetPassword(target[1]);
         } else if (target[0] === "#loadProgram" && target.length >= 4) {
