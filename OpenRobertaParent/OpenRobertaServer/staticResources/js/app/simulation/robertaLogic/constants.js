@@ -95,11 +95,11 @@ define({
     VOLUME: "volume",
 
     IMAGE: "image",
-    
+
     IMAGE_SHIFT_ACTION: "ImageShiftAction",
-    
+
     IMAGE_INVERT_ACTION: "ImageInvertAction",
-    
+
     DIRECTION: "direction",
 
     PLAY_FILE_ACTION: "PlayFileAction",
@@ -117,7 +117,7 @@ define({
     X: "x",
 
     Y: "y",
-    
+
     N: "n",
 
     MATH_PROP_FUNCT: "MathPropFunct",
@@ -427,6 +427,8 @@ define({
     METHOD_VOID: "createMethodVoid",
 
     METHOD_RETURN: "createMethodReturn",
+    
+    IF_RETURN: "createMethodIfReturn",
 
     RETURN_TYPE: "returnType",
 

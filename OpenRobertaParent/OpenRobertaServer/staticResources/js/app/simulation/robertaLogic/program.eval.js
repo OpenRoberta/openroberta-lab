@@ -212,6 +212,9 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
                 case CONSTANTS.FLOW_CONTROL:
                     evalFlowControlStatement(internal(this), stmt);
+                    break;                    
+                case CONSTANTS.IF_RETURN:
+                    evalIfReturn(internal(this), stmt)
                     break;
 
                 default:
@@ -219,7 +222,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
             }
 
             if (internal(this).modifiedStmt) {
-                internal(this).program.addCustomMethodForEvaluation(internal(this).currentStatement);
+                internal(this).program.addCustomMethodForEvaluation([internal(this).currentStatement]);
                 internal(this).program.merge();
                 internal(this).modifiedStmt = false;
             }
@@ -561,14 +564,35 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         var method = obj.program.getMethod(name);
         obj.memory.increaseMethodCalls(name);
         var numberOfCalls = obj.memory.getNumberOfMethodCalls(name);
-        var funcionCallName = "funct_" + name + "_call_" + numberOfCalls;
-        var returnVariable = createReturnPlaceHolderVariable(method, funcionCallName);
-        obj.program.addCustomMethodForEvaluation(parameters);
-        obj.program.addCustomMethodForEvaluation(method.stmtList);
+        var functionCallName = "funct_" + name + "_call_" + numberOfCalls;
+        var returnVariable = createReturnPlaceHolderVariable(method, functionCallName);
+        obj.program.addCustomMethodForEvaluation(parameters, functionCallName);
+        obj.program.addCustomMethodForEvaluation(method.stmtList, functionCallName);
 
-        obj.program.addCustomMethodForEvaluation(returnVariable);
-        return createReferenceToReturnVarible(method.returnType, funcionCallName);
+        obj.program.addCustomMethodForEvaluation([returnVariable], functionCallName);
+        return createReferenceToReturnVarible(method.returnType, functionCallName);
     };
+    
+    var evalIfReturn = function(obj, stmt) {
+        var condition = evalExpr(obj, "expr");
+        var functionCallName = stmt.callFromFunction;
+        if (condition) {
+            var stopLoop = true;           
+            while (stopLoop) {
+                var curStmt = obj.program.get();
+                if (curStmt.callFromFunction == functionCallName) {      
+                    obj.program.getRemove()
+                }
+                else {
+                    stopLoop = false;
+                }
+            }
+            var returnVariable = createReturnPlaceHolderVariable(stmt, functionCallName);
+            obj.program.prepend([returnVariable]);            
+        }
+        
+    };
+
 
     var createReturnPlaceHolderVariable = function(method, funcionCallName) {
         var returnVariable = PROGRAM_BUILDER.build("blocklyProgram=createVarDeclaration(CONST." + method.returnType + ",\"" + funcionCallName + "\")");

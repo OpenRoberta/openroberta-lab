@@ -737,6 +737,7 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
     public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn) {
         this.sb.append("createIfReturn(");
         methodIfReturn.getCondition().visit(this);
+        this.sb.append(", CONST." + methodIfReturn.getReturnType().toString());
         this.sb.append(", ");
         methodIfReturn.getReturnValue().visit(this);
         this.sb.append(")");
