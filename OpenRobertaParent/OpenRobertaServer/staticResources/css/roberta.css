@@ -1338,6 +1338,8 @@ td.bs-checkbox {
 	overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    max-height: 34px;
+    min-height: 34px;
     margin-bottom: 12px;
     -ms-word-break: break-all;
     word-break: break-all;
@@ -1379,7 +1381,7 @@ div.galleryDescription {
     border: none;
     box-shadow: none;
     text-decoration: none;
-    overflow: auto;
+    overflow: hidden;
     white-space: normal;
     padding: 0;
     height: 34px;
@@ -1390,6 +1392,8 @@ div.galleryDescription {
 }
 .galleryTags>.tag {
     background-color: #bbb;
+    line-height: 34px;
+    white-space: normal;
 }
 .galleryTable td {
     border: none;

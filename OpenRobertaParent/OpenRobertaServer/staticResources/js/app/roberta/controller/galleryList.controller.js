@@ -99,7 +99,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
             return false;
         }, "refresh gallery list clicked");
 
-        $('#galleryTable').onWrap('dbl-click-row.bs.table', function($element, row) {
+        $('#galleryTable').onWrap('click-row.bs.table', function($element, row) {
             PROGRAM_C.loadFromGallery(row);
         }, "Load program from gallery double clicked");
 

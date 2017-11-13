@@ -482,6 +482,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     function setView(view) {
         $('#head-navi-tooltip-program').attr('data-toggle', 'dropdown');
         $('#head-navi-tooltip-configuration').attr('data-toggle', 'dropdown');
+        $('#head-navigation-program-edit').removeClass('disabled');
+        $('#head-navigation-configuration-edit').removeClass('disabled');
         GUISTATE.gui.prevView = GUISTATE.gui.view;
         GUISTATE.gui.view = view;
         if (!isRobotConnected()) {
@@ -501,6 +503,8 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
         } else {
             $('#head-navi-tooltip-program').attr('data-toggle', '');
             $('#head-navi-tooltip-configuration').attr('data-toggle', '');
+            $('#head-navigation-program-edit').addClass('disabled');
+            $('#head-navigation-configuration-edit').addClass('disabled');
         }
     }
 
