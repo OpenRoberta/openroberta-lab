@@ -109,13 +109,14 @@ function _exportApplication {
 
     echo 'copying resources for all robot plugins'
     set *
+    mkAndCheckDir "${exportpath}/OpenRobertaParent"
     for Robot do
         if [[ -d "$Robot" && -e "$Robot/resources" ]]
         then
             echo "  $Robot"
-            mkAndCheckDir "${exportpath}/$Robot"
+            mkAndCheckDir "${exportpath}/OpenRobertaParent/$Robot"
             cd "$Robot"
-            cp -r --parents resources "${exportpath}/$Robot"
+            cp -r --parents resources "${exportpath}/OpenRobertaParent/$Robot"
             cd ..
         fi
     done
