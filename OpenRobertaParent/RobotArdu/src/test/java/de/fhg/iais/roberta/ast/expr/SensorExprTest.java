@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
+import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;

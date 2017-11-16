@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.factory.arduino.botnroll.Factory;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.action.arduino.botnroll.ActorPort;
+import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
 
 public class HelperBotNroll extends de.fhg.iais.roberta.util.test.Helper {
 

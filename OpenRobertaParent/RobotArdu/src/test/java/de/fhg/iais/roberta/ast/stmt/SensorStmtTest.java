@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
+import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;

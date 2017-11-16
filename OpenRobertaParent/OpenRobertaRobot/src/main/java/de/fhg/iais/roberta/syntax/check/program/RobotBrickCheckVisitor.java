@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
-import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor {
@@ -23,7 +23,7 @@ public abstract class RobotBrickCheckVisitor extends RobotCommonCheckVisitor {
     }
 
     @Override
-    protected void checkSensorPort(BaseSensor<Void> sensor) {
+    protected void checkSensorPort(ExternalSensor<Void> sensor) {
         Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));

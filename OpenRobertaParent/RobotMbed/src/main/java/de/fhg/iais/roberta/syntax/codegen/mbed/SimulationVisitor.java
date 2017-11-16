@@ -53,7 +53,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
@@ -189,6 +188,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.sb.append("createGetSample(CONST.AMBIENTLIGHT)");
         return null;
     }
 
@@ -346,12 +346,6 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
         this.sb.append("createLedOnAction(");
         ledOnAction.getLedColor().visit(this);
         this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        this.sb.append("createGetSample(CONST.AMBIENTLIGHT)");
         return null;
     }
 

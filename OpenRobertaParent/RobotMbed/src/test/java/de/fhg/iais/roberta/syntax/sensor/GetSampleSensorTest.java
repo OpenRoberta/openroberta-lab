@@ -34,7 +34,7 @@ public class GetSampleSensorTest {
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [null]]], NumConst [20]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [AmbientLightSensor []]], NumConst [50]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [LightSensor [mode=DEFAULT, port=NO_PORT]]], NumConst [50]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/get_sample_sensor.xml");

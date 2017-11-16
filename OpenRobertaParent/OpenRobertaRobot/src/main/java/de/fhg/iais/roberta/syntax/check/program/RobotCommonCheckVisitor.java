@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.syntax.check.CheckVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
-import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -84,7 +84,7 @@ public abstract class RobotCommonCheckVisitor extends CheckVisitor
         return this.warningCount;
     }
 
-    protected abstract void checkSensorPort(BaseSensor<Void> sensor);
+    protected abstract void checkSensorPort(ExternalSensor<Void> sensor);
 
     @Override
     public Void visitVar(Var<Void> var) {

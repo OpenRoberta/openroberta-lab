@@ -54,7 +54,7 @@ abstract public class Jaxb2AstTransformer<V> {
         return this.data;
     }
 
-    private IRobotFactory modeFactory;
+    private final IRobotFactory modeFactory;
     private int variableCounter = 0;
 
     protected Jaxb2AstTransformer(IRobotFactory factory) {
@@ -505,6 +505,29 @@ abstract public class Jaxb2AstTransformer<V> {
         fields = block.getField();
         Assert.isTrue(fields.size() <= numOfFields, "Number of fields is not equal to " + numOfFields + "!");
         return fields;
+    }
+
+    /**
+     * Extract field from list of {@link Field}. If the field with the given name is not found it returns the {@link defaultValue}.<br>
+     * <br>
+     * Throws {@link DbcException} if the field is not found and the defaultValue is set to <b>null</b>.
+     *
+     * @param fields as a source
+     * @param name of the field to be extracted
+     * @param defaultValue if the field is not existent
+     * @return value containing the field
+     */
+    public String extractField(List<Field> fields, String name, String defaultValue) {
+        for ( Field field : fields ) {
+            if ( field.getName().equals(name) ) {
+                return field.getValue();
+            }
+        }
+        if ( defaultValue == null ) {
+            throw new DbcException("There is no field with name " + name);
+        } else {
+            return defaultValue;
+        }
     }
 
     /**

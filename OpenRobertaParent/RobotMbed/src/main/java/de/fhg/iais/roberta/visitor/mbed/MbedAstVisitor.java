@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MicrophoneSensor;
@@ -105,13 +104,6 @@ public interface MbedAstVisitor<V> extends AstVisitor<V> {
      * @param ledOnAction phrase to be visited
      */
     V visitLedOnAction(LedOnAction<V> ledOnAction);
-
-    /**
-     * visit a {@link AmbientLightSensor}.
-     *
-     * @param ambientLightSensor phrase to be visited
-     */
-    V visitAmbientLightSensor(AmbientLightSensor<V> ambientLightSensor);
 
     /**
      * visit a {@link RadioSendAction}.

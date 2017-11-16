@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.syntax.sensor.BaseSensor;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -62,7 +62,7 @@ public abstract class RobotSimulationCheckVisitor extends RobotCommonCheckVisito
     }
 
     @Override
-    protected void checkSensorPort(BaseSensor<Void> sensor) {
+    protected void checkSensorPort(ExternalSensor<Void> sensor) {
         Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
             if ( sensor.getKind().hasName("INFRARED_SENSING") ) {

@@ -9,9 +9,11 @@ public class AmbientLightSensorTest {
     Helper h = new Helper();
 
     @Test
-    public void make_ByDefault_ReturnInstanceOfAmbientLightSensorClass() throws Exception {
+    public void make_ByDefault_ReturnInstanceOfLightSensorClass() throws Exception {
         String expectedResult =
-            "BlockAST [project=[[Location [x=163, y=62], " + "MainTask [], " + "DisplayTextAction [TEXT, SensorExpr [AmbientLightSensor []]]]]]";
+            "BlockAST [project=[[Location [x=163, y=62], "
+                + "MainTask [], "
+                + "DisplayTextAction [TEXT, SensorExpr [LightSensor [mode=DEFAULT, port=NO_PORT]]]]]]";
 
         String result = this.h.generateTransformerString("/sensor/get_ambient_light.xml");
 

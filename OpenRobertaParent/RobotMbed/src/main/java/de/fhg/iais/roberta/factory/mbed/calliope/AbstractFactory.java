@@ -23,7 +23,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
@@ -169,17 +168,6 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
-        return null;
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
         return null;
     }
@@ -271,25 +259,7 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ISensorPort getSensorPort(String port) {
-        return null;
-    }
-
-    @Override
-    public List<ISensorPort> getSensorPorts() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ILightSensorMode getLightColor(String mode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<ILightSensorMode> getLightColors() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -307,6 +277,12 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public IWorkingState getWorkingState(String mode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ILightSensorMode getLightColor(String mode) {
         // TODO Auto-generated method stub
         return null;
     }

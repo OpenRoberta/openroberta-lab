@@ -24,18 +24,16 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.action.arduino.botnroll.ActorPort;
-import de.fhg.iais.roberta.mode.action.arduino.botnroll.BlinkMode;
-import de.fhg.iais.roberta.mode.action.arduino.botnroll.BrickLedColor;
+import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
+import de.fhg.iais.roberta.mode.actors.arduino.botnroll.BlinkMode;
+import de.fhg.iais.roberta.mode.actors.arduino.botnroll.BrickLedColor;
 import de.fhg.iais.roberta.mode.general.arduino.bob3.PickColor;
-import de.fhg.iais.roberta.mode.sensor.arduino.bob3.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.BrickKey;
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.arduino.botnroll.SensorPort;
+import de.fhg.iais.roberta.mode.sensors.arduino.bob3.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.BrickKey;
+import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.LightSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -194,8 +192,9 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ILightSensorMode getLightSensorMode(String lightSensorMode) {
-        if ( lightSensorMode == null || lightSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
+        ILightSensorMode defaultMode = super.getLightSensorMode(lightSensorMode);
+        if ( defaultMode != null ) {
+            return defaultMode;
         }
         String sUpper = lightSensorMode.trim().toUpperCase(Locale.GERMAN);
         for ( LightSensorMode sp : LightSensorMode.values() ) {
@@ -287,30 +286,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public List<ITouchSensorMode> getTouchSensorModes() {
-        return null;
-    }
-
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        if ( port == null || port.isEmpty() ) {
-            throw new DbcException("Invalid sensor port: " + port);
-        }
-        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( SensorPort po : SensorPort.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid sensor port: " + port);
-    }
-
-    @Override
-    public List<ISensorPort> getSensorPorts() {
         return null;
     }
 

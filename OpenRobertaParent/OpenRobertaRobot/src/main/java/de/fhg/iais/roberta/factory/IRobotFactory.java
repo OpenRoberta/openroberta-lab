@@ -33,9 +33,12 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public interface IRobotFactory {
     /**
@@ -237,9 +240,19 @@ public interface IRobotFactory {
 
     List<IJoystickMode> getJoystickMode();
 
-    ILightSensorMode getLightSensorMode(String lightrSensorMode);
+    default ILightSensorMode getLightSensorMode(String lightSensorMode) {
+        if ( lightSensorMode == null || lightSensorMode.isEmpty() ) {
+            throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
+        }
+        if ( lightSensorMode.equals("DEFAULT") ) {
+            return LightSensorMode.DEFAULT;
+        }
+        return null;
+    }
 
-    List<ILightSensorMode> getLightSensorModes();
+    default List<ILightSensorMode> getLightSensorModes() {
+        return null;
+    }
 
     ISoundSensorMode getSoundSensorMode(String soundSensorMode);
 
@@ -318,9 +331,16 @@ public interface IRobotFactory {
      * @param name of the sensor port
      * @return the sensor port from the enum {@link ISensorPort}
      */
-    ISensorPort getSensorPort(String port);
+    default ISensorPort getSensorPort(String port) {
+        if ( port.equals("NO_PORT") ) {
+            return SensorPort.NO_PORT;
+        }
+        return null;
+    }
 
-    List<ISensorPort> getSensorPorts();
+    default List<ISensorPort> getSensorPorts() {
+        return null;
+    }
 
     /**
      * Get the compiler workflow object for this robot.

@@ -7,24 +7,23 @@ import java.util.Set;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.arduino.bob3.BodyLEDAction;
-import de.fhg.iais.roberta.syntax.action.arduino.bob3.RecallAction;
-import de.fhg.iais.roberta.syntax.action.arduino.bob3.ReceiveIRAction;
-import de.fhg.iais.roberta.syntax.action.arduino.bob3.RememberAction;
-import de.fhg.iais.roberta.syntax.action.arduino.bob3.SendIRAction;
-import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOffAction;
-import de.fhg.iais.roberta.syntax.action.arduino.mbot.ExternalLedOnAction;
-import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOffAction;
-import de.fhg.iais.roberta.syntax.action.arduino.mbot.LedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.BodyLEDAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RecallAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.RememberAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.bob3.SendIRAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOnAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
+import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
-import de.fhg.iais.roberta.syntax.expr.arduino.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.AmbientLightSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.Bob3TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.CodePadSensor;
-import de.fhg.iais.roberta.syntax.sensor.arduino.bob3.GetSampleSensor;
+import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.visitor.arduino.Bob3AstVisitor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TemperatureSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TouchSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
+import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
+import de.fhg.iais.roberta.visitors.arduino.Bob3AstVisitor;
 
 /**
  * This visitor collects information for used actors and sensors in blockly program.
@@ -47,12 +46,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLightSensor(AmbientLightSensor<Void> lightSensor) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -93,7 +93,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerOrientationSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.AccelerometerSensor.Mode;
-import de.fhg.iais.roberta.syntax.sensor.mbed.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.GestureSensor.GestureMode;
 import de.fhg.iais.roberta.syntax.sensor.mbed.MbedGetSampleSensor;
@@ -525,6 +524,7 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        this.sb.append("uBit.display.readLightLevel()");
         return null;
     }
 
@@ -1015,12 +1015,6 @@ public class CppVisitor extends RobotCppVisitor implements MbedAstVisitor<Void>,
         this.sb.append("uBit.rgb.setColour(");
         ledOnAction.getLedColor().visit(this);
         this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitAmbientLightSensor(AmbientLightSensor<Void> ambientLightSensor) {
-        this.sb.append("uBit.display.readLightLevel()");
         return null;
     }
 
