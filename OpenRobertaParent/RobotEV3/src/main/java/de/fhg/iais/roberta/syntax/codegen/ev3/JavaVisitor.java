@@ -536,7 +536,8 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     }
 
     @Override
-    public Void visitSoundSensor(SoundSensor<Void> sensor) {
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        this.sb.append("hal.getSoundLevel(" + getEnumCode(soundSensor.getPort()) + ")");
         return null;
     }
 

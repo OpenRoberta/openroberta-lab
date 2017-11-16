@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.ev3.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -220,8 +221,21 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
 
     @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        // TODO Auto-generated method stub
-        return null;
+        if ( soundSensorMode == null || soundSensorMode.isEmpty() ) {
+            throw new DbcException("Invalid Sound Sensor Mode: " + soundSensorMode);
+        }
+        String sUpper = soundSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( SoundSensorMode sp : SoundSensorMode.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
+            }
+            for ( String value : sp.getValues() ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
+                    return sp;
+                }
+            }
+        }
+        throw new DbcException("Invalid Sound Sensor Mode: " + soundSensorMode);
     }
 
     @Override
