@@ -22,6 +22,7 @@ public class SearchMsgOccurrencesTest {
         smo.search(new File("../OpenRobertaServer/staticResources/index.html"), ALL);
         smo.search(new File("../OpenRobertaServer/staticResources/js"), ALL);
 
+        smo.search(new File("../../../blockly/blockly_compressed.js"), ALL);
         smo.search(new File("../../../blockly/appengine"), ALL);
         smo.search(new File("../../../blockly/blocks"), ALL);
         smo.search(new File("../../../blockly/core"), ALL);

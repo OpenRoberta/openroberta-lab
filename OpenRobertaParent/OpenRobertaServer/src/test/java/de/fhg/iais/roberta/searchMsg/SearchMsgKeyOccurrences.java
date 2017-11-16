@@ -32,13 +32,15 @@ class SearchMsgKeyOccurrences {
         blocklyKeyList,
         unusedKeys,
         unknownKeys;
-    private final String keyPattern = "([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)";
+    private final String keyPattern = "([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\w|\\d)";
     private final Pattern keyRegexp = Pattern.compile("Key\\." + keyPattern + "(?:[^\\w]|$)"),
         nepoInfoRegExp = Pattern.compile("NepoInfo\\.\\w+\\((?:Serverity\\.[A-Z]+\\s*,)?\\s*\"" + keyPattern + "\"\\)"),
         checkMotorRegExp = Pattern.compile("checkIfMotorRegulated\\(.+?,\\s*\"" + keyPattern + "\"\\)"),
         htmlRegExp = Pattern.compile("lkey=\"Blockly\\.Msg\\." + keyPattern + "\""),
-        jsRegExp = Pattern.compile("MSG\\.displayMessage\\(\"" + keyPattern + "\""),
-        directRegExp = Pattern.compile("Blockly\\.Msg\\." + keyPattern + "(?:[^\\w]|$)");
+        jsRegExp = Pattern.compile("MSG\\.displayMessage\\([\"']" + keyPattern + "[\"']"),
+        directRegExp = Pattern.compile("Blockly\\.Msg(?:\\.|\\[[\"'])" + keyPattern + "(?:[^\\w]|$)"),
+        msgHelperRegExp = Pattern.compile("\\.display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,)\\s*[\"']" + keyPattern + "[\"']"),
+        createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + keyPattern + "[\"']\\)");
 
     /**
      * 
@@ -172,7 +174,7 @@ class SearchMsgKeyOccurrences {
 
                 while ( (line = lineReader.readLine()) != null ) {
                     
-                    usedPatterns = new ArrayList<Pattern>(3);
+                    usedPatterns = new ArrayList<Pattern>(5);
                     while (matcher != null && matcher.find() || (matcher = this.matchLine(line, fileEnding, usedPatterns)) != null) {
                         key = matcher.pattern().equals(keyRegexp) ? "ORA_" + matcher.group(1) : matcher.group(1);
                         
@@ -216,11 +218,6 @@ class SearchMsgKeyOccurrences {
     private Matcher matchLine(String line, String fileEnding, List<Pattern> usedPatterns) {
         Matcher matcher = null;
         
-        // All patterns have been used
-        if (usedPatterns.size() == 3) {
-            return null;
-        }
-        
         switch (fileEnding) {
             case "java":
                 if (!usedPatterns.contains(this.keyRegexp)) {
@@ -259,7 +256,19 @@ class SearchMsgKeyOccurrences {
                             usedPatterns.add(this.directRegExp);
                         }
                         if (matcher == null || !matcher.find()) {
-                            return null;
+                            if (!usedPatterns.contains(this.msgHelperRegExp)) {
+                                matcher = this.msgHelperRegExp.matcher(line);
+                                usedPatterns.add(this.msgHelperRegExp);
+                            }
+                            if (matcher == null || !matcher.find()) {
+                                if (!usedPatterns.contains(this.createButtonRegExp)) {
+                                    matcher = this.createButtonRegExp.matcher(line);
+                                    usedPatterns.add(this.createButtonRegExp);
+                                }
+                                if (matcher == null || !matcher.find()) {
+                                    return null;
+                                }
+                            }
                         }
                     }
                 }
