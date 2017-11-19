@@ -187,9 +187,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'guiState.contr
     var formatProgramDescription = function(value, row, index) {
         var xmlDoc = Blockly.Xml.textToDom(value, Blockly.getMainWorkspace());
         var description = xmlDoc.getAttribute("description");
-        if (description) {
-            description = description.substring(0, 200);
-        } else {
+        if (!description) {           
             description = "&nbsp;";
         }
         return '<div class="galleryDescription">' + description + '</div>';
