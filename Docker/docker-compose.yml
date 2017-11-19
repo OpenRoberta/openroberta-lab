@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+   embedded:
+     image: embedded
+     ports:
+      - "7000:1999"
+     volumes:
+      - "/home/rbudde/git/robertalab/OpenRobertaParent/OpenRobertaServer/db-2.4.0:/opt/openRoberta/db-2.4.0"

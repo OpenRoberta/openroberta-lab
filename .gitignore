@@ -1,6 +1,7 @@
 **/target
 **/bin
 **/*.class
+DockerInstallation
 Resources/resources/**/*.jar
 Resources/updateResources/**/*.jar
 Resources/**/*.zip

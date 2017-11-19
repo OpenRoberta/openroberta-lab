@@ -12,24 +12,31 @@
 # - remove old database directories after successful upgrade
 
 SERVERLOGFILE='./ora-server.log'
-NOHUP=''
+START='plain'
 
 echo 'start-ora-server-embedded.sh with the following optional parameters:'
+echo "  -docker                    log to stdout, no nohup, no process spawning"
 echo "  -logserver <file-name>     server log file. Default: $SERVERLOGFILE"
 echo '  -nohup                     start server with nohup. Default: without nohup'
 
-NOHUP=''
 while [ true ]
 do
 	case "$1" in
+	  -docker)    START='docker'
+		      shift ;;
 	  -logserver) SERVERLOGFILE=$2
-				  shift; shift ;;
-	  -nohup)	  NOHUP="nohup" ;;
-	  *)		  break ;;
+                      shift; shift ;;
+	  -nohup)     START="nohup"
+		      shift ;;
+	  *)	      break ;;
 	esac
 done
 
-case "$NOHUP" in
-nohup) nohup java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 & ;;
-*)     java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 ;;
+case "$START" in
+docker) java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+	      -d database.parentdir=. -d database.mode=embedded \$* 2>&1 ;;
+nohup)  nohup java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+	      -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 & ;;
+*)      java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
+	      -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 ;;
 esac
