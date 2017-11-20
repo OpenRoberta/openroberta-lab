@@ -209,7 +209,7 @@ public class RestInterfaceTest {
             "ok",
             Key.USER_DEACTIVATION_SUCCESS);
 
-        restUser(this.sMinscha, "{'cmd':'getUser';'accountName':'minscha'}", "ok", Key.USER_GET_ONE_SUCCESS);
+        restUser(this.sMinscha, "{'cmd':'getUser'}", "ok", Key.USER_GET_ONE_SUCCESS);
         this.response.getEntity().toString().contains("cavy1231");
         restUser(this.sMinscha, "{'cmd':'logout'}", "ok", Key.USER_LOGOUT_SUCCESS);
         Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());

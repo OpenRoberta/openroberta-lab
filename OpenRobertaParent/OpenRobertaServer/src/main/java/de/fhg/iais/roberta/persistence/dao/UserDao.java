@@ -69,34 +69,19 @@ public class UserDao extends AbstractDao<User> {
         return checkUserExistance(hql);
     }
 
+    @Deprecated
     public List<User> loadUserList(String sortBy, int offset, String tagFilter) {
-
-        if ( tagFilter == null ) {
-            Query hql = this.session.createQuery("from User where order by " + sortBy);
-            hql.setFirstResult(offset);
-            hql.setMaxResults(10);
-
-            @SuppressWarnings("unchecked")
-            List<User> il = hql.list();
-            if ( il.size() == 0 ) {
-                return null;
-            } else {
-                return il;
-            }
+        Query hql = this.session.createQuery("from User where tags=:tag order by " + sortBy);
+        hql.setFirstResult(offset);
+        hql.setMaxResults(10);
+        hql.setString("tag", tagFilter);
+        @SuppressWarnings("unchecked")
+        List<User> il = hql.list();
+        if ( il.size() == 0 ) {
+            return null;
         } else {
-            Query hql = this.session.createQuery("from User where tags=:tag order by " + sortBy);
-            hql.setFirstResult(offset);
-            hql.setMaxResults(10);
-            hql.setString("tag", tagFilter);
-            @SuppressWarnings("unchecked")
-            List<User> il = hql.list();
-            if ( il.size() == 0 ) {
-                return null;
-            } else {
-                return il;
-            }
+            return il;
         }
-
     }
 
     public int deleteUser(User userToBeDeleted) {

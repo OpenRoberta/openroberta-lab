@@ -38,7 +38,7 @@ define([ 'exports', 'log', 'message', 'util', 'user.model', 'guiState.controller
             USER.updateUserToServer(GUISTATE_C.getUserAccountName(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerUserAge').val(), GUISTATE_C.getLanguage(), function(
                     result) {
                 if (result.rc === "ok") {
-                    USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
+                    USER.getUserFromServer(function(result) {
                         if (result.rc === "ok") {
                             GUISTATE_C.setLogin(result);
                         }

@@ -1,12 +1,7 @@
 package de.fhg.iais.roberta.persistence;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
@@ -69,10 +64,10 @@ public class UserProcessor extends AbstractProcessor {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(id);
         if ( user != null ) {
-            setSuccess(Key.USER_EMAIL_ONE_SUCCESS);
+            setSuccess(Key.USER_GET_ONE_SUCCESS);
             return user;
         } else {
-            setError(Key.USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL);
+            setError(Key.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
             return null;
         }
     }
@@ -210,24 +205,4 @@ public class UserProcessor extends AbstractProcessor {
             setError(Key.USER_DELETE_ERROR_ID_NOT_FOUND, account);
         }
     }
-
-    @Deprecated
-    public JSONArray getUsers(String sortBy, int offset, String tagFilter) throws JSONException {
-        UserDao userDao = new UserDao(this.dbSession);
-        List<User> userList = userDao.loadUserList(sortBy, offset, tagFilter);
-        JSONArray usersJSONArray = new JSONArray();
-
-        for ( User user : userList ) {
-            JSONObject userJSON = new JSONObject();
-            if ( user != null ) {
-                userJSON.put("id", user.getId());
-                userJSON.put("name", user.getAccount());
-                userJSON.put("role", user.getRole()); // This will be changed to user rights
-                usersJSONArray.put(userJSON);
-            }
-        }
-        setSuccess(Key.USER_GET_ALL_SUCCESS);
-        return usersJSONArray;
-    }
-
 }

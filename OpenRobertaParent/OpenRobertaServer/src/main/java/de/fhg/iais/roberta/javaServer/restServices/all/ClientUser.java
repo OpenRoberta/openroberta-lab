@@ -103,8 +103,7 @@ public class ClientUser {
                 }
 
             } else if ( cmd.equals("getUser") && httpSessionState.isUserLoggedIn() ) {
-                String userAccountName = request.getString("accountName");
-                User user = up.getUser(userAccountName);
+                User user = up.getUser(httpSessionState.getUserId());
                 Util.addResultInfo(response, up);
                 if ( user != null ) {
                     int id = user.getId();
@@ -231,17 +230,6 @@ public class ClientUser {
                     sendActivationMail(up, confirmation.getUrlPostfix(), account, user.getEmail(), lang, false);
                 }
                 Util.addResultInfo(response, up);
-            } else if ( cmd.equals("obtainUsers") ) {
-                String sortBy = request.getString("sortBy");
-                int offset = request.getInt("offset");
-                String tagFilter = request.getString("tagFilter");
-                if ( tagFilter == "null" ) {
-                    tagFilter = null;
-                }
-                JSONArray usersJSONArray = up.getUsers(sortBy, offset, tagFilter);
-                response.put("usersList", usersJSONArray);
-                Util.addResultInfo(response, up);
-
             } else if ( cmd.equals("deleteUser") ) {
                 String account = request.getString("accountName");
                 String password = request.getString("password");

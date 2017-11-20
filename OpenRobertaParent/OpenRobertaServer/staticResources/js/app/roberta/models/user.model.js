@@ -60,10 +60,8 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      */
     function getUserFromServer(accountName, successFn) {
         COMM.json("/user", {
-            "cmd" : "getUser",
-            "accountName" : accountName
-
-        }, successFn, "get user '" + accountName + "' from server");
+            "cmd" : "getUser"
+        }, successFn, "got user info from server");
     }
 
     exports.getUserFromServer = getUserFromServer;

@@ -36,36 +36,6 @@ public class RobotDao extends AbstractDao<Robot> {
         }
     }
 
-    public List<Robot> loadRobotList(String sortBy, int offset, String tagFilter) {
-
-        if ( tagFilter == null ) {
-            Query hql = this.session.createQuery("from Robot where order by " + sortBy);
-            hql.setFirstResult(offset);
-            hql.setMaxResults(10);
-
-            @SuppressWarnings("unchecked")
-            List<Robot> il = hql.list();
-            if ( il.size() == 0 ) {
-                return null;
-            } else {
-                return il;
-            }
-        } else {
-            Query hql = this.session.createQuery("from Robot where tags=:tag order by " + sortBy);
-            hql.setFirstResult(offset);
-            hql.setMaxResults(10);
-            hql.setString("tag", tagFilter);
-            @SuppressWarnings("unchecked")
-            List<Robot> il = hql.list();
-            if ( il.size() == 0 ) {
-                return null;
-            } else {
-                return il;
-            }
-        }
-
-    }
-
     /**
      * persist a robot object that is owned by the caller
      *
