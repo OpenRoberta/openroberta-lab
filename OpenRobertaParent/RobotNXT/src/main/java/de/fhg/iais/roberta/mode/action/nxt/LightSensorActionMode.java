@@ -13,7 +13,7 @@ public enum LightSensorActionMode implements ILightSensorActionMode {
 
     @Override
     public String[] getValues() {
-        return values;
+        return this.values;
     }
 
 }

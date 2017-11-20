@@ -14,4 +14,5 @@ public enum SoundSensorMode implements ISoundSensorMode {
     public String[] getValues() {
         return this.values;
     }
+
 }

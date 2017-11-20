@@ -15,5 +15,4 @@ public enum InfraredSensorMode implements IInfraredSensorMode {
     public String[] getValues() {
         return this.values;
     }
-
 }

@@ -342,7 +342,7 @@ public class PythonVisitor extends RobotPythonVisitor implements MbedAstVisitor<
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("microbit." + brickSensor.getKey() + ".is_pressed()");
+        this.sb.append("microbit." + brickSensor.getKey().toString().toLowerCase() + ".is_pressed()");
         return null;
     }
 

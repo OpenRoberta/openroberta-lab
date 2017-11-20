@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.factory.arduino.bob3;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -10,6 +8,7 @@ import org.apache.commons.lang3.SystemUtils;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -27,20 +26,15 @@ import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
 import de.fhg.iais.roberta.mode.actors.arduino.botnroll.BlinkMode;
-import de.fhg.iais.roberta.mode.actors.arduino.botnroll.BrickLedColor;
 import de.fhg.iais.roberta.mode.general.arduino.bob3.PickColor;
 import de.fhg.iais.roberta.mode.sensors.arduino.bob3.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.BrickKey;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.LightSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.codegen.arduino.bob3.CppVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Factory extends AbstractRobotFactory {
     private final CompilerWorkflow compilerWorkflow;
@@ -66,117 +60,26 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IBlinkMode getBlinkMode(String mode) {
-        if ( mode == null || mode.isEmpty() ) {
-            throw new DbcException("Invalid Blink Mode: " + mode);
-        }
-        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        for ( BlinkMode mo : BlinkMode.values() ) {
-            if ( mo.toString().equals(sUpper) ) {
-                return mo;
-            }
-            for ( String value : mo.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return mo;
-                }
-            }
-        }
-        throw new DbcException("Invalid Blink Mode: " + mode);
+        return IRobotFactory.getModeValue(mode, BlinkMode.class);
     }
 
     @Override
     public IPickColor getPickColor(String color) {
-        if ( color == null || color.isEmpty() ) {
-            throw new DbcException("Invalid Color: " + color);
-        }
-        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
-        for ( PickColor po : PickColor.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color: " + color);
-    }
-
-    @Override
-    public List<IBlinkMode> getBlinkModes() {
-        return null;
+        return IRobotFactory.getModeValue(color, PickColor.class);
     }
 
     @Override
     public IActorPort getActorPort(String port) {
-        if ( port == null || port.isEmpty() ) {
-            throw new DbcException("Invalid Actor Port: " + port);
-        }
-        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( ActorPort co : ActorPort.values() ) {
-            if ( co.toString().equals(sUpper) ) {
-                return co;
-            }
-            for ( String value : co.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return co;
-                }
-            }
-        }
-        throw new DbcException("Invalid Actor Port: " + port);
-    }
-
-    @Override
-    public List<IActorPort> getActorPorts() {
         return null;
     }
 
     @Override
     public IBrickLedColor getBrickLedColor(String color) {
-        if ( color == null || color.isEmpty() ) {
-            throw new DbcException("Invalid Brick Led Color: " + color);
-        }
-        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickLedColor co : BrickLedColor.values() ) {
-            if ( co.toString().equals(sUpper) ) {
-                return co;
-            }
-            for ( String value : co.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return co;
-                }
-            }
-        }
-        throw new DbcException("Invalid Brick Led Color: " + color);
-
-    }
-
-    @Override
-    public List<IBrickLedColor> getBrickLedColors() {
         return null;
     }
 
     @Override
     public IBrickKey getBrickKey(String brickKey) {
-        if ( brickKey == null || brickKey.isEmpty() ) {
-            throw new DbcException("Invalid Brick Key: " + brickKey);
-        }
-        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickKey sp : BrickKey.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Brick Key: " + brickKey);
-    }
-
-    @Override
-    public List<IBrickKey> getBrickKeys() {
         return null;
     }
 
@@ -186,42 +89,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IColorSensorMode> getColorSensorModes() {
-        return null;
-    }
-
-    @Override
-    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
-        ILightSensorMode defaultMode = super.getLightSensorMode(lightSensorMode);
-        if ( defaultMode != null ) {
-            return defaultMode;
-        }
-        String sUpper = lightSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( LightSensorMode sp : LightSensorMode.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightSensorModes() {
-        return null;
-    }
-
-    @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        return null;
-    }
-
-    @Override
-    public List<ISoundSensorMode> getSoundSensorModes() {
         return null;
     }
 
@@ -231,17 +99,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IGyroSensorMode> getGyroSensorModes() {
-        return null;
-    }
-
-    @Override
     public IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode) {
-        return null;
-    }
-
-    @Override
-    public List<IInfraredSensorMode> getInfraredSensorModes() {
         return null;
     }
 
@@ -251,42 +109,13 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IMotorTachoMode> getMotorTachoModes() {
-        return null;
-    }
-
-    @Override
     public IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode) {
         return null;
     }
 
     @Override
-    public List<IUltrasonicSensorMode> getUltrasonicSensorModes() {
-        return null;
-    }
-
-    @Override
     public ITouchSensorMode getTouchSensorMode(String mode) {
-        if ( mode == null || mode.isEmpty() ) {
-            throw new DbcException("Invalid Touch Sensor Mode: " + mode);
-        }
-        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        for ( TouchSensorMode ultra : TouchSensorMode.values() ) {
-            if ( ultra.toString().equals(sUpper) ) {
-                return ultra;
-            }
-            for ( String value : ultra.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return ultra;
-                }
-            }
-        }
-        throw new DbcException("Invalid Touch Sensor Mode: " + mode);
-    }
-
-    @Override
-    public List<ITouchSensorMode> getTouchSensorModes() {
-        return null;
+        return IRobotFactory.getModeValue(mode, TouchSensorMode.class);
     }
 
     @Override
@@ -305,27 +134,12 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<ILightSensorMode> getLightColors() {
-        return null;
-    }
-
-    @Override
     public ILightSensorActionMode getLightActionColor(String mode) {
         return null;
     }
 
     @Override
-    public List<ILightSensorActionMode> getLightActionColors() {
-        return null;
-    }
-
-    @Override
     public IWorkingState getWorkingState(String mode) {
-        return null;
-    }
-
-    @Override
-    public List<IWorkingState> getWorkingStates() {
         return null;
     }
 
@@ -390,11 +204,6 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IShowPicture> getShowPictures() {
-        return null;
-    }
-
-    @Override
     public Boolean hasConfiguration() {
         return this.bob3Properties.getProperty("robot.configuration") != null ? false : true;
     }
@@ -423,11 +232,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
-        return null;
-    }
-
-    @Override
-    public List<IJoystickMode> getJoystickMode() {
         return null;
     }
 

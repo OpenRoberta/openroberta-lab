@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
+import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
-import de.fhg.iais.roberta.mode.action.mbed.MotorStopMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.ValueType;

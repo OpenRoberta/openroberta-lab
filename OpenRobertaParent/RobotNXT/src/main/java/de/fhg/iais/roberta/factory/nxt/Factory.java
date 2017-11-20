@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.factory.nxt;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -24,7 +23,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
@@ -33,12 +31,10 @@ import de.fhg.iais.roberta.mode.action.nxt.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.general.nxt.WorkingState;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
@@ -51,14 +47,13 @@ import de.fhg.iais.roberta.syntax.check.program.nxt.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.nxt.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Factory extends AbstractRobotFactory {
     private final CompilerWorkflow robotCompilerWorkflow;
     private final SimCompilerWorkflow simCompilerWorkflow;
     private final Properties nxtProperties;
     private final String name;
-    private int robotPropertyNumber;
+    private final int robotPropertyNumber;
 
     public Factory() {
         this.nxtProperties = Util1.loadProperties("classpath:NXT.properties");
@@ -74,97 +69,22 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IBlinkMode getBlinkMode(String mode) {
-        if ( mode == null || mode.isEmpty() ) {
-            throw new DbcException("Invalid Blink Mode: " + mode);
-        }
-        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        for ( BlinkMode mo : BlinkMode.values() ) {
-            if ( mo.toString().equals(sUpper) ) {
-                return mo;
-            }
-            for ( String value : mo.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return mo;
-                }
-            }
-        }
-        throw new DbcException("Invalid Blink Mode: " + mode);
-    }
-
-    @Override
-    public List<IBlinkMode> getBlinkModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(mode, BlinkMode.class);
     }
 
     @Override
     public IActorPort getActorPort(String port) {
-        if ( port == null || port.isEmpty() ) {
-            throw new DbcException("Invalid Actor Port: " + port);
-        }
-        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( ActorPort co : ActorPort.values() ) {
-            if ( co.toString().equals(sUpper) ) {
-                return co;
-            }
-            for ( String value : co.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return co;
-                }
-            }
-        }
-        throw new DbcException("Invalid Actor Port: " + port);
-    }
-
-    @Override
-    public List<IActorPort> getActorPorts() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(port, ActorPort.class);
     }
 
     @Override
     public IPickColor getPickColor(String color) {
-        if ( color == null || color.isEmpty() ) {
-            throw new DbcException("Invalid Color: " + color);
-        }
-        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
-        for ( PickColor po : PickColor.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color: " + color);
+        return IRobotFactory.getModeValue(color, PickColor.class);
     }
 
     @Override
     public IBrickLedColor getBrickLedColor(String color) {
-        if ( color == null || color.isEmpty() ) {
-            throw new DbcException("Invalid Brick Led Color: " + color);
-        }
-        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickLedColor co : BrickLedColor.values() ) {
-            if ( co.toString().equals(sUpper) ) {
-                return co;
-            }
-            for ( String value : co.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return co;
-                }
-            }
-        }
-        throw new DbcException("Invalid Brick Led Color: " + color);
-
-    }
-
-    @Override
-    public List<IBrickLedColor> getBrickLedColors() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(color, BrickLedColor.class);
     }
 
     @Override
@@ -173,345 +93,73 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IShowPicture> getShowPictures() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public IBrickKey getBrickKey(String brickKey) {
-        if ( brickKey == null || brickKey.isEmpty() ) {
-            throw new DbcException("Invalid Brick Key: " + brickKey);
-        }
-        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickKey sp : BrickKey.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Brick Key: " + brickKey);
-    }
-
-    @Override
-    public List<IBrickKey> getBrickKeys() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(brickKey, BrickKey.class);
     }
 
     @Override
     public IColorSensorMode getColorSensorMode(String colorSensorMode) {
-        if ( colorSensorMode == null || colorSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Color Sensor Mode: " + colorSensorMode);
-        }
-        String sUpper = colorSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( ColorSensorMode sp : ColorSensorMode.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color Sensor Mode: " + colorSensorMode);
+        return IRobotFactory.getModeValue(colorSensorMode, ColorSensorMode.class);
     }
 
-    @Override
-    public List<IColorSensorMode> getColorSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
-        if ( lightSensorMode == null || lightSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
-        }
-        String sUpper = lightSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( LightSensorMode sp : LightSensorMode.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color Sensor Mode: " + lightSensorMode);
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    //    @Override
+    //    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
+    //        return IRobotFactory.getModeValue(lightSensorMode, LightSensorMode.class);
+    //    }
 
     @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        if ( soundSensorMode == null || soundSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
-        }
-        String sUpper = soundSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( SoundSensorMode sp : SoundSensorMode.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
-    }
-
-    @Override
-    public List<ISoundSensorMode> getSoundSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(soundSensorMode, SoundSensorMode.class);
     }
 
     @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-        if ( gyroSensorMode == null || gyroSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Gyro Sensor Mode: " + gyroSensorMode);
-        }
-        String sUpper = gyroSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( GyroSensorMode sp : GyroSensorMode.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Gyro Sensor Mode: " + gyroSensorMode);
-    }
-
-    @Override
-    public List<IGyroSensorMode> getGyroSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(gyroSensorMode, GyroSensorMode.class);
     }
 
     @Override
     public IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode) {
-        if ( infraredSensorMode == null || infraredSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensorMode);
-        }
-        String sUpper = infraredSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( InfraredSensorMode inf : InfraredSensorMode.values() ) {
-            if ( inf.toString().equals(sUpper) ) {
-                return inf;
-            }
-            for ( String value : inf.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return inf;
-                }
-            }
-        }
-        throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensorMode);
-    }
-
-    @Override
-    public List<IInfraredSensorMode> getInfraredSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
-        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
-            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-        }
-        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
-        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
-            if ( timerSens.toString().equals(sUpper) ) {
-                return timerSens;
-            }
-            for ( String value : timerSens.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return timerSens;
-                }
-            }
-        }
-        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-    }
-
-    @Override
-    public List<ITimerSensorMode> getTimerSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(infraredSensorMode, InfraredSensorMode.class);
     }
 
     @Override
     public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
-        if ( motorTachoMode == null || motorTachoMode.isEmpty() ) {
-            throw new DbcException("Invalid Motor Tacho Mode: " + motorTachoMode);
-        }
-        String sUpper = motorTachoMode.trim().toUpperCase(Locale.GERMAN);
-        for ( MotorTachoMode motorTacho : MotorTachoMode.values() ) {
-            if ( motorTacho.toString().equals(sUpper) ) {
-                return motorTacho;
-            }
-            for ( String value : motorTacho.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return motorTacho;
-                }
-            }
-        }
-        throw new DbcException("Invalid Motor Tacho Mode: " + motorTachoMode);
-    }
-
-    @Override
-    public List<IMotorTachoMode> getMotorTachoModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(motorTachoMode, MotorTachoMode.class);
     }
 
     @Override
     public IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode) {
-        if ( ultrasonicSensorMode == null || ultrasonicSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Ultrasonic Sensor Mode: " + ultrasonicSensorMode);
-        }
-        String sUpper = ultrasonicSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( UltrasonicSensorMode ultra : UltrasonicSensorMode.values() ) {
-            if ( ultra.toString().equals(sUpper) ) {
-                return ultra;
-            }
-            for ( String value : ultra.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return ultra;
-                }
-            }
-        }
-        throw new DbcException("Invalid Ultrasonic Sensor Mode: " + ultrasonicSensorMode);
-    }
-
-    @Override
-    public List<IUltrasonicSensorMode> getUltrasonicSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(ultrasonicSensorMode, UltrasonicSensorMode.class);
     }
 
     @Override
     public ITouchSensorMode getTouchSensorMode(String mode) {
-        if ( mode == null || mode.isEmpty() ) {
-            throw new DbcException("Invalid Touch Sensor Mode: " + mode);
-        }
-        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        for ( TouchSensorMode ultra : TouchSensorMode.values() ) {
-            if ( ultra.toString().equals(sUpper) ) {
-                return ultra;
-            }
-            for ( String value : ultra.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return ultra;
-                }
-            }
-        }
-        throw new DbcException("Invalid Touch Sensor Mode: " + mode);
-    }
-
-    @Override
-    public List<ITouchSensorMode> getTouchSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(mode, TouchSensorMode.class);
     }
 
     @Override
     public ISensorPort getSensorPort(String port) {
-        if ( port == null || port.isEmpty() ) {
-            throw new DbcException("Invalid Ultrasonic Sensor Mode: " + port);
-        }
-        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( SensorPort po : SensorPort.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid Ultrasonic Sensor Mode: " + port);
-    }
-
-    @Override
-    public List<ISensorPort> getSensorPorts() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(port, SensorPort.class);
     }
 
     @Override
     public ILightSensorMode getLightColor(String mode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightColors() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ILightSensorActionMode getLightActionColor(String light) {
-        if ( light == null || light.isEmpty() ) {
-            throw new DbcException("Invalid Light Color Mode: " + light);
-        }
-        String sUpper = light.trim().toUpperCase(Locale.GERMAN);
-        for ( ILightSensorActionMode po : LightSensorActionMode.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid Light Color Mode: " + light);
-    }
+        return IRobotFactory.getModeValue(light, LightSensorActionMode.class);
 
-    @Override
-    public List<ILightSensorActionMode> getLightActionColors() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
     public IWorkingState getWorkingState(String state) {
-        if ( state == null || state.isEmpty() ) {
-            throw new DbcException("Invalid Working State Mode: " + state);
-        }
-        String sUpper = state.trim().toUpperCase(Locale.GERMAN);
-        for ( IWorkingState po : WorkingState.values() ) {
-            if ( po.toString().equals(sUpper) ) {
-                return po;
-            }
-            for ( String value : po.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return po;
-                }
-            }
-        }
-        throw new DbcException("Invalid  Working State Mode: " + state);
+        return IRobotFactory.getModeValue(state, WorkingState.class);
     }
 
     @Override
-    public List<IWorkingState> getWorkingStates() {
-        // TODO Auto-generated method stub
+    public IJoystickMode getJoystickMode(String joystickMode) {
         return null;
     }
 
@@ -604,31 +252,16 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IJoystickMode getJoystickMode(String joystickMode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<IJoystickMode> getJoystickMode() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getVendorId() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getCommandline() {
-        // TODO Auto-generated method stub
         return null;
     }
 

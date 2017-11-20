@@ -17,6 +17,7 @@ public enum WorkingState implements IWorkingState {
 
     @Override
     public String[] getValues() {
-        return values;
+        return this.values;
     }
+
 }

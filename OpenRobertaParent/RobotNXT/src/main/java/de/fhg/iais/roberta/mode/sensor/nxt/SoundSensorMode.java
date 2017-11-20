@@ -15,12 +15,12 @@ public enum SoundSensorMode implements ISoundSensorMode {
      * @return name that Lejos is using for this mode
      */
     public String getLejosModeName() {
-        return values[0];
+        return this.values[0];
     }
 
     @Override
     public String[] getValues() {
-        return values;
+        return this.values;
     }
 
 }

@@ -14,4 +14,5 @@ public enum SensorPort implements ISensorPort {
     public String getPortNumber() {
         return null;
     }
+
 }

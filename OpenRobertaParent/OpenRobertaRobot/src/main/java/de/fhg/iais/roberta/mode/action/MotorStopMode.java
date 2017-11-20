@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.action;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 
 public enum MotorStopMode implements IMotorStopMode {
-    NONFLOAT(), FLOAT();
+    DEFAULT(), NONFLOAT(), FLOAT(), SLEEP();
 
     private final String[] values;
 

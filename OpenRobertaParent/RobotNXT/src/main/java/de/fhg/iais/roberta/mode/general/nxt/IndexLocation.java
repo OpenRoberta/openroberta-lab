@@ -15,4 +15,5 @@ public enum IndexLocation implements IIndexLocation {
     public String[] getValues() {
         return this.values;
     }
+
 }

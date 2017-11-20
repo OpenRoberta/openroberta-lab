@@ -25,7 +25,7 @@ public enum ListElementOperations implements IListElementOperations {
 
     @Override
     public String[] getValues() {
-
         return this.values;
     }
+
 }

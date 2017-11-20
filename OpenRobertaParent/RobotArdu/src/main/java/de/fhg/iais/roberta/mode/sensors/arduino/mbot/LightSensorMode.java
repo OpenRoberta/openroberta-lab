@@ -3,12 +3,11 @@ package de.fhg.iais.roberta.mode.sensors.arduino.mbot;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 
 public enum LightSensorMode implements ILightSensorMode {
-    LEFT( "Left" ), RIGHT( "Right" );
+    DEFAULT(), LEFT( "Left" ), RIGHT( "Right" );
 
     private final String[] values;
 
     private LightSensorMode(String... values) {
-
         this.values = values;
     }
 
@@ -16,5 +15,4 @@ public enum LightSensorMode implements ILightSensorMode {
     public String[] getValues() {
         return this.values;
     }
-
 }

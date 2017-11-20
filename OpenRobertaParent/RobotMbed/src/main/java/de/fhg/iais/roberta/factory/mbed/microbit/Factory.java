@@ -1,13 +1,12 @@
 package de.fhg.iais.roberta.factory.mbed.microbit;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.mbed.SimCompilerWorkflow;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
@@ -24,10 +23,8 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
@@ -35,7 +32,6 @@ import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.mbed.microbit.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class Factory extends AbstractRobotFactory {
 
@@ -65,18 +61,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IBlinkMode> getBlinkModes() {
-        return null;
-    }
-
-    @Override
     public IActorPort getActorPort(String port) {
-        return null;
-    }
-
-    @Override
-    public List<IActorPort> getActorPorts() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -86,65 +71,17 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IBrickLedColor> getBrickLedColors() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public IShowPicture getShowPicture(String picture) {
         return null;
     }
 
     @Override
-    public List<IShowPicture> getShowPictures() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public IBrickKey getBrickKey(String brickKey) {
-        if ( brickKey == null || brickKey.isEmpty() ) {
-            throw new DbcException("Invalid Brick Key: " + brickKey);
-        }
-        //String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickKey sp : BrickKey.values() ) {
-            if ( sp.toString().equals(brickKey) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( brickKey.equals(value) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Brick Key: " + brickKey);
-    }
-
-    @Override
-    public List<IBrickKey> getBrickKeys() {
-        // TODO Auto-generated method stub
-        return null;
+        return IRobotFactory.getModeValue(brickKey, BrickKey.class);
     }
 
     @Override
     public IColorSensorMode getColorSensorMode(String colorSensorMode) {
-        return null;
-    }
-
-    @Override
-    public List<IColorSensorMode> getColorSensorModes() {
-        return null;
-    }
-
-    @Override
-    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
-        return null;
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightSensorModes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -154,17 +91,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<ISoundSensorMode> getSoundSensorModes() {
-        return null;
-    }
-
-    @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-        return null;
-    }
-
-    @Override
-    public List<IGyroSensorMode> getGyroSensorModes() {
         return null;
     }
 
@@ -174,42 +101,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IInfraredSensorMode> getInfraredSensorModes() {
-        return null;
-    }
-
-    @Override
-    public ITimerSensorMode getTimerSensorMode(String timerSensroMode) {
-        if ( timerSensroMode == null || timerSensroMode.isEmpty() ) {
-            throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-        }
-        String sUpper = timerSensroMode.trim().toUpperCase(Locale.GERMAN);
-        for ( TimerSensorMode timerSens : TimerSensorMode.values() ) {
-            if ( timerSens.toString().equals(sUpper) ) {
-                return timerSens;
-            }
-            for ( String value : timerSens.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return timerSens;
-                }
-            }
-        }
-        throw new DbcException("Invalid Timer Sensor Mode: " + timerSensroMode);
-    }
-
-    @Override
-    public List<ITimerSensorMode> getTimerSensorModes() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
-        return null;
-    }
-
-    @Override
-    public List<IMotorTachoMode> getMotorTachoModes() {
         return null;
     }
 
@@ -219,17 +111,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<IUltrasonicSensorMode> getUltrasonicSensorModes() {
-        return null;
-    }
-
-    @Override
     public ITouchSensorMode getTouchSensorMode(String mode) {
-        return null;
-    }
-
-    @Override
-    public List<ITouchSensorMode> getTouchSensorModes() {
         return null;
     }
 
@@ -239,20 +121,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<ISensorPort> getSensorPorts() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public ILightSensorMode getLightColor(String mode) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<ILightSensorMode> getLightColors() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -262,17 +131,7 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public List<ILightSensorActionMode> getLightActionColors() {
-        return null;
-    }
-
-    @Override
     public IWorkingState getWorkingState(String mode) {
-        return null;
-    }
-
-    @Override
-    public List<IWorkingState> getWorkingStates() {
         return null;
     }
 
@@ -368,11 +227,6 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
-        return null;
-    }
-
-    @Override
-    public List<IJoystickMode> getJoystickMode() {
         return null;
     }
 

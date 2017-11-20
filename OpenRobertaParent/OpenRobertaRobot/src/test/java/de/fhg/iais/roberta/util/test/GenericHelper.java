@@ -41,19 +41,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<IBlinkMode> getBlinkModes() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public IBrickLedColor getBrickLedColor(String mode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<IBrickLedColor> getBrickLedColors() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -65,19 +53,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<ILightSensorMode> getLightColors() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public ILightSensorActionMode getLightActionColor(String mode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<ILightSensorActionMode> getLightActionColors() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -89,19 +65,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<IWorkingState> getWorkingStates() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public IShowPicture getShowPicture(String picture) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<IShowPicture> getShowPictures() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -113,19 +77,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<IActorPort> getActorPorts() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public IBrickKey getBrickKey(String brickKey) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<IBrickKey> getBrickKeys() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -137,19 +89,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<IColorSensorMode> getColorSensorModes() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public ILightSensorMode getLightSensorMode(String lightrSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<ILightSensorMode> getLightSensorModes() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -161,19 +101,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<ISoundSensorMode> getSoundSensorModes() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<IGyroSensorMode> getGyroSensorModes() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -185,19 +113,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<IInfraredSensorMode> getInfraredSensorModes() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<IMotorTachoMode> getMotorTachoModes() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -209,19 +125,7 @@ public class GenericHelper extends Helper {
         }
 
         @Override
-        public List<IUltrasonicSensorMode> getUltrasonicSensorModes() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
         public ITouchSensorMode getTouchSensorMode(String mode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<ITouchSensorMode> getTouchSensorModes() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -342,12 +246,6 @@ public class GenericHelper extends Helper {
 
         @Override
         public IJoystickMode getJoystickMode(String joystickMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<IJoystickMode> getJoystickMode() {
             // TODO Auto-generated method stub
             return null;
         }

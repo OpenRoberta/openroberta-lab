@@ -54,4 +54,5 @@ public enum PickColor implements IPickColor {
         }
         throw new DbcException("Invalid color: " + id);
     }
+
 }

@@ -13,11 +13,12 @@ public enum SensorPort implements ISensorPort {
 
     @Override
     public String[] getValues() {
-        return values;
+        return this.values;
     }
 
     @Override
     public String getPortNumber() {
-        return values[0];
+        return this.values[0];
     }
+
 }

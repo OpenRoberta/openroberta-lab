@@ -15,4 +15,5 @@ public enum Direction implements IDirection {
     public String[] getValues() {
         return this.values;
     }
+
 }

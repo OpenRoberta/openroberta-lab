@@ -13,10 +13,10 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
 import de.fhg.iais.roberta.mode.general.nxt.IndexLocation;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.nxt.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nxt.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -774,6 +774,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             case RIGHT:
                 button = "BTNRIGHT";
                 break;
+            default:
+                throw new DbcException("Invalid Key!");
         }
         this.sb.append("ButtonPressed(" + button + ", false)");
         return null;
