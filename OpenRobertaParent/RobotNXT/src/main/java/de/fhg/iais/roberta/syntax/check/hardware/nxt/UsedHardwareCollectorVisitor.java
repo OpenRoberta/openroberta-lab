@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -18,8 +19,8 @@ import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements NxtAstVisitor<Void> {
 
     private boolean isPlayToneUsed = false;
-    private boolean isDriveUsed = false;
-    private boolean isCurveUsed = false;
+    private final boolean isDriveUsed = false;
+    private final boolean isCurveUsed = false;
     //private String tmpArrVar = "";
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
@@ -48,6 +49,13 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        super.visitPlayNoteAction(playNoteAction);
+        this.isPlayToneUsed = true;
+        return null;
+    }
+
+    @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
         return null;
     }
@@ -69,7 +77,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
             type = "int";
             defVal = "0";
         }
-
+    
         if ( !expr.getVarType().toString().contains("ARRAY") ) {
             this.tmpArrVarCount += 1;
             String str = expr.toString().replaceAll("defVal=ARRAY", defVal);
@@ -88,12 +96,12 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
                     values += value;
                 }
             }
-
+    
             this.tmpArrVar += "\n" + type + " __tmpArr" + this.tmpArrVarCount + "[] = {" + values + "};";
         }
         return null;
     }
-
+    
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         List<Expr<Void>> param = mathOnListFunct.getParam();
@@ -102,15 +110,15 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         generateArrTmpVar(mathOnListFunct.getParam().get(0));
         return null;
-
+    
     }
-
+    
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         generateArrTmpVar(lengthOfIsEmptyFunct.getParam().get(0));
         return null;
     }
-
+    
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         int listsInLine = StringUtils.countMatches(indexOfFunct.getParam().get(1).toString(), "ListCreate");
@@ -120,7 +128,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }
-
+    
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         int listsInLine = StringUtils.countMatches(listGetIndex.getParam().get(1).toString(), "ListCreate");
@@ -130,7 +138,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         }
         return null;
     }
-
+    
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         int listsInLine = StringUtils.countMatches(listSetIndex.getParam().get(0).toString(), "ListCreate");
