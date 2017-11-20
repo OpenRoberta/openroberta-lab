@@ -131,7 +131,7 @@ function _docker {
   rm -rf DockerInstallation
   $0 --export DockerInstallation
   cp Docker/DockerfileEmbedded DockerInstallation/Dockerfile
-  docker build -t openroberta_embedded DockerInstallation
+  docker build -t OpenRobertaEmbedded DockerInstallation
 }
 
 function _updateLejos {
