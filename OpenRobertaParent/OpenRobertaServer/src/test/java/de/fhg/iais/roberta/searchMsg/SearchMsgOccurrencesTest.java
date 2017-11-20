@@ -3,14 +3,15 @@ package de.fhg.iais.roberta.searchMsg;
 import java.io.File;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.Ignore;
 
 public class SearchMsgOccurrencesTest {
     private static final Pattern ALL = Pattern.compile(".+");
 
-    @Test
+    @Ignore
     public void testMessageOccurences() throws Exception {
-        SearchMsgKeyOccurrences smo = new SearchMsgKeyOccurrences(new File("../../../blockly/robMsg/robMessages.js"), new File("../../../blockly/msg/messages.js"));
+        SearchMsgKeyOccurrences smo =
+            new SearchMsgKeyOccurrences(new File("../../../blockly/robMsg/robMessages.js"), new File("../../../blockly/msg/messages.js"));
         smo.search(new File("../OpenRobertaRobot/src/main/java"), ALL);
         smo.search(new File("../OpenRobertaServer/src/main/java"), ALL);
         smo.search(new File("../RobotArdu/src/main/java"), ALL);
