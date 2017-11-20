@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # start a SQL client.
 # First parameter: database URL
 # - server mode: likely "jdbc:hsqldb:hsql://localhost/openroberta-db"

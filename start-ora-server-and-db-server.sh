@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # start of the openroberta server and a separate database server
 # typical use case: large servers with the need to access the database with a sql client when the server is running.
 # E.g. the official server

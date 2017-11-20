@@ -25,6 +25,11 @@ Commands of the ora.sh script:
                             - start-ora-server-with-db-embedded.sh   uses an embedded hsqldb. For small systems (Raspberry Pi, for instance)
                             - start-ora-server-and-db-server.sh      starts database and a server process. For large system (the official release, e.g.)
 
+  --dockerE                 create a docker image. As a first step the application is exported to DockerInstallation (this directory is rm -rf before)
+                            Then docker is called to build the image OpenRobertaEmbedded. start-ora-server-with-db-embedded.sh is used when the container
+                            is started. The database is expected at VOLUME /opt/openRoberta/db-2.4.0 and has to be supplied at container startup.							uses an embedded hsqldb. For small systems (Raspberry Pi, for instance)
+                            Have a look at the docker-compose file in directory docker to see how this can be done.
+
   --sqlclient DATABASEURL   start a sql client.
                             - this command fails if the openroberta server is running in embedded mode. You have to terminate the server to get access.
                             - if the database is used by an openroberta server in server mode, the sql client and the server have access to the database.

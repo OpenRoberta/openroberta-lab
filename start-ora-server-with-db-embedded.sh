@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # start of the openroberta server with the database EMBEDDED.
 # typical use case: small standalone servers, e.g. Raspberry PI. When the server is running, the database cannot
 # be accessed with a sql client.

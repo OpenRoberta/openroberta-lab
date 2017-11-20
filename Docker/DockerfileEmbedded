@@ -3,7 +3,7 @@ FROM openjdk:8u102
 RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta/OpenRobertaParent
 WORKDIR /opt/openRoberta
 
-EXPOSE 1998
+EXPOSE 1999
 VOLUME /opt/openRoberta/db-2.4.0
  
 ADD ["start-ora-server-with-db-embedded.sh","./"]
