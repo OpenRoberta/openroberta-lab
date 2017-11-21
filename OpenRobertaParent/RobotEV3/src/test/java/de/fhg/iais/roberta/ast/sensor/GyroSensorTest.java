@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -14,8 +14,7 @@ public class GyroSensorTest {
 
     @Test
     public void sensorSetGyro() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [mode=ANGLE, port=S2]], [Location [x=-26, y=250], GyroSensor [mode=RATE, port=S4]]]]";
+        String a = "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [ANGLE, S2]], [Location [x=-26, y=250], GyroSensor [RATE, S4]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setGyro.xml"));
     }
@@ -44,7 +43,7 @@ public class GyroSensorTest {
 
     @Test
     public void sensorResetGyro() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-13, y=105], GyroSensor [mode=RESET, port=S2]]]]";
+        String a = "BlockAST [project=[[Location [x=-13, y=105], GyroSensor [RESET, S2]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetGyro.xml"));
     }

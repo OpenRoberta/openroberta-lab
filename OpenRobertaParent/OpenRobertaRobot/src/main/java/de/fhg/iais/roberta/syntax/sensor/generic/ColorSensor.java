@@ -1,22 +1,18 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -31,12 +27,9 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * To create an instance from this class use the method {@link #make(ColorSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorSensor<V> extends ExternalSensor<V> {
-    private final IColorSensorMode mode;
 
     private ColorSensor(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("COLOR_SENSING"), properties, comment);
-        Assert.isTrue(mode != null && port != null);
-        this.mode = mode;
+        super(mode, port, BlockTypeContainer.getByName("COLOR_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -53,16 +46,9 @@ public class ColorSensor<V> extends ExternalSensor<V> {
         return new ColorSensor<V>(mode, port, properties, comment);
     }
 
-    /**
-     * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have
-     */
-    public IColorSensorMode getMode() {
-        return this.mode;
-    }
-
     @Override
     public String toString() {
-        return "ColorSensor [mode=" + this.mode + ", port=" + this.getPort() + "]";
+        return "ColorSensor [" + this.getMode() + ", " + this.getPort() + "]";
     }
 
     @Override
@@ -79,25 +65,11 @@ public class ColorSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        SensorMetaDataBean sensorData = extracPortAndMode(block, helper);
+        String mode = sensorData.getMode();
+        String port = sensorData.getPort();
         return ColorSensor
-            .make(factory.getColorSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        Mutation mutation = new Mutation();
-        mutation.setMode(getMode().toString());
-        jaxbDestination.setMutation(mutation);
-        String fieldValue = getPort().getPortNumber();
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
-
-        return jaxbDestination;
+            .make(factory.getColorSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

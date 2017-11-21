@@ -47,7 +47,7 @@ public class BrickSensorTest {
     public void sensorBrick() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-96, y=73], \n"
-                + "if SensorExpr [TouchSensor [port=S1]]\n"
+                + "if SensorExpr [TouchSensor [DEFAULT, S1]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [BrickSensor [key=ENTER, mode=IS_PRESSED]]\n\n"
                 + "]]]";

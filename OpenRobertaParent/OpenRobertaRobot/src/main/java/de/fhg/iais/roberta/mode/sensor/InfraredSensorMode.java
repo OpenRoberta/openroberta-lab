@@ -1,9 +1,9 @@
-package de.fhg.iais.roberta.mode.sensor.ev3;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 
 public enum InfraredSensorMode implements IInfraredSensorMode {
-    DISTANCE( "Distance" ), SEEK( "Seek" );
+    DEFAULT, DISTANCE( "Distance" ), SEEK( "Seek" );
 
     private final String[] values;
 

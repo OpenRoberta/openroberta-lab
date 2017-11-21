@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ev3.Helper;
@@ -14,8 +14,7 @@ public class UltraSonicSensorTest {
 
     @Test
     public void sensorSetUltrasonic() throws Exception {
-        String a =
-            "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [mode=DISTANCE, port=S4]], [Location [x=1, y=98], UltrasonicSensor [mode=PRESENCE, port=S2]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [DISTANCE, S4]], [Location [x=1, y=98], UltrasonicSensor [PRESENCE, S2]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
     }

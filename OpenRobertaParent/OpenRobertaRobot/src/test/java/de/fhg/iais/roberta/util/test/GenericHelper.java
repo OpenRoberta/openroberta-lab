@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.util.test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
@@ -14,15 +13,8 @@ import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -78,66 +70,6 @@ public class GenericHelper extends Helper {
 
         @Override
         public IBrickKey getBrickKey(String brickKey) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public IColorSensorMode getColorSensorMode(String colorSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public ILightSensorMode getLightSensorMode(String lightrSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public ITouchSensorMode getTouchSensorMode(String mode) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public ISensorPort getSensorPort(String port) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<ISensorPort> getSensorPorts() {
             // TODO Auto-generated method stub
             return null;
         }
@@ -270,6 +202,12 @@ public class GenericHelper extends Helper {
 
         @Override
         public String getSignature() {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public IColorSensorMode getColorSensorMode(String modeName) {
             // TODO Auto-generated method stub
             return null;
         }

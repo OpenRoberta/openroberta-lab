@@ -19,14 +19,10 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
 
 public class Joystick<V> extends ExternalSensor<V> {
-    private final ISensorPort port;
-    private final IJoystickMode mode;
     private final String joystickAxis;
 
     public Joystick(String axis, IJoystickMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("ARDU_JOYSTICK_GETSAMPLE"), properties, comment);
-        this.port = port;
-        this.mode = mode;
+        super(mode, port, BlockTypeContainer.getByName("ARDU_JOYSTICK_GETSAMPLE"), properties, comment);
         this.joystickAxis = axis;
         setReadOnly();
     }
@@ -43,22 +39,13 @@ public class Joystick<V> extends ExternalSensor<V> {
     }
 
     @Override
-    public ISensorPort getPort() {
-        return this.port;
-    }
-
-    @Override
     public String toString() {
-        return "Joystick [port = " + this.port + ", mode  = " + this.mode + "]";
+        return "Joystick [" + this.getMode() + ", " + this.getPort() + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return ((MbotAstVisitor<V>) visitor).visitJoystick(this);
-    }
-
-    public IJoystickMode getMode() {
-        return this.mode;
     }
 
     public String getAxis() {
@@ -85,7 +72,7 @@ public class Joystick<V> extends ExternalSensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = this.port.getPortNumber();
+        String fieldValue = this.getPort().getPortNumber();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }

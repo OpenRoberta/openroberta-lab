@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -15,10 +15,10 @@ public class ColorSensorTest {
     @Test
     public void sensorSetColor() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [mode=COLOUR, port=S3]], "
-                + "[Location [x=-13, y=147], ColorSensor [mode=RED, port=S1]], "
-                + "[Location [x=-11, y=187], ColorSensor [mode=RGB, port=S2]], "
-                + "[Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=S4]]]]";
+            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [COLOUR, S3]], "
+                + "[Location [x=-13, y=147], ColorSensor [RED, S1]], "
+                + "[Location [x=-11, y=187], ColorSensor [RGB, S2]], "
+                + "[Location [x=-11, y=224], ColorSensor [AMBIENTLIGHT, S4]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
     }

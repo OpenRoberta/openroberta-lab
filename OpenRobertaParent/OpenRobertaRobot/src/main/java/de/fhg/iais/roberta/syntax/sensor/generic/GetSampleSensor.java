@@ -76,7 +76,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = LightSensor.make(factory.getLightSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
-                this.sensor = CompassSensor.make(factory.getSensorPort(port), properties, comment);
+                this.sensor = CompassSensor.make(factory.getCompassSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(port), properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");

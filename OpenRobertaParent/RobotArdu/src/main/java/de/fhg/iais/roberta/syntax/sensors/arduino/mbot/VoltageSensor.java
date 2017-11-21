@@ -18,11 +18,9 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
 
 public class VoltageSensor<V> extends ExternalSensor<V> {
-    private final ISensorPort port;
 
     public VoltageSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MAKEBLOCK_VOLTAGE_GET_SAMPLE"), properties, comment);
-        this.port = port;
         setReadOnly();
     }
 
@@ -38,13 +36,8 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
     }
 
     @Override
-    public ISensorPort getPort() {
-        return this.port;
-    }
-
-    @Override
     public String toString() {
-        return "Voltage [port = " + this.port + "]";
+        return "Voltage [" + this.port + "]";
     }
 
     @Override
@@ -70,7 +63,7 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = this.port.getPortNumber();
+        String fieldValue = this.getPort().getPortNumber();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }

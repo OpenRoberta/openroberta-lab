@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -30,12 +32,10 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * To create an instance from this class use the method {@link #make(GyroSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class GyroSensor<V> extends ExternalSensor<V> {
-    private final IGyroSensorMode mode;
 
     private GyroSensor(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("GYRO_SENSING"), properties, comment);
+        super(mode, port, BlockTypeContainer.getByName("GYRO_SENSING"), properties, comment);
         Assert.isTrue(mode != null && port != null);
-        this.mode = mode;
         setReadOnly();
     }
 
@@ -52,16 +52,9 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         return new GyroSensor<V>(mode, port, properties, comment);
     }
 
-    /**
-     * @return get the mode of sensor. See enum {@link GyroSensorMode} for all possible modes that the sensor have.
-     */
-    public IGyroSensorMode getMode() {
-        return this.mode;
-    }
-
     @Override
     public String toString() {
-        return "GyroSensor [mode=" + this.mode + ", port=" + getPort() + "]";
+        return "GyroSensor [" + this.getMode() + ", " + getPort() + "]";
     }
 
     @Override

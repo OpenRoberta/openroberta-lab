@@ -1,9 +1,9 @@
-package de.fhg.iais.roberta.mode.sensor.ev3;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 
 public enum SoundSensorMode implements ISoundSensorMode {
-    SOUND( "sound" );
+    DEFAULT, SOUND( "sound" );
     private final String[] values;
 
     private SoundSensorMode(String... values) {

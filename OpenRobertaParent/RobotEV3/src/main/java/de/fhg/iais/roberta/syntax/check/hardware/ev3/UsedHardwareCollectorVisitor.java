@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;

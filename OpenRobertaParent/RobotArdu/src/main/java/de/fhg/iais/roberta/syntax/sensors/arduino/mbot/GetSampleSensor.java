@@ -82,7 +82,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = PIRMotionSensor.make(factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
-                this.sensor = TemperatureSensor.make(factory.getSensorPort(port), properties, comment);
+                this.sensor =
+                    TemperatureSensor.make(factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(port), properties, comment);
                 break;
             case BlocklyConstants.VOLTAGE:
                 this.sensor = VoltageSensor.make(factory.getSensorPort(port), properties, comment);

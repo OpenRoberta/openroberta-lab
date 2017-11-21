@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.factory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import com.google.inject.AbstractModule;
@@ -25,6 +24,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ITemperatureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
@@ -44,9 +45,17 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
+import de.fhg.iais.roberta.mode.sensor.TemperatureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
+import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -252,11 +261,21 @@ public interface IRobotFactory {
 
     IJoystickMode getJoystickMode(String modeName);
 
-    default ILightSensorMode getLightSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, LightSensorMode.class);
+    default ILightSensorMode getLightSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, LightSensorMode.class);
     }
 
-    ISoundSensorMode getSoundSensorMode(String modeName);
+    default ICompassSensorMode getCompassSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, CompassSensorMode.class);
+    }
+
+    default ITemperatureSensorMode getTemperatureSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, TemperatureSensorMode.class);
+    }
+
+    default ISoundSensorMode getSoundSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, SoundSensorMode.class);
+    }
 
     /**
      * Get a gyro sensor mode from {@link IGyroSensorMode} given string parameter. It is possible for one gyro sensor mode to have multiple string mappings.
@@ -265,7 +284,9 @@ public interface IRobotFactory {
      * @param name of the gyro sensor mode
      * @return the gyro sensor mode from the enum {@link IGyroSensorMode}
      */
-    IGyroSensorMode getGyroSensorMode(String modeName);
+    default IGyroSensorMode getGyroSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, GyroSensorMode.class);
+    }
 
     /**
      * Get a infrared sensor mode from {@link IInfraredSensorMode} given string parameter. It is possible for one infrared sensor mode to have multiple string
@@ -274,7 +295,9 @@ public interface IRobotFactory {
      * @param name of the infrared sensor mode
      * @return the infrared sensor mode from the enum {@link IInfraredSensorMode}
      */
-    IInfraredSensorMode getInfraredSensorMode(String modeName);
+    default IInfraredSensorMode getInfraredSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, InfraredSensorMode.class);
+    }
 
     /**
      * Get a timer sensor mode from {@link ITimerSensorMode} given string parameter. It is possible for one timer sensor mode to have multiple string mappings.
@@ -294,7 +317,9 @@ public interface IRobotFactory {
      * @param name of the motor tacho sensor mode
      * @return the motor tacho sensor mode from the enum {@link IMotorTachoMode}
      */
-    IMotorTachoMode getMotorTachoMode(String modeName);
+    default IMotorTachoMode getMotorTachoMode(String mode) {
+        return IRobotFactory.getModeValue(mode, MotorTachoMode.class);
+    }
 
     /**
      * Get a ultrasonic sensor mode from {@link IUltrasonicSensorMode} given string parameter. It is possible for one ultrasonic sensor mode to have multiple
@@ -303,7 +328,9 @@ public interface IRobotFactory {
      * @param name of the ultrasonic sensor mode
      * @return the ultrasonic sensor mode from the enum {@link IUltrasonicSensorMode}
      */
-    IUltrasonicSensorMode getUltrasonicSensorMode(String modeName);
+    default IUltrasonicSensorMode getUltrasonicSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, UltrasonicSensorMode.class);
+    }
 
     /**
      * Get a touch sensor mode from {@link ITouchSensorMode} given string parameter. It is possible for one touch sensor mode to have multiple string mappings.
@@ -312,7 +339,9 @@ public interface IRobotFactory {
      * @param name of the touch sensor mode
      * @return the touch sensor mode from the enum {@link ITouchSensorMode}
      */
-    ITouchSensorMode getTouchSensorMode(String modeName);
+    default ITouchSensorMode getTouchSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, TouchSensorMode.class);
+    }
 
     /**
      * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
@@ -322,14 +351,7 @@ public interface IRobotFactory {
      * @return the sensor port from the enum {@link ISensorPort}
      */
     default ISensorPort getSensorPort(String port) {
-        if ( port.equals("NO_PORT") ) {
-            return SensorPort.NO_PORT;
-        }
-        return null;
-    }
-
-    default List<ISensorPort> getSensorPorts() {
-        return null;
+        return IRobotFactory.getModeValue(port, SensorPort.class);
     }
 
     /**

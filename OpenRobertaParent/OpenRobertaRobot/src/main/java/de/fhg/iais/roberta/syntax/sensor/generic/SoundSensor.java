@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
+import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -29,11 +31,9 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * To create an instance from this class use the method {@link #make(LightSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class SoundSensor<V> extends ExternalSensor<V> {
-    private final ISoundSensorMode mode;
 
     private SoundSensor(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("SOUND_SENSING"), properties, comment);
-        this.mode = mode;
+        super(mode, port, BlockTypeContainer.getByName("SOUND_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -50,16 +50,9 @@ public class SoundSensor<V> extends ExternalSensor<V> {
         return new SoundSensor<V>(mode, port, properties, comment);
     }
 
-    /**
-     * @return the mode
-     */
-    public ISoundSensorMode getMode() {
-        return this.mode;
-    }
-
     @Override
     public String toString() {
-        return "SoundSensor [port=" + getPort() + "]";
+        return "SoundSensor [" + getMode() + ", " + getPort() + "]";
     }
 
     @Override

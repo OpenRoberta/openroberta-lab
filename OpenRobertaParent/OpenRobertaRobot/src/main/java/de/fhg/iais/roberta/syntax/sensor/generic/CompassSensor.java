@@ -1,18 +1,17 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -25,11 +24,9 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class CompassSensor<V> extends ExternalSensor<V> {
-    private final ISensorPort port;
 
-    private CompassSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(port, BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
-        this.port = port;
+    private CompassSensor(ICompassSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(mode, port, BlockTypeContainer.getByName("COMPASS_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -42,22 +39,13 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link CompassSensor}
      */
-    public static <V> CompassSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new CompassSensor<>(port, properties, comment);
+    public static <V> CompassSensor<V> make(ICompassSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new CompassSensor<>(mode, port, properties, comment);
     }
-
-    @Override
-    public ISensorPort getPort() {
-        return this.port;
-    }
-
-    /**
-     * @return the mode
-     */
 
     @Override
     public String toString() {
-        return "CompassSensor []";
+        return "CompassSensor [" + getPort() + ", " + getMode() + "]";
     }
 
     @Override
@@ -73,21 +61,11 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String port = "1";
-        if ( !block.getType().equals("robSensors_compass_getSample") && !block.getType().equals("mbedSensors_compass_getSample") ) {
-            port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        }
-        return CompassSensor.make(helper.getModeFactory().getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        if ( !getProperty().getBlockType().equals("robSensors_compass_getSample") && !getProperty().getBlockType().equals("mbedSensors_compass_getSample") ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.port.getPortNumber());
-        }
-        return jaxbDestination;
+        IRobotFactory factory = helper.getModeFactory();
+        SensorMetaDataBean sensorData = extracPortAndMode(block, helper);
+        String mode = sensorData.getMode();
+        String port = sensorData.getPort();
+        return CompassSensor
+            .make(factory.getCompassSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

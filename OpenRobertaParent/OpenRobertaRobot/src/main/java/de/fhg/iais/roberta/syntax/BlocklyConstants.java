@@ -327,4 +327,6 @@ public final class BlocklyConstants {
     public static final String PIN_DIGITAL = "PIN_DIGITAL";
     public static final String PIN_PULSEHIGH = "PIN_PULSEHIGH";
     public static final String PIN_PULSELOW = "PIN_PULSELOW";
+    public static final String DEFAULT = "DEFAULT";
+    public static final String NO_PORT = "NO_PORT";
 }

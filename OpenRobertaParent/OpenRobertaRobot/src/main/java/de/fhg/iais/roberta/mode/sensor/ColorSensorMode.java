@@ -1,9 +1,9 @@
-package de.fhg.iais.roberta.mode.sensor.ev3;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 
 public enum ColorSensorMode implements IColorSensorMode {
-    COLOUR( "ColorID" ), RED( "Red" ), RGB( "RGB" ), AMBIENTLIGHT( "Ambient" );
+    DEFAULT, COLOUR( "ColorID" ), RED( "Red" ), RGB( "RGB" ), AMBIENTLIGHT( "Ambient" );
 
     private final String[] values;
 
