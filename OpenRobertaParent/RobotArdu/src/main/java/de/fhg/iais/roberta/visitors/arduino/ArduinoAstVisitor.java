@@ -26,12 +26,6 @@ public interface ArduinoAstVisitor<V>
 
     V visitLedOffAction(LedOffAction<V> ledOffAction);
 
-    /**
-     * visit a {@link VoltageSensor}.
-     *
-     * @param voltageSensor to be visited
-     */
-
     V visitExternalLedOnAction(ExternalLedOnAction<V> externalLedOnAction);
 
     V visitExternalLedOffAction(ExternalLedOffAction<V> externalLedOffAction);

@@ -54,17 +54,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.botnroll.VoltageSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.BotnrollAstVisitor;
+import de.fhg.iais.roberta.visitors.arduino.ArduinoAstVisitor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
  * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
  */
-public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Void> {
+public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void> {
     private final BotNrollConfiguration brickConfiguration;
     private final boolean isTimerSensorUsed;
 
@@ -602,6 +602,7 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
                     nlIndent();
                     this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
+                case VOLTAGE:
                 case TIMER:
                 case LIGHT:
                 case COMPASS:

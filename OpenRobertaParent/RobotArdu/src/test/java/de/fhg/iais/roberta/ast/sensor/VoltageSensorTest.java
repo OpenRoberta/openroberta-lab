@@ -10,7 +10,7 @@ public class VoltageSensorTest {
 
     @Test
     public void voltageSensorJaxbToAstTransformation() throws Exception {
-        String a = "BlockAST [project=[[Location [x=38, y=238], VoltageSensor []]]]";
+        String a = "BlockAST [project=[[Location [x=38, y=238], Voltage [DEFAULT, NO_PORT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Voltage.xml"));
     }

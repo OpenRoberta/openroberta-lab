@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.sensor;
 
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -13,6 +14,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
@@ -123,6 +125,24 @@ public interface AstSensorsVisitor<V> extends AstVisitor<V> {
      */
     default V visitTemperatureSensor(TemperatureSensor<V> temperatureSensor) {
         throw new DbcException("TemperatureSensor not implemented!");
+    }
+
+    /**
+     * visit a {@link VoltageSensor}.
+     *
+     * @param voltageSensor to be visited
+     */
+    default V visitVoltageSensor(VoltageSensor<V> voltageSensor) {
+        throw new DbcException("VoltageSensor not implemented!");
+    }
+
+    /**
+     * visit a {@link AccelerometerSensor}.
+     *
+     * @param accelerometerSensor to be visited
+     */
+    default V visitAccelerometer(AccelerometerSensor<V> accelerometerSensor) {
+        throw new DbcException("AccelerometerSensor not implemented!");
     }
 
     /**

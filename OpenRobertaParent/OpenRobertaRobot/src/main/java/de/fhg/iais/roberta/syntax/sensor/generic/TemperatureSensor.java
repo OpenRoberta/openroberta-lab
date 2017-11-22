@@ -25,7 +25,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 public class TemperatureSensor<V> extends ExternalSensor<V> {
 
     private TemperatureSensor(ITemperatureSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("TEMP_SENSING"), properties, comment);
+        super(mode, port, BlockTypeContainer.getByName("TEMPERATURE_SENSING"), properties, comment);
         setReadOnly();
     }
 

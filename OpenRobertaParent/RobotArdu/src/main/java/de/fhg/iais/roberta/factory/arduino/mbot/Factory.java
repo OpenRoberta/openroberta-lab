@@ -39,7 +39,6 @@ import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.UltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.sensors.arduino.mbot.Coordinates;
 import de.fhg.iais.roberta.mode.sensors.arduino.mbot.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.mbot.JoystickMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.mbot.LightSensorMode;
@@ -63,29 +62,29 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        this.mbotProperties = Util1.loadProperties("classpath:mbot.properties");
-        this.name = this.mbotProperties.getProperty("robot.name");
-        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
-        this.compilerWorkflow =
+        mbotProperties = Util1.loadProperties("classpath:mbot.properties");
+        name = mbotProperties.getProperty("robot.name");
+        robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(name);
+        compilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
 
-        addBlockTypesFromProperties("mbot.properties", this.mbotProperties);
+        addBlockTypesFromProperties("mbot.properties", mbotProperties);
     }
 
     @Override
     public IBlinkMode getBlinkMode(String mode) {
-        if ( mode == null || mode.isEmpty() ) {
+        if ( (mode == null) || mode.isEmpty() ) {
             throw new DbcException("Invalid Blink Mode: " + mode);
         }
-        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        for ( BlinkMode mo : BlinkMode.values() ) {
+        final String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
+        for ( final BlinkMode mo : BlinkMode.values() ) {
             if ( mo.toString().equals(sUpper) ) {
                 return mo;
             }
-            for ( String value : mo.getValues() ) {
+            for ( final String value : mo.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return mo;
                 }
@@ -96,15 +95,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IActorPort getActorPort(String port) {
-        if ( port == null || port.isEmpty() ) {
+        if ( (port == null) || port.isEmpty() ) {
             throw new DbcException("Invalid Actor Port: " + port);
         }
-        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( ActorPort co : ActorPort.values() ) {
+        final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
+        for ( final ActorPort co : ActorPort.values() ) {
             if ( co.toString().equals(sUpper) ) {
                 return co;
             }
-            for ( String value : co.getValues() ) {
+            for ( final String value : co.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return co;
                 }
@@ -115,15 +114,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IBrickLedColor getBrickLedColor(String color) {
-        if ( color == null || color.isEmpty() ) {
+        if ( (color == null) || color.isEmpty() ) {
             throw new DbcException("Invalid Brick Led Color: " + color);
         }
-        String sUpper = color.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickLedColor co : BrickLedColor.values() ) {
+        final String sUpper = color.trim().toUpperCase(Locale.GERMAN);
+        for ( final BrickLedColor co : BrickLedColor.values() ) {
             if ( co.toString().equals(sUpper) ) {
                 return co;
             }
-            for ( String value : co.getValues() ) {
+            for ( final String value : co.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return co;
                 }
@@ -135,15 +134,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IBrickKey getBrickKey(String brickKey) {
-        if ( brickKey == null || brickKey.isEmpty() ) {
+        if ( (brickKey == null) || brickKey.isEmpty() ) {
             throw new DbcException("Invalid Brick Key: " + brickKey);
         }
-        String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
-        for ( BrickKey sp : BrickKey.values() ) {
+        final String sUpper = brickKey.trim().toUpperCase(Locale.GERMAN);
+        for ( final BrickKey sp : BrickKey.values() ) {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }
-            for ( String value : sp.getValues() ) {
+            for ( final String value : sp.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return sp;
                 }
@@ -154,15 +153,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IColorSensorMode getColorSensorMode(String colorSensorMode) {
-        if ( colorSensorMode == null || colorSensorMode.isEmpty() ) {
+        if ( (colorSensorMode == null) || colorSensorMode.isEmpty() ) {
             throw new DbcException("Invalid Color Sensor Mode: " + colorSensorMode);
         }
-        String sUpper = colorSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( ColorSensorMode sp : ColorSensorMode.values() ) {
+        final String sUpper = colorSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final ColorSensorMode sp : ColorSensorMode.values() ) {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }
-            for ( String value : sp.getValues() ) {
+            for ( final String value : sp.getValues() ) {
                 if ( sUpper.equals(value.toUpperCase()) ) {
                     return sp;
                 }
@@ -178,15 +177,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        if ( soundSensorMode == null || soundSensorMode.isEmpty() ) {
+        if ( (soundSensorMode == null) || soundSensorMode.isEmpty() ) {
             throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
         }
-        String sUpper = soundSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( SoundSensorMode sp : SoundSensorMode.values() ) {
+        final String sUpper = soundSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final SoundSensorMode sp : SoundSensorMode.values() ) {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }
-            for ( String value : sp.getValues() ) {
+            for ( final String value : sp.getValues() ) {
                 if ( sUpper.equals(value.toUpperCase()) ) {
                     return sp;
                 }
@@ -197,15 +196,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-        if ( gyroSensorMode == null || gyroSensorMode.isEmpty() ) {
+        if ( (gyroSensorMode == null) || gyroSensorMode.isEmpty() ) {
             throw new DbcException("Invalid Gyro Sensor Mode: " + gyroSensorMode);
         }
-        String sUpper = gyroSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( GyroSensorMode sp : GyroSensorMode.values() ) {
+        final String sUpper = gyroSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final GyroSensorMode sp : GyroSensorMode.values() ) {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }
-            for ( String value : sp.getValues() ) {
+            for ( final String value : sp.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return sp;
                 }
@@ -214,35 +213,17 @@ public class Factory extends AbstractRobotFactory {
         throw new DbcException("Invalid Gyro Sensor Mode: " + gyroSensorMode);
     }
 
-    public Coordinates getCoordinates(String coordinates) {
-        if ( coordinates == null || coordinates.isEmpty() ) {
-            throw new DbcException("Invalid Gyro Sensor Mode: " + coordinates);
-        }
-        String sUpper = coordinates.trim().toUpperCase(Locale.GERMAN);
-        for ( Coordinates sp : Coordinates.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( String value : sp.getValues() ) {
-                if ( sUpper.equals(value) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Gyro Sensor Mode: " + coordinates);
-    }
-
     @Override
     public IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode) {
-        if ( infraredSensorMode == null || infraredSensorMode.isEmpty() ) {
+        if ( (infraredSensorMode == null) || infraredSensorMode.isEmpty() ) {
             throw new DbcException("Invalid Infrared Sensor Mode: " + infraredSensorMode);
         }
-        String sUpper = infraredSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( InfraredSensorMode inf : InfraredSensorMode.values() ) {
+        final String sUpper = infraredSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final InfraredSensorMode inf : InfraredSensorMode.values() ) {
             if ( inf.toString().equals(sUpper) ) {
                 return inf;
             }
-            for ( String value : inf.getValues() ) {
+            for ( final String value : inf.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return inf;
                 }
@@ -253,15 +234,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
-        if ( motorTachoMode == null || motorTachoMode.isEmpty() ) {
+        if ( (motorTachoMode == null) || motorTachoMode.isEmpty() ) {
             throw new DbcException("Invalid Motor Tacho Mode: " + motorTachoMode);
         }
-        String sUpper = motorTachoMode.trim().toUpperCase(Locale.GERMAN);
-        for ( MotorTachoMode motorTacho : MotorTachoMode.values() ) {
+        final String sUpper = motorTachoMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final MotorTachoMode motorTacho : MotorTachoMode.values() ) {
             if ( motorTacho.toString().equals(sUpper) ) {
                 return motorTacho;
             }
-            for ( String value : motorTacho.getValues() ) {
+            for ( final String value : motorTacho.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return motorTacho;
                 }
@@ -272,15 +253,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode) {
-        if ( ultrasonicSensorMode == null || ultrasonicSensorMode.isEmpty() ) {
+        if ( (ultrasonicSensorMode == null) || ultrasonicSensorMode.isEmpty() ) {
             throw new DbcException("Invalid Ultrasonic Sensor Mode: " + ultrasonicSensorMode);
         }
-        String sUpper = ultrasonicSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( UltrasonicSensorMode ultra : UltrasonicSensorMode.values() ) {
+        final String sUpper = ultrasonicSensorMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final UltrasonicSensorMode ultra : UltrasonicSensorMode.values() ) {
             if ( ultra.toString().equals(sUpper) ) {
                 return ultra;
             }
-            for ( String value : ultra.getValues() ) {
+            for ( final String value : ultra.getValues() ) {
                 if ( sUpper.equals(value.toUpperCase()) ) {
                     return ultra;
                 }
@@ -291,15 +272,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ITouchSensorMode getTouchSensorMode(String mode) {
-        if ( mode == null || mode.isEmpty() ) {
+        if ( (mode == null) || mode.isEmpty() ) {
             throw new DbcException("Invalid Touch Sensor Mode: " + mode);
         }
-        String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        for ( TouchSensorMode ultra : TouchSensorMode.values() ) {
+        final String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
+        for ( final TouchSensorMode ultra : TouchSensorMode.values() ) {
             if ( ultra.toString().equals(sUpper) ) {
                 return ultra;
             }
-            for ( String value : ultra.getValues() ) {
+            for ( final String value : ultra.getValues() ) {
                 if ( sUpper.equals(value.toUpperCase()) ) {
                     return ultra;
                 }
@@ -310,15 +291,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ISensorPort getSensorPort(String port) {
-        if ( port == null || port.isEmpty() ) {
+        if ( (port == null) || port.isEmpty() ) {
             throw new DbcException("Invalid sensor port: " + port);
         }
-        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        for ( SensorPort po : SensorPort.values() ) {
+        final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
+        for ( final SensorPort po : SensorPort.values() ) {
             if ( po.toString().equals(sUpper) ) {
                 return po;
             }
-            for ( String value : po.getValues() ) {
+            for ( final String value : po.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return po;
                 }
@@ -329,7 +310,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
@@ -363,47 +344,47 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return this.mbotProperties.getProperty("robot.program.toolbox.beginner");
+        return mbotProperties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return this.mbotProperties.getProperty("robot.program.toolbox.expert");
+        return mbotProperties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return this.mbotProperties.getProperty("robot.program.default");
+        return mbotProperties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return this.mbotProperties.getProperty("robot.configuration.toolbox");
+        return mbotProperties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return this.mbotProperties.getProperty("robot.configuration.default");
+        return mbotProperties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return this.mbotProperties.getProperty("robot.real.name");
+        return mbotProperties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return this.mbotProperties.getProperty("robot.sim").equals("true") ? true : false;
+        return mbotProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
     public String getInfo() {
-        return this.mbotProperties.getProperty("robot.info") != null ? this.mbotProperties.getProperty("robot.info") : "#";
+        return mbotProperties.getProperty("robot.info") != null ? mbotProperties.getProperty("robot.info") : "#";
     }
 
     @Override
     public Boolean isBeta() {
-        return this.mbotProperties.getProperty("robot.beta") != null ? true : false;
+        return mbotProperties.getProperty("robot.beta") != null ? true : false;
     }
 
     @Override
@@ -419,14 +400,14 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.mbotProperties.getProperty("robot.configuration") != null ? false : true;
+        return mbotProperties.getProperty("robot.configuration") != null ? false : true;
     }
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
-            : this.name;
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : name;
     }
 
     @Override
@@ -436,25 +417,25 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getConnectionType() {
-        return this.mbotProperties.getProperty("robot.connection");
+        return mbotProperties.getProperty("robot.connection");
     }
 
     @Override
     public String getVendorId() {
-        return this.mbotProperties.getProperty("robot.vendor");
+        return mbotProperties.getProperty("robot.vendor");
     }
 
     @Override
     public JoystickMode getJoystickMode(String joystickMode) {
-        if ( joystickMode == null || joystickMode.isEmpty() ) {
+        if ( (joystickMode == null) || joystickMode.isEmpty() ) {
             throw new DbcException("Invalid joystick axis: " + joystickMode);
         }
-        String sUpper = joystickMode.trim().toUpperCase(Locale.GERMAN);
-        for ( JoystickMode po : JoystickMode.values() ) {
+        final String sUpper = joystickMode.trim().toUpperCase(Locale.GERMAN);
+        for ( final JoystickMode po : JoystickMode.values() ) {
             if ( po.toString().equals(sUpper) ) {
                 return po;
             }
-            for ( String value : po.getValues() ) {
+            for ( final String value : po.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return po;
                 }
@@ -465,12 +446,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getCommandline() {
-        return this.mbotProperties.getProperty("robot.connection.commandLine");
+        return mbotProperties.getProperty("robot.connection.commandLine");
     }
 
     @Override
     public String getSignature() {
-        return this.mbotProperties.getProperty("robot.connection.signature");
+        return mbotProperties.getProperty("robot.connection.signature");
     }
 
     @Override
@@ -481,15 +462,15 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public IMotorSide getMotorSide(String motorSide) {
-        if ( motorSide == null || motorSide.isEmpty() ) {
+        if ( (motorSide == null) || motorSide.isEmpty() ) {
             throw new DbcException("Invalid Drive Direction: " + motorSide);
         }
-        String sUpper = motorSide.trim().toUpperCase(Locale.GERMAN);
-        for ( MotorSide sp : MotorSide.values() ) {
+        final String sUpper = motorSide.trim().toUpperCase(Locale.GERMAN);
+        for ( final MotorSide sp : MotorSide.values() ) {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }
-            for ( String value : sp.getValues() ) {
+            for ( final String value : sp.getValues() ) {
                 if ( sUpper.equals(value) ) {
                     return sp;
                 }

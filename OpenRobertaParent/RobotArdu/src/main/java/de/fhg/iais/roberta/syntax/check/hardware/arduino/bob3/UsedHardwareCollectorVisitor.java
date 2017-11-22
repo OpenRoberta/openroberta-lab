@@ -18,8 +18,6 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOffAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
@@ -39,65 +37,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         check(phrasesSet);
     }
 
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitRgbColor(RgbColor<Void> rgbColor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitBob3TemperatureSensor(Bob3TemperatureSensor<Void> temperatureSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public Set<UsedSensor> getTimer() {
         return this.usedSensors;
     }
@@ -115,6 +54,18 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
+    public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
         // TODO Auto-generated method stub
         return null;
@@ -122,6 +73,42 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor<Void> rgbColor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTouchSensor(Bob3TouchSensor<Void> touchSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBodyLEDAction(BodyLEDAction<Void> bodyLEDAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitSendIRAction(SendIRAction<Void> sendIRAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitReceiveIRAction(ReceiveIRAction<Void> receiveIRAction) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -137,4 +124,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         // TODO Auto-generated method stub
         return null;
     }
+
+
 }

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensors.arduino.mbot;
+package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.factory.IRobotFactory;
@@ -12,12 +12,12 @@ import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
+import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 public class VoltageSensor<V> extends ExternalSensor<V> {
 
     public VoltageSensor(IVoltageSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("MAKEBLOCK_VOLTAGE_GET_SAMPLE"), properties, comment);
+        super(mode, port, BlockTypeContainer.getByName("VOLTAGE_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -34,12 +34,12 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
 
     @Override
     public String toString() {
-        return "Voltage [" + this.getMode() + ", " + this.getPort() + "]";
+        return "Voltage [" + getMode() + ", " + getPort() + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((MbotAstVisitor<V>) visitor).visitVoltageSensor(this);
+        return ((AstSensorsVisitor<V>) visitor).visitVoltageSensor(this);
     }
 
     /**
@@ -50,10 +50,10 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        String mode = sensorData.getMode();
-        String port = sensorData.getPort();
+        final IRobotFactory factory = helper.getModeFactory();
+        final SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
+        final String mode = sensorData.getMode();
+        final String port = sensorData.getPort();
         return VoltageSensor
             .make(factory.getVoltageSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }

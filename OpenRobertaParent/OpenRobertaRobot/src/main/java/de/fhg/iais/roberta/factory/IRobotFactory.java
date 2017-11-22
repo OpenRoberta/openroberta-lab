@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
+import de.fhg.iais.roberta.inter.mode.sensor.IAccelerometerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
@@ -46,6 +47,7 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.sensor.AccelerometerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
@@ -66,15 +68,15 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public interface IRobotFactory {
 
     static <E extends IMode> E getModeValue(String modeName, Class<E> modes) {
-        if ( modeName == null || modeName.isEmpty() ) {
+        if ( (modeName == null) || modeName.isEmpty() ) {
             throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
         }
-        String sUpper = modeName.trim().toUpperCase(Locale.GERMAN);
-        for ( E mode : modes.getEnumConstants() ) {
+        final String sUpper = modeName.trim().toUpperCase(Locale.GERMAN);
+        for ( final E mode : modes.getEnumConstants() ) {
             if ( mode.toString().equals(sUpper) ) {
                 return mode;
             }
-            for ( String value : mode.getValues() ) {
+            for ( final String value : mode.getValues() ) {
                 if ( sUpper.equals(value.toUpperCase()) ) {
                     return mode;
                 }
@@ -134,7 +136,7 @@ public interface IRobotFactory {
      * @return enum {@link IPickColor}
      */
     default IPickColor getPickColor(int colorId) {
-        for ( PickColor sp : PickColor.values() ) {
+        for ( final PickColor sp : PickColor.values() ) {
             if ( sp.getColorID() == colorId ) {
                 return sp;
             }
@@ -273,6 +275,10 @@ public interface IRobotFactory {
 
     default ITemperatureSensorMode getTemperatureSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, TemperatureSensorMode.class);
+    }
+
+    default IAccelerometerSensorMode getAccelerometerSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, AccelerometerSensorMode.class);
     }
 
     default ISoundSensorMode getSoundSensorMode(String mode) {

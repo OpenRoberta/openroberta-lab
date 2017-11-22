@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -63,7 +64,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = LightSensor.make(factory.getLightSensorMode("DEFAULT"), factory.getSensorPort("NO_PORT"), properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
-                this.sensor = Bob3TemperatureSensor.make(properties, comment);
+                this.sensor = TemperatureSensor.make(factory.getTemperatureSensorMode("DEFAULT"), factory.getSensorPort("NO_PORT"), properties, comment);
                 break;
             case BlocklyConstants.CODE:
                 this.sensor = CodePadSensor.make(properties, comment);

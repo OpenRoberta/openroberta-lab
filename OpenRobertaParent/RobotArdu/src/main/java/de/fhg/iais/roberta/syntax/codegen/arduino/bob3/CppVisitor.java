@@ -47,7 +47,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.Bob3TouchSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.CodePadSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.bob3.GetSampleSensor;
@@ -413,11 +412,6 @@ public class CppVisitor extends ArduinoVisitor implements Bob3AstVisitor<Void>, 
         return null;
     }
 
-    @Override
-    public Void visitBob3TemperatureSensor(Bob3TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("myBob.getTemperature()");
-        return null;
-    }
 
     @Override
     public Void visitBob3CodePadSensor(CodePadSensor<Void> codePadSensor) {

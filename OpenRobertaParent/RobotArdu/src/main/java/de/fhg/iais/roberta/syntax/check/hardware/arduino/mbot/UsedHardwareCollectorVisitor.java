@@ -22,16 +22,16 @@ import de.fhg.iais.roberta.syntax.actors.arduino.mbot.LedOnAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.expressions.arduino.LedMatrix;
 import de.fhg.iais.roberta.syntax.expressions.arduino.RgbColor;
+import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Accelerometer;
+import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.AmbientLightSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.FlameSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.Joystick;
 import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.PIRMotionSensor;
-import de.fhg.iais.roberta.syntax.sensors.arduino.mbot.VoltageSensor;
 import de.fhg.iais.roberta.visitors.arduino.MbotAstVisitor;
 
 /**
@@ -47,87 +47,87 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.usedSensors.add(new UsedSensor(temperatureSensor.getPort(), SensorType.TEMPERATURE, null));
+        usedSensors.add(new UsedSensor(temperatureSensor.getPort(), SensorType.TEMPERATURE, null));
         return null;
     }
 
     @Override
     public Void visitJoystick(Joystick<Void> joystick) {
-        this.usedSensors.add(new UsedSensor(joystick.getPort(), SensorType.JOYSTICK, null));
+        usedSensors.add(new UsedSensor(joystick.getPort(), SensorType.JOYSTICK, null));
         return null;
     }
 
     @Override
     public Void visitAmbientLightSensor(AmbientLightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.AMBIENT_LIGHT, null));
+        usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.AMBIENT_LIGHT, null));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LINE_FOLLOWER, lightSensor.getMode()));
+        usedSensors.add(new UsedSensor(lightSensor.getPort(), SensorType.LINE_FOLLOWER, lightSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitAccelerometer(Accelerometer<Void> accelerometer) {
-        this.usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getCoordinate()));
+    public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
+        usedSensors.add(new UsedSensor(accelerometer.getPort(), SensorType.ACCELEROMETER, accelerometer.getMode()));
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+        usedSensors.add(new UsedSensor(gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        this.usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
+        usedSensors.add(new UsedSensor(flameSensor.getPort(), SensorType.FLAMESENSOR, null));
         return null;
     }
 
     @Override
     public Void visitPIRMotionSensor(PIRMotionSensor<Void> motionSensor) {
-        this.usedSensors.add(new UsedSensor(motionSensor.getPort(), SensorType.PIR_MOTION, null));
+        usedSensors.add(new UsedSensor(motionSensor.getPort(), SensorType.PIR_MOTION, null));
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         super.visitToneAction(toneAction);
-        this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
+        usedActors.add(new UsedActor(null, ActorType.BUZZER));
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         super.visitPlayNoteAction(playNoteAction);
-        this.usedActors.add(new UsedActor(null, ActorType.BUZZER));
+        usedActors.add(new UsedActor(null, ActorType.BUZZER));
         return null;
     }
 
     @Override
     public Void visitLedOnAction(LedOnAction<Void> ledOnAction) {
-        this.usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
+        usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
         return null;
     }
 
     @Override
     public Void visitLedOffAction(LedOffAction<Void> ledOffAction) {
-        this.usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
+        usedActors.add(new UsedActor(null, ActorType.LED_ON_BOARD));
         return null;
     }
 
     @Override
     public Void visitExternalLedOnAction(ExternalLedOnAction<Void> externalLedOnAction) {
-        this.usedActors.add(new UsedActor(externalLedOnAction.getPort(), ActorType.EXTERNAL_LED));
+        usedActors.add(new UsedActor(externalLedOnAction.getPort(), ActorType.EXTERNAL_LED));
         return null;
     }
 
     @Override
     public Void visitExternalLedOffAction(ExternalLedOffAction<Void> externalLedOffAction) {
-        this.usedActors.add(new UsedActor(externalLedOffAction.getPort(), ActorType.EXTERNAL_LED));
+        usedActors.add(new UsedActor(externalLedOffAction.getPort(), ActorType.EXTERNAL_LED));
         return null;
     }
 
@@ -137,8 +137,8 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        if ( brickConfiguration != null ) {
+            usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -150,8 +150,8 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        if ( brickConfiguration != null ) {
+            usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -162,8 +162,8 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        if ( brickConfiguration != null ) {
+            usedActors.add(new UsedActor(brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -182,19 +182,19 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction<Void> displayImageAction) {
-        this.usedActors.add(new UsedActor(displayImageAction.getPort(), ActorType.LED_MATRIX));
+        usedActors.add(new UsedActor(displayImageAction.getPort(), ActorType.LED_MATRIX));
         return null;
     }
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction<Void> displayTextAction) {
-        this.usedActors.add(new UsedActor(displayTextAction.getPort(), ActorType.LED_MATRIX));
+        usedActors.add(new UsedActor(displayTextAction.getPort(), ActorType.LED_MATRIX));
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.usedSensors.add(new UsedSensor(voltageSensor.getPort(), SensorType.VOLTAGE, null));
+        usedSensors.add(new UsedSensor(voltageSensor.getPort(), SensorType.VOLTAGE, null));
         return null;
     }
 
