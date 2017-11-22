@@ -192,6 +192,7 @@ public class ServerStarter {
             ServerStarter.LOG.info("server started at " + server.getURI());
         } catch ( Exception e ) {
             ServerStarter.LOG.error("Could not start the server at " + host + ":" + port, e);
+            http.close();
             System.exit(16);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
