@@ -142,9 +142,10 @@ public class DbExecutor {
         return result;
     }
 
-    public void ddl(String sqlStmt) {
+    public int ddl(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
         DbExecutor.LOG.debug("rows affected (probably 0): " + result);
+        return result;
     }
 
     private static boolean isSelect(String sqlStmt) {
@@ -156,7 +157,7 @@ public class DbExecutor {
     }
 
     private static boolean isDDL(String sqlStmt) {
-        return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ") || DbExecutor.sW(sqlStmt, "alter ");
+        return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ") || DbExecutor.sW(sqlStmt, "alter ") || DbExecutor.sW(sqlStmt, "backup ");
     }
 
     private static boolean sW(String testString, String expected) {

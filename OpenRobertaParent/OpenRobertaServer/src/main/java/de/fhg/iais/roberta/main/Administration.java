@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.main;
 
 import java.io.StringWriter;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
+import de.fhg.iais.roberta.persistence.util.DbExecutor;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -63,6 +67,9 @@ public class Administration {
             case "sql":
                 adminWork.runSql();
                 break;
+            case "dbBackup":
+                adminWork.dbBackup();
+                break;
             case "conf:xml2text":
                 // adminWork.confXml2text();
                 break;
@@ -105,6 +112,30 @@ public class Administration {
             Administration.LOG.info("  " + Arrays.toString(object));
         }
         nativeSession.getTransaction().rollback();
+        nativeSession.close();
+    }
+
+    /**
+     * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
+     */
+    private void dbBackup() {
+        Administration.LOG.info("*** dbBackup. This makes sense in SERVER mode ONLY (of course :-) ***");
+        expectArgs(2);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        nativeSession.beginTransaction();
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        String formatDateTime = now.format(formatter);
+
+        dbExecutor.ddl("BACKUP DATABASE TO 'dbBackup/dbBackup-" + formatDateTime + ".tgz' BLOCKING;");
+        long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
+        long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
+        LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
+
+        nativeSession.getTransaction().commit();
         nativeSession.close();
     }
 
