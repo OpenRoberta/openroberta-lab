@@ -96,7 +96,7 @@ public class EncoderSensor<V> extends Sensor<V> {
         }
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE);
         return EncoderSensor
             .make(factory.getMotorTachoMode(modeName), factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
@@ -108,7 +108,7 @@ public class EncoderSensor<V> extends Sensor<V> {
 
         String fieldValue = getMotorPort().toString();
         if ( !getMode().toString().equals("RESET") ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, fieldValue);
 

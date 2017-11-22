@@ -7,12 +7,10 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITemperatureSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -44,7 +42,7 @@ public class TemperatureSensor<V> extends ExternalSensor<V> {
 
     @Override
     public String toString() {
-        return "TemperatureSensor [" + getMode() + "," + this.getPort() + "]";
+        return "TemperatureSensor [" + getMode() + ", " + this.getPort() + "]";
     }
 
     @Override
@@ -61,23 +59,12 @@ public class TemperatureSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extracPortAndMode(block, helper);
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
         String mode = sensorData.getMode();
         String port = sensorData.getPort();
 
         return TemperatureSensor
             .make(factory.getTemperatureSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
 
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        ISensorPort port = this.getPort();
-        if ( port != null ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, port.getPortNumber());
-        }
-        return jaxbDestination;
     }
 }

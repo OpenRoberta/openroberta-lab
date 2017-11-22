@@ -99,8 +99,8 @@ public class ShowPictureAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 2);
         String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, BlocklyType.NUMBER_INT));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, BlocklyType.NUMBER_INT));
+        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return ShowPictureAction.make(
             factory.getShowPicture(pic),
             helper.convertPhraseToExpr(x),
@@ -115,8 +115,8 @@ public class ShowPictureAction<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         String fieldValue = getPicture().toString();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PICTURE, fieldValue);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X_, getX());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y_, getY());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X, getX());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y, getY());
 
         return jaxbDestination;
 

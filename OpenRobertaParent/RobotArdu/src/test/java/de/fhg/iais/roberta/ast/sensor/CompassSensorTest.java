@@ -10,7 +10,7 @@ public class CompassSensorTest {
 
     @Test
     public void jaxb2astTransformation() throws Exception {
-        String a = "BlockAST [project=[[Location [x=137, y=263], CompassSensor []]]]";
+        String a = "BlockAST [project=[[Location [x=137, y=263], CompassSensor [DEFAULT, NO_PORT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Compass.xml"));
     }

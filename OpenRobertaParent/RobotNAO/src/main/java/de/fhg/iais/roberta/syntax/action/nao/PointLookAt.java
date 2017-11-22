@@ -131,7 +131,7 @@ public final class PointLookAt<V> extends Action<V> {
         Phrase<V> pointX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         Phrase<V> pointY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         Phrase<V> pointZ = helper.extractValue(values, new ExprParam(BlocklyConstants.Z, BlocklyType.NUMBER_INT));
-        Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.Speed, BlocklyType.NUMBER_INT));
+        Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
         return PointLookAt.make(
             Frame.get(frame),
@@ -154,7 +154,7 @@ public final class PointLookAt<V> extends Action<V> {
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X, this.pointX);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y, this.pointY);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Z, this.pointZ);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Speed, this.speed);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.SPEED, this.speed);
 
         return jaxbDestination;
     }

@@ -13,7 +13,7 @@ public class SoundSensorTest {
 
     @Test
     public void sensorSound() throws Exception {
-        String a = "BlockAST [project=[[Location [x=137, y=338], SoundSensor [port=S2]]]]";
+        String a = "BlockAST [project=[[Location [x=137, y=338], SoundSensor [SOUND, S2]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_Sound.xml"));
     }

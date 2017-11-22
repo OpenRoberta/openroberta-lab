@@ -123,7 +123,7 @@ public class GetSubFunct<V> extends Function<V> {
         strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE1)));
         strParams.add(factory.getIndexLocation(helper.extractField(fields, BlocklyConstants.WHERE2)));
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.LIST_, BlocklyType.STRING));
+        exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.STRING));
         if ( block.getMutation().isAt1() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT1, BlocklyType.NUMBER_INT));
         }
@@ -145,7 +145,7 @@ public class GetSubFunct<V> extends Function<V> {
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE1, getStrParam().get(0).toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE2, getStrParam().get(1).toString());
         if ( getFunctName() == FunctionNames.GET_SUBLIST ) {
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
+            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST, getParam().get(0));
         } else {
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.STRING, getParam().get(0));
         }

@@ -119,11 +119,11 @@ public class ListSetIndex<V> extends Function<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
-        String op = helper.extractField(fields, BlocklyConstants.MODE_);
+        String op = helper.extractField(fields, BlocklyConstants.MODE);
 
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.LIST_, BlocklyType.STRING));
-        exprParams.add(new ExprParam(BlocklyConstants.TO_, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.STRING));
+        exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
@@ -143,15 +143,15 @@ public class ListSetIndex<V> extends Function<V> {
 
         Mutation mutation = new Mutation();
         mutation.setAt(false);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getElementOperation().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getElementOperation().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST, getParam().get(0));
         if ( getParam().size() > 2 ) {
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT, getParam().get(2));
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, getParam().get(1));
+            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO, getParam().get(1));
             mutation.setAt(true);
         } else {
-            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, getParam().get(1));
+            JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO, getParam().get(1));
         }
         jaxbDestination.setMutation(mutation);
         return jaxbDestination;

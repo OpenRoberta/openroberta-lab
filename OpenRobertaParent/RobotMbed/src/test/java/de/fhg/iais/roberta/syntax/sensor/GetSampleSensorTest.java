@@ -28,13 +28,13 @@ public class GetSampleSensorTest {
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [EQ, SensorExpr [MbedGetSampleSensor [GestureSensor [ FREEFALL ]]], BoolConst [true]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [CompassSensor []]], NumConst [180]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [CompassSensor [DEFAULT, NO_PORT]]], NumConst [180]]]\n"
                 + ")], WaitStmt [\n"
                 + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TimerSensor [mode=GET_SAMPLE, timer=1]]], NumConst [500]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [null]]], NumConst [20]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [TemperatureSensor [DEFAULT, NO_PORT]]], NumConst [20]]]\n"
                 + ")], WaitStmt [\n"
-                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [LightSensor [mode=DEFAULT, port=NO_PORT]]], NumConst [50]]]\n"
+                + "(repeat [WAIT, Binary [GT, SensorExpr [MbedGetSampleSensor [LightSensor [DEFAULT, NO_PORT]]], NumConst [50]]]\n"
                 + ")]]]]";
 
         String result = this.h.generateTransformerString("/sensor/get_sample_sensor.xml");

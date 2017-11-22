@@ -79,7 +79,7 @@ public class MotorStopAction<V> extends MoveAction<V> {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, mbolck ? (short) 1 : (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        String modeName = mbolck ? MotorStopMode.FLOAT.toString() : helper.extractField(fields, BlocklyConstants.MODE_);
+        String modeName = mbolck ? MotorStopMode.FLOAT.toString() : helper.extractField(fields, BlocklyConstants.MODE);
         return MotorStopAction
             .make(factory.getActorPort(portName), factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
 
@@ -91,7 +91,7 @@ public class MotorStopAction<V> extends MoveAction<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
 
         return jaxbDestination;
     }

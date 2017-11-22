@@ -84,9 +84,9 @@ public final class WalkAsync<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 3);
 
-        Phrase<V> XSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.X + BlocklyConstants.Speed, BlocklyType.NUMBER_INT));
-        Phrase<V> YSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Y + BlocklyConstants.Speed, BlocklyType.NUMBER_INT));
-        Phrase<V> ZSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Z + BlocklyConstants.Speed, BlocklyType.NUMBER_INT));
+        Phrase<V> XSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.X + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
+        Phrase<V> YSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Y + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
+        Phrase<V> ZSpeed = helper.extractValue(values, new ExprParam(BlocklyConstants.Z + BlocklyConstants.SPEED, BlocklyType.NUMBER_INT));
 
         return WalkAsync.make(
             helper.convertPhraseToExpr(XSpeed),
@@ -101,9 +101,9 @@ public final class WalkAsync<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X + BlocklyConstants.Speed, this.XSpeed);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y + BlocklyConstants.Speed, this.YSpeed);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Z + BlocklyConstants.Speed, this.ZSpeed);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X + BlocklyConstants.SPEED, this.XSpeed);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y + BlocklyConstants.SPEED, this.YSpeed);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Z + BlocklyConstants.SPEED, this.ZSpeed);
 
         return jaxbDestination;
     }

@@ -116,7 +116,7 @@ public class CppVisitor extends ArduinoVisitor implements BotnrollAstVisitor<Voi
         if ( tt.getKind().hasName("SENSOR_EXPR") ) {
             de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
             if ( sens.getKind().hasName("COLOR_SENSING") ) {
-                mode = ((ColorSensor<Void>) sens).getMode();
+                mode = (IColorSensorMode) ((ColorSensor<Void>) sens).getMode();
             }
         }
 

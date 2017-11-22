@@ -7,8 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
+import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.lang.expr.Assoc;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
@@ -32,7 +32,7 @@ public class SensorExprTest {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
-        String a = "SensorExpr [TouchSensor [port=S1]]";
+        String a = "SensorExpr [TouchSensor [TOUCH, S1]]";
         Assert.assertEquals(a, sensorExpr.toString());
     }
 
@@ -41,7 +41,7 @@ public class SensorExprTest {
         TouchSensor<Void> touchSensor =
             TouchSensor.make(TouchSensorMode.TOUCH, SensorPort.S1, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
-        String a = "TouchSensor [port=S1]";
+        String a = "TouchSensor [TOUCH, S1]";
         Assert.assertEquals(a, sensorExpr.getSens().toString());
     }
 

@@ -92,7 +92,7 @@ public class MathPowerFunct<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getFunctName().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.A, getParam().get(0));
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.B, getParam().get(1));
         return jaxbDestination;

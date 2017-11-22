@@ -19,9 +19,6 @@ import de.fhg.iais.roberta.visitor.nxt.NxtAstVisitor;
 public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisitor implements NxtAstVisitor<Void> {
 
     private boolean isPlayToneUsed = false;
-    private final boolean isDriveUsed = false;
-    private final boolean isCurveUsed = false;
-    //private String tmpArrVar = "";
 
     public UsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
         super(configuration);
@@ -54,12 +51,6 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
         this.isPlayToneUsed = true;
         return null;
     }
-
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        return null;
-    }
-
     /*TODO: rewrite it in a nicer way, check why it is not detecting inserted arrays, fix sensors
     public Void generateArrTmpVar(Expr<Void> expr) {
         String type;

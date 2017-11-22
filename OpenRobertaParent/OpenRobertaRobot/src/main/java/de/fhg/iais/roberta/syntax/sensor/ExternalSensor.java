@@ -55,10 +55,10 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> SensorMetaDataBean extracPortAndMode(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> SensorMetaDataBean extractPortAndMode(Block block, Jaxb2AstTransformer<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_, BlocklyConstants.DEFAULT);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
 
         return new SensorMetaDataBean(portName, modeName);
     }
@@ -71,7 +71,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             Mutation mutation = new Mutation();
             mutation.setMode(getMode().toString());
             jaxbDestination.setMutation(mutation);
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
             String fieldValue = getPort().getPortNumber();

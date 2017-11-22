@@ -250,7 +250,7 @@ public final class Binary<V> extends Expr<V> {
                     BlocklyConstants.MOD);
 
             case BlocklyConstants.MATH_ARITHMETIC:
-                String opp = helper.extractOperation(block, BlocklyConstants.OP_);
+                String opp = helper.extractOperation(block, BlocklyConstants.OP);
                 if ( opp.equals(BlocklyConstants.POWER) ) {
                     ArrayList<ExprParam> exprParams = new ArrayList<>();
                     exprParams.add(new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT));
@@ -263,7 +263,7 @@ public final class Binary<V> extends Expr<V> {
                     block,
                     new ExprParam(BlocklyConstants.A, BlocklyType.NUMBER_INT),
                     new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT),
-                    BlocklyConstants.OP_);
+                    BlocklyConstants.OP);
 
         }
     }
@@ -294,7 +294,7 @@ public final class Binary<V> extends Expr<V> {
                 return jaxbDestination;
 
             default:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getOp().name());
+                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP, getOp().name());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.B, getRight());
                 return jaxbDestination;

@@ -20,7 +20,7 @@ public class MethodIfReturnTest {
     public void methodIfReturn1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMBER, x, EmptyExpr [defVal=NUMBER], false, false], "
-                + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [port=S1]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=NULL]]]]]";
+                + "MethodStmt [MethodIfReturn [SensorExpr [TouchSensor [DEFAULT, S1]], BOOLEAN, BoolConst [false]]], BOOLEAN, EmptyExpr [defVal=NULL]]]]]";
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/methods/method_if_return_1.xml"));
 
     }

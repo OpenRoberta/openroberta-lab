@@ -149,9 +149,9 @@ public class RepeatStmt<V> extends Stmt<V> {
                 exprList = ExprList.make();
 
                 var = helper.extractVar(block);
-                from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM_, BlocklyType.NUMBER_INT));
-                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO_, BlocklyType.NUMBER_INT));
-                by = helper.extractValue(values, new ExprParam(BlocklyConstants.BY_, BlocklyType.NUMBER_INT));
+                from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM, BlocklyType.NUMBER_INT));
+                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
+                by = helper.extractValue(values, new ExprParam(BlocklyConstants.BY, BlocklyType.NUMBER_INT));
 
                 exprList.addExpr(helper.convertPhraseToExpr(var));
                 exprList.addExpr(helper.convertPhraseToExpr(from));
@@ -174,7 +174,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                         null);
 
                 values = helper.extractValues(block, (short) 1);
-                exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST_, BlocklyType.ARRAY));
+                exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST, BlocklyType.ARRAY));
 
                 Binary<V> exprBinary =
                     Binary.make(
@@ -188,7 +188,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
             case BlocklyConstants.CONTROLS_WHILE_UNTIL:
                 fields = helper.extractFields(block, (short) 1);
-                String modee = helper.extractField(fields, BlocklyConstants.MODE_);
+                String modee = helper.extractField(fields, BlocklyConstants.MODE);
                 values = helper.extractValues(block, (short) 1);
                 if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(modee) ) {
                     exprr =
@@ -227,21 +227,21 @@ public class RepeatStmt<V> extends Stmt<V> {
 
             case WAIT:
             case UNTIL:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().name());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, ((Unary<?>) getExpr()).getExpr());
                 break;
 
             case WHILE:
-                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+                JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().name());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
                 break;
 
             case FOR:
                 ExprList<?> exprList = (ExprList<?>) getExpr();
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) exprList.get().get(0)).getValue());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FROM_, (exprList.get().get(1)));
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, (exprList.get().get(2)));
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BY_, (exprList.get().get(3)));
+                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FROM, (exprList.get().get(1)));
+                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO, (exprList.get().get(2)));
+                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BY, (exprList.get().get(3)));
                 break;
 
             case FOR_EACH:
@@ -249,7 +249,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 JaxbTransformerHelper
                     .addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
-                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, exprBinary.getRight());
+                JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST, exprBinary.getRight());
                 break;
             case FOREVER:
             case FOREVER_ARDU:

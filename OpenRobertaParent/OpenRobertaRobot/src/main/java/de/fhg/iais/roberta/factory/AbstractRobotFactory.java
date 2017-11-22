@@ -7,8 +7,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.AbstractModule;
-
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.util.Util1;
@@ -22,11 +20,6 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     public AbstractRobotFactory() {
         this.robotProperties = Util1.loadProperties("classpath:Robot.properties");
         addBlockTypesFromProperties("Robot.properties", this.robotProperties);
-    }
-
-    @Override
-    public AbstractModule getGuiceModule() {
-        return null;
     }
 
     /**

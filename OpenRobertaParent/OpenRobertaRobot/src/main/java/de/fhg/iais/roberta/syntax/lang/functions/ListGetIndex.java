@@ -121,7 +121,7 @@ public class ListGetIndex<V> extends Function<V> {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        String op = helper.extractField(fields, BlocklyConstants.MODE_);
+        String op = helper.extractField(fields, BlocklyConstants.MODE);
         exprParams.add(new ExprParam(BlocklyConstants.VALUE, BlocklyType.STRING));
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
@@ -143,7 +143,7 @@ public class ListGetIndex<V> extends Function<V> {
         Mutation mutation = new Mutation();
         mutation.setAt(false);
         mutation.setStatement(getElementOperation().isStatment());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getElementOperation().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getElementOperation().toString());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
         if ( getParam().size() > 1 ) {

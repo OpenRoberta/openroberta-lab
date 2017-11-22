@@ -75,7 +75,7 @@ public class SingleMotorStopAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE);
         return SingleMotorStopAction.make(factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
@@ -84,7 +84,7 @@ public class SingleMotorStopAction<V> extends Action<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
 
         return jaxbDestination;
     }

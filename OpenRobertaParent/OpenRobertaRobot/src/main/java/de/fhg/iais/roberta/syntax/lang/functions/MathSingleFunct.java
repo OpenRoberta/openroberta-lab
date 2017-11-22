@@ -98,12 +98,12 @@ public class MathSingleFunct<V> extends Function<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        if ( helper.getOperation(block, BlocklyConstants.OP_).equals(BlocklyConstants.NEG) ) {
-            return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT), BlocklyConstants.OP_);
+        if ( helper.getOperation(block, BlocklyConstants.OP).equals(BlocklyConstants.NEG) ) {
+            return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT), BlocklyConstants.OP);
         }
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
         exprParams.add(new ExprParam(BlocklyConstants.NUM, BlocklyType.NUMBER_INT));
-        String op = helper.getOperation(block, BlocklyConstants.OP_);
+        String op = helper.getOperation(block, BlocklyConstants.OP);
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return MathSingleFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
@@ -113,7 +113,7 @@ public class MathSingleFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getFunctName().name());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP, getFunctName().name());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getParam().get(0));
         return jaxbDestination;
     }

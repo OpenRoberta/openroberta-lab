@@ -79,7 +79,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         }
         List<Field> fields = helper.extractFields(block, (short) 2);
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE);
         return GyroSensor
             .make(factory.getGyroSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
@@ -91,7 +91,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
 
         String fieldValue = getPort().getPortNumber();
         if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("RATE") ) {
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().toString());
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;

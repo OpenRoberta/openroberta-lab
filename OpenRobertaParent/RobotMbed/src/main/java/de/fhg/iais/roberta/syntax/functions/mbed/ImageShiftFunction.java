@@ -120,7 +120,7 @@ public class ImageShiftFunction<V> extends Function<V> {
         IRobotFactory factory = helper.getModeFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 2);
-        IDirection shiftingDirection = factory.getDirection(helper.extractField(fields, BlocklyConstants.OP_));
+        IDirection shiftingDirection = factory.getDirection(helper.extractField(fields, BlocklyConstants.OP));
         Phrase<V> image = helper.extractValue(values, new ExprParam(BlocklyConstants.A, BlocklyType.PREDEFINED_IMAGE));
         Phrase<V> numberOfPositions = helper.extractValue(values, new ExprParam(BlocklyConstants.B, BlocklyType.NUMBER_INT));
         return ImageShiftFunction.make(
@@ -135,7 +135,7 @@ public class ImageShiftFunction<V> extends Function<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, this.shiftDirection.toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP, this.shiftDirection.toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.A, this.image);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.B, this.positions);
 

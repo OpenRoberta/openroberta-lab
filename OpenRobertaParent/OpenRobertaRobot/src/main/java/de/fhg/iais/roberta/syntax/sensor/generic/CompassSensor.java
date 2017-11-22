@@ -45,7 +45,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
 
     @Override
     public String toString() {
-        return "CompassSensor [" + getPort() + ", " + getMode() + "]";
+        return "CompassSensor [" + getMode() + ", " + getPort() + "]";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extracPortAndMode(block, helper);
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
         String mode = sensorData.getMode();
         String port = sensorData.getPort();
         return CompassSensor

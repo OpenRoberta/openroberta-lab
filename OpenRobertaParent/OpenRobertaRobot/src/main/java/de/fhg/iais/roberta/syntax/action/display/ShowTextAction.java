@@ -96,8 +96,8 @@ public class ShowTextAction<V> extends Action<V> {
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 3);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
-        Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL_, BlocklyType.NUMBER_INT));
-        Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW_, BlocklyType.NUMBER_INT));
+        Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL, BlocklyType.NUMBER_INT));
+        Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW, BlocklyType.NUMBER_INT));
         return ShowTextAction.make(
             helper.convertPhraseToExpr(msg),
             helper.convertPhraseToExpr(col),
@@ -112,8 +112,8 @@ public class ShowTextAction<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.OUT, getMsg());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COL_, getX());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ROW_, getY());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.COL, getX());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ROW, getY());
 
         return jaxbDestination;
     }

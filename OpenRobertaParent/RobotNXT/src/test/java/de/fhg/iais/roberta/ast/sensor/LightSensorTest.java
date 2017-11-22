@@ -15,8 +15,7 @@ public class LightSensorTest {
     @Test
     public void sensorSetLight() throws Exception {
         final String a =
-            "BlockAST [project=[[Location [x=162, y=238], LightSensor [mode=RED, port=S3]], "
-                + "[Location [x=163, y=263], LightSensor [mode=AMBIENTLIGHT, port=S4]]]]";
+            "BlockAST [project=[[Location [x=162, y=238], LightSensor [RED, S3]], " + "[Location [x=163, y=263], LightSensor [AMBIENTLIGHT, S4]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setLight.xml"));
     }

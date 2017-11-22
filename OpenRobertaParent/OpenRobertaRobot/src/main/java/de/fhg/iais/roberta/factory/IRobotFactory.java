@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITemperatureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -56,6 +57,7 @@ import de.fhg.iais.roberta.mode.sensor.TemperatureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.VoltageSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -344,6 +346,18 @@ public interface IRobotFactory {
     }
 
     /**
+     * Get a touch sensor mode from {@link IVoltageSensorMode} given string parameter. It is possible for one voltage sensor mode to have multiple string
+     * mappings.
+     * Throws exception if the voltage sensor mode does not exists.
+     *
+     * @param name of the voltage sensor mode
+     * @return the volatage sensor mode from the enum {@link IVoltageSensorMode}
+     */
+    default IVoltageSensorMode getVoltageSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, VoltageSensorMode.class);
+    }
+
+    /**
      * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
      * if the sensor port does not exists.
      *
@@ -374,7 +388,9 @@ public interface IRobotFactory {
      *
      * @return the guice module for this robot or <code>null</code>, if this robot doesn't need to inject resources
      */
-    AbstractModule getGuiceModule();
+    default AbstractModule getGuiceModule() {
+        return null;
+    }
 
     /**
      * Get the file extension of the specific language for this robot. This is used when we want to download

@@ -89,8 +89,8 @@ public class MathRandomIntFunct<V> extends Function<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.FROM_, BlocklyType.NUMBER_INT));
-        exprParams.add(new ExprParam(BlocklyConstants.TO_, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.FROM, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
         List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
         return MathRandomIntFunct.make(params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
@@ -100,8 +100,8 @@ public class MathRandomIntFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FROM_, getParam().get(0));
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, getParam().get(1));
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FROM, getParam().get(0));
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO, getParam().get(1));
         return jaxbDestination;
     }
 }

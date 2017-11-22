@@ -98,8 +98,8 @@ public class DisplaySetPixelAction<V> extends Action<V> {
         List<Value> values = helper.extractValues(block, (short) 3);
 
         Phrase<V> brightness = helper.extractValue(values, new ExprParam(BlocklyConstants.BRIGHTNESS, BlocklyType.NUMBER_INT));
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, BlocklyType.NUMBER_INT));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, BlocklyType.NUMBER_INT));
+        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
+        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return DisplaySetPixelAction.make(
             helper.convertPhraseToExpr(x),
             helper.convertPhraseToExpr(y),
@@ -114,8 +114,8 @@ public class DisplaySetPixelAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X_, this.x);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y_, this.y);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X, this.x);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y, this.y);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BRIGHTNESS, this.brightness);
 
         return jaxbDestination;

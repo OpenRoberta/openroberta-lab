@@ -68,16 +68,22 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                 this.sensor = GestureSensor.make(GestureSensor.GestureMode.valueOf(port), properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
-                this.sensor = CompassSensor.make(factory.getSensorPort(port), properties, comment);
+                this.sensor =
+                    CompassSensor
+                        .make(factory.getCompassSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
                 break;
             case BlocklyConstants.MICROPHONE:
                 this.sensor = MicrophoneSensor.make(1, properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
-                this.sensor = TemperatureSensor.make(null, properties, comment);
+                this.sensor =
+                    TemperatureSensor
+                        .make(factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
-                this.sensor = LightSensor.make(factory.getLightSensorMode("DEFAULT"), factory.getSensorPort("NO_PORT"), properties, comment);
+                this.sensor =
+                    LightSensor
+                        .make(factory.getLightSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
                 break;
             case BlocklyConstants.ACCELERATION:
                 this.sensor = AccelerometerSensor.make(AccelerometerSensor.Mode.valueOf(port), properties, comment);

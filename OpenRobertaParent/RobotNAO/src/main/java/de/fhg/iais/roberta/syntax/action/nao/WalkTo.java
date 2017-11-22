@@ -86,7 +86,7 @@ public final class WalkTo<V> extends Action<V> {
 
         Phrase<V> walkToX = helper.extractValue(values, new ExprParam(BlocklyConstants.X, BlocklyType.NUMBER_INT));
         Phrase<V> walkToY = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
-        Phrase<V> walkToTheta = helper.extractValue(values, new ExprParam(BlocklyConstants.Theta, BlocklyType.NUMBER_INT));
+        Phrase<V> walkToTheta = helper.extractValue(values, new ExprParam(BlocklyConstants.THETA, BlocklyType.NUMBER_INT));
 
         return WalkTo.make(
             helper.convertPhraseToExpr(walkToX),
@@ -103,7 +103,7 @@ public final class WalkTo<V> extends Action<V> {
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X, this.walkToX);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y, this.walkToY);
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Theta, this.walkToTheta);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.THETA, this.walkToTheta);
 
         return jaxbDestination;
     }
