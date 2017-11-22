@@ -35,4 +35,10 @@ public class SearchMsgOccurrencesTest {
 
         smo.statistics();
     }
+    
+    @Ignore
+    public void testMessageRedundency() throws Exception {
+        SearchMsgKeyRedundencies smr = new SearchMsgKeyRedundencies(new File("../../../blockly/robMsg/robMessages.js"), new File("../../../blockly/msg/messages.js"));
+        smr.stastics();
+    }
 }
