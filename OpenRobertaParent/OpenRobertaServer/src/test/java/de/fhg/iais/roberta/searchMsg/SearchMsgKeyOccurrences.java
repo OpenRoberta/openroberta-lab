@@ -33,14 +33,13 @@ class SearchMsgKeyOccurrences {
         unusedKeys,
         unknownKeys;
     private final String keyPattern = "([A-Z0-9]+(?:_[A-Z0-9]+)*[a-z]?)(?!\\w|\\d)";
-    private final Pattern keyRegexp = Pattern.compile("Key\\." + keyPattern + "(?:[^\\w]|$)"),
+    private final Pattern keyRegexp = Pattern.compile("[^\"]Key\\." + keyPattern + "(?:[^\\w\"]|$)"),
         nepoInfoRegExp = Pattern.compile("NepoInfo\\.\\w+\\((?:Serverity\\.[A-Z]+\\s*,)?\\s*\"" + keyPattern + "\"\\)"),
         checkMotorRegExp = Pattern.compile("checkIfMotorRegulated\\(.+?,\\s*\"" + keyPattern + "\"\\)"),
-        htmlRegExp = Pattern.compile("lkey=\"Blockly\\.Msg\\." + keyPattern + "\""),
-        jsRegExp = Pattern.compile("MSG\\.displayMessage\\([\"']" + keyPattern + "[\"']"),
         directRegExp = Pattern.compile("Blockly\\.Msg(?:\\.|\\[[\"'])" + keyPattern + "(?:[^\\w]|$)"),
-        msgHelperRegExp = Pattern.compile("\\.display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,)\\s*[\"']" + keyPattern + "[\"']"),
-        createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + keyPattern + "[\"']\\)");
+        helperRegExp = Pattern.compile("\\.(?:showMsgOnTop\\(|display(?:(?:Popup)?Message\\(|Information\\(\\s*(?:\\{\\s*[\"']?\\w+?[\"']?\\s*:\\s*[\"']\\w+[\"']\\s*\\}|\\w+)\\s*,))\\s*[\"']" + keyPattern + "[\"']"),
+        createButtonRegExp = Pattern.compile("\\.createButton\\_\\(.+?,\\-?\\d+,\\-?\\d+,[\"']" + keyPattern + "[\"']\\)"),
+        categoryNameRegExp = Pattern.compile("\\<category(?:\\s+\\w+\\=(?:[\"][^\"]+[\"]|['][^']+[']))*\\s+name\\=[\"']" + keyPattern + "[\"']");
 
     /**
      * 
@@ -164,7 +163,7 @@ class SearchMsgKeyOccurrences {
         for ( File file : fileList ) {
             filePath = file.getAbsolutePath();
             
-            if (filePath.contains("target")) {
+            if (filePath.contains("target") || filePath.contains("demos")) {
                 continue;
             }
             
@@ -174,7 +173,7 @@ class SearchMsgKeyOccurrences {
 
                 while ( (line = lineReader.readLine()) != null ) {
                     
-                    usedPatterns = new ArrayList<Pattern>(5);
+                    usedPatterns = new ArrayList<Pattern>(4);
                     while (matcher != null && matcher.find() || (matcher = this.matchLine(line, fileEnding, usedPatterns)) != null) {
                         key = matcher.pattern().equals(keyRegexp) ? "ORA_" + matcher.group(1) : matcher.group(1);
                         
@@ -241,33 +240,27 @@ class SearchMsgKeyOccurrences {
                 }
                 break;
             default:
-                if (!usedPatterns.contains(this.htmlRegExp)) {
-                    matcher = this.htmlRegExp.matcher(line);
-                    usedPatterns.add(this.htmlRegExp);
+                if (!usedPatterns.contains(this.directRegExp)) {
+                    matcher = this.directRegExp.matcher(line);
+                    usedPatterns.add(this.directRegExp);
                 }
                 if (matcher == null || !matcher.find()) {
-                    if (!usedPatterns.contains(this.jsRegExp)) {
-                        matcher = this.jsRegExp.matcher(line);
-                        usedPatterns.add(this.jsRegExp);
+                    if (!usedPatterns.contains(this.helperRegExp)) {
+                        matcher = this.helperRegExp.matcher(line);
+                        usedPatterns.add(this.helperRegExp);
                     }
                     if (matcher == null || !matcher.find()) {
-                        if (!usedPatterns.contains(this.directRegExp)) {
-                            matcher = this.directRegExp.matcher(line);
-                            usedPatterns.add(this.directRegExp);
+                        if (!usedPatterns.contains(this.createButtonRegExp)) {
+                            matcher = this.createButtonRegExp.matcher(line);
+                            usedPatterns.add(this.createButtonRegExp);
                         }
                         if (matcher == null || !matcher.find()) {
-                            if (!usedPatterns.contains(this.msgHelperRegExp)) {
-                                matcher = this.msgHelperRegExp.matcher(line);
-                                usedPatterns.add(this.msgHelperRegExp);
+                            if (!usedPatterns.contains(this.categoryNameRegExp)) {
+                                matcher = this.categoryNameRegExp.matcher(line);
+                                usedPatterns.add(this.categoryNameRegExp);
                             }
                             if (matcher == null || !matcher.find()) {
-                                if (!usedPatterns.contains(this.createButtonRegExp)) {
-                                    matcher = this.createButtonRegExp.matcher(line);
-                                    usedPatterns.add(this.createButtonRegExp);
-                                }
-                                if (matcher == null || !matcher.find()) {
-                                    return null;
-                                }
+                                return null;
                             }
                         }
                     }
