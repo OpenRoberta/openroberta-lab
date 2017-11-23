@@ -174,6 +174,9 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
         var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
         var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
         if (mainversionServer > mainversionRobot) {
+            if (mainversionRobot == '2.3' && GUISTATE_C.getRobotFWName() == "lejos") {
+                return false;
+            }
             LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '"
                     + GUISTATE_C.getRobotVersion() + "' on the robot");
             $("#confirmUpdateFirmware").modal('show');
