@@ -660,7 +660,7 @@ public class AstToLejosJavaVisitorTest {
                 + USED_SENSORS_DECL
                 + HAL
                 + MAIN_METHOD
-                + "    hal.playTone(261.626, 2000);"
+                + "    hal.playTone( (float) 261.626, (float) 2000);"
                 + "    }\n"
                 + "}\n";
 

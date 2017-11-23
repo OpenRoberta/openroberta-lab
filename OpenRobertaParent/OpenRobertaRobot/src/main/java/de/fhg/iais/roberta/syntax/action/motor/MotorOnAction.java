@@ -138,7 +138,6 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
-        System.out.println(getParam().getDuration());
         if ( getParam().getDuration() != null ) {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().toString());
             JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getDurationValue());

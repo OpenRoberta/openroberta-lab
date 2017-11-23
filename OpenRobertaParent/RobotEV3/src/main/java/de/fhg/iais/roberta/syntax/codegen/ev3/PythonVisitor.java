@@ -245,11 +245,11 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
-        this.sb.append("hal.playTone(");
+        this.sb.append("hal.playTone(float(");
         this.sb.append(playNoteAction.getFrequency());
-        this.sb.append(", ");
+        this.sb.append("), float(");
         this.sb.append(playNoteAction.getDuration());
-        this.sb.append(")");
+        this.sb.append("))");
         return null;
     }
 

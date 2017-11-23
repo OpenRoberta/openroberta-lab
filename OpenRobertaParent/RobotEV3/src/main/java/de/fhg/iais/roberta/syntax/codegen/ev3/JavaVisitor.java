@@ -302,9 +302,9 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     @Override
     public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
         this.sb.append("hal.playTone(");
-        this.sb.append(playNoteAction.getFrequency());
+        this.sb.append(" (float) " + playNoteAction.getFrequency());
         this.sb.append(", ");
-        this.sb.append(playNoteAction.getDuration());
+        this.sb.append(" (float) " + playNoteAction.getDuration());
         this.sb.append(");");
         return null;
     }

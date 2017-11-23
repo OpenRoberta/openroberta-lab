@@ -30,7 +30,6 @@ public class PlayNoteAction<V> extends Action<V> {
 
     private PlayNoteAction(String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
-        System.out.println(this.getKind());
         Assert.isTrue(NumberUtils.isNumber(duration) && NumberUtils.isNumber(frequency));
         this.duration = duration;
         this.frequency = frequency;
