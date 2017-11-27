@@ -128,10 +128,9 @@ function _exportApplication {
 }
 
 function _docker {
-  rm -rf DockerInstallation
+  rm -rf DockerInstallation/*
   $0 --export DockerInstallation
   cp Docker/DockerfileEmbedded DockerInstallation/Dockerfile
-  docker build -t openroberta_embedded DockerInstallation
 }
 
 function _updateLejos {
