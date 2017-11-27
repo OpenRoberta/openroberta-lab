@@ -1,6 +1,10 @@
 #!/bin/bash
 
 function mkAndCheckDir {
+  if [ -e "$1" ]
+  then
+    return
+  fi
   mkdir "$1"
   if [ $? -ne 0 ]
   then
@@ -90,10 +94,12 @@ function _checkJava {
 
 function _exportApplication {
     exportpath="$1"
-    if [[ -e "$exportpath" ]]
+    if [ -e "$exportpath" ] && [ ! -z "$(ls -A $exportpath)" ]
     then
-        echo "target directory \"$exportpath\" already exists - exit 1"
+        echo "target directory \"$exportpath\" exists and is not empty - exit 1"
         exit 1
+    else
+        :
     fi
     mkAndCheckDir "$exportpath"
     exportpath=$(cd "$exportpath"; pwd)
