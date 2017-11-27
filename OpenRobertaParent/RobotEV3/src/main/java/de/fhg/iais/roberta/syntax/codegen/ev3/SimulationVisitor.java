@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -26,6 +27,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
@@ -184,6 +187,55 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         } else {
             this.sb.append("createGetVolume()");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        String end = createClosingBracket();
+        this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
+        switch ( (Language) setLanguageAction.getLanguage() ) {
+            case GERMAN:
+                this.sb.append("de");
+                break;
+            case ENGLISH:
+                this.sb.append("en/en");
+                break;
+            case FRENCH:
+                this.sb.append("fr");
+                break;
+            case SPANISH:
+                this.sb.append("es");
+                break;
+            case ITALIAN:
+                this.sb.append("it");
+                break;
+            case DUTCH:
+                this.sb.append("nl");
+                break;
+            case FINNISH:
+                this.sb.append("fi");
+                break;
+            case POLISH:
+                this.sb.append("pl");
+                break;
+            case PORTUGUESE:
+                this.sb.append("pt-pt");
+                break;
+            default:
+                break;
+        }
+        this.sb.append("\')");
+        this.sb.append(end);
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        String end = createClosingBracket();
+        this.sb.append("createSayTextAction(");
+        sayTextAction.getMsg().visit(this);
+        this.sb.append(end);
         return null;
     }
 

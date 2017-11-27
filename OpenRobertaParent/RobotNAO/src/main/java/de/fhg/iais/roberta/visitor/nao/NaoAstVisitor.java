@@ -16,9 +16,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
@@ -45,11 +43,12 @@ import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.syntax.sensor.nao.Sonar;
 import de.fhg.iais.roberta.syntax.sensor.nao.Touchsensors;
 import de.fhg.iais.roberta.visitor.AstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface NaoAstVisitor<V> extends AstVisitor<V> {
+public interface NaoAstVisitor<V> extends AstVisitor<V>, AstActorSoundVisitor<V> {
     /**
      * visit a {@link SetMode}.
      *
@@ -149,25 +148,11 @@ public interface NaoAstVisitor<V> extends AstVisitor<V> {
     V visitGetVolume(GetVolume<V> getVolume);
 
     /**
-     * visit a {@link SetLanguage}.
-     *
-     * @param set language phrase to be visited
-     */
-    V visitSetLanguage(SetLanguage<V> setLanguage);
-
-    /**
      * visit a {@link GetLanguage}.
      *
      * @param getLanguage phrase to be visited
      */
     V visitGetLanguage(GetLanguage<V> getLanguage);
-
-    /**
-     * visit a {@link SayText}.
-     *
-     * @param sayText phrase to be visited
-     */
-    V visitSayText(SayText<V> sayText);
 
     /**
      * visit a {@link PlayFile}.

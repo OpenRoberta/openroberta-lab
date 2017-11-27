@@ -40,6 +40,8 @@ import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.nxt.LightSensorAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.nxt.UsedHardwareCollectorVisitor;
@@ -478,6 +480,16 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 

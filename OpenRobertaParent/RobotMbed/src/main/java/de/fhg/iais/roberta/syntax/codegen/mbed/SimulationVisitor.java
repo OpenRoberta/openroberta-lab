@@ -31,6 +31,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.codegen.RobotSimulationVisitor;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -150,6 +152,16 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements M
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.nao;
+package de.fhg.iais.roberta.syntax.action.sound;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
-import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
+import de.fhg.iais.roberta.visitor.actor.AstActorSoundVisitor;
 
 /**
  * This class represents the <b>naoActions_sayText</b> block from Blockly into the AST (abstract syntax tree).
@@ -25,12 +25,12 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  * <br>
  * <br>
  */
-public class SayText<V> extends Action<V> {
+public class SayTextAction<V> extends Action<V> {
     private final Expr<V> msg;
     private final Expr<V> speed;
     private final Expr<V> shape;
 
-    private SayText(Expr<V> msg, Expr<V> speed, Expr<V> shape, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private SayTextAction(Expr<V> msg, Expr<V> speed, Expr<V> shape, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SAY_TEXT"), properties, comment);
         Assert.isTrue(msg != null);
         this.msg = msg;
@@ -47,8 +47,8 @@ public class SayText<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> SayText<V> make(Expr<V> msg, Expr<V> speed, Expr<V> shape, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SayText<>(msg, speed, shape, properties, comment);
+    private static <V> SayTextAction<V> make(Expr<V> msg, Expr<V> speed, Expr<V> shape, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SayTextAction<>(msg, speed, shape, properties, comment);
     }
 
     /**
@@ -57,7 +57,7 @@ public class SayText<V> extends Action<V> {
     public Expr<V> getMsg() {
         return this.msg;
     }
-    
+
     /**
      * @return the speed.
      */
@@ -65,7 +65,6 @@ public class SayText<V> extends Action<V> {
         return this.speed;
     }
 
-    
     /**
      * @return the shape.
      */
@@ -73,15 +72,14 @@ public class SayText<V> extends Action<V> {
         return this.shape;
     }
 
-
     @Override
     public String toString() {
-        return "SayText [" + this.msg + ", " + this.speed + ", " + this.shape + "]";
+        return "SayTextAction [" + this.msg + ", " + this.speed + ", " + this.shape + "]";
     }
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return ((NaoAstVisitor<V>) visitor).visitSayText(this);
+        return ((AstActorSoundVisitor<V>) visitor).visitSayTextAction(this);
 
     }
 
@@ -97,8 +95,13 @@ public class SayText<V> extends Action<V> {
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
         Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.VOICESPEED, BlocklyType.NUMBER_INT));
         Phrase<V> shape = helper.extractValue(values, new ExprParam(BlocklyConstants.SHAPE, BlocklyType.NUMBER_INT));
-        
-        return SayText.make(helper.convertPhraseToExpr(msg), helper.convertPhraseToExpr(speed), helper.convertPhraseToExpr(shape), helper.extractBlockProperties(block), helper.extractComment(block));
+
+        return SayTextAction.make(
+            helper.convertPhraseToExpr(msg),
+            helper.convertPhraseToExpr(speed),
+            helper.convertPhraseToExpr(shape),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

@@ -189,7 +189,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 case CONSTANTS.PLAY_FILE_ACTION:
                     evalPlayFileAction(internal(this), simulationData, stmt);
                     break;
-
+                    
+                case CONSTANTS.SET_LANGUAGE_ACTION:
+                    evalSetLanguageAction(internal(this), stmt);
+                    break;
+                    
+                case CONSTANTS.SAY_TEXT_ACTION:
+                    evalSayTextAction(internal(this), simulationData, stmt);
+                    break;
+                    
                 case CONSTANTS.SET_VOLUME_ACTION:
                     evalVolumeAction(internal(this), stmt);
                     break;
@@ -535,6 +543,21 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         setSimulationTimer(obj, simulationData, duration);
         obj.outputCommands.tone = {};
         obj.outputCommands.tone.file = stmt.file;
+    };
+    
+    var evalSetLanguageAction = function(obj, stmt) {
+        var value = evalExpr(obj, "language");
+        if (!isObject(value) && !obj.modifiedStmt) {
+            obj.outputCommands.language = value;
+        }
+    };
+    
+    var evalSayTextAction = function(obj, simulationData, stmt) {
+        var text = evalExpr(obj, "text");
+        if (!isObject(text) && !obj.modifiedStmt) {
+            obj.outputCommands.sayText = {};
+            obj.outputCommands.sayText.text = text;
+        }
     };
 
     var evalVolumeAction = function(obj, stmt) {

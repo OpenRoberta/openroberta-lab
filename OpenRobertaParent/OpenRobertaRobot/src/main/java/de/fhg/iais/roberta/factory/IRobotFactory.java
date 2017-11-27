@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
@@ -40,6 +41,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -286,6 +288,10 @@ public interface IRobotFactory {
 
     default ISoundSensorMode getSoundSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, SoundSensorMode.class);
+    }
+
+    default ILanguage getLanguageMode(String mode) {
+        return IRobotFactory.getModeValue(mode, Language.class);
     }
 
     /**

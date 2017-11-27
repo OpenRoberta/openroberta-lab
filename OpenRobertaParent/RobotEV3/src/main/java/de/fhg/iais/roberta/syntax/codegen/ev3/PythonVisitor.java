@@ -41,6 +41,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
@@ -176,6 +178,15 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
+        return null;
+    }
+
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 

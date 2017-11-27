@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ], function(SIM, CONSTANTS, Robot) {
+define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 'meSpeak' ], function(SIM, CONSTANTS, Robot) {
 
     /**
      * Creates a new Ev3 for a simulation.
@@ -154,6 +154,21 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
         oscillator : oscillator,
         gainNode : gainNode,
         volume : 0.5,
+    }
+    
+    Ev3.prototype.sayText = {
+        language : "de",
+        say : function(text, lang) {
+            if (meSpeak.isVoiceLoaded(lang)) {
+                meSpeak.speak(text, { voice : lang});
+            } else {
+                meSpeak.loadVoice("js/libs/mespeak/voices/" + lang + ".json", function(success, id) {
+                    if (success) {
+                        meSpeak.speak(text, { voice : lang });
+                    }
+                });
+            }
+        }
     }
 
     Ev3.prototype.tone = {
@@ -462,6 +477,15 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ]
             }
             if (actions.tone.file != undefined) {
                 this.tone.file[actions.tone.file](this.webAudio);
+            }
+        }
+        // update sayText
+        if (actions.language && AudioContext) {
+            this.sayText.language = actions.language;
+        }
+        if (actions.sayText && AudioContext) {
+            if (actions.sayText.text) {
+                this.sayText.say(actions.sayText.text, this.sayText.language);
             }
         }
         // update timer

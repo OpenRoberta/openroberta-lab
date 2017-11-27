@@ -31,6 +31,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.mbot.ExternalLedOffAction;
@@ -154,6 +156,16 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         return null;
     }
 

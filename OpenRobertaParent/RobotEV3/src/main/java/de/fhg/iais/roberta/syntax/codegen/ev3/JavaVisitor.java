@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
@@ -43,6 +44,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.ev3.UsedHardwareCollectorVisitor;
@@ -231,6 +234,64 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        this.sb.append("hal.setLanguage(\"");
+        switch ( (Language) setLanguageAction.getLanguage() ) {
+            case GERMAN:
+                this.sb.append("de");
+                break;
+            case ENGLISH:
+                this.sb.append("en");
+                break;
+            case FRENCH:
+                this.sb.append("fr");
+                break;
+            case SPANISH:
+                this.sb.append("es");
+                break;
+            case ITALIAN:
+                this.sb.append("it");
+                break;
+            case DUTCH:
+                this.sb.append("nl");
+                break;
+            case FINNISH:
+                this.sb.append("fi");
+                break;
+            case POLISH:
+                this.sb.append("pl");
+                break;
+            case RUSSIAN:
+                this.sb.append("ru");
+                break;
+            case TURKISH:
+                this.sb.append("tu");
+                break;
+            case CZECH:
+                this.sb.append("cs");
+                break;
+            case PORTUGUESE:
+                this.sb.append("pt-pt");
+                break;
+            case DANISH:
+                this.sb.append("da");
+                break;
+            default:
+                break;
+        }
+        this.sb.append("\");");
+        return null;
+    }
+
+    @Override
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        this.sb.append("hal.sayText(");
+        sayTextAction.getMsg().visit(this);
+        this.sb.append(");");
         return null;
     }
 

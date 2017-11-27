@@ -24,6 +24,8 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.TurnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.ActivityTask;
@@ -321,6 +323,18 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
     @Override
     public T visitVolumeAction(VolumeAction<T> volumeAction) {
         extractInfos(volumeAction);
+        return null;
+    }
+
+    @Override
+    public T visitSetLanguageAction(SetLanguageAction<T> setLanguageAction) {
+        extractInfos(setLanguageAction);
+        return null;
+    }
+
+    @Override
+    public T visitSayTextAction(SayTextAction<T> sayTextAction) {
+        extractInfos(sayTextAction);
         return null;
     }
 
@@ -681,5 +695,4 @@ public class InfoCollector<T> implements AstLanguageVisitor<T>, AstSensorsVisito
         // TODO Auto-generated method stub
         return null;
     }
-
 }

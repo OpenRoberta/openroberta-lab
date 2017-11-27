@@ -103,6 +103,12 @@ define({
     DIRECTION: "direction",
 
     PLAY_FILE_ACTION: "PlayFileAction",
+    
+    SET_LANGUAGE_ACTION: "SetLanguageAction",
+    
+    SAY_TEXT_ACTION: "SayTextAction",
+    
+    LANGUAGE: "language",
 
     FILE: "file",
 

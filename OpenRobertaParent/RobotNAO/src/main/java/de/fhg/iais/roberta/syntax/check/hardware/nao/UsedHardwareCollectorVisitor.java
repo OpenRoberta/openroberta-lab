@@ -22,9 +22,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
@@ -35,6 +33,8 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.check.hardware.RobotUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
@@ -142,7 +142,7 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguage) {
         return null;
     }
 
@@ -152,8 +152,8 @@ public class UsedHardwareCollectorVisitor extends RobotUsedHardwareCollectorVisi
     }
 
     @Override
-    public Void visitSayText(SayText<Void> sayText) {
-        sayText.getMsg().visit(this);
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
+        sayTextAction.getMsg().visit(this);
         return null;
     }
 

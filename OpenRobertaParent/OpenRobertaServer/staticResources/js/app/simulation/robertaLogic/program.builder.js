@@ -304,6 +304,20 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         result[CONST.FILE] = file;
         return result;
     }
+    
+    function createSetLanguageAction(language) {
+        var result = {};
+        result[CONST.STMT] = CONST.SET_LANGUAGE_ACTION;
+        result[CONST.LANGUAGE] = language;
+        return result;
+    }
+    
+    function createSayTextAction(text) {
+        var result = {};
+        result[CONST.STMT] = CONST.SAY_TEXT_ACTION;
+        result[CONST.TEXT] = text;
+        return result;
+    }
 
     function createTurnAction(speed, direction, angle) {
         var result = {};

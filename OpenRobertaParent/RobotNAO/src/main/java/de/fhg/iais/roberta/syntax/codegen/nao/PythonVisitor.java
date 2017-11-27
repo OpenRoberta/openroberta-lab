@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.components.nao.SensorType;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -29,9 +30,7 @@ import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RastaDuration;
 import de.fhg.iais.roberta.syntax.action.nao.RecordVideo;
-import de.fhg.iais.roberta.syntax.action.nao.SayText;
 import de.fhg.iais.roberta.syntax.action.nao.SetIntensity;
-import de.fhg.iais.roberta.syntax.action.nao.SetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.SetLeds;
 import de.fhg.iais.roberta.syntax.action.nao.SetMode;
 import de.fhg.iais.roberta.syntax.action.nao.SetStiffness;
@@ -42,6 +41,12 @@ import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetLanguageAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.check.hardware.nao.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.RobotPythonVisitor;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -788,73 +793,76 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitSetLanguage(SetLanguage<Void> setLanguage) {
-        this.sb.append("h.setLanguage(");
-        switch ( setLanguage.getLanguage() ) {
+    public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
+        this.sb.append("h.setLanguage(\"");
+        switch ( (Language) setLanguageAction.getLanguage() ) {
             case GERMAN:
-                this.sb.append("\"German\")");
+                this.sb.append("German");
                 break;
             case ENGLISH:
-                this.sb.append("\"English\")");
+                this.sb.append("English");
                 break;
             case FRENCH:
-                this.sb.append("\"French\")");
+                this.sb.append("French");
                 break;
             case JAPANESE:
-                this.sb.append("\"Japanese\")");
+                this.sb.append("Japanese");
                 break;
             case CHINESE:
-                this.sb.append("\"Chinese\")");
+                this.sb.append("Chinese");
                 break;
             case SPANISH:
-                this.sb.append("\"Spanish\")");
+                this.sb.append("Spanish");
                 break;
             case KOREAN:
-                this.sb.append("\"Korean\")");
+                this.sb.append("Korean");
                 break;
             case ITALIAN:
-                this.sb.append("\"Italian\")");
+                this.sb.append("Italian");
                 break;
             case DUTCH:
-                this.sb.append("\"Dutch\")");
+                this.sb.append("Dutch");
                 break;
             case FINNISH:
-                this.sb.append("\"Finnish\")");
+                this.sb.append("Finnish");
                 break;
             case POLISH:
-                this.sb.append("\"Polish\")");
+                this.sb.append("Polish");
                 break;
             case RUSSIAN:
-                this.sb.append("\"Russian\")");
+                this.sb.append("Russian");
                 break;
             case TURKISH:
-                this.sb.append("\"Turkish\")");
+                this.sb.append("Turkish");
                 break;
             case ARABIC:
-                this.sb.append("\"Arabic\")");
+                this.sb.append("Arabic");
                 break;
             case CZECH:
-                this.sb.append("\"Czech\")");
+                this.sb.append("Czech");
                 break;
             case PORTUGUESE:
-                this.sb.append("\"Portuguese\")");
+                this.sb.append("Portuguese");
                 break;
             case BRAZILIAN:
-                this.sb.append("\"Brazilian\")");
+                this.sb.append("Brazilian");
                 break;
             case SWEDISH:
-                this.sb.append("\"Swedish\")");
+                this.sb.append("Swedish");
                 break;
             case DANISH:
-                this.sb.append("\"Danish\")");
+                this.sb.append("Danish");
                 break;
             case NORWEGIAN:
-                this.sb.append("\"Norwegian\")");
+                this.sb.append("Norwegian");
                 break;
             case GREEK:
-                this.sb.append("\"Greek\")");
+                this.sb.append("Greek");
+                break;
+            default:
                 break;
         }
+        this.sb.append("\")");
         return null;
     }
 
@@ -865,14 +873,34 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     }
 
     @Override
-    public Void visitSayText(SayText<Void> sayText) {
+    public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("h.say(");
-        sayText.getMsg().visit(this);
+        sayTextAction.getMsg().visit(this);
         this.sb.append(",");
-        sayText.getSpeed().visit(this);
+        sayTextAction.getSpeed().visit(this);
         this.sb.append(",");
-        sayText.getShape().visit(this);
+        sayTextAction.getShape().visit(this);
         this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitToneAction(ToneAction<Void> toneAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction<Void> playNoteAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         return null;
     }
 

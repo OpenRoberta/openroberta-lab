@@ -19,6 +19,7 @@ require.config({
         'prettify' : 'code-prettify/prettify',
         'socket.io' : 'socket.io/socket.io',
         'volume-meter' : 'sound/volume-meter',
+        'meSpeak' : 'mespeak/mespeak',
 
         'confDelete.controller' : '../app/roberta/controller/confDelete.controller',
         'configuration.controller' : '../app/roberta/controller/configuration.controller',
@@ -107,6 +108,12 @@ require.config({
                 };
             }
         },
+        'meSpeak' : {
+            init : function() {
+                meSpeak.loadConfig("js/libs/mespeak/mespeak_config.json");
+                meSpeak.loadVoice("js/libs/mespeak/voices/en/en.json");
+            }
+        },
         'jquery-validate' : {
             deps : [ 'jquery' ]
         },
@@ -118,7 +125,7 @@ require.config({
 
 require([ 'require', 'wrap', 'jquery', 'jquery-cookie', 'guiState.controller', 'progList.controller', 'logList.controller', 'confList.controller',
         'progDelete.controller', 'confDelete.controller', 'progShare.controller', 'cookieDisclaimer.controller', 'menu.controller', 'user.controller', 'robot.controller',
-        'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model' ], function(require) {
+        'program.controller', 'configuration.controller', 'language.controller', 'socket.controller', 'volume-meter', 'user.model', 'meSpeak'], function(require) {
 
     $ = require('jquery', 'jquery-cookie');
     WRAP = require('wrap');
