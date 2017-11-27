@@ -1,4 +1,4 @@
-FROM openjdk:8u102
+FROM openjdk:8u151-jdk
  
 RUN mkdir --parent /opt/openRoberta/lib /opt/openRoberta/OpenRobertaParent
 WORKDIR /opt/openRoberta

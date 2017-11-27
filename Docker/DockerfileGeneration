@@ -1,0 +1,15 @@
+FROM openjdk:8u151-jdk
+
+VOLUME /opt/openRoberta/DockerInstallation
+
+RUN apt-get install -y git maven && apt-get clean
+
+WORKDIR /opt
+RUN wget -q https://github.com/OpenRoberta/robertalab/archive/develop.zip && \
+    unzip develop.zip && \
+    rm develop.zip
+
+WORKDIR /opt/robertalab-develop/OpenRobertaParent
+RUN mvn clean install -DskipTests -DskipITs
+
+CMD ["/opt/robertalab-develop/ora.sh", "--dockerE"]
