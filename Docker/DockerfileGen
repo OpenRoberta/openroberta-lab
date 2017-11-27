@@ -1,10 +1,6 @@
-FROM openjdk:8u151-jdk
+FROM rbudde/openroberta_meta:latest
 
-VOLUME /opt/robertalab-develop/DockerInstallation
-
-RUN apt-get update && apt-get install -y git maven && apt-get clean
-
-ARG LAST_RUN_FROM_HERE=2017-11-27-16:38:00
+ARG LAST_RUN_FROM_HERE=2017-11-27-22:00:00
 
 WORKDIR /opt
 RUN wget -q https://github.com/OpenRoberta/robertalab/archive/develop.zip && \

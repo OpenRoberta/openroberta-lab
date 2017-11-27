@@ -36,7 +36,7 @@ done
 
 case "$START" in
 docker) java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
-	      -d database.parentdir=. -d database.mode=embedded \$* 2>&1 ;;
+	      -d database.parentdir=/opt/db -d database.mode=embedded \$* 2>&1 ;;
 nohup)  nohup java -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
 	      -d database.parentdir=. -d database.mode=embedded \$* >>$SERVERLOGFILE 2>&1 & ;;
 *)      java  -cp lib/\* de.fhg.iais.roberta.main.ServerStarter \
