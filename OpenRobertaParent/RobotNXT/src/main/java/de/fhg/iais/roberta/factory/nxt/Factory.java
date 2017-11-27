@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.nxt.ActorPort;
@@ -38,7 +37,6 @@ import de.fhg.iais.roberta.mode.sensor.nxt.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.nxt.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.nxt.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
@@ -106,11 +104,6 @@ public class Factory extends AbstractRobotFactory {
     //    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
     //        return IRobotFactory.getModeValue(lightSensorMode, LightSensorMode.class);
     //    }
-
-    @Override
-    public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        return IRobotFactory.getModeValue(soundSensorMode, SoundSensorMode.class);
-    }
 
     @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {

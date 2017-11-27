@@ -21,7 +21,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.mbed.ActorPort;
@@ -43,10 +42,10 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     public AbstractFactory() {
         super();
-        Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
+        final Properties mbedProperties = Util1.loadProperties("classpath:Mbed.properties");
         addBlockTypesFromProperties("Mbed.properties", mbedProperties);
 
-        this.calliopeSimCompilerWorkflow = new SimCompilerWorkflow();
+        calliopeSimCompilerWorkflow = new SimCompilerWorkflow();
     }
 
     @Override
@@ -76,11 +75,6 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public IColorSensorMode getColorSensorMode(String colorSensorMode) {
-        return null;
-    }
-
-    @Override
-    public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
         return null;
     }
 
@@ -156,62 +150,62 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return this.compilerWorkflow;
+        return compilerWorkflow;
     }
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return this.calliopeSimCompilerWorkflow;
+        return calliopeSimCompilerWorkflow;
     }
 
     @Override
     public String getProgramToolboxBeginner() {
-        return this.calliopeProperties.getProperty("robot.program.toolbox.beginner");
+        return calliopeProperties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return this.calliopeProperties.getProperty("robot.program.toolbox.expert");
+        return calliopeProperties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return this.calliopeProperties.getProperty("robot.program.default");
+        return calliopeProperties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return this.calliopeProperties.getProperty("robot.configuration.toolbox");
+        return calliopeProperties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return this.calliopeProperties.getProperty("robot.configuration.default");
+        return calliopeProperties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return this.calliopeProperties.getProperty("robot.real.name");
+        return calliopeProperties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return this.calliopeProperties.getProperty("robot.sim").equals("true") ? true : false;
+        return calliopeProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
     public String getInfo() {
-        return this.calliopeProperties.getProperty("robot.info") != null ? this.calliopeProperties.getProperty("robot.info") : "#";
+        return calliopeProperties.getProperty("robot.info") != null ? calliopeProperties.getProperty("robot.info") : "#";
     }
 
     @Override
     public Boolean isBeta() {
-        return this.calliopeProperties.getProperty("robot.beta") != null ? true : false;
+        return calliopeProperties.getProperty("robot.beta") != null ? true : false;
     }
 
     @Override
     public String getConnectionType() {
-        return this.calliopeProperties.getProperty("robot.connection");
+        return calliopeProperties.getProperty("robot.connection");
     }
 
     @Override
@@ -221,14 +215,14 @@ public abstract class AbstractFactory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return this.calliopeProperties.getProperty("robot.configuration") != null ? false : true;
+        return calliopeProperties.getProperty("robot.configuration") != null ? false : true;
     }
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
-            : this.name;
+        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
+            : name;
     }
 
     @Override

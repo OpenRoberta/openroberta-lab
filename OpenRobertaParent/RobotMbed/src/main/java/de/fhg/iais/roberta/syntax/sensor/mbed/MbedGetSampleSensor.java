@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
@@ -72,8 +73,10 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                     CompassSensor
                         .make(factory.getCompassSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
                 break;
-            case BlocklyConstants.MICROPHONE:
-                this.sensor = MicrophoneSensor.make(1, properties, comment);
+            case BlocklyConstants.SOUND:
+                this.sensor =
+                    SoundSensor
+                        .make(factory.getSoundSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
                 this.sensor =
@@ -115,7 +118,7 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment,
         IRobotFactory factory) {
-        return new MbedGetSampleSensor<V>(sensorType, port, properties, comment, factory);
+        return new MbedGetSampleSensor<>(sensorType, port, properties, comment, factory);
     }
 
     /**
@@ -157,9 +160,9 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
-        String portNameType = GetSampleType.get(modeName).getPortTypeName();
+        final List<Field> fields = helper.extractFields(block, (short) 2);
+        final String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
+        final String portNameType = GetSampleType.get(modeName).getPortTypeName();
         String portName = "";
         if ( !portNameType.equals("") ) {
             portName = helper.extractField(fields, portNameType);
@@ -170,10 +173,10 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
 
     @Override
     public Block astToBlock() {
-        Block jaxbDestination = new Block();
+        final Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this.sensor, jaxbDestination);
 
-        Mutation mutation = new Mutation();
+        final Mutation mutation = new Mutation();
         mutation.setInput(getSensorType().name());
         jaxbDestination.setMutation(mutation);
 
@@ -182,7 +185,7 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
             JaxbTransformerHelper.addField(jaxbDestination, getSensorType().getPortTypeName(), this.sensorPort);
         }
         // TODO: This is hard coded on the blockly side
-        Data data = new Data();
+        final Data data = new Data();
         data.setValue("calliope");
         jaxbDestination.setData(data);
         return jaxbDestination;

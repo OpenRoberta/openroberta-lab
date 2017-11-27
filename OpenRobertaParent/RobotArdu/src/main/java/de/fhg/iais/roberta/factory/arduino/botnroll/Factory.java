@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
@@ -37,7 +36,6 @@ import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
@@ -92,11 +90,6 @@ public class Factory extends AbstractRobotFactory {
     @Override
     public IColorSensorMode getColorSensorMode(String colorSensorMode) {
         return IRobotFactory.getModeValue(colorSensorMode, ColorSensorMode.class);
-    }
-
-    @Override
-    public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        return IRobotFactory.getModeValue(soundSensorMode, SoundSensorMode.class);
     }
 
     @Override

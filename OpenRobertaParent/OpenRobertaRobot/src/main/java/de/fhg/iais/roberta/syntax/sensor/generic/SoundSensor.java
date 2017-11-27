@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
-import java.util.List;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
@@ -12,11 +9,10 @@ import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -47,7 +43,7 @@ public class SoundSensor<V> extends ExternalSensor<V> {
      * @return read only object of {@link SoundSensor}
      */
     public static <V> SoundSensor<V> make(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SoundSensor<V>(mode, port, properties, comment);
+        return new SoundSensor<>(mode, port, properties, comment);
     }
 
     @Override
@@ -68,21 +64,11 @@ public class SoundSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+        final IRobotFactory factory = helper.getModeFactory();
+        final SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
+        final String mode = sensorData.getMode();
+        final String port = sensorData.getPort();
         return SoundSensor
-            .make(factory.getSoundSensorMode("SOUND"), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    @Override
-    public Block astToBlock() {
-        Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
-        String fieldValue = getPort().getPortNumber();
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
-
-        return jaxbDestination;
+            .make(factory.getSoundSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -60,7 +61,7 @@ public abstract class Configuration {
      * @return connected actor on given port
      */
     public Actor getActorOnPort(IActorPort actorPort) {
-        Actor actor = this.actors.get(actorPort);
+        final Actor actor = this.actors.get(actorPort);
         return actor;
     }
 
@@ -103,7 +104,7 @@ public abstract class Configuration {
      * @return if the motor is regulated
      */
     public boolean isMotorRegulated(IActorPort port) {
-        Actor actor = this.actors.get(port);
+        final Actor actor = this.actors.get(port);
         Assert.isTrue(actor != null, "No actor connected to the port " + port);
         return actor.isRegulated();
     }
@@ -174,13 +175,13 @@ public abstract class Configuration {
         // trackWidthCM and wheelDiameterCM restricted to 1 fraction digit
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((this.actors == null) ? 0 : this.actors.hashCode());
-        result = prime * result + ((this.sensors == null) ? 0 : this.sensors.hashCode());
+        result = (prime * result) + ((this.actors == null) ? 0 : this.actors.hashCode());
+        result = (prime * result) + ((this.sensors == null) ? 0 : this.sensors.hashCode());
         long temp;
         temp = (long) (this.trackWidthCM * 10);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = (prime * result) + (int) (temp ^ (temp >>> 32));
         temp = (long) (this.wheelDiameterCM);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = (prime * result) + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -196,7 +197,7 @@ public abstract class Configuration {
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        Configuration other = (Configuration) obj;
+        final Configuration other = (Configuration) obj;
         if ( this.actors == null ) {
             if ( other.actors != null ) {
                 return false;
@@ -235,7 +236,7 @@ public abstract class Configuration {
 
     protected IActorPort getMotorPortOnSide(IMotorSide side) {
         Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
-        for ( Map.Entry<IActorPort, Actor> entry : this.actors.entrySet() ) {
+        for ( final Map.Entry<IActorPort, Actor> entry : this.actors.entrySet() ) {
             if ( entry.getValue().getMotorSide() == side ) {
                 return entry.getKey();
             }
@@ -275,7 +276,7 @@ public abstract class Configuration {
          */
         @SuppressWarnings("unchecked")
         public T addActors(List<Pair<IActorPort, Actor>> actors) {
-            for ( Pair<IActorPort, Actor> pair : actors ) {
+            for ( final Pair<IActorPort, Actor> pair : actors ) {
                 this.actorMapping.put(pair.getFirst(), pair.getSecond());
             }
             return (T) this;
@@ -302,7 +303,7 @@ public abstract class Configuration {
          */
         @SuppressWarnings("unchecked")
         public T addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
-            for ( Pair<ISensorPort, Sensor> pair : sensors ) {
+            for ( final Pair<ISensorPort, Sensor> pair : sensors ) {
                 this.sensorMapping.put(pair.getFirst(), pair.getSecond());
             }
             return (T) this;

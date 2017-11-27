@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -37,7 +36,6 @@ import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.BrickKey;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.MotorTachoMode;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.UltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.mbot.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.mbot.JoystickMode;
@@ -62,16 +60,16 @@ public class Factory extends AbstractRobotFactory {
         if ( SystemUtils.IS_OS_WINDOWS ) {
             os = "windows";
         }
-        mbotProperties = Util1.loadProperties("classpath:mbot.properties");
-        name = mbotProperties.getProperty("robot.name");
-        robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(name);
-        compilerWorkflow =
+        this.mbotProperties = Util1.loadProperties("classpath:mbot.properties");
+        this.name = this.mbotProperties.getProperty("robot.name");
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
+        this.compilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler.resources.dir"),
-                RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".compiler." + os + ".dir"));
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"),
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler." + os + ".dir"));
 
-        addBlockTypesFromProperties("mbot.properties", mbotProperties);
+        addBlockTypesFromProperties("mbot.properties", this.mbotProperties);
     }
 
     @Override
@@ -173,25 +171,6 @@ public class Factory extends AbstractRobotFactory {
     @Override
     public ILightSensorMode getLightSensorMode(String lightSensorMode) {
         return IRobotFactory.getModeValue(lightSensorMode, LightSensorMode.class);
-    }
-
-    @Override
-    public ISoundSensorMode getSoundSensorMode(String soundSensorMode) {
-        if ( (soundSensorMode == null) || soundSensorMode.isEmpty() ) {
-            throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
-        }
-        final String sUpper = soundSensorMode.trim().toUpperCase(Locale.GERMAN);
-        for ( final SoundSensorMode sp : SoundSensorMode.values() ) {
-            if ( sp.toString().equals(sUpper) ) {
-                return sp;
-            }
-            for ( final String value : sp.getValues() ) {
-                if ( sUpper.equals(value.toUpperCase()) ) {
-                    return sp;
-                }
-            }
-        }
-        throw new DbcException("Invalid Color Sensor Mode: " + soundSensorMode);
     }
 
     @Override
@@ -310,7 +289,7 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return compilerWorkflow;
+        return this.compilerWorkflow;
     }
 
     @Override
@@ -344,47 +323,47 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getProgramToolboxBeginner() {
-        return mbotProperties.getProperty("robot.program.toolbox.beginner");
+        return this.mbotProperties.getProperty("robot.program.toolbox.beginner");
     }
 
     @Override
     public String getProgramToolboxExpert() {
-        return mbotProperties.getProperty("robot.program.toolbox.expert");
+        return this.mbotProperties.getProperty("robot.program.toolbox.expert");
     }
 
     @Override
     public String getProgramDefault() {
-        return mbotProperties.getProperty("robot.program.default");
+        return this.mbotProperties.getProperty("robot.program.default");
     }
 
     @Override
     public String getConfigurationToolbox() {
-        return mbotProperties.getProperty("robot.configuration.toolbox");
+        return this.mbotProperties.getProperty("robot.configuration.toolbox");
     }
 
     @Override
     public String getConfigurationDefault() {
-        return mbotProperties.getProperty("robot.configuration.default");
+        return this.mbotProperties.getProperty("robot.configuration.default");
     }
 
     @Override
     public String getRealName() {
-        return mbotProperties.getProperty("robot.real.name");
+        return this.mbotProperties.getProperty("robot.real.name");
     }
 
     @Override
     public Boolean hasSim() {
-        return mbotProperties.getProperty("robot.sim").equals("true") ? true : false;
+        return this.mbotProperties.getProperty("robot.sim").equals("true") ? true : false;
     }
 
     @Override
     public String getInfo() {
-        return mbotProperties.getProperty("robot.info") != null ? mbotProperties.getProperty("robot.info") : "#";
+        return this.mbotProperties.getProperty("robot.info") != null ? this.mbotProperties.getProperty("robot.info") : "#";
     }
 
     @Override
     public Boolean isBeta() {
-        return mbotProperties.getProperty("robot.beta") != null ? true : false;
+        return this.mbotProperties.getProperty("robot.beta") != null ? true : false;
     }
 
     @Override
@@ -400,14 +379,14 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public Boolean hasConfiguration() {
-        return mbotProperties.getProperty("robot.configuration") != null ? false : true;
+        return this.mbotProperties.getProperty("robot.configuration") != null ? false : true;
     }
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + robotPropertyNumber + ".group")
-            : name;
+        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+            : this.name;
     }
 
     @Override
@@ -417,12 +396,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getConnectionType() {
-        return mbotProperties.getProperty("robot.connection");
+        return this.mbotProperties.getProperty("robot.connection");
     }
 
     @Override
     public String getVendorId() {
-        return mbotProperties.getProperty("robot.vendor");
+        return this.mbotProperties.getProperty("robot.vendor");
     }
 
     @Override
@@ -446,12 +425,12 @@ public class Factory extends AbstractRobotFactory {
 
     @Override
     public String getCommandline() {
-        return mbotProperties.getProperty("robot.connection.commandLine");
+        return this.mbotProperties.getProperty("robot.connection.commandLine");
     }
 
     @Override
     public String getSignature() {
-        return mbotProperties.getProperty("robot.connection.signature");
+        return this.mbotProperties.getProperty("robot.connection.signature");
     }
 
     @Override
