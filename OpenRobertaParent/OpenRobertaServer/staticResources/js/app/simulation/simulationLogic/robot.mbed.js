@@ -236,7 +236,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'util' ], function(S
                 this.display.leds = [ [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0 ] ];
             }
             if (actions.display.pixel) {
-                this.display.leds[actions.display.pixel.y][actions.display.pixel.x] = actions.display.pixel.brightness * 255 / 9;
+                this.display.leds[actions.display.pixel.x][actions.display.pixel.y] = actions.display.pixel.brightness * 255 / 9;
             }
         }
         for (var i = 0; i < 4; i++) {
