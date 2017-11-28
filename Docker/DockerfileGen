@@ -1,14 +1,7 @@
-FROM rbudde/openroberta_meta:latest
-
-ARG LAST_RUN_FROM_HERE=2017-11-27-22:00:00
+FROM rbudde/openroberta_meta:1
 
 WORKDIR /opt
-RUN wget -q https://github.com/OpenRoberta/robertalab/archive/develop.zip && \
-    unzip develop.zip && \
-    rm develop.zip
+ADD ["./ora_gen.sh","./"]
+RUN chmod +x ./ora_gen.sh
 
-WORKDIR /opt/robertalab-develop/OpenRobertaParent
-RUN mvn clean install -DskipTests -DskipITs
-WORKDIR /opt/robertalab-develop
-
-CMD ["/opt/robertalab-develop/ora.sh", "--dockerE"]
+CMD /opt/ora_gen.sh '2.4.0'

@@ -1,5 +1,28 @@
 FROM openjdk:8u151-jdk
 
-VOLUME /opt/robertalab-develop/DockerInstallation
+RUN apt-get update && apt-get -y upgrade && apt-get -y install apt-utils
+RUN apt-get install -y \
+            apt-transport-https \
+            ca-certificates \
+            gnupg2 \
+            software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg | apt-key add -
+RUN add-apt-repository \
+            "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+            $(lsb_release -cs) \
+            stable"
+RUN apt-get update
+RUN apt-get install -y docker-ce
 
-RUN apt-get update && apt-get -y upgrade && apt-get install -y git maven && apt-get clean
+RUN apt-get update && apt-get install -y git maven && apt-get clean
+
+# run mvn once to install most all the artifacts needed in /root/.m2
+WORKDIR /opt
+RUN wget -q https://github.com/OpenRoberta/robertalab/archive/develop.zip && \
+    unzip develop.zip && \
+    rm develop.zip
+
+WORKDIR /opt/robertalab-develop/OpenRobertaParent
+RUN mvn clean install -DskipTests -DskipITs
+WORKDIR /opt
+RUN rm -rf /opt/robertalab-develop

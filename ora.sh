@@ -133,12 +133,6 @@ function _exportApplication {
 	echo "You are responsible to supply a usable database in directory db-${serverVersion}"
 }
 
-function _docker {
-  rm -rf DockerInstallation/*
-  $0 --export DockerInstallation
-  cp Docker/DockerfileEmbedded DockerInstallation/Dockerfile
-}
-
 function _updateLejos {
   cd OpenRobertaParent
   run="scp -oKexAlgorithms=+diffie-hellman-group1-sha1 RobotEV3/resources/updateResources/lejos_${lejosVersion}/EV3Menu.jar root@${LEJOSIPADDR}:/home/root/lejos/bin/utils"
@@ -176,8 +170,6 @@ DBBASE='OpenRobertaParent/OpenRobertaServer/dbBase'
 
 case "$cmd" in
 --export)         _exportApplication $* ;;
-
---dockerE)        _docker ;;
 
 --start-from-git) java -cp OpenRobertaParent/OpenRobertaServer/target/resources/\* de.fhg.iais.roberta.main.ServerStarter -d database.mode=embedded -d database.parentdir=OpenRobertaParent/OpenRobertaServer $* ;;
 
