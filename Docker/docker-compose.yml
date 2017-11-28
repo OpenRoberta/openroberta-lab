@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-   openroberta_embedded:
+   openrobertalab_embedded:
      image: rbudde/openrobertalab:2.4.0
      ports:
-      - "7171:1999"
+      - "7000:1999"
      volumes:
       - "/home/rbudde/docker/db:/opt/db"
