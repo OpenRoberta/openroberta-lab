@@ -20,13 +20,13 @@
 	<name>RobotEV3</name>
 	<description>the plugin for the EV3 robot</description>
 	<properties>
-		<dbusjava.v0.version>0.9.0-beta</dbusjava.v0.version>
-		<dbusjava.v1.version>0.9.1-beta</dbusjava.v1.version>
-		<jna.version>3.2.7</jna.version>
-		<ev3classes.v0.version>0.9.0-beta</ev3classes.v0.version>
-		<ev3classes.v1.version>0.9.1-beta</ev3classes.v1.version>
 		<ev3runtime.v0.version>2.3.0</ev3runtime.v0.version>
 		<ev3runtime.v1.version>2.4.0</ev3runtime.v1.version>
+		<ev3classes.v0.version>0.9.0</ev3classes.v0.version>
+		<ev3classes.v1.version>0.9.1</ev3classes.v1.version>
+		<dbusjava.v0.version>0.9.0</dbusjava.v0.version>
+		<dbusjava.v1.version>0.9.1</dbusjava.v1.version>
+		<jna.version>3.2.7</jna.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -84,14 +84,14 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
-									<artifactId>EV3Runtime</artifactId>
+									<artifactId>EV3Menu</artifactId>
 									<version>${ev3runtime.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta.ev3.v0</groupId>
-									<artifactId>EV3Menu</artifactId>
+									<artifactId>EV3Runtime</artifactId>
 									<version>${ev3runtime.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
@@ -176,21 +176,14 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
+									<groupId>org.lejos</groupId>
 									<artifactId>ev3classes</artifactId>
 									<version>${ev3classes.v1.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
+									<groupId>org.lejos</groupId>
 									<artifactId>dbusjava</artifactId>
 									<version>${dbusjava.v1.version}</version>
 									<type>jar</type>
@@ -207,6 +200,13 @@
 									<groupId>org.java-websocket</groupId>
 									<artifactId>Java-WebSocket</artifactId>
 									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
@@ -233,21 +233,14 @@
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
-									<groupId>org.json</groupId>
-									<artifactId>json</artifactId>
-									<version>${json.version}</version>
-									<type>jar</type>
-									<overWrite>true</overWrite>
-								</artifactItem>
-								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
+									<groupId>org.lejos</groupId>
 									<artifactId>ev3classes</artifactId>
 									<version>${ev3classes.v0.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
 								<artifactItem>
-									<groupId>de.fhg.iais.roberta</groupId>
+									<groupId>org.lejos</groupId>
 									<artifactId>dbusjava</artifactId>
 									<version>${dbusjava.v0.version}</version>
 									<type>jar</type>
@@ -264,6 +257,13 @@
 									<groupId>org.java-websocket</groupId>
 									<artifactId>Java-WebSocket</artifactId>
 									<version>${ev3.websocket.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.json</groupId>
+									<artifactId>json</artifactId>
+									<version>${json.version}</version>
 									<type>jar</type>
 									<overWrite>true</overWrite>
 								</artifactItem>
