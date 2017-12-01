@@ -23,8 +23,8 @@ mkdir -p $DOCKERDIR/meta $DOCKERDIR/gen $DOCKERDIR/db
 cd $GITREPO/Docker
 cp DockerfileMeta $DOCKERDIR/meta/Dockerfile
 cp DockerfileGen  $DOCKERDIR/gen/Dockerfile
-cp ora-gen.sh     $DOCKERDIR/gen
-cp -r $GITREPO/OpenRbertaParent/OpenRobertaServer/db-2.4.0 $DOCKERDIR/db
+cp ora_gen.sh     $DOCKERDIR/gen
+cp -r $GITREPO/OpenRobertaParent/OpenRobertaServer/db-2.4.0 $DOCKERDIR/db
 
 cd $DOCKERDIR/meta
 docker build -t rbudde/openroberta_meta:1 .
@@ -67,9 +67,10 @@ docker push rbudde/openrobertalab:2.4.0 # done by the roberta maintainer; you sh
 Assume that in $DOCKERDIR/db is a valid data base directory, e.g. db-2.4.0, then you can run the image 
 - with docker:
   docker run -p 7000:1999 -v $DOCKERDIR/db:/opt/db rbudde/openroberta_gen:2.4.0
-- with compose:
+- with docker-compose:
   cd $GITREPO/Docker # here the docker-compose.yml is located
   docker-compose up
-Using compose is preferred. If the log message, that tells you how many programs are in the data base,
-is printed, you can access the server pointing a browser to dns-name-or-localhost:7000
+Using docker-compose is preferred.
+If the log message, that tells you how many programs are in the data base, is printed, you can access
+the server pointing a browser to http://dns-name-or-localhost:7000
 
