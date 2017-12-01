@@ -1,25 +1,27 @@
-package de.fhg.iais.roberta.mode.action.nao;
+
+package de.fhg.iais.roberta.mode.action;
 
 import java.util.Locale;
 
-import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public enum WalkDirection implements IMode {
-    FOREWARD( "FORWARD" ), BACKWARD();
+public enum MoveDirection implements IDriveDirection {
+    //TODO: rename FOREWARD first in blockly
+    FOREWARD( "OFF", "FORWARD" ), BACKWARD( "ON", "BACKWARDS" );
 
     private final String[] values;
 
-    private WalkDirection(String... values) {
+    private MoveDirection(String... values) {
         this.values = values;
     }
 
-    public static WalkDirection get(String direction) {
-        if ( direction == null || direction.isEmpty() ) {
+    public static MoveDirection get(String direction) {
+        if ( (direction == null) || direction.isEmpty() ) {
             throw new DbcException("Invalid Walk Direction: " + direction);
         }
         String sUpper = direction.trim().toUpperCase(Locale.GERMAN);
-        for ( WalkDirection wd : WalkDirection.values() ) {
+        for ( MoveDirection wd : MoveDirection.values() ) {
             if ( wd.toString().equals(sUpper) ) {
                 return wd;
             }

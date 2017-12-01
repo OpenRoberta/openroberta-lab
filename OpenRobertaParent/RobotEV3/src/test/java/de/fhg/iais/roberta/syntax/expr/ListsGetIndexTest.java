@@ -10,7 +10,7 @@ public class ListsGetIndexTest {
     @Test
     public void Test() throws Exception {
         String a =
-            "publicvoidrun()throwsException{hal.regulatedDrive(DriveDirection.FOREWARD,BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0,0,0),ListElementOperations.GET,IndexLocation.FROM_START,0));hal.regulatedDrive(DriveDirection.FOREWARD,BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0,0,0),ListElementOperations.GET_REMOVE,IndexLocation.FIRST));BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0,0,0),ListElementOperations.REMOVE,IndexLocation.LAST);}";
+            "publicvoidrun()throwsException{hal.regulatedDrive(MoveDirection.FOREWARD,BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0,0,0),ListElementOperations.GET,IndexLocation.FROM_START,0));hal.regulatedDrive(MoveDirection.FOREWARD,BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0,0,0),ListElementOperations.GET_REMOVE,IndexLocation.FIRST));BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0,0,0),ListElementOperations.REMOVE,IndexLocation.LAST);}";
 
         this.h.assertCodeIsOk(a, "/syntax/lists/lists_get_index.xml");
     }

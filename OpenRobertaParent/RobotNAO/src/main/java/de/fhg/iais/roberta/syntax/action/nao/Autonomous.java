@@ -4,8 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.mode.action.nao.BodyPart;
-import de.fhg.iais.roberta.mode.action.nao.OnOff;
+import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -25,9 +24,9 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  */
 public final class Autonomous<V> extends Action<V> {
 
-    private final OnOff onOff;
+    private final WorkingState onOff;
 
-    private Autonomous(OnOff onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Autonomous(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("AUTONOMOUS"), properties, comment);
         Assert.notNull(onOff, "Missing onOff in Autonomous block!");
         this.onOff = onOff;
@@ -41,11 +40,11 @@ public final class Autonomous<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Autonomous}
      */
-    private static <V> Autonomous<V> make(OnOff onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Autonomous<V>(onOff, properties, comment);
+    private static <V> Autonomous<V> make(WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Autonomous<>(onOff, properties, comment);
     }
 
-    public OnOff getOnOff() {
+    public WorkingState getOnOff() {
         return this.onOff;
     }
 
@@ -66,7 +65,7 @@ public final class Autonomous<V> extends Action<V> {
 
         String onOff = helper.extractField(fields, BlocklyConstants.MODE);
 
-        return Autonomous.make(OnOff.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
+        return Autonomous.make(WorkingState.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

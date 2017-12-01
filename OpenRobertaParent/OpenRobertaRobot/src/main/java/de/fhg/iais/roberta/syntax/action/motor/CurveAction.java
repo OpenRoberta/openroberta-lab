@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -28,9 +28,9 @@ import de.fhg.iais.roberta.visitor.actor.AstActorMotorVisitor;
  * This class represents the <b>robActions_motor_on_for</b> and <b>robActions_motor_on</b> blocks from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate code for setting the motors in pilot mode.<br/>
  * <br>
- * The client must provide the {@link DriveDirection} and {@link MotionParam} (distance the robot should cover and speed). <br>
+ * The client must provide the {@link MoveDirection} and {@link MotionParam} (distance the robot should cover and speed). <br>
  * <br>
- * To create an instance from this class use the method {@link #make(DriveDirection, MotionParam)}.<br>
+ * To create an instance from this class use the method {@link #make(MoveDirection, MotionParam)}.<br>
  */
 public class CurveAction<V> extends Action<V> {
 
@@ -55,7 +55,7 @@ public class CurveAction<V> extends Action<V> {
     /**
      * Creates instance of {@link CurveAction}. This instance is read only and can not be modified.
      *
-     * @param direction {@link DriveDirection} in which the robot will drive; must be <b>not</b> null,
+     * @param direction {@link MoveDirection} in which the robot will drive; must be <b>not</b> null,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed), must be <b>not</b>
      *        null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -72,7 +72,7 @@ public class CurveAction<V> extends Action<V> {
     }
 
     /**
-     * @return {@link DriveDirection} in which the robot will drive
+     * @return {@link MoveDirection} in which the robot will drive
      */
     public IDriveDirection getDirection() {
         return this.direction;

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.components.ISensorType;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum SensorType implements ISensorType {
@@ -42,11 +42,11 @@ public enum SensorType implements ISensorType {
     }
 
     /**
-     * Get direction from {@link DriveDirection} from string parameter. It is possible for one direction to have multiple string mappings.
+     * Get direction from {@link MoveDirection} from string parameter. It is possible for one direction to have multiple string mappings.
      * Throws exception if the direction does not exists.
      *
      * @param name of the direction
-     * @return name of the direction from the enum {@link DriveDirection}
+     * @return name of the direction from the enum {@link MoveDirection}
      */
     public static SensorType get(String s) {
         if ( s == null || s.isEmpty() ) {

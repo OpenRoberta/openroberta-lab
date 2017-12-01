@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.nao.BodyPart;
-import de.fhg.iais.roberta.mode.action.nao.OnOff;
+import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -27,9 +27,9 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
 public final class SetStiffness<V> extends Action<V> {
 
     private final BodyPart bodyPart;
-    private final OnOff onOff;
+    private final WorkingState onOff;
 
-    private SetStiffness(BodyPart bodyPart, OnOff onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private SetStiffness(BodyPart bodyPart, WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SET_STIFFNESS"), properties, comment);
         Assert.notNull(bodyPart, "Missing body part in SetStiffness block!");
         Assert.notNull(onOff, "Missing onOff in SetStiffness block!");
@@ -46,7 +46,7 @@ public final class SetStiffness<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link SetStiffness}
      */
-    private static <V> SetStiffness<V> make(BodyPart bodyPart, OnOff onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> SetStiffness<V> make(BodyPart bodyPart, WorkingState onOff, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new SetStiffness<V>(bodyPart, onOff, properties, comment);
     }
 
@@ -54,7 +54,7 @@ public final class SetStiffness<V> extends Action<V> {
         return this.bodyPart;
     }
 
-    public OnOff getOnOff() {
+    public WorkingState getOnOff() {
         return this.onOff;
     }
 
@@ -76,7 +76,7 @@ public final class SetStiffness<V> extends Action<V> {
         String bodyPart = helper.extractField(fields, BlocklyConstants.PART);
         String onOff = helper.extractField(fields, BlocklyConstants.MODE);
 
-        return SetStiffness.make(BodyPart.get(bodyPart), OnOff.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
+        return SetStiffness.make(BodyPart.get(bodyPart), WorkingState.get(onOff), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

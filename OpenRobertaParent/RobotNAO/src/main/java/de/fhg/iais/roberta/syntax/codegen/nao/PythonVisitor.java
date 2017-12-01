@@ -8,9 +8,9 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.components.nao.SensorType;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
-import de.fhg.iais.roberta.mode.action.nao.TurnDirection;
-import de.fhg.iais.roberta.mode.action.nao.WalkDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
@@ -228,14 +228,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append(", ");
         IndexLocation where1 = (IndexLocation) getSubFunct.getStrParam().get(0);
         this.sb.append(getEnumCode(where1));
-        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+        if ( (where1 == IndexLocation.FROM_START) || (where1 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             getSubFunct.getParam().get(1).visit(this);
         }
         this.sb.append(", ");
         IndexLocation where2 = (IndexLocation) getSubFunct.getStrParam().get(1);
         this.sb.append(getEnumCode(where2));
-        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+        if ( (where2 == IndexLocation.FROM_START) || (where2 == IndexLocation.FROM_END) ) {
             this.sb.append(", ");
             if ( getSubFunct.getParam().size() == 3 ) {
                 getSubFunct.getParam().get(2).visit(this);
@@ -699,7 +699,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
         this.sb.append("h.walk(");
-        if ( walkDistance.getWalkDirection() == WalkDirection.BACKWARD ) {
+        if ( walkDistance.getWalkDirection() == MoveDirection.BACKWARD ) {
             this.sb.append("-");
         }
         walkDistance.getDistanceToWalk().visit(this);

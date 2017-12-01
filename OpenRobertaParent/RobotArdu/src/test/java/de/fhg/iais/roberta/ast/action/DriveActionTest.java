@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.syntax.action.motor.DriveAction;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNroll;
 
@@ -24,7 +24,7 @@ public class DriveActionTest {
     @Test
     public void getDirection() throws Exception {
         DriveAction<?> da = (DriveAction<?>) this.h.generateAST("/ast/actions/action_MotorDiffOnFor.xml");
-        Assert.assertEquals(DriveDirection.FOREWARD, da.getDirection());
+        Assert.assertEquals(MoveDirection.FOREWARD, da.getDirection());
     }
 
     @Test

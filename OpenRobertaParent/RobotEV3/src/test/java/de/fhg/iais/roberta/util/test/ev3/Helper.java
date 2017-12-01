@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
@@ -22,10 +22,10 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
         this.robotFactory = new Factory();
         Configuration brickConfiguration =
             new EV3Configuration.Builder()
-                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, MoveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, MoveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         setRobotConfiguration(brickConfiguration);
     }

@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.test.nxt.Helper;
@@ -42,8 +42,8 @@ public class NxcVisitorTest {
         final NxtConfiguration.Builder builder = new NxtConfiguration.Builder();
         builder.setTrackWidth(11).setWheelDiameter(5.6);
         builder
-            .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+            .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.LEFT))
+            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = (NxtConfiguration) builder.build();
     }

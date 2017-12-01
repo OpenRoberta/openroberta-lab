@@ -1,18 +1,35 @@
 package de.fhg.iais.roberta.mode.general;
 
-import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
+import java.util.Locale;
 
-/**
- * All colors that are legal.
- */
+import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+
 public enum WorkingState implements IWorkingState {
-
     ON(), OFF();
 
     private final String[] values;
 
     private WorkingState(String... values) {
         this.values = values;
+    }
+
+    public static WorkingState get(String direction) {
+        if ( (direction == null) || direction.isEmpty() ) {
+            throw new DbcException("Invalid Modus: " + direction);
+        }
+        String sUpper = direction.trim().toUpperCase(Locale.GERMAN);
+        for ( WorkingState p : WorkingState.values() ) {
+            if ( p.toString().equals(sUpper) ) {
+                return p;
+            }
+            for ( String value : p.getValues() ) {
+                if ( sUpper.equals(value) ) {
+                    return p;
+                }
+            }
+        }
+        throw new DbcException("Invalid Modus: " + direction);
     }
 
     @Override

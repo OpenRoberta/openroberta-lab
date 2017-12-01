@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -527,7 +527,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        final boolean reverse = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        final boolean reverse = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getRotationDirection() == MoveDirection.BACKWARD;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
         final boolean isRegulatedDrive = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         String sign = reverse ? "-" : "";
@@ -559,7 +559,7 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        final boolean reverse = this.brickConfiguration.getActorOnPort(motorSetPowerAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        final boolean reverse = this.brickConfiguration.getActorOnPort(motorSetPowerAction.getPort()).getRotationDirection() == MoveDirection.BACKWARD;
         String sign = reverse ? "-" : "";
         final String methodName = "OnFwdReg";
         //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
@@ -593,9 +593,9 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         final boolean isDuration = driveAction.getParam().getDuration() != null;
         final boolean reverse =
-            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD);
-        final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
+            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == MoveDirection.BACKWARD)
+                || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == MoveDirection.BACKWARD);
+        final boolean localReverse = driveAction.getDirection() == MoveDirection.BACKWARD;
         String methodName = "";
         if ( isDuration ) {
             methodName = "RotateMotorEx";
@@ -635,8 +635,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         final boolean isDuration = turnAction.getParam().getDuration() != null;
         final boolean reverse =
-            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD);
+            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == MoveDirection.BACKWARD)
+                || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == MoveDirection.BACKWARD);
 
         String methodName = "";
         int turnpct = 100;
@@ -681,8 +681,8 @@ public class NxcVisitor extends RobotCppVisitor implements NxtAstVisitor<Void>, 
     public Void visitCurveAction(CurveAction<Void> curveAction) {
         final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
         final boolean confForward =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.FOREWARD;
-        final boolean blockForward = curveAction.getDirection() == DriveDirection.FOREWARD;
+            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == MoveDirection.FOREWARD;
+        final boolean blockForward = curveAction.getDirection() == MoveDirection.FOREWARD;
         String methodName = "";
         if ( isDuration ) {
             methodName = "SteerDriveEx";

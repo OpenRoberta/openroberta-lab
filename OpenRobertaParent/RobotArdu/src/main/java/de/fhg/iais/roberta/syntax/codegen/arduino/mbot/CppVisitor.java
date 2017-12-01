@@ -2,14 +2,14 @@ package de.fhg.iais.roberta.syntax.codegen.arduino.mbot;
 
 import java.util.ArrayList;
 
+import de.fag.iais.roberta.mode.sensor.arduino.mbot.LightSensorMode;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensors.arduino.mbot.LightSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -208,7 +208,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         final MotorDuration<Void> duration = driveAction.getParam().getDuration();
         sb.append("myDrive.drive(");
         driveAction.getParam().getSpeed().visit(this);
-        sb.append("*255/100, ").append(driveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        sb.append("*255/100, ").append(driveAction.getDirection() == MoveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             sb.append(", ");
             duration.getValue().visit(this);
@@ -224,7 +224,7 @@ public class CppVisitor extends ArduinoVisitor implements MbotAstVisitor<Void> {
         curveAction.getParamLeft().getSpeed().visit(this);
         sb.append("*255/100, ");
         curveAction.getParamRight().getSpeed().visit(this);
-        sb.append("*255/100, ").append(curveAction.getDirection() == DriveDirection.FOREWARD ? 1 : 0);
+        sb.append("*255/100, ").append(curveAction.getDirection() == MoveDirection.FOREWARD ? 1 : 0);
         if ( duration != null ) {
             sb.append(", ");
             duration.getValue().visit(this);

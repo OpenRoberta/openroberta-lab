@@ -16,7 +16,7 @@ public class MathTrigTest {
 
     @Test
     public void Test1() throws Exception {
-        String a = "if(0==BlocklyMethods.sin(0)){hal.regulatedDrive(DriveDirection.FOREWARD,BlocklyMethods.acos(0));}}";
+        String a = "if(0==BlocklyMethods.sin(0)){hal.regulatedDrive(MoveDirection.FOREWARD,BlocklyMethods.acos(0));}}";
 
         this.h.assertCodeIsOk(a, "/syntax/math/math_trig1.xml");
     }

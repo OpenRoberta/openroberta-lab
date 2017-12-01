@@ -16,16 +16,16 @@ import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
-import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
-import de.fhg.iais.roberta.inter.mode.sensor.IAccelerometerSensorMode;
+import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
@@ -38,17 +38,18 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
-import de.fhg.iais.roberta.mode.sensor.AccelerometerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.CoordinatesMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
@@ -242,7 +243,7 @@ public interface IRobotFactory {
      * @return the drive direction from the enum {@link IDriveDirection}
      */
     default IDriveDirection getDriveDirection(String driveDirection) {
-        return IRobotFactory.getModeValue(driveDirection, DriveDirection.class);
+        return IRobotFactory.getModeValue(driveDirection, MoveDirection.class);
     }
 
     /**
@@ -277,8 +278,8 @@ public interface IRobotFactory {
         return IRobotFactory.getModeValue(mode, TemperatureSensorMode.class);
     }
 
-    default IAccelerometerSensorMode getAccelerometerSensorMode(String mode) {
-        return IRobotFactory.getModeValue(mode, AccelerometerSensorMode.class);
+    default ICoordinatesMode getAccelerometerSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, CoordinatesMode.class);
     }
 
     default ISoundSensorMode getSoundSensorMode(String mode) {

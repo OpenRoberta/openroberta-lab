@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser;
 import de.fhg.iais.roberta.ev3Configuration.generated.Ev3ConfigurationParser.ConfContext;
 import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.transformer.ev3.Ev3ConfigurationParseTree2Ev3ConfigurationVisitor;
@@ -141,7 +141,7 @@ public class Antlr4Ev3ConfigurationTest {
     public void testParseTree2Configuration1Actor() throws Exception {
         Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
-        expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE));
+        expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.NONE));
         EV3Configuration expected = (EV3Configuration) expectedBuilder.build();
 
         assertAllEquals(
@@ -159,9 +159,9 @@ public class Antlr4Ev3ConfigurationTest {
     public void testParseTree2Configuration3Actors() throws Exception {
         Builder<EV3Configuration.Builder> expectedBuilder = new EV3Configuration.Builder();
         expectedBuilder.setWheelDiameter(5.0).setTrackWidth(2.5);
-        expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE));
-        expectedBuilder.addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.BACKWARD, MotorSide.LEFT));
-        expectedBuilder.addActor(ActorPort.D, new Actor(ActorType.LARGE, false, DriveDirection.BACKWARD, MotorSide.RIGHT));
+        expectedBuilder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.NONE));
+        expectedBuilder.addActor(ActorPort.C, new Actor(ActorType.LARGE, false, MoveDirection.BACKWARD, MotorSide.LEFT));
+        expectedBuilder.addActor(ActorPort.D, new Actor(ActorType.LARGE, false, MoveDirection.BACKWARD, MotorSide.RIGHT));
         EV3Configuration expected = (EV3Configuration) expectedBuilder.build();
 
         assertAllEquals(
@@ -184,8 +184,8 @@ public class Antlr4Ev3ConfigurationTest {
             .setTrackWidth(13.5)
             .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))
             .addSensor(SensorPort.S4, new Sensor(SensorType.ULTRASONIC))
-            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-            .addActor(ActorPort.C, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT));
+            .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.RIGHT))
+            .addActor(ActorPort.C, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.LEFT));
         EV3Configuration expected = (EV3Configuration) expectedBuilder.build();
 
         assertAllEquals(

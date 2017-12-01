@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
@@ -187,12 +187,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getDriveDirectionFromString() {
-        Assert.assertEquals(this.factory.getDriveDirection("BACKWARD"), DriveDirection.BACKWARD);
+        Assert.assertEquals(this.factory.getDriveDirection("BACKWARD"), MoveDirection.BACKWARD);
     }
 
     @Test
     public void getDriveDirectionByAlternativeName() {
-        Assert.assertEquals(this.factory.getDriveDirection("OFF"), DriveDirection.FOREWARD);
+        Assert.assertEquals(this.factory.getDriveDirection("OFF"), MoveDirection.FOREWARD);
     }
 
     @Test(expected = DbcException.class)

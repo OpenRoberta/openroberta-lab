@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.ColorSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;

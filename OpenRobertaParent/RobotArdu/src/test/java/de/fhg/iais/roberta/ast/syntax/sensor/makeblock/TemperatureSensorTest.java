@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.sensor.makeblock;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensors.arduino.mbot.SensorPort;
+import de.fag.iais.roberta.mode.sensor.arduino.mbot.SensorPort;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ardu.HelperMakeBlock;

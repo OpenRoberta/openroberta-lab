@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IAccelerometerSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 public final class AccelerometerSensor<V> extends ExternalSensor<V> {
 
-    private AccelerometerSensor(IAccelerometerSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private AccelerometerSensor(ICoordinatesMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(mode, port, BlockTypeContainer.getByName("ACCELEROMETER_SENSING"), properties, comment);
         setReadOnly();
     }
@@ -31,7 +31,7 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Gyroscope}
      */
-    public static <V> AccelerometerSensor<V> make(IAccelerometerSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> AccelerometerSensor<V> make(ICoordinatesMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new AccelerometerSensor<>(mode, port, properties, comment);
     }
 

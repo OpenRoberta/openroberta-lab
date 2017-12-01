@@ -9,14 +9,14 @@ public class DriveActionTest {
 
     @Test
     public void drive() throws Exception {
-        String a = "\nhal.regulatedDrive(DriveDirection.FOREWARD, 50);}";
+        String a = "\nhal.regulatedDrive(MoveDirection.FOREWARD, 50);}";
 
         this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffOn.xml");
     }
 
     @Test
     public void driveFor() throws Exception {
-        String a = "\nhal.driveDistance(DriveDirection.FOREWARD, 50, 20);}";
+        String a = "\nhal.driveDistance(MoveDirection.FOREWARD, 50, 20);}";
 
         this.h.assertCodeIsOk(a, "/syntax/actions/action_MotorDiffOnFor.xml");
     }

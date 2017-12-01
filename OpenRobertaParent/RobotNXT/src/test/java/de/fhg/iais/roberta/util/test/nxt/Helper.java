@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.factory.nxt.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.syntax.codegen.nxt.NxcVisitor;
 import de.fhg.iais.roberta.syntax.codegen.nxt.SimulationVisitor;
@@ -23,10 +23,10 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
         this.robotFactory = new Factory();
         Configuration brickConfiguration =
             new NxtConfiguration.Builder()
-                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, MoveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, MoveDirection.FOREWARD, MotorSide.NONE))
                 .build();
         setRobotConfiguration(brickConfiguration);
     }
@@ -85,10 +85,10 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
     public void assertWrappedCodeIsOk(String correctJavaCode, String fileName) throws Exception {
         NxtConfiguration brickConfiguration =
             (NxtConfiguration) new NxtConfiguration.Builder()
-                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.A, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(ActorPort.B, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.C, new Actor(ActorType.LARGE, false, MoveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.D, new Actor(ActorType.MEDIUM, false, MoveDirection.FOREWARD, MotorSide.NONE))
                 .build();
         Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }

@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -72,7 +72,7 @@ public class Jaxb2CalliopeConfigurationTransformer {
                 actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
                 actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
-                String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
+                String rotation = actor.getRotationDirection() == MoveDirection.FOREWARD ? "OFF" : "ON";
                 actorFields.add(mkField("MOTOR_REVERSE", rotation));
                 if ( !actor.getName().blocklyName().equals("robBrick_motor_middle") ) {
                     actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));

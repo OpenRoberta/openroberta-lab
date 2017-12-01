@@ -1,25 +1,25 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import java.util.Locale;
 
-import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public enum Coordinates implements IMode {
-    X(), Y(), Z();
+public enum CoordinatesMode implements ICoordinatesMode {
+    DEFAULT, X( "X" ), Y( "Y" ), Z( "Z" );
 
     private final String[] values;
 
-    private Coordinates(String... values) {
+    private CoordinatesMode(String... values) {
         this.values = values;
     }
 
-    public static Coordinates get(String direction) {
-        if ( direction == null || direction.isEmpty() ) {
+    public static CoordinatesMode get(String direction) {
+        if ( (direction == null) || direction.isEmpty() ) {
             throw new DbcException("Invalid Coordinate: " + direction);
         }
         String sUpper = direction.trim().toUpperCase(Locale.GERMAN);
-        for ( Coordinates c : Coordinates.values() ) {
+        for ( CoordinatesMode c : CoordinatesMode.values() ) {
             if ( c.toString().equals(sUpper) ) {
                 return c;
             }

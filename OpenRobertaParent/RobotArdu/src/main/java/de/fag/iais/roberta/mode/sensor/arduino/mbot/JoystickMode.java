@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.sensors.arduino.mbot;
+package de.fag.iais.roberta.mode.sensor.arduino.mbot;
 
 import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 

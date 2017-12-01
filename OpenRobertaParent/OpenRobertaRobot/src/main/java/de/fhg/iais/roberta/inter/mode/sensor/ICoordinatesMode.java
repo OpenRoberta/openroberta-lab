@@ -8,6 +8,6 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  * @author eovchinnikova
  */
 
-public interface IAccelerometerSensorMode extends IMode {
+public interface ICoordinatesMode extends IMode {
 
 }

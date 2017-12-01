@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MoveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -935,11 +935,11 @@ public abstract class RobotSimulationVisitor<V> implements AstLanguageVisitor<V>
         }
     }
 
-    protected DriveDirection getDriveDirection(boolean isReverse) {
+    protected MoveDirection getDriveDirection(boolean isReverse) {
         if ( isReverse ) {
-            return DriveDirection.BACKWARD;
+            return MoveDirection.BACKWARD;
         }
-        return DriveDirection.FOREWARD;
+        return MoveDirection.FOREWARD;
     }
 
     protected TurnDirection getTurnDirection(boolean isReverse) {
