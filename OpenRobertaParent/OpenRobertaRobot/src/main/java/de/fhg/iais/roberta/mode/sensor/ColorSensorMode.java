@@ -8,7 +8,6 @@ public enum ColorSensorMode implements IColorSensorMode {
     private final String[] values;
 
     private ColorSensorMode(String... values) {
-
         this.values = values;
     }
 

@@ -56,7 +56,7 @@ public class JavaSourceCompiler {
     }
 
     private Boolean compile() {
-        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+        DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         List<JavaFileObject> javaFiles = getJavaFiles();
         List<String> compilationOptions = getCompilerProperties();
         CompilationTask task = this.compiler.getTask(null, this.fileManager, diagnostics, compilationOptions, null, javaFiles);
@@ -82,13 +82,13 @@ public class JavaSourceCompiler {
     }
 
     private List<JavaFileObject> getJavaFiles() {
-        List<JavaFileObject> javaFiles = new ArrayList<JavaFileObject>();
+        List<JavaFileObject> javaFiles = new ArrayList<>();
         javaFiles.add(new SourceJavaFileObject(this.packageName + this.programName, this.sourceCode));
         return javaFiles;
     }
 
     private List<String> getCompilerProperties() {
-        List<String> compilationOptions = new ArrayList<String>();
+        List<String> compilationOptions = new ArrayList<>();
         compilationOptions.add("-source");
         compilationOptions.add("1.7");
         compilationOptions.add("-target");

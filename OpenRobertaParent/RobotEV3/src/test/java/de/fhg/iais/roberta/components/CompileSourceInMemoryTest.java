@@ -12,6 +12,8 @@ public class CompileSourceInMemoryTest {
             + "import de.fhg.iais.roberta.runtime.*;\n"
             + "import de.fhg.iais.roberta.runtime.ev3.*;\n"
             + "import de.fhg.iais.roberta.mode.general.*;\n"
+            + "import de.fhg.iais.roberta.mode.action.*;\n"
+            + "import de.fhg.iais.roberta.mode.sensor.*;\n"
             + "import de.fhg.iais.roberta.mode.action.ev3.*;\n"
             + "import de.fhg.iais.roberta.mode.sensor.ev3.*;\n"
             + "import de.fhg.iais.roberta.components.*;\n"
@@ -49,7 +51,6 @@ public class CompileSourceInMemoryTest {
 
     @Test
     public void testParsing() throws Exception {
-
         JavaSourceCompiler csm = new JavaSourceCompiler("NEPOprog", code, "");
         csm.compileAndPackage("a", "a");
         Assert.assertEquals(false, csm.isSuccess());

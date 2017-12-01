@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.action.nxt;
+package de.fhg.iais.roberta.mode.action;
 
 import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
 

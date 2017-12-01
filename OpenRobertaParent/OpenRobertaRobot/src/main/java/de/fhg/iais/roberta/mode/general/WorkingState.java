@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.inter.mode.action.IWorkingState;
  * All colors that are legal.
  */
 public enum WorkingState implements IWorkingState {
+
     ON(), OFF();
 
     private final String[] values;
