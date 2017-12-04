@@ -209,13 +209,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      * @param xmlTextConfig
      *            {String} - XML representation of the robot configuration
      */
-    function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
         COMM.json("/program", {
             "cmd" : "showSourceP",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig
+            "configurationText" : xmlTextConfig,
+            "language" : language
         }, successFn, "show source code of program '" + programName + "'");
     }
 
@@ -234,25 +235,27 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the robot configuration
      * 
      */
-    function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
         COMM.json("/program", {
             "cmd" : "runP",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig
+            "configurationText" : xmlTextConfig,
+            "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
 
     exports.runOnBrick = runOnBrick;
 
-    function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    function runOnBrickBack(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
         COMM.json("/program", {
             "cmd" : "runPBack",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig
+            "configurationText" : xmlTextConfig,
+            "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
 
@@ -271,13 +274,14 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
      *            {String} - XML representation of the robot configuration
      * 
      */
-    function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
         COMM.json("/program", {
             "cmd" : "runPsim",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
-            "configurationText" : xmlTextConfig
+            "configurationText" : xmlTextConfig,
+            "language" : language
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
     }
 

@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.check.hardware.mbed.UsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.syntax.codegen.mbed.calliope.CppVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -69,7 +70,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
+    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         String sourceCode = CppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
         UsedHardwareCollectorVisitor usedHardwareVisitor =
             new UsedHardwareCollectorVisitor(data.getProgramTransformer().getTree(), data.getBrickConfiguration());
@@ -110,7 +111,7 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
     @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText) {
+    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText, ILanguage language) {
         BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;

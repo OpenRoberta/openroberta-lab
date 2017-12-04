@@ -31,7 +31,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
                 var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-                PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+                var language = GUISTATE_C.getLanguage();
+                
+                PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                     if (result.rc == "ok") {
                         MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                         $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
@@ -177,7 +179,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-            PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+            var language = GUISTATE_C.getLanguage();
+            
+            PROGRAM.runInSim(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 if (result.rc == "ok") {
                     //                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", GUISTATE_C.getProgramName());
                     SIM.init(result.javaScriptProgram, true, GUISTATE_C.getRobotGroup());

@@ -495,17 +495,19 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
         var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
+        var language = GUISTATE_C.getLanguage();
+        
         var connectionType = GUISTATE_C.getConnectionTypeEnum();
         switch (GUISTATE_C.getConnection()) {
         case connectionType.TOKEN:
-            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+            PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 RUN_C.runForToken(result);
                 reloadProgram(result);
             });
             break;
         case connectionType.AUTO:
             GUISTATE_C.setAutoConnectedBusy(true);
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 RUN_C.runForAutoConnection(result);
                 reloadProgram(result);
             });
@@ -513,17 +515,17 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
         case connectionType.AGENT:
             $('#menuRunProg').parent().addClass('disabled');
             GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
-            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+            PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                 RUN_C.runForAgentConnection(result);
             });
             break;
         case connectionType.AGENTORTOKEN:
             if (GUISTATE_C.getIsAgent() == true) {
-                PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+                PROGRAM.runOnBrickBack(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                     RUN_C.runForAgentConnection(result);
                 });
             } else {
-                PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, function(result) {
+                PROGRAM.runOnBrick(GUISTATE_C.getProgramName(), configName, xmlTextProgram, xmlConfigText, language, function(result) {
                     RUN_C.runForToken(result);
                     reloadProgram(result);
                 });
@@ -638,8 +640,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'guiState.controller', 'gu
             var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
             var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
             var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-
-            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, function(result) {
+            
+            var language = GUISTATE_C.getLanguage();
+            
+            PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, function(result) {
                 $('#codeContent').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.sourceCode.escapeHTML(), null, true) + '</pre>');
             });
         }

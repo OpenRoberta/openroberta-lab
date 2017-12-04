@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
@@ -44,8 +45,8 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        String sourceCode = PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
         try {
             storeGeneratedProgram(token, programName, sourceCode);
         } catch ( Exception e ) {
@@ -71,13 +72,13 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
     @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText) {
+    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText, ILanguage language) {
         BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;
         }
 
-        return PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+        return PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
     }
 
     /**

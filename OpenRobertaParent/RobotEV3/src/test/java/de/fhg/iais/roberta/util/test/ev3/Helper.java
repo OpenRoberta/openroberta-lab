@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.syntax.codegen.ev3.JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.PythonVisitor;
@@ -39,7 +40,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     private String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String javaCode = JavaVisitor.generate("Test", (EV3Configuration) this.robotConfiguration, transformer.getTree(), false);
+        String javaCode = JavaVisitor.generate("Test", (EV3Configuration) this.robotConfiguration, transformer.getTree(), false, Language.ENGLISH);
         return javaCode;
     }
 
@@ -64,7 +65,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJava(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true);
+        String code = JavaVisitor.generate("Test", (EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -79,7 +80,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generatePython(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true);
+        String code = PythonVisitor.generate((EV3Configuration) brickConfiguration, transformer.getTree(), true, Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }

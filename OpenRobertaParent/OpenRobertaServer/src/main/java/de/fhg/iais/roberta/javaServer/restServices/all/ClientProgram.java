@@ -29,7 +29,9 @@ import de.fhg.iais.roberta.blockly.generated.Export;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
@@ -137,6 +139,7 @@ public class ClientProgram {
                 String programText = request.getString("programText");
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
+                ILanguage language = Language.findByAbbr(request.optString("language"));
 
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
@@ -144,7 +147,7 @@ public class ClientProgram {
                     configurationText = robotFactory.getConfigurationDefault();
                 }
 
-                String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText);
+                String sourceCode = robotCompilerWorkflow.generateSourceCode(robotFactory, token, programName, programText, configurationText, language);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( sourceCode == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
@@ -211,7 +214,7 @@ public class ClientProgram {
                     Util.addErrorInfo(response, Key.USER_ERROR_NOT_LOGGED_IN);
                 } else {
                     User user = up.getUser(userId);
-                    if ( !this.isPublicServer || (user != null && user.isActivated()) ) {
+                    if ( !this.isPublicServer || user != null && user.isActivated() ) {
                         String programName = request.getString("programName");
                         String userToShareName = request.getString("userToShare");
                         String right = request.getString("right");
@@ -232,7 +235,7 @@ public class ClientProgram {
                     // generating a unique name for the program owned by the gallery.
                     User user = up.getUser(userId);
                     String userAccount = user.getAccount();
-                    if ( !this.isPublicServer || (user != null && user.isActivated()) ) {
+                    if ( !this.isPublicServer || user != null && user.isActivated() ) {
                         // get the program from the origin user to share with the gallery
                         Program program = pp.getProgram(programName, userAccount, robot, userAccount);
 
@@ -380,6 +383,7 @@ public class ClientProgram {
                 String programText = request.optString("programText");
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
+                ILanguage language = Language.findByAbbr(request.optString("language"));
 
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
@@ -395,7 +399,7 @@ public class ClientProgram {
                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);
+                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer, language);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                     } else {
@@ -413,6 +417,7 @@ public class ClientProgram {
                 String programText = request.optString("programText");
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
+                ILanguage language = Language.findByAbbr(request.optString("language"));
 
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
@@ -427,7 +432,7 @@ public class ClientProgram {
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
 
-                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer);
+                    messageKey = robotCompilerWorkflow.execute(token, programName, programAndConfigTransformer, language);
                     if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                         response.put("compiledCode", robotCompilerWorkflow.getCompiledCode());
                         response.put("rc", "ok");
@@ -451,6 +456,7 @@ public class ClientProgram {
                 String programText = request.optString("programText");
                 String configName = request.optString("configuration", null);
                 String configurationText = request.optString("configurationText", null);
+                ILanguage language = Language.findByAbbr(request.optString("language"));
 
                 if ( configName != null ) {
                     configurationText = configurationProcessor.getConfigurationText(configName, userId, robot);
@@ -468,7 +474,7 @@ public class ClientProgram {
                 if ( messageKey == null ) {
                     ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                     String javaScriptCode =
-                        robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, programText, configurationText);
+                        robotFactory.getSimCompilerWorkflow().generateSourceCode(robotFactory, token, programName, programText, configurationText, language);
 
                     ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                     response.put("javaScriptProgram", javaScriptCode);

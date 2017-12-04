@@ -7,6 +7,7 @@ import java.util.Set;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.components.nao.SensorType;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
@@ -100,6 +101,8 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
 
     protected Set<UsedSensor> usedSensors;
 
+    protected ILanguage language;
+
     /**
      * initialize the Python code generator visitor.
      *
@@ -107,7 +110,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private PythonVisitor(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private PythonVisitor(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
         UsedHardwareCollectorVisitor checker = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -116,6 +119,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
 
+        this.language = language;
     }
 
     /**
@@ -125,10 +129,14 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(NAOConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
+    public static String generate(
+        NAOConfiguration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        boolean withWrapping,
+        ILanguage language) {
         Assert.notNull(brickConfiguration);
 
-        PythonVisitor astVisitor = new PythonVisitor(brickConfiguration, phrasesSet, 0);
+        PythonVisitor astVisitor = new PythonVisitor(brickConfiguration, phrasesSet, 0, language);
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
@@ -792,76 +800,59 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         return null;
     }
 
+    private String getLanguageString(ILanguage language) {
+        switch ( (Language) language ) {
+            case GERMAN:
+                return "German";
+            case ENGLISH:
+                return "English";
+            case FRENCH:
+                return "French";
+            case JAPANESE:
+                return "Japanese";
+            case CHINESE:
+                return "Chinese";
+            case SPANISH:
+                return "Spanish";
+            case KOREAN:
+                return "Korean";
+            case ITALIAN:
+                return "Italian";
+            case DUTCH:
+                return "Dutch";
+            case FINNISH:
+                return "Finnish";
+            case POLISH:
+                return "Polish";
+            case RUSSIAN:
+                return "Russian";
+            case TURKISH:
+                return "Turkish";
+            case ARABIC:
+                return "Arabic";
+            case CZECH:
+                return "Czech";
+            case PORTUGUESE:
+                return "Portuguese";
+            case BRAZILIAN:
+                return "Brazilian";
+            case SWEDISH:
+                return "Swedish";
+            case DANISH:
+                return "Danish";
+            case NORWEGIAN:
+                return "Norwegian";
+            case GREEK:
+                return "Greek";
+            default:
+                return "English";
+        }
+    }
+
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         this.sb.append("h.setLanguage(\"");
-        switch ( (Language) setLanguageAction.getLanguage() ) {
-            case GERMAN:
-                this.sb.append("German");
-                break;
-            case ENGLISH:
-                this.sb.append("English");
-                break;
-            case FRENCH:
-                this.sb.append("French");
-                break;
-            case JAPANESE:
-                this.sb.append("Japanese");
-                break;
-            case CHINESE:
-                this.sb.append("Chinese");
-                break;
-            case SPANISH:
-                this.sb.append("Spanish");
-                break;
-            case KOREAN:
-                this.sb.append("Korean");
-                break;
-            case ITALIAN:
-                this.sb.append("Italian");
-                break;
-            case DUTCH:
-                this.sb.append("Dutch");
-                break;
-            case FINNISH:
-                this.sb.append("Finnish");
-                break;
-            case POLISH:
-                this.sb.append("Polish");
-                break;
-            case RUSSIAN:
-                this.sb.append("Russian");
-                break;
-            case TURKISH:
-                this.sb.append("Turkish");
-                break;
-            case ARABIC:
-                this.sb.append("Arabic");
-                break;
-            case CZECH:
-                this.sb.append("Czech");
-                break;
-            case PORTUGUESE:
-                this.sb.append("Portuguese");
-                break;
-            case BRAZILIAN:
-                this.sb.append("Brazilian");
-                break;
-            case SWEDISH:
-                this.sb.append("Swedish");
-                break;
-            case DANISH:
-                this.sb.append("Danish");
-                break;
-            case NORWEGIAN:
-                this.sb.append("Norwegian");
-                break;
-            case GREEK:
-                this.sb.append("Greek");
-                break;
-            default:
-                break;
-        }
+        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
         this.sb.append("\")");
         return null;
     }
@@ -1327,7 +1318,6 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("from roberta import Hal\n");
         this.sb.append("from roberta import BlocklyMethods\n");
         this.sb.append("h = Hal()\n");
-
         this.generateSensors();
 
         if ( !this.loopsLabels.isEmpty() ) {
@@ -1336,6 +1326,9 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
             this.sb.append("class ContinueLoop(Exception): pass\n\n");
         }
 
+        this.sb.append("\nh.setLanguage(\"");
+        this.sb.append(this.getLanguageString(this.language));
+        this.sb.append("\")");
     }
 
     @Override

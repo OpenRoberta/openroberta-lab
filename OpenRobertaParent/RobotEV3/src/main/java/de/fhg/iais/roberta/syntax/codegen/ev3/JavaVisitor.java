@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
@@ -103,6 +104,8 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     protected final Set<UsedSensor> usedSensors;
     protected final Set<String> usedImages;
 
+    protected ILanguage language;
+
     /**
      * initialize the Java code generator visitor.
      *
@@ -111,7 +114,12 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private JavaVisitor(String programName, ArrayList<ArrayList<Phrase<Void>>> programPhrases, EV3Configuration brickConfiguration, int indentation) {
+    private JavaVisitor(
+        String programName,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        EV3Configuration brickConfiguration,
+        int indentation,
+        ILanguage language) {
         super(programPhrases, programName, indentation);
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -121,6 +129,8 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.usedImages = checkVisitor.getUsedImages();
 
         this.loopsLabels = checkVisitor.getloopsLabelContainer();
+
+        this.language = language;
         // Picture strings are UTF-16 encoded with extra \0 padding bytes
         initPredefinedImages();
 
@@ -137,11 +147,12 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         String programName,
         EV3Configuration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
-        boolean withWrapping) {
+        boolean withWrapping,
+        ILanguage language) {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
 
-        JavaVisitor astVisitor = new JavaVisitor(programName, phrasesSet, brickConfiguration, withWrapping ? 1 : 0);
+        JavaVisitor astVisitor = new JavaVisitor(programName, phrasesSet, brickConfiguration, withWrapping ? 1 : 0, language);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
     }
@@ -166,13 +177,17 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
+
+        this.sb.append("hal.setLanguage(\"");
+        this.sb.append(this.getLanguageString(this.language));
+        this.sb.append("\");");
+
         this.sb.append(generateUsedImages()).append("\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
         this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
         this.sb.append(INDENT).append("}");
-
     }
 
     @Override
@@ -237,52 +252,43 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         return null;
     }
 
+    private String getLanguageString(ILanguage language) {
+        switch ( (Language) language ) {
+            case GERMAN:
+                return "de";
+            case ENGLISH:
+                return "en";
+            case FRENCH:
+                return "fr";
+            case SPANISH:
+                return "es";
+            case ITALIAN:
+                return "it";
+            case DUTCH:
+                return "nl";
+            case FINNISH:
+                return "fi";
+            case POLISH:
+                return "pl";
+            case RUSSIAN:
+                return "ru";
+            case TURKISH:
+                return "tu";
+            case CZECH:
+                return "cs";
+            case PORTUGUESE:
+                return "pt-pt";
+            case DANISH:
+                return "da";
+            default:
+                return "en";
+        }
+    }
+
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         this.sb.append("hal.setLanguage(\"");
-        switch ( (Language) setLanguageAction.getLanguage() ) {
-            case GERMAN:
-                this.sb.append("de");
-                break;
-            case ENGLISH:
-                this.sb.append("en");
-                break;
-            case FRENCH:
-                this.sb.append("fr");
-                break;
-            case SPANISH:
-                this.sb.append("es");
-                break;
-            case ITALIAN:
-                this.sb.append("it");
-                break;
-            case DUTCH:
-                this.sb.append("nl");
-                break;
-            case FINNISH:
-                this.sb.append("fi");
-                break;
-            case POLISH:
-                this.sb.append("pl");
-                break;
-            case RUSSIAN:
-                this.sb.append("ru");
-                break;
-            case TURKISH:
-                this.sb.append("tu");
-                break;
-            case CZECH:
-                this.sb.append("cs");
-                break;
-            case PORTUGUESE:
-                this.sb.append("pt-pt");
-                break;
-            case DANISH:
-                this.sb.append("da");
-                break;
-            default:
-                break;
-        }
+        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
         this.sb.append("\");");
         return null;
     }

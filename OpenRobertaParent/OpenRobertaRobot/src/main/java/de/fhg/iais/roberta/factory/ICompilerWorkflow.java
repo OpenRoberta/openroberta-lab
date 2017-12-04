@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.factory;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.util.Key;
 
@@ -22,7 +23,7 @@ public interface ICompilerWorkflow {
      * @param configurationText the hardware configuration source that describes characteristic data of the robot
      * @return a message key in case of an error; null otherwise
      */
-    Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data);
+    Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language);
 
     /**
      * - take the program given<br>
@@ -38,7 +39,7 @@ public interface ICompilerWorkflow {
      * @param configurationText the hardware configuration source that describes characteristic data of the robot
      * @return the generated source code; null in case of an error
      */
-    String generateSourceCode(IRobotFactory iRobotFactory, String token, String programName, String programText, String configurationText);
+    String generateSourceCode(IRobotFactory iRobotFactory, String token, String programName, String programText, String configurationText, ILanguage language);
 
     /**
      * return the brick configuration for given XML configuration text.

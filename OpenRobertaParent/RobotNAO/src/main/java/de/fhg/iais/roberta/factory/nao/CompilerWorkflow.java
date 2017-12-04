@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.codegen.nao.PythonVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.nao.Jaxb2NaoConfigurationTransformer;
@@ -48,8 +49,8 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     @Override
-    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = generateProgram(programName, data);
+    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        String sourceCode = generateProgram(programName, data, language);
         //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, ".py");
@@ -78,16 +79,22 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
     @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText) {
+    public String generateSourceCode(
+        IRobotFactory factory,
+        String token,
+        String programName,
+        String programText,
+        String configurationText,
+        ILanguage language) {
         BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return generateProgram(programName, data);
+        return generateProgram(programName, data, language);
     }
 
-    private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = PythonVisitor.generate((NAOConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+    private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        String sourceCode = PythonVisitor.generate((NAOConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
         CompilerWorkflow.LOG.info("generating {} code", toString().toLowerCase());
         return sourceCode;
     }

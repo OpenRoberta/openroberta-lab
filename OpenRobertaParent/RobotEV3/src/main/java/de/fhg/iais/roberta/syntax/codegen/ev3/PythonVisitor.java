@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -100,6 +101,8 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     protected final Set<UsedActor> usedActors;
     protected final Set<String> usedImages;
 
+    protected ILanguage language;
+
     /**
      * initialize the Python code generator visitor.
      *
@@ -107,7 +110,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
         UsedHardwareCollectorVisitor checkVisitor = new UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -122,6 +125,8 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.isProgramEmpty = checkVisitor.isProgramEmpty();
         this.loopsLabels = checkVisitor.getloopsLabelContainer();
 
+        this.language = language;
+
         initPredefinedImages();
     }
 
@@ -131,10 +136,14 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public static String generate(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(
+        EV3Configuration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> programPhrases,
+        boolean withWrapping,
+        ILanguage language) {
         Assert.notNull(brickConfiguration);
 
-        PythonVisitor astVisitor = new PythonVisitor(brickConfiguration, programPhrases, 0);
+        PythonVisitor astVisitor = new PythonVisitor(brickConfiguration, programPhrases, 0, language);
         astVisitor.generateCode(withWrapping);
 
         return astVisitor.sb.toString();
@@ -182,52 +191,43 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         return null;
     }
 
+    private String getLanguageString(ILanguage language) {
+        switch ( (Language) language ) {
+            case GERMAN:
+                return "de";
+            case ENGLISH:
+                return "en";
+            case FRENCH:
+                return "fr";
+            case SPANISH:
+                return "es";
+            case ITALIAN:
+                return "it";
+            case DUTCH:
+                return "nl";
+            case FINNISH:
+                return "fi";
+            case POLISH:
+                return "pl";
+            case RUSSIAN:
+                return "ru";
+            case TURKISH:
+                return "tu";
+            case CZECH:
+                return "cs";
+            case PORTUGUESE:
+                return "pt-pt";
+            case DANISH:
+                return "da";
+            default:
+                return "en";
+        }
+    }
+
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
         this.sb.append("hal.setLanguage(\"");
-        switch ( (Language) setLanguageAction.getLanguage() ) {
-            case GERMAN:
-                this.sb.append("de");
-                break;
-            case ENGLISH:
-                this.sb.append("en");
-                break;
-            case FRENCH:
-                this.sb.append("fr");
-                break;
-            case SPANISH:
-                this.sb.append("es");
-                break;
-            case ITALIAN:
-                this.sb.append("it");
-                break;
-            case DUTCH:
-                this.sb.append("nl");
-                break;
-            case FINNISH:
-                this.sb.append("fi");
-                break;
-            case POLISH:
-                this.sb.append("pl");
-                break;
-            case RUSSIAN:
-                this.sb.append("ru");
-                break;
-            case TURKISH:
-                this.sb.append("tu");
-                break;
-            case CZECH:
-                this.sb.append("cs");
-                break;
-            case PORTUGUESE:
-                this.sb.append("pt-pt");
-                break;
-            case DANISH:
-                this.sb.append("da");
-                break;
-            default:
-                break;
-        }
+        this.sb.append(this.getLanguageString(setLanguageAction.getLanguage()));
         this.sb.append("\")");
         return null;
     }
@@ -878,6 +878,10 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append(generateUsedImages());
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append("hal = Hal(_brickConfiguration)");
+
+        this.sb.append("\nhal.setLanguage(\"");
+        this.sb.append(this.getLanguageString(this.language));
+        this.sb.append("\")");
     }
 
     @Override
