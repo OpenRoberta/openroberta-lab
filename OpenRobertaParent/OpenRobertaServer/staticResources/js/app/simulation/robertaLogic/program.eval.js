@@ -725,8 +725,11 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
                 if (!isObject(list) && !obj.modifiedStmt) {
                     if (i < list.length) {
                         obj.memory.assign(stmt.expr.left.name, list[i]);
-                        obj.program.prepend([obj.repeatStmtExpr])
+                        obj.program.prepend([obj.repeatStmtExpr]);
                         obj.program.prepend(stmt.stmtList);
+                    } else {
+                        obj.memory.remove(stmt.expr.left.name);
+                        obj.repeatStmtExpr = {};
                     }
                 }
                 break;
@@ -738,7 +741,7 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
 
                 if (!isObject(from) && !isObject(to) && !isObject(to) && !obj.modifiedStmt) {
                     if (obj.memory.get(stmt.expr[0].name) == undefined) {
-                        obj.memory.decl(stmt.expr[0].name, from)
+                        obj.memory.decl(stmt.expr[0].name, from);
                     } else {
                         var oldValue = obj.memory.get(stmt.expr[0].name);
                         obj.memory.assign(stmt.expr[0].name, oldValue + step);
