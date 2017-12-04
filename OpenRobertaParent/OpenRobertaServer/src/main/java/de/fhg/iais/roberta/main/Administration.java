@@ -70,6 +70,9 @@ public class Administration {
             case "dbBackup":
                 adminWork.dbBackup();
                 break;
+            case "dbShutdown":
+                adminWork.dbShutdown();
+                break;
             case "conf:xml2text":
                 // adminWork.confXml2text();
                 break;
@@ -119,7 +122,7 @@ public class Administration {
      * backup the database. Needs the second parameter from the main args, which has to be the database URI (e.g. "jdbc:hsqldb:hsql://localhost/openroberta-db")
      */
     private void dbBackup() {
-        Administration.LOG.info("*** dbBackup. This makes sense in SERVER mode ONLY (of course :-) ***");
+        Administration.LOG.info("*** dbBackup. This makes sense in SERVER mode ONLY ***");
         expectArgs(2);
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
@@ -138,6 +141,28 @@ public class Administration {
 
         nativeSession.getTransaction().commit();
         nativeSession.close();
+    }
+
+    /**
+     * shutdown the database. Needs the second parameter from the main args, which has to be the database URI (e.g.
+     * "jdbc:hsqldb:hsql://localhost/openroberta-db")
+     */
+    private void dbShutdown() {
+        Administration.LOG.info("*** dbShutdown. This makes sense in SERVER mode ONLY ***");
+        expectArgs(2);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        DbExecutor dbExecutor = DbExecutor.make(nativeSession);
+        nativeSession.beginTransaction();
+
+        long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
+        long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
+
+        try {
+            dbExecutor.ddl("SHUTDOWN COMPACT;");
+        } finally {
+            LOG.info("shutdown compact succeeded for a database with " + users + " users and " + programs + " programs");
+        }
     }
 
     private String xml2Ast2xml(String updatedProgram) throws Exception, JAXBException {

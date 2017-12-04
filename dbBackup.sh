@@ -9,15 +9,7 @@ echo '  - The name of the backup contains the backup date formatted as yyyy-MM-d
 
 URI='jdbc:hsqldb:hsql://localhost/openroberta-db'
 
-if [ -e ${hsqldbJar} ]
-then
-  echo "using version ${hsqldbVersion} of hsqldb"
-else
-  echo "version ${hsqldbVersion} of hsqldb does not exist - exit 12"
-  exit 12
-fi
-
-LOGFILE=./dbBackup.log
+LOGFILE=./dbAdmin.log
 case "$1" in
   -log) LOGFILE=$2 ;;
   '')   ;;
