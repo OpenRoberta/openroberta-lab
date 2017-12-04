@@ -635,7 +635,7 @@ public class RestInterfaceTest {
             restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid';'authorName':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
             long lastChanged2 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
-            Assert.assertTrue(lastChanged2 > lastChanged1);
+            Assert.assertTrue(lastChanged2 > lastChanged1); // TODO: here sometimes a time race occurs. This may generate a test error. Investigate why!
         }
         final Key LOCK_ERROR = Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING;
         // scenario 2: minscha reads pid's p4, then pid reads her p4; pid stores her program, but minscha can't (his timestamp is outdated)

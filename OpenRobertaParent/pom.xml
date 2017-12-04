@@ -85,7 +85,7 @@
 			<name>Open Roberta snapshot repository</name>
 			<url>http://maven.iais.fraunhofer.de/artifactory/openroberta-snapshot-local</url>
 			<releases>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>

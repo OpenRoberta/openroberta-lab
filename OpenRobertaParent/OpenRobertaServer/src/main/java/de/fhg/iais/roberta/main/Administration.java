@@ -126,13 +126,14 @@ public class Administration {
         DbExecutor dbExecutor = DbExecutor.make(nativeSession);
         nativeSession.beginTransaction();
 
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
-        String formatDateTime = now.format(formatter);
-
-        dbExecutor.ddl("BACKUP DATABASE TO 'dbBackup/dbBackup-" + formatDateTime + ".tgz' BLOCKING;");
         long users = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from USER")).longValue();
         long programs = ((BigInteger) dbExecutor.oneValueSelect("select count(*) from PROGRAM;")).longValue();
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        String backupFileName = "backup/dbBackup-" + now.format(formatter) + "-u" + users + "-p" + programs + ".tgz";
+
+        dbExecutor.ddl("BACKUP DATABASE TO '" + backupFileName + "' BLOCKING;");
         LOG.info("backup succeeded for a database with " + users + " users and " + programs + " programs");
 
         nativeSession.getTransaction().commit();
