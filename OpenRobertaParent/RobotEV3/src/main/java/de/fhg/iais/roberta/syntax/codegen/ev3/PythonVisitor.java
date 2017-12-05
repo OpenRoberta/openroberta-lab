@@ -69,6 +69,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -464,6 +465,13 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         } else {
             this.sb.append("hal.getUltraSonicSensorPresence('" + ultrasonicSensorPort + "')");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        String soundSensorPort = soundSensor.getPort().getPortNumber();
+        this.sb.append("hal.getSoundLevel('" + soundSensorPort + "')");
         return null;
     }
 

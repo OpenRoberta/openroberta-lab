@@ -71,7 +71,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public interface IRobotFactory {
 
     static <E extends IMode> E getModeValue(String modeName, Class<E> modes) {
-        if ( (modeName == null) || modeName.isEmpty() ) {
+        if ( (modeName == null) ) {
             throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
         }
         final String sUpper = modeName.trim().toUpperCase(Locale.GERMAN);

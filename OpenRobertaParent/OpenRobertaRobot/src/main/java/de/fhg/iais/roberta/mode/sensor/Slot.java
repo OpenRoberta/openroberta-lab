@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 
 public enum Slot implements ISlot {
-    NO_SLOT;
+    NO_SLOT, EMPTY_SLOT( "" );
     private final String[] values;
 
     private Slot(String... values) {

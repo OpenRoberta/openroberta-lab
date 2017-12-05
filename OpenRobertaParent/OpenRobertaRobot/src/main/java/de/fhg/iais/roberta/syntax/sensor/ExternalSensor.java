@@ -75,7 +75,6 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
         String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
-
         return new SensorMetaDataBean(factory.getSensorPort(portName), getMode.apply(modeName), factory.getSlot(slotName));
     }
 
@@ -94,7 +93,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
-            String fieldValue = getPort().getPortNumber();
+            String fieldValue = getSlot().getValues()[0];
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
         }
         return jaxbDestination;
