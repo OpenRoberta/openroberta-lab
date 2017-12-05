@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.robotCommunication;
 
 import org.junit.Ignore;
 
-import de.fhg.iais.roberta.factory.ev3.lejos.v0.CompilerWorkflow;
+import de.fhg.iais.roberta.factory.ev3.lejos.CompilerWorkflow;
 
 public class Ev3CompilerWorkflowTest {
 

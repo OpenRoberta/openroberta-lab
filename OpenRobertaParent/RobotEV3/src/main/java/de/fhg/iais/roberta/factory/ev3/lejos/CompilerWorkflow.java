@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.factory.ev3.lejos.v1;
+package de.fhg.iais.roberta.factory.ev3.lejos;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -134,5 +134,4 @@ public class CompilerWorkflow implements ICompilerWorkflow {
     public String getCompiledCode() {
         return null;
     }
-
 }

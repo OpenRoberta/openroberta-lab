@@ -47,11 +47,29 @@ import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.BrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
+import de.fhg.iais.roberta.util.Util1;
 
 public abstract class EV3AbstracFactory extends AbstractRobotFactory {
     protected Ev3SimCompilerWorkflow simCompilerWorkflow;
+    protected ICompilerWorkflow robotCompilerWorkflow;
     protected Properties ev3Properties;
     protected String name;
+
+    public EV3AbstracFactory(String propertyName) {
+        this.ev3Properties = Util1.loadProperties("classpath:" + propertyName);
+        this.name = this.ev3Properties.getProperty("robot.name");
+        this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
+        this.robotCompilerWorkflow =
+            new CompilerWorkflow(
+                RobertaProperties.getTempDirForUserProjects(),
+                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
+
+        this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
+
+        addBlockTypesFromProperties(propertyName, this.ev3Properties);
+
+    }
+
     protected int robotPropertyNumber;
 
     @Override
@@ -122,6 +140,11 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
         return this.simCompilerWorkflow;
+    }
+
+    @Override
+    public ICompilerWorkflow getRobotCompilerWorkflow() {
+        return this.robotCompilerWorkflow;
     }
 
     @Override
