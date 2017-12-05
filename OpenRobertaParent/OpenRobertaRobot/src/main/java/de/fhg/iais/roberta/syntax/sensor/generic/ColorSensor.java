@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -28,8 +25,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class ColorSensor<V> extends ExternalSensor<V> {
 
-    private ColorSensor(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("COLOR_SENSING"), properties, comment);
+    private ColorSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("COLOR_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -42,13 +39,8 @@ public class ColorSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorSensor}
      */
-    static <V> ColorSensor<V> make(IColorSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorSensor<V>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "ColorSensor [" + this.getMode() + ", " + this.getPort() + "]";
+    static <V> ColorSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ColorSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -64,12 +56,8 @@ public class ColorSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        String mode = sensorData.getMode();
-        String port = sensorData.getPort();
-        return ColorSensor
-            .make(factory.getColorSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getColorSensorMode);
+        return ColorSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

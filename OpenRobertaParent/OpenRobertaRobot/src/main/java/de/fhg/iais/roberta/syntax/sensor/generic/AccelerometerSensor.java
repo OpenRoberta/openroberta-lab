@@ -1,9 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -17,8 +15,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 public final class AccelerometerSensor<V> extends ExternalSensor<V> {
 
-    private AccelerometerSensor(ICoordinatesMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("ACCELEROMETER_SENSING"), properties, comment);
+    private AccelerometerSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("ACCELEROMETER_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -31,8 +29,8 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link Gyroscope}
      */
-    public static <V> AccelerometerSensor<V> make(ICoordinatesMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new AccelerometerSensor<>(mode, port, properties, comment);
+    public static <V> AccelerometerSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new AccelerometerSensor<>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -48,17 +46,8 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        final IRobotFactory factory = helper.getModeFactory();
-        final SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        final String mode = sensorData.getMode();
-        final String port = sensorData.getPort();
-        return AccelerometerSensor
-            .make(factory.getAccelerometerSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    @Override
-    public String toString() {
-        return "Accelerometer [port = " + getPort() + ", coordinate  = " + getMode() + "]";
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getAccelerometerSensorMode);
+        return AccelerometerSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

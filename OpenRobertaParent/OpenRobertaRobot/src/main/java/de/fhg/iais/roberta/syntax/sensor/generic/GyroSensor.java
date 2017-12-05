@@ -5,8 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -15,9 +13,9 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
@@ -33,9 +31,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class GyroSensor<V> extends ExternalSensor<V> {
 
-    private GyroSensor(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("GYRO_SENSING"), properties, comment);
-        Assert.isTrue(mode != null && port != null);
+    private GyroSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("GYRO_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -48,13 +45,8 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link GyroSensor}
      */
-    public static <V> GyroSensor<V> make(IGyroSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GyroSensor<V>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "GyroSensor [" + this.getMode() + ", " + getPort() + "]";
+    public static <V> GyroSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new GyroSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -71,17 +63,16 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
+        SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-            return GyroSensor
-                .make(factory.getGyroSensorMode("RESET"), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+            sensorMetaDataBean =
+                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getGyroSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT));
+            return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE);
-        return GyroSensor
-            .make(factory.getGyroSensorMode(modeName), factory.getSensorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        sensorMetaDataBean = extractPortAndMode(block, helper, helper.getModeFactory()::getGyroSensorMode);
+        return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

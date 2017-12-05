@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -52,6 +53,7 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
         Assert.isTrue(sensorType != null);
         this.sensorPort = port;
         this.sensorType = sensorType;
+        SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.KEY_PRESSED:
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);
@@ -69,24 +71,36 @@ public class MbedGetSampleSensor<V> extends Sensor<V> {
                 this.sensor = GestureSensor.make(GestureSensor.GestureMode.valueOf(port), properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
-                this.sensor =
-                    CompassSensor
-                        .make(factory.getCompassSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getCompassSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = CompassSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.SOUND:
-                this.sensor =
-                    SoundSensor
-                        .make(factory.getSoundSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getSoundSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = SoundSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
-                this.sensor =
-                    TemperatureSensor
-                        .make(factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
-                this.sensor =
-                    LightSensor
-                        .make(factory.getLightSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(BlocklyConstants.NO_PORT), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getLightSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ACCELERATION:
                 this.sensor = AccelerometerSensor.make(AccelerometerSensor.Mode.valueOf(port), properties, comment);

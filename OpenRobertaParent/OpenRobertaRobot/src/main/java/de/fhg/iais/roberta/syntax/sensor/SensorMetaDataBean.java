@@ -2,30 +2,44 @@ package de.fhg.iais.roberta.syntax.sensor;
 
 import java.io.Serializable;
 
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
+
 public class SensorMetaDataBean implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String port;
-    private String mode;
+    private ISensorPort port;
+    private IMode mode;
+    private ISlot slot;
 
-    public SensorMetaDataBean(String port, String mode) {
+    public SensorMetaDataBean(ISensorPort port, IMode mode, ISlot slot) {
         this.port = port;
         this.mode = mode;
+        this.slot = slot;
     }
 
-    public String getPort() {
+    public ISensorPort getPort() {
         return this.port;
     }
 
-    public void setPort(String port) {
+    public void setPort(ISensorPort port) {
         this.port = port;
     }
 
-    public String getMode() {
+    public IMode getMode() {
         return this.mode;
     }
 
-    public void setMode(String mode) {
+    public void setMode(IMode mode) {
         this.mode = mode;
+    }
+
+    public ISlot getSlot() {
+        return this.slot;
+    }
+
+    public void setSlot(ISlot slot) {
+        this.slot = slot;
     }
 
     @Override
@@ -34,6 +48,7 @@ public class SensorMetaDataBean implements Serializable {
         int result = 1;
         result = prime * result + ((this.mode == null) ? 0 : this.mode.hashCode());
         result = prime * result + ((this.port == null) ? 0 : this.port.hashCode());
+        result = prime * result + ((this.slot == null) ? 0 : this.slot.hashCode());
         return result;
     }
 
@@ -61,6 +76,13 @@ public class SensorMetaDataBean implements Serializable {
                 return false;
             }
         } else if ( !this.port.equals(other.port) ) {
+            return false;
+        }
+        if ( this.slot == null ) {
+            if ( other.slot != null ) {
+                return false;
+            }
+        } else if ( !this.slot.equals(other.slot) ) {
             return false;
         }
         return true;

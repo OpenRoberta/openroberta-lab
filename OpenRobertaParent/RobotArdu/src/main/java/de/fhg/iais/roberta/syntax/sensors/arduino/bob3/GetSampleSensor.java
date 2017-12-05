@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -53,6 +54,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.armPart = armPart;
         String port = "1";
         this.sensorType = sensorType;
+        SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
                 this.sensor = Bob3TouchSensor.make(armSide, armPart, properties, comment);
@@ -61,10 +63,20 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
                 break;
             case BlocklyConstants.LIGHT_LEVEL:
-                this.sensor = LightSensor.make(factory.getLightSensorMode("DEFAULT"), factory.getSensorPort("NO_PORT"), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(BlocklyConstants.NO_PORT),
+                        factory.getLightSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TEMPERATURE:
-                this.sensor = TemperatureSensor.make(factory.getTemperatureSensorMode("DEFAULT"), factory.getSensorPort("NO_PORT"), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getTemperatureSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = TemperatureSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.CODE:
                 this.sensor = CodePadSensor.make(properties, comment);

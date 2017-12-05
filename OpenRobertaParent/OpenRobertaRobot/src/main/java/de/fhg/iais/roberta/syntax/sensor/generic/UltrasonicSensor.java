@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -29,9 +26,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  * To create an instance from this class use the method {@link #make(UltrasonicSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class UltrasonicSensor<V> extends ExternalSensor<V> {
-
-    private UltrasonicSensor(IUltrasonicSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("ULTRASONIC_SENSING"), properties, comment);
+    private UltrasonicSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("ULTRASONIC_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -45,13 +41,8 @@ public class UltrasonicSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link UltrasonicSensor}
      */
-    public static <V> UltrasonicSensor<V> make(IUltrasonicSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new UltrasonicSensor<V>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "UltrasonicSensor [" + this.getMode() + ", " + getPort() + "]";
+    public static <V> UltrasonicSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new UltrasonicSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -67,12 +58,8 @@ public class UltrasonicSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        String mode = sensorData.getMode();
-        String port = sensorData.getPort();
-        return UltrasonicSensor
-            .make(factory.getUltrasonicSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getUltrasonicSensorMode);
+        return UltrasonicSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

@@ -14,7 +14,9 @@ public class InfraredSensorTest {
 
     @Test
     public void sensorSetInfrared() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-23, y=157], InfraredSensor [DISTANCE, S4]], " + "[Location [x=-19, y=199], InfraredSensor [SEEK, S3]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-23, y=157], InfraredSensor [S4, DISTANCE, NO_SLOT]], "
+                + "[Location [x=-19, y=199], InfraredSensor [S3, SEEK, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setInfrared.xml"));
     }

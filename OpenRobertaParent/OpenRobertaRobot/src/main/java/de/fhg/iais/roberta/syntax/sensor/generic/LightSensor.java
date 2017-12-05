@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -28,8 +25,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class LightSensor<V> extends ExternalSensor<V> {
 
-    private LightSensor(ILightSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("LIGHT_SENSING"), properties, comment);
+    private LightSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("LIGHT_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -42,13 +39,8 @@ public class LightSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightSensor}
      */
-    public static <V> LightSensor<V> make(ILightSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new LightSensor<V>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "LightSensor [" + this.getMode() + ", " + this.getPort() + "]";
+    public static <V> LightSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LightSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -64,12 +56,8 @@ public class LightSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        String mode = sensorData.getMode();
-        String port = sensorData.getPort();
-        return LightSensor
-            .make(factory.getLightSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getLightSensorMode);
+        return LightSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

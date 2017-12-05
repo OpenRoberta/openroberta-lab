@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
 import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor.Mode;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
@@ -43,19 +44,36 @@ public class GetSampleSensor<V> extends Sensor<V> {
         Assert.isTrue(sensorType != null && port != "");
         this.sensorPort = port;
         this.sensorType = sensorType;
+        SensorMetaDataBean sensorMetaDataBean;
         switch ( sensorType.getSensorType() ) {
             case BlocklyConstants.TOUCH:
-                this.sensor = TouchSensor.make(factory.getTouchSensorMode("TOUCH"), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(factory.getSensorPort(port), factory.getTouchSensorMode("TOUCH"), factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ULTRASONIC:
-                this.sensor =
-                    UltrasonicSensor.make(factory.getUltrasonicSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getUltrasonicSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = UltrasonicSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.COLOUR:
-                this.sensor = ColorSensor.make(factory.getColorSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getColorSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = ColorSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.INFRARED:
-                this.sensor = InfraredSensor.make(factory.getInfraredSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getInfraredSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = InfraredSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.ENCODER:
                 this.sensor = EncoderSensor.make(factory.getMotorTachoMode(sensorType.getSensorMode()), factory.getActorPort(port), properties, comment);
@@ -64,19 +82,39 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, factory.getBrickKey(port), properties, comment);
                 break;
             case BlocklyConstants.GYRO:
-                this.sensor = GyroSensor.make(factory.getGyroSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getGyroSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = GyroSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.TIME:
                 this.sensor = TimerSensor.make(factory.getTimerSensorMode("GET_SAMPLE"), Integer.valueOf(port), properties, comment);
                 break;
             case BlocklyConstants.SOUND:
-                this.sensor = SoundSensor.make(factory.getSoundSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getSoundSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = SoundSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.LIGHT:
-                this.sensor = LightSensor.make(factory.getLightSensorMode(sensorType.getSensorMode()), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getLightSensorMode(sensorType.getSensorMode()),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = LightSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             case BlocklyConstants.COMPASS:
-                this.sensor = CompassSensor.make(factory.getCompassSensorMode(BlocklyConstants.DEFAULT), factory.getSensorPort(port), properties, comment);
+                sensorMetaDataBean =
+                    new SensorMetaDataBean(
+                        factory.getSensorPort(port),
+                        factory.getCompassSensorMode(BlocklyConstants.DEFAULT),
+                        factory.getSlot(BlocklyConstants.NO_SLOT));
+                this.sensor = CompassSensor.make(sensorMetaDataBean, properties, comment);
                 break;
             default:
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");

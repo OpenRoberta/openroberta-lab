@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -29,8 +26,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class InfraredSensor<V> extends ExternalSensor<V> {
 
-    private InfraredSensor(IInfraredSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("INFRARED_SENSING"), properties, comment);
+    private InfraredSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("INFRARED_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -43,13 +40,8 @@ public class InfraredSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link InfraredSensor}
      */
-    static <V> InfraredSensor<V> make(IInfraredSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new InfraredSensor<V>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "InfraredSensor [" + this.getMode() + ", " + getPort() + "]";
+    static <V> InfraredSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new InfraredSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -65,12 +57,8 @@ public class InfraredSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
-        SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        String mode = sensorData.getMode();
-        String port = sensorData.getPort();
-        return InfraredSensor
-            .make(factory.getInfraredSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getInfraredSensorMode);
+        return InfraredSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

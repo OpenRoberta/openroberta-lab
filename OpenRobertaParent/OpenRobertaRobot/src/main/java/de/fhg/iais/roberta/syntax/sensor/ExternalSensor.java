@@ -1,12 +1,15 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
 import java.util.List;
+import java.util.function.Function;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -19,6 +22,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public abstract class ExternalSensor<V> extends Sensor<V> {
     private final ISensorPort port;
     private final IMode mode;
+    private final ISlot slot;
 
     /**
      * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockType}.
@@ -27,11 +31,12 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
      */
-    public ExternalSensor(IMode mode, ISensorPort port, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public ExternalSensor(SensorMetaDataBean metaDataBean, BlockType kind, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(kind, properties, comment);
-        Assert.isTrue(mode != null && port != null);
-        this.port = port;
-        this.mode = mode;
+        Assert.isTrue(metaDataBean.getMode() != null && metaDataBean.getPort() != null && metaDataBean.getSlot() != null);
+        this.port = metaDataBean.getPort();
+        this.mode = metaDataBean.getMode();
+        this.slot = metaDataBean.getSlot();
     }
 
     /**
@@ -48,6 +53,15 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         return this.mode;
     }
 
+    public ISlot getSlot() {
+        return this.slot;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + " [" + getPort() + ", " + getMode() + ", " + getSlot() + "]";
+    }
+
     /**
      * Transformation from JAXB object to corresponding AST object.
      *
@@ -55,12 +69,14 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> SensorMetaDataBean extractPortAndMode(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
+    public static <V> SensorMetaDataBean extractPortAndMode(Block block, Jaxb2AstTransformer<V> helper, Function<String, IMode> getMode) {
+        List<Field> fields = helper.extractFields(block, (short) 3);
+        IRobotFactory factory = helper.getModeFactory();
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
+        String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
 
-        return new SensorMetaDataBean(portName, modeName);
+        return new SensorMetaDataBean(factory.getSensorPort(portName), getMode.apply(modeName), factory.getSlot(slotName));
     }
 
     @Override
@@ -77,7 +93,10 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
             String fieldValue = getPort().getPortNumber();
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
-
+        if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
+            String fieldValue = getPort().getPortNumber();
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
+        }
         return jaxbDestination;
     }
 }

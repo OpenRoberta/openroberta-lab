@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITemperatureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
@@ -55,6 +56,7 @@ import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.mode.sensor.Slot;
 import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TemperatureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -373,6 +375,17 @@ public interface IRobotFactory {
      */
     default ISensorPort getSensorPort(String port) {
         return IRobotFactory.getModeValue(port, SensorPort.class);
+    }
+
+    /**
+     * Get a sensor port from {@link ISensorPort} given string parameter. It is possible for one sensor port to have multiple string mappings. Throws exception
+     * if the sensor port does not exists.
+     *
+     * @param name of the sensor port
+     * @return the sensor port from the enum {@link ISensorPort}
+     */
+    default ISlot getSlot(String slot) {
+        return IRobotFactory.getModeValue(slot, Slot.class);
     }
 
     /**

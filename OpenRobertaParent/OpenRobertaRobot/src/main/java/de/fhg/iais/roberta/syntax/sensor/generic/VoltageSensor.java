@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -16,8 +13,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
 
 public class VoltageSensor<V> extends ExternalSensor<V> {
 
-    public VoltageSensor(IVoltageSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("VOLTAGE_SENSING"), properties, comment);
+    public VoltageSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("VOLTAGE_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -28,13 +25,8 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link VoltageSensor}
      */
-    public static <V> VoltageSensor<V> make(IVoltageSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new VoltageSensor<>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "Voltage [" + getMode() + ", " + getPort() + "]";
+    public static <V> VoltageSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new VoltageSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -50,12 +42,8 @@ public class VoltageSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        final IRobotFactory factory = helper.getModeFactory();
-        final SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        final String mode = sensorData.getMode();
-        final String port = sensorData.getPort();
-        return VoltageSensor
-            .make(factory.getVoltageSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getVoltageSensorMode);
+        return VoltageSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

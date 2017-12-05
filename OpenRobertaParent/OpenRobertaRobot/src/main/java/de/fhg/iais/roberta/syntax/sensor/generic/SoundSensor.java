@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -28,8 +25,8 @@ import de.fhg.iais.roberta.visitor.sensor.AstSensorsVisitor;
  */
 public class SoundSensor<V> extends ExternalSensor<V> {
 
-    private SoundSensor(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(mode, port, BlockTypeContainer.getByName("SOUND_SENSING"), properties, comment);
+    private SoundSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("SOUND_SENSING"), properties, comment);
         setReadOnly();
     }
 
@@ -42,13 +39,8 @@ public class SoundSensor<V> extends ExternalSensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link SoundSensor}
      */
-    public static <V> SoundSensor<V> make(ISoundSensorMode mode, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SoundSensor<>(mode, port, properties, comment);
-    }
-
-    @Override
-    public String toString() {
-        return "SoundSensor [" + getMode() + ", " + getPort() + "]";
+    public static <V> SoundSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SoundSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -64,11 +56,7 @@ public class SoundSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        final IRobotFactory factory = helper.getModeFactory();
-        final SensorMetaDataBean sensorData = extractPortAndMode(block, helper);
-        final String mode = sensorData.getMode();
-        final String port = sensorData.getPort();
-        return SoundSensor
-            .make(factory.getSoundSensorMode(mode), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        SensorMetaDataBean sensorData = extractPortAndMode(block, helper, helper.getModeFactory()::getSoundSensorMode);
+        return SoundSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }
