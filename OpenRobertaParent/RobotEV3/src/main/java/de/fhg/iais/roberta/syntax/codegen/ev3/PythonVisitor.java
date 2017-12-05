@@ -978,6 +978,9 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
             case ULTRASONIC:
                 name = "UltrasonicSensor";
                 break;
+            case SOUND:
+                name = "SoundSensor";
+                break;
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getType() + "to ev3dev-lang-python");
         }
