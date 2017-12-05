@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -131,13 +131,13 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                             actors.add(
                                 Pair.of(
                                     this.factory.getActorPort(value.getName()),
-                                    new Actor(ActorType.get(value.getBlock().getType()), false, MoveDirection.FOREWARD, null)));
+                                    new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
                         case "robBrick_led_matrix":
                             actors.add(
                                 Pair.of(
                                     this.factory.getActorPort(value.getName()),
-                                    new Actor(ActorType.get(value.getBlock().getType()), false, MoveDirection.FOREWARD, null)));
+                                    new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
                         default:
                             throw new DbcException("Invalide actor type!" + value.getBlock().getType());
@@ -154,7 +154,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                                 new Actor(
                                     ActorType.get(value.getBlock().getType()),
                                     false,
-                                    MoveDirection.FOREWARD,
+                                    DriveDirection.FOREWARD,
                                     this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 0)))));
                         break;
                     default:

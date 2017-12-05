@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
@@ -66,9 +66,9 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
         this.sb.append("createDriveAction(");
         driveAction.getParam().getSpeed().visit(this);
         IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        MoveDirection driveDirection = (MoveDirection) driveAction.getDirection();
-        if ( leftMotorRotationDirection != MoveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(driveAction.getDirection() == MoveDirection.FOREWARD);
+        DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
+        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
+            driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
         }
         this.sb.append(", CONST." + driveDirection);
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
@@ -85,9 +85,9 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
         this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
         IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
-        MoveDirection driveDirection = (MoveDirection) curveAction.getDirection();
-        if ( leftMotorRotationDirection != MoveDirection.FOREWARD ) {
-            driveDirection = getDriveDirection(curveAction.getDirection() == MoveDirection.FOREWARD);
+        DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
+        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
+            driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
         }
         this.sb.append(", CONST." + driveDirection);
         MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
@@ -103,7 +103,7 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> implements N
         turnAction.getParam().getSpeed().visit(this);
         IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
         ITurnDirection turnDirection = turnAction.getDirection();
-        if ( leftMotorRotationDirection != MoveDirection.FOREWARD ) {
+        if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
         }
         this.sb.append(", CONST." + turnDirection);

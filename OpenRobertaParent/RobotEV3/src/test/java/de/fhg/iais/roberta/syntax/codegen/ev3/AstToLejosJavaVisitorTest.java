@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.util.test.ev3.Helper;
 
@@ -44,8 +44,8 @@ public class AstToLejosJavaVisitorTest {
         + "    brickConfiguration = new EV3Configuration.Builder()\n"
         + "    .setWheelDiameter(5.6)\n"
         + "    .setTrackWidth(17.0)\n"
-        + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.LEFT))\n"
-        + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.RIGHT))\n"
+        + "    .addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
+        + "    .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
         + "    .addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH))\n"
         + "    .addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC))\n"
         + "    .build();\n\n";
@@ -94,9 +94,9 @@ public class AstToLejosJavaVisitorTest {
     public static void setupConfigurationForAllTests() {
         Configuration.Builder<?> builder = new EV3Configuration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, MoveDirection.FOREWARD, MotorSide.LEFT)).addActor(
+        builder.addActor(ActorPort.A, new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
-            new Actor(ActorType.LARGE, true, MoveDirection.FOREWARD, MotorSide.RIGHT));
+            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(SensorPort.S1, new Sensor(SensorType.TOUCH)).addSensor(SensorPort.S2, new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = builder.build();
     }
@@ -346,7 +346,7 @@ public class AstToLejosJavaVisitorTest {
             + "        float variablenName = 0;\n"
             + "    public void run() throwsException {\n"
 
-            + "hal.regulatedDrive(MoveDirection.FOREWARD,50);"
+            + "hal.regulatedDrive(DriveDirection.FOREWARD,50);"
             + "hal.drawPicture(predefinedImages.get(\"OLDGLASSES\"),0,0);"
             + SUFFIX
             + "    }\n"
@@ -707,7 +707,7 @@ public class AstToLejosJavaVisitorTest {
             + "while(true){"
             + "if ( 30 == 20 ) {"
             + "break;"
-            + "} else if(30==12){continue;}}}for(floati=1;i<10;i+=1){hal.driveDistance(MoveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==12){break;}}for(floatitem:item2){hal.driveDistance(MoveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==20){break;}}while(true){if(30==20){continue;}elseif(30==20){break;}}for(floatk0=0;k0<10;k0+=1){if(30==20){break;}elseif(30==20){continue;}}while(true){if(hal.isPressed(SensorPort.S1)==true){break;}if(hal.isPressed(SensorPort.S1)==true){break;}hal.waitFor(15);}hal.closeResources();}}";
+            + "} else if(30==12){continue;}}}for(floati=1;i<10;i+=1){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==12){break;}}for(floatitem:item2){hal.driveDistance(DriveDirection.FOREWARD,30,20);if(30==20){continue;}elseif(30==20){break;}}while(true){if(30==20){continue;}elseif(30==20){break;}}for(floatk0=0;k0<10;k0+=1){if(30==20){break;}elseif(30==20){continue;}}while(true){if(hal.isPressed(SensorPort.S1)==true){break;}if(hal.isPressed(SensorPort.S1)==true){break;}hal.waitFor(15);}hal.closeResources();}}";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/loops_with_break_and_continue.xml");
     }

@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.nao.NAOConfiguration;
 import de.fhg.iais.roberta.components.nao.SensorType;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -699,7 +699,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     @Override
     public Void visitWalkDistance(WalkDistance<Void> walkDistance) {
         this.sb.append("h.walk(");
-        if ( walkDistance.getWalkDirection() == MoveDirection.BACKWARD ) {
+        if ( walkDistance.getWalkDirection() == DriveDirection.BACKWARD ) {
             this.sb.append("-");
         }
         walkDistance.getDistanceToWalk().visit(this);

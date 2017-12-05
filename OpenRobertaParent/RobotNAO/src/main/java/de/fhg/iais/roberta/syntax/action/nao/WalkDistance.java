@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -29,10 +29,10 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  */
 public final class WalkDistance<V> extends Action<V> {
 
-    private final MoveDirection walkDirection;
+    private final DriveDirection walkDirection;
     private final Expr<V> distanceToWalk;
 
-    private WalkDistance(MoveDirection walkDirection, Expr<V> distanceToWalk, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private WalkDistance(DriveDirection walkDirection, Expr<V> distanceToWalk, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("WALK_DISTANCE"), properties, comment);
         Assert.notNull(walkDirection, "Missing direction in WalkDistance block!");
         this.walkDirection = walkDirection;
@@ -49,11 +49,11 @@ public final class WalkDistance<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link WalkDistance}
      */
-    private static <V> WalkDistance<V> make(MoveDirection walkDirection, Expr<V> distanceToWalk, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> WalkDistance<V> make(DriveDirection walkDirection, Expr<V> distanceToWalk, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new WalkDistance<V>(walkDirection, distanceToWalk, properties, comment);
     }
 
-    public MoveDirection getWalkDirection() {
+    public DriveDirection getWalkDirection() {
         return this.walkDirection;
     }
 
@@ -86,7 +86,7 @@ public final class WalkDistance<V> extends Action<V> {
         Phrase<V> walkDistance = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, BlocklyType.NUMBER_INT));
 
         return WalkDistance.make(
-            MoveDirection.get(walkDirection),
+            DriveDirection.get(walkDirection),
             helper.convertPhraseToExpr(walkDistance),
             helper.extractBlockProperties(block),
             helper.extractComment(block));

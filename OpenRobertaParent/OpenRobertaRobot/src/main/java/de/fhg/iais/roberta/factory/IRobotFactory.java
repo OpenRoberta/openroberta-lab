@@ -43,7 +43,7 @@ import de.fhg.iais.roberta.mode.action.BlinkMode;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.MoveDirection;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -245,7 +245,7 @@ public interface IRobotFactory {
      * @return the drive direction from the enum {@link IDriveDirection}
      */
     default IDriveDirection getDriveDirection(String driveDirection) {
-        return IRobotFactory.getModeValue(driveDirection, MoveDirection.class);
+        return IRobotFactory.getModeValue(driveDirection, DriveDirection.class);
     }
 
     /**
