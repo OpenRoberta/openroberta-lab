@@ -41,7 +41,6 @@ public final class JaxbTransformerHelper {
     public static void setBasicProperties(Phrase<?> astSource, Block jaxbDestination) {
         Assert.notNull(astSource);
         Assert.notNull(jaxbDestination);
-        // Assert.isTrue(astSource != null && jaxbDestination != null);
         if ( astSource.getProperty() == null ) {
             return;
         }
@@ -64,7 +63,9 @@ public final class JaxbTransformerHelper {
      *        {@link BlockType#STMT_LIST}
      */
     public static void addStatement(Block block, String name, Phrase<?> value) {
-        Assert.isTrue(block != null && value != null && !name.equals(""));
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(block);
+        Assert.notNull(value);
         Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
         if ( !((StmtList<?>) value).get().isEmpty() ) {
             Statement statement = new Statement();
@@ -85,7 +86,9 @@ public final class JaxbTransformerHelper {
      *        {@link BlockType#EXPR_LIST}
      */
     public static void addStatement(Block block, String name, ExprList<?> exprList) {
-        Assert.isTrue(block != null && exprList != null && !name.equals(""));
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(block);
+        Assert.notNull(exprList);
         Assert.isTrue(exprList.getKind().hasName("EXPR_LIST"), "Phrase is not EXPR_LIST");
         if ( !exprList.get().isEmpty() ) {
             Statement statement = new Statement();
@@ -104,7 +107,9 @@ public final class JaxbTransformerHelper {
      *        {@link BlockType#STMT_LIST}
      */
     public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
-        Assert.isTrue(repetitions != null && value != null && !name.equals(""));
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(repetitions);
+        Assert.notNull(value);
         Assert.isTrue(value.getKind().hasName("STMT_LIST"), "Phrase is not STMT_LIST");
         if ( !((StmtList<?>) value).get().isEmpty() ) {
             Statement statement = new Statement();
@@ -125,7 +130,9 @@ public final class JaxbTransformerHelper {
      *        {@link BlockType#EXPR_LIST}
      */
     public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
-        Assert.isTrue(repetitions != null && exprList != null && !name.equals(""));
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(repetitions);
+        Assert.notNull(exprList);
         Assert.isTrue(exprList.getKind().hasName("EXPR_LIST"), "Phrase is not EXPR_LIST");
         if ( !exprList.get().isEmpty() ) {
             Statement statement = new Statement();
@@ -145,7 +152,9 @@ public final class JaxbTransformerHelper {
      * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
      */
     public static void addValue(Block block, String name, Phrase<?> value) {
-        Assert.isTrue(block != null && value != null && !name.equals(""));
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(block);
+        Assert.notNull(value);
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
@@ -171,6 +180,9 @@ public final class JaxbTransformerHelper {
      * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
      */
     public static void addValue(Repetitions repetitions, String name, Phrase<?> value) {
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(repetitions);
+        Assert.notNull(value);
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
@@ -189,7 +201,8 @@ public final class JaxbTransformerHelper {
      * @param value is the AST representation of the Blockly block where the value is stored
      */
     public static void addField(Block block, String name, String value) {
-        Assert.isTrue(block != null && !name.equals(""));
+        Assert.isTrue(!name.equals(""));
+        Assert.notNull(block);
         Field field = new Field();
         field.setName(name);
         field.setValue(value);
