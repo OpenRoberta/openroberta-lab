@@ -27,11 +27,15 @@ import de.fhg.iais.roberta.visitor.nao.NaoAstVisitor;
  */
 public class SayText<V> extends Action<V> {
     private final Expr<V> msg;
+    private final Expr<V> speed;
+    private final Expr<V> shape;
 
-    private SayText(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private SayText(Expr<V> msg, Expr<V> speed, Expr<V> shape, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SAY_TEXT"), properties, comment);
         Assert.isTrue(msg != null);
         this.msg = msg;
+        this.speed = speed;
+        this.shape = shape;
         setReadOnly();
     }
 
@@ -43,8 +47,8 @@ public class SayText<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DisplayTextAction}
      */
-    private static <V> SayText<V> make(Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new SayText<>(msg, properties, comment);
+    private static <V> SayText<V> make(Expr<V> msg, Expr<V> speed, Expr<V> shape, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new SayText<>(msg, speed, shape, properties, comment);
     }
 
     /**
@@ -53,10 +57,26 @@ public class SayText<V> extends Action<V> {
     public Expr<V> getMsg() {
         return this.msg;
     }
+    
+    /**
+     * @return the speed.
+     */
+    public Expr<V> getSpeed() {
+        return this.speed;
+    }
+
+    
+    /**
+     * @return the shape.
+     */
+    public Expr<V> getShape() {
+        return this.shape;
+    }
+
 
     @Override
     public String toString() {
-        return "SayText [" + this.msg + "]";
+        return "SayText [" + this.msg + ", " + this.speed + ", " + this.shape + "]";
     }
 
     @Override
@@ -73,9 +93,12 @@ public class SayText<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
+        List<Value> values = helper.extractValues(block, (short) 3);
         Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.STRING));
-        return SayText.make(helper.convertPhraseToExpr(msg), helper.extractBlockProperties(block), helper.extractComment(block));
+        Phrase<V> speed = helper.extractValue(values, new ExprParam(BlocklyConstants.VOICESPEED, BlocklyType.NUMBER_INT));
+        Phrase<V> shape = helper.extractValue(values, new ExprParam(BlocklyConstants.SHAPE, BlocklyType.NUMBER_INT));
+        
+        return SayText.make(helper.convertPhraseToExpr(msg), helper.convertPhraseToExpr(speed), helper.convertPhraseToExpr(shape), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -84,6 +107,8 @@ public class SayText<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.OUT, this.msg);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VOICESPEED, this.speed);
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.SHAPE, this.shape);
 
         return jaxbDestination;
     }

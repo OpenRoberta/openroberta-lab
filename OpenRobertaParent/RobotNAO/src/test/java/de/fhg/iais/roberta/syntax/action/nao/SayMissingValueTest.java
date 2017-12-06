@@ -10,7 +10,7 @@ public class SayMissingValueTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSayClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=138, y=138], " + "MainTask [], " + "SayText [EmptyExpr [defVal=STRING]]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=138, y=138], " + "MainTask [], " + "SayText [EmptyExpr [defVal=STRING], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
         
         String result = this.h.generateTransformerString("/action/say_missingValue.xml");
 

@@ -760,6 +760,7 @@ Blockly.Msg.NAO_SETINTENSITY_TOOLTIP = "Fijarla intensidad de un grupo de LEDs."
 Blockly.Msg.NAO_SETLANGUAGE = "fijar idioma";
 Blockly.Msg.NAO_SETLANGUAGE_TOOLTIP = "Fijar el idioma.";
 Blockly.Msg.NAO_SETVOLUME_TOOLTIP = "Fijar el volumen.";
+Blockly.Msg.NAO_SHAPE = "voice shape %";  // untranslated
 Blockly.Msg.NAO_STIFFNESS = "stiffness of";  // untranslated
 Blockly.Msg.NAO_STIFFNESS_TOOLTIP = "The stiffness of the selected body part of the robot is turned on or off. Be aware that releasing the leg motors while the robot is standing may result in downfall.";  // untranslated
 Blockly.Msg.NAO_STOP = "stop movement";  // untranslated

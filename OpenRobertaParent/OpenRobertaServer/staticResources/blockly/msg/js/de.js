@@ -760,6 +760,7 @@ Blockly.Msg.NAO_SETINTENSITY_TOOLTIP = "Bestimme die Intensität/Helligkeit von 
 Blockly.Msg.NAO_SETLANGUAGE = "Setze Sprache";
 Blockly.Msg.NAO_SETLANGUAGE_TOOLTIP = "Setze die Sprache. Beachte, dass die Sprache vorher heruntergeladen werden muss. Schaue dazu in die Anleitung des Roboters.";
 Blockly.Msg.NAO_SETVOLUME_TOOLTIP = "Setze die Lautstärke die Tonausgabe des Roboters, wobei 100, die maximale Lautstärke und 0, die minimale Lautstärke ist.";
+Blockly.Msg.NAO_SHAPE = "voice shape %";  // untranslated
 Blockly.Msg.NAO_STIFFNESS = "Steifigkeit von";
 Blockly.Msg.NAO_STIFFNESS_TOOLTIP = "Der Motor des ausgewählten Körperteils des Roboters wird deaktiviert. Werden die Beinmotoren deaktiviert während der Roboter steht kann dies zu einem Sturz führen.";
 Blockly.Msg.NAO_STOP = "Stoppe Bewegung";

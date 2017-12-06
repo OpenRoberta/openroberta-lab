@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-12-05 09:14:43.856985",
+		"lastupdated": "2017-12-06 13:18:49.560585",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1076,6 +1076,7 @@
 	"NAO_ABSOLUTE": "absolute",
 	"NAO_RELATIVE": "relative",
 	"NAO_FILENAME": "filename",
+	"NAO_SHAPE": "voice shape %",
 	"NAO_MODE_TOOLTIP": "This block allows to move the robot in to three different modes. Active makes the robot activate all motors and go to a standing position. Rest makes the robotgo to a prone stance and deactivate all motors. In Sit also all motors will be deactivated and the robot will sit down.",
 	"NAO_APPLYPOSTURE_TOOLTIP": "Robot goes into the selected posture. Use the dropdown menu to choose between different stand, sit and lying positions.",
 	"NAO_STIFFNESS_TOOLTIP": "The stiffness of the selected body part of the robot is turned on or off. Be aware that releasing the leg motors while the robot is standing may result in downfall.",
@@ -1092,7 +1093,7 @@
 	"NAO_GETVOLUME_TOOLTIP": "Get the volume.",
 	"NAO_GETLANGUAGE_TOOLTIP": "Get the active language. This is the language the robot is currently using for Text to Speech and Voice recognition.",
 	"NAO_SETLANGUAGE_TOOLTIP": "Set the language. Be aware that it is necessary to download the language pack before you can use it. For more information refer to the manual of your robot.",
-	"NAO_SAY_TOOLTIP": "The robot says the given text. It is also possible to enter special charaters. The robot will use the selected language to try and speak the entered text.",
+	"NAO_SAY_TOOLTIP": "The robot says the given text. It is also possible to enter special charaters. The robot will use the selected language to try and speak the entered text. Modify the speed (range: 50-400) and the shape of the voice (range: 50-200) with the input fields",
 	"NAO_PLAYFILE_TOOLTIP": "Plays a sound file from the robot. Enter the name of the file. The file needs to be transferred to the robot beforehand.",
 	"NAO_TAKEPICTURE_TOOLTIP": "Takes a picture and saves it on the robot. Access the robots file system to view the picture.",
 	"NAO_RECORDVIDEO_TOOLTIP": "Records a video and saves it on the robot. Access the robots file system to view the video.",

@@ -10,7 +10,7 @@ public class SayTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSayClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=138, y=138], " + "MainTask [], " + "SayText [StringConst [Hello]]]]]";
+        String expectedResult = "BlockAST [project=[[Location [x=88, y=63], " + "MainTask [], " + "SayText [StringConst [Hello], NumConst [100], NumConst [100]]]]]";
         
         String result = this.h.generateTransformerString("/action/say.xml");
 

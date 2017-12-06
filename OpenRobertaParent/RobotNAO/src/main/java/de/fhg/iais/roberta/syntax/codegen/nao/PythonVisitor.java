@@ -868,6 +868,10 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     public Void visitSayText(SayText<Void> sayText) {
         this.sb.append("h.say(");
         sayText.getMsg().visit(this);
+        this.sb.append(",");
+        sayText.getSpeed().visit(this);
+        this.sb.append(",");
+        sayText.getShape().visit(this);
         this.sb.append(")");
         return null;
     }

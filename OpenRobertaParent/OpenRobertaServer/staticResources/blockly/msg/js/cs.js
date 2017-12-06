@@ -760,6 +760,7 @@ Blockly.Msg.NAO_SETINTENSITY_TOOLTIP = "Nastaví intenzitu skupiny LED.";
 Blockly.Msg.NAO_SETLANGUAGE = "nastavit jazyk";
 Blockly.Msg.NAO_SETLANGUAGE_TOOLTIP = "Nastaví jazyk.";
 Blockly.Msg.NAO_SETVOLUME_TOOLTIP = "Nastaví hlasitost.";
+Blockly.Msg.NAO_SHAPE = "voice shape %";  // untranslated
 Blockly.Msg.NAO_STIFFNESS = "tuhost";
 Blockly.Msg.NAO_STIFFNESS_TOOLTIP = "Tuhost vybrané části těla je zapnuta nebo vypnuta";
 Blockly.Msg.NAO_STOP = "přeruš pohyb";
