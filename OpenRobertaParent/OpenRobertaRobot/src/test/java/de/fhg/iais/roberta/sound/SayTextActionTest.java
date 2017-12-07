@@ -11,7 +11,8 @@ public class SayTextActionTest {
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSayTextActionClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=138, y=138], " + "MainTask [], " + "SayTextAction [StringConst [Hello]]]]]";
+        String expectedResult =
+            "BlockAST [project=[[Location [x=88, y=63], " + "MainTask [], " + "SayTextAction [StringConst [Hello], NumConst [100], NumConst [100]]]]]";
 
         String result = this.h.generateTransformerString("/ast/actions/action_SayText.xml");
 
@@ -26,7 +27,10 @@ public class SayTextActionTest {
 
     @Test
     public void make_MissingValue_ReturnInstanceOfSayClass() throws Exception {
-        String expectedResult = "BlockAST [project=[[Location [x=138, y=138], " + "MainTask [], " + "SayTextAction [EmptyExpr [defVal=STRING]]]]]";
+        String expectedResult =
+            "BlockAST [project=[[Location [x=138, y=138], "
+                + "MainTask [], "
+                + "SayTextAction [EmptyExpr [defVal=STRING], EmptyExpr [defVal=NUMBER_INT], EmptyExpr [defVal=NUMBER_INT]]]]]";
 
         String result = this.h.generateTransformerString("/ast/actions/action_SayTextMissing.xml");
 

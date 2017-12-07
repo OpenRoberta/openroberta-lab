@@ -102,6 +102,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
     protected Set<UsedSensor> usedSensors;
 
     protected ILanguage language;
+    private final boolean isSayTextUsed;
 
     /**
      * initialize the Python code generator visitor.
@@ -118,6 +119,7 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.usedGlobalVarInFunctions = checker.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checker.isProgramEmpty();
         this.loopsLabels = checker.getloopsLabelContainer();
+        this.isSayTextUsed = checker.isSayTextUsed();
 
         this.language = language;
     }
@@ -1326,9 +1328,11 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
             this.sb.append("class ContinueLoop(Exception): pass\n\n");
         }
 
-        this.sb.append("\nh.setLanguage(\"");
-        this.sb.append(this.getLanguageString(this.language));
-        this.sb.append("\")");
+        if ( this.isSayTextUsed ) {
+            this.sb.append("\nh.setLanguage(\"");
+            this.sb.append(this.getLanguageString(this.language));
+            this.sb.append("\")");
+        }
     }
 
     @Override

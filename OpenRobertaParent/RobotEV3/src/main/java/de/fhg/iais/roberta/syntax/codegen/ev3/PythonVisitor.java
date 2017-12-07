@@ -102,6 +102,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
     protected final Set<String> usedImages;
 
     protected ILanguage language;
+    private final boolean isSayTextUsed;
 
     /**
      * initialize the Python code generator visitor.
@@ -120,6 +121,7 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.usedActors = checkVisitor.getUsedActors();
         this.usedSensors = checkVisitor.getUsedSensors();
         this.usedImages = checkVisitor.getUsedImages();
+        this.isSayTextUsed = checkVisitor.isSayTextUsed();
 
         this.usedGlobalVarInFunctions = checkVisitor.getMarkedVariablesAsGlobal();
         this.isProgramEmpty = checkVisitor.isProgramEmpty();
@@ -879,9 +881,11 @@ public class PythonVisitor extends RobotPythonVisitor implements AstSensorsVisit
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append("hal = Hal(_brickConfiguration)");
 
-        this.sb.append("\nhal.setLanguage(\"");
-        this.sb.append(this.getLanguageString(this.language));
-        this.sb.append("\")");
+        if ( this.isSayTextUsed ) {
+            this.sb.append("\nhal.setLanguage(\"");
+            this.sb.append(this.getLanguageString(this.language));
+            this.sb.append("\")");
+        }
     }
 
     @Override

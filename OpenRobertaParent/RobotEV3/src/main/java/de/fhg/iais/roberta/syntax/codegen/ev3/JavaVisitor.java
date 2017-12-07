@@ -105,6 +105,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     protected final Set<String> usedImages;
 
     protected ILanguage language;
+    private final boolean isSayTextUsed;
 
     /**
      * initialize the Java code generator visitor.
@@ -127,6 +128,7 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.brickConfiguration = brickConfiguration;
         this.usedSensors = checkVisitor.getUsedSensors();
         this.usedImages = checkVisitor.getUsedImages();
+        this.isSayTextUsed = checkVisitor.isSayTextUsed();
 
         this.loopsLabels = checkVisitor.getloopsLabelContainer();
 
@@ -177,10 +179,6 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
-
-        this.sb.append("hal.setLanguage(\"");
-        this.sb.append(this.getLanguageString(this.language));
-        this.sb.append("\");");
 
         this.sb.append(generateUsedImages()).append("\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
@@ -610,6 +608,12 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
             this.sb.append(INDENT).append(INDENT).append("hal.startLogging();");
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
+        }
+        if ( this.isSayTextUsed ) {
+            this.sb.append("\n");
+            this.sb.append(INDENT).append(INDENT).append("hal.setLanguage(\"");
+            this.sb.append(this.getLanguageString(this.language));
+            this.sb.append("\");");
         }
         return null;
     }

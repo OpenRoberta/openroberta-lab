@@ -1,12 +1,13 @@
-package de.fhg.iais.roberta.ast.action;
+package de.fhg.iais.roberta.sound;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.util.test.ev3.Helper;
+import de.fhg.iais.roberta.util.test.GenericHelper;
+import de.fhg.iais.roberta.util.test.Helper;
 
 public class SetLanguageTest {
-    Helper h = new Helper();
+    Helper h = new GenericHelper();
 
     @Test
     public void make_ByDefault_ReturnInstanceOfSetLanguageAction() throws Exception {
