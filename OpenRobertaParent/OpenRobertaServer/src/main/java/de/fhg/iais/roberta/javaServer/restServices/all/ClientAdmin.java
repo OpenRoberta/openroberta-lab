@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,9 +83,13 @@ public class ClientAdmin {
             } else if ( cmd.equals("setToken") ) {
                 String token = request.getString("token");
                 Key tokenAgreement = this.brickCommunicator.aTokenAgreementWasSent(token, httpSessionState.getRobotName());
+
                 switch ( tokenAgreement ) {
                     case TOKEN_SET_SUCCESS:
                         httpSessionState.setToken(token);
+                        String robotMenuVersion = this.brickCommunicator.getState(token).getMenuVersion();
+                        String serverMenuVersion = httpSessionState.getRobotFactory().getMenuVersion();
+                        addRobotUpdateInfo(response, robotMenuVersion, serverMenuVersion);
                         Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                         LOG.info("success: token " + token + " is registered in the session");
                         break;
@@ -181,4 +186,13 @@ public class ClientAdmin {
         MDC.clear();
         return Response.ok(response).build();
     }
+
+    private void addRobotUpdateInfo(JSONObject response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
+        if ( robotMenuVersion != null && serverMenuVersion != null ) {
+            response.put("robot.update", Util.versionCompare(robotMenuVersion, serverMenuVersion));
+        } else {
+            response.put("robot.update", 0);
+        }
+    }
+
 }

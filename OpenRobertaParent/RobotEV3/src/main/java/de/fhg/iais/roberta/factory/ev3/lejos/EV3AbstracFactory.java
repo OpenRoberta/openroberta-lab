@@ -271,4 +271,9 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
     public String getSignature() {
         return null;
     }
+
+    @Override
+    public String getMenuVersion() {
+        return this.ev3Properties.getProperty("robot.menu.verision");
+    }
 }

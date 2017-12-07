@@ -14,3 +14,4 @@ OpenRobertaParent/OpenRobertaServer/db-*
 .*
 .idea
 *.iml
+**/*.log

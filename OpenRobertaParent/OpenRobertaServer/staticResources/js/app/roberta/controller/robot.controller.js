@@ -39,7 +39,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
                     GUISTATE_C.setRobotToken(token);
                     GUISTATE_C.setState(result);
                     MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, GUISTATE_C.getRobotName());
-                    handleFirmwareConflict();
+                    handleFirmwareConflict(result['robot.update']);
                 } else {
                     if (result.message === 'ORA_TOKEN_SET_ERROR_WRONG_ROBOTTYPE') {
                         $('.modal').modal('hide');
@@ -166,19 +166,13 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.controller', 'guiState.m
     /**
      * Handle firmware conflict between server and robot
      */
-    function handleFirmwareConflict() {
-        if (GUISTATE_C.getRobotFWName() != "lejos" && GUISTATE_C.getRobotFWName() != "ev3lejosv1") {
-            return false;
-        }
-        var regex = '^([^\.]+\.[^\.]+)[\..+]*'; // get x.y from version x.y.z
-        var mainversionServer = GUISTATE_C.getServerVersion().match(regex)[1];
-        var mainversionRobot = GUISTATE_C.getRobotVersion().match(regex)[1];
-        if (mainversionServer > mainversionRobot) {
+    function handleFirmwareConflict(updateInfo) {      
+        if (updateInfo < 0) {
             LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is newer than the firmware version '"
                     + GUISTATE_C.getRobotVersion() + "' on the robot");
             $("#confirmUpdateFirmware").modal('show');
             return true;
-        } else if (mainversionServer < mainversionRobot) {
+        } else if (updateInfo > 0) {
             LOG.info("The firmware version '" + GUISTATE_C.getServerVersion() + "' on the server is older than the firmware version '"
                     + GUISTATE_C.getRobotVersion() + "' on the robot");
             MSG.displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");

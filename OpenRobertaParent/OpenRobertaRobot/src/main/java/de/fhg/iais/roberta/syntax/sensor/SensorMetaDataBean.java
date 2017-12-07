@@ -1,13 +1,10 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
-import java.io.Serializable;
-
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 
-public class SensorMetaDataBean implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class SensorMetaDataBean {
     private ISensorPort port;
     private IMode mode;
     private ISlot slot;

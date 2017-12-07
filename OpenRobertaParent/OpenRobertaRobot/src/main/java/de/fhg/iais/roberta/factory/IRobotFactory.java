@@ -41,11 +41,11 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
+import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorSide;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -461,5 +461,9 @@ public interface IRobotFactory {
     String getGroup();
 
     String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping);
+
+    default String getMenuVersion() {
+        return null;
+    }
 
 }
