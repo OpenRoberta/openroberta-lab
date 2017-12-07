@@ -100,11 +100,6 @@ public class Factory extends AbstractRobotFactory {
         return IRobotFactory.getModeValue(colorSensorMode, ColorSensorMode.class);
     }
 
-    //    @Override
-    //    public ILightSensorMode getLightSensorMode(String lightSensorMode) {
-    //        return IRobotFactory.getModeValue(lightSensorMode, LightSensorMode.class);
-    //    }
-
     @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
         return IRobotFactory.getModeValue(gyroSensorMode, GyroSensorMode.class);

@@ -189,7 +189,6 @@ public class CompilerWorkflow implements ICompilerWorkflow {
             } else {
                 CompilerWorkflow.LOG.error("exception when preparing the build", e);
             }
-            e.printStackTrace();
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

@@ -50,6 +50,7 @@ import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
 public abstract class EV3AbstracFactory extends AbstractRobotFactory {
+    private static final String ROBOT_PLUGIN_PREFIX = "robot.plugin.";
     protected Ev3SimCompilerWorkflow simCompilerWorkflow;
     protected ICompilerWorkflow robotCompilerWorkflow;
     protected Properties ev3Properties;
@@ -62,7 +63,7 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
         this.robotCompilerWorkflow =
             new CompilerWorkflow(
                 RobertaProperties.getTempDirForUserProjects(),
-                RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".compiler.resources.dir"));
+                RobertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".compiler.resources.dir"));
 
         this.simCompilerWorkflow = new Ev3SimCompilerWorkflow();
 
@@ -239,8 +240,8 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
 
     @Override
     public String getGroup() {
-        return RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group") != null
-            ? RobertaProperties.getStringProperty("robot.plugin." + this.robotPropertyNumber + ".group")
+        return RobertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group") != null
+            ? RobertaProperties.getStringProperty(ROBOT_PLUGIN_PREFIX + this.robotPropertyNumber + ".group")
             : this.name;
     }
 

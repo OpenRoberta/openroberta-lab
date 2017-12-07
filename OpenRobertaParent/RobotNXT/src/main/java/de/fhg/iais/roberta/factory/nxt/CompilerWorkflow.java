@@ -87,7 +87,13 @@ public class CompilerWorkflow implements ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
     @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText, ILanguage language) {
+    public String generateSourceCode(
+        IRobotFactory factory,
+        String token,
+        String programName,
+        String programText,
+        String configurationText,
+        ILanguage language) {
         BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;
@@ -153,7 +159,6 @@ public class CompilerWorkflow implements ICompilerWorkflow {
             } else {
                 CompilerWorkflow.LOG.error("exception when preparing the build", e);
             }
-            e.printStackTrace();
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }

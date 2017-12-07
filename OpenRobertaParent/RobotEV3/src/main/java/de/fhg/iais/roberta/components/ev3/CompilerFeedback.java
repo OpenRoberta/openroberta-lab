@@ -10,7 +10,11 @@ import javax.tools.DiagnosticCollector;
 import javax.tools.JavaFileObject;
 import javax.tools.SimpleJavaFileObject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CompilerFeedback {
+    private static final Logger LOG = LoggerFactory.getLogger(CompilerFeedback.class);
     final private boolean success;
     final private List<CompilerMessage> messages = new ArrayList<>();
 
@@ -70,7 +74,7 @@ public class CompilerFeedback {
                     final CharSequence charSequence = simpleSourceFileObject.getCharContent(false);
                     sourceCodePreliminary = charSequence.toString();
                 } catch ( IOException e ) {
-                    e.printStackTrace();
+                    CompilerFeedback.LOG.error(e.getMessage());
                 }
             }
             if ( sourceCodePreliminary == null ) {

@@ -135,7 +135,7 @@ public class JavaSourceCompiler {
             stream.close();
             return stream;
         } catch ( IOException e ) {
-            e.printStackTrace();
+            LOG.error(e.getMessage());
         }
         return stream;
 

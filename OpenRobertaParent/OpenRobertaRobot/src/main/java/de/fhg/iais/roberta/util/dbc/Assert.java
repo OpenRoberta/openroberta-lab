@@ -77,7 +77,6 @@ public final class Assert {
             try {
                 throw new DbcException("Assertion is violated");
             } catch ( DbcException e ) {
-                e.printStackTrace();
                 String msg = Assert.makeMessage(format, params);
                 throw new DbcException(msg);
             }
@@ -146,7 +145,6 @@ public final class Assert {
             try {
                 throw new DbcException("Assertion is violated");
             } catch ( DbcException e ) {
-                e.printStackTrace();
                 String msg = Assert.makeMessage(format, params);
                 throw new DbcException(msg);
             }

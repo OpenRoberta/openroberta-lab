@@ -4,9 +4,14 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class VersionChecker {
+    private static final Logger LOG = LoggerFactory.getLogger(VersionChecker.class);
+
     private static final String DOT_REGEX = "\\.";
 
     private final String[] versionFrom;
@@ -73,7 +78,7 @@ public class VersionChecker {
                 }
             } catch ( Exception e ) {
                 System.out.println("invalid version string. Either " + Arrays.toString(v1) + " or " + Arrays.toString(v2));
-                e.printStackTrace();
+                LOG.error(e.getMessage());
                 return false;
             }
         }
