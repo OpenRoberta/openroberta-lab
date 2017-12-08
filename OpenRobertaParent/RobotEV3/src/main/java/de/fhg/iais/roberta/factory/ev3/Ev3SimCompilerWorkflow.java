@@ -57,16 +57,22 @@ public class Ev3SimCompilerWorkflow implements ICompilerWorkflow {
      * @return the generated source code; null in case of an error
      */
     @Override
-    public String generateSourceCode(IRobotFactory factory, String token, String programName, String programText, String configurationText, ILanguage language) {
+    public String generateSourceCode(
+        IRobotFactory factory,
+        String token,
+        String programName,
+        String programText,
+        String configurationText,
+        ILanguage language) {
         BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(factory, programText, configurationText);
         if ( data.getErrorMessage() != null ) {
             return null;
         }
-        return generateProgram(programName, data);
+        return generateProgram(programName, data, language);
     }
 
-    private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data) {
-        String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+    private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
+        String sourceCode = SimulationVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), language);
         Ev3SimCompilerWorkflow.LOG.info("generating javascript code");
 
         return sourceCode;

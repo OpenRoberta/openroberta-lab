@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
+import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -46,15 +47,19 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
     private static final String MOTOR_LEFT = "CONST.MOTOR_LEFT";
     private static final String MOTOR_RIGHT = "CONST.MOTOR_RIGHT";
 
-    private SimulationVisitor(Configuration brickConfiguration) {
+    private ILanguage language;
+
+    private SimulationVisitor(Configuration brickConfiguration, ILanguage language) {
         super(brickConfiguration);
+
+        this.language = language;
     }
 
-    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, ILanguage language) {
         Assert.isTrue(!phrasesSet.isEmpty());
         Assert.notNull(brickConfiguration);
 
-        SimulationVisitor astVisitor = new SimulationVisitor(brickConfiguration);
+        SimulationVisitor astVisitor = new SimulationVisitor(brickConfiguration, language);
         astVisitor.generateCodeFromPhrases(phrasesSet);
         return astVisitor.sb.toString();
     }
@@ -190,49 +195,53 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         return null;
     }
 
+    private String getLanguageString(ILanguage language) {
+        switch ( (Language) language ) {
+            case GERMAN:
+                return "de";
+            case ENGLISH:
+                return "en/en";
+            case FRENCH:
+                return "fr";
+            case SPANISH:
+                return "es";
+            case ITALIAN:
+                return "it";
+            case DUTCH:
+                return "nl";
+            case FINNISH:
+                return "fi";
+            case POLISH:
+                return "pl";
+            case RUSSIAN:
+                return "ru";
+            case TURKISH:
+                return "tu";
+            case CZECH:
+                return "cs";
+            case PORTUGUESE:
+                return "pt-pt";
+            case DANISH:
+                return "da";
+            default:
+                return "en";
+        }
+    }
+
     @Override
     public Void visitSetLanguageAction(SetLanguageAction<Void> setLanguageAction) {
-        String end = createClosingBracket();
-        this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
-        switch ( (Language) setLanguageAction.getLanguage() ) {
-            case GERMAN:
-                this.sb.append("de");
-                break;
-            case ENGLISH:
-                this.sb.append("en/en");
-                break;
-            case FRENCH:
-                this.sb.append("fr");
-                break;
-            case SPANISH:
-                this.sb.append("es");
-                break;
-            case ITALIAN:
-                this.sb.append("it");
-                break;
-            case DUTCH:
-                this.sb.append("nl");
-                break;
-            case FINNISH:
-                this.sb.append("fi");
-                break;
-            case POLISH:
-                this.sb.append("pl");
-                break;
-            case PORTUGUESE:
-                this.sb.append("pt-pt");
-                break;
-            default:
-                break;
-        }
-        this.sb.append("\')");
-        this.sb.append(end);
+        this.language = setLanguageAction.getLanguage();
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         String end = createClosingBracket();
+        this.sb.append("createSetLanguageAction(createConstant(CONST.STRING_CONST, \'");
+        this.sb.append(this.getLanguageString(this.language));
+        this.sb.append("\')");
+        this.sb.append(end);
+        end = createClosingBracket();
         this.sb.append("createSayTextAction(");
         sayTextAction.getMsg().visit(this);
         this.sb.append(end);

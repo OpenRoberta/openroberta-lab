@@ -157,13 +157,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
     }
     
     Ev3.prototype.sayText = {
-        language : "",
-        init : function() {
-            this.language = guiStateController.getLanguage();
-            if (this.language === "en") {
-                this.language = "en/en";
-            }
-        },
+        language : "en/en",
         say : function(text, lang) {
             if (meSpeak.isVoiceLoaded(lang)) {
                 meSpeak.speak(text, { voice : lang});
@@ -176,7 +170,6 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
             }
         }
     }
-    Ev3.prototype.sayText.init();
 
     Ev3.prototype.tone = {
         duration : 0,

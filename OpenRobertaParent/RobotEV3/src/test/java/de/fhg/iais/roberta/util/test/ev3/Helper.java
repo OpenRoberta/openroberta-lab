@@ -94,7 +94,7 @@ public class Helper extends de.fhg.iais.roberta.util.test.Helper {
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        String code = SimulationVisitor.generate(this.robotConfiguration, transformer.getTree());
+        String code = SimulationVisitor.generate(this.robotConfiguration, transformer.getTree(), Language.ENGLISH);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
