@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -870,9 +871,17 @@ public class PythonVisitor extends RobotPythonVisitor implements NaoAstVisitor<V
         this.sb.append("h.say(");
         sayTextAction.getMsg().visit(this);
         this.sb.append(",");
-        sayTextAction.getSpeed().visit(this);
+        if ( sayTextAction.getSpeed().getKind().equals(BlockTypeContainer.getByName("EMPTY_EXPR")) ) {
+            this.sb.append("100");
+        } else {
+            sayTextAction.getSpeed().visit(this);
+        }
         this.sb.append(",");
-        sayTextAction.getShape().visit(this);
+        if ( sayTextAction.getShape().getKind().equals(BlockTypeContainer.getByName("EMPTY_EXPR")) ) {
+            this.sb.append("100");
+        } else {
+            sayTextAction.getShape().visit(this);
+        }
         this.sb.append(")");
         return null;
     }
