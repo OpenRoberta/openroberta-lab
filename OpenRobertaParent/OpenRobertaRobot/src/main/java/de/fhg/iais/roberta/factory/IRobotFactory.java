@@ -40,7 +40,9 @@ import de.fhg.iais.roberta.inter.mode.sensor.ITimerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IVoltageSensorMode;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
+import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -51,8 +53,11 @@ import de.fhg.iais.roberta.mode.general.Direction;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.general.WorkingState;
+import de.fhg.iais.roberta.mode.sensor.Axis;
+import de.fhg.iais.roberta.mode.sensor.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
-import de.fhg.iais.roberta.mode.sensor.CoordinatesMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
@@ -88,6 +93,24 @@ public interface IRobotFactory {
             }
         }
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
+    }
+
+    static <E extends IActorPort> E getPort(String port, Class<E> ports) {
+        if ( (port == null) ) {
+            throw new DbcException("Invalid " + ports.getName() + ": " + port);
+        }
+        final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
+        for ( final E mode : ports.getEnumConstants() ) {
+            if ( mode.toString().equals(sUpper) ) {
+                return mode;
+            }
+            for ( final String value : mode.getValues() ) {
+                if ( sUpper.equals(value.toUpperCase()) ) {
+                    return mode;
+                }
+            }
+        }
+        throw new DbcException("Invalid " + ports.getName() + ": " + port);
     }
 
     /**
@@ -156,7 +179,9 @@ public interface IRobotFactory {
      * @param name of the mode
      * @return mode from the enum {@link BlinkMode}
      */
-    IBlinkMode getBlinkMode(String mode);
+    default IBlinkMode getBlinkMode(String mode) {
+        return IRobotFactory.getModeValue(mode, BlinkMode.class);
+    };
 
     /**
      * Get a {@link IBrickLedColor} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the
@@ -165,17 +190,23 @@ public interface IRobotFactory {
      * @param name of the mode
      * @return mode from the enum {@link IBlinkMode}
      */
-    IBrickLedColor getBrickLedColor(String mode);
+    default IBrickLedColor getBrickLedColor(String mode) {
+        return IRobotFactory.getModeValue(mode, BrickLedColor.class);
+    };
 
     /**
      * Get a {@link ILightSensorMode} enumeration given string parameter. It is possible for one mode to have multiple string mappings. Throws exception if the
      * mode does not exists.
      */
-    ILightSensorMode getLightColor(String mode);
+    default ILightSensorMode getLightColor(String mode) {
+        return IRobotFactory.getModeValue(mode, LightSensorMode.class);
+    };
 
     ILightSensorActionMode getLightActionColor(String mode);
 
-    IWorkingState getWorkingState(String mode);
+    default IWorkingState getWorkingState(String mode) {
+        return IRobotFactory.getModeValue(mode, WorkingState.class);
+    };
 
     /**
      * Get a {@link IShowPicture} enumeration given string parameter. It is possible for one picture to have multiple string mappings. Throws exception if the
@@ -215,7 +246,9 @@ public interface IRobotFactory {
      * @param name of the actor port
      * @return actor port from the enum {@link IActorPort}
      */
-    IActorPort getActorPort(String port);
+    default IActorPort getActorPort(String port) {
+        return IRobotFactory.getPort(port, ActorPort.class);
+    }
 
     /**
      * Get stopping mode from {@link IMotorStopMode} from string parameter. It is possible for one stopping mode to have multiple string mappings. Throws
@@ -257,7 +290,9 @@ public interface IRobotFactory {
      * @param name of the robot key
      * @return the robot keys from the enum {@link IBrickKey}
      */
-    IBrickKey getBrickKey(String brickKey);
+    default IBrickKey getBrickKey(String brickKey) {
+        return IRobotFactory.getModeValue(brickKey, BrickKey.class);
+    };
 
     /**
      * Get a color sensor mode from {@link IColorSensorMode} given string parameter. It is possible for one color sensor mode to have multiple string mappings.
@@ -266,9 +301,13 @@ public interface IRobotFactory {
      * @param name of the color sensor mode
      * @return the color sensor mode from the enum {@link IColorSensorMode}
      */
-    IColorSensorMode getColorSensorMode(String modeName);
+    default IColorSensorMode getColorSensorMode(String mode) {
+        return IRobotFactory.getModeValue(mode, ColorSensorMode.class);
+    };
 
-    IJoystickMode getJoystickMode(String modeName);
+    default IJoystickMode getJoystickMode(String mode) {
+        return IRobotFactory.getModeValue(mode, Axis.class);
+    };
 
     default ILightSensorMode getLightSensorMode(String mode) {
         return IRobotFactory.getModeValue(mode, LightSensorMode.class);
@@ -283,7 +322,7 @@ public interface IRobotFactory {
     }
 
     default ICoordinatesMode getAccelerometerSensorMode(String mode) {
-        return IRobotFactory.getModeValue(mode, CoordinatesMode.class);
+        return IRobotFactory.getModeValue(mode, Axis.class);
     }
 
     default ISoundSensorMode getSoundSensorMode(String mode) {
@@ -446,11 +485,17 @@ public interface IRobotFactory {
 
     String getConnectionType();
 
-    String getVendorId();
+    default String getVendorId() {
+        return null;
+    }
 
-    String getCommandline();
+    default String getCommandline() {
+        return null;
+    }
 
-    String getSignature();
+    default String getSignature() {
+        return null;
+    }
 
     Boolean hasConfiguration();
 

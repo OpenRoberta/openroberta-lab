@@ -5,6 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -34,7 +35,7 @@ public class Joystick<V> extends ExternalSensor<V> {
      * @return read only object of {@link Joystick}
      */
     public static <V> Joystick<V> make(String axis, SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Joystick<V>(axis, sensorMetaDataBean, properties, comment);
+        return new Joystick<>(axis, sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class Joystick<V> extends ExternalSensor<V> {
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         String mode = helper.extractField(fields, BlocklyConstants.JOYSTICKAXIS);
         SensorMetaDataBean sensorData =
-            new SensorMetaDataBean(factory.getSensorPort(port), factory.getJoystickMode(mode), factory.getSlot(BlocklyConstants.NO_SLOT));
+            new SensorMetaDataBean(factory.getSensorPort(port), IRobotFactory.getModeValue(mode, Axis.class), factory.getSlot(BlocklyConstants.NO_SLOT));
         return Joystick.make(mode, sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

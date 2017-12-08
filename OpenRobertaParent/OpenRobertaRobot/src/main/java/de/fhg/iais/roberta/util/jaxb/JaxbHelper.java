@@ -111,7 +111,6 @@ public class JaxbHelper {
      */
     public static Jaxb2BlocklyProgramTransformer<Void> generateProgramTransformer(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-
         Jaxb2BlocklyProgramTransformer<Void> transformer = new Jaxb2BlocklyProgramTransformer<>(factory);
         transformer.transform(project);
         return transformer;

@@ -4,7 +4,6 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.mode.action.nao.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -38,14 +37,13 @@ public final class DetectedFaceInformation<V> extends Sensor<V> {
     /**
      * Creates instance of {@link DetectedFaceInformation}. This instance is read only and can not be modified.
      *
-     * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link DetectedFaceInformation}
      */
     static <V> DetectedFaceInformation<V> make(Expr<V> savedFace, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectedFaceInformation<V>(savedFace, properties, comment);
+        return new DetectedFaceInformation<>(savedFace, properties, comment);
     }
 
     @Override

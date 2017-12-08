@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.mode.action.nao.ActorPort;
+import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -38,14 +38,13 @@ public final class ForceSensor<V> extends Sensor<V> {
     /**
      * Creates instance of {@link ForceSensor}. This instance is read only and can not be modified.
      *
-     * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link ForceSensor}
      */
     static <V> ForceSensor<V> make(Side side, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ForceSensor<V>(side, properties, comment);
+        return new ForceSensor<>(side, properties, comment);
     }
 
     public Side getSide() {

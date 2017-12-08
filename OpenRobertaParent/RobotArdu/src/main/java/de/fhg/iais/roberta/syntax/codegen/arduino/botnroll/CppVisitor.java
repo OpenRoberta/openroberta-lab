@@ -8,13 +8,13 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
-import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.actors.arduino.botnroll.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.BrickKey;
-import de.fhg.iais.roberta.mode.sensors.arduino.botnroll.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -459,6 +459,8 @@ public class CppVisitor extends ArduinoVisitor implements ArduinoAstVisitor<Void
                 this.sb.append("bnr.colorSensorLight(" + colors + port);
                 this.sb.append(")");
                 break;
+            default:
+                throw new DbcException("Unknown colour mode " + colorSensor.getMode());
         }
         return null;
     }

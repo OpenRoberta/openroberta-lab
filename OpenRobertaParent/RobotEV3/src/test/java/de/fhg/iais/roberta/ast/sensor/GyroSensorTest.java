@@ -44,7 +44,6 @@ public class GyroSensorTest {
     @Test
     public void sensorResetGyro() throws Exception {
         String a = "BlockAST [project=[[Location [x=-13, y=105], GyroSensor [S2, RESET, NO_SLOT]]]]";
-
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_resetGyro.xml"));
     }
 

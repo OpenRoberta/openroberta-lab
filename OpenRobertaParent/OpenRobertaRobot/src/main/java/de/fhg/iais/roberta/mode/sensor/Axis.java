@@ -3,23 +3,25 @@ package de.fhg.iais.roberta.mode.sensor;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public enum CoordinatesMode implements ICoordinatesMode {
+public enum Axis implements ICoordinatesMode, IJoystickMode, IGyroSensorMode {
     DEFAULT, X( "X" ), Y( "Y" ), Z( "Z" );
 
     private final String[] values;
 
-    private CoordinatesMode(String... values) {
+    private Axis(String... values) {
         this.values = values;
     }
 
-    public static CoordinatesMode get(String direction) {
-        if ( (direction == null) || direction.isEmpty() ) {
-            throw new DbcException("Invalid Coordinate: " + direction);
+    public static Axis get(String axis) {
+        if ( (axis == null) || axis.isEmpty() ) {
+            throw new DbcException("Invalid Coordinate: " + axis);
         }
-        String sUpper = direction.trim().toUpperCase(Locale.GERMAN);
-        for ( CoordinatesMode c : CoordinatesMode.values() ) {
+        String sUpper = axis.trim().toUpperCase(Locale.GERMAN);
+        for ( Axis c : Axis.values() ) {
             if ( c.toString().equals(sUpper) ) {
                 return c;
             }
@@ -29,7 +31,7 @@ public enum CoordinatesMode implements ICoordinatesMode {
                 }
             }
         }
-        throw new DbcException("Invalid Coordinate: " + direction);
+        throw new DbcException("Invalid Coordinate: " + axis);
     }
 
     @Override

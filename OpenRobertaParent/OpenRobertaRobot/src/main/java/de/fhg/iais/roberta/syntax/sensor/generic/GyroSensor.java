@@ -46,7 +46,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @return read only object of {@link GyroSensor}
      */
     public static <V> GyroSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new GyroSensor<V>(sensorMetaDataBean, properties, comment);
+        return new GyroSensor<>(sensorMetaDataBean, properties, comment);
     }
 
     @Override

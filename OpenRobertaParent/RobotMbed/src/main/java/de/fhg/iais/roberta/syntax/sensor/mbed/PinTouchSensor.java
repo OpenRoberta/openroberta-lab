@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.mode.action.mbed.MbedPins;
-import de.fhg.iais.roberta.mode.sensor.mbed.BrickKey;
+import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.visitor.mbed.MbedAstVisitor;
  * To create an instance from this class use the method {@link #make(int, BrickKey, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class PinTouchSensor<V> extends Sensor<V> {
-    private MbedPins pin;
+    private final MbedPins pin;
 
     private PinTouchSensor(MbedPins pinNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_TOUCH_SENSING"), properties, comment);
@@ -46,7 +46,7 @@ public class PinTouchSensor<V> extends Sensor<V> {
      * @return read only object of class {@link PinTouchSensor}
      */
     public static <V> PinTouchSensor<V> make(MbedPins pinNumber, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new PinTouchSensor<V>(pinNumber, properties, comment);
+        return new PinTouchSensor<>(pinNumber, properties, comment);
     }
 
     /**

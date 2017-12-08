@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.ev3.lejos.v0.Factory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.BlinkMode;
@@ -19,6 +20,7 @@ import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PickColor;
+import de.fhg.iais.roberta.mode.sensor.BrickKey;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
@@ -26,7 +28,6 @@ import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.BrickKey;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -227,17 +228,17 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getGyroSensorModeFromString() {
-        Assert.assertEquals(this.factory.getGyroSensorMode("ANGLE"), GyroSensorMode.ANGLE);
+        Assert.assertEquals(IRobotFactory.getModeValue("ANGLE", GyroSensorMode.class), GyroSensorMode.ANGLE);
     }
 
     @Test
     public void getGyroSensorModeByAlternativeName() {
-        Assert.assertEquals(this.factory.getGyroSensorMode("Rate"), GyroSensorMode.RATE);
+        Assert.assertEquals(IRobotFactory.getModeValue("Rate", GyroSensorMode.class), GyroSensorMode.RATE);
     }
 
     @Test(expected = DbcException.class)
     public void invalidGyroSensorMode() {
-        this.factory.getGyroSensorMode("Q");
+        IRobotFactory.getModeValue("Q", GyroSensorMode.class);
     }
 
     @Test

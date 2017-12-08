@@ -8,36 +8,14 @@ import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
-import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.inter.mode.general.IPickColor;
-import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.BlinkMode;
-import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.nxt.LightSensorActionMode;
-import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.general.nxt.PickColor;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.sensor.nxt.BrickKey;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -66,11 +44,6 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public IBlinkMode getBlinkMode(String mode) {
-        return IRobotFactory.getModeValue(mode, BlinkMode.class);
-    }
-
-    @Override
     public IActorPort getActorPort(String port) {
         return IRobotFactory.getModeValue(port, ActorPort.class);
     }
@@ -81,48 +54,8 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public IBrickLedColor getBrickLedColor(String color) {
-        return IRobotFactory.getModeValue(color, BrickLedColor.class);
-    }
-
-    @Override
     public IShowPicture getShowPicture(String picture) {
         return null;
-    }
-
-    @Override
-    public IBrickKey getBrickKey(String brickKey) {
-        return IRobotFactory.getModeValue(brickKey, BrickKey.class);
-    }
-
-    @Override
-    public IColorSensorMode getColorSensorMode(String colorSensorMode) {
-        return IRobotFactory.getModeValue(colorSensorMode, ColorSensorMode.class);
-    }
-
-    @Override
-    public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-        return IRobotFactory.getModeValue(gyroSensorMode, GyroSensorMode.class);
-    }
-
-    @Override
-    public IInfraredSensorMode getInfraredSensorMode(String infraredSensorMode) {
-        return IRobotFactory.getModeValue(infraredSensorMode, InfraredSensorMode.class);
-    }
-
-    @Override
-    public IMotorTachoMode getMotorTachoMode(String motorTachoMode) {
-        return IRobotFactory.getModeValue(motorTachoMode, MotorTachoMode.class);
-    }
-
-    @Override
-    public IUltrasonicSensorMode getUltrasonicSensorMode(String ultrasonicSensorMode) {
-        return IRobotFactory.getModeValue(ultrasonicSensorMode, UltrasonicSensorMode.class);
-    }
-
-    @Override
-    public ITouchSensorMode getTouchSensorMode(String mode) {
-        return IRobotFactory.getModeValue(mode, TouchSensorMode.class);
     }
 
     @Override
@@ -131,24 +64,9 @@ public class Factory extends AbstractRobotFactory {
     }
 
     @Override
-    public ILightSensorMode getLightColor(String mode) {
-        return null;
-    }
-
-    @Override
     public ILightSensorActionMode getLightActionColor(String light) {
         return IRobotFactory.getModeValue(light, LightSensorActionMode.class);
 
-    }
-
-    @Override
-    public IWorkingState getWorkingState(String state) {
-        return IRobotFactory.getModeValue(state, WorkingState.class);
-    }
-
-    @Override
-    public IJoystickMode getJoystickMode(String joystickMode) {
-        return null;
     }
 
     @Override
@@ -243,19 +161,4 @@ public class Factory extends AbstractRobotFactory {
         return null;
     }
 
-    @Override
-    public String getVendorId() {
-        return null;
-    }
-
-    @Override
-    public String getCommandline() {
-        return null;
-    }
-
-    @Override
-    public String getSignature() {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

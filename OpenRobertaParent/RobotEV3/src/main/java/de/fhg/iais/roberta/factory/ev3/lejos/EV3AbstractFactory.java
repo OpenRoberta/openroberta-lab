@@ -11,36 +11,11 @@ import de.fhg.iais.roberta.factory.ICompilerWorkflow;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.factory.ev3.Ev3GuiceModule;
 import de.fhg.iais.roberta.factory.ev3.Ev3SimCompilerWorkflow;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IBlinkMode;
-import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightSensorActionMode;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
-import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IInfraredSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISoundSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IUltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.BlinkMode;
-import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.mode.sensor.SoundSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.BrickKey;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.check.program.RobotBrickCheckVisitor;
 import de.fhg.iais.roberta.syntax.check.program.RobotSimulationCheckVisitor;
@@ -49,14 +24,14 @@ import de.fhg.iais.roberta.syntax.check.program.ev3.SimulationCheckVisitor;
 import de.fhg.iais.roberta.util.RobertaProperties;
 import de.fhg.iais.roberta.util.Util1;
 
-public abstract class EV3AbstracFactory extends AbstractRobotFactory {
+public abstract class EV3AbstractFactory extends AbstractRobotFactory {
     private static final String ROBOT_PLUGIN_PREFIX = "robot.plugin.";
     protected Ev3SimCompilerWorkflow simCompilerWorkflow;
     protected ICompilerWorkflow robotCompilerWorkflow;
     protected Properties ev3Properties;
     protected String name;
 
-    public EV3AbstracFactory(String propertyName) {
+    public EV3AbstractFactory(String propertyName) {
         this.ev3Properties = Util1.loadProperties("classpath:" + propertyName);
         this.name = this.ev3Properties.getProperty("robot.name");
         this.robotPropertyNumber = RobertaProperties.getRobotNumberFromProperty(this.name);
@@ -74,63 +49,8 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
     protected int robotPropertyNumber;
 
     @Override
-    public IBlinkMode getBlinkMode(String mode) {
-        return IRobotFactory.getModeValue(mode, BlinkMode.class);
-    }
-
-    @Override
-    public IActorPort getActorPort(String port) {
-        return IRobotFactory.getModeValue(port, ActorPort.class);
-    }
-
-    @Override
-    public IBrickLedColor getBrickLedColor(String color) {
-        return IRobotFactory.getModeValue(color, BrickLedColor.class);
-    }
-
-    @Override
     public IShowPicture getShowPicture(String picture) {
         return IRobotFactory.getModeValue(picture, ShowPicture.class);
-    }
-
-    @Override
-    public IBrickKey getBrickKey(String brickKey) {
-        return IRobotFactory.getModeValue(brickKey, BrickKey.class);
-    }
-
-    @Override
-    public IColorSensorMode getColorSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, ColorSensorMode.class);
-    }
-
-    @Override
-    public ISoundSensorMode getSoundSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, SoundSensorMode.class);
-    }
-
-    @Override
-    public IGyroSensorMode getGyroSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, GyroSensorMode.class);
-    }
-
-    @Override
-    public IInfraredSensorMode getInfraredSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, InfraredSensorMode.class);
-    }
-
-    @Override
-    public IMotorTachoMode getMotorTachoMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, MotorTachoMode.class);
-    }
-
-    @Override
-    public IUltrasonicSensorMode getUltrasonicSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, UltrasonicSensorMode.class);
-    }
-
-    @Override
-    public ITouchSensorMode getTouchSensorMode(String modeName) {
-        return IRobotFactory.getModeValue(modeName, TouchSensorMode.class);
     }
 
     @Override
@@ -155,16 +75,6 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
 
     @Override
     public ILightSensorActionMode getLightActionColor(String mode) {
-        return null;
-    }
-
-    @Override
-    public IWorkingState getWorkingState(String mode) {
-        return null;
-    }
-
-    @Override
-    public ILightSensorMode getLightColor(String mode) {
         return null;
     }
 
@@ -247,29 +157,6 @@ public abstract class EV3AbstracFactory extends AbstractRobotFactory {
 
     @Override
     public String generateCode(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) {
-        return null;
-    }
-
-    @Override
-    public IJoystickMode getJoystickMode(String joystickMode) {
-
-        return null;
-    }
-
-    @Override
-    public String getVendorId() {
-
-        return null;
-    }
-
-    @Override
-    public String getCommandline() {
-
-        return null;
-    }
-
-    @Override
-    public String getSignature() {
         return null;
     }
 

@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.mode.sensor;
 import de.fhg.iais.roberta.inter.mode.sensor.ITouchSensorMode;
 
 public enum TouchSensorMode implements ITouchSensorMode {
-    DEFAULT(), TOUCH( "touch" );
+    DEFAULT(), TOUCH( "touch" ), BOTTOM( "3" ), MIDDLE( "2" ), TOP( "1" ), ANY( "4" );
     private final String[] values;
 
     private TouchSensorMode(String... values) {
