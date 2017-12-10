@@ -8,7 +8,7 @@ define([ 'exports', 'util', 'log', 'message', 'guiState.model', 'socket.controll
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);
         if (result.rc == "ok") {
-            if (GUISTATE_C.isProgramToDownload()) {
+            if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) != null) {
                 var filename = GUISTATE_C.getProgramName() + '.hex';
                 UTIL.download(filename, result.compiledCode);
                 GUISTATE_C.setAutoConnectedBusy(false);

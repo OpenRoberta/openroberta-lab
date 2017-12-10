@@ -262,14 +262,13 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         $("#single-modal").modal('show');
     }
     exports.showSingleModal = showSingleModal;
-    
-    
+
     function showSingleListModal(customize, onSubmit, onHidden, validator) {
-    	$('#single-modal-list-form').onWrap('submit', function(e) {
+        $('#single-modal-list-form').onWrap('submit', function(e) {
             e.preventDefault();
             onSubmit();
         });
-    	$('#single-modal-list').onWrap('hidden.bs.modal', function() {
+        $('#single-modal-list').onWrap('hidden.bs.modal', function() {
             $('#single-modal-list-form').unbind('submit');
             onHidden();
         });
@@ -351,20 +350,34 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
     }
     exports.getBasename = getBasename;
 
+//    function download(filename, content) {
+//        var blob = new Blob([ content ]);
+//        if (window.navigator.msSaveOrOpenBlob) {
+//            window.navigator.msSaveOrOpenBlob(blob, filename);
+//        } else {
+//            var element = document.createElement('a');
+//            var myURL = window.URL || window.webkitURL;
+//            element.setAttribute('href', myURL.createObjectURL(blob));
+//            element.setAttribute('download', filename);
+//            element.style.display = 'none';
+//            document.body.appendChild(element);
+//            element.click();
+//            document.body.removeChild(element);
+//        }
+//    }
+//    exports.download = download;
+
     function download(filename, content) {
-        var blob = new Blob([ content ]);
-        if (window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            var element = document.createElement('a');
-            var myURL = window.URL || window.webkitURL;
-            element.setAttribute('href', myURL.createObjectURL(blob));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
     }
     exports.download = download;
 
@@ -376,7 +389,7 @@ define([ 'exports', 'message', 'log', 'jquery', 'jquery-validate', 'bootstrap' ]
         return (hash < 0) ? ((hash * -1) + 0xFFFFFFFF) : hash;
     }
     exports.getHashFrom = getHashFrom;
-    
+
     function countBlocks(xmlString) {
         var counter = 0;
         var pos = 0;
