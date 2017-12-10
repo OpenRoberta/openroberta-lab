@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2017-12-08 12:15:16.113516",
+		"lastupdated": "2017-12-10 21:39:27.652909",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1239,5 +1239,7 @@
 	"SENSOR_TOUCH_BOB3": "arm",
 	"SENSOR_SOUND_CALLIOPE": "microphone",
 	"MODE_VALUE": "value",
-	"MODE_PRESSED": "pressed"
+	"MODE_PRESSED": "pressed",
+	"INFRARED_DISTANCE_GETSAMPLE_TOOLTIP": "Gets the current relative distance from the infrared sensor. The values are between 1 and 75 cm.",
+	"INFRARED_PRESENCE_GETSAMPLE_TOOLTIP": "Returns an array of measurements for the presence of a beacon."
 }
