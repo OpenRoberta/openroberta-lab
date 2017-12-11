@@ -1,4 +1,4 @@
-define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 'meSpeak' ], function(SIM, CONSTANTS, Robot) {
+define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot' ], function(SIM, CONSTANTS, Robot) {
 
     /**
      * Creates a new Ev3 for a simulation.
@@ -156,20 +156,20 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
         volume : 0.5,
     }
     
-    Ev3.prototype.sayText = {
-        language : "en/en",
-        say : function(text, lang, speed = 175, pitch = 50) {
-            if (meSpeak.isVoiceLoaded(lang)) {
-                meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
-            } else {
-                meSpeak.loadVoice("js/libs/mespeak/voices/" + lang + ".json", function(success, id) {
-                    if (success) {
-                        meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
-                    }
-                });
-            }
-        }
-    }
+//    Ev3.prototype.sayText = {
+//        language : "en/en",
+//        say : function(text, lang, speed = 175, pitch = 50) {
+//            if (meSpeak.isVoiceLoaded(lang)) {
+//                meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
+//            } else {
+//                meSpeak.loadVoice("js/libs/mespeak/voices/" + lang + ".json", function(success, id) {
+//                    if (success) {
+//                        meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
+//                    }
+//                });
+//            }
+//        }
+//    }
 
     Ev3.prototype.tone = {
         duration : 0,
@@ -479,15 +479,15 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
                 this.tone.file[actions.tone.file](this.webAudio);
             }
         }
-        // update sayText
-        if (actions.language && AudioContext) {
-            this.sayText.language = actions.language;
-        }
-        if (actions.sayText && AudioContext) {
-            if (actions.sayText.text) {
-                this.sayText.say(actions.sayText.text, this.sayText.language, actions.sayText.speed, actions.sayText.pitch);
-            }
-        }
+//        // update sayText
+//        if (actions.language && AudioContext) {
+//            this.sayText.language = actions.language;
+//        }
+//        if (actions.sayText && AudioContext) {
+//            if (actions.sayText.text) {
+//                this.sayText.say(actions.sayText.text, this.sayText.language, actions.sayText.speed, actions.sayText.pitch);
+//            }
+//        }
         // update timer
         if (actions.timer) {
             for (key in actions.timer) {
