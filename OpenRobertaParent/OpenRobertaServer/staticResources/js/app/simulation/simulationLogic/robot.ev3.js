@@ -158,13 +158,13 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
     
     Ev3.prototype.sayText = {
         language : "en/en",
-        say : function(text, lang) {
+        say : function(text, lang, speed = 175, pitch = 50) {
             if (meSpeak.isVoiceLoaded(lang)) {
-                meSpeak.speak(text, { voice : lang});
+                meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
             } else {
                 meSpeak.loadVoice("js/libs/mespeak/voices/" + lang + ".json", function(success, id) {
                     if (success) {
-                        meSpeak.speak(text, { voice : lang });
+                        meSpeak.speak(text, { voice : lang, pitch : pitch, speed : speed});
                     }
                 });
             }
@@ -485,7 +485,7 @@ define([ 'simulation.simulation', 'robertaLogic.constants', 'simulation.robot', 
         }
         if (actions.sayText && AudioContext) {
             if (actions.sayText.text) {
-                this.sayText.say(actions.sayText.text, this.sayText.language);
+                this.sayText.say(actions.sayText.text, this.sayText.language, actions.sayText.speed, actions.sayText.pitch);
             }
         }
         // update timer

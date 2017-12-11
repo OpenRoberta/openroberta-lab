@@ -557,6 +557,15 @@ define(['robertaLogic.actors', 'robertaLogic.memory', 'robertaLogic.program', 'r
         if (!isObject(text) && !obj.modifiedStmt) {
             obj.outputCommands.sayText = {};
             obj.outputCommands.sayText.text = text;
+            
+            if (obj.currentStatement.speed != undefined && obj.currentStatement.pitch != undefined) {
+                var speed = evalExpr(obj, "speed");
+                var pitch = evalExpr(obj, "pitch");
+                if(!isObject(speed) && !isObject(pitch)) {
+                    obj.outputCommands.sayText.speed = speed;
+                    obj.outputCommands.sayText.pitch = pitch;
+                }
+            }
         }
     };
 

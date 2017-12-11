@@ -110,6 +110,8 @@ define({
     
     LANGUAGE: "language",
 
+    PITCH: "pitch",
+
     FILE: "file",
 
     TEXT: "text",

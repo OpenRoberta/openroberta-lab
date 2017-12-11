@@ -12,6 +12,8 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -244,6 +246,13 @@ public class SimulationVisitor extends RobotSimulationVisitor<Void> {
         end = createClosingBracket();
         this.sb.append("createSayTextAction(");
         sayTextAction.getMsg().visit(this);
+        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
+        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
+            this.sb.append(",");
+            sayTextAction.getSpeed().visit(this);
+            this.sb.append(",");
+            sayTextAction.getShape().visit(this);
+        }
         this.sb.append(end);
         return null;
     }

@@ -312,10 +312,12 @@ define([ 'exports', 'robertaLogic.constants' ], function(exports, CONST) {
         return result;
     }
     
-    function createSayTextAction(text) {
+    function createSayTextAction(text, speed, pitch) {
         var result = {};
         result[CONST.STMT] = CONST.SAY_TEXT_ACTION;
         result[CONST.TEXT] = text;
+        result[CONST.SPEED] = speed;
+        result[CONST.PITCH] = pitch;
         return result;
     }
 
