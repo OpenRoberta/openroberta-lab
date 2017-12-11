@@ -23,6 +23,8 @@ import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer;
+import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -295,6 +297,13 @@ public class JavaVisitor extends RobotJavaVisitor implements AstSensorsVisitor<V
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
         this.sb.append("hal.sayText(");
         sayTextAction.getMsg().visit(this);
+        BlockType emptyBlock = BlockTypeContainer.getByName("EMPTY_EXPR");
+        if ( !(sayTextAction.getSpeed().getKind().equals(emptyBlock) && sayTextAction.getShape().getKind().equals(emptyBlock)) ) {
+            this.sb.append(",");
+            sayTextAction.getSpeed().visit(this);
+            this.sb.append(",");
+            sayTextAction.getShape().visit(this);
+        }
         this.sb.append(");");
         return null;
     }
