@@ -2,14 +2,19 @@ package de.fhg.iais.roberta.syntax.sensor;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * This enumeration contain all types of sensors that are used in <b>robSensors_getSample</b> Blockly block.
  */
 public enum GetSampleType {
+<<<<<<< 42890fecc915ea55defa5859baabc6d8d865693a
     TOUCH( "SENSORPORT", "TOUCH", "TOUCH" ),
     TOUCH_PRESSED( "SENSORPORT", "TOUCH", "PRESSED" ),
+=======
+    TOUCH( "SENSORPORT", "TOUCH", "TOUCH_PRESSED", "TOUCH" ),
+>>>>>>> fix ev3 touch bug
     ULTRASONIC_DISTANCE( "SENSORPORT", "ULTRASONIC", "DISTANCE" ),
     ULTRASONIC_PRESENCE( "SENSORPORT", "ULTRASONIC", "PRESENCE" ),
     COLOUR_COLOUR( "SENSORPORT", "COLOUR", "COLOUR" ),

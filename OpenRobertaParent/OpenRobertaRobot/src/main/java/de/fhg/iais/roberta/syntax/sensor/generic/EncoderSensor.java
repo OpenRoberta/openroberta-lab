@@ -7,6 +7,9 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
+import de.fhg.iais.roberta.mode.action.ActorPort;
+import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -94,7 +97,7 @@ public class EncoderSensor<V> extends Sensor<V> {
             return EncoderSensor
                 .make(factory.getMotorTachoMode("RESET"), factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Field> fields = helper.extractFields(block, (short) 3);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE);
         return EncoderSensor
