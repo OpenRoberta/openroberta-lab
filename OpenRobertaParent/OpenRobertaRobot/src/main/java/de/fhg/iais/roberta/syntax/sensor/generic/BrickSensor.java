@@ -92,7 +92,7 @@ public class BrickSensor<V> extends Sensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         IRobotFactory factory = helper.getModeFactory();
-        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Field> fields = helper.extractFields(block, (short) 3);
         String portName = helper.extractField(fields, BlocklyConstants.KEY);
         return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, factory.getBrickKey(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
