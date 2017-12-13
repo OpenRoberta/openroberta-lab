@@ -12,20 +12,8 @@ public enum GetSensorSampleType {
 
     private final String[] values;
 
-    private GetSensorSampleType(String... values) {
-        this.values = values;
-
-    }
-
-    /**
-     * get mode from {@link MotorTachoMode} from string parameter. It is possible for one mode to have multiple string mappings.
-     * Throws exception if the mode does not exists.
-     *
-     * @param name of the mode
-     * @return mode from the enum {@link MotorTachoMode}
-     */
     public static GetSensorSampleType get(String s) {
-        if ( s == null || s.isEmpty() ) {
+        if ( (s == null) || s.isEmpty() ) {
             throw new DbcException("Invalid mode: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
@@ -40,5 +28,10 @@ public enum GetSensorSampleType {
             }
         }
         throw new DbcException("Invalid mode: " + s);
+    }
+
+    private GetSensorSampleType(String... values) {
+        this.values = values;
+
     }
 }

@@ -50,7 +50,7 @@ public enum GetSampleType {
      * @return sensor type
      */
     public static GetSampleType get(String s) {
-        if ( s == null || s.isEmpty() ) {
+        if ( (s == null) || s.isEmpty() ) {
             throw new DbcException("Invalid mode: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
